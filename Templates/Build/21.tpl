@@ -8,7 +8,7 @@ $trainlist = $technology->getTrainingList(3);
 ?>
 <div id="build" class="gid21">
     <a href="#" onClick="return Popup(21,4, 'gid');" class="build_logo">
-        <img class="building g21" src="img/x.gif" alt="Workshop" title="<?php echo WORKSHOP;?>" />
+        <img class="building g21" src="img/x.gif" alt="<?php echo WORKSHOP; ?>" title="<?php echo WORKSHOP;?>" />
     </a>
     <h1><?php echo WORKSHOP;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo WORKSHOP_DESC;?></p>
@@ -58,7 +58,7 @@ $trainlist = $technology->getTrainingList(3);
                                 <img class="r5" src="img/x.gif" title="<?php echo CROP_COM;?>"/><?php echo (int)$unitData['pop'];?>|
                                 <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $timeFormatted;?>
                                 <?php if ($showNpc):?>
-                                    |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade"/></a>
+                                    |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>"/></a>
                                 <?php endif;?>
                             </div>
                         </td>
@@ -70,7 +70,7 @@ $trainlist = $technology->getTrainingList(3);
                 <?php endif;?>
                 </tbody>
             </table>
-            <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" /></p>
+            <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" /></p>
         </form>
     <?php else:?>
         <b><?php echo TRAINING_COMMENCE_WORKSHOP;?></b><br />

@@ -32,7 +32,7 @@ foreach($countArray as $index => $count){
 
 		<tr>
 			<td></td>
-			<td>Forum name</td>
+			<td><?php echo TZ_FORUM_NAME; ?></td>
 			<td>&nbsp;Threads&nbsp;</td>
 			<td>&nbsp;Last post&nbsp;</td>
 		</tr>
@@ -71,10 +71,10 @@ foreach($forumcat as $arr){
 	echo '<tr><td class="ico">';
 	if(Alliance::canAct($checkArray)){
 		echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&res=1&admin=pos" title="To top">
-			<img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit">
-			<img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&res=0&admin=pos" title="To bottom">
-			<img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete">
-			<img src="img/x.gif" alt="delete" /></a>';
+			<img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="'.EDIT.'">
+			<img src="img/x.gif" alt="'.EDIT.'" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&res=0&admin=pos" title="To bottom">
+			<img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="'.DELETE.'">
+			<img src="img/x.gif" alt="'.DELETE.'" /></a>';
 	}
 	else echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 
@@ -95,7 +95,7 @@ foreach($forumcat as $arr){
 <p>
 <?php
 if(isset($opt['opt5']) && $opt['opt5'] == 1 || $session->access == ADMIN){
-	echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>';
+	echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="'.TZ_NEW_FORUM.'" /></a>';
 	echo '<a href="allianz.php?s='.$ids.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 }
 ?>

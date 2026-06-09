@@ -16,20 +16,20 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<h2>(4/5) Neighbours</h2>
+<h2><?php echo TZ_N_4_5_NEIGHBOURS; ?></h2>
             <table class="tutorial_table">
                 <tbody>
                     <tr>
                         <td class="visual">
                             <img src="img/en/tut/karte.jpg" alt="" />
-                            Your village and your neighbours
+                            <?php echo TZ_YOUR_VILLAGE_AND_YOUR_NEIGHBOURS; ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="beschreibung">
-                        In Travian you are not alone; you interact with thousands of other players in the Travian world.
+                        <?php echo TZ_IN_TRAVIAN_YOU_ARE_NOT_ALONE_YOU_I; ?>
                         <br><br>
-                        The players in your surrounding area are most important to you. Thanks to the map you have a good overview of who they are.
+                        <?php echo TZ_THE_PLAYERS_IN_YOUR_SURROUNDING_AR; ?>
                         </td>
                     </tr>
                 </tbody>
@@ -38,10 +38,10 @@
                 <tbody>
                     <tr>
                         <td class="nav_prev">
-                            <a href="tutorial.php?s=3" title="back">&laquo; back</a>
+                            <a href="tutorial.php?s=3" title="<?php echo BACK; ?>">&laquo; back</a>
                         </td>
                         <td class="nav_next">
-                            <a href="tutorial.php?s=5" title="forward">forward &raquo;</a>
+                            <a href="tutorial.php?s=5" title="<?php echo TZ_FORWARD; ?>">forward &raquo;</a>
                         </td>
                     </tr>
                 </tbody>
@@ -51,13 +51,13 @@
     </div> 
     <div id="footer">
         <div class="container">
-            <a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
+            <a href="#" class="logo"><img src="img/x.gif" alt="<?php echo TZ_TRAVIAN_GAMES; ?>" class="logo_traviangames" /></a>
             <ul class="menu">
-                <li><a href="anleitung.php?s=3">FAQ</a>|</li>
-                <li><a href="index.php?screenshots">Screenshots</a>|</li>
-                <li><a href="spielregeln.php">Game Rules</a>|</li>
-                <li><a href="agb.php">Terms</a>|</li>
-                <li><a href="impressum.php">Imprint</a></li>
+                <li><a href="anleitung.php?s=3"><?php echo FAQ; ?></a>|</li>
+                <li><a href="index.php?screenshots"><?php echo SCREENSHOTS; ?></a>|</li>
+                <li><a href="spielregeln.php"><?php echo GAME_RULES; ?></a>|</li>
+                <li><a href="agb.php"><?php echo TZ_TERMS; ?></a>|</li>
+                <li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
                 <li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
             </ul>
         </div>

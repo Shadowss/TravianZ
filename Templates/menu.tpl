@@ -58,7 +58,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
 <div id="side_navi">
 
     <a id="logo" href="<?php echo HOMEPAGE; ?>" name="logo">
-        <img src="img/x.gif" alt="Travian">
+        <img src="img/x.gif" alt="<?php echo TZ_TRAVIAN; ?>">
     </a>
 
     <p>
@@ -86,7 +86,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
         <img
             src="img/x.gif"
             <?php if($isPlus) { echo 'class="logo_plus"'; } ?>
-            alt="Travian"
+            alt="<?php echo TZ_TRAVIAN; ?>"
         >
     </a>
 
@@ -112,7 +112,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
         if($isMH) {
             ?>
             <a href="Admin/admin.php">
-                <font color="Blue">Multihunter Panel</font>
+                <font color="Blue"><?php echo MH_PANEL; ?></font>
             </a>
         <?php
         }
@@ -127,7 +127,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
             </a>
 
             <a href="build_croppers.php">
-                Build Cropper
+                <?php echo TZ_BUILD_CROPPER; ?>
             </a>
         <?php
         }
@@ -156,7 +156,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
         if($idUser != 1) {
         ?>
             <a href="plus.php?id=3">
-                TravianZ
+                <?php echo TZ_TRAVIANZ; ?>
                 <b>
                     <span class="plus_g">P</span>
                     <span class="plus_o">l</span>
@@ -218,8 +218,8 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
                     <img
                         class="del"
                         src="img/x.gif"
-                        alt="Cancel process"
-                        title="Cancel process"
+                        alt="'.CANCEL_PROCESS.'"
+                        title="'.CANCEL_PROCESS.'"
                     />
                   </a>';
         }

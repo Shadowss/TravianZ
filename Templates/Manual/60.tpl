@@ -8,7 +8,7 @@ The plus account offers you the following   improvements:<br>
     <li>Sorting   function for reports and messages</li>
     <li>Sorting function for the   marketplace</li>
     <li>Auto-completion</li>
-    <li>Report filter</li>
+    <li><?php echo REPORT_FILTER; ?></li>
     <li>Freely   definable direct links</li>
     <li>Graphical statistics</li>
     <li>Central   account overview</li>

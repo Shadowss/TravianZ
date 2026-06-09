@@ -16,24 +16,24 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<h2>(2/5) Resources</h2>
+<h2><?php echo TZ_N_2_5_RESOURCES; ?></h2>
             <table class="tutorial_table">
                 <tbody>
                     <tr>
                         <td class="visual">
                             <img src="img/en/tut/rohstofffeld.gif" alt="" />
-                            1. Choose a resource field
+                            <?php echo TZ_N_1_CHOOSE_A_RESOURCE_FIELD; ?>
                         </td>
                         <td class="visual">
                             <img src="img/en/tut/rohstofffeld2.gif" alt="" />
-                            2. Extend the resource field
+                            <?php echo TZ_N_2_EXTEND_THE_RESOURCE_FIELD; ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="beschreibung" colspan="2">
-                            There are four different types of resources in Travian: lumber, clay, iron and crop.
+                            <?php echo TZ_THERE_ARE_FOUR_DIFFERENT_TYPES_OF; ?>
                             <br><br>
-                            Before you expand your village's buildings, you should develop some resource fields to increase your resource supply.
+                            <?php echo TZ_BEFORE_YOU_EXPAND_YOUR_VILLAGE_S_B; ?>
                         </td>
                     </tr>
                 </tbody>
@@ -42,10 +42,10 @@
                 <tbody>
                     <tr>
                         <td class="nav_prev">
-                            <a href="tutorial.php" title="back">&laquo; back</a>
+                            <a href="tutorial.php" title="<?php echo BACK; ?>">&laquo; back</a>
                         </td>
                         <td class="nav_next">
-                            <a href="tutorial.php?s=3" title="forward">forward &raquo;</a>
+                            <a href="tutorial.php?s=3" title="<?php echo TZ_FORWARD; ?>">forward &raquo;</a>
                         </td>
                     </tr>
                 </tbody>
@@ -55,13 +55,13 @@
     </div> 
     <div id="footer">
         <div class="container">
-            <a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
+            <a href="#" class="logo"><img src="img/x.gif" alt="<?php echo TZ_TRAVIAN_GAMES; ?>" class="logo_traviangames" /></a>
             <ul class="menu">
-                <li><a href="anleitung.php?s=3">FAQ</a>|</li>
-                <li><a href="index.php?screenshots">Screenshots</a>|</li>
-                <li><a href="spielregeln.php">Game Rules</a>|</li>
-                <li><a href="agb.php">Terms</a>|</li>
-                <li><a href="impressum.php">Imprint</a></li>
+                <li><a href="anleitung.php?s=3"><?php echo FAQ; ?></a>|</li>
+                <li><a href="index.php?screenshots"><?php echo SCREENSHOTS; ?></a>|</li>
+                <li><a href="spielregeln.php"><?php echo GAME_RULES; ?></a>|</li>
+                <li><a href="agb.php"><?php echo TZ_TERMS; ?></a>|</li>
+                <li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
                 <li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
             </ul>
         </div>

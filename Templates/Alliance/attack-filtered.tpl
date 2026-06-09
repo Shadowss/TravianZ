@@ -150,9 +150,9 @@ if (!$sql || mysqli_num_rows($sql) == 0) {
 <table cellpadding="1" cellspacing="1" id="offs">
 <thead>
 <tr>
-    <td>Player</td>
-    <td>Alliance</td>
-    <td>Date</td>
+    <td><?php echo PLAYER; ?></td>
+    <td><?php echo ALLIANCE; ?></td>
+    <td><?php echo DATE; ?></td>
 </tr>
 </thead>
 

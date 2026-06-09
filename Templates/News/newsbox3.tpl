@@ -11,45 +11,41 @@
 ?>
 
 <h5>
-    <img src="../img/en/t2/newsbox3.gif" alt="newsbox 3" />
+    <img src="../img/en/t2/newsbox3.gif" alt="<?php echo EDIT_NEWSBOX3; ?>" />
 </h5>
 
 <div class="news">
 
     <div style="text-align: center;">
-        <b>TravianZ</b>
+        <b><?php echo TZ_TRAVIANZ; ?></b>
     </div>
 
     <br />
 
-    <b>Version: <font color="Red">v8.3.5</font></b><br />
+    <b><?php echo TZ_VERSION; ?> <font color="Red">v8.3.5</font></b><br />
 
-    <b>Major Changes:</b>
-    Over 120 bugs fixed, artifacts fully fixed, catapults and rams fully fixed,
-    automated Natars/Artifacts/WW villages/WW building plans, new battle formula
-    (more precise than the old one), automatic artifacts activation,
-    rewritten a lot of code. See more in readme file!
+    <b><?php echo TZ_MAJOR_CHANGES; ?></b>
+    <?php echo TZ_ML_CHANGELOG_120BUGS; ?>
     <br />
 
-    <b>Minor Changes:</b>
-    New forum system, Travian-like trapper formula, fixed master builder,
-    double research queue in blacksmith and armoury with plus
+    <b><?php echo TZ_MINOR_CHANGES; ?></b>
+    <?php echo TZ_ML_CHANGELOG_NEWFORUM; ?>
     <br />
 
-    <b>Script Price:</b> FREE!
+    <b><?php echo TZ_SCRIPT_PRICE; ?></b> <?php echo TZ_FREE; ?>
     <br /><br />
 
     <div style="text-align: center;">
-        <u><b>Released by: TravianZ Team</b></u>
+        <u><b><?php echo TZ_RELEASED_BY_TRAVIANZ_TEAM; ?></b></u>
     </div>
 
     <br />
 
     <div style="text-align: center;">
         <b>
-            Visit:
+            <?php echo TZ_VISIT; ?>
             <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/" target="_blank">
-                RageZone.com
+                <?php echo TZ_RAGEZONE_COM; ?>
             </a>
         </b>
     </div>
@@ -59,9 +55,9 @@
     <div style="text-align: center;">
         <b>
             <u>
-                Download from
+                <?php echo TZ_DOWNLOAD_FROM; ?>
                 <a href="https://github.com/Shadowss/TravianZ/archive/master.zip" target="_blank">
-                    Github
+                    <?php echo TZ_GITHUB; ?>
                 </a>
             </u>
         </b>

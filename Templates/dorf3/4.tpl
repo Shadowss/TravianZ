@@ -19,14 +19,14 @@ include('menu.tpl');
 
 <thead>
 <tr>
-	<th colspan="5">Culture points</th>
+	<th colspan="5"><?php echo CULTUREPOINT; ?></th>
 </tr>
 <tr>
-	<td>Village</td>
-	<td>CP/day</td>
-	<td>Celebrations</td>
-	<td>Troops</td>
-	<td>Slots</td>
+	<td><?php echo VILLAGE; ?></td>
+	<td><?php echo TZ_CP_DAY; ?></td>
+	<td><?php echo CELEBRATIONS; ?></td>
+	<td><?php echo TROOPS; ?></td>
+	<td><?php echo TZ_SLOTS; ?></td>
 </tr>
 </thead>
 
@@ -173,7 +173,7 @@ foreach ($varray as $vil) {
 
 <tr class="sum">
 
-	<th class="vil">Sum</th>
+	<th class="vil"><?php echo SUM; ?></th>
 
 	<td class="cps"><?php echo $gescp; ?></td>
 

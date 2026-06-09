@@ -39,6 +39,10 @@ class Profile {
 					$this->updateProfile($post);
 					break;
 
+				case "p2":
+					$this->updatePreferences($post);
+					break;
+
 				case "p3":
 					$this->updateAccount($post);
 					break;
@@ -52,6 +56,27 @@ class Profile {
 		if (isset($post['s']) && $post['s'] == 4) {
 			$this->gpack($post);
 		}
+	}
+
+	/**
+	 * Preferences form (ft=p2): persist the per-user game language.
+	 * Writes the existing `lang` column (matches struct.sql + Session seeding).
+	 */
+	private function updatePreferences($post) {
+		global $database, $session;
+
+		$allowed = ['en', 'fr', 'it', 'ro', 'zh'];
+		if (!empty($post['lang'])) {
+			$lang = strtolower(trim($post['lang']));
+			if (in_array($lang, $allowed, true)) {
+				$database->updateUserField($session->uid, "lang", $lang, 1);
+				$_SESSION['lang'] = $lang;
+				$session->userinfo['lang'] = $lang;
+			}
+		}
+
+		header("Location: spieler.php?s=2");
+		exit;
 	}
 
 	public function procSpecial($get) {
@@ -218,21 +243,6 @@ class Profile {
 			} else {
 				$form->addError("email", EMAIL_ERROR);
 			}
-		}
-		
-		// Language change
-		if (!empty($post['sprache'])) {
-		// whitelist – pune aici limbile pe care le ai în /lang/
-		$allowed = ['en','fr','it','ro','zh'];
-		$lang = strtolower(trim($post['sprache']));
-    
-		if (in_array($lang, $allowed, true)) {
-        $database->updateUserField($session->uid, "language", $lang, 1);
-        
-        // update sesiunea ca să se vadă imediat, fără relog
-        $_SESSION['lang'] = $lang;
-        $session->userinfo['language'] = $lang;
-		}
 		}
 
 		// Delete request cancel

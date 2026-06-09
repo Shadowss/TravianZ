@@ -71,12 +71,12 @@
 						<?php echo $name." (Level ".$hero_datarow['level'].")"; ?>
 					</div>
 					<div class="details">
-						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
-                        <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
-                        <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
-                        <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
+						<img class="r1" src="img/x.gif" alt="<?php echo TZ_WOOD; ?>" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
+                        <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
+                        <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
+                        <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
                         <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
-                        <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
+                        <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
 				        <?php
                             //-- If available resources combined are not enough, remove NPC button
@@ -109,12 +109,12 @@
 						<?php echo $name." (Level ".$hero_datarow['level'].")"; ?>
 					</div>
 					<div class="details">
-						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
-                        <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
-                        <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
-                        <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
+						<img class="r1" src="img/x.gif" alt="<?php echo TZ_WOOD; ?>" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
+                        <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
+                        <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
+                        <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
                         <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
-                        <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
+                        <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
 				        <?php
                             //-- If available resources combined are not enough, remove NPC button

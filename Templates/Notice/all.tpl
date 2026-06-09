@@ -10,29 +10,29 @@
 
 // ======================== NOTICE TYPES ========================
 $noticeClass = [
-    "Scout Report",
-    "Won as attacker without losses",
-    "Won as attacker with losses",
-    "Lost as attacker with losses",
-    "Won as defender without losses",
-    "Won as defender with losses",
-    "Lost as defender with losses",
-    "Lost as defender without losses",
-    "Reinforcement arrived",
+    TZ_RPT_SCOUT,
+    TZ_RPT_WON_ATK_NOLOSS,
+    TZ_RPT_WON_ATK_LOSS,
+    TZ_RPT_LOST_ATK_LOSS,
+    TZ_RPT_WON_DEF_NOLOSS,
+    TZ_RPT_WON_DEF_LOSS,
+    TZ_RPT_LOST_DEF_LOSS,
+    TZ_RPT_LOST_DEF_NOLOSS,
+    TZ_RPT_REINF_ARRIVED,
     "",
-    "Wood Delivered",
-    "Clay Delivered",
-    "Iron Delivered",
-    "Crop Delivered",
+    TZ_RPT_WOOD_DELIVERED,
+    TZ_RPT_CLAY_DELIVERED,
+    TZ_RPT_IRON_DELIVERED,
+    TZ_RPT_CROP_DELIVERED,
     "",
-    "Won as defender without losses",
-    "Won as defender with losses",
-    "Lost as defender with losses",
-    "Won scouting as attacker",
-    "Lost scouting as attacker",
-    "Won scouting as defender",
-    "Lost scouting as defender",
-    "Scout Report"
+    TZ_RPT_WON_DEF_NOLOSS,
+    TZ_RPT_WON_DEF_LOSS,
+    TZ_RPT_LOST_DEF_LOSS,
+    TZ_RPT_WON_SCOUT_ATK,
+    TZ_RPT_LOST_SCOUT_ATK,
+    TZ_RPT_WON_SCOUT_DEF,
+    TZ_RPT_LOST_SCOUT_DEF,
+    TZ_RPT_SCOUT
 ];
 
 // ======================== GOLD CHECK (cached query) ========================
@@ -61,9 +61,9 @@ $queryBase = (!empty($_GET['t'])) ? 't='.$_GET['t'].'&amp;' : '';
 
 <thead>
 <tr>
-    <th colspan="2">Subject:</th>
+    <th colspan="2"><?php echo SUBJECT; ?>:</th>
     <th class="sent">
-        <a href="berichte.php?o=1<?php echo (!empty($_GET['t']) ? '&amp;t='.$_GET['t'] : ''); ?>">Sent</a>
+        <a href="berichte.php?o=1<?php echo (!empty($_GET['t']) ? '&amp;t='.$_GET['t'] : ''); ?>"><?php echo SENT; ?></a>
     </th>
 </tr>
 </thead>
@@ -84,15 +84,15 @@ $queryBase = (!empty($_GET['t'])) ? 't='.$_GET['t'].'&amp;' : '';
 <th class="buttons">
 
     <input name="del" type="image" id="btn_delete" class="dynamic_img"
-           src="img/x.gif" value="delete" alt="delete" />
+           src="img/x.gif" value="delete" alt="<?php echo DELETE; ?>" />
 
     <?php if ($session->plus) { ?>
 
         <?php if (isset($_GET['t']) && $_GET['t'] == 5) { ?>
-            <input name="start" type="image" value="back" alt="back"
+            <input name="start" type="image" value="back" alt="<?php echo BACK; ?>"
                    id="btn_back" class="dynamic_img" src="img/x.gif" />
         <?php } else { ?>
-            <input name="archive" type="image" value="Archive" alt="Archive"
+            <input name="archive" type="image" value="Archive" alt="<?php echo ARCHIVE; ?>"
                    id="btn_archiv" class="dynamic_img" src="img/x.gif" />
         <?php } ?>
 
@@ -187,7 +187,7 @@ for ($i = (1 + $s); $i <= (10 + $s); $i++) {
 
         // ================= SUBJECT =================
         echo "<div>
-                <a href=\"berichte.php?id=".$row['id']."\">".$row['topic']."</a>";
+                <a href=\"berichte.php?id=".$row['id']."\">".tz_loc_topic($row['topic'])."</a>";
 
         if ($row['viewed'] == 0) {
             echo " (new)";
@@ -208,7 +208,7 @@ for ($i = (1 + $s); $i <= (10 + $s); $i++) {
 
 // ======================== EMPTY STATE ========================
 if ($total == 0) {
-    echo "<tr><td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
+    echo "<tr><td colspan=\"3\" class=\"none\">".NO_REPORTS.".</td></tr>";
 }
 ?>
 

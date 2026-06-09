@@ -55,14 +55,14 @@ if ($fromName != "[?]" || $fromId == 0) {
 <thead>
 
 <tr>
-    <th>Subject:</th>
-    <th><?php echo $message->readingNotice['topic']; ?></th>
+    <th><?php echo SUBJECT; ?>:</th>
+    <th><?php echo tz_loc_topic($message->readingNotice['topic']); ?></th>
 </tr>
 
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
-    <td class="sent">Sent:</td>
-    <td>on <span><?php echo $date[0]." at ".$date[1]; ?></span><span> </span></td>
+    <td class="sent"><?php echo TZ_SENT; ?></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span><span> </span></td>
 </tr>
 
 </thead>
@@ -76,9 +76,9 @@ if ($fromName != "[?]" || $fromId == 0) {
 
 <thead>
 <tr>
-    <td class="role">sender</td>
+    <td class="role"><?php echo SENDER; ?></td>
     <td colspan="<?php echo $colspan; ?>">
-        <?php echo $user_url; ?> from the village <?php echo $from_url; ?>
+        <?php echo $user_url; ?> <?php echo FROM_THE_VILL; ?> <?php echo $from_url; ?>
     </td>
 </tr>
 </thead>
@@ -103,7 +103,7 @@ if ($hasHero) {
     echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 
-echo "</tr><tr><th>Troops</th>";
+echo "</tr><tr><th>".TROOPS."</th>";
 
 // ======================== TROOPS ========================
 $unitarray = [];
@@ -132,10 +132,10 @@ if ($hasHero) {
 <!-- ======================== UPKEEP ======================== -->
 <tbody class="infos">
 <tr>
-    <th>upkeep</th>
+    <th><?php echo UPKEEP; ?></th>
     <td colspan="11">
         <?php echo $technology->getUpkeep($unitarray, $dataarray[2]); ?>
-        <img src="img/x.gif" class="r4" title="Crop" alt="Crop" /> per hour
+        <img src="img/x.gif" class="r4" title="<?php echo CROP; ?>" alt="<?php echo CROP; ?>" /> per hour
     </td>
 </tr>
 </tbody>

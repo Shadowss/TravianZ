@@ -45,7 +45,7 @@ include_once("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Options</th>
+    <th colspan="2"><?php echo OPTION; ?></th>
 </tr>
 </thead>
 
@@ -123,7 +123,7 @@ foreach ($options as $value => $optData) {
     <td class="sel">
         <input class="radio" type="radio" name="o" value="11">
     </td>
-    <td class="val">Quit alliance</td>
+    <td class="val"><?php echo TZ_QUIT_ALLIANCE; ?></td>
 </tr>
 
 </tbody>
@@ -137,7 +137,7 @@ foreach ($options as $value => $optData) {
         id="btn_ok"
         class="trav_buttons"
         onclick="this.disabled=true;this.form.submit();">
-        Ok
+        <?php echo TZ_OK_2; ?>
     </button>
 </p>
 

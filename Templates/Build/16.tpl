@@ -9,7 +9,7 @@ $hasRally = $village->resarray['f39'] > 0;
 ?>
 <div id="build" class="gid16">
     <a href="#" onclick="return Popup(16,4);" class="build_logo">
-        <img class="g16" src="img/x.gif" alt="Rally point" title="<?= RALLYPOINT ?>">
+        <img class="g16" src="img/x.gif" alt="<?php echo RALLYPOINT; ?>" title="<?= RALLYPOINT ?>">
     </a>
     <h1><?= RALLYPOINT ?> <span class="level"><?= LEVEL ?> <?= $village->resarray['f'.$id] ?></span></h1>
     <p class="build_desc"><?= RALLYPOINT_DESC ?></p>
@@ -71,7 +71,7 @@ $hasRally = $village->resarray['f39'] > 0;
             </td>
         </tr></thead>
         <tbody class="units">
-            <tr><th>&nbsp;</th><?php for($i=$start;$i<$start+10;$i++): ?><td><img src="img/x.gif" class="unit u<?= $i ?>" title="<?= $technology->getUnitName($i) ?>"></td><?php endfor; ?><?php if($e['hero']): ?><td><img src="img/x.gif" class="unit uhero" title="Hero"></td><?php endif; ?></tr>
+            <tr><th>&nbsp;</th><?php for($i=$start;$i<$start+10;$i++): ?><td><img src="img/x.gif" class="unit u<?= $i ?>" title="<?= $technology->getUnitName($i) ?>"></td><?php endfor; ?><?php if($e['hero']): ?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif; ?></tr>
             <tr><th><?= TROOPS ?></th><?php for($i=$start;$i<$start+10;$i++): ?><td class="<?= $e['u'.$i]==0?'none':'' ?>"><?= $e['u'.$i] ?></td><?php endfor; ?><?php if($e['hero']): ?><td><?= $e['hero'] ?></td><?php endif; ?></tr>
         </tbody>
         <tbody class="infos"><tr><th><?= UPKEEP ?></th><td colspan="<?= $colspan ?>">

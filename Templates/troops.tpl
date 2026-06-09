@@ -104,8 +104,8 @@ if (!empty($troops['hero'])) {
                 <img
                     class="unit uhero"
                     src="img/x.gif"
-                    alt="Hero"
-                    title="Hero"
+                    alt="'.U0.'"
+                    title="'.U0.'"
                 />
             </a>
         </td>

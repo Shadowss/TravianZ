@@ -16,28 +16,28 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<h2>(5/5) Navigation</h2>
+<h2><?php echo TZ_N_5_5_NAVIGATION; ?></h2>
             <table class="tutorial_table">
                 <tbody>
                     <tr>
                         <td class="visual">
                             <img src="img/en/tut/navi.jpg" alt="" />
-                            The navigation bar
+                            <?php echo TZ_THE_NAVIGATION_BAR; ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="beschreibung"><ol start="1" type="1">
-                            <li><b>Overview:</b> Here you find your resource fields</li>
-                            <li><b>Centre:</b> In the village you can build buildings</li>
-                            <li><b>Map:</b> Here you can have a look at your village's surrounding area and your neighbours</li>
-                            <li><b>Statistics:</b> Ranking of all players</li>
-                            <li><b>Reports:</b> Information on happenings in your village</li>
-                            <li><b>Messages:</b> Send and receive messages</li></ol>
+                            <li><b><?php echo TZ_OVERVIEW; ?></b> <?php echo TZ_HERE_YOU_FIND_YOUR_RESOURCE_FIELDS; ?></li>
+                            <li><b><?php echo TZ_CENTRE; ?></b> <?php echo TZ_IN_THE_VILLAGE_YOU_CAN_BUILD_BUILD; ?></li>
+                            <li><b><?php echo TZ_MAP_2; ?></b> <?php echo TZ_HERE_YOU_CAN_HAVE_A_LOOK_AT_YOUR_V; ?></li>
+                            <li><b><?php echo TZ_STATISTICS; ?></b> <?php echo TZ_RANKING_OF_ALL_PLAYERS; ?></li>
+                            <li><b><?php echo TZ_REPORTS; ?></b> <?php echo TZ_INFORMATION_ON_HAPPENINGS_IN_YOUR; ?></li>
+                            <li><b><?php echo TZ_MESSAGES; ?></b> <?php echo TZ_SEND_AND_RECEIVE_MESSAGES; ?></li></ol>
                         </td>
                     </tr>
                     <tr>
                         <td class="beschreibung">
-                            Now you know everything important about Travian. After registration you can start playing!
+                            <?php echo TZ_NOW_YOU_KNOW_EVERYTHING_IMPORTANT; ?>
                         </td>
                     </tr>
                 </tbody>
@@ -46,10 +46,10 @@
                 <tbody>
                     <tr>
                         <td class="nav_prev">
-                            <a href="tutorial.php?s=4" title="back">&laquo; back</a>
+                            <a href="tutorial.php?s=4" title="<?php echo BACK; ?>">&laquo; back</a>
                         </td>
                         <td class="nav_next">
-                            <a href="index.php?signup" title="to the registration"> &raquo; to the registration</a>
+                            <a href="index.php?signup" title="<?php echo TZ_TO_THE_REGISTRATION; ?>"> &raquo; to the registration</a>
                         </td>
                     </tr>
                 </tbody>
@@ -59,13 +59,13 @@
     </div>  
     <div id="footer">
         <div class="container">
-            <a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
+            <a href="#" class="logo"><img src="img/x.gif" alt="<?php echo TZ_TRAVIAN_GAMES; ?>" class="logo_traviangames" /></a>
             <ul class="menu">
-                <li><a href="anleitung.php?s=3">FAQ</a>|</li>
-                <li><a href="index.php?screenshots">Screenshots</a>|</li>
-                <li><a href="spielregeln.php">Game Rules</a>|</li>
-                <li><a href="agb.php">Terms</a>|</li>
-                <li><a href="impressum.php">Imprint</a></li>
+                <li><a href="anleitung.php?s=3"><?php echo FAQ; ?></a>|</li>
+                <li><a href="index.php?screenshots"><?php echo SCREENSHOTS; ?></a>|</li>
+                <li><a href="spielregeln.php"><?php echo GAME_RULES; ?></a>|</li>
+                <li><a href="agb.php"><?php echo TZ_TERMS; ?></a>|</li>
+                <li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
                 <li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
             </ul>
         </div>

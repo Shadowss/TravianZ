@@ -37,7 +37,7 @@ include("alli_menu.tpl");
 
     <thead>
         <tr>
-            <th colspan="2">Assign to position</th>
+            <th colspan="2"><?php echo TZ_ASSIGN_TO_POSITION; ?></th>
         </tr>
     </thead>
 
@@ -51,7 +51,7 @@ include("alli_menu.tpl");
 
         <!-- MEMBER SELECT -->
         <tr>
-            <th>Name</th>
+            <th><?php echo NAME; ?></th>
             <td>
                 <select name="a_user" class="name dropdown">
                     <?php

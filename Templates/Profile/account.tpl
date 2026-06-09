@@ -16,7 +16,7 @@
 
 ?>
 
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 
 <?php include("menu.tpl"); ?>
 
@@ -43,22 +43,22 @@ if ($session->userinfo['sit2'] != 0) $count += 1;
 <table cellpadding="1" cellspacing="1" id="change_pass" class="account">
 <thead>
 <tr>
-    <th colspan="2">Change password</th>
+    <th colspan="2"><?php echo CHANGE_PASSWORD; ?></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-    <th>Old password</th>
+    <th><?php echo OLD_PASSWORD; ?></th>
     <td><input class="text" type="password" name="pw1" maxlength="30" /></td>
 </tr>
 
 <tr>
-    <th>New password</th>
+    <th><?php echo NEW_PASSWORD; ?></th>
     <td><input class="text" type="password" name="pw2" maxlength="30" /></td>
 </tr>
 
 <tr>
-    <th>New password</th>
+    <th><?php echo NEW_PASSWORD; ?></th>
     <td><input class="text" type="password" name="pw3" maxlength="30" /></td>
 </tr>
 </tbody>
@@ -77,23 +77,23 @@ if (!empty($pwError)) {
 <table cellpadding="1" cellspacing="1" id="change_mail" class="account">
 <thead>
 <tr>
-    <th colspan="2">Change email</th>
+    <th colspan="2"><?php echo CHANGE_EMAIL; ?></th>
 </tr>
 </thead>
 <tbody>
 <tr>
     <td class="note" colspan="2">
-        Please enter your old and your new e-mail addresses. You will then receive a code snippet at both e-mail addresses which you have to enter here.
+        <?php echo TZ_PLEASE_ENTER_YOUR_OLD_AND_YOUR_NEW; ?>
     </td>
 </tr>
 
 <tr>
-    <th>Old email</th>
+    <th><?php echo OLD_EMAIL; ?></th>
     <td><input class="text" type="text" name="email_alt" /></td>
 </tr>
 
 <tr>
-    <th>New email</th>
+    <th><?php echo NEW_EMAIL; ?></th>
     <td><input class="text" type="text" name="email_neu" /></td>
 </tr>
 </tbody>
@@ -111,20 +111,20 @@ if (!empty($emailError)) {
 <table cellpadding="1" cellspacing="1" id="sitter" class="account">
 <thead>
 <tr>
-    <th colspan="2">Account sitters</th>
+    <th colspan="2"><?php echo ACCOUNT_SITTERS; ?></th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
     <td class="note" colspan="2">
-        A sitter can log into your account by using your name and his/her password. You can have up to two sitters.
+        <?php echo TZ_A_SITTER_CAN_LOG_INTO_YOUR_ACCOUNT; ?>
     </td>
 </tr>
 
 <?php if ($count < 2) { ?>
 <tr>
-    <th>Name of the sitter</th>
+    <th><?php echo SITTER_NAME; ?></th>
     <td>
         <input class="text" type="text" name="v1" maxlength="15">
         <span class="count">(<?php echo $count; ?>/2)</span>
@@ -165,7 +165,7 @@ foreach ($sitSlots as $type => $key) {
 
 <tr>
 <td class="note" colspan="2">
-    You have been entered as sitter on the following accounts. You can cancel this by clicking the red X.
+    <?php echo TZ_YOU_HAVE_BEEN_ENTERED_AS_SITTER_ON; ?>
 </td>
 </tr>
 
@@ -209,14 +209,14 @@ if (!empty($sitterError)) {
 <table cellpadding="1" cellspacing="1" id="del_acc" class="account">
 <thead>
 <tr>
-    <th colspan="2">Delete account</th>
+    <th colspan="2"><?php echo VAC_OP6; ?></th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
     <td class="note" colspan="2">
-        You can delete your account here. After starting the cancellation it will take three days to complete the cancellation of your account. You can cancel this process within the first 24 hours.
+        <?php echo TZ_YOU_CAN_DELETE_YOUR_ACCOUNT_HERE_A; ?>
     </td>
 </tr>
 
@@ -237,15 +237,15 @@ if ($timestamp) {
     echo "The account will be deleted in <span id=\"timer".++$session->timer."\">".$time."</span> .</td>";
 } else {
 ?>
-    <th>Delete account?</th>
+    <th><?php echo TZ_DELETE_ACCOUNT; ?></th>
     <td class="del_selection">
-        <label><input class="radio" type="radio" name="del" value="1" /> Yes</label>
-        <label><input class="radio" type="radio" name="del" value="0" checked /> No</label>
+        <label><input class="radio" type="radio" name="del" value="1" /> <?php echo YES; ?></label>
+        <label><input class="radio" type="radio" name="del" value="0" checked /> <?php echo NO; ?></label>
     </td>
 </tr>
 
 <tr>
-    <th>Confirm with password:</th>
+    <th><?php echo TZ_CONFIRM_WITH_PASSWORD; ?></th>
     <td><input class="text" type="password" name="del_pw" maxlength="30" /></td>
 <?php } ?>
 </tr>
@@ -259,7 +259,7 @@ if (!empty($deleteError = $form->getError("del"))) {
 ?>
 
 <p class="btn">
-    <input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" />
+    <input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="<?php echo SAVE; ?>" />
 </p>
 
 </form>

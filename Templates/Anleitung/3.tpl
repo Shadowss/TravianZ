@@ -1,5 +1,5 @@
 
-<p><img src="img/un/h/faq_vp.jpg" width="116" height="128" border="0" alt="Rally point" title="Rally point" align="right"></p>
+<p><img src="img/un/h/faq_vp.jpg" width="116" height="128" border="0" alt="<?php echo RALLYPOINT; ?>" title="<?php echo RALLYPOINT; ?>" align="right"></p>
 
 <p class="question">How can I build a rally point?</p>
 
@@ -7,7 +7,7 @@
 
 
 
-<p><img src="img/un/h/faq_botschaft.jpg" width="122" height="150" border="0" alt="Embassy" title="Embassy" align="left"></p>
+<p><img src="img/un/h/faq_botschaft.jpg" width="122" height="150" border="0" alt="<?php echo EMBASSY; ?>" title="<?php echo EMBASSY; ?>" align="left"></p>
 
 <p class="question">How can I found an alliance?</p>
 
@@ -17,7 +17,7 @@
 
 <p class="question">How can I change the name of my village?</p>
 
-<p class="answer">First select the village you wish to remain by clicking it under <i>Villages</i>. Next click <i>Profile</i> at the left then <i>Change Profile</i>. Change the name in the <i>Village name</i> box and click OK.</p>
+<p class="answer">First select the village you wish to remain by clicking it under <i><?php echo VILLAGES; ?></i>. Next click <i><?php echo PROFILE; ?></i> at the left then <i><?php echo CHANGE_PROFILE; ?></i>. Change the name in the <i><?php echo VILLAGE_NAME; ?></i> box and click OK.</p>
 
 
 
@@ -37,7 +37,7 @@
 
 <p class="question">Help, my crop production sinks more and more!</p>
 
-<p class="answer">At <i>Production</i> (e.g. 10) your crop production minus your use of crop because of <i>population</i> (e.g. 5) and <i>Troops</i> is shown. Your total crop production is shown in the upper right corner. e.g. <img src="img/un/res/5.gif" width="18" height="12" border="0" alt="use of crop" title="use of crop"> 5/15
+<p class="answer"><?php echo AT; ?> <i><?php echo PRODUCTION; ?></i> (e.g. 10) your crop production minus your use of crop because of <i><?php echo POP; ?></i> (e.g. 5) and <i><?php echo TROOPS; ?></i> is shown. Your total crop production is shown in the upper right corner. e.g. <img src="img/un/res/5.gif" width="18" height="12" border="0" alt="use of crop" title="use of crop"> 5/15
 
 <br>In the example 8 would be your use of crop, 15 your total crop production, <br>15 - 8 = 7 units of crop per hour. </p>
 
@@ -45,13 +45,13 @@
 
 <p class="question">Why do my troops plunder so few resources?</p>
 
-<p class="answer">There are two explanations. Firstly, each troop type can only carry a certain number of resources. Secondly, your victim might have a <i>cranny</i> where his or her villagers automatically hide a certain number of resources that your plundering hordes cannot find.</p>
+<p class="answer">There are two explanations. Firstly, each troop type can only carry a certain number of resources. Secondly, your victim might have a <i><?php echo CRANNY; ?></i> where his or her villagers automatically hide a certain number of resources that your plundering hordes cannot find.</p>
 
 
 
 <p class="question">How can I found or conquer new villages?</p>
 
-<p class="answer">You need three settlers to found a new village. To conquer a village you need an administrator (senator, chief or chieftain) which can be trained in your palace/residence at level 10. Additionally you need a certain number of <a href="anleitung.php?s=4">culture points</a>.</p>
+<p class="answer">You need three settlers to found a new village. To conquer a village you need an administrator (senator, chief or chieftain) which can be trained in your palace/residence at level 10. Additionally you need a certain number of <a href="anleitung.php?s=4"><?php echo CULTUREPOINT; ?></a>.</p>
 
 
 

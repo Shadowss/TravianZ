@@ -62,11 +62,11 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="3">Alliance</th>
+    <th colspan="3"><?php echo ALLIANCE; ?></th>
 </tr>
 <tr>
-    <td colspan="2">Details</td>
-    <td>Description</td>
+    <td colspan="2"><?php echo DETAIL; ?></td>
+    <td><?php echo DESCRIPTION; ?></td>
 </tr>
 </thead>
 
@@ -79,7 +79,7 @@ include("alli_menu.tpl");
 
 <!-- TAG + DESCRIPTION -->
 <tr>
-    <th>Tag</th>
+    <th><?php echo TAG; ?></th>
     <td class="s7">
         <?php echo htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8'); ?>
     </td>
@@ -94,7 +94,7 @@ include("alli_menu.tpl");
 </tr>
 
 <tr>
-    <th>Name</th>
+    <th><?php echo NAME; ?></th>
     <td><?php echo htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8'); ?></td>
 </tr>
 
@@ -102,17 +102,17 @@ include("alli_menu.tpl");
 
 <!-- RANK -->
 <tr>
-    <th>Rank</th>
+    <th><?php echo RANK; ?></th>
     <td><?php echo (int)$ranking->getAllianceRank($aid); ?>.</td>
 </tr>
 
 <tr>
-    <th>Points</th>
+    <th><?php echo POINTS; ?></th>
     <td><?php echo (int)$totalpop; ?></td>
 </tr>
 
 <tr>
-    <th>Members</th>
+    <th><?php echo TZ_MEMBERS; ?></th>
     <td><?php echo count($memberlist); ?></td>
 </tr>
 
@@ -135,13 +135,13 @@ include("alli_menu.tpl");
 <!-- MEDALS -->
 <p>
 <table cellspacing="1" cellpadding="2" class="tbg">
-<tr><td class="rbg" colspan="4">Medals</td></tr>
+<tr><td class="rbg" colspan="4"><?php echo MEDALS; ?></td></tr>
 
 <tr>
-    <td>Category</td>
-    <td>Rank</td>
-    <td>Week</td>
-    <td>BB-Code</td>
+    <td><?php echo CATEGORY; ?></td>
+    <td><?php echo RANK; ?></td>
+    <td><?php echo WEEK; ?></td>
+    <td><?php echo BB_CODE; ?></td>
 </tr>
 
 <?php
@@ -199,7 +199,7 @@ if (!empty($varmedal)) {
 <!-- SAVE BUTTON -->
 <p class="btn">
     <input tabindex="3" type="image" name="s1" id="btn_save"
-           class="dynamic_img" src="img/x.gif" alt="save">
+           class="dynamic_img" src="img/x.gif" alt="<?php echo SAVE; ?>">
 </p>
 
 </form>

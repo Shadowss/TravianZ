@@ -9,7 +9,7 @@ $current = $level > 0 ? (int)$bid39[$level]['attri'] * STORAGE_MULTIPLIER : 0;
 ?>
 <div id="build" class="gid39">
     <a href="#" onClick="return Popup(39,4);" class="build_logo">
-        <img class="building g39" src="img/x.gif" alt="Great Granary" title="<?php echo GREATGRANARY;?>" />
+        <img class="building g39" src="img/x.gif" alt="<?php echo GREATGRANARY; ?>" title="<?php echo GREATGRANARY;?>" />
     </a>
     <h1><?php echo GREATGRANARY;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo GREATGRANARY_DESC;?></p>

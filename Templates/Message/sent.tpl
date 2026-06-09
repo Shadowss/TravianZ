@@ -24,7 +24,7 @@ function getCachedUsername($uid, $database, &$cache) {
 ?>
 
 <div id="content" class="messages">
-<h1>Messages</h1>
+<h1><?php echo MESSAGES; ?></h1>
 
 <?php include("menu.tpl"); ?>
 
@@ -36,10 +36,10 @@ function getCachedUsername($uid, $database, &$cache) {
 <thead>
 <tr>
     <th></th>
-    <th>Subject</th>
-    <th>Recipient</th>
+    <th><?php echo SUBJECT; ?></th>
+    <th><?php echo RECIPIENT; ?></th>
     <th class="sent">
-        <a href="nachrichten.php?t=2&s=0&amp;t=2&amp;o=1">Sent</a>
+        <a href="nachrichten.php?t=2&s=0&amp;t=2&amp;o=1"><?php echo SENT; ?></a>
     </th>
 </tr>
 </thead>
@@ -69,7 +69,7 @@ if ($golds['plus'] > $date2) {
 </th>
 
 <th colspan="2" class="buttons">
-<button value="delete" name="delmsg" id="btn_delete" class="trav_buttons">Delete</button>
+<button value="delete" name="delmsg" id="btn_delete" class="trav_buttons"><?php echo DELETE; ?></button>
 </th>
 
 <th class="navi">

@@ -5,27 +5,27 @@
 							Defender
 						</td><td>
 
-								<img src="img/x.gif" class="unit u11" title="Clubswinger" alt="Clubswinger" />
+								<img src="img/x.gif" class="unit u11" title="<?php echo U11; ?>" alt="<?php echo U11; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u12" title="Spearman" alt="Spearman" />
+								<img src="img/x.gif" class="unit u12" title="<?php echo U12; ?>" alt="<?php echo U12; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u13" title="Axeman" alt="Axeman" />
+								<img src="img/x.gif" class="unit u13" title="<?php echo U13; ?>" alt="<?php echo U13; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u14" title="Scout" alt="Scout" />
+								<img src="img/x.gif" class="unit u14" title="<?php echo U14; ?>" alt="<?php echo U14; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u15" title="Paladin" alt="Paladin" />
+								<img src="img/x.gif" class="unit u15" title="<?php echo U15; ?>" alt="<?php echo U15; ?>" />
 
 							</td><td>
-								<img src="img/x.gif" class="unit u16" title="Teutonic Knight" alt="Teutonic Knight" />
+								<img src="img/x.gif" class="unit u16" title="<?php echo U16; ?>" alt="<?php echo U16; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u17" title="Ram" alt="Ram" />
+								<img src="img/x.gif" class="unit u17" title="<?php echo U17; ?>" alt="<?php echo U17; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u18" title="Catapult" alt="Catapult" />
+								<img src="img/x.gif" class="unit u18" title="<?php echo U18; ?>" alt="<?php echo U18; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u19" title="Chief" alt="Chief" />
+								<img src="img/x.gif" class="unit u19" title="<?php echo U19; ?>" alt="<?php echo U19; ?>" />
 							</td><td>
 
-								<img src="img/x.gif" class="unit u20" title="Settler" alt="Settler" />
+								<img src="img/x.gif" class="unit u20" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" />
 							</td></tr>
 				</thead>
 				<tbody>

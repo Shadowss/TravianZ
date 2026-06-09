@@ -17,7 +17,7 @@
 if (GP_ENABLE) {
 ?>
 
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 
 <?php
 // =========================
@@ -55,10 +55,10 @@ if (isset($_GET["custom_url"])) {
 
     <!-- ================= ERROR BOX ================= -->
     <div id="gpack_error">
-        <img class="logo unknown" src="img/x.gif" alt="unknown" title="unknown">
+        <img class="logo unknown" src="img/x.gif" alt="<?php echo TZ_UNKNOWN; ?>" title="<?php echo TZ_UNKNOWN; ?>">
 
         <span class="error">
-            Graphic Pack could not be found. This could be due to the following reasons:
+            <?php echo TZ_ML_GPACK_NOTFOUND; ?>
         </span>
 
         <br>
@@ -77,7 +77,7 @@ if (isset($_GET["custom_url"])) {
         <form action="spieler.php" method="post">
             <input type="hidden" name="s" value="4">
             <div class="btn">
-                <button class="trav_buttons" id="btn_ok">Ok</button>
+                <button class="trav_buttons" id="btn_ok"><?php echo TZ_OK_2; ?></button>
             </div>
         </form>
     </div>
@@ -85,15 +85,13 @@ if (isset($_GET["custom_url"])) {
     <!-- ================= SUCCESS BOX ================= -->
     <div id="gpack_activate">
 
-        <span class="info">Graphic Pack found.</span><br>
+        <span class="info"><?php echo TZ_GRAPHIC_PACK_FOUND; ?></span><br>
 
         <img id="preview" src="img/x.gif"><br>
 
-        The path
+        <?php echo TZ_THE_PATH; ?>
         <span class="path"><?php echo $gpackUrlEsc; ?></span>
-        shows an allowed Graphic Pack.
-
-        Save your choice to activate it.
+        <?php echo TZ_ML_GPACK_ALLOWED_SAVE; ?>
 
         <form action="spieler.php" method="post">
             <input type="hidden" name="s" value="4">
@@ -121,7 +119,7 @@ if (isset($_GET["custom_url"])) {
 
         <thead>
             <tr>
-                <th>Graphic pack settings</th>
+                <th><?php echo TZ_GRAPHIC_PACK_SETTINGS; ?></th>
             </tr>
         </thead>
 
@@ -129,10 +127,9 @@ if (isset($_GET["custom_url"])) {
 
             <tr>
                 <td class="info">
-                    With a graphic pack you can alter the appearance of Travian.
-                    You can choose one from the list or provide a custom path.
+                    <?php echo TZ_ML_GPACK_ALTER_APPEARANCE; ?>
                     <br><br>
-                    <span class="alert">ATTENTION! Use only trustworthy graphic packs</span>
+                    <span class="alert"><?php echo TZ_ATTENTION_USE_ONLY_TRUSTWORTHY_GRA; ?></span>
                 </td>
             </tr>
 
@@ -145,7 +142,7 @@ if (isset($_GET["custom_url"])) {
 
                     <label>
                         <input type="radio" class="radio" name="gp_type" value="custom" checked="checked" />
-                        User-defined graphic pack
+                        <?php echo TZ_USER_DEFINED_GRAPHIC_PACK; ?>
                     </label>
 
                     <input
@@ -159,7 +156,7 @@ if (isset($_GET["custom_url"])) {
                     <br />
 
                     <div class="example">
-                        Example:
+                        <?php echo TZ_EXAMPLE; ?>
                         <span class="path">file:///C:/Travian/gpack/</span>
                         or
                         <span class="path">http://www.travian.org/user/gpack/</span>
@@ -167,7 +164,7 @@ if (isset($_GET["custom_url"])) {
 
                     <center>
                         <div class="example">
-                            Default:
+                            <?php echo TZ_DEFAULT; ?>
                             <span class="path"><?php echo GP_LOCATE; ?></span>
                         </div>
                     </center>
@@ -180,7 +177,7 @@ if (isset($_GET["custom_url"])) {
 
     <p class="btn">
         <button name="gp_selection_button" value="ok" class="trav_buttons" id="btn_ok">
-            Ok
+            <?php echo TZ_OK_2; ?>
         </button>
     </p>
 </form>
@@ -191,20 +188,20 @@ if (isset($_GET["custom_url"])) {
 
     <thead>
         <tr>
-            <th colspan="4">More graphic packs</th>
+            <th colspan="4"><?php echo TZ_MORE_GRAPHIC_PACKS; ?></th>
         </tr>
         <tr>
-            <td>Name</td>
-            <td>Size in MB</td>
-            <td>Activate</td>
-            <td>Download</td>
+            <td><?php echo NAME; ?></td>
+            <td><?php echo TZ_SIZE_IN_MB; ?></td>
+            <td><?php echo ACTIVATE; ?></td>
+            <td><?php echo TZ_DOWNLOAD; ?></td>
         </tr>
     </thead>
 
     <tbody>
 
         <tr>
-            <td class="nam">Travian Default</td>
+            <td class="nam"><?php echo TZ_TRAVIAN_DEFAULT; ?></td>
             <td class="size">4</td>
             <td class="act">
                 <a href="spieler.php?s=4&gp_type=custom&custom_url=gpack/travian_default/">
@@ -213,13 +210,13 @@ if (isset($_GET["custom_url"])) {
             </td>
             <td class="down">
                 <a href="gpack/download/travian_default.zip" target="_blank">
-                    Download
+                    <?php echo TZ_DOWNLOAD; ?>
                 </a>
             </td>
         </tr>
 
         <tr>
-            <td class="nam">Travian T4 Style</td>
+            <td class="nam"><?php echo TZ_TRAVIAN_T4_STYLE; ?></td>
             <td class="size">4</td>
             <td class="act">
                 <a href="spieler.php?s=4&gp_type=custom&custom_url=gpack/travian_t4/">
@@ -228,7 +225,7 @@ if (isset($_GET["custom_url"])) {
             </td>
             <td class="down">
                 <a href="gpack/download/travian_default.zip" target="_blank">
-                    Download
+                    <?php echo TZ_DOWNLOAD; ?>
                 </a>
             </td>
         </tr>

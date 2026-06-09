@@ -30,7 +30,7 @@ $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3
         <td class="role">
             <?php if (!$isElders):?>
                 <a href="karte.php?d=<?= $from?>&c=<?= $generator->getMapCheck($from)?>"><?= $database->getVillageField($from,'name')?></a>
-            <?php else:?><a>village of the elders</a><?php endif;?>
+            <?php else:?><a><?php echo VILLAGE_OF_THE_ELDERS; ?></a><?php endif;?>
         </td>
         <td colspan="<?= $colspan?>">
             <?php if (!$isElders):?>
@@ -41,7 +41,7 @@ $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3
     <tbody class="units">
         <tr><th>&nbsp;</th>
             <?php for ($i=$start;$i<=$end;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>" title="<?= $technology->getUnitName($i)?>"></td><?php endfor;?>
-            <?php if ($u['t11'] && $isMine):?><td><img src="img/x.gif" class="unit uhero" title="Hero"></td><?php endif;?>
+            <?php if ($u['t11'] && $isMine):?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif;?>
         </tr>
         <tr><th><?= TROOPS?></th>
             <?php for ($i=1;$i<=$colspan;$i++):

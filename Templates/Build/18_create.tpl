@@ -32,7 +32,7 @@ $maxName = $isBanned ? 25 : 50;
     </table>
 
     <?php if (!$isBanned):?>
-        <p><button type="submit" name="s1" id="btn_ok" class="trav_buttons">Ok</button></p>
+        <p><button type="submit" name="s1" id="btn_ok" class="trav_buttons"><?php echo TZ_OK_2; ?></button></p>
     </form>
     <?php else:?>
     </form>

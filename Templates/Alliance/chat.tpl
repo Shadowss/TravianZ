@@ -91,7 +91,7 @@ function send_data() {
 
 <form name="form1" onsubmit="return send_data();">
 
-    <div id="TitleName" class="chatHeader">Ally-Chat</div>
+    <div id="TitleName" class="chatHeader"><?php echo TZ_ALLY_CHAT; ?></div>
 
     <div id="chatContainer"
          style="position:relative; height:220px; width:500px; overflow:hidden; background:#FFF; border:1px solid #C0C0C0;">
@@ -130,7 +130,7 @@ function send_data() {
                     <input type="button"
                            id="btn_ok"
                            style="border:0; float:left;"
-                           alt="ok"
+                           alt="<?php echo TZ_OK_3; ?>"
                            onclick="send_data();" />
                 </td>
             </tr>

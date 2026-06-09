@@ -64,7 +64,7 @@ foreach ($varray as $vil) {
 }
 ?>
 
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 
 <?php
 // =========================
@@ -107,8 +107,8 @@ if ($displayarray['vac_mode'] == 1)
 ?>
 
 <tr>
-    <td>Details</td>
-    <td>Description</td>
+    <td><?php echo DETAIL; ?></td>
+    <td><?php echo DESCRIPTION; ?></td>
 </tr>
 
 </thead>
@@ -128,17 +128,17 @@ if ($displayarray['vac_mode'] == 1)
 
 <?php
 if ($displayarray['access'] == BANNED) {
-    echo "<tr><td colspan='2'><center><b>Banned</b></center></td></tr>";
+    echo "<tr><td colspan='2'><center><b>".BANNED."</b></center></td></tr>";
 }
 ?>
 
 <tr>
-    <th>Rank</th>
+    <th><?php echo RANK; ?></th>
     <td><?php echo $ranking->getUserRank($displayarray['id']); ?></td>
 </tr>
 
 <tr>
-    <th>Tribe</th>
+    <th><?php echo TRIBE; ?></th>
     <td>
         <?php
         $tribeArrays = [TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5];
@@ -148,7 +148,7 @@ if ($displayarray['access'] == BANNED) {
 </tr>
 
 <tr>
-    <th>Alliance</th>
+    <th><?php echo ALLIANCE; ?></th>
     <td>
         <?php
         if ($displayarray['alliance'] == 0) {
@@ -164,12 +164,12 @@ if ($displayarray['access'] == BANNED) {
 </tr>
 
 <tr>
-    <th>Villages</th>
+    <th><?php echo VILLAGES; ?></th>
     <td><?php echo count($varray); ?></td>
 </tr>
 
 <tr>
-    <th>Population</th>
+    <th><?php echo POP; ?></th>
     <td><?php echo (int)$totalpop; ?></td>
 </tr>
 
@@ -193,14 +193,14 @@ if (!empty($displayarray['birthday'])) {
 // =========================
 if (!empty($displayarray['gender'])) {
     $gender = ($displayarray['gender'] == 1) ? "Male" : "Female";
-    echo "<tr><th>Gender</th><td>$gender</td></tr>";
+    echo "<tr><th>".GENDER."</th><td>$gender</td></tr>";
 }
 
 // =========================
 // LOCATION
 // =========================
 if (!empty($displayarray['location'])) {
-    echo "<tr><th>Location</th><td>" .
+    echo "<tr><th>".LOCATION."</th><td>" .
          htmlspecialchars($displayarray['location'], ENT_QUOTES, 'UTF-8') .
          "</td></tr>";
 }
@@ -287,14 +287,14 @@ if ($uid == $session->uid) {
 </tr>
 
 <tr>
-    <td>Name</td>
+    <td><?php echo NAME; ?></td>
 
     <?php if (defined('NEW_FUNCTIONS_OASIS') && NEW_FUNCTIONS_OASIS) { ?>
-        <td>Oasis</td>
+        <td><?php echo OASIS; ?></td>
     <?php } ?>
 
-    <td>Inhabitants</td>
-    <td>Coordinates</td>
+    <td><?php echo INHABITANTS; ?></td>
+    <td><?php echo COORDINATES; ?></td>
 </tr>
 
 </thead>

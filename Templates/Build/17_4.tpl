@@ -14,7 +14,7 @@ $edit = ($action === 'editRoute' && $routeid > 0 && $database->getTradeRouteUid(
 ?>
 <div id="build" class="gid17">
     <a href="#" onClick="return Popup(17,4);" class="build_logo">
-        <img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" />
+        <img class="building g17" src="img/x.gif" alt="<?php echo MARKETPLACE; ?>" title="<?php echo MARKETPLACE;?>" />
     </a>
     <h1><?php echo MARKETPLACE;?> <span class="level"><?php echo LEVEL;?> <?php echo (int)$village->resarray['f'.$id];?></span></h1>
     <p class="build_desc"><?php echo MARKETPLACE_DESC;?></p>
@@ -28,7 +28,7 @@ $edit = ($action === 'editRoute' && $routeid > 0 && $database->getTradeRouteUid(
         <?php include("17_edit.tpl");?>
 
     <?php else:?>
-        <p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE;?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>.</p>
+        <p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE;?>img/a/gold.gif" alt="<?php echo GOLD; ?>" title="<?php echo GOLD;?>"><b>2</b>.</p>
 
         <form method="post" action="build.php?gid=17&t=4">
             <table id="npc" cellpadding="1" cellspacing="1">
@@ -78,7 +78,7 @@ $edit = ($action === 'editRoute' && $routeid > 0 && $database->getTradeRouteUid(
             </table>
         </form>
 
-        * <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE;?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>
+        * <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE;?>img/a/gold.gif" alt="<?php echo GOLD; ?>" title="<?php echo GOLD;?>"><b>2</b>
         <br>
         <div class="options">
             <a class="arrow" href="build.php?gid=17&t=4&create">» <?php echo CREATE_TRADE_ROUTES;?></a>

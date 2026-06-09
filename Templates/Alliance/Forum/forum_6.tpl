@@ -37,7 +37,7 @@ include ("GameEngine/BBCode.php");
 $bbcode_topic = stripslashes(nl2br($bbcoded));
 ?>
 <h4>
-	<a href="allianz.php?s=2">Alliance</a> -> <a
+	<a href="allianz.php?s=2"><?php echo ALLIANCE; ?></a> -> <a
 		href="allianz.php?s=2&fid=<?php echo $arr['cat']; ?>"><?php echo $CatName; ?></a>
 </h4>
 <table cellpadding="1" cellspacing="1" id="posts">
@@ -47,8 +47,8 @@ $bbcode_topic = stripslashes(nl2br($bbcoded));
 
 		</tr>
 		<tr>
-			<td>Author</td>
-			<td>Message</td>
+			<td><?php echo TZ_AUTHOR; ?></td>
+			<td><?php echo TZ_MESSAGE_3; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -67,7 +67,7 @@ $checkArray = ['aid' => $aid, 'alliance' => $arr['alliance'], 'forum_perm' => $o
 		'owner' => $arr['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $forumData['owner']];
 
 if(Alliance::canAct($checkArray)){
-	echo '<div class="admin"><a class="edit" href="allianz.php?s=2&idt='.$arr['id'].'&admin=editans"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&fid='.$arr['cat'].'&idt='.$arr['id'].'&admin=deltopic" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
+	echo '<div class="admin"><a class="edit" href="allianz.php?s=2&idt='.$arr['id'].'&admin=editans"><img src="img/x.gif" title="'.EDIT.'" alt="'.EDIT.'" /></a><a class="fdel" href="?s=2&fid='.$arr['cat'].'&idt='.$arr['id'].'&admin=deltopic" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="'.DELETE.'" alt="'.DELETE.'" /></a></div><br />';
 }
 ?>
 		<div class="clear dotted"></div>
@@ -109,7 +109,7 @@ if($database->checkSurvey($arr['id'])){
 							name="tid" value="<?php echo $_GET['tid']; ?>" />
 						<p class="btn">
 							<input type="image" id="fbtn_vote" value="ok" name="s1"
-								class="dynamic_img" src="img/x.gif" alt="Vote" />
+								class="dynamic_img" src="img/x.gif" alt="<?php echo TZ_VOTE; ?>" />
 				
 				</form>
 				</p>
@@ -168,7 +168,7 @@ foreach($posts as $po){
 		</td>
 		<td class="pcontent"><div class="posted">created: '.$date.'</div>';
 	if(Alliance::canAct($checkArray)){
-		echo '<div class="admin"><a class="edit" href="allianz.php?s=2&fid='.$topic['cat'].'&tid='.$_GET['tid'].'&pod='.$po['id'].'&admin=editpost"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&pod='.$po['id'].'&tid='.$_GET['tid'].'&fid2='.$topic['cat'].'&admin=delpost" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
+		echo '<div class="admin"><a class="edit" href="allianz.php?s=2&fid='.$topic['cat'].'&tid='.$_GET['tid'].'&pod='.$po['id'].'&admin=editpost"><img src="img/x.gif" title="'.EDIT.'" alt="'.EDIT.'" /></a><a class="fdel" href="?s=2&pod='.$po['id'].'&tid='.$_GET['tid'].'&fid2='.$topic['cat'].'&admin=delpost" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="'.DELETE.'" alt="'.DELETE.'" /></a></div><br />';
 	}
 	echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></td>
 	</tr>';
@@ -179,7 +179,7 @@ foreach($posts as $po){
 <div style="margin-top: 15px;">
 <?php
 if(!$arr['close'] && ($forumData['forum_area'] != 3 || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1))){
-	echo '<a href="allianz.php?s=2&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
+	echo '<a href="allianz.php?s=2&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="'.TZ_REPLIES.'" /></a>';
 	echo '<a href="allianz.php?s=2&tid='.$arr['id'].((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 }
 ?>

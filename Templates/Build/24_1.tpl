@@ -27,7 +27,7 @@ $inProgress = $inuse > $now;
                     <img class="r3" src="img/x.gif" title="<?php echo IRON;?>"/><?php echo (int)$c['iron'];?>|
                     <img class="r4" src="img/x.gif" title="<?php echo CROP;?>"/><?php echo (int)$c['crop'];?>|
                     <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $time;?>
-                    <?php if ($showNpc):?>|<a href="build.php?gid=17&t=3&r1=<?php echo $c['wood'];?>&r2=<?php echo $c['clay'];?>&r3=<?php echo $c['iron'];?>&r4=<?php echo $c['crop'];?>" title="NPC trade"><img class="npc" src="img/x.gif"/></a><?php endif;?>
+                    <?php if ($showNpc):?>|<a href="build.php?gid=17&t=3&r1=<?php echo $c['wood'];?>&r2=<?php echo $c['clay'];?>&r3=<?php echo $c['iron'];?>&r4=<?php echo $c['crop'];?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif"/></a><?php endif;?>
                     <?php if (!$canAfford &&!$inProgress): if ($village->getProd("crop")>0){ $t=$technology->calculateAvaliable(24,$c); echo "<br><span class=\"none\">".ENOUGH_RESOURCES." ".$t[0]." at ".$t[1]."</span>"; } else echo "<br><span class=\"none\">".CROP_NEGATIVE."</span>"; endif;?>
                 </div>
             </td>
@@ -53,7 +53,7 @@ $inProgress = $inuse > $now;
                     <img class="r3" src="img/x.gif" title="<?php echo IRON;?>"/>32000|
                     <img class="r4" src="img/x.gif" title="<?php echo CROP;?>"/>6700|
                     <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $gcTime;?>
-                    <?php if ($showNpc2):?>|<a href="build.php?gid=17&t=3&r1=29700&r2=33250&r3=32000&r4=6700" title="NPC trade"><img class="npc" src="img/x.gif"/></a><?php endif;?>
+                    <?php if ($showNpc2):?>|<a href="build.php?gid=17&t=3&r1=29700&r2=33250&r3=32000&r4=6700" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif"/></a><?php endif;?>
                     <?php if (!$canAfford2 &&!$inProgress): if ($village->getProd("crop")>0){ $t=$technology->calculateAvaliable(24,$cel[2]); echo "<br><span class=\"none\">".ENOUGH_RESOURCES." ".$t[0]." at ".$t[1]."</span>"; } else echo "<br><span class=\"none\">".CROP_NEGATIVE."</span>"; endif;?>
                 </div>
             </td>

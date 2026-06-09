@@ -79,7 +79,7 @@ foreach ($spawnEvents as $eventName => $spawnTime) {
 
             <span>
                 <b><?php echo $eventName; ?></b>
-                will spawn in:
+                <?php echo TZ_WILL_SPAWN_IN; ?>
             </span>
 
             <span id="timer<?php echo ++$session->timer; ?>">

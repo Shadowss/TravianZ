@@ -42,7 +42,7 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Link to the forum</th>
+    <th colspan="2"><?php echo TZ_LINK_TO_THE_FORUM; ?></th>
 </tr>
 </thead>
 
@@ -75,7 +75,7 @@ include("alli_menu.tpl");
 
 <tr>
     <td colspan="2" class="info">
-        If your alliance wants to use an external forum, you can enter the url here.
+        <?php echo TZ_IF_YOUR_ALLIANCE_WANTS_TO_USE_AN_E; ?>
     </td>
 </tr>
 
@@ -90,7 +90,7 @@ include("alli_menu.tpl");
         id="btn_ok"
         class="trav_buttons"
         onclick="this.disabled=true;this.form.submit();">
-        Ok
+        <?php echo TZ_OK_2; ?>
     </button>
 </p>
 

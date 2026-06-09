@@ -38,7 +38,7 @@ for ($i = $start; $i <= $end; $i++):
             <img class="r5" src="img/x.gif" title="<?php echo CROP_COM;?>"/><?php echo $pop;?>|
             <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $generator->getTimeFormat($time);?>
             <?php if ($showNpc):?>
-            |<a href="build.php?gid=17&t=3&r1=<?php echo $costWood/3*$maxPlus;?>&r2=<?php echo $costClay/3*$maxPlus;?>&r3=<?php echo $costIron/3*$maxPlus;?>&r4=<?php echo $costCrop/3*$maxPlus;?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade" /></a>
+            |<a href="build.php?gid=17&t=3&r1=<?php echo $costWood/3*$maxPlus;?>&r2=<?php echo $costClay/3*$maxPlus;?>&r3=<?php echo $costIron/3*$maxPlus;?>&r4=<?php echo $costCrop/3*$maxPlus;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" /></a>
             <?php endif;?>
         </div>
     </td>

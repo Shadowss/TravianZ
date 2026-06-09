@@ -149,7 +149,7 @@ for ($i = 1; $i <= 18; $i++) {
     <area href="dorf2.php"
           coords="144,131,36"
           shape="circle"
-          title="Village centre"
+          title="<?php echo VILLAGE_CENTER; ?>"
           alt="" />
 
 </map>

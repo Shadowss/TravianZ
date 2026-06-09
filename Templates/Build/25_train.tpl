@@ -45,7 +45,7 @@ echo "<td class=\"val\"><input type=\"text\" class=\"text\" name=\"t".$i."\" val
 </tbody>
 </table>
 <p>
-<input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
+<input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" />
 </p>
 </form>
 <?php

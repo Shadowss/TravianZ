@@ -32,8 +32,8 @@ The chronological order of troop movements stays the same, even in an event jam,
 As player, nothing can be done against an event jam except waiting. Normally these problems get resolved after a few minutes automatically. At the moment <b><?php echo $count; ?></b> events await
 </p>
 <map id="nav" name="nav">
-    <area href="manual.php?s=1" title="back" coords="0,0,45,18" shape="rect" alt="" />
-    <area href="manual.php?s=1" title="Overview" coords="46,0,70,18" shape="rect" alt="" />
+    <area href="manual.php?s=1" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="forward" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />

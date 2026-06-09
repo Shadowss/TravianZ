@@ -231,7 +231,7 @@ if(isset($_POST['lang']))
 <!-- =========================
      PAGE HEADER
 ========================= -->
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 
 <?php include("menu.tpl"); ?>
 
@@ -244,13 +244,13 @@ if(isset($_POST['lang']))
 <table cellpadding="1" cellspacing="1" id="links">
     <thead>
         <tr>
-            <th colspan="4">Direct links</th>
+            <th colspan="4"><?php echo DIRECT_LINKS; ?></th>
         </tr>
         <tr>
-            <td>Delete</td>
-            <td>No.</td>
-            <td>Link name</td>
-            <td>Link target</td>
+            <td><?php echo DELETE; ?></td>
+            <td><?php echo TZ_NO; ?></td>
+            <td><?php echo LINK_NAME; ?></td>
+            <td><?php echo LINK_TARGET; ?></td>
         </tr>
     </thead>
 
@@ -266,7 +266,7 @@ if(isset($_POST['lang']))
         <tr>
             <td>
                 <a href="spieler.php?del=<?php echo (int)$link['id']; ?>&s=2">
-                    <img class="del" src="img/x.gif" alt="delete" title="delete">
+                    <img class="del" src="img/x.gif" alt="<?php echo DELETE; ?>" title="<?php echo DELETE; ?>">
                 </a>
             </td>
 
@@ -352,27 +352,27 @@ if(isset($_POST['lang']))
   <th colspan="2">
     Auto completion 
     <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      (not coded yet)
+      <?php echo TZ_NOT_CODED_YET; ?>
     </span>
   </th>
 </tr>
-<tr><td colspan="2">Used for rally point and marketplace:</td></tr>
+<tr><td colspan="2"><?php echo TZ_USED_FOR_RALLY_POINT_AND_MARKETPLA; ?></td></tr>
 </thead>
 <tbody>
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v1" value="1" <?php if($session->userinfo['v1']) echo 'checked'; ?>></td>
-<td>own villages</td>
+<td><?php echo OWN_VILLAGES; ?></td>
 </tr>
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v2" value="1" <?php if($session->userinfo['v2']) echo 'checked'; ?>></td>
-<td>villages of the surroundings</td>
+<td><?php echo VILLAGES_NEAR; ?></td>
 </tr>
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v3" value="1" <?php if($session->userinfo['v3']) echo 'checked'; ?>></td>
-<td>villages from players of the alliance</td>
+<td><?php echo VILLAGES_ALLI_PLAYERS; ?></td>
 </tr>
 
 </tbody>
@@ -387,7 +387,7 @@ if(isset($_POST['lang']))
   <th colspan="2">
     Large map 
     <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      (not coded yet)
+      <?php echo TZ_NOT_CODED_YET; ?>
     </span>
   </th>
 </tr>
@@ -397,7 +397,7 @@ if(isset($_POST['lang']))
 <td class="sel">
 <input class="check" type="checkbox" name="map" <?php if($session->userinfo['map']) echo 'checked'; ?>>
 </td>
-<td>Show the large map in an extra window.</td>
+<td><?php echo TZ_SHOW_THE_LARGE_MAP_IN_AN_EXTRA_WIN; ?></td>
 </tr>
 </tbody>
 </table>
@@ -411,7 +411,7 @@ if(isset($_POST['lang']))
   <th colspan="2">
     Report filter
     <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      (not coded yet)
+      <?php echo TZ_NOT_CODED_YET; ?>
     </span>
   </th>
 </tr>
@@ -420,17 +420,17 @@ if(isset($_POST['lang']))
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v4" value="1" <?php if($session->userinfo['v4']) echo 'checked'; ?>></td>
-<td>No reports for transfers to own villages.</td>
+<td><?php echo TZ_NO_REPORTS_FOR_TRANSFERS_TO_OWN_VI; ?></td>
 </tr>
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v5" value="1" <?php if($session->userinfo['v5']) echo 'checked'; ?>></td>
-<td>No reports for transfers to foreign villages.</td>
+<td><?php echo TZ_NO_REPORTS_FOR_TRANSFERS_TO_FOREIG; ?></td>
 </tr>
 
 <tr>
 <td class="sel"><input class="check" type="checkbox" name="v6" value="1" <?php if($session->userinfo['v6']) echo 'checked'; ?>></td>
-<td>No reports for transfers from foreign villages.</td>
+<td><?php echo TZ_NO_REPORTS_FOR_TRANSFERS_FROM_FORE; ?></td>
 </tr>
 
 </tbody>
@@ -443,57 +443,57 @@ if(isset($_POST['lang']))
 <thead>
 <tr>
   <th colspan="2">
-    Time Preference
+    <?php echo TZ_TIME_PREFERENCE; ?>
     <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      (not coded yet)
+      <?php echo TZ_NOT_CODED_YET; ?>
     </span>
   </th>
 </tr>
-<tr><td colspan="2">Here you can change Travian's displayed time to fit your time zone.</td></tr>
+<tr><td colspan="2"><?php echo TZ_HERE_YOU_CAN_CHANGE_TRAVIAN_S_DISP; ?></td></tr>
 </thead>
 <tbody>
 
 <tr>
-<th>Time zones</th>
+<th><?php echo TZ_TIME_ZONES; ?></th>
 <td>
 <select name="timezone" class="dropdown">
 
 <optgroup label="local time zones">
-    <option value="495" <?php if($session->userinfo['timezone']==495) echo 'selected'; ?>>Europe</option>
-    <option value="99" <?php if($session->userinfo['timezone']==99) echo 'selected'; ?>>UK</option>
-    <option value="492" <?php if($session->userinfo['timezone']==492) echo 'selected'; ?>>Turkey</option>
-    <option value="328" <?php if($session->userinfo['timezone']==328) echo 'selected'; ?>>Asia/Kolkata</option>
-    <option value="345" <?php if($session->userinfo['timezone']==345) echo 'selected'; ?>>Asia/Bangkok</option>
-    <option value="257" <?php if($session->userinfo['timezone']==257) echo 'selected'; ?>>USA/New York</option>
-    <option value="189" <?php if($session->userinfo['timezone']==189) echo 'selected'; ?>>USA/Chicago</option>
-    <option value="474" <?php if($session->userinfo['timezone']==474) echo 'selected'; ?>>New Zealand</option>
+    <option value="495" <?php if($session->userinfo['timezone']==495) echo 'selected'; ?>><?php echo TIME_ZONE_L1; ?></option>
+    <option value="99" <?php if($session->userinfo['timezone']==99) echo 'selected'; ?>><?php echo TIME_ZONE_L2; ?></option>
+    <option value="492" <?php if($session->userinfo['timezone']==492) echo 'selected'; ?>><?php echo TIME_ZONE_L3; ?></option>
+    <option value="328" <?php if($session->userinfo['timezone']==328) echo 'selected'; ?>><?php echo TIME_ZONE_L4; ?></option>
+    <option value="345" <?php if($session->userinfo['timezone']==345) echo 'selected'; ?>><?php echo TIME_ZONE_L5; ?></option>
+    <option value="257" <?php if($session->userinfo['timezone']==257) echo 'selected'; ?>><?php echo TIME_ZONE_L6; ?></option>
+    <option value="189" <?php if($session->userinfo['timezone']==189) echo 'selected'; ?>><?php echo TIME_ZONE_L7; ?></option>
+    <option value="474" <?php if($session->userinfo['timezone']==474) echo 'selected'; ?>><?php echo TIME_ZONE_L8; ?></option>
 </optgroup>
 
 <optgroup label="general time zones">
-    <option value="12" <?php if($session->userinfo['timezone']==12) echo 'selected'; ?>>UTC-11</option>
-    <option value="13" <?php if($session->userinfo['timezone']==13) echo 'selected'; ?>>UTC-10</option>
-    <option value="14" <?php if($session->userinfo['timezone']==14) echo 'selected'; ?>>UTC-9</option>
-    <option value="15" <?php if($session->userinfo['timezone']==15) echo 'selected'; ?>>UTC-8</option>
-    <option value="16" <?php if($session->userinfo['timezone']==16) echo 'selected'; ?>>UTC-7</option>
-    <option value="17" <?php if($session->userinfo['timezone']==17) echo 'selected'; ?>>UTC-6</option>
-    <option value="18" <?php if($session->userinfo['timezone']==18) echo 'selected'; ?>>UTC-5</option>
-    <option value="19" <?php if($session->userinfo['timezone']==19) echo 'selected'; ?>>UTC-4</option>
-    <option value="20" <?php if($session->userinfo['timezone']==20) echo 'selected'; ?>>UTC-3</option>
-    <option value="21" <?php if($session->userinfo['timezone']==21) echo 'selected'; ?>>UTC-2</option>
-    <option value="22" <?php if($session->userinfo['timezone']==22) echo 'selected'; ?>>UTC-1</option>
+    <option value="12" <?php if($session->userinfo['timezone']==12) echo 'selected'; ?>><?php echo TZ_UTC_11_2; ?></option>
+    <option value="13" <?php if($session->userinfo['timezone']==13) echo 'selected'; ?>><?php echo TZ_UTC_10_2; ?></option>
+    <option value="14" <?php if($session->userinfo['timezone']==14) echo 'selected'; ?>><?php echo TZ_UTC_9_2; ?></option>
+    <option value="15" <?php if($session->userinfo['timezone']==15) echo 'selected'; ?>><?php echo TZ_UTC_8_2; ?></option>
+    <option value="16" <?php if($session->userinfo['timezone']==16) echo 'selected'; ?>><?php echo TZ_UTC_7_2; ?></option>
+    <option value="17" <?php if($session->userinfo['timezone']==17) echo 'selected'; ?>><?php echo TZ_UTC_6_2; ?></option>
+    <option value="18" <?php if($session->userinfo['timezone']==18) echo 'selected'; ?>><?php echo TZ_UTC_5_2; ?></option>
+    <option value="19" <?php if($session->userinfo['timezone']==19) echo 'selected'; ?>><?php echo TZ_UTC_4_2; ?></option>
+    <option value="20" <?php if($session->userinfo['timezone']==20) echo 'selected'; ?>><?php echo TZ_UTC_3_2; ?></option>
+    <option value="21" <?php if($session->userinfo['timezone']==21) echo 'selected'; ?>><?php echo TZ_UTC_2_2; ?></option>
+    <option value="22" <?php if($session->userinfo['timezone']==22) echo 'selected'; ?>><?php echo TZ_UTC_1_2; ?></option>
     <option value="23" <?php if($session->userinfo['timezone']==23) echo 'selected'; ?>>UTC</option>
-    <option value="0" <?php if($session->userinfo['timezone']==0) echo 'selected'; ?>>UTC+1</option>
-    <option value="1" <?php if($session->userinfo['timezone']==1) echo 'selected'; ?>>UTC+2</option>
-    <option value="2" <?php if($session->userinfo['timezone']==2) echo 'selected'; ?>>UTC+3</option>
-    <option value="3" <?php if($session->userinfo['timezone']==3) echo 'selected'; ?>>UTC+4</option>
-    <option value="4" <?php if($session->userinfo['timezone']==4) echo 'selected'; ?>>UTC+5</option>
-    <option value="5" <?php if($session->userinfo['timezone']==5) echo 'selected'; ?>>UTC+6</option>
-    <option value="6" <?php if($session->userinfo['timezone']==6) echo 'selected'; ?>>UTC+7</option>
-    <option value="7" <?php if($session->userinfo['timezone']==7) echo 'selected'; ?>>UTC+8</option>
-    <option value="8" <?php if($session->userinfo['timezone']==8) echo 'selected'; ?>>UTC+9</option>
-    <option value="9" <?php if($session->userinfo['timezone']==9) echo 'selected'; ?>>UTC+10</option>
-    <option value="10" <?php if($session->userinfo['timezone']==10) echo 'selected'; ?>>UTC+11</option>
-    <option value="11" <?php if($session->userinfo['timezone']==11) echo 'selected'; ?>>UTC+12</option>
+    <option value="0" <?php if($session->userinfo['timezone']==0) echo 'selected'; ?>><?php echo TZ_UTC_1; ?></option>
+    <option value="1" <?php if($session->userinfo['timezone']==1) echo 'selected'; ?>><?php echo TZ_UTC_2; ?></option>
+    <option value="2" <?php if($session->userinfo['timezone']==2) echo 'selected'; ?>><?php echo TZ_UTC_3; ?></option>
+    <option value="3" <?php if($session->userinfo['timezone']==3) echo 'selected'; ?>><?php echo TZ_UTC_4; ?></option>
+    <option value="4" <?php if($session->userinfo['timezone']==4) echo 'selected'; ?>><?php echo TZ_UTC_5; ?></option>
+    <option value="5" <?php if($session->userinfo['timezone']==5) echo 'selected'; ?>><?php echo TZ_UTC_6; ?></option>
+    <option value="6" <?php if($session->userinfo['timezone']==6) echo 'selected'; ?>><?php echo TZ_UTC_7; ?></option>
+    <option value="7" <?php if($session->userinfo['timezone']==7) echo 'selected'; ?>><?php echo TZ_UTC_8; ?></option>
+    <option value="8" <?php if($session->userinfo['timezone']==8) echo 'selected'; ?>><?php echo TZ_UTC_9; ?></option>
+    <option value="9" <?php if($session->userinfo['timezone']==9) echo 'selected'; ?>><?php echo TZ_UTC_10; ?></option>
+    <option value="10" <?php if($session->userinfo['timezone']==10) echo 'selected'; ?>><?php echo TZ_UTC_11; ?></option>
+    <option value="11" <?php if($session->userinfo['timezone']==11) echo 'selected'; ?>><?php echo TZ_UTC_12; ?></option>
 </optgroup>
 
 </select>
@@ -501,13 +501,13 @@ if(isset($_POST['lang']))
 </tr>
 
 <tr>
-<th>Date</th>
+<th><?php echo DATE; ?></th>
 <td>
 
-<label><input class="radio" type="radio" name="tformat" value="0" <?php if($session->userinfo['tformat']==0) echo 'checked'; ?>> EU (dd.mm.yy 24h)</label><br>
-<label><input class="radio" type="radio" name="tformat" value="1" <?php if($session->userinfo['tformat']==1) echo 'checked'; ?>> US (mm/dd/yy 12h)</label><br>
-<label><input class="radio" type="radio" name="tformat" value="2" <?php if($session->userinfo['tformat']==2) echo 'checked'; ?>> UK (dd/mm/yy 12h)</label><br>
-<label><input class="radio" type="radio" name="tformat" value="3" <?php if($session->userinfo['tformat']==3) echo 'checked'; ?>> ISO (yy/mm/dd 24h)</label>
+<label><input class="radio" type="radio" name="tformat" value="0" <?php if($session->userinfo['tformat']==0) echo 'checked'; ?>> <?php echo TZ_EU_DD_MM_YY_24H; ?></label><br>
+<label><input class="radio" type="radio" name="tformat" value="1" <?php if($session->userinfo['tformat']==1) echo 'checked'; ?>> <?php echo TZ_US_MM_DD_YY_12H; ?></label><br>
+<label><input class="radio" type="radio" name="tformat" value="2" <?php if($session->userinfo['tformat']==2) echo 'checked'; ?>> <?php echo TZ_UK_DD_MM_YY_12H; ?></label><br>
+<label><input class="radio" type="radio" name="tformat" value="3" <?php if($session->userinfo['tformat']==3) echo 'checked'; ?>> <?php echo TZ_ISO_YY_MM_DD_24H; ?></label>
 
 </td>
 </tr>
@@ -521,29 +521,29 @@ if(isset($_POST['lang']))
 <thead>
 <tr>
   <th colspan="2">
-    Language settings
+    <?php echo TZ_LANGUAGE_SETTINGS; ?>
   </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-    <th>Game language</th>
+    <th><?php echo TZ_GAME_LANGUAGE; ?></th>
     <td>
         <select name="lang" class="dropdown">
             <option value="en" <?php if($session->userinfo['lang']=="en") echo 'selected'; ?>>
-                English
+                <?php echo TZ_ENGLISH; ?>
             </option>
             <option value="ro" <?php if($session->userinfo['lang']=="ro") echo 'selected'; ?>>
-                Romanian
+                <?php echo TZ_ROMANIAN; ?>
             </option>
             <option value="zh" <?php if($session->userinfo['lang']=="zh") echo 'selected'; ?>>
-                Chinese
+                <?php echo TZ_CHINESE; ?>
             </option>
             <option value="fr" <?php if($session->userinfo['lang']=="fr") echo 'selected'; ?>>
-                French
+                <?php echo TZ_FRENCH; ?>
             </option>
             <option value="it" <?php if($session->userinfo['lang']=="it") echo 'selected'; ?>>
-                Italian
+                <?php echo TZ_ITALIAN; ?>
             </option>
         </select>
     </td>

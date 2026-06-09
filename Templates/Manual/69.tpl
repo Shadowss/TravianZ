@@ -3,7 +3,7 @@
 	color: #808080;
 }
 </style>
-<h1>Gold club</h1>
+<h1><?php echo GOLD_CLUB; ?></h1>
 You will only be charged once for entry into Gold   club. Afterwards you have access to various exclusive features. Some of   the exclusive features are free, others cost a defined amount of gold   per use.<br>
 <br>
 <strong>Free Gold club features:</strong>

@@ -19,7 +19,7 @@ if (!is_numeric($_SESSION['search'])) {
     <center>
         <font color="orange" size="2">
             <p class="error">
-                The user <b>"<?php echo htmlspecialchars($_SESSION['search'], ENT_QUOTES, 'UTF-8'); ?>"</b> does not exist.
+                <?php echo TZ_THE_USER; ?> <b>"<?php echo htmlspecialchars($_SESSION['search'], ENT_QUOTES, 'UTF-8'); ?>"</b> <?php echo TZ_DOES_NOT_EXIST; ?>
             </p>
         </font>
     </center>
@@ -56,22 +56,22 @@ if (isset($_GET['rank']) && is_numeric($_GET['rank'])) {
     <thead>
         <tr>
             <th colspan="5">
-                The largest Teutons
+                <?php echo TZ_THE_LARGEST_TEUTONS; ?>
                 <div id="submenu">
-                    <a title="Top 10" href="statistiken.php?id=7"><img class="btn_top10" src="img/x.gif" alt="Top 10" /></a>
-                    <a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender" /></a>
-                    <a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker" /></a>
+                    <a title="<?php echo TZ_TOP_10; ?>" href="statistiken.php?id=7"><img class="btn_top10" src="img/x.gif" alt="<?php echo TZ_TOP_10; ?>" /></a>
+                    <a title="<?php echo DEFENDER; ?>" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="<?php echo DEFENDER; ?>" /></a>
+                    <a title="<?php echo ATTACKER; ?>" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="<?php echo ATTACKER; ?>" /></a>
                 </div>
                 <br>
                 <div id="submenu2">
-                    <a title="Romans" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="attacker"></a>
-                    <a title="Teutons" href="statistiken.php?id=12"><img class="active btn_v2" src="img/x.gif" alt="attacker"></a>
-                    <a title="Gauls" href="statistiken.php?id=13"><img class="btn_v3" src="img/x.gif" alt="attacker"></a>
+                    <a title="<?php echo TRIBE1; ?>" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
+                    <a title="<?php echo TRIBE2; ?>" href="statistiken.php?id=12"><img class="active btn_v2" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
+                    <a title="<?php echo TRIBE3; ?>" href="statistiken.php?id=13"><img class="btn_v3" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
                 </div>
             </th>
         </tr>
         <tr>
-            <td></td><td>Player</td><td>Alliance</td><td>Population</td><td>Villages</td>
+            <td></td><td><?php echo PLAYER; ?></td><td><?php echo ALLIANCE; ?></td><td><?php echo POP; ?></td><td><?php echo VILLAGES; ?></td>
         </tr>
     </thead>
 

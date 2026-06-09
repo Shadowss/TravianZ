@@ -4,7 +4,7 @@
 			<td class="desc"><?php echo HORSEDRINKING_DESC ?></td>
 			<td rowspan="3" class="bimg">
 				<a href="#" onClick="return Popup(41,4);">
-				<img class="building g41" src="img/x.gif" alt="Horse Drinking Trough" title="Horse Drinking Trough" /></a>
+				<img class="building g41" src="img/x.gif" alt="<?php echo HORSEDRINKING; ?>" title="<?php echo HORSEDRINKING; ?>" /></a>
 			</td>
 		</tr>
 		<tr>

@@ -27,7 +27,7 @@ $varmedal = $database->getProfileMedal($session->uid);
      PAGE HEADER
 ========================= -->
 
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 <?php include("menu.tpl"); ?>
 
 
@@ -40,11 +40,11 @@ $varmedal = $database->getProfileMedal($session->uid);
 
 <thead>
 <tr>
-    <th colspan="3">Player <?php echo htmlspecialchars($session->username, ENT_QUOTES, 'UTF-8'); ?></th>
+    <th colspan="3"><?php echo PLAYER; ?> <?php echo htmlspecialchars($session->username, ENT_QUOTES, 'UTF-8'); ?></th>
 </tr>
 <tr>
-    <td colspan="2">Details</td>
-    <td>Description</td>
+    <td colspan="2"><?php echo DETAIL; ?></td>
+    <td><?php echo DESCRIPTION; ?></td>
 </tr>
 </thead>
 
@@ -64,7 +64,7 @@ $bday = ($birthday != 0) ? explode("-", $birthday) : array('', '', '');
 ?>
 
 <tr>
-<th>Birthday</th>
+<th><?php echo BDAY; ?></th>
 <td class="birth">
 
 <input tabindex="1" class="text day" type="text" name="tag"
@@ -103,7 +103,7 @@ maxlength="4" class="text year">
      GENDER
 ========================= -->
 <tr>
-<th>Gender</th>
+<th><?php echo GENDER; ?></th>
 <td class="gend">
 
 <label><input class="radio" type="radio" name="mw" value="0"
@@ -120,7 +120,7 @@ maxlength="4" class="text year">
 
 <!-- LOCATION -->
 <tr>
-<th>Location</th>
+<th><?php echo LOCATION; ?></th>
 <td>
 <input tabindex="5" type="text" name="ort"
 value="<?= htmlspecialchars($session->userinfo['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
@@ -139,7 +139,7 @@ $varray = $database->getProfileVillages($session->uid);
 for ($i = 0; $i < count($varray); $i++):
 ?>
 <tr>
-<th>Village name</th>
+<th><?php echo VILLAGE_NAME; ?></th>
 <td>
 <input tabindex="6" type="text"
 name="dname<?php echo $i; ?>"
@@ -165,13 +165,13 @@ maxlength="30" class="text">
 <p>
 <table cellspacing="1" cellpadding="2" class="tbg">
 
-<tr><td class="rbg" colspan="4">Medals</td></tr>
+<tr><td class="rbg" colspan="4"><?php echo MEDALS; ?></td></tr>
 
 <tr>
-<td>Category</td>
-<td>Rank</td>
-<td>Week</td>
-<td>BB-Code</td>
+<td><?php echo CATEGORY; ?></td>
+<td><?php echo RANK; ?></td>
+<td><?php echo WEEK; ?></td>
+<td><?php echo BB_CODE; ?></td>
 </tr>
 
 <?php
@@ -211,7 +211,7 @@ foreach ($varmedal as $medal) {
 ?>
 
 <tr>
-<td>Beginners Protection</td><td></td><td></td>
+<td><?php echo BEGINPRO; ?></td><td></td><td></td>
 <td><a href="#" onclick="insertMedal('[#0]'); return false;">[#0]</a></td>
 </tr>
 
@@ -252,24 +252,24 @@ if(defined('NEW_FUNCTIONS_MHS_IMAGES') && NEW_FUNCTIONS_MHS_IMAGES){
 
     if(($session->userinfo['access'] ?? 0) == 9){
 
-        echo "<tr><td>Administrator</td><td></td><td></td>
+        echo "<tr><td>".ADMIN1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#MULTIHUNTER]'); return false;\">[#MULTIHUNTER]</a></td></tr>";
 
-        echo "<tr><td>Administrator</td><td></td><td></td>
+        echo "<tr><td>".ADMIN1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#MH]'); return false;\">[#MH]</a></td></tr>";
 
-        echo "<tr><td>Administrator</td><td></td><td></td>
+        echo "<tr><td>".ADMIN1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#TEAM]'); return false;\">[#TEAM]</a></td></tr>";
 
     } elseif(($session->userinfo['access'] ?? 0) == 8){
 
-        echo "<tr><td>Multihunter</td><td></td><td></td>
+        echo "<tr><td>".MULTIH1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#MULTIHUNTER]'); return false;\">[#MULTIHUNTER]</a></td></tr>";
 
-        echo "<tr><td>Multihunter</td><td></td><td></td>
+        echo "<tr><td>".MULTIH1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#MH]'); return false;\">[#MH]</a></td></tr>";
 
-        echo "<tr><td>Multihunter</td><td></td><td></td>
+        echo "<tr><td>".MULTIH1."</td><td></td><td></td>
         <td><a href='#' onclick=\"insertMedal('[#TEAM]'); return false;\">[#TEAM]</a></td></tr>";
     }
 }

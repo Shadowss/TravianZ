@@ -4,25 +4,25 @@
                         <td class="role">
                             Attacker
                         </td><td>
-                            <img src="img/x.gif" class="unit u41" title="Pikeman" alt="Pikeman" />
+                            <img src="img/x.gif" class="unit u41" title="<?php echo U41; ?>" alt="<?php echo U41; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u42" title="Thorned Warrior" alt="Thorned Warrior" />
+                            <img src="img/x.gif" class="unit u42" title="<?php echo U42; ?>" alt="<?php echo U42; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u43" title="Guardsman" alt="Guardsman" />
+                            <img src="img/x.gif" class="unit u43" title="<?php echo U43; ?>" alt="<?php echo U43; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u44" title="Birds Of Prey" alt="Birds Of Prey"r" />
+                            <img src="img/x.gif" class="unit u44" title="<?php echo U44; ?>" alt="<?php echo U44; ?>"r" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u45" title="Axerider" alt="Axerider" />
+                            <img src="img/x.gif" class="unit u45" title="<?php echo U45; ?>" alt="<?php echo U45; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u46" title="Natarian Knight" alt="Natarian Knight" />
+                            <img src="img/x.gif" class="unit u46" title="<?php echo U46; ?>" alt="<?php echo U46; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u47" title="War Elephant" alt="War Elephant" />
+                            <img src="img/x.gif" class="unit u47" title="<?php echo U47; ?>" alt="<?php echo U47; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u48" title="Ballista" alt="Ballista" />
+                            <img src="img/x.gif" class="unit u48" title="<?php echo U48; ?>" alt="<?php echo U48; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u49" title="Natarian Emperor" alt="Natarian Emperor" />
+                            <img src="img/x.gif" class="unit u49" title="<?php echo U49; ?>" alt="<?php echo U49; ?>" />
                         </td><td>
-                            <img src="img/x.gif" class="unit u50" title="Natarian Settler" alt="Natarian Settler" />
+                            <img src="img/x.gif" class="unit u50" title="<?php echo U50; ?>" alt="<?php echo U50; ?>" />
                         </td>
                     </tr>
 				</thead>

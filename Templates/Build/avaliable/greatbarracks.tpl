@@ -5,7 +5,7 @@
                 <td class="desc"><?php echo GREATBARRACKS_DESC ?></td>
                 <td rowspan="3" class="bimg">
         <a href="#" onClick="return Popup(29,4);">
-                                <img class="building g29" src="img/x.gif" alt="Great Barracks" title="Great Barracks" /></a>
+                                <img class="building g29" src="img/x.gif" alt="<?php echo GREATBARRACKS; ?>" title="<?php echo GREATBARRACKS; ?>" /></a>
                                         </td>
         </tr>
         <tr>

@@ -128,7 +128,7 @@ if ($action === 'addSlot' && $lid) {
 ?>
 
 <div id="raidListSlot">
-    <h4>Add Slot</h4>
+    <h4><?php echo TZ_ADD_SLOT; ?></h4>
 
     <font color="#FF0000"><b><?php echo $errormsg; ?></b></font>
 
@@ -154,7 +154,7 @@ if ($action === 'addSlot' && $lid) {
             <tbody>
 
                 <tr>
-                    <th>List name:</th>
+                    <th><?php echo TZ_LIST_NAME; ?></th>
                     <td>
                         <select name="lid">
                             <?php
@@ -180,7 +180,7 @@ if ($action === 'addSlot' && $lid) {
                 </tr>
 
                 <tr>
-                    <th>Target village:</th>
+                    <th><?php echo TZ_TARGET_VILLAGE; ?></th>
                     <td class="target">
 
                         <div class="coordinatesInput">
@@ -205,7 +205,7 @@ if ($action === 'addSlot' && $lid) {
 
                         <div class="targetSelect">
 
-                            <label class="lastTargets">Last targets:</label>
+                            <label class="lastTargets"><?php echo TZ_LAST_TARGETS; ?></label>
 
                             <select name="target_id">
                                 <?php
@@ -255,7 +255,7 @@ if ($action === 'addSlot' && $lid) {
 
         <?php include("Templates/goldClub/trooplist.tpl"); ?>
 
-        <button type="submit" class="trav_buttons">Create</button>
+        <button type="submit" class="trav_buttons"><?php echo TZ_CREATE; ?></button>
 
     </form>
 </div>

@@ -9,7 +9,7 @@ $current = $level > 0 ? (int)($bid41[$level]['attri'] * 100 - 100) : 0;
 ?>
 <div id="build" class="gid41">
     <a href="#" onClick="return Popup(41,4);" class="build_logo">
-        <img class="building g41" src="img/x.gif" alt="Horse Drinking Trough" title="<?php echo HORSEDRINKING;?>" />
+        <img class="building g41" src="img/x.gif" alt="<?php echo HORSEDRINKING; ?>" title="<?php echo HORSEDRINKING;?>" />
     </a>
     <h1><?php echo HORSEDRINKING;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo HORSEDRINKING_DESC;?></p>

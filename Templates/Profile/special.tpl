@@ -20,7 +20,7 @@
 <table cellpadding="1" cellspacing="1" id="support_mh">
 	<thead>
 	<tr>
-		<th>Support and Multihunter</th>
+		<th><?php echo TZ_SUPPORT_AND_MULTIHUNTER; ?></th>
 	</tr>
 	</thead>
 
@@ -31,8 +31,8 @@
 	========================= -->
 	<tr>
 	<td>
-		<b>Support:</b><br>
-		The support is a group of experienced players who will answer your questions gladly.<br />
+		<b><?php echo TZ_SUPPORT; ?></b><br>
+		<?php echo TZ_THE_SUPPORT_IS_A_GROUP_OF_EXPERIEN; ?><br />
 
 		<?php
 		// SAFE MESSAGE: support admin (id=1)
@@ -49,10 +49,9 @@
 	========================= -->
 	<tr>
 	<td>
-		<b>Multihunter:</b><br>
-		The Multihunters are responsible for compliance with
-		<a href="rules.php"><b><?php echo GAME_RULES; ?></b></a>.
-		If you have questions or want to report a violation, you can message a Multihunter.<br />
+		<b><?php echo TZ_MULTIHUNTER; ?></b><br>
+		<?php echo TZ_THE_MULTIHUNTERS_ARE_RESPONSIBLE_F; ?>
+		<a href="rules.php"><b><?php echo GAME_RULES; ?></b></a><?php echo TZ_ML_QUESTIONS_MULTIHUNTER; ?><br />
 
 		<?php
 		// =========================================================

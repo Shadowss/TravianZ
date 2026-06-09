@@ -149,7 +149,7 @@ if (
 ?>
 
 <div id="raidListSlot">
-    <h4>Edit Slot</h4>
+    <h4><?php echo TZ_EDIT_SLOT; ?></h4>
 
     <font color="#FF0000"><b><?php echo $errormsg; ?></b></font>
 
@@ -173,7 +173,7 @@ if (
         <table cellpadding="1" cellspacing="1" class="transparent" id="raidList">
 
             <tr>
-                <th>List name:</th>
+                <th><?php echo TZ_LIST_NAME; ?></th>
                 <td>
                     <select onchange="getTargetsByLid();" id="lid" name="lid">
 
@@ -205,7 +205,7 @@ if (
             </tr>
 
             <tr>
-                <th>Target village:</th>
+                <th><?php echo TZ_TARGET_VILLAGE; ?></th>
 
                 <td class="target">
 
@@ -231,7 +231,7 @@ if (
 
                     <div class="targetSelect">
 
-                        <label class="lastTargets">Last targets:</label>
+                        <label class="lastTargets"><?php echo TZ_LAST_TARGETS; ?></label>
 
                         <select name="target_id">
 
@@ -290,7 +290,7 @@ if (
 
         <?php include "Templates/goldClub/trooplist.tpl"; ?>
 
-        <button type="submit" class="trav_buttons">Save</button>
+        <button type="submit" class="trav_buttons"><?php echo SAVE; ?></button>
         <button type="button"
                 class="trav_buttons"
                 onclick="window.location.href='?gid=16&t=99&action=deleteSlot&eid=<?php echo $eid; ?>&lid=<?php echo $eiddata['lid']; ?>';">

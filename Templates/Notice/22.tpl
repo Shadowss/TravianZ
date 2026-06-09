@@ -41,14 +41,14 @@ if ($type == 1) {
 <thead>
 
 <tr>
-    <th>Subject:</th>
-    <th><?php echo $message->readingNotice['topic']; ?></th>
+    <th><?php echo SUBJECT; ?>:</th>
+    <th><?php echo tz_loc_topic($message->readingNotice['topic']); ?></th>
 </tr>
 
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
-    <td class="sent">Sent:</td>
-    <td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
+    <td class="sent"><?php echo TZ_SENT; ?></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
 </tr>
 
 </thead>
@@ -62,14 +62,14 @@ if ($type == 1) {
 
 <thead>
 <tr>
-    <td class="role">Attacker</td>
+    <td class="role"><?php echo ATTACKER; ?></td>
     <td colspan="<?php echo $colspan; ?>">
 
         <a href="spieler.php?uid=<?php echo $attackerUid; ?>">
             <?php echo $attackerName; ?>
         </a>
 
-        from the village
+        <?php echo FROM_THE_VILL; ?>
 
         <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>">
             <?php echo $database->getVillageField($dataarray[1], "name"); ?>
@@ -98,7 +98,7 @@ if ($hasHero) {
     echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 
-echo "</tr><tr><th>Troops</th>";
+echo "</tr><tr><th>".TROOPS."</th>";
 
 // TROOPS
 for ($i = 4; $i <= 13; $i++) {
@@ -119,7 +119,7 @@ if ($hasHero) {
 <!-- ======================== INFORMATION ======================== -->
 <tbody class="goods">
 <tr>
-    <th>Information</th>
+    <th><?php echo INFORMATION; ?></th>
     <td colspan="<?php echo $colspan; ?>">
 
         <?php
@@ -129,8 +129,8 @@ if ($hasHero) {
         ?>
 
         <img src="<?php echo GP_LOCATE; ?>img/r/<?php echo $icon; ?>.gif"
-             alt="Event"
-             title="Event" />
+             alt="<?php echo TZ_EVENT; ?>"
+             title="<?php echo TZ_EVENT; ?>" />
 
         <?php echo $message1; ?>
 

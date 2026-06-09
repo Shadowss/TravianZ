@@ -12,7 +12,7 @@ $user = $database->getUserArray($session->uid, 1);
 ?>
 <div id="build" class="gid16">
     <a href="#" onclick="return Popup(16,4);" class="build_logo">
-        <img class="g16" src="img/x.gif" alt="Rally point" title="<?= RALLYPOINT ?>">
+        <img class="g16" src="img/x.gif" alt="<?php echo RALLYPOINT; ?>" title="<?= RALLYPOINT ?>">
     </a>
     <h1><?= RALLYPOINT ?> <span class="level"><?= LEVEL ?> <?= $village->resarray['f'.$id] ?></span></h1>
     <p class="build_desc"><?= RALLYPOINT_DESC ?></p>
@@ -57,7 +57,7 @@ $user = $database->getUserArray($session->uid, 1);
         <?= SEND_TROOPS_AWAY_MAX ?>
         <input class="text" type="text" name="maxevasion" value="<?= $user['maxevasion'] ?>" maxlength="3" style="width:50px;">
         <?= TIMES ?>
-        <span class="none">(<?= COSTS ?>: <img src="<?= GP_LOCATE ?>img/a/gold_g.gif" alt="Gold" title="<?= GOLD ?>"><b>2</b> <?= PER_EVASION ?>)</span>
+        <span class="none">(<?= COSTS ?>: <img src="<?= GP_LOCATE ?>img/a/gold_g.gif" alt="<?php echo GOLD; ?>" title="<?= GOLD ?>"><b>2</b> <?= PER_EVASION ?>)</span>
         <div class="clear"></div>
         <p><button value="ok" name="s1" id="btn_ok" class="trav_buttons" tabindex="8">OK</button></p>
     </form>

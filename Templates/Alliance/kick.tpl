@@ -40,7 +40,7 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Kick Player:</th>
+    <th colspan="2"><?php echo TZ_KICK_PLAYER; ?></th>
 </tr>
 </thead>
 
@@ -48,12 +48,12 @@ include("alli_menu.tpl");
 
 <tr>
     <th colspan="2">
-        Here you can kick the players from your alliance.
+        <?php echo TZ_HERE_YOU_CAN_KICK_THE_PLAYERS_FROM; ?>
     </th>
 </tr>
 
 <tr>
-    <th>Name</th>
+    <th><?php echo NAME; ?></th>
     <td>
 
         <select name="a_user" class="name dropdown">
@@ -95,7 +95,7 @@ include("alli_menu.tpl");
         id="btn_ok"
         class="trav_buttons"
         onclick="this.disabled=true;this.form.submit();">
-        Ok
+        <?php echo TZ_OK_2; ?>
     </button>
 </p>
 

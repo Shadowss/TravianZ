@@ -20,7 +20,7 @@ include('menu.tpl');
 <thead>
 
 <tr>
-	<th colspan="12">Own troops</th>
+	<th colspan="12"><?php echo OWN_TROOPS; ?></th>
 </tr>
 
 <tr>
@@ -29,7 +29,7 @@ include('menu.tpl');
 $varray = $database->getProfileVillages($session->uid);
 ?>
 
-<td>Village</td>
+<td><?php echo VILLAGE; ?></td>
 
 <?php
 // ==========================================================
@@ -157,7 +157,7 @@ foreach ($varray as $vil) {
 ========================================================== -->
 
 <tr>
-	<th>Sum</th>
+	<th><?php echo SUM; ?></th>
 
 <?php
 for ($i = $unit_start; $i <= $unit_end; $i++) {

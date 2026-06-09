@@ -30,7 +30,7 @@ $isMH        = (isset($session->access) && $session->access == MULTIHUNTER);
      PAGE HEADER
 ========================= -->
 
-<h1>Player profile</h1>
+<h1><?php echo PLAYER_PROFILE; ?></h1>
 <?php include("menu.tpl"); ?>
 
 <?php
@@ -58,7 +58,7 @@ function vac_ok($key, $errors)
 
 <div class="vacationBox">
 
-    <center><h2>Vacation Mode</h2></center>
+    <center><h2><?php echo VACATION_MODE; ?></h2></center>
     <br>
 
     <?php
@@ -73,55 +73,52 @@ function vac_ok($key, $errors)
     ?>
 
     <div class="vacationDesc">
-        If you plan on being away for an extended period of time and do not wish to set a sitter,
-        you can activate <b>Vacation Mode</b>. During this time your account is essentially frozen.
-        No resources, troops or research will progress and your villages cannot be attacked.
-        Remember, this just freezes your Travian, not time.
+        <?php echo TZ_ML_AWAY_NO_SITTER; ?> <b><?php echo VACATION_MODE; ?></b><?php echo TZ_ML_ACCOUNT_FROZEN; ?>
         <br><br>
-        Minimum vacation: <b>2 days</b><br>
-        Maximum vacation: <b>14 days</b>
+        <?php echo TZ_MINIMUM_VACATION; ?> <b><?php echo TZ_N_2_DAYS; ?></b><br>
+        <?php echo TZ_MAXIMUM_VACATION; ?> <b><?php echo TZ_N_14_DAYS; ?></b>
     </div>
 
     <div class="vacationGrid">
 
         <div class="vacationColumn">
-            <h4>Inactive during vacation</h4>
+            <h4><?php echo TZ_INACTIVE_DURING_VACATION; ?></h4>
             <ul class="vacList">
-                <li>Send or receive troops</li>
-                <li>Start new construction order</li>
-                <li>Use market</li>
-                <li>Train new troops</li>
-                <li>Join an alliance</li>
-                <li>Delete account</li>
+                <li><?php echo VAC_OP1; ?></li>
+                <li><?php echo VAC_OP2; ?></li>
+                <li><?php echo VAC_OP3; ?></li>
+                <li><?php echo VAC_OP4; ?></li>
+                <li><?php echo TZ_JOIN_AN_ALLIANCE; ?></li>
+                <li><?php echo VAC_OP6; ?></li>
             </ul>
         </div>
 
         <div class="vacationColumn">
-            <h3>Requirements</h3>
+            <h3><?php echo TZ_REQUIREMENTS; ?></h3>
             <ul class="vacList">
 
                 <li style="color:<?= vac_ok('TROOPS_MOVING',$errors) ? 'green':'red' ?>">
-                    There are no outgoing troops
+                    <?php echo TZ_THERE_ARE_NO_OUTGOING_TROOPS; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('INCOMING_TROOPS',$errors) ? 'green':'red' ?>">
-                    There are no incoming troops
+                    <?php echo TZ_THERE_ARE_NO_INCOMING_TROOPS; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('REINFORCEMENTS',$errors) ? 'green':'red' ?>">
-                    No reinforcing troops sent/receive
+                    <?php echo TZ_NO_REINFORCING_TROOPS_SENT_RECEIVE; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('WW',$errors) ? 'green':'red' ?>">
-                    No ownership of a Wonder of the World village
+                    <?php echo TZ_NO_OWNERSHIP_OF_A_WONDER_OF_THE_WO; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('ARTEFACTS',$errors) ? 'green':'red' ?>">
-                    No ownership of an artifact village
+                    <?php echo TZ_NO_OWNERSHIP_OF_AN_ARTIFACT_VILLAG; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('PROTECTION',$errors) ? 'green':'red' ?>">
-                    No beginner’s protection
+                    <?php echo TZ_NO_BEGINNER_PROT2; ?>
                 </li>
 
                 <li style="color:<?= (vac_ok('PRISONERS_IN',$errors) && vac_ok('PRISONERS_OUT',$errors)) ? 'green':'red' ?>">
@@ -133,15 +130,15 @@ function vac_ok($key, $errors)
                 </li>
 
                 <li style="color:<?= vac_ok('MARKET',$errors) ? 'green':'red' ?>">
-                    No marketplace activity
+                    <?php echo TZ_NO_MARKETPLACE_ACTIVITY; ?>
                 </li>
 
                 <li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
-                    Account is not scheduled for deletion
+                    <?php echo TZ_ACCOUNT_IS_NOT_SCHEDULED_FOR_DELET; ?>
                 </li>
 				<?php if ($isAdmin || $isMH): ?>
 				<li style="color:<?= vac_ok('NO_VACATION_ACCESS', $errors) ? 'green' : 'red' ?>">
-				Account is Admin or MH
+				<?php echo TZ_ACCOUNT_IS_ADMIN_OR_MH; ?>
 				</li>
 				<?php endif; ?>
             </ul>
@@ -153,21 +150,21 @@ function vac_ok($key, $errors)
 
         <label>
             <input type="radio" name="vac" value="1">
-            Activate Vacation Mode
+            <?php echo TZ_ACTIVATE_VACATION_MODE; ?>
         </label>
 
         <input type="number" name="vac_days" value="2" min="2" max="14">
 
-        <span>days</span>
+        <span><?php echo DAYS; ?></span>
 
     </div>
 
     <div class="vacationButton">
     <?php if ($canActivate) { ?>
-        <input type="image" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save">
+        <input type="image" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="<?php echo SAVE; ?>">
     <?php } else { ?>
         <div style="padding:10px;background:#300;color:#fff;font-weight:bold;text-align:center;border-radius:5px;">
-            Vacation mode cannot be activated – requirements not met
+            <?php echo TZ_VACATION_MODE_CANNOT_BE_ACTIVATED; ?>
         </div>
     <?php } ?>
     </div>

@@ -74,7 +74,7 @@ function showCheckList() {
 			newTD2.innerHTML = html_input_1 + 'id="users_by_name_'+num_fields+'" class="text" maxlength="50" name="users_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
 		}
 
-		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow(\''+element_id+'\')">';
+		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow(\''+element_id+'\')">';
     }
 
 </script>
@@ -114,35 +114,35 @@ function showCheckList() {
 
 	<table cellpadding="1" cellspacing="1" id="new_forum"><thead>
 	<tr>
-    	<th colspan="2">New forum</th>
+    	<th colspan="2"><?php echo TZ_NEW_FORUM; ?></th>
 	</tr>
 	</thead><tbody>
 	<tr>
 
-		<th>Forum name</th>
+		<th><?php echo TZ_FORUM_NAME; ?></th>
 		<td><input class="text" type="text" name="u1" value="" maxlength="20"></td>
 	</tr>
 
 	<tr>
-		<th>Description</th>
+		<th><?php echo DESCRIPTION; ?></th>
 		<td><input class="text" type="text" name="u2" value="" maxlength="38"></td>
 	</tr>
 
 	<tr>
-		<th>Forum type</th>
-		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><?php if($session->access == ADMIN){ ?><option value="1">Public Forum</option><?php }else{ ?><option value="2">Confederation Forum</option><option value="0" selected>Alliance Forum</option><option value="3">Closed Forum</option><?php } ?></select></td>
+		<th><?php echo TZ_FORUM_TYPE; ?></th>
+		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><?php if($session->access == ADMIN){ ?><option value="1"><?php echo TZ_PUBLIC_FORUM; ?></option><?php }else{ ?><option value="2"><?php echo TZ_CONFEDERATION_FORUM; ?></option><option value="0" selected><?php echo TZ_ALLIANCE_FORUM; ?></option><option value="3"><?php echo TZ_CLOSED_FORUM; ?></option><?php } ?></select></td>
 	</tr>
 	</tbody></table>
 <?php if($session->access != ADMIN){ ?>
 <table cellpadding="1" cellspacing="1" id="ally_list"><thead>
 	<tr>
 
-        <th colspan="3">Open for more alliances</th>
+        <th colspan="3"><?php echo TZ_OPEN_FOR_MORE_ALLIANCES; ?></th>
 	</tr>
 	<tr>
-		<td>Alliance ID</td>
-		<td>Tag:</td>
-		<td>Add</td>
+		<td><?php echo TZ_ALLIANCE_ID; ?></td>
+		<td><?php echo TZ_TAG; ?></td>
+		<td><?php echo TZ_ADD_2; ?></td>
 	</tr>
 
 	</thead><tbody>
@@ -155,18 +155,18 @@ function showCheckList() {
 		</td>
 		<td class="ad">
 
-			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('ally_list')" />
+			<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow('ally_list')" />
 		</td>
 	</tr>
 </table><table cellpadding="1" cellspacing="1" id="user_list"><thead>
 	<tr>
-        <th colspan="3">Open forum for the following players</th>
+        <th colspan="3"><?php echo TZ_OPEN_FORUM_FOR_THE_FOLLOWING_PLAYE; ?></th>
 	</tr>
 	<tr>
-		<td>User ID</td>
+		<td><?php echo TZ_USER_ID; ?></td>
 
-		<td>Name:</td>
-		<td>Add</td>
+		<td><?php echo TZ_NAME; ?></td>
+		<td><?php echo TZ_ADD_2; ?></td>
 	</tr>
 	</thead><tbody>
 	<tr>
@@ -178,7 +178,7 @@ function showCheckList() {
 			<input class="text" type="text" id="users_by_name_0" maxlength="50" name="users_by_name[0]" onkeyup="checkInputs(0,'users');" />
 		</td>
 		<td class="ad">
-			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('user_list')" />
+			<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow('user_list')" />
 		</td>
 	</tr>
 </tbody></table>

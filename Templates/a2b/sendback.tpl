@@ -30,16 +30,16 @@ $layout = [
     ],
 ];
 ?>
-<h1>Send units back</h1>
+<h1><?php echo TZ_SEND_UNITS_BACK; ?></h1>
 <form method="POST" name="snd" action="a2b.php">
     <table id="short_info" cellpadding="1" cellspacing="1">
         <tbody>
             <tr>
-                <th>Destination:</th>
+                <th><?php echo TZ_DESTINATION; ?></th>
                 <td><a href="karte.php?d=<?php echo $toBaseId; ?>&amp;c=<?php echo $toMapCheck; ?>"><?php echo htmlspecialchars($to['name']); ?> (<?php echo $fromcoor['x']; ?>|<?php echo $fromcoor['y']; ?>)</a></td>
             </tr>
             <tr>
-                <th>Owner:</th>
+                <th><?php echo TZ_OWNER; ?></th>
                 <td><a href="spieler.php?uid=<?php echo $to['owner']; ?>"><?php echo htmlspecialchars($database->getUserField($to['owner'], 'username', 0)); ?></a></td>
             </tr>
         </tbody>
@@ -47,7 +47,7 @@ $layout = [
 
     <table class="troop_details" cellpadding="1" cellspacing="1">
         <thead>
-            <tr><td colspan="10">Send units back to <?php echo htmlspecialchars($to['name']); ?></td></tr>
+            <tr><td colspan="10"><?php echo TZ_SEND_UNITS_BACK_TO; ?> <?php echo htmlspecialchars($to['name']); ?></td></tr>
         </thead>
     </table>
 
@@ -71,7 +71,7 @@ $layout = [
             <?php if ($rowIndex === 2): // rândul 3 ?>
                 <?php if (!empty($enforce['hero'])): ?>
                     <td class="line-last large">
-                        <img class="unit uhero" src="img/x.gif" title="Hero" alt="Hero">
+                        <img class="unit uhero" src="img/x.gif" title="<?php echo TZ_HERO; ?>" alt="<?php echo TZ_HERO; ?>">
                         <input class="text" name="t11" value="<?php echo (int)$enforce['hero']; ?>" maxlength="6" type="text">
                         <span class="none">(<?php echo (int)$enforce['hero']; ?>)</span>
                     </td>
@@ -87,14 +87,14 @@ $layout = [
     <table class="troop_details" cellpadding="1" cellspacing="1">
         <tbody class="infos">
             <tr>
-                <th>Arrived:</th>
+                <th><?php echo TZ_ARRIVED; ?></th>
                 <?php
                 $troopsTime = $units->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $att_tribe, $enforce, 1);
                 $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
                 ?>
                 <td colspan="10">
-                    <div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
-                    <div class="at">at <span id="tp2"><?php echo date("H:i:s", time() + $time); ?></span><span> hours</span></div>
+                    <div class="in"><?php echo P_IN; ?> <?php echo $generator->getTimeFormat($time); ?></div>
+                    <div class="at"><?php echo AT; ?> <span id="tp2"><?php echo date("H:i:s", time() + $time); ?></span><span> <?php echo HOURS; ?></span></div>
                 </td>
             </tr>
         </tbody>

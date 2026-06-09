@@ -36,7 +36,7 @@ $total_required = (int)($uprequire['wood'] + $uprequire['clay'] + $uprequire['ir
     <img class="r5" src="img/x.gif" title="<?php echo CROP_COM;?>"/><?php echo $uprequire['pop'];?> |
     <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $generator->getTimeFormat($uprequire['time']);?>
     <?php if ($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required):?>
-    | <a href="build.php?gid=17&t=3&r1=<?php echo $uprequire['wood'];?>&r2=<?php echo $uprequire['clay'];?>&r3=<?php echo $uprequire['iron'];?>&r4=<?php echo $uprequire['crop'];?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade"/></a>
+    | <a href="build.php?gid=17&t=3&r1=<?php echo $uprequire['wood'];?>&r2=<?php echo $uprequire['clay'];?>&r3=<?php echo $uprequire['iron'];?>&r4=<?php echo $uprequire['crop'];?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>"/></a>
     <?php endif;?>
     <br />
 <?php
@@ -81,7 +81,7 @@ if (in_array($bindicate, [2,3,7]) && $session->goldclub == 1) {
     } else {
         echo '<span class="none">'.CONSTRUCTING_MASTER_BUILDER.'</span>';
     }
-    echo ' <font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
+    echo ' <font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="'.GOLD.'" title="'.GOLD.'"/>1)</font>';
 }
 ?>
 </p>

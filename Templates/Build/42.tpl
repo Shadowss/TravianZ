@@ -8,7 +8,7 @@ $level = (int)$village->resarray['f'.$id];
 ?>
 <div id="build" class="gid42">
     <a href="#" onClick="return Popup(42,4);" class="build_logo">
-        <img class="building g42" src="img/x.gif" alt="Great Workshop" title="<?php echo GREATWORKSHOP;?>" />
+        <img class="building g42" src="img/x.gif" alt="<?php echo GREATWORKSHOP; ?>" title="<?php echo GREATWORKSHOP;?>" />
     </a>
     <h1><?php echo GREATWORKSHOP;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo GREATWORKSHOP_DESC;?></p>
@@ -23,7 +23,7 @@ $level = (int)$village->resarray['f'.$id];
                 <?php include("42_train.tpl");?>
             </tbody>
         </table>
-        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" /></p>
+        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" /></p>
     </form>
     <?php else:?>
         <b><?php echo TRAINING_COMMENCE_GREATWORKSHOP;?></b><br />

@@ -20,7 +20,7 @@ if (!isset($_SESSION['search']) || !is_numeric($_SESSION['search'])) {
     <center>
         <font color="orange" size="2">
             <p class="error">
-                The hero <b>"<?php echo htmlspecialchars(isset($_SESSION['search']) ? $_SESSION['search'] : '', ENT_QUOTES, 'UTF-8'); ?>"</b> does not exist.
+                <?php echo TZ_THE_HERO; ?> <b>"<?php echo htmlspecialchars(isset($_SESSION['search']) ? $_SESSION['search'] : '', ENT_QUOTES, 'UTF-8'); ?>"</b> <?php echo TZ_DOES_NOT_EXIST; ?>
             </p>
         </font>
     </center>
@@ -34,14 +34,14 @@ if (!isset($_SESSION['search']) || !is_numeric($_SESSION['search'])) {
 <table cellpadding="1" cellspacing="1" id="heroes" class="row_table_data">
     <thead>
         <tr>
-            <th colspan="5">The most experienced heroes</th>
+            <th colspan="5"><?php echo TZ_THE_MOST_EXPERIENCED_HEROES; ?></th>
         </tr>
         <tr>
             <td></td>
-            <td>Hero</td>
-            <td>Player</td>
-            <td>Level</td>
-            <td>Experience</td>
+            <td><?php echo U0; ?></td>
+            <td><?php echo PLAYER; ?></td>
+            <td><?php echo LEVEL; ?></td>
+            <td><?php echo EXPERIENCE; ?></td>
         </tr>
     </thead>
 

@@ -1,4 +1,4 @@
-<h1>Send Troops</h1>
+<h1><?php echo SEND_TROOPS; ?></h1>
 
 <form method="POST" name="snd" action="a2b.php"><input name="timestamp" value="3278280730" type="hidden"> <input name="timestamp_checksum" value="597fa8" type="hidden"> <input name="b" value="1" type="hidden">
 
