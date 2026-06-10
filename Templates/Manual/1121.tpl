@@ -1,10 +1,10 @@
-<h1><img class="unit ugeb" src="img/x.gif" alt="Manual on Nature and Natars" title="Manual on Nature and Natars" /> Manual on Nature and Natars</h1>
+<h1><img class="unit ugeb" src="img/x.gif" alt="<?php echo MANUAL_NF_T_21; ?>" title="<?php echo MANUAL_NF_T_21; ?>" /> <?php echo MANUAL_NF_T_21; ?></h1>
 
-<div id="t_desc">With the help of this information in the manual, you can find a description of the forces of Nature and Natars.</div>
+<div id="t_desc"><?php echo MANUAL_NF_D_21; ?></div>
 
 <map id="nav" name="nav">
     <area href="manual.php?typ=11&amp;s=20" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
-    <area href="manual.php?typ=13&amp;s=31" title="new features" coords="46,0,70,18" shape="rect" alt="" />
-    <area href="manual.php?typ=11&amp;s=22" title="forward" coords="71,0,116,18" shape="rect" alt="" />
+    <area href="manual.php?typ=13&amp;s=31" title="<?php echo NEW_FEATURES; ?>" coords="46,0,70,18" shape="rect" alt="" />
+    <area href="manual.php?typ=11&amp;s=22" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />
