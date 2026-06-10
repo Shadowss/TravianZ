@@ -1,10 +1,10 @@
-<h1><img class="unit u6" src="img/x.gif" alt="<?php echo U6; ?>" title="<?php echo U6; ?>" /> <?php echo U6; ?> <span class="tribe">(Romans)</span></h1>
+<h1><img class="unit u6" src="img/x.gif" alt="<?php echo U6; ?>" title="<?php echo U6; ?>" /> <?php echo U6; ?> <span class="tribe">(<?php echo TRIBE1; ?>)</span></h1>
 
 <table id="troop_info" cellpadding="1" cellspacing="1">
 <thead><tr>
-	<th><img class="att_all" src="img/x.gif" alt="attack value" title="attack value" /></th>
-	<th><img class="def_i" src="img/x.gif" alt="defence against infantry" title="defence against infantry" /></th>
-	<th><img class="def_c" src="img/x.gif" alt="defence against cavalry" title="defence against cavalry" /></th>
+	<th><img class="att_all" src="img/x.gif" alt="<?php echo MANUAL_ATTACK_VALUE; ?>" title="<?php echo MANUAL_ATTACK_VALUE; ?>" /></th>
+	<th><img class="def_i" src="img/x.gif" alt="<?php echo MANUAL_DEF_INFANTRY; ?>" title="<?php echo MANUAL_DEF_INFANTRY; ?>" /></th>
+	<th><img class="def_c" src="img/x.gif" alt="<?php echo MANUAL_DEF_CAVALRY; ?>" title="<?php echo MANUAL_DEF_CAVALRY; ?>" /></th>
 	<th><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /></th>
 	<th><img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /></th>
 	<th><img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /></th>
@@ -24,28 +24,28 @@
 
 <table id="troop_details" cellpadding="1" cellspacing="1">
 <tbody><tr>
-	<th>Velocity</th>
-	<td><b>10</b> fields/hour</td>
+	<th><?php echo MANUAL_VELOCITY; ?></th>
+	<td><b>10</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
 </tr>
 <tr>
-	<th>Can carry</th>
+	<th><?php echo MANUAL_CAN_CARRY; ?></th>
 	<td><b>70</b> <?php echo RESOURCES; ?></td>
 </tr>
 <tr>
 	<th><?php echo UPKEEP; ?></th>
-	<td><img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /> 4</td>
+	<td><img class="r5" src="img/x.gif" alt="<?php echo CROP_CONSUMPTION; ?>" title="<?php echo CROP_CONSUMPTION; ?>" /> 4</td>
 </tr>
 <tr>
-	<th>Duration of training</th>
+	<th><?php echo MANUAL_TRAINING_DURATION; ?></th>
 	<td><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> 0:58:40</td>
 </tr></tbody>
 </table>
 
-<img id="big_unit" class="big_u6" src="img/x.gif" alt="<?php echo U6; ?>" title="<?php echo U6; ?>" /><div id="t_desc">The Equites Caesaris are the heavy cavalry of Rome. They are very well armoured and deal great amounts of damage, but all that armour and weaponry comes with a price. They are slow, carry less resources and feeding them is expensive.</div>
-<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> Level 10, <a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a> Level 5</div>
+<img id="big_unit" class="big_u6" src="img/x.gif" alt="<?php echo U6; ?>" title="<?php echo U6; ?>" /><div id="t_desc"><?php echo MANUAL_UDESC_6; ?></div>
+<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> <?php echo LEVEL; ?> 10, <a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a> <?php echo LEVEL; ?> 5</div>
 <map id="nav" name="nav">
     <area href="manual.php?typ=1&amp;s=5" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
-    <area href="manual.php?typ=1&amp;s=7" title="forward" coords="71,0,116,18" shape="rect" alt="" />
+    <area href="manual.php?typ=1&amp;s=7" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />
