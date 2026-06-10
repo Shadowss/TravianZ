@@ -344,21 +344,18 @@ if (isset($qact)){
 			break;
 
 		case '91':
-			$database->updateUserField($_SESSION['username'],'quest','91',0);
-			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
+			// Atomic, idempotent claim (issue #129): grant the reward only when the quest
+			// pointer actually advances 90 -> 91, so a concurrent or duplicated request
+			// cannot wipe the gold/Plus reward through a stale read-modify-write.
+			$now = time();
+			$claimed = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET quest = 91 WHERE `username` = '".$user_sanitized."' AND quest = 90") && mysqli_affected_rows($database->dblink) === 1;
+			if ($claimed) {
+				$database->updateUserField($_SESSION['username'],'quest_time',''.($now+$skipp_time).'',0);
+				//Give Reward: 1 day of Plus + 15 gold (atomic increments)
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET gold = gold + 15, plus = IF(plus > $now, plus + 86400, $now + 86400) WHERE `username` = '".$user_sanitized."'");
+			}
 			$_SESSION['qst']= 91;
 			$_SESSION['qst_time'] = time()+$skipp_time;
-			//Give Reward
-			if(!$session->plus){
-				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error());
-			} else {
-				$plus=$database->getUserField($_SESSION['username'],'plus','username');
-				$plus+=86400;
-				$database->updateUserField($_SESSION['username'],'plus',$plus,0);
-			}
-			$gold=$database->getUserField($_SESSION['username'],'gold','username');
-			$gold+=15;
-			$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 			break;
 
 		case '92':
@@ -407,21 +404,16 @@ if (isset($qact)){
 			break;
 
 		case '97':
-			$database->updateUserField($_SESSION['username'],'quest','97',0);
-			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()).'',0);
+			// Atomic, idempotent claim (issue #129): advance 96 -> 97 exactly once.
+			$now = time();
+			$claimed = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET quest = 97 WHERE `username` = '".$user_sanitized."' AND quest = 96") && mysqli_affected_rows($database->dblink) === 1;
+			if ($claimed) {
+				$database->updateUserField($_SESSION['username'],'quest_time',''.$now.'',0);
+				//Give Reward: 2 days of Plus + 20 gold (atomic increments)
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET gold = gold + 20, plus = IF(plus > $now, plus + 172800, $now + 172800) WHERE `username` = '".$user_sanitized."'");
+			}
 			$_SESSION['qst_time'] = time();
 			$_SESSION['qst']= 97;
-			//Give Reward 20 gold + 2 days plus
-			if(!$session->plus){
-				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
-			} else {
-				$plus=$database->getUserField($_SESSION['username'],'plus','username');
-				$plus+=172800;
-				$database->updateUserField($_SESSION['username'],'plus',$plus,0);
-			}
-			$gold=$database->getUserField($_SESSION['username'],'gold','username');
-			$gold+=20;
-			$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 			break;
 		}
 	}
