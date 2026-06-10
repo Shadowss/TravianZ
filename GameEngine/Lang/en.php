@@ -2454,6 +2454,42 @@ tz_def('MANUAL_UDESC_47', "No other tribe but the Natars knows how to use these 
 tz_def('MANUAL_UDESC_48', "Even as engineers, the Natars were very successful. They created machinery of war long before anyone else and have since then perfected it in every way. The Ballista, a huge crossbow-like weapon, fires its projectiles with such a force that no wall or shield can deflect them. When the engineers dismantle it to move it to the next battlefield, here is usually nothing but ruins left where the projectiles hit.");
 tz_def('MANUAL_UDESC_49', "A mixture of pure fear, admiration and awe moves the villagers when the Natarian Emperor speaks to them. This commanding and well outfitted figure is fully aware of his effect on others and knows how to subjugate an entire village with a single harangue.");
 tz_def('MANUAL_UDESC_50', "Daring journeymen and master builders, driven by zest for action and knowing every little secret about cultivating land, building Palaces and fortifying villages, the Natarian Settlers go out in parties of three to claim land in the name of their Natarian lords.");
+
+// ===== manual: new-features pages (PR-C) =====
+tz_def('MANUAL_NF_ENABLED', "Enabled");
+tz_def('MANUAL_NF_DISABLED', "Disabled");
+tz_def('MANUAL_NF_T_11', "Display oasis in profile");
+tz_def('MANUAL_NF_T_12', "Alliance invitation message");
+tz_def('MANUAL_NF_T_13', "New Alliance & Embassy Mechanics");
+tz_def('MANUAL_NF_T_14', "New forum post message");
+tz_def('MANUAL_NF_T_15', "Tribes images in profile");
+tz_def('MANUAL_NF_T_16', "MHs images in profile");
+tz_def('MANUAL_NF_T_17', "Display artifact in profile");
+tz_def('MANUAL_NF_T_18', "Display WoW in profile");
+tz_def('MANUAL_NF_T_20', "Catapult targets");
+tz_def('MANUAL_NF_T_21', "Manual on Nature and Natars");
+tz_def('MANUAL_NF_T_22', "Direct links placement");
+tz_def('MANUAL_NF_T_23', "Medal Veteran Player");
+tz_def('MANUAL_NF_T_24', "Medal Veteran Player 5a");
+tz_def('MANUAL_NF_T_25', "Medal Veteran Player 10a");
+tz_def('MANUAL_NF_T_26', "Special Medals");
+tz_def('MANUAL_NF_D_11', "If there is a captured oasis in the village, it will be displayed in the player's profile in front of the corresponding village with the appropriate type of resource and a bonus for production. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_12', "If someone from the players will be sent an invitation to join the alliance, then the player will be notified an in-game message.");
+tz_def('MANUAL_NF_D_13', "<h2>Introduction</h2><br> The Embassy and Alliance mechanics always felt a bit like cheating to me. Especially with the Embassy building having a given \"capacity\", which means only 3/6/9/12/... and up to 60 members could be in the alliance, depending on the level of your Embassy. <br><br> Now, this is all cool and dandy but once you had an Embassy on level 20 and you reached 60 alliance members, you were free to demolish the building completely and nothing ever happened. You wouldn't be able to switch alliances but that was about it. The capacity property for Embassy no longer applied. If it did, you would not be able to demolish it even a single level down to 19 - because with full 60 members, the Embassy wouldn't be able to hold them at level 19 anymore. <br><br> So I decided to pepper the game a little, making Embassy a somewhat more visible chess-piece on the board. <br><br> <h2>New Mechanics</h2><br> In order to make things interesting, I've developed a whole new set of rules for demolition and battle-destruction of the Embassy. It's a little bit complicated but actually mirrors the \"capacity\" property of the alliance perfectly. <br><br> The main change is that people can't really demolish their Embassies without a side-effect of being punished once it goes too low. For an alliance member, this would mean their Embassy must never go below level 1. If it does, they are warned and subsequently removed from their alliance. <br><br> Similarly, for alliance founders, this actually presents even more of a challenge, since they are the ones who need to keep their alliance running smoothly. For them, demolition of an Embassy will not be allowed below a level that can still hold the current number of alliance members. <br><br> Now, in the peculiar situation when other players/alliances actually attack the founder's village where their Embassy stands, and subsequently target that Embassy with their catapults and rams - that situation can bring a whole lot of trouble. If there are no other Embassies in other founder's villages on a sufficient level to hold all the alliance members, the alliance could be dispersed. The only exception would be if any other member of the alliance had a sufficiently developed Embassy - in which case that member will be auto-elected to a leadership position and will save the alliance. If no such player is found, the alliance will be completely dispersed. <br><br> <h2>Detailed information</h2><br> For a more graphical and in-depth information about how this new system works, you can visit this <a href=\"https://docs.google.com/presentation/d/1KN1qVAlxVj7aAN6F9QkRai1oliajfxKPIaJ4MSodUac/edit#slide=id.p\" target=\"_blank\">Google Presentation</a>.");
+tz_def('MANUAL_NF_D_14', "If the player leaves at least one message in the forum thread, he will receive in-game messages that someone else has left a new message in the same thread (i.e. is technically \"subscribed to\").");
+tz_def('MANUAL_NF_D_15', "Using this innovation, any player can add to the description of his profile an image of his tribe with a small description (Romans, Teutons, Gauls).");
+tz_def('MANUAL_NF_D_16', "In fact, for players this is a useless function, since it is intended only for Administrators and Multihunters. With it, Administrators and Multihunters will be able to add to their profile descriptions various interesting images with descriptions to them.");
+tz_def('MANUAL_NF_D_17', "If there is an artifact in one of the villages, this will be displayed in the player's profile in front of the corresponding village in which it is located. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_18', "If in the village there is a playground for the construction of the Wonder of the World, this will be displayed in the profile opposite the corresponding village. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_19', "Vacation mode allows you to protect your empire from any hostile actions of other players during your long absence. True, for this there are certain conditions that will entail a backlog in the development of your empire. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_20', "If you send the catapults to a normal attack, you can see in the rally point which targets you set for the attack. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_21', "With the help of this information in the manual, you can find a description of the forces of Nature and Natars.");
+tz_def('MANUAL_NF_D_22', "The location of the Direct links is changing. In the original Travian T3.6 Direct links are placed in the right menu below the list of villages which is not entirely convenient. If this option is enabled then Direct links will be placed in the left menu that is much more convenient.");
+tz_def('MANUAL_NF_D_23', "The medal of which is awarded to players losing by the same email address of 3 or more years. Can be added to the profile description. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_24', "The medal of which is awarded to players losing by the same email address of 5 or more years. Can be added to the profile description. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_25', "The medal of which is awarded to players losing by the same email address of 10 or more years. Can be added to the profile description. This function was presented in Travian T4.");
+tz_def('MANUAL_NF_D_26', "The medal of which is awarded to players losing by the same email address of 10 or more years. Can be added to the profile description. This function was presented in Travian T4.");
+
 // ===== display-time localization of stored report topics =====
 // Reports are generated server-side at battle resolution and stored in the DB
 // (column `topic`) with English connectors. This rewrites them to the viewing
