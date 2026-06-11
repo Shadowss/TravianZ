@@ -1412,6 +1412,239 @@ class Automation {
     }
 
     /**
+     * Release prisoners trapped in the target village during a conquest attack,
+     * send them home (with 25% casualties), repair destroyed traps, and return
+     * the HTML fragment for the battle-report trap line.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array  $data            Current attack row.
+     * @param array  $from            Attacker village info (getMInfo).
+     * @param array  $to              Defender village info (getMInfo).
+     * @param int    $ownally         Attacker's alliance id.
+     * @param int    $type            Attack type (3 = normal with rams/catas).
+     * @param int    $totalsend_att   Total attacking troops sent.
+     * @param int    $totaldead_att   Total attacking troops killed.
+     * @param int    $totaltraped_att Total attacking troops trapped.
+     * @return string HTML fragment for the trap report line; empty if no prisoners freed.
+     */
+    private function handlePrisoners($data, $from, $to, $ownally, $type, $totalsend_att, $totaldead_att, $totaltraped_att) {
+        global $database, $units, $bid19, $u99;
+
+        if ($type != 3 || $totalsend_att - ($totaldead_att + $totaltraped_att) <= 0) {
+            return '';
+        }
+
+        $prisoners = $database->getPrisoners([$to['wref']], 0, false)[$to['wref'].'0'];
+        if (count($prisoners) == 0) {
+            return '';
+        }
+
+        $anothertroops = $mytroops = $ownDeads = $anotherDeads = 0;
+        $prisoners2delete = $movementType = $movementFrom = $movementTo = $movementRef = $movementTime = $movementEndtime = [];
+        $utime = microtime(true);
+
+        foreach ($prisoners as $prisoner) {
+            $p_owner = $database->getVillageField($prisoner['from'], "owner");
+
+            if ($prisoner['from'] == $from['wref']) {
+                for ($i = 1; $i <= 11; $i++) {
+                    $deadPrisoners      = round($prisoner['t'.$i] / 4);
+                    $mytroops          += $prisoner['t'.$i];
+                    $ownDeads          += $deadPrisoners;
+                    $prisoner['t'.$i] -= $deadPrisoners;
+                }
+                $database->modifyAttack2(
+                    $data['ref'],
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                    [$prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'],
+                     $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11']]
+                );
+                $prisoners2delete[] = $prisoner['id'];
+            } else {
+                $p_alliance   = $database->getUserField($p_owner, "alliance", 0);
+                $friendarray  = $database->getAllianceAlly($p_alliance, 1);
+                $neutralarray = $database->getAllianceAlly($p_alliance, 2);
+                $friend  = ($friendarray[0]['alli1']  > 0 && $friendarray[0]['alli2']  > 0 && $p_alliance > 0)
+                         && ($friendarray[0]['alli1']  == $ownally || $friendarray[0]['alli2']  == $ownally)
+                         && ($ownally != $p_alliance && $ownally && $p_alliance);
+                $neutral = ($neutralarray[0]['alli1'] > 0 && $neutralarray[0]['alli2'] > 0 && $p_alliance > 0)
+                         && ($neutralarray[0]['alli1'] == $ownally || $neutralarray[0]['alli2'] == $ownally)
+                         && ($ownally != $p_alliance && $ownally && $p_alliance);
+
+                if ($p_alliance == $ownally || $friend || $neutral) {
+                    $p_tribe = $database->getUserField($p_owner, "tribe", 0);
+
+                    for ($i = 1; $i <= 11; $i++) {
+                        $deadPrisoners      = round($prisoner['t'.$i] / 4);
+                        if ($p_owner == $from['owner']) {
+                            $mytroops  += $prisoner['t'.$i];
+                            $ownDeads  += $deadPrisoners;
+                        } else {
+                            $anothertroops += $prisoner['t'.$i];
+                            $anotherDeads  += $deadPrisoners;
+                        }
+                        $prisoner['t'.$i] -= $deadPrisoners;
+                    }
+
+                    $troopsTime  = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
+                    $p_time      = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
+                    $p_reference = $database->addAttack(
+                        $prisoner['from'],
+                        $prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'],
+                        $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11'],
+                        3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                    );
+                    $movementType[]     = 4;
+                    $movementFrom[]     = $prisoner['wref'];
+                    $movementTo[]       = $prisoner['from'];
+                    $movementRef[]      = $p_reference;
+                    $movementTime[]     = $utime;
+                    $movementEndtime[]  = $p_time + $utime;
+                    $prisoners2delete[] = $prisoner['id'];
+                }
+            }
+        }
+
+        if (count($movementType)) {
+            $database->addMovement($movementType, $movementFrom, $movementTo, $movementRef, $movementTime, $movementEndtime);
+        }
+        $database->deletePrisoners($prisoners2delete);
+
+        $ownDeadsText     = ($ownAlive     = $mytroops     - $ownDeads)     > 0 ? " of which <b>".$ownAlive."</b> have been saved"     : "";
+        $anotherDeadsText = ($anotherAlive = $anothertroops - $anotherDeads) > 0 ? " of which <b>".$anotherAlive."</b> have been saved" : "";
+
+        $database->addGeneralAttack($ownDeads + $anotherDeads);
+
+        $newtraps = round(($mytroops + $anothertroops) / 3);
+        $database->modifyUnit($data['to'], ['99', '99o'], [$mytroops + $anothertroops, $mytroops + $anothertroops], [0, 0]);
+        if ($newtraps > 0) {
+            $repairDuration = $database->getArtifactsValueInfluence(
+                $to['owner'], $to['wref'], 5,
+                round(($bid19[max($this->getTypeLevel(36, $to['wref']), 1)]['attri'] / 100) * $u99['time'] / SPEED)
+            );
+            $database->trainUnit($to['wref'], 99, $newtraps, $u99['pop'], $repairDuration, 0);
+        }
+
+        $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
+        $p_username  = $database->getUserField($from['owner'], "username", 0);
+
+        if ($mytroops > 0 && $anothertroops > 0) {
+            return $trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText." and <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
+        } elseif ($mytroops > 0) {
+            return $trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText.".";
+        } elseif ($anothertroops > 0) {
+            return $trapper_pic." <b>".$p_username."</b> freed <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
+        }
+        return '';
+    }
+
+    /**
+     * Assemble the battle-report data string ($data2) and the all-attacker-dead
+     * fallback ($data_fail) from pre-computed battle results.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param bool   $scout           True when this is a scouting mission.
+     * @param array  $from            Attacker village info (getMInfo).
+     * @param array  $to              Defender village info (getMInfo).
+     * @param int    $owntribe        Attacker tribe id.
+     * @param int    $targettribe     Defender tribe id.
+     * @param string $unitssend_att   CSV of units sent by attacker.
+     * @param string $unitsdead_att   CSV of attacker units killed.
+     * @param array  $steal           [wood, clay, iron, crop] looted amounts.
+     * @param array  $battlepart      calculateBattle() result.
+     * @param array  $unitssend_def   CSV of defender units sent (indexed 0–5).
+     * @param array  $unitsdead_def   CSV of defender units dead (indexed 0–5).
+     * @param array  $unitssend_deff  Masked defender units for data_fail (indexed 0–5).
+     * @param array  $unitsdead_deff  Masked dead units for data_fail (indexed 0–5).
+     * @param int    $rom,$ger,$gal,$nat,$natar  Tribe presence flags.
+     * @param string $DefenderHeroesTot   CSV of defender heroes totals by tribe.
+     * @param string $DefenderHeroesDead  CSV of defender heroes dead by tribe.
+     * @param string $info_ram        Ram result fragment.
+     * @param string $info_cat        Catapult result fragment (internally extended if village destroyed).
+     * @param string $info_chief      Chief/senator result fragment.
+     * @param string $info_spy        Scout report fragment (scout missions only).
+     * @param string $info_trap       Prisoner-release fragment (from handlePrisoners).
+     * @param string $info_hero       Hero result fragment.
+     * @param string $info_troop      "None of your soldiers returned" fragment.
+     * @param array  $data            Current attack row (for t11).
+     * @param int    $dead11          Hero casualties.
+     * @param int    $herosend_def    Defender hero count.
+     * @param int    $deadhero        Defender hero casualties.
+     * @param string $unitstraped_att CSV of attacker units trapped.
+     * @param int    $village_destroyed 1 if the village was destroyed.
+     * @param int    $can_destroy     1 if the village can be destroyed.
+     * @param int    $catp_pic        Catapult unit-pic id for the HTML fragment.
+     * @return array ['data2' => string, 'data_fail' => string]
+     */
+    private function buildCombatReport(
+        $scout, $from, $to, $owntribe, $targettribe,
+        $unitssend_att, $unitsdead_att, $steal, $battlepart,
+        $unitssend_def, $unitsdead_def, $unitssend_deff, $unitsdead_deff,
+        $rom, $ger, $gal, $nat, $natar,
+        $DefenderHeroesTot, $DefenderHeroesDead,
+        $info_ram, $info_cat, $info_chief, $info_spy,
+        $info_trap, $info_hero, $info_troop,
+        $data, $dead11, $herosend_def, $deadhero, $unitstraped_att,
+        $village_destroyed, $can_destroy, $catp_pic
+    ) {
+        if (!empty($scout)) {
+            $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att
+                    .',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name'])
+                    .',,,,'.$targettribe
+                    .','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom
+                    .','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger
+                    .','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal
+                    .','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat
+                    .','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar
+                    .','.$unitssend_def[5].','.$unitsdead_def[5]
+                    .','.$DefenderHeroesTot.','.$DefenderHeroesDead
+                    .','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy
+                    .','.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero
+                    .',,'.$unitstraped_att;
+        } else {
+            if (isset($village_destroyed) && $village_destroyed == 1 && $can_destroy == 1) {
+                if (strpos($info_cat, "The village has") === false) {
+                    $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">"
+                               . "<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" />"
+                               . " The village has been destroyed.</td></tr></tbody>";
+                }
+            }
+            $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att
+                    .','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty']
+                    .','.$to['owner'].','.$to['wref'].','.addslashes($to['name'])
+                    .',,,,'.$targettribe
+                    .','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom
+                    .','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger
+                    .','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal
+                    .','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat
+                    .','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar
+                    .','.$unitssend_def[5].','.$unitsdead_def[5]
+                    .','.$DefenderHeroesTot.','.$DefenderHeroesDead
+                    .','.$info_ram.','.$info_cat.','.$info_chief.'.'.(isset($info_spy) ? $info_spy : '')
+                    .',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero
+                    .','.$unitstraped_att;
+
+            $data2 .= ','.($info_trap !== '' ? addslashes($info_trap) : '').',,'.$info_troop.','.$info_hero;
+        }
+
+        $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att
+                    .','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty']
+                    .','.$to['owner'].','.$to['wref'].','.addslashes($to['name'])
+                    .',,,,'.$targettribe
+                    .','.$unitssend_deff[0].','.$unitsdead_deff[0].','.$rom
+                    .','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger
+                    .','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal
+                    .','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat
+                    .','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar
+                    .','.$unitssend_deff[5].','.$unitsdead_deff[5]
+                    .','.$DefenderHeroesTot.','.$DefenderHeroesDead
+                    .',,,'.$data['t11'].','.$dead11.','.$unitstraped_att
+                    .',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
+
+        return ['data2' => $data2, 'data_fail' => $data_fail];
+    }
+
+    /**
      * Distribute the battle bounty across the resources actually available in
      * the target (after cranny protection) and return how much of each is taken.
      * Pure behaviour-preserving extraction (refactor for issue #155).
@@ -2364,28 +2597,28 @@ class Automation {
                     
                     if ($DefenderID == 0) $natar = 0;
 
-                    if(!empty($scout)) {
+                    if (!empty($scout)) {
                         $info_spy = $this->buildScoutReport($data, $spy_pic, $isoasis, $targettribe, $crannySpy, $totwood, $totclay, $totiron, $totcrop);
+                    }
 
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.','.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.',,'.$unitstraped_att;
-                    }else{
-                        if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
-                            //check if village pop=0 and no info destroy
-                            if (strpos($info_cat, "The village has") === false) {
-                                $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-                                          <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
-                            }
-                        }
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '').',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
-                    }
-                  
-                    if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) <= 0){
-                        $info_troop = "None of your soldiers returned.";
-                    }
-                    else $info_troop = "";
-                    
-                    //When all of the attacker's troops die, send no informations
-                    $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_deff[0].','.$unitsdead_deff[0].','.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
+                    // prisoners freed during conquest attacks — extracted to handlePrisoners() [#155]
+                    $info_trap  = empty($scout) ? $this->handlePrisoners($data, $from, $to, $ownally, $type, $totalsend_att, $totaldead_att, $totaltraped_att) : '';
+                    $info_troop = ($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) <= 0) ? "None of your soldiers returned." : "";
+
+                    // assemble data2 + data_fail — extracted to buildCombatReport() [#155]
+                    $report    = $this->buildCombatReport(
+                        $scout, $from, $to, $owntribe, $targettribe,
+                        $unitssend_att, $unitsdead_att, $steal, $battlepart,
+                        $unitssend_def, $unitsdead_def, $unitssend_deff, $unitsdead_deff,
+                        $rom, $ger, $gal, $nat, $natar,
+                        $DefenderHeroesTot, $DefenderHeroesDead,
+                        $info_ram, $info_cat, $info_chief, isset($info_spy) ? $info_spy : '',
+                        $info_trap, $info_hero, $info_troop,
+                        $data, $dead11, $herosend_def, $deadhero, $unitstraped_att,
+                        $village_destroyed, $can_destroy, $catp_pic
+                    );
+                    $data2     = $report['data2'];
+                    $data_fail = $report['data_fail'];
 
                     //Undetected and detected in here.
                     if(!empty($scout)){
@@ -2404,113 +2637,6 @@ class Automation {
                             }
                         }
                     }else{
-                        if($type == 3 && $totalsend_att - ($totaldead_att + $totaltraped_att) > 0){                          
-                            $prisoners = $database->getPrisoners([$to['wref']], 0, false)[$to['wref'].'0'];
-                            if(count($prisoners) > 0){
-                                $anothertroops = $mytroops = $ownDeads = $anotherDeads = 0;
-                                $prisoners2delete = [];
-                                $movementType = [];
-                                $movementFrom = [];
-                                $movementTo = [];
-                                $movementRef = [];
-                                $movementTime = [];
-                                $movementEndtime = [];
-                                $utime = microtime(true);
-                                
-                                foreach($prisoners as $prisoner) {
-                                    $p_owner = $database->getVillageField($prisoner['from'], "owner");
-
-                                    //If troops are coming from the same village, add it to the returing troops
-                                    if ($prisoner['from'] == $from['wref']) {
-                                        for($i = 1; $i <= 11; $i++){
-                                            $deadPrisoners = round($prisoner['t'.$i] / 4);
-                                            $mytroops += $prisoner['t'.$i];
-                                            $ownDeads += $deadPrisoners; 
-                                            $prisoner['t'.$i] -= $deadPrisoners;
-                                        }
-                                        
-                                        $database->modifyAttack2(
-                                            $data['ref'],
-                                            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                                            [$prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11']]
-                                        );             
-                                        $prisoners2delete[] = $prisoner['id'];
-                                    } else {
-                                        $p_alliance = $database->getUserField($p_owner, "alliance",0);
-                                        $friendarray = $database->getAllianceAlly($p_alliance, 1);
-                                        $neutralarray = $database->getAllianceAlly($p_alliance, 2);
-                                        $friend = ($friendarray[0]['alli1'] > 0 && $friendarray[0]['alli2'] > 0 && $p_alliance > 0) && ($friendarray[0]['alli1'] == $ownally || $friendarray[0]['alli2'] == $ownally) && ($ownally != $p_alliance && $ownally && $p_alliance);
-                                        $neutral = ($neutralarray[0]['alli1'] > 0 && $neutralarray[0]['alli2'] > 0 && $p_alliance > 0) && ($neutralarray[0]['alli1'] == $ownally || $neutralarray[0]['alli2'] == $ownally) && ($ownally != $p_alliance && $ownally && $p_alliance);
-
-                                        if($p_alliance == $ownally || $friend || $neutral){
-                                            $p_tribe = $database->getUserField($p_owner, "tribe", 0);
-
-                                            for($i = 1; $i <= 11; $i++){
-                                                $deadPrisoners = round($prisoner['t'.$i] / 4);
-                                                if($p_owner == $from['owner']){
-                                                    $mytroops += $prisoner['t'.$i];
-                                                    $ownDeads += $deadPrisoners;                                   
-                                                }else{
-                                                    $anothertroops += $prisoner['t'.$i];
-                                                    $anotherDeads += $deadPrisoners;
-                                                }
-                                                $prisoner['t'.$i] -= $deadPrisoners;
-                                            } 
-                                            
-                                            $troopsTime = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
-                                            $p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
-                                            
-                                            $p_reference = $database->addAttack($prisoner['from'], $prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11'], 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-                                            $movementType[] = 4;
-                                            $movementFrom[] = $prisoner['wref'];
-                                            $movementTo[] = $prisoner['from'];
-                                            $movementRef[] = $p_reference;
-                                            $movementTime[] = $utime;
-                                            $movementEndtime[] = $p_time + $utime;                                                      
-                                            $prisoners2delete[] = $prisoner['id'];
-                                        }
-                                    }
-                                }
-
-                                if (count($movementType)) {
-                                    $database->addMovement($movementType, $movementFrom, $movementTo, $movementRef, $movementTime, $movementEndtime);
-                                }
-
-                                $database->deletePrisoners($prisoners2delete);
-
-                                $ownDeadsText = ($ownAlive = $mytroops - $ownDeads) > 0 ? " of which <b>".$ownAlive."</b> have been saved" : "";
-                                $anotherDeadsText = ($anotherAlive = $anothertroops - $anotherDeads) > 0 ? " of which <b>".$anotherAlive."</b> have been saved" : "";
-                                
-                                //Add dead troops to the "General attacks" tab
-                                $database->addGeneralAttack($ownDeads + $anotherDeads);
-                                
-                                //Calculate new traps which have to be repaired
-                                $newtraps = round(($mytroops + $anothertroops) / 3);
-                                
-                                //Reset traps
-                                $database->modifyUnit($data['to'], ['99', '99o'], [$mytroops + $anothertroops, $mytroops + $anothertroops], [0, 0]);
-                                
-                                //Repair needed traps            
-                                if($newtraps > 0){
-                                    $repairDuration = $database->getArtifactsValueInfluence($to['owner'], $to['wref'], 5, round(($bid19[max($this->getTypeLevel(36, $to['wref']), 1)]['attri'] / 100) * $u99['time'] / SPEED));
-                                    $database->trainUnit($to['wref'], 99, $newtraps, $u99['pop'], $repairDuration, 0);
-                                }
-                                
-                                $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
-                                $p_username = $database->getUserField($from['owner'], "username", 0);
-
-                                if($mytroops > 0 && $anothertroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText." and <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
-                                }elseif($mytroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText.".";
-                                }elseif($anothertroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
-                                }
-                            }
-                        }
-                        
-                        $data2 = $data2.','.(isset($info_trap) ? addslashes($info_trap) : '').',,'.$info_troop.','.$info_hero;
-
                         if($totalsend_alldef == 0 && $totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
                             $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                         }else if($totaldead_alldef == 0){
@@ -2521,7 +2647,6 @@ class Automation {
                             $database->addNotice($to['owner'],$to['wref'],$targetally,6,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                         }
                     }
-                    //to here
                     // If the dead units not equal the ammount sent they will return and report
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {                       
@@ -2708,7 +2833,8 @@ class Automation {
                     ,$troopsdead10
                     ,$troopsdead11
                     ,$DefenderUnit
-                    ,$info_trap);
+                    ,$info_trap
+                    ,$report);
 
                 #################################################
 
