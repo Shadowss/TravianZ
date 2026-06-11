@@ -776,6 +776,9 @@ define('AND', 'și');
 //other
 define('VILLAGE', 'Sat');
 define('STATISTICS', 'Statistici');
+define('ALLIANCES', 'Alianțe');
+define('HEROES', 'Eroi');
+define('GENERAL', 'General');
 define('OASIS', 'Oază');
 define('NO_OASIS', 'Nu deții nicio oază.');
 define('NO_VILLAGES', 'Nu există sate.');

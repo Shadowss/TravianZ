@@ -35,24 +35,24 @@ if(isset($_GET['newdid'])) {
 <html>
 <head>
 	<title><?php
-	echo SERVER_NAME . ' &raquo; &raquo; &raquo; Statistics (';
+	echo SERVER_NAME . ' &raquo; &raquo; &raquo; ' . STATISTICS . ' (';
 
 	if (!empty($_GET['id'])) {
 	    switch ($_GET['id']) {
 	        case '4':
-	            echo 'Alliances';
+	            echo ALLIANCES;
 	            break;
 
 	        case '2':
-	            echo 'Villages';
+	            echo VILLAGES;
 	            break;
 
 	        case '8':
-	            echo 'Heroes';
+	            echo HEROES;
 	            break;
 
 	        case '0':
-	            echo 'General';
+	            echo GENERAL;
 	            break;
 
 	        case '99':
@@ -60,7 +60,7 @@ if(isset($_GET['newdid'])) {
 	            break;
 	    }
 	} else {
-	    echo 'Players';
+	    echo PLAYERS;
 	}
 
 	echo ')';
@@ -103,13 +103,13 @@ if(isset($_GET['newdid'])) {
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 		<div id="content"  class="statistics">
-<h1>Statistics</h1>
+<h1><?php echo STATISTICS; ?></h1>
 <div id="textmenu">
-   <a href="statistiken.php" <?php if(!isset($_GET['id']) || (isset($_GET['id']) && ($_GET['id'] == 1 || $_GET['id'] == 31 || $_GET['id'] == 32 || $_GET['id'] == 7))) { echo "class=\"selected \""; } ?>>Player</a>
- | <a href="statistiken.php?id=4" <?php if(isset($_GET['id']) && ($_GET['id'] == 4 || $_GET['id'] == 41 || $_GET['id'] == 42 || $_GET['id'] == 43)) { echo "class=\"selected \""; } ?>>Alliances</a>
- | <a href="statistiken.php?id=2" <?php if(isset($_GET['id']) && $_GET['id'] == 2) { echo "class=\"selected \""; } ?>>Villages</a>
- | <a href="statistiken.php?id=8" <?php if(isset($_GET['id']) && $_GET['id'] == 8) { echo "class=\"selected \""; } ?>>Heroes</a>
- | <a href="statistiken.php?id=0" <?php if(isset($_GET['id']) && $_GET['id'] == 0) { echo "class=\"selected \""; } ?>>General</a>
+   <a href="statistiken.php" <?php if(!isset($_GET['id']) || (isset($_GET['id']) && ($_GET['id'] == 1 || $_GET['id'] == 31 || $_GET['id'] == 32 || $_GET['id'] == 7))) { echo "class=\"selected \""; } ?>><?php echo PLAYER; ?></a>
+ | <a href="statistiken.php?id=4" <?php if(isset($_GET['id']) && ($_GET['id'] == 4 || $_GET['id'] == 41 || $_GET['id'] == 42 || $_GET['id'] == 43)) { echo "class=\"selected \""; } ?>><?php echo ALLIANCES; ?></a>
+ | <a href="statistiken.php?id=2" <?php if(isset($_GET['id']) && $_GET['id'] == 2) { echo "class=\"selected \""; } ?>><?php echo VILLAGES; ?></a>
+ | <a href="statistiken.php?id=8" <?php if(isset($_GET['id']) && $_GET['id'] == 8) { echo "class=\"selected \""; } ?>><?php echo HEROES; ?></a>
+ | <a href="statistiken.php?id=0" <?php if(isset($_GET['id']) && $_GET['id'] == 0) { echo "class=\"selected \""; } ?>><?php echo GENERAL; ?></a>
  <?php if(WW == true) { echo
  '|'; } else { echo ''; } ?> <a href="statistiken.php?id=99" <?php if(isset($_GET['id']) && $_GET['id'] == 99) { echo "class=\"selected \""; } ?>><?php if(WW == true) { echo
  'WW'; } else { echo ''; }?></a>

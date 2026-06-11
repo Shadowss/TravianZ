@@ -776,6 +776,9 @@ define('AND', 'et');
 //other
 define('VILLAGE', 'Village');
 define('STATISTICS', 'Statistiques');
+define('ALLIANCES', 'Alliances');
+define('HEROES', 'Héros');
+define('GENERAL', 'Général');
 define('OASIS', 'Oasis');
 define('NO_OASIS', 'Vous ne possédez aucune oasis.');
 define('NO_VILLAGES', 'Il n\'y a pas de villages.');
