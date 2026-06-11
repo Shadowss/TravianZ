@@ -385,10 +385,7 @@ if(isset($_POST['lang']))
 <thead>
 <tr>
   <th colspan="2">
-    Large map 
-    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      <?php echo TZ_NOT_CODED_YET; ?>
-    </span>
+    <?php echo LARGE_MAP; ?>
   </th>
 </tr>
 </thead>
