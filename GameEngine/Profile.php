@@ -91,14 +91,10 @@ class Profile {
 			"WHERE id=" . (int)$session->uid
 		);
 
-		// Keep the in-memory session in sync for the immediate re-render.
-		foreach ([
-			'v1' => $v1, 'v2' => $v2, 'v3' => $v3, 'map' => $map,
-			'v4' => $v4, 'v5' => $v5, 'v6' => $v6,
-			'timezone' => $timezone, 'tformat' => $tformat,
-		] as $field => $value) {
-			$session->userinfo[$field] = $value;
-		}
+		// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+		// reloaded page reflects the new values immediately, without a re-login.
+		$cacheKeyUser = 'cache_user_' . ($_SESSION['username'] ?? '');
+		unset($_SESSION[$cacheKeyUser]);
 
 		// Game language.
 		$allowed = ['en', 'fr', 'it', 'ro', 'zh'];
