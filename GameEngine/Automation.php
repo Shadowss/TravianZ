@@ -641,8 +641,17 @@ class Automation {
             $ownally = $userData_from['alliance'];
             $targetally = $userData_to['alliance'];
 
-            $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
-            if($from['owner'] != $to['owner']) {
+            // Report filter preferences (#198): skip merchant-transfer notices
+            // according to the saved checkboxes of the involved players.
+            //   v4 -> recipient: no report for transfers to own villages
+            //   v6 -> recipient: no report for transfers from foreign villages
+            //   v5 -> sender:    no report for transfers to foreign villages
+            $ownTransfer   = ($from['owner'] == $to['owner']);
+            $skipRecipient = $ownTransfer ? !empty($userData_to['v4']) : !empty($userData_to['v6']);
+            if(!$skipRecipient) {
+                $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
+            }
+            if(!$ownTransfer && empty($userData_from['v5'])) {
                 $database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             }
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
