@@ -115,7 +115,7 @@ if (!empty($troops['hero'])) {
         </td>
 
         <td class="un">
-            Hero
+            ' . U0 . '
         </td>
     </tr>';
 

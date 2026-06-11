@@ -31,12 +31,12 @@ if(!isset($_GET['id'])){ $_GET['id']='1'; }
 							<div class="navi">
 <?php
 if(count($rankArray) < 22){
-    echo "&laquo; back | forward &raquo;";
+    echo "&laquo; ".BACK." | ".FORWARD." &raquo;";
 }else if($start != 1 && $start + 20 < count($rankArray)) {
-    echo "<a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start - 20)."\">&laquo; back</a> | <a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start + 20)."\">forward &raquo;</a>";
+    echo "<a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start - 20)."\">&laquo; ".BACK."</a> | <a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start + 20)."\">".FORWARD." &raquo;</a>";
 }else if($start == 1 && $start + 20 < count($rankArray)) {
-    echo "&laquo; back | <a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start + 20)."\">forward &raquo;</a>";
+    echo "&laquo; ".BACK." | <a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start + 20)."\">".FORWARD." &raquo;</a>";
 }else if($start != 1 && $start - 20 < count($rankArray)) {
-    echo "<a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start - 20)."\">&laquo; back</a> | forward &raquo;";
+    echo "<a href=\"statistiken.php?id=".$_GET['id']."&amp;rank=".($start - 20)."\">&laquo; ".BACK."</a> | ".FORWARD." &raquo;";
 }
 ?>
