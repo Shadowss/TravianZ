@@ -59,12 +59,48 @@ class Profile {
 	}
 
 	/**
-	 * Preferences form (ft=p2): persist the per-user game language.
-	 * Writes the existing `lang` column (matches struct.sql + Session seeding).
+	 * Preferences form (ft=p2): persist all per-user preferences.
+	 * Stores the checkbox prefs (auto-completion v1-v3, large map, report
+	 * filter v4-v6), the time preference (timezone/tformat) and the game
+	 * language. Columns match struct.sql + Session seeding. Some of these are
+	 * stored only for now and applied in-game incrementally (issue #198).
 	 */
 	private function updatePreferences($post) {
 		global $database, $session;
 
+		// Checkbox preferences -> 0/1 (unchecked boxes are absent from POST).
+		$v1  = empty($post['v1'])  ? 0 : 1;
+		$v2  = empty($post['v2'])  ? 0 : 1;
+		$v3  = empty($post['v3'])  ? 0 : 1;
+		$map = empty($post['map']) ? 0 : 1;
+		$v4  = empty($post['v4'])  ? 0 : 1;
+		$v5  = empty($post['v5'])  ? 0 : 1;
+		$v6  = empty($post['v6'])  ? 0 : 1;
+
+		// Time preference: timezone index + date format (0..3).
+		$timezone = isset($post['timezone']) ? (int)$post['timezone'] : 1;
+		$tformat  = isset($post['tformat'])  ? (int)$post['tformat']  : 0;
+		if ($tformat < 0 || $tformat > 3) {
+			$tformat = 0;
+		}
+
+		$database->query(
+			"UPDATE " . TB_PREFIX . "users SET " .
+			"v1=$v1, v2=$v2, v3=$v3, map=$map, v4=$v4, v5=$v5, v6=$v6, " .
+			"timezone=$timezone, tformat=$tformat " .
+			"WHERE id=" . (int)$session->uid
+		);
+
+		// Keep the in-memory session in sync for the immediate re-render.
+		foreach ([
+			'v1' => $v1, 'v2' => $v2, 'v3' => $v3, 'map' => $map,
+			'v4' => $v4, 'v5' => $v5, 'v6' => $v6,
+			'timezone' => $timezone, 'tformat' => $tformat,
+		] as $field => $value) {
+			$session->userinfo[$field] = $value;
+		}
+
+		// Game language.
 		$allowed = ['en', 'fr', 'it', 'ro', 'zh'];
 		if (!empty($post['lang'])) {
 			$lang = strtolower(trim($post['lang']));
