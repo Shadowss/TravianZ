@@ -439,7 +439,14 @@ while ($donnees = mysqli_fetch_assoc($result2)) {
 			function init_local(){map_init();}
 		</script><?php
 		if($session->plus){
-			echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="'.LARGE_MAP.'" title="'.LARGE_MAP.'"/></a>';
+			if(!empty($session->userinfo['map'])){
+				// Preference "Show the large map in an extra window" (#198):
+				// open the large map (karte2.php) in a separate browser window
+				// instead of the in-page iframe overlay.
+				echo '<a id="map_makelarge" href="karte2.php?z='.$bigmid.'" target="bigmap" onclick="window.open(this.href, \'bigmap\', \'width=1020,height=600,scrollbars=yes,resizable=yes\'); return false;"><img class="ml" src="img/x.gif" alt="'.LARGE_MAP.'" title="'.LARGE_MAP.'"/></a>';
+			} else {
+				echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="'.LARGE_MAP.'" title="'.LARGE_MAP.'"/></a>';
+			}
 		}?>
 		<img id="map_navibox" src="img/x.gif" usemap="#map_navibox"/>
 		<map name="map_navibox">
