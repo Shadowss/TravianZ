@@ -147,6 +147,10 @@ if (!empty($_GET['p'])) {
             $subpage = 'Server Settings';
             break;
 
+        case 'debug_log':
+            $subpage = 'Debug Error Log';
+            break;
+
         case 'editServerSet':
             $subpage = 'Server Configuration';
             break;
@@ -622,6 +626,7 @@ body.app #lmid3 a{color:#15803d !important;font-weight:600 !important;}
 						<li class="sub"><a href="#">Admin</a>
 							<ul>
 								<li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
+								<li><a href="?p=debug_log">Debug Error Log</a></li>
 								<li><a href="?p=config">Server Settings</a></li>
 								<li><a href="?p=maintenance">Server Maintenance</a></li>
 								<li><a href="?p=resetServer">Server Resetting</a></li>

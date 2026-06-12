@@ -1932,6 +1932,8 @@ tz_def('TZ_CONSTRUCT_WAREHOUSE', 'Construct Warehouse.');
 tz_def('TZ_CP_DAY', 'CP/day');
 tz_def('TZ_CROP_25_5_GOLD', 'Crop +25% (5 gold)');
 tz_def('TZ_DATE_AND_TIME', 'Date and time');
+tz_def('TZ_DEBUG_OFF', 'Debug log OFF');
+tz_def('TZ_DEBUG_ON', 'Debug log ON');
 tz_def('TZ_DECLARE_WAR', 'declare war');
 tz_def('TZ_DEFAULT', 'Default:');
 tz_def('TZ_DELETE_ACCOUNT', 'Delete account?');

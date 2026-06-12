@@ -1931,6 +1931,8 @@ define('TZ_CONSTRUCT_WAREHOUSE', 'Construisez un entrepôt.');
 define('TZ_CP_DAY', 'PC/jour');
 define('TZ_CROP_25_5_GOLD', 'Céréales +25% (5 or)');
 define('TZ_DATE_AND_TIME', 'Date et heure');
+define('TZ_DEBUG_OFF', 'Journal debug DÉSACTIVÉ');
+define('TZ_DEBUG_ON', 'Journal debug ACTIVÉ');
 define('TZ_DECLARE_WAR', 'déclarer la guerre');
 define('TZ_DEFAULT', 'Par défaut :');
 define('TZ_DELETE_ACCOUNT', 'Supprimer le compte ?');

@@ -195,6 +195,11 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
 		*/
 		include("Templates/maintenance_status.tpl");
 
+		/**
+		* Debug Error Log quick toggle for admins
+		*/
+		include("Templates/debug_status.tpl");
+
         ?>
 
     </p>

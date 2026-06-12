@@ -129,6 +129,21 @@ function __construct() {
         }
     }
 
+    // === DEBUG ERROR LOG (admin-controlled, transparent to players) ===
+    // When enabled from the admin panel, capture the selected PHP errors of
+    // every player into var/log/debug-players.log. Auto-disables itself after
+    // the configured window so a forgotten debug session cannot run forever.
+    $dbg = $database->getDebugMode();
+    if (!empty($dbg['active'])) {
+        $autoOff = (int)($dbg['auto_off_hours'] ?? 0);
+        if ($autoOff > 0 && !empty($dbg['started_at'])
+            && ($dbg['started_at'] + $autoOff * 3600) < $this->time) {
+            $database->setDebugMode(0, $this->uid ?? 0);
+        } else {
+            \App\Utils\DebugErrorLogger::enable($dbg, $this->uid ?? 0, $this->username ?? '');
+        }
+    }
+
     $this->referrer = $_SESSION['url'] ?? "/";
     $this->url = $_SESSION['url'] = $_SERVER['PHP_SELF'];
 

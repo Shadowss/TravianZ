@@ -1926,6 +1926,8 @@ define('TZ_CONSTRUCT_WAREHOUSE', 'Construiește un depozit.');
 define('TZ_CP_DAY', 'PC/zi');
 define('TZ_CROP_25_5_GOLD', 'Grâne +25% (5 aur)');
 define('TZ_DATE_AND_TIME', 'Data și ora');
+define('TZ_DEBUG_OFF', 'Jurnal debug OPRIT');
+define('TZ_DEBUG_ON', 'Jurnal debug PORNIT');
 define('TZ_DECLARE_WAR', 'declară război');
 define('TZ_DEFAULT', 'Implicit:');
 define('TZ_DELETE_ACCOUNT', 'Ștergi contul?');
