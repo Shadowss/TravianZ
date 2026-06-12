@@ -6130,12 +6130,12 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         $end              = ( $ownertribe * 10 );
 
         for ( $i = $start; $i <= $end; $i ++ ) {
-            $totalunits += $movingunits[ 'u' . $i ];
-            $totalunits += $reinforcingunits[ 'u' . $i ];
+            $totalunits += $movingunits[ 'u' . $i ] ?? 0;
+            $totalunits += $reinforcingunits[ 'u' . $i ] ?? 0;
         }
 
-        $totalunits += $movingunits['hero'];
-        $totalunits += $reinforcingunits['hero'];
+        $totalunits += $movingunits['hero'] ?? 0;
+        $totalunits += $reinforcingunits['hero'] ?? 0;
 
 		return $totalunits;
 	}
