@@ -44,7 +44,8 @@ if (isset($_GET['z'])) {
             </td>
             <td class="vil">
                 <span><?php echo TZ_VILLAGE; ?></span>
-                <input class="text" name="dname" value="<?php echo htmlspecialchars($form->getValue('dname'), ENT_QUOTES); ?>" maxlength="20" type="text">
+                <input class="text" name="dname" value="<?php echo htmlspecialchars($form->getValue('dname'), ENT_QUOTES); ?>" maxlength="20" type="text" list="dnameSuggest" autocomplete="off">
+                <?php include("Templates/villageAutocomplete.tpl"); ?>
             </td>
         </tr>
         <tr>

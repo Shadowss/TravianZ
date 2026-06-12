@@ -134,7 +134,7 @@ if (isset($_GET['z'])) {
 
         <table id="target_select" class="res_target" cellpadding="1" cellspacing="1">
             <tr><td class="mer"><?php echo MERCHANT;?> <?php echo $merchantAvail;?>/<?php echo $totalMerchants;?></td></tr>
-            <tr><td class="vil"><span><?php echo VILLAGES;?>:</span> <input class="text" type="text" name="dname" value="" maxlength="30" tabindex="5"></td></tr>
+            <tr><td class="vil"><span><?php echo VILLAGES;?>:</span> <input class="text" type="text" name="dname" value="" maxlength="30" tabindex="5" list="dnameSuggest" autocomplete="off"><?php include("Templates/villageAutocomplete.tpl"); ?></td></tr>
             <tr><td class="or"><?php echo OR_;?></td></tr>
             <tr>
                 <td class="coo">
