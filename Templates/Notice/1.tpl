@@ -144,7 +144,9 @@ if ($hasHero) {
 }
 
 // PRISONERS (unchanged logic but safer sum)
-if (!$spy && array_sum(array_slice($dataarray, 182, 11)) > 0) {
+// Cast to int: some reports carry non-numeric text in these slots (e.g. the
+// "Information" line shifts indices), which made array_sum() warn under PHP 8.
+if (!$spy && array_sum(array_map('intval', array_slice($dataarray, 182, 11))) > 0) {
     echo "</tr><tr><th>".PRISONERS."</th>";
 
     for ($i = 182; $i <= 191; $i++) {

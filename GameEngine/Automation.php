@@ -1842,7 +1842,7 @@ class Automation {
 
                     //type of attack
                     $type = $dataarray[$data_num]['attack_type'];
-                    if($type == 1) $scout = 1;
+                    $scout = ($type == 1) ? 1 : 0;
                     
                     $ud = ($def_tribe - 1) * 10;
                     $att_ab = $database->getABTech($data['from']); // Blacksmith level
@@ -1941,7 +1941,7 @@ class Automation {
 
                     //type of attack
                     $type = $dataarray[$data_num]['attack_type'];
-                    if($type == 1) $scout = 1;
+                    $scout = ($type == 1) ? 1 : 0;
 
                     $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
                     $def_ab[31] = $def_ab[32] = $def_ab[33] = $def_ab[34] = $def_ab[35] = $def_ab[36] = $def_ab[37] = $def_ab[38] = 0;
@@ -2082,7 +2082,7 @@ class Automation {
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     
                     //check to see if can destroy village
-                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref) && !$to['natar']) {
+                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref) && empty($to['natar'])) {
                     	$can_destroy = 1;
                     }
                     else $can_destroy = 0;
