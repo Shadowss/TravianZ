@@ -68,7 +68,7 @@ function renderReports($database,$generator,$session,$d,$limit,$typeMap=null){
             $icon = '<img src="img/x.gif" class="iReport iReport'.$row['ntype'].'" title="'.$row['topic'].'">';
         }
         $date = $generator->procMtime($row['time']);
-        echo '<tr><td>'.$icon.' <a href="berichte.php?id='.$row['id'].'">'.$date[0].' '.date('H:i',$row['time']).'</a></td></tr>';
+        echo '<tr><td>'.$icon.' <a href="berichte.php?id='.$row['id'].'">'.$date[0].' '.substr($date[1],0,5).'</a></td></tr>';
     }
 }
 ?>

@@ -140,7 +140,7 @@ if (!$sql || mysqli_num_rows($sql) == 0) {
         $outputList .= "<td class=\"al\">" . $allyLink . "</td>";
 
         // date column
-        $outputList .= "<td class=\"dat\">" . $date[0] . " " . date('H:i', $time) . "</td>";
+        $outputList .= "<td class=\"dat\">" . $date[0] . " " . substr($date[1], 0, 5) . "</td>";
 
         $outputList .= "</tr>";
     }

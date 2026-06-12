@@ -231,7 +231,7 @@ if (mysqli_num_rows($getnotice) > 0) {
 
         $date = $generator->procMtime($row2['time']);
         echo '<a href="berichte.php?id='.$row2['id'].'">'
-            .$date[0]." ".date('H:i', $row2['time']).'</a>';
+            .$date[0]." ".substr($date[1],0,5).'</a>';
     }
 }
 ?>

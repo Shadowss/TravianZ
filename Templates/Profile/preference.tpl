@@ -435,9 +435,6 @@ if(isset($_POST['lang']))
 <tr>
   <th colspan="2">
     <?php echo TZ_TIME_PREFERENCE; ?>
-    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      <?php echo TZ_NOT_CODED_YET; ?>
-    </span>
   </th>
 </tr>
 <tr><td colspan="2"><?php echo TZ_HERE_YOU_CAN_CHANGE_TRAVIAN_S_DISP; ?></td></tr>

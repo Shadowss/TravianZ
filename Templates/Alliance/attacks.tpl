@@ -180,7 +180,7 @@ if ($f === 31 || $f === 32) {
             $outputList .= "</a></div></td>";
 
             $outputList .= "<td class=\"al\">" . $allyName . "</td>";
-            $outputList .= "<td class=\"dat\">" . $date[0] . " " . date('H:i', $time) . "</td>";
+            $outputList .= "<td class=\"dat\">" . $date[0] . " " . substr($date[1], 0, 5) . "</td>";
 
             $outputList .= "</tr>";
         }
