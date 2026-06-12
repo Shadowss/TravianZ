@@ -152,6 +152,7 @@ tz_def('HI', 'HI');
 tz_def('P_IN', 'in');
 tz_def('MS', 'ms');
 tz_def('SERVER_TIME', 'Server time:');
+tz_def('LOCAL_TIME', 'Local time:');
 tz_def('REMAINING_GOLD', 'Remaining gold');
 
 // HEADER && MENU && Messages && Reports

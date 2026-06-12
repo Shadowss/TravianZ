@@ -149,6 +149,7 @@ define('HI', 'Salut');
 define('P_IN', 'în');
 define('MS', 'ms');
 define('SERVER_TIME', 'Ora serverului:');
+define('LOCAL_TIME', 'Ora locală:');
 define('REMAINING_GOLD', 'Aur rămas');
 
 // HEADER && MENU && Messages && Reports

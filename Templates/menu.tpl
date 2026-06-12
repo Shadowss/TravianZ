@@ -244,6 +244,68 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
 
 <?php
 /**
+ * Live "local time" clock (issue #198): show a second clock next to the
+ * server-time one, ticking in the player's chosen timezone. The server-time
+ * block lives in each page's own footer (rendered after this menu), so we wait
+ * for the DOM and target the last #tp1 (the visible one). Vanilla JS, driven by
+ * Date.now() + the player's UTC offset, so it is independent of the browser
+ * timezone and does not touch the unx.js tp+i counters (arrival timers).
+ *
+ * Skipped entirely when the player's timezone matches the server's, so no
+ * redundant line is shown.
+ */
+$localOffset  = (int) $generator->userTimeZoneOffset();
+$serverOffset = (int) date('Z');
+if ($localOffset !== $serverOffset):
+?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var anchors = document.querySelectorAll('#tp1');
+    if (!anchors.length) return;
+    var tp = anchors[anchors.length - 1];
+    var off = <?php echo $localOffset; ?> * 1000;
+    var label = <?php echo json_encode(LOCAL_TIME); ?>;
+
+    var br  = document.createElement('br');
+    var lbl = document.createElement('span');
+    lbl.appendChild(document.createTextNode(label + ' '));
+    var val = document.createElement('span');
+    val.className = 'b';
+
+    var parent = tp.parentNode, next = tp.nextSibling;
+    parent.insertBefore(br, next);
+    parent.insertBefore(lbl, next);
+    parent.insertBefore(val, next);
+
+    // align the local-time value vertically under the server-time value
+    var delta = tp.offsetLeft - val.offsetLeft;
+    if (delta > 0) {
+        lbl.style.display = 'inline-block';
+        lbl.style.width = (lbl.offsetWidth + delta) + 'px';
+    }
+
+    // make room for the extra line and lift the block so it stays in the frame
+    var box = tp;
+    while (box && box.id !== 'ltime') box = box.parentNode;
+    if (box) {
+        box.style.height = 'auto';
+        var top = parseInt(window.getComputedStyle(box).top, 10);
+        if (!isNaN(top)) box.style.top = (top - 8) + 'px';
+    }
+
+    function p(n) { return n < 10 ? '0' + n : n; }
+    function tick() {
+        var d = new Date(Date.now() + off);
+        val.innerHTML = p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds());
+    }
+    tick();
+    setInterval(tick, 1000);
+});
+</script>
+<?php endif; ?>
+
+<?php
+/**
  * Announcement screen
  */
 if($sessionOk) {

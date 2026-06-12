@@ -149,6 +149,7 @@ define('HI', 'Bonjour');
 define('P_IN', 'dans');
 define('MS', 'ms');
 define('SERVER_TIME', 'Heure du serveur :');
+define('LOCAL_TIME', 'Heure locale :');
 define('REMAINING_GOLD', 'Or restant');
 
 // HEADER && MENU && Messages && Reports
