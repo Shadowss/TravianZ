@@ -38,7 +38,7 @@ $firstSelect = ($villages[0]?? 0) == $village->wid? 1 : 0;
                         <?php $icons = [1=>'1',2=>'2',3=>'3',4=>'4']; $names = [1=>LUMBER,2=>CLAY,3=>IRON,4=>CROP];
                         foreach ($icons as $i => $img):?>
                             <img src="../../<?php echo GP_LOCATE;?>img/r/<?php echo $img;?>.gif" alt="<?php echo $names[$i];?>" title="<?php echo $names[$i];?>">
-                            <input class="text" type="text" name="r<?php echo $i;?>" id="r<?php echo $i;?>" value="" maxlength="5" tabindex="1" style="width:50px;">
+                            <input class="text" type="text" name="r<?php echo $i;?>" id="r<?php echo $i;?>" value="" maxlength="9" tabindex="1" style="width:50px;">
                         <?php endforeach;?>
                     </td>
                 </tr>

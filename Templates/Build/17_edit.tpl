@@ -32,7 +32,7 @@ $deliveries = (int)($edited_route['deliveries']??1);
                         ];
                         foreach ($res as $r):?>
                             <img src="../../<?php echo GP_LOCATE;?>img/r/<?php echo $r[2];?>.gif" alt="<?php echo $r[3];?>" title="<?php echo $r[3];?>">
-                            <input class="text" type="text" name="<?php echo $r[0];?>" id="<?php echo $r[0];?>" value="<?php echo $r[1];?>" maxlength="5" tabindex="1" style="width:50px;">
+                            <input class="text" type="text" name="<?php echo $r[0];?>" id="<?php echo $r[0];?>" value="<?php echo $r[1];?>" maxlength="9" tabindex="1" style="width:50px;">
                         <?php endforeach;?>
                     </td>
                 </tr>
