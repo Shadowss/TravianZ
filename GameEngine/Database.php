@@ -8878,12 +8878,70 @@ public function setMaintenance($active, $uid=0) {
     $active = (int)$active;
     $uid = (int)$uid;
     // REPLACE creează rândul dacă nu există
-    return $this->query("REPLACE INTO ".TB_PREFIX."maintenance 
-        (id, active, started_by, started_at) 
+    return $this->query("REPLACE INTO ".TB_PREFIX."maintenance
+        (id, active, started_by, started_at)
         VALUES (1, $active, $uid, $time)");
 }
 
-    
+/**
+ * Debug error-log mode (admin-controlled, transparent to players).
+ * Returns the single config row, falling back to safe defaults when the
+ * table does not exist yet (so deploying the code before creating the table
+ * never produces a blank page).
+ */
+public function getDebugMode() {
+    $default = [
+        'active'         => 0,
+        'lvl_warning'    => 1,
+        'lvl_notice'     => 1,
+        'lvl_deprecated' => 1,
+        'lvl_fatal'      => 1,
+        'max_size_mb'    => 5,
+        'auto_off_hours' => 6,
+        'started_by'     => null,
+        'started_at'     => null,
+    ];
+    try {
+        $res = @mysqli_query($this->dblink, "SELECT * FROM ".TB_PREFIX."debug_log WHERE id=1 LIMIT 1");
+        if (!$res) {
+            return $default;
+        }
+        $row = mysqli_fetch_assoc($res);
+        return $row ?: $default;
+    } catch (\Throwable $e) {
+        return $default;
+    }
+}
+
+/**
+ * Toggle the debug mode on/off (stamps who/when on activation).
+ */
+public function setDebugMode($active, $uid = 0) {
+    $active = (int)$active;
+    $uid    = (int)$uid;
+    $time   = time();
+    return $this->query("UPDATE ".TB_PREFIX."debug_log
+        SET active = $active, started_by = $uid, started_at = $time
+        WHERE id = 1");
+}
+
+/**
+ * Persist the debug capture parameters (levels, size cap, auto-off window).
+ */
+public function setDebugSettings($warning, $notice, $deprecated, $fatal, $maxSizeMb, $autoOffHours) {
+    $warning      = $warning ? 1 : 0;
+    $notice       = $notice ? 1 : 0;
+    $deprecated   = $deprecated ? 1 : 0;
+    $fatal        = $fatal ? 1 : 0;
+    $maxSizeMb    = max(1, (int)$maxSizeMb);
+    $autoOffHours = max(0, (int)$autoOffHours);
+    return $this->query("UPDATE ".TB_PREFIX."debug_log
+        SET lvl_warning = $warning, lvl_notice = $notice, lvl_deprecated = $deprecated,
+            lvl_fatal = $fatal, max_size_mb = $maxSizeMb, auto_off_hours = $autoOffHours
+        WHERE id = 1");
+}
+
+
     /**
      * Changed the actual capital with a new one
      * 

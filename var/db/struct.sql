@@ -1828,3 +1828,28 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%maintenance` (
 --
 INSERT INTO `%PREFIX%maintenance` (`id`, `active`, `message`, `started_by`, `started_at`) VALUES
 (1, 0, 'Server in maintenance', NULL, NULL);
+
+--
+-- Table structure for table `%PREFIX%debug_log`
+-- Admin-controlled PHP error capture (transparent to players). One row (id=1).
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%debug_log` (
+  `id` tinyint(1) NOT NULL DEFAULT 1,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
+  `lvl_warning` tinyint(1) NOT NULL DEFAULT 1,
+  `lvl_notice` tinyint(1) NOT NULL DEFAULT 1,
+  `lvl_deprecated` tinyint(1) NOT NULL DEFAULT 1,
+  `lvl_fatal` tinyint(1) NOT NULL DEFAULT 1,
+  `max_size_mb` int(11) NOT NULL DEFAULT 5,
+  `auto_off_hours` int(11) NOT NULL DEFAULT 6,
+  `started_by` int(11) DEFAULT NULL,
+  `started_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%debug_log`
+--
+INSERT INTO `%PREFIX%debug_log` (`id`, `active`, `lvl_warning`, `lvl_notice`, `lvl_deprecated`, `lvl_fatal`, `max_size_mb`, `auto_off_hours`, `started_by`, `started_at`) VALUES
+(1, 0, 1, 1, 1, 1, 5, 6, NULL, NULL);
