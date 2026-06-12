@@ -1629,7 +1629,7 @@ class Automation {
                     .','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar
                     .','.$unitssend_def[5].','.$unitsdead_def[5]
                     .','.$DefenderHeroesTot.','.$DefenderHeroesDead
-                    .','.$info_ram.','.$info_cat.','.$info_chief.'.'.(isset($info_spy) ? $info_spy : '')
+                    .','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '')
                     .',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero
                     .','.$unitstraped_att;
 
