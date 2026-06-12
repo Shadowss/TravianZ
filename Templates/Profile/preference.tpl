@@ -350,10 +350,7 @@ if(isset($_POST['lang']))
 <thead>
 <tr>
   <th colspan="2">
-    Auto completion 
-    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      <?php echo TZ_NOT_CODED_YET; ?>
-    </span>
+    <?php echo AUTO_COMPL; ?>
   </th>
 </tr>
 <tr><td colspan="2"><?php echo TZ_USED_FOR_RALLY_POINT_AND_MARKETPLA; ?></td></tr>

@@ -5377,6 +5377,67 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         return $this->getVillage($name, 1, $use_cache)['wref'];
 	}
 
+	/**
+	 * Build the village-name autocomplete suggestions for the rally point and
+	 * the marketplace, honouring the player's auto-completion preferences
+	 * (issue #198):
+	 *   v1 -> own villages
+	 *   v2 -> villages in the surroundings of the active village
+	 *   v3 -> villages of the player's alliance members
+	 * System accounts (Nature, Natars, Multihunter, ...) are excluded.
+	 *
+	 * @param int $uid      Player id (own villages / self).
+	 * @param int $alliance Player's alliance id (0 = none).
+	 * @param int $x        Active village X coordinate (vicinity center).
+	 * @param int $y        Active village Y coordinate (vicinity center).
+	 * @param bool $v1      Include own villages.
+	 * @param bool $v2      Include surrounding villages.
+	 * @param bool $v3      Include alliance villages.
+	 * @param int $radius   Vicinity radius in fields (v2).
+	 * @param int $limit    Max number of names returned.
+	 * @return string[]     Distinct village names.
+	 */
+	function getAutoCompleteVillages($uid, $alliance, $x, $y, $v1, $v2, $v3, $radius = 25, $limit = 100) {
+		$uid      = (int) $uid;
+		$alliance = (int) $alliance;
+		$x        = (int) $x;
+		$y        = (int) $y;
+		$radius   = (int) $radius;
+		$limit    = (int) $limit;
+
+		$joins = "JOIN " . TB_PREFIX . "users u ON u.id = v.owner ";
+		$conds = [];
+
+		if ($v1) {
+			$conds[] = "v.owner = $uid";
+		}
+		if ($v3 && $alliance > 0) {
+			$conds[] = "u.alliance = $alliance";
+		}
+		if ($v2) {
+			$joins  .= "JOIN " . TB_PREFIX . "wdata w ON w.id = v.wref ";
+			$conds[] = "(ABS(w.x - $x) <= $radius AND ABS(w.y - $y) <= $radius)";
+		}
+
+		if (!count($conds)) {
+			return [];
+		}
+
+		$q = "SELECT DISTINCT v.name FROM " . TB_PREFIX . "vdata v " .
+			$joins .
+			"WHERE u.id > 5 AND (" . implode(' OR ', $conds) . ") " .
+			"ORDER BY v.name LIMIT $limit";
+
+		$result = mysqli_query($this->dblink, $q);
+		$names  = [];
+		if ($result) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$names[] = $row['name'];
+			}
+		}
+		return $names;
+	}
+
     function getVillageByOwner($uid, $use_cache = true) {
         $uid = (int) $uid;
 
