@@ -126,7 +126,7 @@ if (isset($_GET['z'])) {
             <tr>
                 <td class="ico"><a href="#" onClick="upd_res(<?php echo $i;?>,1); return false;"><img class="r<?php echo $i;?>" src="img/x.gif" alt="<?php echo $resNames[$i];?>" title="<?php echo $resNames[$i];?>" /></a></td>
                 <td class="nam"><?php echo $resNames[$i];?>:</td>
-                <td class="val"><input class="text" type="text" name="r<?php echo $i;?>" id="r<?php echo $i;?>" value="" maxlength="5" onKeyUp="upd_res(<?php echo $i;?>)" tabindex="<?php echo $i;?>"></td>
+                <td class="val"><input class="text" type="text" name="r<?php echo $i;?>" id="r<?php echo $i;?>" value="" maxlength="9" onKeyUp="upd_res(<?php echo $i;?>)" tabindex="<?php echo $i;?>"></td>
                 <td class="max"><a href="#" onMouseUp="add_res(<?php echo $i;?>);" onClick="return false;">(<?php echo $maxcarry;?>)</a></td>
             </tr>
             <?php endfor;?>
