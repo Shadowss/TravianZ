@@ -1710,6 +1710,53 @@ class Automation {
         return $steal;
     }
 
+    /**
+     * Apply battle casualties to the defender's own (in-village) troops, persist
+     * the losses, and return the per-unit dead map used later for points/reports.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data        Current attack row (uses 'to').
+     * @param int   $targettribe Defender tribe (1-5).
+     * @param array $battlepart  Battle result (index 2 = defender kill ratio,
+     *                           'deadherodef' = defender hero losses).
+     * @return array Map of dead own troops: keys are the unit index (int) plus 'hero'.
+     */
+    private function applyOwnDefenceCasualties($data, $targettribe, $battlepart) {
+        global $database;
+
+        $owndead = [];
+        $unitlist = $database->getUnit($data['to'], false);
+        $start = ($targettribe - 1) * 10 + 1;
+        $end = ($targettribe * 10);
+
+        $unitModifications_units = [];
+        $unitModifications_amounts = [];
+        $unitModifications_modes = [];
+        for ($i = $start; $i <= $end; $i++) {
+            if ($unitlist) {
+                $owndead[$i] = round($battlepart[2] * $unitlist['u'.$i]);
+                $unitModifications_units[] = $i;
+                $unitModifications_amounts[] = $owndead[$i];
+                $unitModifications_modes[] = 0;
+            }
+        }
+
+        $owndead['hero'] = 0;
+
+        if ($unitlist) {
+            $owndead['hero'] = (isset($battlepart['deadherodef']) ? $battlepart['deadherodef'] : '');
+
+            $unitModifications_units[] = 'hero';
+            $unitModifications_amounts[] = $owndead['hero'];
+            $unitModifications_modes[] = 0;
+        }
+
+        // modify units in DB
+        $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
+
+        return $owndead;
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2213,42 +2260,8 @@ class Automation {
                     for($i = 1; $i <= 50; $i++) $alldead[$i] = 0;
                     $heroAttackDead = $dead11;
                     
-                    //kill own defence
-                    $unitlist = $database->getUnit($data['to'], false);
-                    $start = ($targettribe-1)*10+1;
-                    $end = ($targettribe*10);
-
-                    if ($targettribe == 1) $u = "";                    
-                    else $u = $targettribe - 1;
-
-                    $unitModifications_units = [];
-                    $unitModifications_amounts = [];
-                    $unitModifications_modes = [];
-                    for ($i = $start; $i <= $end; $i++) {
-                        if($i == $end) {
-                            $u = $targettribe;
-                        }
-
-                        if($unitlist){
-                            $owndead[$i] = round($battlepart[2] * $unitlist['u'.$i]);
-                            $unitModifications_units[] = $i;
-                            $unitModifications_amounts[] = $owndead[$i];
-                            $unitModifications_modes[] = 0;
-                        }
-                    }
-
-                    $owndead['hero'] = 0;
-
-                    if($unitlist){
-                        $owndead['hero'] = (isset($battlepart['deadherodef']) ? $battlepart['deadherodef'] : '');
-
-                        $unitModifications_units[] = 'hero';
-                        $unitModifications_amounts[] = $owndead['hero'];
-                        $unitModifications_modes[] = 0;
-                    }
-
-                    // modify units in DB
-                    $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
+                    //kill own defence — extracted to applyOwnDefenceCasualties() [#155]
+                    $owndead = $this->applyOwnDefenceCasualties($data, $targettribe, $battlepart);
 
                     //kill other defence in village
                     // ... once again, units could have changed, so we need to reselect
