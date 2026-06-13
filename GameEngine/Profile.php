@@ -107,8 +107,73 @@ class Profile {
 			}
 		}
 
+		// Direct links table (add / update / delete the player's custom links).
+		$this->updateLinks($post);
+
 		header("Location: spieler.php?s=2");
 		exit;
+	}
+
+	/**
+	 * Direct links (ft=p2): add / update / delete the player's custom menu
+	 * links from the preferences form. This logic used to live in
+	 * Templates/Profile/preference.tpl, but since procProfile() now intercepts
+	 * the ft=p2 POST and exits, the template was never reached and links could
+	 * no longer be saved (issue #204). Mirrors the form's nr / id / linkname /
+	 * linkziel row fields.
+	 */
+	private function updateLinks($post) {
+		global $database, $session;
+
+		$uid   = (int)$session->uid;
+		$links = [];
+
+		// Group the row fields (nr0, id0, linkname0, linkziel0, ...) by index.
+		foreach ($post as $key => $value) {
+			if (!is_string($value)) {
+				continue;
+			}
+			$value = trim($value);
+
+			if (strpos($key, 'linkname') === 0) {
+				$links[substr($key, 8)]['name'] = mysqli_real_escape_string($database->dblink, $value);
+			} elseif (strpos($key, 'linkziel') === 0) {
+				$links[substr($key, 8)]['url'] = mysqli_real_escape_string($database->dblink, $value);
+			} elseif (strpos($key, 'nr') === 0) {
+				$links[substr($key, 2)]['nr'] = (int)$value;
+			} elseif (strpos($key, 'id') === 0) {
+				$links[substr($key, 2)]['id'] = (int)$value;
+			}
+		}
+
+		foreach ($links as $link) {
+			$nr   = isset($link['nr'])   ? (int)$link['nr'] : 0;
+			$id   = isset($link['id'])   ? (int)$link['id'] : 0;
+			$name = isset($link['name']) ? $link['name'] : '';
+			$url  = isset($link['url'])  ? $link['url']  : '';
+
+			if ($nr !== 0 && $name !== '' && $url !== '' && $id === 0) {
+				// New link.
+				mysqli_query(
+					$database->dblink,
+					"INSERT INTO `" . TB_PREFIX . "links` (`userid`, `name`, `url`, `pos`) " .
+					"VALUES ($uid, '$name', '$url', $nr)"
+				);
+			} elseif ($nr !== 0 && $name !== '' && $url !== '' && $id > 0) {
+				// Update existing link (ownership enforced in the WHERE clause).
+				mysqli_query(
+					$database->dblink,
+					"UPDATE `" . TB_PREFIX . "links` SET `name`='$name', `url`='$url', `pos`=$nr " .
+					"WHERE `id`=$id AND `userid`=$uid"
+				);
+			} elseif ($nr === 0 && $name === '' && $url === '' && $id > 0) {
+				// Emptied row -> delete (ownership enforced in the WHERE clause).
+				mysqli_query(
+					$database->dblink,
+					"DELETE FROM `" . TB_PREFIX . "links` WHERE `id`=$id AND `userid`=$uid"
+				);
+			}
+		}
 	}
 
 	public function procSpecial($get) {
