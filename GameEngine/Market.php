@@ -806,35 +806,20 @@ class Market
             exit;
         }
 
-        // Prevent selling more resources than available
-        if (
-            (
-                (int)$post['m2'][0] < 0 &&
-                round($village->awood) + (int)$post['m2'][0] < 0
-            ) ||
-            (
-                (int)$post['m2'][1] < 0 &&
-                round($village->aclay) + (int)$post['m2'][1] < 0
-            ) ||
-            (
-                (int)$post['m2'][2] < 0 &&
-                round($village->airon) + (int)$post['m2'][2] < 0
-            ) ||
-            (
-                (int)$post['m2'][3] < 0 &&
-                round($village->acrop) + (int)$post['m2'][3] < 0
-            )
-        ) {
+        // Sanitize the requested distribution: never negative, never above the
+        // warehouse / granary capacity. Guards against a forged or NaN-corrupted
+        // POST (issue #211: NPC distribution).
+        $maxstore = (int) $village->maxstore;
+        $maxcrop  = (int) $village->maxcrop;
 
-            header('Location: build.php?id=' . $post['id'] . '&t=3');
-            exit;
-        }
+        $m2 = [
+            max(0, min($maxstore, (int)($post['m2'][0] ?? 0))),
+            max(0, min($maxstore, (int)($post['m2'][1] ?? 0))),
+            max(0, min($maxstore, (int)($post['m2'][2] ?? 0))),
+            max(0, min($maxcrop,  (int)($post['m2'][3] ?? 0))),
+        ];
 
-        $newTotal =
-            (int)$post['m2'][0] +
-            (int)$post['m2'][1] +
-            (int)$post['m2'][2] +
-            (int)$post['m2'][3];
+        $newTotal = $m2[0] + $m2[1] + $m2[2] + $m2[3];
 
         $currentTotal =
             round($village->awood) +
@@ -853,10 +838,10 @@ class Market
             $village->wid,
             ['wood', 'clay', 'iron', 'crop'],
             [
-                $post['m2'][0],
-                $post['m2'][1],
-                $post['m2'][2],
-                $post['m2'][3]
+                $m2[0],
+                $m2[1],
+                $m2[2],
+                $m2[3]
             ]
         );
 		$this->forget();
