@@ -2744,7 +2744,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getVillageType2($wref) {
+	function getVillageType2($wref, $use_cache = true) {
         // retirieve form cache
         return $this->getVillageByWorldID($wref, $use_cache)['oasistype'];
 	}
