@@ -761,7 +761,7 @@ class Units {
     public function startRaidList($post){   
     	global $database, $generator, $session;
 
-    	$slots = $post['slot'];
+    	$slots = $post['slot'] ?? [];
     	if(empty($slots)){
     		header("Location: build.php?id=39&t=99");
     		exit();
