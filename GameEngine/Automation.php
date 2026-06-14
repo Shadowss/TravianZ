@@ -1878,6 +1878,91 @@ class Automation {
         return ['rom' => $rom, 'ger' => $ger, 'gal' => $gal, 'nat' => $nat, 'natar' => $natar];
     }
 
+    /**
+     * Collect the defender-side report data BEFORE casualties are applied: reset and
+     * rebuild the reinforcement unit totals ($DefenderEnf) and the per-tribe hero
+     * totals from a fresh re-select, fold reinforcement heroes into the defender's
+     * hero count, build the "units sent" report rows (own troops + reinforcements,
+     * plus their masked variants), and (re)initialise the per-tribe dead-hero
+     * accumulator to zero. Returns everything the caller needs downstream.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data        Current attack row (uses 'to').
+     * @param int   $targettribe Defender tribe (1-5).
+     * @param array $Defender    Defender unit array (own troops + 'hero'); passed by value,
+     *                           its 'hero' is folded with reinforcement heroes and returned
+     *                           via the 'defenderHero' key.
+     * @return array Report bundle: DefenderEnf, DefenderHeroesTotArray,
+     *               DefenderHeroesDeadArray, unitssend_def, unitssend_deff,
+     *               totalsend_alldef, defenderHero.
+     */
+    private function collectReinforcementReport($data, $targettribe, $Defender) {
+        global $database;
+
+        $DefenderEnf = [];
+        $DefenderHeroesTotArray = [];
+        $DefenderHeroesDeadArray = [];
+        $unitssend_def = [];
+        $unitssend_deff = [];
+
+        //Resetting the enforcement arrays
+        for ($i = 1; $i <= 50; $i++) {
+            $DefenderEnf['u'.$i] = 0;
+            if ($i <= 5) {
+                $DefenderHeroesTotArray[$i] = 0;
+                $DefenderHeroesDeadArray[$i] = 0;
+            }
+        }
+
+        // our reinforcements count could have changed at this point, thus the re-select
+        $enforcementarray2 = $database->getEnforceVillage($data['to'], 0);
+        if (count($enforcementarray2) > 0) {
+            foreach ($enforcementarray2 as $enforce2) {
+                for ($i = 1; $i <= 50; $i++) {
+                    $DefenderEnf['u'.$i] += $enforce2['u'.$i];
+                }
+
+                //Divide heroes by tribe
+                if ($enforce2['hero'] > 0) {
+                    $reinfTribe = ($enforce2['from'] == 0) ? 4 : $database->getUserField($database->getVillageField($enforce2['from'], "owner"), "tribe", 0);
+                    $DefenderHeroesTotArray[$reinfTribe] += $enforce2['hero'];
+                    $Defender['hero'] += $enforce2['hero'];
+                }
+            }
+        }
+
+        $totalsend_alldef = 0;
+
+        //Own troops
+        $ownTroops = array_slice($Defender, ($targettribe - 1) * 10 + 1, 10);
+        $totalsend_alldef = array_sum($ownTroops);
+
+        //Collecting informations for the report
+        $unitssend_def[0] = implode(",", $ownTroops);
+        $unitssend_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
+
+        for ($i = 1; $i <= 5; $i++) {
+            //Reinforcements
+            $reinfTroops = array_slice($DefenderEnf, ($i - 1) * 10, 10);
+            $totalsend_alldef += array_sum($reinfTroops);
+
+            //Collecting informations for the report
+            $unitssend_def[$i] = implode(",", $reinfTroops);
+            $unitssend_deff[$i] = $unitssend_deff[0];
+        }
+        $totalsend_alldef += $Defender['hero'];
+
+        return [
+            'DefenderEnf' => $DefenderEnf,
+            'DefenderHeroesTotArray' => $DefenderHeroesTotArray,
+            'DefenderHeroesDeadArray' => $DefenderHeroesDeadArray,
+            'unitssend_def' => $unitssend_def,
+            'unitssend_deff' => $unitssend_deff,
+            'totalsend_alldef' => $totalsend_alldef,
+            'defenderHero' => $Defender['hero'],
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2309,53 +2394,15 @@ class Automation {
                     if ($herosend_att > 0) $unitssend_att_check = $unitssend_att.','.$data['t11'];      
                     else  $unitssend_att_check = $unitssend_att;            
 
-                    //Resetting the enforcement arrays
-                    for($i = 1; $i <= 50; $i++) { 
-                        $DefenderEnf['u'.$i] = 0;
-                        if($i <= 5){
-                            $DefenderHeroesTotArray[$i] = 0;
-                            $DefenderHeroesDeadArray[$i] = 0;
-                        }     
-                    }
-                    
-                    // our reinforcements count could have changed at this point, thus the re-select
-                    $enforcementarray2 = $database->getEnforceVillage($data['to'], 0);
-                    if(count($enforcementarray2) > 0) {
-                        foreach($enforcementarray2 as $enforce2) {                           
-                            for($i = 1; $i <= 50; $i++) {
-                                $DefenderEnf['u'.$i] += $enforce2['u'.$i];
-                            }                     
-                            
-                            //Divide heroes by tribe
-                            if($enforce2['hero'] > 0) {
-                                $reinfTribe = ($enforce2['from'] == 0) ? 4 : $database->getUserField($database->getVillageField($enforce2['from'], "owner"), "tribe", 0);
-                                $DefenderHeroesTotArray[$reinfTribe] += $enforce2['hero'];
-                                $Defender['hero'] += $enforce2['hero'];
-                            }
-                        }         
-                    }
-                    
-                    $totalsend_alldef = 0;
-                    $unitssend_def = [];
-                    
-                    //Own troops     
-                    $ownTroops = array_slice($Defender, ($targettribe - 1) * 10 + 1, 10);
-                    $totalsend_alldef = array_sum($ownTroops);
-                    
-                    //Collecting informations for the report
-                    $unitssend_def[0] = implode(",", $ownTroops);               
-                    $unitssend_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
-                     
-                    for($i = 1; $i <= 5; $i++){
-                        //Reinforcements
-                        $reinfTroops = array_slice($DefenderEnf, ($i - 1) * 10, 10);
-                        $totalsend_alldef += array_sum($reinfTroops);
-                        
-                        //Collecting informations for the report
-                        $unitssend_def[$i] = implode(",", $reinfTroops);
-                        $unitssend_deff[$i] = $unitssend_deff[0];
-                    }
-                    $totalsend_alldef += $Defender['hero'];
+                    //reinforcement report (pre-casualty defender data) — extracted to collectReinforcementReport() [#155]
+                    $reinfReport = $this->collectReinforcementReport($data, $targettribe, $Defender);
+                    $DefenderEnf             = $reinfReport['DefenderEnf'];
+                    $DefenderHeroesTotArray  = $reinfReport['DefenderHeroesTotArray'];
+                    $DefenderHeroesDeadArray = $reinfReport['DefenderHeroesDeadArray'];
+                    $unitssend_def           = $reinfReport['unitssend_def'];
+                    $unitssend_deff          = $reinfReport['unitssend_deff'];
+                    $totalsend_alldef        = $reinfReport['totalsend_alldef'];
+                    $Defender['hero']        = $reinfReport['defenderHero'];
 
                     #################################################
                     ################FIXED BY SONGER################
