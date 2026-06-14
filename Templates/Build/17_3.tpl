@@ -8,9 +8,23 @@ if ($session->gold <= 2) {
 }
 
 $level = (int)$village->resarray['f'.$id];
-$totalRes = floor($village->awood + $village->aclay + $village->airon + $village->acrop);
-$maxstore = (int)$village->maxstore;
-$maxcrop = (int)$village->maxcrop;
+
+// Defensive: a resource computed as NaN/INF (PHP float) would be echoed as
+// "NAN"/"INF" into org4/summe and lock the NPC distribution on "Rest: NaN"
+// (issue #211). Coerce every value the template/JS relies on to a valid,
+// non-negative integer before it reaches the page.
+$resSafe = static function ($v) {
+    $v = (float) $v;
+    return (is_finite($v) && $v > 0) ? (int) floor($v) : 0;
+};
+$awood = $resSafe($village->awood);
+$aclay = $resSafe($village->aclay);
+$airon = $resSafe($village->airon);
+$acrop = $resSafe($village->acrop);
+
+$totalRes = $awood + $aclay + $airon + $acrop;
+$maxstore = max(0, (int)$village->maxstore);
+$maxcrop  = max(0, (int)$village->maxcrop);
 
 // valori prefill din GET
 $r = [];
@@ -62,6 +76,9 @@ $completed = isset($_GET['c']);
             document.getElementById("overall").innerHTML=overall+"%";
         }
         function normalize() { calculateRes(); resObj=document.getElementsByName("m2"); for (i=0; i<resObj.length; i++) { tmp=parseInt(resObj[i].value); tmp=tmp*(100/overall); resObj[i].value=Math.round(tmp); } calculateRes(); }
+        // Safe integer division: 0 when the divisor is 0 or the value is not finite
+        // (issue #211: avoids Infinity/NaN leaking into the inputs and the "Rest").
+        function npcDiv(a, b) { return (b > 0 && isFinite(a)) ? Math.round(a / b) : 0; }
         function calculateRest() {
             resObj=document.getElementsByName("m2[]"); overall=0;
             for (i=0; i<resObj.length; i++) {
@@ -69,10 +86,13 @@ $completed = isset($_GET['c']);
                 if (tmp=="") { tmp="0"; newRes=0; resObj[i].value=""; } else { newRes=parseInt(tmp); if ((i<3) && (newRes>max123)) newRes=max123; if ((i==3) && (newRes>max4)) newRes=max4; resObj[i].value=newRes; }
                 dif=newRes-parseInt(document.getElementById("org"+i).innerHTML); newHTML=dif; if (dif>0) newHTML="+"+dif; document.getElementById("diff"+i).innerHTML=newHTML; overall+=newRes;
             }
-            document.getElementById("newsum").innerHTML=overall; rest=parseInt(document.getElementById("org4").innerHTML)-overall; document.getElementById("remain").innerHTML=rest; testSum();
+            if (!isFinite(overall)) overall=0;
+            var total=parseInt(document.getElementById("org4").innerHTML); if (!isFinite(total)) total=summe;
+            rest=total-overall; if (!isFinite(rest)) rest=0;
+            document.getElementById("newsum").innerHTML=overall; document.getElementById("remain").innerHTML=rest; testSum();
         }
         function fillup(nr) { resObj=document.getElementsByName("m2[]"); if (nr<3) { resObj[nr].value=max123; } else { resObj[nr].value=max4; } calculateRest(); }
-        function portionOut() { /*... cod original neschimbat... */ restRes=parseInt(document.getElementById("remain").innerHTML); rest=restRes; resObj=document.getElementsByName("m2[]"); nullCount=0; notNullCount=0; for (j=0; j<resObj.length; j++) { if ((restRes>0) && (resObj[j].value=="")) nullCount++; if ((restRes<0) && (resObj[j].value!="")) notNullCount++; } nullCount2=0; if (restRes>0) { if (nullCount==0) { for (i=0; i<resObj.length; i++) { free=max123-parseInt(resObj[i].value); resObj[i].value=(parseInt(resObj[i].value)+Math.round(rest/(4-i))); rest=rest-Math.min(free,Math.round(rest/(4-i))); if ((i<3) && (parseInt(resObj[i].value)<max123)) nullCount2++; } } else { for (i=0; i<resObj.length; i++) { if (resObj[i].value=="") { resObj[i].value=Math.round(rest/nullCount); rest=rest-Math.round(rest/nullCount); nullCount--; } if ((i<3) && (parseInt(resObj[i].value)<max123)) nullCount2++; } } } else { for (j=0; j<resObj.length; j++) { if (parseInt(resObj[j].value)>0) { resObj[j].value=(parseInt(resObj[j].value)+Math.round(rest/notNullCount)); rest=rest-Math.round(rest/notNullCount); notNullCount--; } } } calculateRest(); if (rest>0) { if (max123>max4) { for (j=0; j<3; j++) { if (parseInt(resObj[j].value)<max123) { resObj[j].value=(parseInt(resObj[j].value)+Math.round(rest/nullCount2)); rest=rest-Math.round(rest/nullCount2); nullCount2--; } } } else { resObj[3].value=(parseInt(resObj[3].value)+rest); } } calculateRest(); }
+        function portionOut() { restRes=parseInt(document.getElementById("remain").innerHTML); if (!isFinite(restRes)) restRes=0; rest=restRes; resObj=document.getElementsByName("m2[]"); nullCount=0; notNullCount=0; for (j=0; j<resObj.length; j++) { if ((restRes>0) && (resObj[j].value=="")) nullCount++; if ((restRes<0) && (resObj[j].value!="")) notNullCount++; } nullCount2=0; if (restRes>0) { if (nullCount==0) { for (i=0; i<resObj.length; i++) { free=max123-parseInt(resObj[i].value); resObj[i].value=(parseInt(resObj[i].value)+npcDiv(rest,(4-i))); rest=rest-Math.min(free,npcDiv(rest,(4-i))); if ((i<3) && (parseInt(resObj[i].value)<max123)) nullCount2++; } } else { for (i=0; i<resObj.length; i++) { if (resObj[i].value=="") { resObj[i].value=npcDiv(rest,nullCount); rest=rest-npcDiv(rest,nullCount); nullCount--; } if ((i<3) && (parseInt(resObj[i].value)<max123)) nullCount2++; } } } else { for (j=0; j<resObj.length; j++) { if (parseInt(resObj[j].value)>0) { resObj[j].value=(parseInt(resObj[j].value)+npcDiv(rest,notNullCount)); rest=rest-npcDiv(rest,notNullCount); notNullCount--; } } } calculateRest(); if (rest>0) { if (max123>max4) { for (j=0; j<3; j++) { if (parseInt(resObj[j].value)<max123) { resObj[j].value=(parseInt(resObj[j].value)+npcDiv(rest,nullCount2)); rest=rest-npcDiv(rest,nullCount2); nullCount2--; } } } else { resObj[3].value=((parseInt(resObj[3].value)||0)+(isFinite(rest)?rest:0)); } } calculateRest(); }
         function testSum() { if (document.getElementById("remain").innerHTML!=0) { document.getElementById("submitText").innerHTML="<a href='javascript:portionOut();'><?php echo DISTRIBUTE_RESOURCES;?></a>"; document.getElementById("submitText").style.display="block"; document.getElementById("submitButton").style.display="none"; } else { document.getElementById("submitText").innerHTML=""; document.getElementById("submitText").style.display="none"; document.getElementById("submitButton").style.display="block"; } }
         </script>
         <script language="JavaScript">var summe=<?php echo $totalRes;?>;var max123=<?php echo $maxstore;?>;var max4=<?php echo $maxcrop;?>;</script>
@@ -88,10 +108,10 @@ $completed = isset($_GET['c']);
                     <tr><th colspan="5"><?php echo NPC_TRADE;?></th></tr>
                     <tr>
                         <?php $resData = [
-                            ['wood', $village->awood, 'r1', LUMBER],
-                            ['clay', $village->aclay, 'r2', CLAY],
-                            ['iron', $village->airon, 'r3', IRON],
-                            ['crop', $village->acrop, 'r4', CROP],
+                            ['wood', $awood, 'r1', LUMBER],
+                            ['clay', $aclay, 'r2', CLAY],
+                            ['iron', $airon, 'r3', IRON],
+                            ['crop', $acrop, 'r4', CROP],
                         ];
                         foreach ($resData as $idx => $rd):?>
                         <td class="all">
