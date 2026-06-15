@@ -2276,6 +2276,161 @@ class Automation {
         ];
     }
 
+    /**
+     * Resolve the defender target context for a VILLAGE attack: target owner
+     * (tribe/alliance), map info, conquest flag, evasion inputs and the battle
+     * environment (wall, armory/blacksmith tech, residence, siege masonry).
+     * Read-only — no DB writes.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data      Current attack row.
+     * @param array $dataarray Full batch of completed attacks.
+     * @param int   $data_num  Index of $data within $dataarray.
+     * @param int   $owntribe  Attacker tribe.
+     * @return array Target + battle-environment context.
+     */
+    private function resolveVillageTarget($data, $dataarray, $data_num, $owntribe) {
+        global $database, $units;
+
+        $DefenderUserData = $this->getCachedUser($database->getVillageField($data['to'],"owner"),1);
+        $DefenderID = $DefenderUserData["id"];
+        $targettribe = $DefenderUserData["tribe"];
+        $targetally = $DefenderUserData["alliance"];
+        $to = $database->getMInfo($data['to']);
+        $toF = $database->getVillage($data['to']);
+        $conqureby = 0;
+        $NatarCapital = ($toF['owner'] == 3 && $toF['capital'] == 1);
+        if(!isset($to['name']) || empty($to['name'])) $to['name'] = "[?]";
+
+        $DefenderUnit = $database->getUnit($data['to']);
+        $evasion = $toF["evasion"];
+        $maxevasion = $DefenderUserData["maxevasion"];
+        $gold = $DefenderUserData["gold"];
+        $cannotsend = false;
+
+        $movements = $database->getMovement(34, $data['to'], 1);
+        for($y = 0; $y < count($movements); $y++){
+            if(property_exists($units, $y)){
+                $returntime = $units->$y['endtime'] - time();
+                if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
+                    $cannotsend = true;
+                }
+            }
+        }
+
+        //need to set these variables.
+        $def_wall = $database->getFieldLevel($data['to'], 40, false);
+        $att_tribe = $owntribe;
+        $def_tribe = $targettribe;
+        $attpop = $defpop = $residence = 0;
+        $def_ab = [];
+
+        //get level of palace or residence
+        $residence = $database->getFieldLevelInVillage($data['to'], '25, 26', false);
+
+        //type of attack
+        $type = $dataarray[$data_num]['attack_type'];
+        $scout = ($type == 1) ? 1 : 0;
+
+        $ud = ($def_tribe - 1) * 10;
+        $att_ab = $database->getABTech($data['from']); // Blacksmith level
+        $att_ab1 = $att_ab['b1'];
+        $att_ab2 = $att_ab['b2'];
+        $att_ab3 = $att_ab['b3'];
+        $att_ab4 = $att_ab['b4'];
+        $att_ab5 = $att_ab['b5'];
+        $att_ab6 = $att_ab['b6'];
+        $att_ab7 = $att_ab['b7'];
+        $att_ab8 = $att_ab['b8'];
+        $armory = $database->getABTech($data['to']); // Armory level
+        $def_ab[$ud + 1] = $armory['a1'];
+        $def_ab[$ud + 2] = $armory['a2'];
+        $def_ab[$ud + 3] = $armory['a3'];
+        $def_ab[$ud + 4] = $armory['a4'];
+        $def_ab[$ud + 5] = $armory['a5'];
+        $def_ab[$ud + 6] = $armory['a6'];
+        $def_ab[$ud + 7] = $armory['a7'];
+        $def_ab[$ud + 8] = $armory['a8'];
+
+        //rams attack
+        $walllevel = 0;
+        $wallid = 0;
+        if (($data['t7']) > 0 && $type == 3) {
+            $basearraywall = $to;
+            if (($walllevel = $database->getFieldLevel($basearraywall['wref'], 40, false)) > 0){
+                $wallid = 40;
+            }
+        }
+
+        $tblevel = 1;
+        $stonemason = $database->getFieldLevelInVillage($data['to'], 34);
+
+        return [
+            'DefenderID' => $DefenderID, 'targettribe' => $targettribe, 'targetally' => $targetally,
+            'to' => $to, 'toF' => $toF, 'conqureby' => $conqureby, 'NatarCapital' => $NatarCapital,
+            'DefenderUnit' => $DefenderUnit, 'evasion' => $evasion, 'maxevasion' => $maxevasion,
+            'gold' => $gold, 'cannotsend' => $cannotsend,
+            'def_wall' => $def_wall, 'att_tribe' => $att_tribe, 'def_tribe' => $def_tribe,
+            'attpop' => $attpop, 'defpop' => $defpop, 'residence' => $residence, 'def_ab' => $def_ab,
+            'type' => $type, 'scout' => $scout,
+            'att_ab1' => $att_ab1, 'att_ab2' => $att_ab2, 'att_ab3' => $att_ab3, 'att_ab4' => $att_ab4,
+            'att_ab5' => $att_ab5, 'att_ab6' => $att_ab6, 'att_ab7' => $att_ab7, 'att_ab8' => $att_ab8,
+            'walllevel' => $walllevel, 'wallid' => $wallid,
+            'tblevel' => $tblevel, 'stonemason' => $stonemason,
+        ];
+    }
+
+    /**
+     * Resolve the defender target context for an OASIS attack: target owner
+     * (tribe/alliance), oasis map info, conquest flag and the (mostly fixed)
+     * battle environment. Read-only — no DB writes.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data      Current attack row.
+     * @param array $dataarray Full batch of completed attacks.
+     * @param int   $data_num  Index of $data within $dataarray.
+     * @param int   $owntribe  Attacker tribe.
+     * @return array Target + battle-environment context.
+     */
+    private function resolveOasisTarget($data, $dataarray, $data_num, $owntribe) {
+        global $database;
+
+        $DefenderUserData = $this->getCachedUser($database->getOasisField($data['to'], "owner"),1);
+        $DefenderID = $DefenderUserData["id"];
+        $targettribe = $DefenderUserData["tribe"];
+        $targetally = $DefenderUserData["alliance"];
+        $to = $database->getOMInfo($data['to']);
+        $toF = $database->getOasisV($data['to']);
+        $conqureby = $toF['conqured'];
+
+        //need to set these variables.
+        $def_wall = $residence = $attpop = 0;
+        $att_tribe = $owntribe;
+        $def_tribe = $targettribe;
+        $defpop = 500;
+
+        //type of attack
+        $type = $dataarray[$data_num]['attack_type'];
+        $scout = ($type == 1) ? 1 : 0;
+
+        $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
+        $def_ab = [];
+        $def_ab[31] = $def_ab[32] = $def_ab[33] = $def_ab[34] = $def_ab[35] = $def_ab[36] = $def_ab[37] = $def_ab[38] = 0;
+
+        $walllevel = $tblevel = $stonemason = 0;
+
+        return [
+            'DefenderID' => $DefenderID, 'targettribe' => $targettribe, 'targetally' => $targetally,
+            'to' => $to, 'toF' => $toF, 'conqureby' => $conqureby,
+            'def_wall' => $def_wall, 'att_tribe' => $att_tribe, 'def_tribe' => $def_tribe,
+            'attpop' => $attpop, 'defpop' => $defpop, 'residence' => $residence, 'def_ab' => $def_ab,
+            'type' => $type, 'scout' => $scout,
+            'att_ab1' => $att_ab1, 'att_ab2' => $att_ab2, 'att_ab3' => $att_ab3, 'att_ab4' => $att_ab4,
+            'att_ab5' => $att_ab5, 'att_ab6' => $att_ab6, 'att_ab7' => $att_ab7, 'att_ab8' => $att_ab8,
+            'walllevel' => $walllevel, 'tblevel' => $tblevel, 'stonemason' => $stonemason,
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2312,37 +2467,40 @@ class Automation {
 
                 //It's a village
                 if ($isoasis == 0){
-                    $DefenderUserData = $this->getCachedUser($database->getVillageField($data['to'],"owner"),1);
-                    $Defender['id'] = $DefenderUserData["id"];
-                    $DefenderID = $Defender['id'];
-                    $targettribe = $DefenderUserData["tribe"];
-                    $targetally = $DefenderUserData["alliance"];
-                    $to = $database->getMInfo($data['to']);
-                    $toF = $database->getVillage($data['to']);
-                    $conqureby = 0;
-					$NatarCapital = ($toF['owner'] == 3 && $toF['capital'] == 1);
-					if(!isset($to['name']) || empty($to['name'])) $to['name'] = "[?]";
+                    // target + battle environment — extracted to resolveVillageTarget() [#155]
+                    $vt = $this->resolveVillageTarget($data, $dataarray, $data_num, $owntribe);
+                    $DefenderID   = $vt['DefenderID'];
+                    $targettribe  = $vt['targettribe'];
+                    $targetally   = $vt['targetally'];
+                    $to           = $vt['to'];
+                    $toF          = $vt['toF'];
+                    $conqureby    = $vt['conqureby'];
+                    $NatarCapital = $vt['NatarCapital'];
+                    $DefenderUnit = $vt['DefenderUnit'];
+                    $def_wall     = $vt['def_wall'];
+                    $att_tribe    = $vt['att_tribe'];
+                    $def_tribe    = $vt['def_tribe'];
+                    $attpop       = $vt['attpop'];
+                    $defpop       = $vt['defpop'];
+                    $residence    = $vt['residence'];
+                    $def_ab       = $vt['def_ab'];
+                    $type         = $vt['type'];
+                    $scout        = $vt['scout'];
+                    $att_ab1      = $vt['att_ab1'];
+                    $att_ab2      = $vt['att_ab2'];
+                    $att_ab3      = $vt['att_ab3'];
+                    $att_ab4      = $vt['att_ab4'];
+                    $att_ab5      = $vt['att_ab5'];
+                    $att_ab6      = $vt['att_ab6'];
+                    $att_ab7      = $vt['att_ab7'];
+                    $att_ab8      = $vt['att_ab8'];
+                    $walllevel    = $vt['walllevel'];
+                    $wallid       = $vt['wallid'];
+                    $tblevel      = $vt['tblevel'];
+                    $stonemason   = $vt['stonemason'];
 
-                    $DefenderUnit = [];
-					$DefenderUnit = $database->getUnit($data['to']);
-					$evasion = $toF["evasion"];
-					$maxevasion = $DefenderUserData["maxevasion"];
-					$gold = $DefenderUserData["gold"];
-					$playerunit = (($targettribe - 1) * 10);
-					$cannotsend = false;
-					
-					$movements = $database->getMovement(34, $data['to'], 1);
-					for($y = 0; $y < count($movements); $y++){
-						if(property_exists($units, $y)){
-							$returntime = $units->$y['endtime'] - time();
-							if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
-								$cannotsend = true;
-							}
-						}
-					}
+                    $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $vt['evasion'], $vt['maxevasion'], $vt['gold'], $vt['cannotsend'], $dataarray[$data_num]['attack_type']);
 
-                    $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $evasion, $maxevasion, $gold, $cannotsend, $dataarray[$data_num]['attack_type']);
-                    
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
@@ -2360,64 +2518,37 @@ class Automation {
                     $chief_pic = $atkUnits['chief_pic'];
                     $spy_pic   = $atkUnits['spy_pic'];
                     $hero_pic  = $atkUnits['hero_pic'];
-                    
-                    //need to set these variables.
-                    $def_wall = $database->getFieldLevel($data['to'], 40, false);
-                    $att_tribe = $owntribe;
-                    $def_tribe = $targettribe;
-                    $attpop = $defpop = $residence = 0;
-                    $def_ab = [];
-                    
-                    //get level of palace or residence
-                    $residence = $database->getFieldLevelInVillage($data['to'], '25, 26', false);
-
-                    //type of attack
-                    $type = $dataarray[$data_num]['attack_type'];
-                    $scout = ($type == 1) ? 1 : 0;
-                    
-                    $ud = ($def_tribe - 1) * 10;
-                    $att_ab = $database->getABTech($data['from']); // Blacksmith level
-                    $att_ab1 = $att_ab['b1'];
-                    $att_ab2 = $att_ab['b2'];
-                    $att_ab3 = $att_ab['b3'];
-                    $att_ab4 = $att_ab['b4'];
-                    $att_ab5 = $att_ab['b5'];
-                    $att_ab6 = $att_ab['b6'];
-                    $att_ab7 = $att_ab['b7'];
-                    $att_ab8 = $att_ab['b8'];
-                    $armory = $database->getABTech($data['to']); // Armory level
-                    $def_ab[$ud + 1] = $armory['a1'];
-                    $def_ab[$ud + 2] = $armory['a2'];
-                    $def_ab[$ud + 3] = $armory['a3'];
-                    $def_ab[$ud + 4] = $armory['a4'];
-                    $def_ab[$ud + 5] = $armory['a5'];
-                    $def_ab[$ud + 6] = $armory['a6'];
-                    $def_ab[$ud + 7] = $armory['a7'];
-                    $def_ab[$ud + 8] = $armory['a8'];
-
-                    //rams attack
-                    if (($data['t7']) > 0 && $type == 3) {
-                        $basearraywall = $to;
-                        if (($walllevel = $database->getFieldLevel($basearraywall['wref'], 40, false)) > 0){
-                            $wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
-                            $wallid = 40;
-                            $w = 4;
-                        }
-                    }
-
-                    $tblevel = 1;
-                    $stonemason = $database->getFieldLevelInVillage($data['to'], 34);
 
                 }else{ //It's an oasis
-                	
-                    $DefenderUserData = $this->getCachedUser($database->getOasisField($data['to'], "owner"),1);
-					$Defender['id'] = $DefenderUserData["id"];
-					$DefenderID = $Defender['id'];
-					$targettribe = $DefenderUserData["tribe"];
-					$targetally = $DefenderUserData["alliance"];
-					$to = $database->getOMInfo($data['to']);
-					$toF = $database->getOasisV($data['to']);
-					$conqureby = $toF['conqured'];
+                    // target + battle environment — extracted to resolveOasisTarget() [#155]
+                    $ot = $this->resolveOasisTarget($data, $dataarray, $data_num, $owntribe);
+                    $DefenderID  = $ot['DefenderID'];
+                    $targettribe = $ot['targettribe'];
+                    $targetally  = $ot['targetally'];
+                    $to          = $ot['to'];
+                    $toF         = $ot['toF'];
+                    $conqureby   = $ot['conqureby'];
+                    $def_wall    = $ot['def_wall'];
+                    $att_tribe   = $ot['att_tribe'];
+                    $def_tribe   = $ot['def_tribe'];
+                    $attpop      = $ot['attpop'];
+                    $defpop      = $ot['defpop'];
+                    $residence   = $ot['residence'];
+                    $def_ab      = $ot['def_ab'];
+                    $type        = $ot['type'];
+                    $scout       = $ot['scout'];
+                    $att_ab1     = $ot['att_ab1'];
+                    $att_ab2     = $ot['att_ab2'];
+                    $att_ab3     = $ot['att_ab3'];
+                    $att_ab4     = $ot['att_ab4'];
+                    $att_ab5     = $ot['att_ab5'];
+                    $att_ab6     = $ot['att_ab6'];
+                    $att_ab7     = $ot['att_ab7'];
+                    $att_ab8     = $ot['att_ab8'];
+                    $walllevel   = $ot['walllevel'];
+                    $tblevel     = $ot['tblevel'];
+                    $stonemason  = $ot['stonemason'];
+
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
@@ -2435,21 +2566,6 @@ class Automation {
                     $chief_pic = $atkUnits['chief_pic'];
                     $spy_pic   = $atkUnits['spy_pic'];
                     $hero_pic  = $atkUnits['hero_pic'];
-                    
-                    //need to set these variables.
-                    $def_wall = $residence = $attpop = 0;
-                    $att_tribe = $owntribe;
-                    $def_tribe = $targettribe;
-                    $defpop = 500;
-
-                    //type of attack
-                    $type = $dataarray[$data_num]['attack_type'];
-                    $scout = ($type == 1) ? 1 : 0;
-
-                    $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
-                    $def_ab[31] = $def_ab[32] = $def_ab[33] = $def_ab[34] = $def_ab[35] = $def_ab[36] = $def_ab[37] = $def_ab[38] = 0;
-
-                    $walllevel = $tblevel = $stonemason = 0;
                 }
 
                 // attacker/defender populations + village lists — extracted to calculatePopulations() [#155]
