@@ -8,7 +8,7 @@ $errormsg = $errormsg ?? null;
 /* =====================================================
    LOAD SLOT DATA (EDIT MODE)
 ===================================================== */
-if ($action === 'editSlot' && $eid) {
+if ($action === 'showSlot' && $eid) {
 
     $eiddata = $database->getRaidList($eid);
 
@@ -192,7 +192,7 @@ if (
                             $lname = $row["name"];
                             $lvname = $database->getVillageField($row["wref"], 'name');
 
-                            $selected = ($lid == $lid2) ? 'selected' : '';
+                            $selected = ($lid == ($eiddata['lid'] ?? 0)) ? 'selected' : '';
 
                             echo '<option value="'.$lid.'" '.$selected.'>'
                                 .$lvname.' - '.$lname.

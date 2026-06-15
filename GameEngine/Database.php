@@ -2744,7 +2744,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getVillageType2($wref) {
+	function getVillageType2($wref, $use_cache = true) {
         // retirieve form cache
         return $this->getVillageByWorldID($wref, $use_cache)['oasistype'];
 	}
@@ -8003,7 +8003,7 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
 		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE owner = '.$uid.' ORDER BY wref ASC LIMIT 1';
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return $dbarray['id'] > 0;
+		return ($dbarray['id'] ?? 0) > 0;
 	}
 
     // no need to cache this method

@@ -259,7 +259,7 @@ if (mysqli_num_rows($getnotice) > 0) {
 <?php if ($database->getVilFarmlist($session->uid)) { ?>
 
 <div class="markAll">
-    <input type="checkbox" onclick="Allmsg(this.form);">
+    <input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);">
     <label><?php echo TZ_SELECT_ALL; ?></label>
 </div>
 
