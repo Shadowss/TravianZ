@@ -1963,6 +1963,41 @@ class Automation {
         ];
     }
 
+    /**
+     * Compute attacker/defender total populations and fetch their village lists.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $to      Defender village info (getMInfo/getOMInfo).
+     * @param array $from    Attacker village info (getMInfo).
+     * @param int   $isoasis Whether the target is an oasis (defender pop counts only for villages).
+     * @param int   $defpop  Initial defender population (accumulated onto).
+     * @param int   $attpop  Initial attacker population (accumulated onto).
+     * @return array{varray:array,varray1:array,defpop:int,attpop:int}
+     */
+    private function calculatePopulations($to, $from, $isoasis, $defpop, $attpop) {
+        global $database;
+
+        $varray = $database->getProfileVillages($to['owner'], 0, false);
+
+        if ($to['owner'] == $from['owner']) $varray1 = $varray;
+        else $varray1 = $database->getProfileVillages($from['owner'], 0, false);
+
+        // total population of the defender
+        if($isoasis == 0){
+            foreach($varray as $defenderVillage) $defpop += $defenderVillage['pop'];
+        }
+
+        // total population of the attacker
+        foreach($varray1 as $attackerVillage) $attpop += $attackerVillage['pop'];
+
+        return [
+            'varray'  => $varray,
+            'varray1' => $varray1,
+            'defpop'  => $defpop,
+            'attpop'  => $attpop,
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2202,18 +2237,12 @@ class Automation {
                     $walllevel = $tblevel = $stonemason = 0;
                 }
 
-                $varray = $database->getProfileVillages($to['owner'], 0, false);
-
-                if ($to['owner'] == $from['owner']) $varray1 = $varray;         
-                else $varray1 = $database->getProfileVillages($from['owner'], 0, false);            
-                
-                // total population of the defender
-                if($isoasis == 0){
-                	foreach($varray as $defenderVillage) $defpop += $defenderVillage['pop'];
-                }       
-                
-                // total population of the attacker
-                foreach($varray1 as $attackerVillage) $attpop += $attackerVillage['pop'];          
+                // attacker/defender populations + village lists — extracted to calculatePopulations() [#155]
+                $popData = $this->calculatePopulations($to, $from, $isoasis, $defpop, $attpop);
+                $varray  = $popData['varray'];
+                $varray1 = $popData['varray1'];
+                $defpop  = $popData['defpop'];
+                $attpop  = $popData['attpop'];
 
                 //fix by ronix
                 for ($i = 1; $i <= 50; $i++) {
