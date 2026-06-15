@@ -2145,6 +2145,60 @@ class Automation {
         return ['battlepart' => $battlepart, 'info_ram' => $info_ram];
     }
 
+    /**
+     * Build the attacking army for the current attack: per-slot unit counts
+     * (u<start..end> + uhero) plus the catapult / ram / chief / scout unit ids
+     * used in the battle report. Oasis attacks include the Nature siege/chief
+     * slots (37/38/39). Pure behaviour-preserving extraction (issue #155).
+     *
+     * @param array $attackRow The attack row (t1..t11, tribe-relative).
+     * @param int   $owntribe  Attacker tribe (1..5).
+     * @param int   $isoasis   0 for a village target, otherwise an oasis.
+     * @return array { Attacker, start, end, u, catp_pic, ram_pic, chief_pic, spy_pic, hero_pic }
+     */
+    private function buildAttackerUnits(array $attackRow, $owntribe, $isoasis) {
+        $Attacker = [];
+        $start = ($owntribe - 1) * 10 + 1;
+        $end   = $owntribe * 10;
+        $u     = ($owntribe - 1) * 10;
+
+        if ($isoasis == 0) {
+            $catapult = [8, 18, 28, 48];
+            $ram      = [7, 17, 27, 47];
+            $chief    = [9, 19, 29, 49];
+        } else {
+            $catapult = [8, 18, 28, 38, 48];
+            $ram      = [7, 17, 27, 37, 47];
+            $chief    = [9, 19, 29, 39, 49];
+        }
+        $spys = [4, 14, 23, 44];
+
+        $catp_pic = $ram_pic = $chief_pic = $spy_pic = null;
+
+        for ($i = $start; $i <= $end; $i++) {
+            $y = $i - $u;
+            $Attacker['u'.$i] = $attackRow['t'.$y];
+            //there are catas
+            if (in_array($i, $catapult)) $catp_pic = $i;
+            if (in_array($i, $ram))      $ram_pic = $i;
+            if (in_array($i, $chief))    $chief_pic = $i;
+            if (in_array($i, $spys))     $spy_pic = $i;
+        }
+        $Attacker['uhero'] = $attackRow['t11'];
+
+        return [
+            'Attacker'  => $Attacker,
+            'start'     => $start,
+            'end'       => $end,
+            'u'         => $u,
+            'catp_pic'  => $catp_pic,
+            'ram_pic'   => $ram_pic,
+            'chief_pic' => $chief_pic,
+            'spy_pic'   => $spy_pic,
+            'hero_pic'  => 'hero',
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2244,26 +2298,16 @@ class Automation {
                         $Defender['hero'] = 0;            
                     }
 
-                    //get attack units
-                    $Attacker = [];
-                    $start = ($owntribe - 1) * 10 + 1;
-                    $end = $owntribe * 10;
-                    $u = ($owntribe - 1) * 10;
-                    $catapult = [8, 18, 28, 48];
-                    $ram = [7, 17, 27, 47];
-                    $chief = [9, 19, 29, 49];
-                    $spys = [4, 14, 23, 44];
-                    for($i = $start; $i <= $end; $i++) {
-                        $y = $i - $u;
-                        $Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
-                        //there are catas
-                        if(in_array($i, $catapult)) $catp_pic = $i;
-                        if(in_array($i, $ram)) $ram_pic = $i;
-                        if(in_array($i, $chief)) $chief_pic = $i;
-                        if(in_array($i, $spys)) $spy_pic = $i;
-                    }
-                    $Attacker['uhero'] = $dataarray[$data_num]['t11'];
-                    $hero_pic = "hero";
+                    // attacker army built — extracted to buildAttackerUnits() [#155]
+                    $atkUnits  = $this->buildAttackerUnits($dataarray[$data_num], $owntribe, $isoasis);
+                    $Attacker  = $atkUnits['Attacker'];
+                    $start     = $atkUnits['start'];
+                    $end       = $atkUnits['end'];
+                    $catp_pic  = $atkUnits['catp_pic'];
+                    $ram_pic   = $atkUnits['ram_pic'];
+                    $chief_pic = $atkUnits['chief_pic'];
+                    $spy_pic   = $atkUnits['spy_pic'];
+                    $hero_pic  = $atkUnits['hero_pic'];
                     
                     //need to set these variables.
                     $def_wall = $database->getFieldLevel($data['to'], 40, false);
@@ -2347,26 +2391,16 @@ class Automation {
                         $Defender['hero'] = 0;                
                     }
 
-                    //get attack units
-                    $Attacker = [];
-                    $start = ($owntribe - 1) * 10 + 1;
-                    $end = $owntribe * 10;
-                    $u = ($owntribe - 1) * 10;
-                    $catapult = [8, 18, 28, 38, 48];
-                    $ram = [7, 17, 27, 37, 47];
-                    $chief = [9, 19, 29, 39, 49];
-                    $spys = [4, 14, 23, 44];
-                    for($i = $start; $i <= $end; $i++) {
-                        $y = $i - $u;
-                        $Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
-                        //there are catas
-                        if(in_array($i, $catapult)) $catp_pic = $i;                       
-                        if(in_array($i, $ram)) $ram_pic = $i;                                                
-                        if(in_array($i, $chief)) $chief_pic = $i;       
-                        if(in_array($i, $spys)) $spy_pic = $i;
-                    }
-                    $Attacker['uhero'] = $dataarray[$data_num]['t11'];
-                    $hero_pic = "hero";
+                    // attacker army built — extracted to buildAttackerUnits() [#155]
+                    $atkUnits  = $this->buildAttackerUnits($dataarray[$data_num], $owntribe, $isoasis);
+                    $Attacker  = $atkUnits['Attacker'];
+                    $start     = $atkUnits['start'];
+                    $end       = $atkUnits['end'];
+                    $catp_pic  = $atkUnits['catp_pic'];
+                    $ram_pic   = $atkUnits['ram_pic'];
+                    $chief_pic = $atkUnits['chief_pic'];
+                    $spy_pic   = $atkUnits['spy_pic'];
+                    $hero_pic  = $atkUnits['hero_pic'];
                     
                     //need to set these variables.
                     $def_wall = $residence = $attpop = 0;
