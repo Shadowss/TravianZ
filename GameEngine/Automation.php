@@ -1998,6 +1998,102 @@ class Automation {
         ];
     }
 
+    /**
+     * Resolve how many incoming attacker units get caught in the defender's
+     * traps (Gaul trapper / Natar capital), update the trap counters and the
+     * prisoners table, and subtract the trapped troops from the attacking army.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data         Current attack row.
+     * @param array $Defender     Defender unit counts (reads u99 / u99o).
+     * @param array $Attacker     Attacker units (u<start..end> + uhero).
+     * @param bool  $NatarCapital True when the target is a Natar capital (all troops trapped).
+     * @param int   $scout        1 for a scouting attack (no trapping).
+     * @param int   $start        First unit index of the attacker tribe.
+     * @param int   $end          Last unit index of the attacker tribe.
+     * @return array {
+     *     traped:          int[] trapped count per unit slot (1..11),
+     *     totaltraped_att: int   total trapped troops,
+     *     Attacker:        array attacker units with trapped troops removed
+     * }
+     */
+    private function calculateTrappedUnits($data, $Defender, $Attacker, $NatarCapital, $scout, $start, $end) {
+        global $database;
+
+        $traped = [];
+        for($i = 1; $i <= 11; $i++) $traped[$i] = 0;
+        $totaltraped_att = 0;
+
+        //impossible to attack or scout NATAR Capital Village
+        if ($NatarCapital){
+            for($i = 1; $i <= 11; $i++) $traped[$i] = $data['t'.$i];
+        }
+        elseif(empty($scout))
+        {
+            $traps = max($Defender['u99'] - $Defender['u99o'], 0);
+
+            $totalTroops = 0;
+            for($i = 1; $i <= 11; $i++) $totalTroops += $data['t'.$i];
+
+            if($traps >= $totalTroops){
+                for($i = 1; $i <= 11; $i++) $traped[$i] = $data['t'.$i];
+            }
+            else if($totalTroops > 0)
+            {
+                $multiplier = $traps / $totalTroops;
+
+                //The hero is excluded, because it can be only trapped if traps > totalTroops
+                for($i = 1; $i <= 10; $i++){
+                    $trappedUnits = intval($data['t'.$i] * $multiplier);
+                    $traped[$i] = $trappedUnits;
+                    $traps -= $trappedUnits;
+                }
+
+                while($traps > 0){
+                    //There are some traps left, let's distribute them
+                    for($i = 1; $i <= 10 && $traps > 0; $i++){
+                        if($data['t'.$i] != 0){
+                            $traped[$i]++;
+                            $traps--;
+                        }
+                    }
+                }
+            }
+            else {
+                for($i = 1; $i <= 11; $i++) $traped[$i] = 0;
+            }
+        }
+
+        if(empty($scout) || $NatarCapital){
+            for ($i = 1; $i <= 11; $i++){
+                $totaltraped_att += $traped[$i];
+            }
+
+            $database->modifyUnit($data['to'], ["99o"], [$totaltraped_att], [1]);
+
+            for($i = $start; $i <= $end; $i++){
+                $j = $i-$start+1;
+                $Attacker['u'.$i] -= $traped[$j];
+            }
+            $Attacker['uhero'] -= $traped[11];
+
+            if($totaltraped_att > 0){
+                $prisoners2 = $database->getPrisoners2($data['to'], $data['from'], false);
+                if(empty($prisoners2)){
+                    $database->addPrisoners($data['to'],$data['from'],$traped[1],$traped[2],$traped[3],$traped[4],$traped[5],$traped[6],$traped[7],$traped[8],$traped[9],$traped[10],$traped[11]);
+                }else{
+                    $database->updatePrisoners($data['to'],$data['from'],$traped[1],$traped[2],$traped[3],$traped[4],$traped[5],$traped[6],$traped[7],$traped[8],$traped[9],$traped[10],$traped[11]);
+                }
+            }
+        }
+
+        return [
+            'traped'          => $traped,
+            'totaltraped_att' => $totaltraped_att,
+            'Attacker'        => $Attacker,
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2260,73 +2356,12 @@ class Automation {
                     elseif($targettribe == 3) $def_spy = $enforDefender['u23'];                      
                     elseif($targettribe == 5) $def_spy = $enforDefender['u44'];
 
-                    //impossible to attack or scout NATAR Capital Village
-                    if ($NatarCapital){
-                        for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
-                    }
-                    elseif(empty($scout))
-                    {
-                        $traps = max($Defender['u99'] - $Defender['u99o'], 0);
-                        
-                        $totalTroops = 0;
-                        for($i = 1; $i <= 11; $i++) $totalTroops += $data['t'.$i];               
-                        
-                        if($traps >= $totalTroops){
-                            for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
-                        }
-                        else if($totalTroops > 0)
-                        {
-                            $multiplier = $traps / $totalTroops;
-                            
-                            //The hero is excluded, because it can be only trapped if traps > totalTroops
-                            for($i = 1; $i <= 10; $i++){
-                                $trappedUnits = intval($data['t'.$i] * $multiplier);
-                                ${'traped'.$i} = $trappedUnits;
-                                $traps -= $trappedUnits;
-                            }
+                    // trapper resolution + prisoners — extracted to calculateTrappedUnits() [#155]
+                    $trapResult = $this->calculateTrappedUnits($data, $Defender, $Attacker, $NatarCapital, $scout, $start, $end);
+                    for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $trapResult['traped'][$i];
+                    $totaltraped_att = $trapResult['totaltraped_att'];
+                    $Attacker        = $trapResult['Attacker'];
 
-                            while($traps > 0){
-                                //There are some traps left, let's distribute them
-                                for($i = 1; $i <= 10 && $traps > 0; $i++){
-                                    if($data['t'.$i] != 0){
-                                        ${'traped'.$i}++;
-                                        $traps--;
-                                    }
-                                }
-                            }
-                        }
-                        else {
-                            for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
-                        }
-                    }
-                    
-                    if(empty($scout) || $NatarCapital){
-                        for ($i = 1; $i <= 11; $i++){
-                            if (!isset(${'traped'.$i})) ${'traped'.$i} = 0;
-                            if ( !isset($totaltraped_att) ) {
-                                $totaltraped_att = 0;
-                            }
-                            $totaltraped_att += ${'traped'.$i};
-                        }
-                        
-                        $database->modifyUnit($data['to'], ["99o"], [$totaltraped_att], [1]);
-                        
-                        for($i = $start; $i <= $end; $i++){
-                            $j = $i-$start+1;
-                            $Attacker['u'.$i] -= ${'traped'.$j};
-                        }
-                        $Attacker['uhero'] -= $traped11;
-                        
-                        if($totaltraped_att > 0){
-                            $prisoners2 = $database->getPrisoners2($data['to'], $data['from'], false);
-                            if(empty($prisoners2)){
-                                $database->addPrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
-                            }else{
-                                $database->updatePrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
-                            }
-                        }
-                    }
-                    
                     // we need to save the attacker heroid before the battle
                     if(isset($Attacker['uhero']) && $Attacker['uhero'] > 0){
                         $AttackerHeroID = $database->getHeroField($from['owner'], "heroid");
