@@ -1,4 +1,4 @@
-<h1><img class="unit uunits" src="img/x.gif" alt="" title="" /> Troops (Nature)</h1>
+<h1><img class="unit uunits" src="img/x.gif" alt="" title="" /> <?php echo TROOPS; ?> (<?php echo TRIBE4; ?>)</h1>
 <ul>
     <li><a href="manual.php?typ=1&amp;s=51"><?php echo U31; ?></a></li>
     <li><a href="manual.php?typ=1&amp;s=52"><?php echo U32; ?></a></li>
