@@ -2094,6 +2094,57 @@ class Automation {
         ];
     }
 
+    /**
+     * Apply ram damage to the defender's wall during a normal attack (type 3):
+     * compute the new wall level, update it in the database (recounting the
+     * village population if the wall is destroyed), build the report fragment,
+     * and recalculate the battle when the wall level changed.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array  $data       Current attack row (uses t7, to).
+     * @param int    $walllevel  Current wall level.
+     * @param int    $wallid     Wall building field id (40).
+     * @param int    $ram_pic    Ram unit id (for the report fragment).
+     * @param array  $battlepart Battle result (provides the ram damage factors).
+     * @param array  $ctx        Battle context for the post-damage recalculation
+     *                           (Attacker, Defender, tribes, populations, AB tech, ...).
+     * @return array { battlepart: array (possibly recalculated), info_ram: string }
+     */
+    private function applyRamDamage($data, $walllevel, $wallid, $ram_pic, $battlepart, array $ctx) {
+        global $database, $battle;
+
+        $info_ram = "".$ram_pic.",There is no wall to destroy.";
+
+        if($walllevel > 0){
+            $ramsDamage = $battle->calculateCatapultsDamage($data['t7'],
+                                                            $battlepart['rams']['upgrades'],
+                                                            $battlepart['rams']['durability'],
+                                                            $battlepart['rams']['attackDefenseRatio'],
+                                                            $battlepart['rams']['strongerBuildings'],
+                                                            $battlepart['rams']['moraleBonus']);
+            $newLevel = $battle->calculateNewBuildingLevel($walllevel, $ramsDamage);
+
+            if ($newLevel == 0){
+                $info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
+                $database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
+                $this->recountPop($data['to']);
+            }elseif ($newLevel == $walllevel){
+                $info_ram = "".$ram_pic.",Wall was not damaged.";
+            }else{
+                $info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$newLevel."</b>.";
+                $database->setVillageLevel($data['to'],"f".$wallid."",$newLevel);
+            }
+
+            //If the wall got damaged/destroyed during the attack
+            //we need to recalculate the whole battle
+            if($newLevel != $walllevel){
+                $battlepart = $battle->calculateBattle($ctx['Attacker'], $ctx['Defender'], $newLevel, $ctx['att_tribe'], $ctx['def_tribe'], $ctx['residence'], $ctx['attpop'], $ctx['defpop'], $ctx['type'], $ctx['def_ab'], $ctx['att_ab1'], $ctx['att_ab2'], $ctx['att_ab3'], $ctx['att_ab4'], $ctx['att_ab5'], $ctx['att_ab6'], $ctx['att_ab7'], $ctx['att_ab8'], $ctx['tblevel'], $ctx['stonemason'], $newLevel, 0, 0, 0, $ctx['AttackerID'], $ctx['DefenderID'], $ctx['AttackerWref'], $ctx['DefenderWref'], $ctx['conqureby'], $ctx['enforcementarray']);
+            }
+        }
+
+        return ['battlepart' => $battlepart, 'info_ram' => $info_ram];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2409,33 +2460,21 @@ class Automation {
                     if($isoasis == 0){
                     	if ($type == 3){
                     		if (($data['t7'] - $traped7) > 0){
-                    			if($walllevel > 0){
-                    			    $ramsDamage = $battle->calculateCatapultsDamage($data['t7'],
-                    			                                                    $battlepart['rams']['upgrades'], 
-                    			                                                    $battlepart['rams']['durability'], 
-                    			                                                    $battlepart['rams']['attackDefenseRatio'], 
-                    			                                                    $battlepart['rams']['strongerBuildings'], 
-                    			                                                    $battlepart['rams']['moraleBonus']);
-                    				$newLevel = $battle->calculateNewBuildingLevel($walllevel, $ramsDamage);
-                    				
-                    				if ($newLevel == 0){
-                    					$info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
-                    					$database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
-                    					$pop = $this->recountPop($data['to']);
-                    				}elseif ($newLevel == $walllevel){
-                    					$info_ram = "".$ram_pic.",Wall was not damaged.";
-                    				}else{
-                    					$info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$newLevel."</b>.";
-                    					$database->setVillageLevel($data['to'],"f".$wallid."",$newLevel);
-                    				}
-                    				
-                    				//If the wall got damaged/destroyed during the attack
-                    				//we need to recalculate the whole battle
-                    				if($newLevel != $walllevel){
-                    					$battlepart = $battle->calculateBattle($Attacker, $Defender, $newLevel, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $newLevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
-                    				}
-                    			}
-                    			else $info_ram = "".$ram_pic.",There is no wall to destroy.";
+                    			// ram damage on the wall (+ battle recalc) — extracted to applyRamDamage() [#155]
+                    			$ramResult = $this->applyRamDamage($data, $walllevel, $wallid, $ram_pic, $battlepart, [
+                    			    'Attacker' => $Attacker, 'Defender' => $Defender,
+                    			    'att_tribe' => $att_tribe, 'def_tribe' => $def_tribe,
+                    			    'residence' => $residence, 'attpop' => $attpop, 'defpop' => $defpop,
+                    			    'type' => $type, 'def_ab' => $def_ab,
+                    			    'att_ab1' => $att_ab1, 'att_ab2' => $att_ab2, 'att_ab3' => $att_ab3, 'att_ab4' => $att_ab4,
+                    			    'att_ab5' => $att_ab5, 'att_ab6' => $att_ab6, 'att_ab7' => $att_ab7, 'att_ab8' => $att_ab8,
+                    			    'tblevel' => $tblevel, 'stonemason' => $stonemason,
+                    			    'AttackerID' => $AttackerID, 'DefenderID' => $DefenderID,
+                    			    'AttackerWref' => $AttackerWref, 'DefenderWref' => $DefenderWref,
+                    			    'conqureby' => $conqureby, 'enforcementarray' => $enforcementarray,
+                    			]);
+                    			$battlepart = $ramResult['battlepart'];
+                    			$info_ram   = $ramResult['info_ram'];
                     		}
                     		
                     		if (($data['t8'] - $traped8) > 0)
