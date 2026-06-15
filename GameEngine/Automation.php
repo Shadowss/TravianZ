@@ -2247,6 +2247,35 @@ class Automation {
         ];
     }
 
+    /**
+     * Resolve the per-attack context that does not depend on the target type:
+     * the attacker village/owner data (tribe, alliance), the war references and
+     * a few base flags. Read-only — no DB writes.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data Current attack row.
+     * @return array {isoasis, AttackArrivalTime, AttackerWref, DefenderWref,
+     *                NatarCapital, AttackerID, owntribe, ownally, from, fromF}
+     */
+    private function resolveAttackContext($data) {
+        global $database;
+
+        $owner = $this->getCachedUser($database->getVillageField($data['from'], "owner"), 1);
+
+        return [
+            'isoasis'           => $data['oasistype'],
+            'AttackArrivalTime' => $data['endtime'],
+            'AttackerWref'      => $data['from'],
+            'DefenderWref'      => $data['to'],
+            'NatarCapital'      => false,
+            'AttackerID'        => $owner['id'],
+            'owntribe'          => $owner['tribe'],
+            'ownally'           => $owner['alliance'],
+            'from'              => $database->getMInfo($data['from']),
+            'fromF'             => $database->getVillage($data['from']),
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2267,18 +2296,19 @@ class Automation {
                 //set base things
 				$totaltraped_att = 0;
 				for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
-                $isoasis = $data['oasistype'];
-                $AttackArrivalTime = $data['endtime'];
-                $AttackerWref = $data['from'];
-                $DefenderWref = $data['to'];
-                $NatarCapital = false;
-
-                $Attacker['id'] = $this->getCachedUser($database->getVillageField($data['from'],"owner"),1)['id'];
-                $AttackerID = $Attacker['id'];
-                $owntribe = $this->getCachedUser($database->getVillageField($data['from'],"owner"),1)['tribe'];
-                $ownally = $this->getCachedUser($database->getVillageField($data['from'],"owner"),1)['alliance'];
-                $from = $database->getMInfo($data['from']);
-                $fromF = $database->getVillage($data['from']);
+                // per-attack context (attacker village/owner) — extracted to resolveAttackContext() [#155]
+                $ctx = $this->resolveAttackContext($data);
+                $isoasis           = $ctx['isoasis'];
+                $AttackArrivalTime = $ctx['AttackArrivalTime'];
+                $AttackerWref      = $ctx['AttackerWref'];
+                $DefenderWref      = $ctx['DefenderWref'];
+                $NatarCapital      = $ctx['NatarCapital'];
+                $AttackerID        = $ctx['AttackerID'];
+                $Attacker['id']    = $ctx['AttackerID'];
+                $owntribe          = $ctx['owntribe'];
+                $ownally           = $ctx['ownally'];
+                $from              = $ctx['from'];
+                $fromF             = $ctx['fromF'];
 
                 //It's a village
                 if ($isoasis == 0){
