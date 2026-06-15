@@ -2199,6 +2199,54 @@ class Automation {
         ];
     }
 
+    /**
+     * Gather the defender's units for the current attack: the village's own
+     * troops (normalised to non-negative ints) plus the aggregated reinforcement
+     * totals, and the raw reinforcement rows. Used for both village and oasis
+     * targets. Pure behaviour-preserving extraction (issue #155).
+     *
+     * @param int $wref Defending village/oasis wref.
+     * @return array { Defender, enforDefender, enforcementarray }
+     */
+    private function buildDefenderUnits($wref) {
+        global $database;
+
+        $enforDefender = [];
+        $Defender = $database->getUnit($wref, false);
+        $enforcementarray = $database->getEnforceVillage($wref, 0);
+
+        if (count($enforcementarray) > 0) {
+            foreach ($enforcementarray as $enforce) {
+                for ($i = 1; $i <= 50; $i++) {
+                    if (!isset($enforDefender['u'.$i])) {
+                        $enforDefender['u'.$i] = 0;
+                    }
+                    $enforDefender['u'.$i] += $enforce['u'.$i];
+                }
+                if (!isset($enforDefender['hero'])) {
+                    $enforDefender['hero'] = 0;
+                }
+                $enforDefender['hero'] += $enforce['hero'];
+            }
+        }
+
+        for ($i = 1; $i <= 50; $i++) {
+            if (!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
+                $Defender['u'.$i] = 0;
+            }
+        }
+
+        if (!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
+            $Defender['hero'] = 0;
+        }
+
+        return [
+            'Defender'         => $Defender,
+            'enforDefender'    => $enforDefender,
+            'enforcementarray' => $enforcementarray,
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2265,38 +2313,12 @@ class Automation {
 
                     $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $evasion, $maxevasion, $gold, $cannotsend, $dataarray[$data_num]['attack_type']);
                     
-                    //get defence units
-                    $enforDefender = [];
+                    // defence units gathered — extracted to buildDefenderUnits() [#155]
                     $rom = $ger = $gal = $nat = $natar = 0;
-                    $Defender = $database->getUnit($data['to'], false);
-                    $enforcementarray = $database->getEnforceVillage($data['to'], 0);
-                    
-                    if(count($enforcementarray) > 0) {
-                        foreach($enforcementarray as $enforce) {
-                            for($i = 1; $i <= 50; $i++){
-								if(!isset($enforDefender['u'.$i])){
-									$enforDefender['u'.$i] = 0;
-								}
-								$enforDefender['u'.$i] += $enforce['u'.$i];
-							}
-
-                            if (!isset($enforDefender['hero'])) {
-                                $enforDefender['hero'] = 0;
-                            }
-                            $enforDefender['hero'] += $enforce['hero'];
-                        }
-                    }
-                    
-                    for($i = 1; $i <= 50; $i++){
-                        $def_ab[$i] = 0;
-                        if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
-                            $Defender['u'.$i] = 0;                                                  
-                        }
-                    }
-                    
-                    if(!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
-                        $Defender['hero'] = 0;            
-                    }
+                    $defUnits = $this->buildDefenderUnits($data['to']);
+                    $Defender         = $defUnits['Defender'];
+                    $enforDefender    = $defUnits['enforDefender'];
+                    $enforcementarray = $defUnits['enforcementarray'];
 
                     // attacker army built — extracted to buildAttackerUnits() [#155]
                     $atkUnits  = $this->buildAttackerUnits($dataarray[$data_num], $owntribe, $isoasis);
@@ -2366,30 +2388,12 @@ class Automation {
 					$to = $database->getOMInfo($data['to']);
 					$toF = $database->getOasisV($data['to']);
 					$conqureby = $toF['conqured'];
-                    //get defence units
-                    $enforDefender = [];
+                    // defence units gathered — extracted to buildDefenderUnits() [#155]
                     $rom = $ger = $gal = $nat = $natar = 0;
-                    $Defender = $database->getUnit($data['to'], false);
-                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
-
-                    if(count($enforcementarray) > 0) {
-                        foreach($enforcementarray as $enforce) {
-                            for($i = 1;$i <= 50; $i++) {
-                                $enforDefender['u'.$i] += $enforce['u'.$i];
-                            }
-                            $enforDefender['hero'] += $enforce['hero'];
-                        }
-                    }
-                    
-                    for($i = 1; $i <= 50; $i++){
-                        if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
-                            $Defender['u'.$i] = 0;                
-                        }
-                    }
-                    
-                    if(!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
-                        $Defender['hero'] = 0;                
-                    }
+                    $defUnits = $this->buildDefenderUnits($data['to']);
+                    $Defender         = $defUnits['Defender'];
+                    $enforDefender    = $defUnits['enforDefender'];
+                    $enforcementarray = $defUnits['enforcementarray'];
 
                     // attacker army built — extracted to buildAttackerUnits() [#155]
                     $atkUnits  = $this->buildAttackerUnits($dataarray[$data_num], $owntribe, $isoasis);
