@@ -22,7 +22,7 @@
 
 //MAIN MENU
 define('TRIBE1', 'Romains');
-define('TRIBE2', 'Teutons');
+define('TRIBE2', 'Germains');
 define('TRIBE3', 'Gaulois');
 define('TRIBE4', 'Nature');
 define('TRIBE5', 'Natars');
@@ -559,34 +559,34 @@ define('U0', 'Héros');
 //ROMAN UNITS
 define('U1', 'Légionnaire');
 define('U2', 'Prétorien');
-define('U3', 'Impérial');
-define('U4', 'Émissaire à cheval');
-define('U5', 'Cavalier impérial');
-define('U6', 'Cavalier de César');
+define('U3', 'Impérian');
+define('U4', 'Equites Legati');
+define('U5', 'Equites Imperatoris');
+define('U6', 'Equites Caesaris');
 define('U7', 'Bélier');
 define('U8', 'Catapulte de feu');
 define('U9', 'Sénateur');
 define('U10', 'Colon');
 
 //TEUTON UNITS
-define('U11', 'Massueur');
-define('U12', 'Hallebardier');
+define('U11', 'Combattant au gourdin');
+define('U12', 'Combattant à la lance');
 define('U13', 'Combattant à la hache');
 define('U14', 'Éclaireur');
 define('U15', 'Paladin');
-define('U16', 'Chevalier teutonique');
+define('U16', 'Cavalier teuton');
 define('U17', 'Bélier');
 define('U18', 'Catapulte');
-define('U19', 'Commandant');
+define('U19', 'Chef');
 define('U20', 'Colon');
 
 //GAUL UNITS
 define('U21', 'Phalange');
 define('U22', 'Combattant à l\'épée');
 define('U23', 'Éclaireur');
-define('U24', 'Foudre de Teutates');
+define('U24', 'Foudre de Teutatès');
 define('U25', 'Druide cavalier');
-define('U26', 'Haeduen');
+define('U26', 'Hédui');
 define('U27', 'Bélier');
 define('U28', 'Trébuchet');
 define('U29', 'Chef de tribu');
@@ -611,11 +611,11 @@ define('U42', 'Guerrier épineux');
 define('U43', 'Garde');
 define('U44', 'Oiseaux de proie');
 define('U45', 'Cavalier à la hache');
-define('U46', 'Chevalier natarian');
+define('U46', 'Chevalier natarien');
 define('U47', 'Éléphant de guerre');
 define('U48', 'Baliste');
-define('U49', 'Empereur natarian');
-define('U50', 'Colon natarian');
+define('U49', 'Empereur natarien');
+define('U50', 'Colon natarien');
 
 //MONSTER UNITS
 define('U51', 'Monstre péon');
@@ -1044,7 +1044,7 @@ define('CRANNY', 'Cachette');
 define('CURRENT_HIDDEN_UNITS', 'Unités actuellement cachées par ressource :');
 define('HIDDEN_UNITS_LEVEL', 'Unités cachées par ressource au niveau');
 define('UNITS', 'unités');
-define('CRANNY_DESC', 'La cachette dissimule une partie de vos ressources en cas d\'attaque du village. Ces ressources ne peuvent pas être volées.<br>Au niveau 1, la cachette peut contenir '.(100*((int)CRANNY_CAPACITY)).' de chaque ressource. La capacité des cachettes gauloises est 1,5 fois supérieure.<br>Si un héros teuton attaque un village, les cachettes ne peuvent dissimuler que 80 % de leur capacité normale.');
+define('CRANNY_DESC', 'La cachette dissimule une partie de vos ressources en cas d\'attaque du village. Ces ressources ne peuvent pas être volées.<br>Au niveau 1, la cachette peut contenir '.(100*((int)CRANNY_CAPACITY)).' de chaque ressource. La capacité des cachettes gauloises est 1,5 fois supérieure.<br>Si un héros germain attaque un village, les cachettes ne peuvent dissimuler que 80 % de leur capacité normale.');
 
 define('TOWNHALL', 'Hôtel de ville');
 define('CELEBRATIONS_COMMENCE_TOWNHALL', 'Les célébrations pourront commencer une fois l\'hôtel de ville terminé.');
@@ -1142,7 +1142,7 @@ define('DEFENCE_LEVEL', 'Bonus de défense au niveau');
 define('CITYWALL_DESC', 'Fournit un bonus de défense pour vos troupes (((1,03 ^ niveau) * 100) % + 10) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau de la muraille est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Romains uniquement.');
 
 define('EARTHWALL', 'Talus de terre');
-define('EARTHWALL_DESC', 'Fournit un bonus de défense pour vos troupes (((1,02 ^ niveau) * 100) % + 6) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau du talus est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Teutons uniquement.');
+define('EARTHWALL_DESC', 'Fournit un bonus de défense pour vos troupes (((1,02 ^ niveau) * 100) % + 6) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau du talus est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Germains uniquement.');
 
 define('PALISADE', 'Palissade');
 define('PALISADE_DESC', 'Fournit un bonus de défense pour vos troupes (((1,025 ^ niveau) * 100) % + 8) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau de la palissade est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Gaulois uniquement.');
@@ -1155,7 +1155,7 @@ define('STONEMASON_DESC', 'Le tailleur de pierre est un expert en taille de pier
 define('BREWERY', 'Brasserie');
 define('CURRENT_BONUS', 'Bonus actuel :');
 define('BONUS_LEVEL', 'Bonus au niveau');
-define('BREWERY_DESC', 'Un savoureux hydromel est brassé ici. Les boissons rendent vos soldats plus braves et plus forts lors d\'attaques (1 % par niveau de brasserie). Malheureusement, le pouvoir de persuasion des chefs est réduit de 50 % et les catapultes ne peuvent faire que des tirs aléatoires. Ne peut être construite que dans la capitale, mais affecte tous vos villages. Les festivals d\'hydromel durent toujours 72 heures.<br>Spécifique à la tribu : Teutons uniquement.');
+define('BREWERY_DESC', 'Un savoureux hydromel est brassé ici. Les boissons rendent vos soldats plus braves et plus forts lors d\'attaques (1 % par niveau de brasserie). Malheureusement, le pouvoir de persuasion des chefs est réduit de 50 % et les catapultes ne peuvent faire que des tirs aléatoires. Ne peut être construite que dans la capitale, mais affecte tous vos villages. Les festivals d\'hydromel durent toujours 72 heures.<br>Spécifique à la tribu : Germains uniquement.');
 
 define('TRAPPER', 'Trappeur');
 define('CURRENT_TRAPS', 'Pièges maximum à entraîner actuellement :');
@@ -1194,10 +1194,10 @@ define('ERROR_NAME_SHORT', 'Erreur : nom trop court');
 define('HEROSMANSION_DESC', 'Le palais du héros est la demeure de votre glorieux héros.<br>Aux niveaux 10, 15 et 20 du bâtiment, vous pouvez utiliser votre héros pour annexer une oasis inoccupée à votre village, une par niveau respectivement. Selon l\'oasis, vous obtiendrez une augmentation de production d\'un certain type de ressource (voire deux ressources pour certaines oasis).');
 
 define('GREATWAREHOUSE', 'Grand entrepôt');
-define('GREATWAREHOUSE_DESC', 'Le grand entrepôt a 3 fois la capacité d\'un entrepôt normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarian spécial.');
+define('GREATWAREHOUSE_DESC', 'Le grand entrepôt a 3 fois la capacité d\'un entrepôt normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarien spécial.');
 
 define('GREATGRANARY', 'Grand grenier');
-define('GREATGRANARY_DESC', 'Le grand grenier a 3 fois la capacité d\'un grenier normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarian spécial.');
+define('GREATGRANARY_DESC', 'Le grand grenier a 3 fois la capacité d\'un grenier normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarien spécial.');
 
 define('WONDER', 'Merveille du monde');
 define('WORLD_WONDER', 'Merveille du monde');
@@ -1396,9 +1396,9 @@ define('CONF_SERV_EVASIONSPEED_TOOLTIP', 'La vitesse de retour est le temps que 
 define('CONF_SERV_STORMULTIPLER', 'Multiplicateur de stockage');
 define('CONF_SERV_STORMULTIPLER_TOOLTIP', 'Un multiplicateur pour la capacité de stockage de l\'entrepôt et du grenier. La valeur 1 équivaut à 80 000 de chaque ressource au niveau maximum. Si vous mettez 2, la capacité au niveau maximum sera de 160 000 par ressource.<br><b>Note :</b> la quantité de ressources générée par les oasis non occupées pour le pillage dépend de cette valeur. Par défaut 800. Si vous mettez 2, le maximum par ressource générée est 1600.');
 define('CONF_SERV_TRADCAPACITY', 'Capacité du marchand');
-define('CONF_SERV_TRADCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de ressources qu\'un marchand peut transporter. La valeur 1 équivaut à 500 pour les Romains, 750 pour les Gaulois, 1000 pour les Teutons. Si vous mettez 2, la capacité transférée double : 1000, 1500, 2000.');
+define('CONF_SERV_TRADCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de ressources qu\'un marchand peut transporter. La valeur 1 équivaut à 500 pour les Romains, 750 pour les Gaulois, 1000 pour les Germains. Si vous mettez 2, la capacité transférée double : 1000, 1500, 2000.');
 define('CONF_SERV_CRANCAPACITY', 'Capacité de la cachette');
-define('CONF_SERV_CRANCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de la cachette qui protège du pillage. La valeur 1 équivaut à 1000 pour Romains et Teutons, 2000 pour Gaulois. Si vous mettez 2, la capacité double : 2000 et 4000.');
+define('CONF_SERV_CRANCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de la cachette qui protège du pillage. La valeur 1 équivaut à 1000 pour Romains et Germains, 2000 pour Gaulois. Si vous mettez 2, la capacité double : 2000 et 4000.');
 define('CONF_SERV_TRAPCAPACITY', 'Capacité du trappeur');
 define('CONF_SERV_TRAPCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité du piège gaulois, capable de capturer des soldats ennemis avant qu\'ils n\'attaquent. La valeur 1 équivaut à 400 au niveau 20 de construction. Si vous mettez 2, la capacité sera de 800.');
 define('CONF_SERV_NATUNITSMULTIPLIER', 'Multiplicateur d\'unités Natars');
@@ -1626,7 +1626,7 @@ define('PLAYER_WAS_REG_ON', 'Ce joueur a inscrit son compte le');
 define('NATARS_ACC', 'Compte officiel Natar');
 define('WW_V_M', 'Village officiel de la Merveille du monde');
 define('ROMAN_T_M', 'Les Romains : grâce à leur haut niveau de développement social et technologique, les Romains sont des maîtres en construction et en coordination. Leurs troupes font partie de l\'élite dans Travian. Très équilibrées, elles sont utiles tant en attaque qu\'en défense.');
-define('TEUTON_T_M', 'Les Teutons : les Teutons sont la tribu la plus agressive. Leurs troupes sont notoires et redoutées pour leur rage et leur frénésie au combat. Ils se déplacent comme une horde pillarde, sans même craindre la mort.');
+define('TEUTON_T_M', 'Les Germains : les Germains sont la tribu la plus agressive. Leurs troupes sont notoires et redoutées pour leur rage et leur frénésie au combat. Ils se déplacent comme une horde pillarde, sans même craindre la mort.');
 define('GAUL_T_M', 'Les Gaulois : les Gaulois sont la tribu la plus pacifique des trois dans Travian. Leurs troupes sont entraînées pour une excellente défense, mais leur capacité d\'attaque rivalise avec les deux autres tribus. Les Gaulois sont des cavaliers nés et leurs chevaux sont réputés pour leur vitesse, ce qui leur permet de frapper l\'ennemi exactement où ils peuvent causer le plus de dégâts.');
 define('ADMIN_M', 'Administrateur officiel du serveur');
 define('MH_M', 'Multihunter global officiel du serveur');
@@ -2123,7 +2123,7 @@ define('TZ_THE_HERO', 'Le héros');
 define('TZ_THE_LARGEST_GAULS', 'Les plus grands Gaulois');
 define('TZ_THE_LARGEST_PLAYERS', 'Les plus grands joueurs');
 define('TZ_THE_LARGEST_ROMANS', 'Les plus grands Romains');
-define('TZ_THE_LARGEST_TEUTONS', 'Les plus grands Teutons');
+define('TZ_THE_LARGEST_TEUTONS', 'Les plus grands Germains');
 define('TZ_THE_LARGEST_VILLAGES', 'Les plus grands villages');
 define('TZ_THE_MOST_EXPERIENCED_HEROES', 'Les héros les plus expérimentés');
 define('TZ_THE_MOST_SUCCESSFUL_ATTACKERS', 'Les attaquants les plus performants');
@@ -2398,7 +2398,7 @@ define('MANUAL_DESC_BARRACKS', "L'infanterie peut être entraînée dans la case
 define('MANUAL_DESC_STABLE', "La cavalerie peut être entraînée dans l'écurie. Plus son niveau est élevé, plus les troupes sont entraînées rapidement.");
 define('MANUAL_DESC_WORKSHOP', "Les engins de siège comme les catapultes et les béliers peuvent être construits dans l'atelier. Plus son niveau est élevé, plus les unités sont produites rapidement.");
 define('MANUAL_DESC_ACADEMY', "De nouveaux types d'unités peuvent être développés à l'académie. En augmentant son niveau, vous pouvez ordonner la recherche de meilleures unités.");
-define('MANUAL_DESC_CRANNY', "La cachette sert à dissimuler au moins une partie de vos ressources lorsque le village est attaqué. Ces ressources ne peuvent pas être volées.<br /><br />Au niveau 1, la cachette contient 100 unités de chaque ressource. Les cachettes gauloises sont deux fois plus grandes que les autres.<br /><br />CONSEILS<br />En T3, la cachette est efficace à 66% contre les Teutons.<br />En T3.5, la cachette est efficace à 80% contre les Teutons.");
+define('MANUAL_DESC_CRANNY', "La cachette sert à dissimuler au moins une partie de vos ressources lorsque le village est attaqué. Ces ressources ne peuvent pas être volées.<br /><br />Au niveau 1, la cachette contient 100 unités de chaque ressource. Les cachettes gauloises sont deux fois plus grandes que les autres.<br /><br />CONSEILS<br />En T3, la cachette est efficace à 66% contre les Germains.<br />En T3.5, la cachette est efficace à 80% contre les Germains.");
 define('MANUAL_DESC_TOWNHALL', "Dans l'hôtel de ville, vous pouvez organiser de fastueuses célébrations. Une telle célébration augmente vos points de culture.<br /><br />Les points de culture sont nécessaires pour fonder ou conquérir de nouveaux villages. Chaque bâtiment produit des points de culture et plus son niveau est élevé, plus il en produit. Avec les célébrations, vous pouvez augmenter cette production pendant un court moment.");
 define('MANUAL_DESC_RESIDENCE', "La résidence est un petit palais où le roi ou la reine séjourne lorsqu'il ou elle visite le village. La résidence protège le village contre les ennemis qui veulent le conquérir.");
 define('MANUAL_DESC_PALACE', "Le roi ou la reine de l'empire vit dans le palais. Il ne peut exister qu'un seul palais dans votre royaume à la fois. Vous avez besoin d'un palais pour proclamer un village comme votre capitale.<br /><br />La capitale ne peut pas être conquise. De plus, la capitale est le seul endroit où les champs de ressources peuvent être améliorés au-delà du niveau 10, et le seul endroit où la loge du tailleur de pierre peut être construite.");
@@ -2407,7 +2407,7 @@ define('MANUAL_DESC_TRADEOFFICE', "Au comptoir commercial, les chariots des marc
 define('MANUAL_DESC_GREATBARRACKS', "La grande caserne vous permet de produire plus d'unités en même temps, mais elles coûtent trois fois le montant initial.<br /><br />Elle ne peut pas être construite dans la capitale.");
 define('MANUAL_DESC_GREATSTABLE', "La grande écurie vous permet de produire plus d'unités en même temps, mais elles coûtent trois fois le montant initial.<br /><br />Elle ne peut pas être construite dans la capitale.");
 define('MANUAL_DESC_STONEMASON', "La loge du tailleur de pierre est experte dans la taille de la pierre. Plus le bâtiment est amélioré, plus la stabilité des bâtiments du village est élevée.<br /><br />Elle ne peut être construite que dans la capitale.");
-define('MANUAL_DESC_BREWERY', "Un savoureux hydromel est brassé dans la brasserie, puis bu par les soldats lors des célébrations.<br /><br />Ces boissons rendent vos soldats plus courageux et plus forts au combat (1% par niveau). Malheureusement, le pouvoir de persuasion des chefs est réduit et les catapultes ne font que des tirs aléatoires.<br /><br />Elle ne peut être construite que par les Teutons et uniquement dans leur capitale. Elle affecte tout l'empire.");
+define('MANUAL_DESC_BREWERY', "Un savoureux hydromel est brassé dans la brasserie, puis bu par les soldats lors des célébrations.<br /><br />Ces boissons rendent vos soldats plus courageux et plus forts au combat (1% par niveau). Malheureusement, le pouvoir de persuasion des chefs est réduit et les catapultes ne font que des tirs aléatoires.<br /><br />Elle ne peut être construite que par les Germains et uniquement dans leur capitale. Elle affecte tout l'empire.");
 define('MANUAL_DESC_HEROSMANSION', "Dans la demeure du héros, vous pouvez entraîner un héros. Pour cela, il vous faut un soldat ordinaire qui deviendra le héros ; vous avez donc besoin d'une caserne ou d'une écurie.<br /><br />Lorsque le bâtiment atteint les niveaux 10, 15 et 20, vous pouvez annexer 1, 2 et 3 oasis inoccupées avec votre héros. Selon l'oasis, vous obtiendrez une augmentation de production pour une certaine ressource (voire deux ressources pour certaines oasis).");
 define('MANUAL_DESC_GREATWAREHOUSE', "Les ressources bois, argile et fer sont stockées dans votre entrepôt. Le grand entrepôt vous offre plus de place et garde vos ressources plus au sec et plus en sécurité que l'entrepôt normal.<br /><br />Ce bâtiment ne peut être construit que dans les anciens villages natars ou avec des artéfacts natars spéciaux.");
 define('MANUAL_DESC_GREATGRANARY', "Les céréales produites par vos fermes sont stockées dans le grenier. Le grand grenier vous offre plus de place et garde vos céréales plus au sec et plus en sécurité que le grenier normal.<br /><br />Ce bâtiment ne peut être construit que dans les anciens villages natars ou avec des artéfacts natars spéciaux.");
@@ -2436,14 +2436,14 @@ define('MANUAL_UDESC_8', "La Catapulte est une excellente arme à longue portée
 define('MANUAL_UDESC_9', "Le Sénateur est le chef choisi par la tribu. C'est un bon orateur qui sait convaincre les autres. Il est capable de persuader d'autres villages de combattre aux côtés de l'empire.<br /><br />Chaque fois que le Sénateur s'adresse aux habitants d'un village, la valeur de loyauté de l'ennemi diminue, jusqu'à ce que le village soit à vous.");
 define('MANUAL_UDESC_10', "Les Colons sont des citoyens courageux et audacieux qui, après un long entraînement, quittent le village pour en fonder un nouveau en votre honneur.<br /><br />Comme le voyage et la fondation du nouveau village sont très difficiles, trois colons doivent rester ensemble. Il leur faut une base de 750 unités par ressource.");
 define('MANUAL_UDESC_11', "Les Massues sont l'unité la moins chère de Travian. Ils sont entraînés rapidement et possèdent des capacités d'attaque moyennes, mais leur armure n'est pas la meilleure. Les Massues sont presque sans défense face à la cavalerie et se font piétiner avec facilité.");
-define('MANUAL_UDESC_12', "Dans l'armée teutonne, la tâche du Lancier est la défense. Il est particulièrement efficace contre la cavalerie grâce à la longueur de son arme.<br /><br />Cependant, ne l'utilisez pas comme unité d'attaque, car ses capacités offensives sont très faibles.");
-define('MANUAL_UDESC_13', "C'est l'unité d'infanterie la plus puissante des Teutons. Il est fort à la fois en attaque et en défense, mais il est plus lent et plus coûteux que les autres unités.");
-define('MANUAL_UDESC_14', "L'Éclaireur se déplace loin devant les troupes teutonnes afin de se faire une idée de la force de l'ennemi et de ses villages. Il se déplace à pied, ce qui le rend plus lent que ses homologues romain ou gaulois. Il espionne les unités, les ressources et les fortifications ennemies.<br /><br />S'il n'y a aucun Éclaireur, Pisteur ou Equites Legati ennemi dans le village espionné, l'espionnage passe inaperçu.");
+define('MANUAL_UDESC_12', "Dans l'armée germaine, la tâche du Combattant à la lance est la défense. Il est particulièrement efficace contre la cavalerie grâce à la longueur de son arme.<br /><br />Cependant, ne l'utilisez pas comme unité d'attaque, car ses capacités offensives sont très faibles.");
+define('MANUAL_UDESC_13', "C'est l'unité d'infanterie la plus puissante des Germains. Il est fort à la fois en attaque et en défense, mais il est plus lent et plus coûteux que les autres unités.");
+define('MANUAL_UDESC_14', "L'Éclaireur se déplace loin devant les troupes germaines afin de se faire une idée de la force de l'ennemi et de ses villages. Il se déplace à pied, ce qui le rend plus lent que ses homologues romain ou gaulois. Il espionne les unités, les ressources et les fortifications ennemies.<br /><br />S'il n'y a aucun Éclaireur, Pisteur ou Equites Legati ennemi dans le village espionné, l'espionnage passe inaperçu.");
 define('MANUAL_UDESC_15', "Équipés d'une lourde armure, les Paladins sont une excellente unité défensive. L'infanterie aura particulièrement du mal à percer leur bouclier.<br /><br />Malheureusement, leurs capacités offensives sont assez faibles et leur vitesse, comparée à celle des autres unités de cavalerie, est en dessous de la moyenne. Leur entraînement est très long et plutôt coûteux.");
-define('MANUAL_UDESC_16', "Le Chevalier teutonique est un guerrier redoutable qui sème la peur et le désespoir parmi ses ennemis. En défense, il excelle contre la cavalerie adverse. Cependant, le coût de son entraînement et de son entretien est extraordinaire.");
+define('MANUAL_UDESC_16', "Le Cavalier teuton est un guerrier redoutable qui sème la peur et le désespoir parmi ses ennemis. En défense, il excelle contre la cavalerie adverse. Cependant, le coût de son entraînement et de son entretien est extraordinaire.");
 define('MANUAL_UDESC_17', "Le Bélier est une lourde arme de soutien pour votre infanterie et votre cavalerie. Sa tâche est de détruire les murs ennemis et d'augmenter ainsi les chances de vos troupes de franchir les fortifications adverses.");
 define('MANUAL_UDESC_18', "La Catapulte est une excellente arme à longue portée ; elle sert à détruire les champs et les bâtiments des villages ennemis. Cependant, sans troupes d'escorte, elle est presque sans défense, alors n'oubliez pas d'envoyer quelques troupes avec elle.<br /><br />Un point de ralliement de haut niveau rend vos catapultes plus précises et vous permet de cibler des bâtiments ennemis supplémentaires. Avec un point de ralliement de niveau 10, tous les bâtiments peuvent être visés, à l'exception de la cachette, des tailleurs de pierre et du trappeur.<br />ASTUCE : les catapultes tirant au hasard PEUVENT toucher la cachette, les trappeurs ou les tailleurs de pierre.");
-define('MANUAL_UDESC_19', "C'est en leur sein que les Teutons choisissent leur Chef. Pour être choisi, le courage et la stratégie ne suffisent pas ; il faut aussi être un orateur redoutable, car l'objectif premier du Chef est de convaincre la population des villages étrangers de rejoindre sa tribu.<br /><br />Plus le Chef s'adresse souvent à la population d'un village, plus la loyauté de ce village diminue, jusqu'à ce qu'il rejoigne finalement la tribu du Chef.");
+define('MANUAL_UDESC_19', "C'est en leur sein que les Germains choisissent leur Chef. Pour être choisi, le courage et la stratégie ne suffisent pas ; il faut aussi être un orateur redoutable, car l'objectif premier du Chef est de convaincre la population des villages étrangers de rejoindre sa tribu.<br /><br />Plus le Chef s'adresse souvent à la population d'un village, plus la loyauté de ce village diminue, jusqu'à ce qu'il rejoigne finalement la tribu du Chef.");
 define('MANUAL_UDESC_21', "Étant de l'infanterie, la Phalange est peu coûteuse et rapide à produire.<br /><br />Bien que sa puissance d'attaque soit faible, en défense elle est assez solide aussi bien contre l'infanterie que contre la cavalerie.");
 define('MANUAL_UDESC_22', "Les Épéistes sont plus coûteux que la Phalange, mais ce sont des unités d'attaque.<br /><br />En défense, ils sont assez faibles, en particulier contre la cavalerie.");
 define('MANUAL_UDESC_23', "Le Pisteur est l'unité de reconnaissance des Gaulois. Ils sont très rapides et peuvent s'approcher prudemment des unités, ressources ou bâtiments ennemis pour les espionner.<br /><br />S'il n'y a aucun Éclaireur, Equites Legati ou Pisteur dans le village espionné, l'espionnage passe inaperçu.");
@@ -2486,7 +2486,7 @@ define('MANUAL_NF_D_11', "Si une oasis conquise se trouve dans le village, elle 
 define('MANUAL_NF_D_12', "Si une invitation à rejoindre l'alliance est envoyée à un joueur, celui-ci en sera informé par un message dans le jeu.");
 define('MANUAL_NF_D_13', "<h2>Introduction</h2><br> Les mécaniques de l'Ambassade et de l'Alliance m'ont toujours semblé un peu comme de la triche. En particulier parce que le bâtiment de l'Ambassade possède une « capacité » donnée, ce qui signifie que seulement 3/6/9/12/... et jusqu'à 60 membres pouvaient faire partie de l'alliance, selon le niveau de votre Ambassade. <br><br> Tout cela est bien beau, mais une fois que vous aviez une Ambassade de niveau 20 et que vous atteigniez 60 membres d'alliance, vous étiez libre de démolir entièrement le bâtiment sans que rien ne se passe. Vous ne pouviez pas changer d'alliance, mais c'était à peu près tout. La propriété de capacité de l'Ambassade ne s'appliquait plus. Si elle s'appliquait, vous ne pourriez même pas la démolir d'un seul niveau jusqu'à 19 — car avec 60 membres au complet, l'Ambassade ne pourrait plus les contenir au niveau 19. <br><br> J'ai donc décidé de pimenter un peu le jeu, en faisant de l'Ambassade une pièce d'échecs un peu plus visible sur l'échiquier. <br><br> <h2>Nouvelles mécaniques</h2><br> Afin de rendre les choses intéressantes, j'ai développé tout un nouvel ensemble de règles pour la démolition et la destruction au combat de l'Ambassade. C'est un peu compliqué mais cela reflète en réalité parfaitement la propriété de « capacité » de l'alliance. <br><br> Le principal changement est que les joueurs ne peuvent pas vraiment démolir leur Ambassade sans subir l'effet secondaire d'être puni une fois qu'elle descend trop bas. Pour un membre d'alliance, cela signifie que son Ambassade ne doit jamais descendre en dessous du niveau 1. Si c'est le cas, il est averti puis exclu de son alliance. <br><br> De même, pour les fondateurs d'alliance, cela représente un défi encore plus grand, car ce sont eux qui doivent veiller au bon fonctionnement de leur alliance. Pour eux, la démolition d'une Ambassade ne sera pas autorisée en dessous d'un niveau pouvant encore contenir le nombre actuel de membres de l'alliance. <br><br> Dans la situation particulière où d'autres joueurs/alliances attaquent réellement le village du fondateur où se trouve son Ambassade, et ciblent ensuite cette Ambassade avec leurs catapultes et leurs béliers — cette situation peut causer beaucoup d'ennuis. S'il n'y a pas d'autres Ambassades dans les villages d'autres fondateurs à un niveau suffisant pour contenir tous les membres de l'alliance, l'alliance pourrait être dispersée. La seule exception serait qu'un autre membre de l'alliance possède une Ambassade suffisamment développée — auquel cas ce membre sera automatiquement élu à un poste de direction et sauvera l'alliance. Si aucun joueur de ce type n'est trouvé, l'alliance sera entièrement dispersée. <br><br> <h2>Informations détaillées</h2><br> Pour des informations plus visuelles et plus approfondies sur le fonctionnement de ce nouveau système, vous pouvez consulter cette <a href=\"https://docs.google.com/presentation/d/1KN1qVAlxVj7aAN6F9QkRai1oliajfxKPIaJ4MSodUac/edit#slide=id.p\" target=\"_blank\">présentation Google</a>.");
 define('MANUAL_NF_D_14', "Si le joueur laisse au moins un message dans un fil de discussion du forum, il recevra des messages dans le jeu lui indiquant qu'une autre personne a laissé un nouveau message dans le même fil (c'est-à-dire qu'il y est techniquement « abonné »).");
-define('MANUAL_NF_D_15', "Grâce à cette innovation, tout joueur peut ajouter à la description de son profil une image de sa tribu avec une petite description (Romains, Teutons, Gaulois).");
+define('MANUAL_NF_D_15', "Grâce à cette innovation, tout joueur peut ajouter à la description de son profil une image de sa tribu avec une petite description (Romains, Germains, Gaulois).");
 define('MANUAL_NF_D_16', "En fait, pour les joueurs, cette fonction est inutile, car elle est destinée uniquement aux Administrateurs et aux Multihunters. Grâce à elle, les Administrateurs et les Multihunters pourront ajouter à la description de leur profil diverses images intéressantes accompagnées de descriptions.");
 define('MANUAL_NF_D_17', "Si un artefact se trouve dans l'un des villages, il sera affiché dans le profil du joueur en face du village correspondant dans lequel il se trouve. Cette fonction a été présentée dans Travian T4.");
 define('MANUAL_NF_D_18', "Si le village dispose d'un emplacement pour la construction de la Merveille du monde, celui-ci sera affiché dans le profil en face du village correspondant. Cette fonction a été présentée dans Travian T4.");
