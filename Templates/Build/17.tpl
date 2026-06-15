@@ -69,7 +69,9 @@ if (isset($_GET['z'])) {
     <?php include("17_menu.tpl");?>
 
     <script language="JavaScript">
-    
+    // Globals used by add_res()/upd_res() in unx.js for the "max per merchant" click.
+    var haendler = <?php echo $merchantAvail; ?>;
+    var carry = <?php echo $maxcarry; ?>;
     </script>
 
 <?php if ($showConfirm && $target):?>
