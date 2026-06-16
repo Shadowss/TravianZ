@@ -2535,6 +2535,91 @@ class Automation {
         return $totaldead_def;
     }
 
+    /**
+     * Resolve the resources lootable from the battle target after cranny
+     * protection: compute the cranny efficiency, pull the current (capped)
+     * stocks of the target village/oasis and derive the lootable amounts.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data        Current attack row (uses 'to').
+     * @param int   $isoasis     Oasis flag (0 = village).
+     * @param int   $conqureby   Owner village of a conquered oasis (0 = none).
+     * @param int   $owntribe    Attacker tribe id (Teuton cranny bonus).
+     * @param int   $targettribe Defender tribe id (Gaul cranny bonus).
+     * @param mixed $crannySpy   OUT (by ref): cranny value seen by a scout; set only for village targets (isoasis == 0).
+     * @return array ['totclay','totiron','totwood','totcrop','avclay','aviron','avwood','avcrop'].
+     */
+    private function resolveResourcesAfterBattle($data, $isoasis, $conqureby, $owntribe, $targettribe, &$crannySpy) {
+        global $database, $bid23;
+
+        if ($isoasis == 0){
+            // get total cranny value:
+            $buildarray = $database->getResourceLevel($data['to']);
+            $cranny = 0;
+            for($i = 19; $i < 39;$i++){
+                if($buildarray['f'.$i.'t'] == 23){
+                    $cranny += $bid23[$buildarray['f'.$i]]['attri'] * CRANNY_CAPACITY;
+                }
+            }
+
+            //cranny efficiency
+            $atk_bonus = ($owntribe == 2) ? (4 / 5) : 1;
+            $def_bonus = ($targettribe == 3) ? 2 : 1;
+            $to_owner = $database->getVillageField($data['to'], "owner");
+
+            $crannySpy = $database->getArtifactsValueInfluence($to_owner, $data['to'], 7, $cranny * $def_bonus);
+            $cranny_eff = $crannySpy * $atk_bonus;
+
+            // work out available resources.
+            $this->updateRes($data['to']);
+            $this->pruneResource();
+
+            $villageData = $database->getVillageFields($data['to'], 'clay, iron, wood, crop', false);
+            $totclay = $villageData['clay'];
+            $totiron = $villageData['iron'];
+            $totwood = $villageData['wood'];
+            $totcrop = $villageData['crop'];
+        }else{
+            $cranny_eff = 0;
+
+            if ($conqureby > 0) { //10% from owner proc village owner - fix by ronix - exploit fixed by iopietro
+                $this->updateRes($conqureby);
+                $this->pruneResource();
+
+                $villageData = $database->getVillageFields($conqureby, 'clay, iron, wood, crop', false);
+                $totclay = intval($villageData['clay'] / 10);
+                $totiron = intval($villageData['iron'] / 10);
+                $totwood = intval($villageData['wood'] / 10);
+                $totcrop = intval($villageData['crop'] / 10);
+            }else{
+                // work out available resources.
+                $this->updateORes($data['to']);
+                $this->pruneOResource();
+
+                $oasisData = $database->getOasisFields($data['to'], false);
+                $totclay = $oasisData['clay'];
+                $totiron = $oasisData['iron'];
+                $totwood = $oasisData['wood'];
+                $totcrop = $oasisData['crop'];
+            }
+        }
+
+        $avclay = floor($totclay - $cranny_eff);
+        $aviron = floor($totiron - $cranny_eff);
+        $avwood = floor($totwood - $cranny_eff);
+        $avcrop = floor($totcrop - $cranny_eff);
+
+        $avclay = ($avclay < 0) ? 0 : $avclay;
+        $aviron = ($aviron < 0) ? 0 : $aviron;
+        $avwood = ($avwood < 0) ? 0 : $avwood;
+        $avcrop = ($avcrop < 0) ? 0 : $avcrop;
+
+        return [
+            'totclay' => $totclay, 'totiron' => $totiron, 'totwood' => $totwood, 'totcrop' => $totcrop,
+            'avclay'  => $avclay,  'aviron'  => $aviron,  'avwood'  => $avwood,  'avcrop'  => $avcrop,
+        ];
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2901,67 +2986,16 @@ class Automation {
                         $heroxp, $defheroxp
                     );
 
-                    if ($isoasis == 0){
-                        // get total cranny value:
-                        $buildarray = $database->getResourceLevel($data['to']);
-                        $cranny = 0;
-                        for($i = 19; $i < 39;$i++){
-                            if($buildarray['f'.$i.'t'] == 23){
-                                $cranny += $bid23[$buildarray['f'.$i]]['attri'] * CRANNY_CAPACITY;
-                            }
-                        }
-
-                        //cranny efficiency
-                        $atk_bonus = ($owntribe == 2) ? (4 / 5) : 1;
-                        $def_bonus = ($targettribe == 3) ? 2 : 1;
-                        $to_owner = $database->getVillageField($data['to'], "owner");                       
-                        
-                        $crannySpy = $database->getArtifactsValueInfluence($to_owner, $data['to'], 7, $cranny * $def_bonus);
-                        $cranny_eff = $crannySpy * $atk_bonus;
-
-                        // work out available resources.
-                        $this->updateRes($data['to']);
-                        $this->pruneResource();
-
-                        $villageData = $database->getVillageFields($data['to'], 'clay, iron, wood, crop', false);
-                        $totclay = $villageData['clay'];
-                        $totiron = $villageData['iron'];
-                        $totwood = $villageData['wood'];
-                        $totcrop = $villageData['crop'];                      
-                    }else{
-                        $cranny_eff = 0;                       
-
-                        if ($conqureby > 0) { //10% from owner proc village owner - fix by ronix - exploit fixed by iopietro
-                            $this->updateRes($conqureby);
-                            $this->pruneResource();
-                            
-                            $villageData = $database->getVillageFields($conqureby, 'clay, iron, wood, crop', false);
-                            $totclay = intval($villageData['clay'] / 10);
-                            $totiron = intval($villageData['iron'] / 10);
-                            $totwood = intval($villageData['wood'] / 10);
-                            $totcrop = intval($villageData['crop'] / 10);
-                        }else{
-                            // work out available resources.
-                            $this->updateORes($data['to']);
-                            $this->pruneOResource();
-                            
-                            $oasisData = $database->getOasisFields($data['to'], false);
-                            $totclay = $oasisData['clay'];
-                            $totiron = $oasisData['iron'];
-                            $totwood = $oasisData['wood'];
-                            $totcrop = $oasisData['crop'];
-                        }
-                    }
-
-                    $avclay = floor($totclay - $cranny_eff);
-                    $aviron = floor($totiron - $cranny_eff);
-                    $avwood = floor($totwood - $cranny_eff);
-                    $avcrop = floor($totcrop - $cranny_eff);
-
-                    $avclay = ($avclay < 0) ? 0 : $avclay;
-                    $aviron = ($aviron < 0) ? 0 : $aviron;
-                    $avwood = ($avwood < 0) ? 0 : $avwood;
-                    $avcrop = ($avcrop < 0) ? 0 : $avcrop;
+                    // resources lootable after cranny protection — extracted to resolveResourcesAfterBattle() [#155]
+                    $resAfter = $this->resolveResourcesAfterBattle($data, $isoasis, $conqureby, $owntribe, $targettribe, $crannySpy);
+                    $totclay = $resAfter['totclay'];
+                    $totiron = $resAfter['totiron'];
+                    $totwood = $resAfter['totwood'];
+                    $totcrop = $resAfter['totcrop'];
+                    $avclay  = $resAfter['avclay'];
+                    $aviron  = $resAfter['aviron'];
+                    $avwood  = $resAfter['avwood'];
+                    $avcrop  = $resAfter['avcrop'];
 
                     // bounty distributed across the resources available after cranny protection (extracted to applyBounty() [#155])
                     $steal = $this->applyBounty([$avwood, $avclay, $aviron, $avcrop], $battlepart['bounty']);
