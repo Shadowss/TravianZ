@@ -2620,6 +2620,92 @@ class Automation {
         ];
     }
 
+    /**
+     * Resolve the attacker hero's outcome after the battle: build the hero
+     * report line ($info_hero), and on a surviving hero handle oasis conquest /
+     * loyalty reduction (oasis targets) or artifact claiming with possible
+     * village destruction (village targets).
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array  $data              Current attack row (uses 't11', 'from', 'to').
+     * @param array  $from              Attacker village info (uses 'owner').
+     * @param array  $to                Defender village/oasis info (uses 'owner', 'loyalty').
+     * @param int    $dead11            Attacker hero casualties.
+     * @param int    $traped11          Attacker hero trapped count.
+     * @param mixed  $heroxp            Attacker hero XP gained this battle.
+     * @param string $hero_pic          Hero unit picture id (report markup).
+     * @param int    $isoasis           Oasis flag (0 = village).
+     * @param int    $type              Attack type (3 = normal with rams/catas).
+     * @param int    $targettribe       Defender tribe id.
+     * @param string $info_cat          Catapult report fragment (read for the destruction notice).
+     * @param string $info_hero         IN/OUT (by ref): hero report line.
+     * @param int    $can_destroy       IN/OUT (by ref): village-destruction allowed flag.
+     * @param int    $village_destroyed IN/OUT (by ref): village-destroyed flag.
+     * @return void
+     */
+    private function handleHeroPostBattle($data, $from, $to, $dead11, $traped11, $heroxp, $hero_pic, $isoasis, $type, $targettribe, $info_cat, &$info_hero, &$can_destroy, &$village_destroyed) {
+        global $database;
+
+        if(($data['t11'] - $dead11 - $traped11) > 0){ //hero
+            if ($heroxp == 0) {
+                $xp = "";
+                $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
+            } else {
+                $xp = " and gained <b>".$heroxp."</b> XP from the battle.";
+                $info_hero = $hero_pic.",Your hero gained <b>".$heroxp."</b> XP.";
+            }
+
+            if ($isoasis != 0) { //oasis fix by ronix
+                if ($to['owner'] != $from['owner']) {
+                    $troopcount = $database->countOasisTroops($data['to'], false);
+                    $canqured = $database->canConquerOasis($data['from'], $data['to'], false);
+                    if ($canqured == 1 && $troopcount == 0) {
+                        $database->conquerOasis($data['from'], $data['to']);
+                        $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
+                    }else{
+                        if ($canqured == 3 && $troopcount == 0) {
+                            if ($type == 3) {
+                                $Oloyaltybefore = intval($to['loyalty']);
+                                //$database->modifyOasisLoyalty($data['to']);
+                                //$OasisInfo = $database->getOasisInfo($data['to']);
+                                $Oloyaltynow = intval($database->modifyOasisLoyalty($data['to']));//intval($OasisInfo['loyalty']);
+                                $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore.$xp;
+                            }
+                            else $info_hero = $hero_pic.",Could not reduce loyalty during raid".$xp;                              
+                        }
+                    }
+                }
+            } else {
+                if ($heroxp == 0) $xp=" no XP from the battle.";
+                else $xp=" gained <b>".$heroxp."</b> XP from the battle.";
+
+                $artifact = reset($database->getOwnArtefactInfo($data['to']));
+                if (!empty($artifact)) {
+                    if ($type == 3) {
+                        if (empty($artifactError = $database->canClaimArtifact($data['from'], $artifact['vref'], $artifact['size'], $artifact['type']))) {
+                            $database->claimArtefact($data['from'], $data['to'], $database->getVillageField($data['from'], "owner"));
+                            $info_hero = $hero_pic.",Your hero is carrying home the artifact <b>".$artifact['name']."</b> and".$xp;
+
+                            // if the defender pop is 0 with no artefact, then destroy the village
+                            if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
+                                $can_destroy = $village_destroyed = 1;
+                                if(strpos($info_cat, "The village has") === false) $info_hero .= " The village has been destroyed.";
+                            }
+                        }
+                        else $info_hero = $hero_pic.",".$artifactError.$xp;
+                    }
+                    else $info_hero = $hero_pic.",Your hero could not claim an artifact during raid".$xp;    
+                }
+            }
+        }elseif($data['t11'] > 0) {
+            if ($heroxp == 0) $xp = "";     
+            else $xp = " but gained <b>".$heroxp."</b> XP from the battle.";
+
+            if ($traped11 > 0) $info_hero = $hero_pic.",Your hero was trapped".$xp;                    
+            else $info_hero = $hero_pic.",Your hero died".$xp;
+        }
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -3007,64 +3093,8 @@ class Automation {
                     $chiefing_village  = $chiefResult['chiefing_village'];
                     $village_destroyed = $chiefResult['village_destroyed'];
 
-                    if(($data['t11'] - $dead11 - $traped11) > 0){ //hero
-                        if ($heroxp == 0) {
-                            $xp = "";
-                            $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
-                        } else {
-                            $xp = " and gained <b>".$heroxp."</b> XP from the battle.";
-                            $info_hero = $hero_pic.",Your hero gained <b>".$heroxp."</b> XP.";
-                        }
-
-                        if ($isoasis != 0) { //oasis fix by ronix
-                            if ($to['owner'] != $from['owner']) {
-                                $troopcount = $database->countOasisTroops($data['to'], false);
-                                $canqured = $database->canConquerOasis($data['from'], $data['to'], false);
-                                if ($canqured == 1 && $troopcount == 0) {
-                                    $database->conquerOasis($data['from'], $data['to']);
-                                    $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
-                                }else{
-                                    if ($canqured == 3 && $troopcount == 0) {
-                                        if ($type == 3) {
-                                            $Oloyaltybefore = intval($to['loyalty']);
-                                            //$database->modifyOasisLoyalty($data['to']);
-                                            //$OasisInfo = $database->getOasisInfo($data['to']);
-                                            $Oloyaltynow = intval($database->modifyOasisLoyalty($data['to']));//intval($OasisInfo['loyalty']);
-                                            $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore.$xp;
-                                        }
-                                        else $info_hero = $hero_pic.",Could not reduce loyalty during raid".$xp;                              
-                                    }
-                                }
-                            }
-                        } else {
-                            if ($heroxp == 0) $xp=" no XP from the battle.";
-                            else $xp=" gained <b>".$heroxp."</b> XP from the battle.";
-                             
-                            $artifact = reset($database->getOwnArtefactInfo($data['to']));
-                            if (!empty($artifact)) {
-                                if ($type == 3) {
-                                    if (empty($artifactError = $database->canClaimArtifact($data['from'], $artifact['vref'], $artifact['size'], $artifact['type']))) {
-                                        $database->claimArtefact($data['from'], $data['to'], $database->getVillageField($data['from'], "owner"));
-                                        $info_hero = $hero_pic.",Your hero is carrying home the artifact <b>".$artifact['name']."</b> and".$xp;
-                                        
-                                        // if the defender pop is 0 with no artefact, then destroy the village
-                                        if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
-                                            $can_destroy = $village_destroyed = 1;
-                                            if(strpos($info_cat, "The village has") === false) $info_hero .= " The village has been destroyed.";
-                                        }
-                                    }
-                                    else $info_hero = $hero_pic.",".$artifactError.$xp;
-                                }
-                                else $info_hero = $hero_pic.",Your hero could not claim an artifact during raid".$xp;    
-                            }
-                        }
-                    }elseif($data['t11'] > 0) {
-                        if ($heroxp == 0) $xp = "";     
-                        else $xp = " but gained <b>".$heroxp."</b> XP from the battle.";
-                        
-                        if ($traped11 > 0) $info_hero = $hero_pic.",Your hero was trapped".$xp;                    
-                        else $info_hero = $hero_pic.",Your hero died".$xp;
-                    }
+                    // attacker hero outcome (oasis conquest/loyalty, artifact claim, report line) — extracted to handleHeroPostBattle() [#155]
+                    $this->handleHeroPostBattle($data, $from, $to, $dead11, $traped11, $heroxp, $hero_pic, $isoasis, $type, $targettribe, $info_cat, $info_hero, $can_destroy, $village_destroyed);
                     
                     if ($DefenderID == 0) $natar = 0;
 
