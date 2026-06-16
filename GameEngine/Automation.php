@@ -2431,6 +2431,110 @@ class Automation {
         ];
     }
 
+    /**
+     * Compute attacker/defender hero XP and victory points from the battle
+     * casualties, persist them (hero XP, player points, alliance points) and
+     * return the total defender losses.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $alldead        Reinforcement casualties by global unit id (+ 'hero').
+     * @param array $owndead        Defender own casualties by global unit id (+ 'hero').
+     * @param array $attackerDead   Attacker casualties, 0-indexed t1..t11 (index 10 = hero).
+     * @param int   $targettribe    Defender tribe id.
+     * @param int   $att_tribe      Attacker tribe id.
+     * @param array $Attacker       Attacker troop row (uses 'uhero').
+     * @param mixed $AttackerHeroID Attacker hero id (for the XP write).
+     * @param array $Defender       Defender troop row (uses 'hero').
+     * @param array $DefendersHeroID Defender hero ids (for the XP writes).
+     * @param array $toF            Defender village (uses 'owner').
+     * @param array $from           Attacker village info (uses 'owner').
+     * @param int   $targetally     Defender alliance id.
+     * @param int   $ownally        Attacker alliance id.
+     * @param mixed $heroxp         OUT (by ref): attacker hero XP, set only if the attacker has a hero.
+     * @param mixed $defheroxp      OUT (by ref): per-defender hero XP, set only if the defender has a hero.
+     * @return int Total defender losses (reinforcements + own troops).
+     */
+    private function calculateHeroXpAndPoints(
+        array $alldead, array $owndead, array $attackerDead,
+        $targettribe, $att_tribe,
+        $Attacker, $AttackerHeroID, $Defender, $DefendersHeroID,
+        $toF, $from, $targetally, $ownally,
+        &$heroxp, &$defheroxp
+    ) {
+        global $database;
+
+        $totaldead_def = 0;
+        $totalpoint_att = 0;
+
+        for($i = 1 ;$i <= 50; $i++) {
+            $unitarray = $GLOBALS["u".$i];
+
+            //Reinforcements dead troops
+            $totaldead_def += $alldead[$i];
+            $totalpoint_att += ($alldead[$i] * $unitarray['pop']);
+
+            //Own dead troops
+            if($i >= ($targettribe - 1) * 10 + 1 && $i <= $targettribe * 10){
+                $totaldead_def += $owndead[$i];
+                $totalpoint_att += ($owndead[$i] * $unitarray['pop']);
+            }
+        }
+        $totalpoint_att += ((isset($alldead['hero']) ? $alldead['hero'] : 0) * 6);
+        $totalpoint_att += ((isset($owndead['hero']) ? $owndead['hero'] : 0) * 6);
+
+        if ($Attacker['uhero'] > 0){
+            $heroxp = $totalpoint_att;
+            $database->modifyHeroXp("experience", $heroxp, $AttackerHeroID);
+        }
+
+        for($i = 1; $i <= 10; $i++){
+            $unitarray = $GLOBALS["u".(($att_tribe - 1) * 10 + $i)];
+            if ( !isset($totalpoint_def) ) {
+                $totalpoint_def = 0;
+            }
+            $totalpoint_def += ($attackerDead[$i - 1] * $unitarray['pop']);
+        }
+
+        $totalpoint_def += $attackerDead[10] * 6;
+
+        if($Defender['hero'] > 0){
+            //counting heroxp
+            $defheroxp = intval($totalpoint_def / count($DefendersHeroID));
+            foreach($DefendersHeroID as $HeroID){
+                $database->modifyHeroXp("experience",$defheroxp,$HeroID);
+            }
+        }
+
+        // we don't need these two variables anymore
+        unset($AttackerHeroID, $DefendersHeroID);
+
+        $database->modifyPoints(
+            $toF['owner'],
+            ['dpall', 'dp'],
+            [$totalpoint_def, $totalpoint_def]
+        );
+
+        $database->modifyPoints(
+            $from['owner'],
+            ['apall', 'ap'],
+            [$totalpoint_att, $totalpoint_att]
+        );
+
+        $database->modifyPointsAlly(
+            $targetally,
+            ['Adp', 'dp'],
+            [$totalpoint_def, $totalpoint_def]
+        );
+
+        $database->modifyPointsAlly(
+            $ownally,
+            ['Aap', 'ap'],
+            [$totalpoint_att, $totalpoint_att]
+        );
+
+        return $totaldead_def;
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -2787,73 +2891,14 @@ class Automation {
                     $troopsdead10 = $dead10;
                     $troopsdead11 = $dead11;
                     
-                    $totaldead_def = 0;
-                    $totalpoint_att = 0;
-                    
-                    for($i = 1 ;$i <= 50; $i++) {
-                        $unitarray = $GLOBALS["u".$i];
-
-                        //Reinforcements dead troops
-                        $totaldead_def += $alldead[$i];
-                        $totalpoint_att += ($alldead[$i] * $unitarray['pop']);
-                        
-                        //Own dead troops
-                        if($i >= ($targettribe - 1) * 10 + 1 && $i <= $targettribe * 10){
-                            $totaldead_def += $owndead[$i];
-                            $totalpoint_att += ($owndead[$i] * $unitarray['pop']);
-                        }
-                    }
-                    $totalpoint_att += ((isset($alldead['hero']) ? $alldead['hero'] : 0) * 6);
-                    $totalpoint_att += ((isset($owndead['hero']) ? $owndead['hero'] : 0) * 6);
-                    
-                    if ($Attacker['uhero'] > 0){
-                        $heroxp = $totalpoint_att;
-                        $database->modifyHeroXp("experience", $heroxp, $AttackerHeroID);
-                    }
-
-                    for($i = 1; $i <= 10; $i++){
-                        $unitarray = $GLOBALS["u".(($att_tribe - 1) * 10 + $i)];
-                        if ( !isset($totalpoint_def) ) {
-                            $totalpoint_def = 0;
-                        }
-                        $totalpoint_def += (${'dead'.$i}*$unitarray['pop']);
-                    }
-
-                    $totalpoint_def += $dead11 * 6;
-                    
-                    if($Defender['hero'] > 0){
-                        //counting heroxp
-                        $defheroxp = intval($totalpoint_def / count($DefendersHeroID));
-                        foreach($DefendersHeroID as $HeroID){
-                            $database->modifyHeroXp("experience",$defheroxp,$HeroID);
-                        }
-                    }
-                    
-                    // we don't need these two variables anymore
-                    unset($AttackerHeroID, $DefendersHeroID);
-
-                    $database->modifyPoints(
-                        $toF['owner'],
-                        ['dpall', 'dp'],
-                        [$totalpoint_def, $totalpoint_def]
-                    );
-
-                    $database->modifyPoints(
-                        $from['owner'],
-                        ['apall', 'ap'],
-                        [$totalpoint_att, $totalpoint_att]
-                    );
-
-                    $database->modifyPointsAlly(
-                        $targetally,
-                        ['Adp', 'dp'],
-                        [$totalpoint_def, $totalpoint_def]
-                    );
-
-                    $database->modifyPointsAlly(
-                        $ownally,
-                        ['Aap', 'ap'],
-                        [$totalpoint_att, $totalpoint_att]
+                    // hero XP, player points and alliance points — extracted to calculateHeroXpAndPoints() [#155]
+                    $totaldead_def = $this->calculateHeroXpAndPoints(
+                        $alldead, $owndead,
+                        [$dead1, $dead2, $dead3, $dead4, $dead5, $dead6, $dead7, $dead8, $dead9, $dead10, $dead11],
+                        $targettribe, $att_tribe,
+                        $Attacker, $AttackerHeroID, $Defender, $DefendersHeroID,
+                        $toF, $from, $targetally, $ownally,
+                        $heroxp, $defheroxp
                     );
 
                     if ($isoasis == 0){
