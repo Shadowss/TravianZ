@@ -2706,6 +2706,60 @@ class Automation {
         }
     }
 
+    /**
+     * Send the battle/scout report notification to the defender.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param mixed  $scout            Truthy when the attack is a scouting run.
+     * @param array  $battlepart       Battle result (uses 'casualties_attacker').
+     * @param array  $from             Attacker village info (uses 'owner', 'name').
+     * @param array  $to               Defender village/oasis info (uses 'owner', 'wref', 'name').
+     * @param int    $targetally       Defender alliance id.
+     * @param string $data2            Combat-report payload.
+     * @param int    $AttackArrivalTime Battle resolution timestamp.
+     * @param string $unitsdead_att    Attacker dead units string.
+     * @param string $unitssend_att    Attacker sent units string.
+     * @param bool   $defspy           Whether the defence has scouts.
+     * @param string $info_troop       Troop-return report fragment.
+     * @param int    $totalsend_alldef Total defending troops (incl. reinforcements).
+     * @param int    $totalsend_att    Total attacking troops sent.
+     * @param int    $totaldead_att    Total attacking troops killed.
+     * @param int    $totaltraped_att  Total attacking troops trapped.
+     * @param int    $totaldead_alldef Total defending troops killed.
+     * @return void
+     */
+    private function sendBattleNotifications($scout, $battlepart, $from, $to, $targetally, $data2, $AttackArrivalTime, $unitsdead_att, $unitssend_att, $defspy, $info_troop, $totalsend_alldef, $totalsend_att, $totaldead_att, $totaltraped_att, $totaldead_alldef) {
+        global $database;
+
+        //Undetected and detected in here.
+        if(!empty($scout)){
+            for($i = 1; $i <= 10; $i++){
+                if($battlepart['casualties_attacker'][$i]){
+                    if($from['owner'] == 3){
+                        $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                        break;
+                    }else if($unitsdead_att == $unitssend_att && $defspy){ //fix by ronix
+                        $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2.',,'.$info_troop,$AttackArrivalTime);
+                        break;
+                    }else if($defspy){ //fix by ronix
+                        $database->addNotice($to['owner'],$to['wref'],$targetally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                        break;
+                    }
+                }
+            }
+        }else{
+            if($totalsend_alldef == 0 && $totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
+                $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+            }else if($totaldead_alldef == 0){
+                $database->addNotice($to['owner'],$to['wref'],$targetally,4,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+            }else if($totalsend_alldef > $totaldead_alldef){
+                $database->addNotice($to['owner'],$to['wref'],$targetally,5,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+            }else if($totalsend_alldef == $totaldead_alldef){
+                $database->addNotice($to['owner'],$to['wref'],$targetally,6,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+            }
+        }
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -3121,33 +3175,8 @@ class Automation {
                     $data2     = $report['data2'];
                     $data_fail = $report['data_fail'];
 
-                    //Undetected and detected in here.
-                    if(!empty($scout)){
-                        for($i = 1; $i <= 10; $i++){
-                            if($battlepart['casualties_attacker'][$i]){
-                                if($from['owner'] == 3){
-                                    $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                                    break;
-                                }else if($unitsdead_att == $unitssend_att && $defspy){ //fix by ronix
-                                    $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2.',,'.$info_troop,$AttackArrivalTime);
-                                    break;
-                                }else if($defspy){ //fix by ronix
-                                    $database->addNotice($to['owner'],$to['wref'],$targetally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                                    break;
-                                }
-                            }
-                        }
-                    }else{
-                        if($totalsend_alldef == 0 && $totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
-                            $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                        }else if($totaldead_alldef == 0){
-                            $database->addNotice($to['owner'],$to['wref'],$targetally,4,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                        }else if($totalsend_alldef > $totaldead_alldef){
-                            $database->addNotice($to['owner'],$to['wref'],$targetally,5,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                        }else if($totalsend_alldef == $totaldead_alldef){
-                            $database->addNotice($to['owner'],$to['wref'],$targetally,6,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                        }
-                    }
+                    // notify the defender of the incoming battle/scout — extracted to sendBattleNotifications() [#155]
+                    $this->sendBattleNotifications($scout, $battlepart, $from, $to, $targetally, $data2, $AttackArrivalTime, $unitsdead_att, $unitssend_att, $defspy, $info_troop, $totalsend_alldef, $totalsend_att, $totaldead_att, $totaltraped_att, $totaldead_alldef);
                     // If the dead units not equal the ammount sent they will return and report
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {                       
