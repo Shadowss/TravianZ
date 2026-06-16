@@ -2857,6 +2857,45 @@ class Automation {
                     }
     }
 
+    /**
+     * Destroy the target village when the battle flagged it for destruction:
+     * reassign the capital to the player's most populated remaining village if
+     * needed, delete the village and reassign its hero.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param int   $village_destroyed Village-destroyed flag.
+     * @param int   $can_destroy       Village-destruction allowed flag.
+     * @param array $data              Current attack row (uses 'to').
+     * @param array $to                Defender village info (uses 'capital').
+     * @param array $varray            The defender owner's villages.
+     * @return void
+     */
+    private function handleVillageDestruction($village_destroyed, $can_destroy, $data, $to, $varray) {
+        global $database;
+
+        if (!($village_destroyed == 1 && $can_destroy == 1)) {
+            return;
+        }
+
+        if($to['capital'] == 1){
+            $mostPopulatedVillage = [];
+            //Search for the most populated village
+            foreach($varray as $village){
+                if($village['wref'] != $data['to'] && (empty($mostPopulatedVillage) || $mostPopulatedVillage['pop'] < $village['pop'])){
+                    $mostPopulatedVillage = $village;
+                }
+            }
+            //Set the new capital
+            $database->changeCapital($mostPopulatedVillage['wref']);
+        }
+
+        //Delete the village
+        $database->DelVillage($data['to']);
+
+        //Reassign the hero, if dead and assigned to the deleted village
+        $database->reassignHero($data['to']);
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -3282,26 +3321,8 @@ class Automation {
 
                     if (!isset($village_destroyed)) $village_destroyed = 0;
 
-                    if ($village_destroyed == 1 && $can_destroy == 1) 
-                    {                 	
-                    	if($to['capital'] == 1){
-                    		$mostPopulatedVillage = [];
-                    		//Search for the most populated village
-                    		foreach($varray as $village){
-                    			if($village['wref'] != $data['to'] && (empty($mostPopulatedVillage) || $mostPopulatedVillage['pop'] < $village['pop'])){
-                    				$mostPopulatedVillage = $village;
-                    			}
-                    		}
-                    		//Set the new capital
-                    		$database->changeCapital($mostPopulatedVillage['wref']);
-                    	}
-                    	
-                    	//Delete the village
-                    	$database->DelVillage($data['to']);
-                    	
-                    	//Reassign the hero, if dead and assigned to the deleted village
-                    	$database->reassignHero($data['to']);
-                    }
+                    // delete the target village if it was destroyed — extracted to handleVillageDestruction() [#155]
+                    $this->handleVillageDestruction($village_destroyed, $can_destroy, $data, $to, $varray);
                 }else{
                     //units attack string for battleraport
                     $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
