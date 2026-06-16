@@ -2211,19 +2211,63 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getMInfo($id, $use_cache = true) {
-	    list($id) = $this->escape_input((int) $id);
+	    $array_passed = is_array($id);
 
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$worldAndVillageDataCache, $id)) && !is_null($cachedValue)) {
-            return $cachedValue;
-        }
+	    if (!$array_passed) {
+	        $id = [(int) $id];
+	    } else {
+	        foreach ($id as $index => $idValue) {
+	            $id[$index] = (int) $idValue;
+	        }
+	    }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "vdata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id LIMIT 1";
+	    if (!count($id)) {
+	        return [];
+	    }
+
+	    // first of all, check if we should be using cache and whether the data
+	    // required is already cached
+	    if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$worldAndVillageDataCache, $id[0])) && !is_null($cachedValue)) {
+	        return $cachedValue;
+	    } else if ($use_cache && $array_passed) {
+	        // only select the world IDs we haven't cached yet
+	        $newIDs = [];
+	        foreach ($id as $key) {
+	            if (!isset(self::$worldAndVillageDataCache[$key])) {
+	                $newIDs[] = $key;
+	            }
+	        }
+
+	        // everything's cached, return the whole cache
+	        if (!count($newIDs)) {
+	            return self::$worldAndVillageDataCache;
+	        }
+	        $id = $newIDs;
+	    }
+
+		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "vdata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id IN(".implode(', ', $id).")";
 		$result = mysqli_query($this->dblink,$q);
 
-        self::$worldAndVillageDataCache[$id] = mysqli_fetch_array($result);
-        return self::$worldAndVillageDataCache[$id];
+	    // preserve the original MYSQLI_BOTH semantics (numeric + associative keys)
+	    $rows = [];
+	    if ($result) {
+	        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
+	            $rows[] = $row;
+	        }
+	    }
+
+	    // return a single value
+	    if (!$array_passed) {
+	        self::$worldAndVillageDataCache[$id[0]] = isset($rows[0]) ? $rows[0] : null;
+	        return self::$worldAndVillageDataCache[$id[0]];
+	    }
+
+	    // cache each returned record by its world ID (wdata.id)
+	    foreach ($rows as $record) {
+	        self::$worldAndVillageDataCache[$record['id']] = $record;
+	    }
+
+	    return self::$worldAndVillageDataCache;
 	}
 
 	function getOMInfo($id, $use_cache = true) {
