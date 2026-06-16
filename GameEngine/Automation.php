@@ -2760,6 +2760,103 @@ class Automation {
         }
     }
 
+    /**
+     * Finalize the fate of the attacking troops: if any survived they return
+     * home (attacker report + return movement + loot transfer / RR points /
+     * leftover-chief enforcement), otherwise they die without returning (only
+     * the all-dead report is sent). Pure behaviour-preserving extraction
+     * (refactor for issue #155).
+     *
+     * @param array  $data             Current attack row (uses 't1..t11', 'moveid', 'ref').
+     * @param array  $from             Attacker village info (uses 'wref', 'owner', 'name').
+     * @param array  $to               Defender village/oasis info (uses 'wref', 'owner', 'name').
+     * @param int    $owntribe         Attacker tribe id.
+     * @param int    $type             Attack type (1 = scout).
+     * @param int    $isoasis          Oasis flag (0 = village).
+     * @param int    $conqureby        Owner village of a conquered oasis (0 = none).
+     * @param int    $AttackArrivalTime Battle resolution timestamp.
+     * @param int    $targetally       Defender alliance id.
+     * @param int    $ownally          Attacker alliance id.
+     * @param string $data2            Combat-report payload (survivors).
+     * @param string $data_fail        Combat-report payload (all dead).
+     * @param int    $chiefing_village Whether this attack chiefed the village.
+     * @param int    $DefenderWref     Defender world ref.
+     * @param int    $AttackerWref     Attacker world ref.
+     * @param array  $steal            [wood, clay, iron, crop] looted.
+     * @param array  $dead             Attacker casualties, 1-indexed t1..t11.
+     * @param array  $traped           Attacker trapped, 1-indexed t1..t11.
+     * @param array  $troopsdead       Attacker dead counts for enforcement, 1-indexed t1..t11.
+     * @param int    $totalsend_att    Total attacking troops sent.
+     * @param int    $totaldead_att    Total attacking troops killed.
+     * @param int    $totaltraped_att  Total attacking troops trapped.
+     * @param int    $totalstolentaken IN/OUT (by ref): running RR loss accumulator for the defender.
+     * @return void
+     */
+    private function finalizeReturnOrDeath($data, $from, $to, $owntribe, $type, $isoasis, $conqureby, $AttackArrivalTime, $targetally, $ownally, $data2, $data_fail, $chiefing_village, $DefenderWref, $AttackerWref, $steal, $dead, $traped, $troopsdead, $totalsend_att, $totaldead_att, $totaltraped_att, &$totalstolentaken) {
+        global $database, $units;
+
+                    // If the dead units not equal the ammount sent they will return and report
+                    if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
+                    {                       
+                        $returningTroops = [];
+                        for($i = 1; $i <= 11; $i++) $returningTroops['t'.$i] = $data['t'.$i] - $traped[$i] - $dead[$i];
+                        $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $returningTroops, 1, 't');
+                        $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);
+                        $endtime += $AttackArrivalTime;
+                        if($type == 1){
+							if($from['owner'] == 3){ // fix natar report by ronix
+								$database->addNotice($to['owner'], $to['wref'], $targetally, 20, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
+							}elseif($totaldead_att == 0 && $totaltraped_att == 0){
+								$database->addNotice($from['owner'], $to['wref'], $ownally, 18, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
+							}else{
+								$database->addNotice($from['owner'], $to['wref'], $ownally, 21, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
+							}
+						}else{
+							if((empty($totaldead_att) || $totaldead_att == 0) && (empty($totaltraped_att) || $totaltraped_att == 0)){
+								$database->addNotice($from['owner'], $to['wref'], $ownally, 1, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
+							}else{
+								$database->addNotice($from['owner'], $to['wref'], $ownally, 2, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
+							}
+						}
+
+                        $database->setMovementProc($data['moveid']);
+
+                        if (!isset($chiefing_village)) $chiefing_village = 0;
+
+                        if($chiefing_village != 1){
+                        	$database->addMovement(4, $DefenderWref, $AttackerWref, $data['ref'], $AttackArrivalTime, $endtime, 1, $steal[0], $steal[1], $steal[2], $steal[3]);
+                            if($type !== 1){
+                            	if ($isoasis == 0) $database->modifyResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);                   
+                                else
+                                {
+                                	//if it's an oasis but it's conquered by someone, resources must be modified in the owner's village
+                                	if($conqureby > 0) $database->modifyResource($conqureby, $steal[0], $steal[1], $steal[2], $steal[3], 0);
+                                    else $database->modifyOasisResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);                                  
+                                }
+								$totalstolengain = $steal[0] + $steal[1] + $steal[2] + $steal[3];
+								$totalstolentaken = ((isset($totalstolentaken) ? $totalstolentaken : 0) - ($steal[0] + $steal[1] + $steal[2] + $steal[3]));
+								$database->modifyPoints($from['owner'], 'RR', $totalstolengain);
+								$database->modifyPoints($to['owner'], 'RR', $totalstolentaken);
+								$database->modifyPointsAlly($targetally, 'RR', $totalstolentaken);
+								$database->modifyPointsAlly($ownally, 'RR', $totalstolengain);
+                            }
+                        }else{ //fix by ronix if only 1 chief left to conqured - don't add with zero enforces
+                            if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 1){
+								$database->addEnforce2($data, $owntribe, $troopsdead[1], $troopsdead[2], $troopsdead[3], $troopsdead[4], $troopsdead[5], $troopsdead[6], $troopsdead[7], $troopsdead[8], $troopsdead[9], $troopsdead[10], $troopsdead[11]);
+							}
+                        }
+                    }
+                    else //else they die and don't return or report.
+                    {
+                        $database->setMovementProc($data['moveid']);
+						if($type == 1){
+							$database->addNotice($from['owner'], $to['wref'], $ownally, 19, addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data_fail, $AttackArrivalTime);
+						}else{
+							$database->addNotice($from['owner'], $to['wref'], $ownally, 3, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data_fail, $AttackArrivalTime);
+						}
+                    }
+    }
+
     private function sendunitsComplete() {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
@@ -3177,66 +3274,10 @@ class Automation {
 
                     // notify the defender of the incoming battle/scout — extracted to sendBattleNotifications() [#155]
                     $this->sendBattleNotifications($scout, $battlepart, $from, $to, $targetally, $data2, $AttackArrivalTime, $unitsdead_att, $unitssend_att, $defspy, $info_troop, $totalsend_alldef, $totalsend_att, $totaldead_att, $totaltraped_att, $totaldead_alldef);
-                    // If the dead units not equal the ammount sent they will return and report
-                    if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
-                    {                       
-                        $returningTroops = [];
-                        for($i = 1; $i <= 11; $i++) $returningTroops['t'.$i] = $data['t'.$i] - ${'traped'.$i} - ${'dead'.$i};
-                        $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $returningTroops, 1, 't');
-                        $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);
-                        $endtime += $AttackArrivalTime;
-                        if($type == 1){
-							if($from['owner'] == 3){ // fix natar report by ronix
-								$database->addNotice($to['owner'], $to['wref'], $targetally, 20, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
-							}elseif($totaldead_att == 0 && $totaltraped_att == 0){
-								$database->addNotice($from['owner'], $to['wref'], $ownally, 18, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
-							}else{
-								$database->addNotice($from['owner'], $to['wref'], $ownally, 21, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
-							}
-						}else{
-							if((empty($totaldead_att) || $totaldead_att == 0) && (empty($totaltraped_att) || $totaltraped_att == 0)){
-								$database->addNotice($from['owner'], $to['wref'], $ownally, 1, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
-							}else{
-								$database->addNotice($from['owner'], $to['wref'], $ownally, 2, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
-							}
-						}
-
-                        $database->setMovementProc($data['moveid']);
-
-                        if (!isset($chiefing_village)) $chiefing_village = 0;
-
-                        if($chiefing_village != 1){
-                        	$database->addMovement(4, $DefenderWref, $AttackerWref, $data['ref'], $AttackArrivalTime, $endtime, 1, $steal[0], $steal[1], $steal[2], $steal[3]);
-                            if($type !== 1){
-                            	if ($isoasis == 0) $database->modifyResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);                   
-                                else
-                                {
-                                	//if it's an oasis but it's conquered by someone, resources must be modified in the owner's village
-                                	if($conqureby > 0) $database->modifyResource($conqureby, $steal[0], $steal[1], $steal[2], $steal[3], 0);
-                                    else $database->modifyOasisResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);                                  
-                                }
-								$totalstolengain = $steal[0] + $steal[1] + $steal[2] + $steal[3];
-								$totalstolentaken = ((isset($totalstolentaken) ? $totalstolentaken : 0) - ($steal[0] + $steal[1] + $steal[2] + $steal[3]));
-								$database->modifyPoints($from['owner'], 'RR', $totalstolengain);
-								$database->modifyPoints($to['owner'], 'RR', $totalstolentaken);
-								$database->modifyPointsAlly($targetally, 'RR', $totalstolentaken);
-								$database->modifyPointsAlly($ownally, 'RR', $totalstolengain);
-                            }
-                        }else{ //fix by ronix if only 1 chief left to conqured - don't add with zero enforces
-                            if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 1){
-								$database->addEnforce2($data, $owntribe, $troopsdead1, $troopsdead2, $troopsdead3, $troopsdead4, $troopsdead5, $troopsdead6, $troopsdead7, $troopsdead8, $troopsdead9, $troopsdead10, $troopsdead11);
-							}
-                        }
-                    }
-                    else //else they die and don't return or report.
-                    {
-                        $database->setMovementProc($data['moveid']);
-						if($type == 1){
-							$database->addNotice($from['owner'], $to['wref'], $ownally, 19, addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data_fail, $AttackArrivalTime);
-						}else{
-							$database->addNotice($from['owner'], $to['wref'], $ownally, 3, '' . addslashes($from['name']) . ' attacks ' . addslashes($to['name']) . '', $data_fail, $AttackArrivalTime);
-						}
-                    }
+                    // surviving attacker troops return (report + movement + loot/RR/enforce) or die — extracted to finalizeReturnOrDeath() [#155]
+                    $retDead = $retTraped = $retTroopsdead = [];
+                    for ($i = 1; $i <= 11; $i++) { $retDead[$i] = ${'dead'.$i}; $retTraped[$i] = ${'traped'.$i}; $retTroopsdead[$i] = ${'troopsdead'.$i}; }
+                    $this->finalizeReturnOrDeath($data, $from, $to, $owntribe, $type, $isoasis, $conqureby, $AttackArrivalTime, $targetally, $ownally, $data2, $data_fail, $chiefing_village, $DefenderWref, $AttackerWref, $steal, $retDead, $retTraped, $retTroopsdead, $totalsend_att, $totaldead_att, $totaltraped_att, $totalstolentaken);
                     if($type == 3 || $type == 4) $database->addGeneralAttack($totalattackdead);
 
                     if (!isset($village_destroyed)) $village_destroyed = 0;
