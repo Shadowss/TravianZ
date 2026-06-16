@@ -1387,6 +1387,7 @@ class Automation {
         $database->getEnforceVillage($vilIDs, 0);
         $database->getMovement(34, $vilIDs, 1);
         $database->getABTech($vilIDs);
+        $database->getMInfo($vilIDs);
     }
 
     private function buildScoutReport($data, $spy_pic, $isoasis, $targettribe, $crannySpy, $totwood, $totclay, $totiron, $totcrop) {
