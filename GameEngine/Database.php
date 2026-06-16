@@ -3729,9 +3729,12 @@ class MYSQLi_DB implements IDbConnection {
         $vid = (int) $vid;
 
         // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$fieldLevelsInVillageSearchCache, $vid.$fieldType)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        // required is already cached. NB: use isset() rather than the generic
+        // returnCachedContent(), which treats a cached level of 0 as "empty" and
+        // re-queries it on every call — buildings the village does not own
+        // (level 0, very common) would otherwise never be cached.
+        if ($use_cache && isset(self::$fieldLevelsInVillageSearchCache[$vid.$fieldType])) {
+            return self::$fieldLevelsInVillageSearchCache[$vid.$fieldType];
         }
 
         // $fieldType can be both, integer and string, to be used in the IN statement,
