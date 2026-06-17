@@ -197,6 +197,65 @@ define('NATAR_COUNTERFORCE', 'Contre-attaque Natar');
 define('FROM_THE_VILL', 'du village');
 define('CASUALTIES', 'Pertes');
 define('INFORMATION', 'Information');
+// === Battle report strings (issue: i18n of combat reports) ===
+define('RC_HERO', 'Héros');
+define('RC_CATAPULT', 'Catapulte');
+define('RC_TRAP', 'Piège');
+define('RC_WALL', 'Muraille');
+define('TZ_AT', 'à');
+// Catapults
+define('RC_DESTROYED', 'détruit');
+define('RC_NOT_DAMAGED', "n'a pas été endommagé.");
+define('RC_DAMAGED_FROM_TO', 'endommagé du niveau <b>%s</b> au niveau <b>%s</b>.');
+define('RC_NO_BUILDINGS', 'Il ne reste aucun bâtiment à détruire');
+define('RC_VILLAGE_ALREADY_DESTROYED', 'Village déjà détruit.');
+define('RC_VILLAGE_CANT_DESTROY', 'Le village ne peut pas être détruit.');
+define('RC_VILLAGE_CANT_BE', 'Le village ne peut pas être');
+define('RC_VILLAGE_DESTROYED', 'Le village a été détruit.');
+// Rams
+define('RC_NO_WALL', "Il n'y a pas de muraille à détruire.");
+define('RC_WALL_DESTROYED', 'Muraille <b>détruite</b>.');
+define('RC_WALL_NOT_DAMAGED', "La muraille n'a pas été endommagée.");
+define('RC_WALL_DAMAGED_FROM_TO', 'Muraille endommagée du niveau <b>%s</b> au niveau <b>%s</b>.');
+// Conquest / chief
+define('RC_NO_REDUCE_CP_RAID', "Impossible de réduire les points de culture lors d'un raid");
+define('RC_NOT_ENOUGH_CP', 'Points de culture insuffisants.');
+define('RC_CANT_TAKEOVER', 'Vous ne pouvez pas conquérir ce village.');
+define('RC_RESIDENCE_NOT_DESTROYED', "Le Palais/la Résidence n'est pas détruit(e) !");
+define('RC_LOYALTY_LOWERED', 'La loyauté a été réduite de <b>%s</b> à <b>%s</b>.');
+define('RC_INHABITANTS_JOIN', 'Les habitants du village %s ont décidé de rejoindre votre empire.');
+// Hero
+define('RC_HERO_NO_KILL', "Votre héros n'avait personne à tuer et ne gagne donc aucun XP.");
+define('RC_HERO_GAINED_XP', 'Votre héros a gagné <b>%s</b> XP.');
+define('RC_HERO_CONQUERED_OASIS', 'Votre héros a conquis cette oasis');
+define('RC_HERO_REDUCED_OASIS_LOYALTY', "Votre héros a réduit la loyauté de l'oasis à %s depuis %s");
+define('RC_NO_REDUCE_LOYALTY_RAID', "Impossible de réduire la loyauté lors d'un raid");
+define('RC_HERO_CARRYING_ARTIFACT', "Votre héros rapporte l'artefact <b>%s</b> et");
+define('RC_HERO_NO_ARTIFACT_RAID', "Votre héros n'a pas pu s'emparer d'un artefact lors d'un raid");
+define('RC_HERO_AND_GAINED_XP_BATTLE', 'et a gagné <b>%s</b> XP lors de la bataille.');
+define('RC_HERO_NO_XP_BATTLE', 'aucun XP lors de la bataille.');
+define('RC_HERO_GAINED_XP_BATTLE', 'a gagné <b>%s</b> XP lors de la bataille.');
+define('RC_HERO_BUT_GAINED_XP_BATTLE', 'mais a gagné <b>%s</b> XP lors de la bataille.');
+define('RC_HERO_TRAPPED', 'Votre héros a été capturé');
+define('RC_HERO_DIED', 'Votre héros est mort');
+// Scout report
+define('RC_TOTAL_RESOURCES', 'Ressources totales :');
+define('RC_RESIDENCE_LEVEL', 'Niveau de la Résidence :');
+define('RC_PALACE_LEVEL', 'Niveau du Palais :');
+define('RC_WALL_LEVEL', 'Niveau de la muraille :');
+define('RC_CRANNY_CAPACITY', 'Capacité totale des cachettes :');
+define('RC_NO_INFO', 'Aucune information à afficher');
+// Prisoners / traps
+define('RC_OF_WHICH_SAVED', 'dont <b>%s</b> ont été sauvés');
+define('RC_FREED_FROM_HIS_TROOPS', 'a libéré <b>%s</b> de ses troupes');
+define('RC_FREED_FRIENDLY_TROOPS', 'a libéré <b>%s</b> troupes alliées');
+define('RC_AND_FRIENDLY_TROOPS', 'et <b>%s</b> troupes alliées');
+// Troop return
+define('RC_NONE_RETURNED', "Aucun de vos soldats n'est revenu.");
+// === End battle report strings ===
+// Embassy-destruction status lines, appended to the catapult battle report.
+define('MSG_ALLIANCE_DISPERSED_STATUS', "L'alliance de ce joueur a été dispersée.");
+define('MSG_FORCED_LEAVE_STATUS', "Le joueur a été forcé de quitter son alliance.");
 define('CARRY', 'transporte');
 define('DEFENDER', 'Défenseur');
 define('VISITED', 'visité');

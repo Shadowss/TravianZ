@@ -197,6 +197,65 @@ define('NATAR_COUNTERFORCE', 'Contraatac Natari');
 define('FROM_THE_VILL', 'din satul');
 define('CASUALTIES', 'Pierderi');
 define('INFORMATION', 'Informații');
+// === Battle report strings (issue: i18n of combat reports) ===
+define('RC_HERO', 'Erou');
+define('RC_CATAPULT', 'Catapultă');
+define('RC_TRAP', 'Capcană');
+define('RC_WALL', 'Zid');
+define('TZ_AT', 'la');
+// Catapults
+define('RC_DESTROYED', 'distrus');
+define('RC_NOT_DAMAGED', 'nu a fost avariat.');
+define('RC_DAMAGED_FROM_TO', 'avariat de la nivelul <b>%s</b> la nivelul <b>%s</b>.');
+define('RC_NO_BUILDINGS', 'Nu mai sunt clădiri de distrus');
+define('RC_VILLAGE_ALREADY_DESTROYED', 'Sat deja distrus.');
+define('RC_VILLAGE_CANT_DESTROY', 'Satul nu poate fi distrus.');
+define('RC_VILLAGE_CANT_BE', 'Satul nu poate fi');
+define('RC_VILLAGE_DESTROYED', 'Satul a fost distrus.');
+// Rams
+define('RC_NO_WALL', 'Nu există zid de distrus.');
+define('RC_WALL_DESTROYED', 'Zid <b>distrus</b>.');
+define('RC_WALL_NOT_DAMAGED', 'Zidul nu a fost avariat.');
+define('RC_WALL_DAMAGED_FROM_TO', 'Zid avariat de la nivelul <b>%s</b> la nivelul <b>%s</b>.');
+// Conquest / chief
+define('RC_NO_REDUCE_CP_RAID', 'Nu s-au putut reduce punctele de cultură în timpul unui raid');
+define('RC_NOT_ENOUGH_CP', 'Puncte de cultură insuficiente.');
+define('RC_CANT_TAKEOVER', 'Nu poți cuceri acest sat.');
+define('RC_RESIDENCE_NOT_DESTROYED', 'Palatul/Reședința nu este distrus(ă)!');
+define('RC_LOYALTY_LOWERED', 'Loialitatea a fost redusă de la <b>%s</b> la <b>%s</b>.');
+define('RC_INHABITANTS_JOIN', 'Locuitorii satului %s au decis să se alăture imperiului tău.');
+// Hero
+define('RC_HERO_NO_KILL', 'Eroul tău nu a avut pe cine ucide, deci nu câștigă niciun XP.');
+define('RC_HERO_GAINED_XP', 'Eroul tău a câștigat <b>%s</b> XP.');
+define('RC_HERO_CONQUERED_OASIS', 'Eroul tău a cucerit această oază');
+define('RC_HERO_REDUCED_OASIS_LOYALTY', 'Eroul tău a redus loialitatea oazei la %s de la %s');
+define('RC_NO_REDUCE_LOYALTY_RAID', 'Nu s-a putut reduce loialitatea în timpul unui raid');
+define('RC_HERO_CARRYING_ARTIFACT', 'Eroul tău aduce acasă artefactul <b>%s</b> și');
+define('RC_HERO_NO_ARTIFACT_RAID', 'Eroul tău nu a putut revendica un artefact în timpul unui raid');
+define('RC_HERO_AND_GAINED_XP_BATTLE', 'și a câștigat <b>%s</b> XP din luptă.');
+define('RC_HERO_NO_XP_BATTLE', 'niciun XP din luptă.');
+define('RC_HERO_GAINED_XP_BATTLE', 'a câștigat <b>%s</b> XP din luptă.');
+define('RC_HERO_BUT_GAINED_XP_BATTLE', 'dar a câștigat <b>%s</b> XP din luptă.');
+define('RC_HERO_TRAPPED', 'Eroul tău a fost capturat');
+define('RC_HERO_DIED', 'Eroul tău a murit');
+// Scout report
+define('RC_TOTAL_RESOURCES', 'Resurse totale:');
+define('RC_RESIDENCE_LEVEL', 'Nivel Reședință:');
+define('RC_PALACE_LEVEL', 'Nivel Palat:');
+define('RC_WALL_LEVEL', 'Nivel zid:');
+define('RC_CRANNY_CAPACITY', 'Capacitate totală ascunzători:');
+define('RC_NO_INFO', 'Nu există informații de afișat');
+// Prisoners / traps
+define('RC_OF_WHICH_SAVED', 'dintre care <b>%s</b> au fost salvați');
+define('RC_FREED_FROM_HIS_TROOPS', 'a eliberat <b>%s</b> din trupele sale');
+define('RC_FREED_FRIENDLY_TROOPS', 'a eliberat <b>%s</b> trupe aliate');
+define('RC_AND_FRIENDLY_TROOPS', 'și <b>%s</b> trupe aliate');
+// Troop return
+define('RC_NONE_RETURNED', 'Niciunul dintre soldații tăi nu s-a întors.');
+// === End battle report strings ===
+// Embassy-destruction status lines, appended to the catapult battle report.
+define('MSG_ALLIANCE_DISPERSED_STATUS', 'Alianța acestui jucător a fost dispersată.');
+define('MSG_FORCED_LEAVE_STATUS', 'Jucătorul a fost forțat să-și părăsească alianța.');
 define('CARRY', 'transportă');
 define('DEFENDER', 'Apărător');
 define('VISITED', 'vizitat');
