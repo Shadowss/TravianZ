@@ -3157,10 +3157,6 @@ class Automation {
                     $totalsend_alldef        = $reinfReport['totalsend_alldef'];
                     $Defender['hero']        = $reinfReport['defenderHero'];
 
-                    #################################################
-                    ################FIXED BY SONGER################
-                    #################################################
-
                     for($i = 1; $i <= 11; $i++){
                         //MUST TO BE FIX : This is only for defender and still not properly coded
                         if (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] <= 0) {
@@ -3171,8 +3167,6 @@ class Automation {
                             ${'dead'.$i} = (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) ? $battlepart['casualties_attacker'][$i] : 0);
                         }
                     }
-
-                    #################################################
 
                     $dead = [];
                     $owndead = [];
@@ -3346,27 +3340,6 @@ class Automation {
                 //Update starvation data
                 $database->addStarvationData($to['wref']);
                 
-				//Returning units back to village is not necessary because it will be taken care when processing movement			
-				// Fix by AL-Kateb
-                // if evasion was active, return units back to base
-               /*
-			   if (isset($evaded)) {
-                    foreach ($evasionUnitModifications_modes as $index => $mode) {
-                        $evasionUnitModifications_modes[$index] = 1;
-                    }
-
-                    $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
-                }
-				*/
-
-                #################################################
-                ################FIXED BY SONGER################
-                #################################################
-
-                ################################################################################
-                ##############ISUE: Lag, fixed3####################################################
-                #### PHP.NET manual: unset() destroy more than one variable unset($foo1, $foo2, $foo3);######
-                ################################################################################
                 $data_num++;
 
                 unset(
@@ -3428,9 +3401,6 @@ class Automation {
                     ,$DefenderUnit
                     ,$info_trap
                     ,$report);
-
-                #################################################
-
             }
         }
     }
