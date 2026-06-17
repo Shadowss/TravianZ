@@ -5187,8 +5187,8 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
             'lvl'      => $current_level
         ], false, $use_cache);
 
-        if ($allianceStatus === false) return ' This player\'s alliance has been dispersed.';    
-	    else if ($allianceStatus === 0) return ' Player was forced to leave their alliance.';          
+        if ($allianceStatus === false) return ' ' . rc_tok('MSG_ALLIANCE_DISPERSED_STATUS');
+	    else if ($allianceStatus === 0) return ' ' . rc_tok('MSG_FORCED_LEAVE_STATUS');
 	    else return ''; // all is good, no need to append additional alliance-related text 
     }
 

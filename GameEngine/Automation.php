@@ -131,7 +131,7 @@ class Automation {
 
     public function procResType($ref, $mode = 0) {
         //Capital or only 1 village left = cannot be destroyed
-        return addslashes(empty($build = Building::procResType($ref)) && !$mode ? "Village can't be" : $build);
+        return addslashes(empty($build = Building::procResType($ref)) && !$mode ? RC_VILLAGE_CANT_BE : $build);
     }
 
     function recountPop($vid, $use_cache = true){
@@ -794,8 +794,8 @@ class Automation {
                 
                 if ($isSecondRow) {
                     if ($tbid > 0) {
-                        $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy)." <b>destroyed</b>.";
+                        $info_cat .= "<tbody class=\"goods\"><tr><th>".INFORMATION."</th><td colspan=\"11\">
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"".rc_tok('RC_CATAPULT')."\" title=\"".rc_tok('RC_CATAPULT')."\" /> ".rc_bld($tbgid, $can_destroy)." <b>".rc_tok('RC_DESTROYED')."</b>.";
                     }
                     
                     // embassy level was changed
@@ -805,7 +805,7 @@ class Automation {
                     
                     $info_cat .= "</td></tr></tbody>";
                 } else {
-                    $info_cat = "".$catp_pic.", ".$this->procResType($tbgid, $can_destroy)." <b>destroyed</b>.";
+                    $info_cat = "".$catp_pic.", ".rc_bld($tbgid, $can_destroy)." <b>".rc_tok('RC_DESTROYED')."</b>.";
                     
                     // embassy level was changed
                     if ($tbgid == 18){
@@ -817,11 +817,11 @@ class Automation {
             elseif($newLevel == $tblevel){
                 if($isSecondRow) {
                     if ($tbid > 0) {
-                        $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy)." was not damaged.</td></tr></tbody>";
+                        $info_cat .= "<tbody class=\"goods\"><tr><th>".INFORMATION."</th><td colspan=\"11\">
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"".rc_tok('RC_CATAPULT')."\" title=\"".rc_tok('RC_CATAPULT')."\" /> ".rc_bld($tbgid, $can_destroy)." ".rc_tok('RC_NOT_DAMAGED')."</td></tr></tbody>";
                     }
                 } else {
-                    $info_cat = "".$catp_pic.",".$this->procResType($tbgid, $can_destroy)." was not damaged.";
+                    $info_cat = "".$catp_pic.",".rc_bld($tbgid, $can_destroy)." ".rc_tok('RC_NOT_DAMAGED');
                 }
             }
             // building/field was damaged, let's calculate the actual damage
@@ -831,7 +831,7 @@ class Automation {
                 $bdo['f'.$catapultTarget] = $newLevel;
                 
                 // building was damaged to a lower level
-                $info_cata = " damaged from level <b>".$tblevel."</b> to level <b>".$newLevel."</b>.";
+                $info_cata = " ".rc_tok('RC_DAMAGED_FROM_TO', $tblevel, $newLevel);
                 
                 $buildarray = $GLOBALS["bid".$tbgid];
                 
@@ -857,8 +857,8 @@ class Automation {
                 }
                 
                 if ($isSecondRow) {
-                    $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy).$info_cata;
+                    $info_cat .= "<tbody class=\"goods\"><tr><th>".INFORMATION."</th><td colspan=\"11\">
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"".rc_tok('RC_CATAPULT')."\" title=\"".rc_tok('RC_CATAPULT')."\" /> ".rc_bld($tbgid, $can_destroy).$info_cata;
                     
                     // embassy level was changed
                     if ($tbgid == 18) {
@@ -867,7 +867,7 @@ class Automation {
                     
                     $info_cat .= "</td></tr></tbody>";
                 } else {
-                    $info_cat = "" . $catp_pic . "," . $this->procResType($tbgid, $can_destroy).$info_cata;
+                    $info_cat = "" . $catp_pic . "," . rc_bld($tbgid, $can_destroy).$info_cata;
                     
                     // embassy level was changed
                     if ($tbgid == 18) {
@@ -877,10 +877,10 @@ class Automation {
             }
         }else{
             if(!isset($info_cat) || empty($info_cat) || $info_cat == ","){
-                $info_cat = "".$catp_pic.", There are no buildings left to destroy";
-            }else if(strpos($info_cat, "There are no buildings left") === false){
-                $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-                          <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> There are no buildings left to destroy.</td></tr></tbody>";
+                $info_cat = "".$catp_pic.", ".rc_tok('RC_NO_BUILDINGS');
+            }else if(strpos($info_cat, rc_tok('RC_NO_BUILDINGS')) === false){
+                $info_cat .= "<tbody class=\"goods\"><tr><th>".INFORMATION."</th><td colspan=\"11\">
+                          <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"".rc_tok('RC_CATAPULT')."\" title=\"".rc_tok('RC_CATAPULT')."\" /> ".rc_tok('RC_NO_BUILDINGS').".</td></tr></tbody>";
             }       
         }
     }
@@ -897,8 +897,8 @@ class Automation {
                     			
                     			// village has been destroyed
                     			if ($pop <= 0) {
-                    				if ($can_destroy == 1) $info_cat = "".$catp_pic.", Village already destroyed.";
-                    				else $info_cat = "".$catp_pic.", Village can\'t be destroyed.";
+                    				if ($can_destroy == 1) $info_cat = "".$catp_pic.", ".rc_tok('RC_VILLAGE_ALREADY_DESTROYED');
+                    				else $info_cat = "".$catp_pic.", ".rc_tok('RC_VILLAGE_CANT_DESTROY');
                     			}
                     			else
                     			{
@@ -1163,7 +1163,7 @@ class Automation {
         }
 
         if ($type != 3) {
-            $info_chief = $chief_pic . ',Could not reduce cultural points during raid';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_NO_REDUCE_CP_RAID');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
@@ -1197,22 +1197,22 @@ class Automation {
         $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
 
         if ($user_cps < $need_cps) {
-            $info_chief = $chief_pic . ',Not enough culture points.';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_NOT_ENOUGH_CP');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
         if (count($varray) <= 1 || $to['capital'] == 1 || $villexp >= $canconquer) {
-            $info_chief = $chief_pic . ',You cant take over this village.';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_CANT_TAKEOVER');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
         if ($to['owner'] == 3 && $to['name'] == 'WW Buildingplan') {
-            $info_chief = $chief_pic . ',You cant take over this village.';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_CANT_TAKEOVER');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
         if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
-            $info_chief = $chief_pic . ',The Palace/Residence isn\'t destroyed!';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_RESIDENCE_NOT_DESTROYED');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
@@ -1234,7 +1234,7 @@ class Automation {
         }
 
         if (($toF['loyalty'] - $reducedLoyaltyTotal) > 0) {
-            $info_chief = $chief_pic . ',The loyalty was lowered from <b>' . floor($toF['loyalty']) . '</b> to <b>' . floor($toF['loyalty'] - $reducedLoyaltyTotal) . '</b>.';
+            $info_chief = $chief_pic . ',' . rc_tok('RC_LOYALTY_LOWERED', floor($toF['loyalty']), floor($toF['loyalty'] - $reducedLoyaltyTotal));
             $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $reducedLoyaltyTotal));
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
@@ -1247,7 +1247,7 @@ class Automation {
         $villname = addslashes($database->getVillageField($data['to'], 'name'));
         $artifact = reset($database->getOwnArtefactInfo($data['to']));
 
-        $info_chief = $chief_pic . ',Inhabitants of ' . $villname . ' village decided to join your empire.';
+        $info_chief = $chief_pic . ',' . rc_tok('RC_INHABITANTS_JOIN', $villname);
 
         if ($artifact['vref'] == $data['to']) {
             $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'], 'owner'));
@@ -1394,29 +1394,29 @@ class Automation {
         global $database;
         $info_spy = "";
                         if ($data['spy'] == 1){
-                            $info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
-				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
-				 <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".round($totiron)." |
-				 <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".round($totcrop)."</div>
-				 <div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\" />Total Resources: ".round($totwood+$totclay+$totiron+$totcrop)."</div>
+                            $info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"".LUMBER."\" title=\"".LUMBER."\" />".round($totwood)." |
+				 <img class=\"r2\" src=\"img/x.gif\" alt=\"".CLAY."\" title=\"".CLAY."\" />".round($totclay)." |
+				 <img class=\"r3\" src=\"img/x.gif\" alt=\"".IRON."\" title=\"".IRON."\" />".round($totiron)." |
+				 <img class=\"r4\" src=\"img/x.gif\" alt=\"".CROP."\" title=\"".CROP."\" />".round($totcrop)."</div>
+				 <div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"".rc_tok('CARRY')."\" title=\"".rc_tok('CARRY')."\" />".rc_tok('RC_TOTAL_RESOURCES')." ".round($totwood+$totclay+$totiron+$totcrop)."</div>
 	";
                         }else if($data['spy'] == 2){
                             if ($isoasis == 0){
                                 $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33');
                                 $residencelevel = $database->getFieldLevelInVillage($data['to'], 25);
                                 $palacelevel = $database->getFieldLevelInVillage($data['to'], 26);
-                                $residenceimg = "<img src=\"".GP_LOCATE."img/g/g25.gif\" height=\"20\" width=\"15\" alt=\"Residence\" title=\"Residence\" />";
-                                $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"Palace\" title=\"Palace\" />";
-                                $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"Cranny\" title=\"Cranny\" />";
-                                $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"Wall\" title=\"Wall\" />";
+                                $residenceimg = "<img src=\"".GP_LOCATE."img/g/g25.gif\" height=\"20\" width=\"15\" alt=\"".RESIDENCE."\" title=\"".RESIDENCE."\" />";
+                                $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"".PALACE."\" title=\"".PALACE."\" />";
+                                $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"".CRANNY."\" title=\"".CRANNY."\" />";
+                                $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"".rc_tok('RC_WALL')."\" title=\"".rc_tok('RC_WALL')."\" />";
                                 $info_spy = "".$spy_pic.",";
-                                if($residencelevel > 0) $info_spy .= $residenceimg." Residence level:<b>".$residencelevel."</b><br />";
-                                elseif($palacelevel > 0) $info_spy .= $palaceimg." Palace level: <b>".$palacelevel."</b><br />";
-                                
-                                if($walllevel > 0) $info_spy .= $wallimg." Wall level: <b>".$walllevel."</b><br />";
-                                $info_spy .= $crannyimg." Total crannies capacity: <b>".$crannySpy."</b>";
+                                if($residencelevel > 0) $info_spy .= $residenceimg." ".rc_tok('RC_RESIDENCE_LEVEL')."<b>".$residencelevel."</b><br />";
+                                elseif($palacelevel > 0) $info_spy .= $palaceimg." ".rc_tok('RC_PALACE_LEVEL')." <b>".$palacelevel."</b><br />";
+
+                                if($walllevel > 0) $info_spy .= $wallimg." ".rc_tok('RC_WALL_LEVEL')." <b>".$walllevel."</b><br />";
+                                $info_spy .= $crannyimg." ".rc_tok('RC_CRANNY_CAPACITY')." <b>".$crannySpy."</b>";
                             }
-                            else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
+                            else $info_spy = "".$spy_pic.", ".rc_tok('RC_NO_INFO');
                         }
         return $info_spy;
     }
@@ -1520,8 +1520,8 @@ class Automation {
         }
         $database->deletePrisoners($prisoners2delete);
 
-        $ownDeadsText     = ($ownAlive     = $mytroops     - $ownDeads)     > 0 ? " of which <b>".$ownAlive."</b> have been saved"     : "";
-        $anotherDeadsText = ($anotherAlive = $anothertroops - $anotherDeads) > 0 ? " of which <b>".$anotherAlive."</b> have been saved" : "";
+        $ownDeadsText     = ($ownAlive     = $mytroops     - $ownDeads)     > 0 ? " ".rc_tok('RC_OF_WHICH_SAVED',$ownAlive)     : "";
+        $anotherDeadsText = ($anotherAlive = $anothertroops - $anotherDeads) > 0 ? " ".rc_tok('RC_OF_WHICH_SAVED',$anotherAlive) : "";
 
         $database->addGeneralAttack($ownDeads + $anotherDeads);
 
@@ -1535,15 +1535,15 @@ class Automation {
             $database->trainUnit($to['wref'], 99, $newtraps, $u99['pop'], $repairDuration, 0);
         }
 
-        $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
+        $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"".rc_tok('RC_TRAP')."\" title=\"".rc_tok('RC_TRAP')."\" />";
         $p_username  = $database->getUserField($from['owner'], "username", 0);
 
         if ($mytroops > 0 && $anothertroops > 0) {
-            return $trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText." and <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
+            return $trapper_pic." <b>".$p_username."</b> ".rc_tok('RC_FREED_FROM_HIS_TROOPS', $mytroops).$ownDeadsText." ".rc_tok('RC_AND_FRIENDLY_TROOPS', $anothertroops).$anotherDeadsText.".";
         } elseif ($mytroops > 0) {
-            return $trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText.".";
+            return $trapper_pic." <b>".$p_username."</b> ".rc_tok('RC_FREED_FROM_HIS_TROOPS', $mytroops).$ownDeadsText.".";
         } elseif ($anothertroops > 0) {
-            return $trapper_pic." <b>".$p_username."</b> freed <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
+            return $trapper_pic." <b>".$p_username."</b> ".rc_tok('RC_FREED_FRIENDLY_TROOPS', $anothertroops).$anotherDeadsText.".";
         }
         return '';
     }
@@ -1613,10 +1613,10 @@ class Automation {
                     .',,'.$unitstraped_att;
         } else {
             if (isset($village_destroyed) && $village_destroyed == 1 && $can_destroy == 1) {
-                if (strpos($info_cat, "The village has") === false) {
-                    $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">"
-                               . "<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" />"
-                               . " The village has been destroyed.</td></tr></tbody>";
+                if (strpos($info_cat, rc_tok('RC_VILLAGE_DESTROYED')) === false) {
+                    $info_cat .= "<tbody class=\"goods\"><tr><th>".INFORMATION."</th><td colspan=\"11\">"
+                               . "<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"".rc_tok('RC_CATAPULT')."\" title=\"".rc_tok('RC_CATAPULT')."\" />"
+                               . " ".rc_tok('RC_VILLAGE_DESTROYED')."</td></tr></tbody>";
                 }
             }
             $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att
@@ -2114,7 +2114,7 @@ class Automation {
     private function applyRamDamage($data, $walllevel, $wallid, $ram_pic, $battlepart, array $ctx) {
         global $database, $battle;
 
-        $info_ram = "".$ram_pic.",There is no wall to destroy.";
+        $info_ram = "".$ram_pic.",".rc_tok('RC_NO_WALL');
 
         if($walllevel > 0){
             $ramsDamage = $battle->calculateCatapultsDamage($data['t7'],
@@ -2126,13 +2126,13 @@ class Automation {
             $newLevel = $battle->calculateNewBuildingLevel($walllevel, $ramsDamage);
 
             if ($newLevel == 0){
-                $info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
+                $info_ram = "".$ram_pic.",".rc_tok('RC_WALL_DESTROYED');
                 $database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
                 $this->recountPop($data['to']);
             }elseif ($newLevel == $walllevel){
-                $info_ram = "".$ram_pic.",Wall was not damaged.";
+                $info_ram = "".$ram_pic.",".rc_tok('RC_WALL_NOT_DAMAGED');
             }else{
-                $info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$newLevel."</b>.";
+                $info_ram = "".$ram_pic.",".rc_tok('RC_WALL_DAMAGED_FROM_TO', $walllevel, $newLevel);
                 $database->setVillageLevel($data['to'],"f".$wallid."",$newLevel);
             }
 
@@ -2650,10 +2650,10 @@ class Automation {
         if(($data['t11'] - $dead11 - $traped11) > 0){ //hero
             if ($heroxp == 0) {
                 $xp = "";
-                $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
+                $info_hero = $hero_pic.",".rc_tok('RC_HERO_NO_KILL');
             } else {
-                $xp = " and gained <b>".$heroxp."</b> XP from the battle.";
-                $info_hero = $hero_pic.",Your hero gained <b>".$heroxp."</b> XP.";
+                $xp = " ".rc_tok('RC_HERO_AND_GAINED_XP_BATTLE', $heroxp);
+                $info_hero = $hero_pic.",".rc_tok('RC_HERO_GAINED_XP', $heroxp);
             }
 
             if ($isoasis != 0) { //oasis fix by ronix
@@ -2662,7 +2662,7 @@ class Automation {
                     $canqured = $database->canConquerOasis($data['from'], $data['to'], false);
                     if ($canqured == 1 && $troopcount == 0) {
                         $database->conquerOasis($data['from'], $data['to']);
-                        $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
+                        $info_hero = $hero_pic.",".rc_tok('RC_HERO_CONQUERED_OASIS').$xp;
                     }else{
                         if ($canqured == 3 && $troopcount == 0) {
                             if ($type == 3) {
@@ -2670,40 +2670,40 @@ class Automation {
                                 //$database->modifyOasisLoyalty($data['to']);
                                 //$OasisInfo = $database->getOasisInfo($data['to']);
                                 $Oloyaltynow = intval($database->modifyOasisLoyalty($data['to']));//intval($OasisInfo['loyalty']);
-                                $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore.$xp;
+                                $info_hero = $hero_pic.",".rc_tok('RC_HERO_REDUCED_OASIS_LOYALTY', $Oloyaltynow, $Oloyaltybefore).$xp;
                             }
-                            else $info_hero = $hero_pic.",Could not reduce loyalty during raid".$xp;                              
+                            else $info_hero = $hero_pic.",".rc_tok('RC_NO_REDUCE_LOYALTY_RAID').$xp;
                         }
                     }
                 }
             } else {
-                if ($heroxp == 0) $xp=" no XP from the battle.";
-                else $xp=" gained <b>".$heroxp."</b> XP from the battle.";
+                if ($heroxp == 0) $xp=" ".rc_tok('RC_HERO_NO_XP_BATTLE');
+                else $xp=" ".rc_tok('RC_HERO_GAINED_XP_BATTLE', $heroxp);
 
                 $artifact = reset($database->getOwnArtefactInfo($data['to']));
                 if (!empty($artifact)) {
                     if ($type == 3) {
                         if (empty($artifactError = $database->canClaimArtifact($data['from'], $artifact['vref'], $artifact['size'], $artifact['type']))) {
                             $database->claimArtefact($data['from'], $data['to'], $database->getVillageField($data['from'], "owner"));
-                            $info_hero = $hero_pic.",Your hero is carrying home the artifact <b>".$artifact['name']."</b> and".$xp;
+                            $info_hero = $hero_pic.",".rc_tok('RC_HERO_CARRYING_ARTIFACT', $artifact['name']).$xp;
 
                             // if the defender pop is 0 with no artefact, then destroy the village
                             if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
                                 $can_destroy = $village_destroyed = 1;
-                                if(strpos($info_cat, "The village has") === false) $info_hero .= " The village has been destroyed.";
+                                if(strpos($info_cat, rc_tok('RC_VILLAGE_DESTROYED')) === false) $info_hero .= " ".rc_tok('RC_VILLAGE_DESTROYED');
                             }
                         }
                         else $info_hero = $hero_pic.",".$artifactError.$xp;
                     }
-                    else $info_hero = $hero_pic.",Your hero could not claim an artifact during raid".$xp;    
+                    else $info_hero = $hero_pic.",".rc_tok('RC_HERO_NO_ARTIFACT_RAID').$xp;
                 }
             }
         }elseif($data['t11'] > 0) {
             if ($heroxp == 0) $xp = "";     
-            else $xp = " but gained <b>".$heroxp."</b> XP from the battle.";
+            else $xp = " ".rc_tok('RC_HERO_BUT_GAINED_XP_BATTLE', $heroxp);
 
-            if ($traped11 > 0) $info_hero = $hero_pic.",Your hero was trapped".$xp;                    
-            else $info_hero = $hero_pic.",Your hero died".$xp;
+            if ($traped11 > 0) $info_hero = $hero_pic.",".rc_tok('RC_HERO_TRAPPED').$xp;
+            else $info_hero = $hero_pic.",".rc_tok('RC_HERO_DIED').$xp;
         }
     }
 
@@ -3289,7 +3289,7 @@ class Automation {
 
                     // prisoners freed during conquest attacks — extracted to handlePrisoners() [#155]
                     $info_trap  = empty($scout) ? $this->handlePrisoners($data, $from, $to, $ownally, $type, $totalsend_att, $totaldead_att, $totaltraped_att) : '';
-                    $info_troop = ($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) <= 0) ? "None of your soldiers returned." : "";
+                    $info_troop = ($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) <= 0) ? rc_tok('RC_NONE_RETURNED') : "";
 
                     // assemble data2 + data_fail — extracted to buildCombatReport() [#155]
                     $report    = $this->buildCombatReport(

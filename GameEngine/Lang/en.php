@@ -200,6 +200,65 @@ tz_def('NATAR_COUNTERFORCE', 'Natar Counterforce');
 tz_def('FROM_THE_VILL', 'from the village');
 tz_def('CASUALTIES', 'Casualties');
 tz_def('INFORMATION', 'Information');
+// === Battle report strings (issue: i18n of combat reports) ===
+tz_def('RC_HERO', 'Hero');
+tz_def('RC_CATAPULT', 'Catapult');
+tz_def('RC_TRAP', 'Trap');
+tz_def('RC_WALL', 'Wall');
+tz_def('TZ_AT', 'at');
+// Catapults
+tz_def('RC_DESTROYED', 'destroyed');
+tz_def('RC_NOT_DAMAGED', 'was not damaged.');
+tz_def('RC_DAMAGED_FROM_TO', 'damaged from level <b>%s</b> to level <b>%s</b>.');
+tz_def('RC_NO_BUILDINGS', 'There are no buildings left to destroy');
+tz_def('RC_VILLAGE_ALREADY_DESTROYED', 'Village already destroyed.');
+tz_def('RC_VILLAGE_CANT_DESTROY', "Village can't be destroyed.");
+tz_def('RC_VILLAGE_CANT_BE', "Village can't be");
+tz_def('RC_VILLAGE_DESTROYED', 'The village has been destroyed.');
+// Rams
+tz_def('RC_NO_WALL', 'There is no wall to destroy.');
+tz_def('RC_WALL_DESTROYED', 'Wall <b>destroyed</b>.');
+tz_def('RC_WALL_NOT_DAMAGED', 'Wall was not damaged.');
+tz_def('RC_WALL_DAMAGED_FROM_TO', 'Wall damaged from level <b>%s</b> to level <b>%s</b>.');
+// Conquest / chief
+tz_def('RC_NO_REDUCE_CP_RAID', 'Could not reduce cultural points during raid');
+tz_def('RC_NOT_ENOUGH_CP', 'Not enough culture points.');
+tz_def('RC_CANT_TAKEOVER', 'You cant take over this village.');
+tz_def('RC_RESIDENCE_NOT_DESTROYED', "The Palace/Residence isn't destroyed!");
+tz_def('RC_LOYALTY_LOWERED', 'The loyalty was lowered from <b>%s</b> to <b>%s</b>.');
+tz_def('RC_INHABITANTS_JOIN', 'Inhabitants of %s village decided to join your empire.');
+// Hero
+tz_def('RC_HERO_NO_KILL', 'Your hero had nothing to kill therefore gains no XP at all.');
+tz_def('RC_HERO_GAINED_XP', 'Your hero gained <b>%s</b> XP.');
+tz_def('RC_HERO_CONQUERED_OASIS', 'Your hero has conquered this oasis');
+tz_def('RC_HERO_REDUCED_OASIS_LOYALTY', 'Your hero has reduced oasis loyalty to %s from %s');
+tz_def('RC_NO_REDUCE_LOYALTY_RAID', 'Could not reduce loyalty during raid');
+tz_def('RC_HERO_CARRYING_ARTIFACT', 'Your hero is carrying home the artifact <b>%s</b> and');
+tz_def('RC_HERO_NO_ARTIFACT_RAID', 'Your hero could not claim an artifact during raid');
+tz_def('RC_HERO_AND_GAINED_XP_BATTLE', 'and gained <b>%s</b> XP from the battle.');
+tz_def('RC_HERO_NO_XP_BATTLE', 'no XP from the battle.');
+tz_def('RC_HERO_GAINED_XP_BATTLE', 'gained <b>%s</b> XP from the battle.');
+tz_def('RC_HERO_BUT_GAINED_XP_BATTLE', 'but gained <b>%s</b> XP from the battle.');
+tz_def('RC_HERO_TRAPPED', 'Your hero was trapped');
+tz_def('RC_HERO_DIED', 'Your hero died');
+// Scout report
+tz_def('RC_TOTAL_RESOURCES', 'Total Resources:');
+tz_def('RC_RESIDENCE_LEVEL', 'Residence level:');
+tz_def('RC_PALACE_LEVEL', 'Palace level:');
+tz_def('RC_WALL_LEVEL', 'Wall level:');
+tz_def('RC_CRANNY_CAPACITY', 'Total crannies capacity:');
+tz_def('RC_NO_INFO', 'There are no informations to show');
+// Prisoners / traps
+tz_def('RC_OF_WHICH_SAVED', 'of which <b>%s</b> have been saved');
+tz_def('RC_FREED_FROM_HIS_TROOPS', 'freed <b>%s</b> from his troops');
+tz_def('RC_FREED_FRIENDLY_TROOPS', 'freed <b>%s</b> friendly troops');
+tz_def('RC_AND_FRIENDLY_TROOPS', 'and <b>%s</b> friendly troops');
+// Troop return
+tz_def('RC_NONE_RETURNED', 'None of your soldiers returned.');
+// === End battle report strings ===
+// Embassy-destruction status lines, appended to the catapult battle report.
+tz_def('MSG_ALLIANCE_DISPERSED_STATUS', "This player's alliance has been dispersed.");
+tz_def('MSG_FORCED_LEAVE_STATUS', 'Player was forced to leave their alliance.');
 tz_def('CARRY', 'carry');
 tz_def('DEFENDER', 'Defender');
 tz_def('VISITED', 'visited');
@@ -2495,6 +2554,52 @@ tz_def('MANUAL_NF_D_23', "The medal of which is awarded to players losing by the
 tz_def('MANUAL_NF_D_24', "The medal of which is awarded to players losing by the same email address of 5 or more years. Can be added to the profile description. This function was presented in Travian T4.");
 tz_def('MANUAL_NF_D_25', "The medal of which is awarded to players losing by the same email address of 10 or more years. Can be added to the profile description. This function was presented in Travian T4.");
 tz_def('MANUAL_NF_D_26', "The medal of which is awarded to players losing by the same email address of 10 or more years. Can be added to the profile description. This function was presented in Travian T4.");
+
+// ===== per-reader localization of battle reports (token layer) =====
+// Battle reports are generated server-side at resolution time, in whichever
+// player's language happened to trigger the automation tick. To make the
+// *body* read in each viewer's own language instead, the report builders store
+// language-neutral TOKENS in the notice payload and tz_expand_report() expands
+// them at display time in the reader's LANG. Token grammar (no commas, so it
+// survives the CSV payload):
+//   {{KEY}}            -> CONST                              (e.g. {{RC_WALL_NOT_DAMAGED}})
+//   {{KEY|a|b}}        -> vsprintf(CONST, [a, b])            (args are rawurlencoded)
+//   {{BLD|type|mode}}  -> building name in the reader's language
+// rc_tok()/rc_bld() are the emit-side helpers (used by the report builders).
+// Unknown / undefined tokens are left untouched, and old reports stored as
+// plain text (pre-token) pass through unchanged.
+if (!function_exists('rc_tok')) {
+    function rc_tok($key /* , ...$args */) {
+        $args = array_slice(func_get_args(), 1);
+        if (!$args) return '{{' . $key . '}}';
+        return '{{' . $key . '|' . implode('|', array_map('rawurlencode', $args)) . '}}';
+    }
+}
+if (!function_exists('rc_bld')) {
+    function rc_bld($type, $mode = 0) {
+        return '{{BLD|' . (int) $type . '|' . (int) $mode . '}}';
+    }
+}
+if (!function_exists('tz_build_name')) {
+    function tz_build_name($type, $mode = 0) {
+        $b = Building::procResType((int) $type);
+        return ($b === '' && !$mode) ? RC_VILLAGE_CANT_BE : $b;
+    }
+}
+if (!function_exists('tz_expand_report')) {
+    function tz_expand_report($s) {
+        if (!is_string($s) || strpos($s, '{{') === false) return $s;
+        return preg_replace_callback('/\{\{([A-Z0-9_]+)((?:\|[^|{}]*)*)\}\}/', function ($m) {
+            $key  = $m[1];
+            $args = ($m[2] === '') ? [] : array_map('rawurldecode', explode('|', substr($m[2], 1)));
+            if ($key === 'BLD') {
+                return tz_build_name($args[0] ?? 0, $args[1] ?? 0);
+            }
+            if (!defined($key)) return $m[0];
+            return $args ? vsprintf(constant($key), $args) : constant($key);
+        }, $s);
+    }
+}
 
 // ===== display-time localization of stored report topics =====
 // Reports are generated server-side at battle resolution and stored in the DB

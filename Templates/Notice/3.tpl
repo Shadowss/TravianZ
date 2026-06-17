@@ -7,7 +7,7 @@
 #  - Reduced redundant queries
 #################################################################################
 
-$dataarray = explode(",", $message->readingNotice['data']);
+$dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));
 
 // ======================== CONFIG ========================
 $hasHero = (isset($dataarray[184]) && $dataarray[184] > 0);
@@ -82,7 +82,7 @@ if ($database->isVillageOases($dataarray[29])) {
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
     <td class="sent"><?php echo TZ_SENT; ?></td>
-    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." ".TZ_AT." ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
 </tr>
 
 </thead>
@@ -117,7 +117,7 @@ for ($i = $start; $i <= ($start + 9); $i++) {
 }
 
 if ($hasHero) {
-    echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+    echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"".RC_HERO."\" alt=\"".RC_HERO."\" /></td>";
 }
 
 echo "</tr><tr><th>".TROOPS."</th>";

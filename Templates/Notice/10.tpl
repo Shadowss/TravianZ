@@ -7,7 +7,7 @@
 #  - Improved readability + minor performance gain
 #################################################################################
 
-$dataarray = explode(",", $message->readingNotice['data']);
+$dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));
 
 // ======================== URL SETUP ========================
 
