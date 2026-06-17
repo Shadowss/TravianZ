@@ -256,6 +256,30 @@ tz_def('RC_AND_FRIENDLY_TROOPS', 'and <b>%s</b> friendly troops');
 // Troop return
 tz_def('RC_NONE_RETURNED', 'None of your soldiers returned.');
 // === End battle report strings ===
+// === System / alliance in-game messages (sendMessage), rendered per reader ===
+tz_def('MSG_INVITE_ALLIANCE', 'Invitation to Alliance');
+tz_def('MSG_FORUM_NEW_TITLE', 'New Message in Forum');
+tz_def('MSG_FORUM_NEW_BODY', "Hi!\n\n<a href=\"%s\">%s</a> posted a new message into your common topic. Here's a link that will get you there: <a href=\"%s\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_LEFT_ALLIANCE_TITLE', 'You left the alliance');
+tz_def('MSG_FORCED_LEAVE_TITLE', 'An attack has forced you to leave the alliance');
+tz_def('MSG_LEFT_DEMOLITION_BODY', "Hi, %s!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_LEFT_ATTACK_BODY', "Hi, %s!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_DISBAND_TITLE', 'Your alliance was disbanded');
+tz_def('MSG_DISBAND_OWNER_BODY', "Hi, %s!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_DISBAND_MEMBER_BODY', "Hi, %s!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\nYou can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_NOW_ALLIANCE_LEADER_TITLE', 'You are now the alliance leader');
+tz_def('MSG_NOW_LEADER_TITLE', 'You are now leader of your alliance');
+tz_def('MSG_PROMOTE_BODY', "Hi, %s!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=%s\">%s</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_DISPERSE_TITLE', 'Your alliance was dispersed');
+tz_def('MSG_DISPERSE_OWNER_BODY_MANY', "Hi, %s!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all %s alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_DISPERSE_OWNER_BODY_FEW', "Hi, %s!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level lower then 3 - which is required to found and hold your own alliance - your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_DISPERSE_MEMBER_BODY', "Hi, %s!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all %s alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_NEW_LEADER_TITLE', 'Your alliance has a new leader');
+tz_def('MSG_NEWLEADER_OWNER_BODY', "Hi, %s!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all %s alliance members, another alliance member who meets these criteria has been auto-elected as a new alliance leader.\n\nAdditionally - due to the Embassy destruction - you have been forcefuly evicted from your alliance.\n\nPlease re-establish the connection with your alliance by building a new Embassy and contacting <a href=\"spieler.php?uid=%s\">the new leader</a> for an invitation.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_NEWLEADER_MEMBER_BODY', "Hi, %s!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player, <a href=\"spieler.php?uid=%s\">another alliance member</a> with enough Embassy capacity has been auto-elected as the new alliance leader.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_FORCED_LEAVE_BODY', "Hi, %s!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the <a href=\"spieler.php?uid=%s\">newly auto-elected leader</a> to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_INVITE_BODY', "Hi, %s!\n\nThis is to inform you that you have been invited to join an alliance. To accept this invitation, please visit your Embassy.\n\nYours sincerely,\n<i>Server Robot :)</i>");
+tz_def('MSG_QUIT_REPLACEMENT_BODY', "Hi!\n\nThis is to inform you that the former leader of your alliance - %s, has decided to quit and elected you as his replacement. You now gain full access, administration and responsibilities to your alliance.\n\nGood luck!\n\nYours sincerely,\n<i>Server Robot :)</i>");
 // Embassy-destruction status lines, appended to the catapult battle report.
 tz_def('MSG_ALLIANCE_DISPERSED_STATUS', "This player's alliance has been dispersed.");
 tz_def('MSG_FORCED_LEAVE_STATUS', 'Player was forced to leave their alliance.');

@@ -107,7 +107,7 @@
                     // SUBJECT
                     // ======================================================
                     echo "<td class=\"top\">
-                            <a href=\"nachrichten.php?id=" . $msg['id'] . "\">" . $msg['topic'] . "</a>";
+                            <a href=\"nachrichten.php?id=" . $msg['id'] . "\">" . tz_expand_report($msg['topic']) . "</a>";
 
                     if ($msg['viewed'] == 0) {
                         echo " (new)";
