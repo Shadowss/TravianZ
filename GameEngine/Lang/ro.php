@@ -253,6 +253,30 @@ define('RC_AND_FRIENDLY_TROOPS', 'și <b>%s</b> trupe aliate');
 // Troop return
 define('RC_NONE_RETURNED', 'Niciunul dintre soldații tăi nu s-a întors.');
 // === End battle report strings ===
+// === System / alliance in-game messages (sendMessage), rendered per reader ===
+define('MSG_INVITE_ALLIANCE', 'Invitație în alianță');
+define('MSG_FORUM_NEW_TITLE', 'Mesaj nou pe forum');
+define('MSG_FORUM_NEW_BODY', "Salut!\n\n<a href=\"%s\">%s</a> a publicat un mesaj nou în subiectul vostru comun. Iată un link care te va duce acolo: <a href=\"%s\">link forum</a>\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_LEFT_ALLIANCE_TITLE', 'Ai părăsit alianța');
+define('MSG_FORCED_LEAVE_TITLE', 'Un atac te-a forțat să părăsești alianța');
+define('MSG_LEFT_DEMOLITION_BODY', "Salut, %s!\n\nTe informăm că, în urma demolării finalizate a ultimei tale Ambasade, ai părăsit acum cu succes alianța.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_LEFT_ATTACK_BODY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit și a distrugerii ultimei tale Ambasade, ai fost forțat să părăsești alianța.\n\nPentru a-ți restabili poziția în această alianță, va trebui să construiești o nouă Ambasadă și să-i ceri liderului să-ți trimită din nou o invitație.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_DISBAND_TITLE', 'Alianța ta a fost desființată');
+define('MSG_DISBAND_OWNER_BODY', "Salut, %s!\n\nTe informăm că, în urma demolării finalizate a ultimei tale Ambasade de nivel 3 și a faptului că erai liderul alianței, această alianță a fost desființată.\n\nPentru a fonda o nouă alianță, te rugăm să construiești din nou o Ambasadă de nivel 3 într-unul dintre satele tale.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_DISBAND_MEMBER_BODY', "Salut, %s!\n\nTe informăm că, în urma demolării ultimei Ambasade a fondatorului alianței tale sub nivelul 3, această alianță a fost desființată.\n\nAcum poți accepta invitații de la alte alianțe sau poți fonda tu însuți o nouă alianță.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_NOW_ALLIANCE_LEADER_TITLE', 'Acum ești liderul alianței');
+define('MSG_NOW_LEADER_TITLE', 'Acum ești liderul alianței tale');
+define('MSG_PROMOTE_BODY', "Salut, %s!\n\nTe informăm că a avut loc un atac reușit asupra jucătorului <a href=\"spieler.php?uid=%s\">%s</a>, care i-a avariat Ambasada suficient de mult încât nu mai poate susține conducerea alianței tale.\n\nDeoarece nivelul Ambasadei tale este suficient, ai fost ales automat în poziția de nou lider al alianței, cu toate îndatoririle și responsabilitățile aferente.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_DISPERSE_TITLE', 'Alianța ta a fost dispersată');
+define('MSG_DISPERSE_OWNER_BODY_MANY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit care ți-a degradat ultima Ambasadă la un nivel care nu poate susține toți cei %s membri ai alianței și deoarece niciun alt membru nu avea o Ambasadă de nivel suficient de înalt pentru a prelua conducerea, alianța ta a fost dispersată.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_DISPERSE_OWNER_BODY_FEW', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit care ți-a degradat ultima Ambasadă la un nivel sub 3 - necesar pentru a fonda și menține propria alianță - alianța ta a fost dispersată.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_DISPERSE_MEMBER_BODY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit al altui jucător asupra Ambasadei liderului alianței tale, care a degradat-o sub pragul necesar pentru a susține toți cei %s membri, și deoarece niciun alt membru nu avea o Ambasadă de nivel suficient de înalt pentru a prelua conducerea, alianța ta a fost dispersată.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_NEW_LEADER_TITLE', 'Alianța ta are un nou lider');
+define('MSG_NEWLEADER_OWNER_BODY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit care ți-a degradat ultima Ambasadă la un nivel ce nu poate susține toți cei %s membri ai alianței, un alt membru care îndeplinește aceste criterii a fost ales automat ca nou lider al alianței.\n\nÎn plus - din cauza distrugerii Ambasadei - ai fost expulzat din alianța ta.\n\nTe rugăm să restabilești legătura cu alianța ta construind o nouă Ambasadă și contactând <a href=\"spieler.php?uid=%s\">noul lider</a> pentru o invitație.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_NEWLEADER_MEMBER_BODY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit al altui jucător asupra Ambasadei liderului alianței tale, <a href=\"spieler.php?uid=%s\">un alt membru al alianței</a> cu o capacitate de Ambasadă suficientă a fost ales automat ca nou lider al alianței.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_FORCED_LEAVE_BODY', "Salut, %s!\n\nTe informăm că, în urma unui atac reușit și a distrugerii ultimei tale Ambasade, ai fost forțat să părăsești alianța.\n\nPentru a-ți restabili poziția în această alianță, va trebui să construiești o nouă Ambasadă și să-i ceri <a href=\"spieler.php?uid=%s\">noului lider ales</a> să-ți trimită din nou o invitație.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_INVITE_BODY', "Salut, %s!\n\nTe informăm că ai fost invitat să te alături unei alianțe. Pentru a accepta această invitație, te rugăm să vizitezi Ambasada ta.\n\nCu stimă,\n<i>Robotul serverului :)</i>");
+define('MSG_QUIT_REPLACEMENT_BODY', "Salut!\n\nTe informăm că fostul lider al alianței tale - %s - a decis să plece și te-a ales ca înlocuitor. Acum primești acces complet, administrare și responsabilități asupra alianței tale.\n\nMult succes!\n\nCu stimă,\n<i>Robotul serverului :)</i>");
 // Embassy-destruction status lines, appended to the catapult battle report.
 define('MSG_ALLIANCE_DISPERSED_STATUS', 'Alianța acestui jucător a fost dispersată.');
 define('MSG_FORCED_LEAVE_STATUS', 'Jucătorul a fost forțat să-și părăsească alianța.');

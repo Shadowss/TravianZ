@@ -3016,8 +3016,13 @@ class MYSQLi_DB implements IDbConnection {
                             $this->sendMessage(
                                 (int) $row['owner'],
                                 4,
-                                'New Message in Forum',
-                                "Hi!\n\n<a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$this->escape($session->username)."</a> posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
+                                rc_tok('MSG_FORUM_NEW_TITLE'),
+                                rc_tok(
+                                    'MSG_FORUM_NEW_BODY',
+                                    rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid,
+                                    $this->escape($session->username),
+                                    rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids"
+                                ),
                                 0,
                                 0,
                                 0,
@@ -5038,10 +5043,10 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         $this->evictUserFromAlliance($userData['id']);
         $this->deleteAlliPermissions($userData['id']);
 
-        $msgTitle = $demolition ? 'You left the alliance' : 'An attack has forced you to leave the alliance';
+        $msgTitle = $demolition ? rc_tok('MSG_LEFT_ALLIANCE_TITLE') : rc_tok('MSG_FORCED_LEAVE_TITLE');
         $msgBody = $demolition
-            ? "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>"
-            : "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>";
+            ? rc_tok('MSG_LEFT_DEMOLITION_BODY', $userData['username'])
+            : rc_tok('MSG_LEFT_ATTACK_BODY', $userData['username']);
 
         $this->sendMessage($userData['id'], 4, $msgTitle, $this->escape($msgBody), 0,0,0,0,0,true);
         
@@ -5078,10 +5083,10 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         foreach ($members as $member) {
             $evicts[] = $member['id'];
             $isOwner = ($member['id'] == $ownerData['id']);
-            $title = 'Your alliance was disbanded';
+            $title = rc_tok('MSG_DISBAND_TITLE');
             $body = $isOwner
-                ? "Hi, ".$ownerData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>"
-                : "Hi, ".$member['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\nYou can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>";
+                ? rc_tok('MSG_DISBAND_OWNER_BODY', $ownerData['username'])
+                : rc_tok('MSG_DISBAND_MEMBER_BODY', $member['username']);
             
             $this->sendMessage($member['id'], 4, $title, $this->escape($body), 0,0,0,0,0,true);
             $this->deleteAlliPermissions($member['id']);
@@ -5123,11 +5128,11 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         $this->updateAlliPermissions($oldLeaderId, $allyId, "Former Leader", 0,0,0,0,0,0,0);
 
         if ($customMessage === null) {
-            $msg = "Hi, $newLeaderName!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=$oldLeaderId\">".$oldLeaderData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>";
-            $title = 'You are now the alliance leader';
+            $msg = rc_tok('MSG_PROMOTE_BODY', $newLeaderName, $oldLeaderId, $oldLeaderData['username']);
+            $title = rc_tok('MSG_NOW_ALLIANCE_LEADER_TITLE');
         } else {
             $msg = $customMessage;
-            $title = 'You are now leader of your alliance';
+            $title = rc_tok('MSG_NOW_LEADER_TITLE');
         }
         $this->sendMessage($newLeaderId, 4, $title, $this->escape($msg), 0,0,0,0,0,true);
         $this->clearQueryCache('alliance');
@@ -5140,10 +5145,14 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         }
         foreach ($members as $m) {
             $isOwner = ($m['id'] == $ownerData['id']);
-            $title = 'Your alliance was dispersed';
-            $body = $isOwner
-                ? "Hi, ".$ownerData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level ".($membersCount>1?"which is unable to hold all $membersCount alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership,":"lower then 3 - which is required to found and hold your own alliance - ")." your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>"
-                : "Hi, ".$m['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all $membersCount alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>";
+            $title = rc_tok('MSG_DISPERSE_TITLE');
+            if ($isOwner) {
+                $body = ($membersCount > 1)
+                    ? rc_tok('MSG_DISPERSE_OWNER_BODY_MANY', $ownerData['username'], $membersCount)
+                    : rc_tok('MSG_DISPERSE_OWNER_BODY_FEW', $ownerData['username']);
+            } else {
+                $body = rc_tok('MSG_DISPERSE_MEMBER_BODY', $m['username'], $membersCount);
+            }
             $this->sendMessage($m['id'], 4, $title, $this->escape($body), 0,0,0,0,0,true);
             $this->deleteAlliPermissions($m['id']);
         }
@@ -5159,17 +5168,17 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
             if (!$keepOwner && $m['id'] == $ownerData['id']) continue;
             
             $isOwner = ($m['id'] == $ownerData['id']);
-            $title = 'Your alliance has a new leader';
+            $title = rc_tok('MSG_NEW_LEADER_TITLE');
             $body = $isOwner
-                ? "Hi, ".$ownerData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".count($members)." alliance members, another alliance member who meets these criteria has been auto-elected as a new alliance leader.\n\nAdditionally - due to the Embassy destruction - you have been forcefuly evicted from your alliance.\n\nPlease re-establish the connection with your alliance by building a new Embassy and contacting <a href=\"spieler.php?uid=$newLeaderId\">the new leader</a> for an invitation.\n\nYours sincerely,\n<i>Server Robot :)</i>"
-                : "Hi, ".$m['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player, <a href=\"spieler.php?uid=$newLeaderId\">another alliance member</a> with enough Embassy capacity has been auto-elected as the new alliance leader.\n\nYours sincerely,\n<i>Server Robot :)</i>";
+                ? rc_tok('MSG_NEWLEADER_OWNER_BODY', $ownerData['username'], count($members), $newLeaderId)
+                : rc_tok('MSG_NEWLEADER_MEMBER_BODY', $m['username'], $newLeaderId);
             $this->sendMessage($m['id'], 4, $title, $this->escape($body), 0,0,0,0,0,true);
         }
 
         if (!$keepOwner) {
             $this->evictUserFromAlliance($ownerData['id']);
-            $msg = "Hi, ".$ownerData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the <a href=\"spieler.php?uid=$newLeaderId\">newly auto-elected leader</a> to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>";
-            $this->sendMessage($ownerData['id'], 4, 'An attack has forced you to leave the alliance', $this->escape($msg), 0,0,0,0,0,true);
+            $msg = rc_tok('MSG_FORCED_LEAVE_BODY', $ownerData['username'], $newLeaderId);
+            $this->sendMessage($ownerData['id'], 4, rc_tok('MSG_FORCED_LEAVE_TITLE'), $this->escape($msg), 0,0,0,0,0,true);
         }
         $this->deleteAlliance($ownerData['alliance']);
         return true;

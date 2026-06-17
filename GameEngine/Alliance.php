@@ -271,11 +271,8 @@ class Alliance {
             );
 			// Trimite invitație și prin mesaj în joc (dacă este activată funcționalitatea nouă)
             if (NEW_FUNCTIONS_ALLIANCE_INVITATION) {
-                $messageBody = "Hi, " . $UserData['username'] . "!\n\n" .
-                               "This is to inform you that you have been invited to join an alliance. " .
-                               "To accept this invitation, please visit your Embassy.\n\n" .
-                               "Yours sincerely,\n<i>Server Robot :)</i>";
-                $database->sendMessage($UserData['id'], 4, 'Invitation to Alliance', $database->escape($messageBody), 0, 0, 0, 0, 0, true);
+                $messageBody = rc_tok('MSG_INVITE_BODY', $UserData['username']);
+                $database->sendMessage($UserData['id'], 4, rc_tok('MSG_INVITE_ALLIANCE'), $database->escape($messageBody), 0, 0, 0, 0, 0, true);
             }
         }
     }
@@ -599,7 +596,7 @@ class Alliance {
             }
             if (!$valid) { $form->addError("founder", FOUNDER_LEAVE_INVALID); return; }
             // Mesaj specific pentru quit voluntar
-			$messageBody = "Hi!\n\nThis is to inform you that the former leader of your alliance - <a href=\"" . rtrim(SERVER, '/') . "/spieler.php?uid=" . $uid . "\">" . $database->escape($session->username) . "</a>, has decided to quit and elected you as his replacement. You now gain full access, administration and responsibilities to your alliance.\n\nGood luck!\n\nYours sincerely,\n<i>Server Robot :)</i>";
+			$messageBody = rc_tok('MSG_QUIT_REPLACEMENT_BODY', "<a href=\"" . rtrim(SERVER, '/') . "/spieler.php?uid=" . $uid . "\">" . $database->escape($session->username) . "</a>");
             // Folosim metoda centralizată cu mesaj custom
 			$database->promoteNewAllianceLeader($allyId, $newFounderID, $uid, $newFounderName, ['username' => $session->username, 'id' => $uid], $messageBody);
             $_SESSION['alliance_user'] = 0;

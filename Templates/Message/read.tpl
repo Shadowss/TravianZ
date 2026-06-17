@@ -10,7 +10,7 @@
 // ======================================================
 $reading  = $message->reading;
 
-$input    = $reading['message'];
+$input    = tz_expand_report($reading['message']);
 $alliance = $reading['alliance'];
 $player   = $reading['player'];
 $coor     = $reading['coor'];
@@ -77,7 +77,7 @@ $date = $generator->procMtime($reading['time']);
     </div>
 
     <!-- Subject -->
-    <div><?php echo $reading['topic']; ?></div>
+    <div><?php echo tz_expand_report($reading['topic']); ?></div>
 
 </div>
 
