@@ -280,6 +280,20 @@ define('MSG_QUIT_REPLACEMENT_BODY', "Salut!\n\nTe informăm că fostul lider al 
 // Embassy-destruction status lines, appended to the catapult battle report.
 define('MSG_ALLIANCE_DISPERSED_STATUS', 'Alianța acestui jucător a fost dispersată.');
 define('MSG_FORCED_LEAVE_STATUS', 'Jucătorul a fost forțat să-și părăsească alianța.');
+// Alliance news-feed notices (rendered in Templates/Alliance/news.tpl)
+define('MSG_INVITE_NOTICE', '%s l-a invitat pe %s în alianță.');
+define('MSG_ALLIANCE_FOUNDED', 'Alianța a fost fondată de %s.');
+define('MSG_NEWS_REJECTED', '%s a refuzat invitația.');
+define('MSG_NEWS_DELETED_INVITE', '%s a șters invitația pentru %s.');
+define('MSG_NEWS_JOINED', '%s s-a alăturat alianței.');
+define('MSG_NEWS_NAME_CHANGED', '%s a schimbat numele alianței.');
+define('MSG_NEWS_DESC_CHANGED', '%s a schimbat descrierea alianței.');
+define('MSG_NEWS_PERMS_CHANGED', '%s a modificat permisiunile lui %s.');
+define('MSG_NEWS_EXPELLED', '%s a fost exclus din alianță de către %s.');
+define('MSG_NEWS_QUIT', '%s a părăsit alianța.');
+define('MSG_NEWS_DIPLO_CONFED', '%s a oferit o confederație către %s.');
+define('MSG_NEWS_DIPLO_NAP', '%s a oferit un pact de neagresiune către %s.');
+define('MSG_NEWS_DIPLO_WAR', '%s a declarat război către %s.');
 define('CARRY', 'transportă');
 define('DEFENDER', 'Apărător');
 define('VISITED', 'vizitat');
