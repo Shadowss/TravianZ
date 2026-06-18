@@ -1384,6 +1384,7 @@ tz_def('OLD_PASSWORD', 'Old password');
 tz_def('NEW_PASSWORD', 'New password');
 tz_def('CHANGE_EMAIL', 'Change email');
 tz_def('CHANGE_EMAIL2', 'Please enter your old and your new e-mail addresses. You will then receive a code snippet at both e-mail addresses which you have to enter here');
+tz_def('CURRENT_EMAIL', 'Current email');
 tz_def('OLD_EMAIL', 'Old email');
 tz_def('NEW_EMAIL', 'New email');
 tz_def('ACCOUNT_SITTERS', 'Account sitters');
