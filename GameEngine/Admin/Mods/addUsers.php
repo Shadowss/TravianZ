@@ -26,6 +26,16 @@ include_once($autoprefix."GameEngine/Session.php");
 include_once($autoprefix."GameEngine/Automation.php");
 include_once($autoprefix."GameEngine/Database.php");
 
+// Admin-rank guard (defense-in-depth). Reaching any file under /Admin already
+// requires an admin session: Session.php's checkLogin() gates the whole /Admin
+// path on $_SESSION['admin_username'], so a plain player session is bounced to
+// login.php before this point. This re-check aligns addUsers with its sibling
+// Mods (gold.php, cp.php, editResources.php, ...), which all assert the rank
+// here too; it is a redundant safety net, not the sole guard.
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 $wgarray = array(1=>1200,1700,2300,3100,4000,5000,6300,7800,9600,11800,14400,17600,21400,25900,31300,37900,45700,55100,66400,80000);
 
 foreach ($_POST as $key => $value) {
