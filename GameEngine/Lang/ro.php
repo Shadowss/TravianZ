@@ -1379,6 +1379,7 @@ define('OLD_PASSWORD', 'Parolă veche');
 define('NEW_PASSWORD', 'Parolă nouă');
 define('CHANGE_EMAIL', 'Schimbă email');
 define('CHANGE_EMAIL2', 'Introdu adresa veche și cea nouă de email. Vei primi un cod pe ambele adrese pe care trebuie să-l introduci aici');
+define('CURRENT_EMAIL', 'Email actual');
 define('OLD_EMAIL', 'Email vechi');
 define('NEW_EMAIL', 'Email nou');
 define('ACCOUNT_SITTERS', 'Sitteri cont');

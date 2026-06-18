@@ -238,6 +238,10 @@ class Profile {
 			$database->RemoveXSS($post['custom_url'])
 		);
 
+		// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+		// new graphics pack applies immediately, without a re-login.
+		unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
+
 		header("Location: spieler.php?uid=" . $session->uid);
 		exit;
 	}
@@ -377,6 +381,11 @@ class Profile {
 			$_SESSION['valuearray'] = $_POST;
 		}
 
+		// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+		// updated account fields (email, sitters, password) are reflected
+		// immediately, without a re-login.
+		unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
+
 		header("Location: spieler.php?s=3");
 		exit;
 	}
@@ -391,6 +400,9 @@ class Profile {
 
 			if ($session->userinfo['sit' . $get['type']] == $get['id']) {
 				$database->updateUserField($session->uid, "sit" . $get['type'], 0, 1);
+				// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+				// removed sitter disappears immediately, without a re-login.
+				unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
 			}
 
 			$session->changeChecker();

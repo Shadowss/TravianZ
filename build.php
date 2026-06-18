@@ -110,6 +110,11 @@ if ($session->goldclub == 1 && count($session->villages) > 1) {
                 $database->editTradeRoute($_POST['routeid'], "timeleft", 604800, 1);
                 $newgold = $session->gold - 2;
                 $database->updateUserField($session->uid, 'gold', $newgold, 1);
+                $session->gold = $newgold;
+                // Invalidate the 30s session user-cache (see Session::PopulateVar) so
+                // the gold balance is fresh next request; the write is absolute
+                // ($session->gold - 2), so a stale cache could double-spend.
+                unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
             }
         }
         $route = 1;

@@ -348,6 +348,10 @@ class Alliance {
                     $database->removeInvitation($inviteID);
                     $database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
                     $database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
+                    // Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+                    // new alliance membership shows up immediately, without a re-login.
+                    unset($_SESSION['cache_user_' . $session->username]);
+                    $_SESSION['alliance_user'] = $invite['alliance'];
 					// Log notice în alianță
                     $notice = rc_tok('MSG_NEWS_JOINED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
                     $database->insertAlliNotice($invite['alliance'], $notice);
@@ -397,6 +401,10 @@ class Alliance {
         $database->updateUserField($session->uid, "alliance", $aid, 1);
         $database->procAllyPop($aid);
         $database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
+        // Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+        // new alliance shows up immediately, without a re-login.
+        unset($_SESSION['cache_user_' . $session->username]);
+        $_SESSION['alliance_user'] = $aid;
         $notice = rc_tok('MSG_ALLIANCE_FOUNDED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
         $database->insertAlliNotice($aid, $notice);
         header("Location: build.php?gid=18");
@@ -606,6 +614,10 @@ class Alliance {
         $database->deleteAlliPermissions($uid);
 		// șterge alianța dacă e goală (comportament original)
         $database->deleteAlliance($allyId);
+        // Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+        // alliance the player just left disappears immediately, without a re-login.
+        unset($_SESSION['cache_user_' . $session->username]);
+        $_SESSION['alliance_user'] = 0;
         $notice = rc_tok('MSG_NEWS_QUIT', '<a href="spieler.php?uid=' . $uid . '">' . addslashes($session->username) . '</a>');
         $database->insertAlliNotice($allyId, $notice);
         header("Location: spieler.php?uid=" . $uid);

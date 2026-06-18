@@ -1760,6 +1760,10 @@ class Building {
 
         $session->gold = $newgold;
         $_SESSION['gold'] = $newgold;
+        // Invalidate the 30s session user-cache (see Session::PopulateVar); the gold
+        // write is absolute ($session->gold - $spent), so a stale cache would revert
+        // the balance next request and could allow a double-spend.
+        unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
     }
 
     // un singur query

@@ -22,6 +22,10 @@ AccessLogger::logRequest();
 if(isset($_GET['ok'])){
 	$database->updateUserField($session->uid,'ok', 0, 1);
 	$_SESSION['ok'] = '0';
+	// Invalidate the 30s session user-cache (see Session::PopulateVar); otherwise
+	// it re-seeds $_SESSION['ok'] from the stale row and the welcome/maintenance
+	// redirect keeps firing for up to 30s after acknowledging.
+	unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
 }
 
 if(isset($_GET['newdid'])) {

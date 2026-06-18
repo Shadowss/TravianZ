@@ -1703,6 +1703,7 @@ define('OLD_PASSWORD', 'Ancien mot de passe');
 define('NEW_PASSWORD', 'Nouveau mot de passe');
 define('CHANGE_EMAIL', 'Changer d\'e-mail');
 define('CHANGE_EMAIL2', 'Veuillez saisir vos anciennes et nouvelles adresses e-mail. Vous recevrez ensuite un code à saisir ici aux deux adresses.');
+define('CURRENT_EMAIL', 'E-mail actuel');
 define('OLD_EMAIL', 'Ancien e-mail');
 define('NEW_EMAIL', 'Nouvel e-mail');
 define('ACCOUNT_SITTERS', 'Substituts du compte');

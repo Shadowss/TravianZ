@@ -88,6 +88,11 @@ if (!empty($pwError)) {
 </tr>
 
 <tr>
+    <th><?php echo CURRENT_EMAIL; ?></th>
+    <td><?php echo htmlspecialchars($session->userinfo['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+</tr>
+
+<tr>
     <th><?php echo OLD_EMAIL; ?></th>
     <td><input class="text" type="text" name="email_alt" /></td>
 </tr>
