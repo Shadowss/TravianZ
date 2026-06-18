@@ -280,6 +280,20 @@ define('MSG_QUIT_REPLACEMENT_BODY', "Bonjour !\n\nNous vous informons que l'anci
 // Embassy-destruction status lines, appended to the catapult battle report.
 define('MSG_ALLIANCE_DISPERSED_STATUS', "L'alliance de ce joueur a été dispersée.");
 define('MSG_FORCED_LEAVE_STATUS', "Le joueur a été forcé de quitter son alliance.");
+// Alliance news-feed notices (rendered in Templates/Alliance/news.tpl)
+define('MSG_INVITE_NOTICE', "%s a invité %s à rejoindre l'alliance.");
+define('MSG_ALLIANCE_FOUNDED', "L'alliance a été fondée par %s.");
+define('MSG_NEWS_REJECTED', "%s a refusé l'invitation.");
+define('MSG_NEWS_DELETED_INVITE', "%s a supprimé l'invitation de %s.");
+define('MSG_NEWS_JOINED', "%s a rejoint l'alliance.");
+define('MSG_NEWS_NAME_CHANGED', "%s a changé le nom de l'alliance.");
+define('MSG_NEWS_DESC_CHANGED', "%s a changé la description de l'alliance.");
+define('MSG_NEWS_PERMS_CHANGED', "%s a modifié les permissions de %s.");
+define('MSG_NEWS_EXPELLED', "%s a été expulsé de l'alliance par %s.");
+define('MSG_NEWS_QUIT', "%s a quitté l'alliance.");
+define('MSG_NEWS_DIPLO_CONFED', "%s a proposé une confédération à %s.");
+define('MSG_NEWS_DIPLO_NAP', "%s a proposé un pacte de non-agression à %s.");
+define('MSG_NEWS_DIPLO_WAR', "%s a déclaré la guerre à %s.");
 define('CARRY', 'transporte');
 define('DEFENDER', 'Défenseur');
 define('VISITED', 'visité');

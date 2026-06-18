@@ -263,11 +263,11 @@ class Alliance {
 			// Log notice în alianță
             $database->insertAlliNotice(
                 $session->alliance,
-                '<a href="spieler.php?uid=' . $session->uid . '">' . 
-                addslashes($session->username) . 
-                '</a> has invited <a href="spieler.php?uid=' . $UserData['id'] . '">' . 
-                addslashes($UserData['username']) . 
-                '</a> into the alliance.'
+                rc_tok(
+                    'MSG_INVITE_NOTICE',
+                    '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>',
+                    '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a>'
+                )
             );
 			// Trimite invitație și prin mesaj în joc (dacă este activată funcționalitatea nouă)
             if (NEW_FUNCTIONS_ALLIANCE_INVITATION) {
@@ -290,8 +290,8 @@ class Alliance {
 				// Ștergem invitația din baza de date
                 $database->removeInvitation($inviteID);
 				// Adăugăm notice în logul alianței
-                $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has rejected the invitation.';
-                $database->insertAlliNotice($invite['alliance'], $notice); 
+                $notice = rc_tok('MSG_NEWS_REJECTED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
+                $database->insertAlliNotice($invite['alliance'], $notice);
                 break; // am găsit și procesat invitația → nu mai continuăm bucla
             }
         }
@@ -318,7 +318,7 @@ class Alliance {
 				// Ștergem invitația
                 $database->removeInvitation($inviteID);
 				// Adăugăm notice în logul alianței
-                $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has deleted the invitation for <a href="spieler.php?uid=' . $invitename['id'] . '">' . addslashes($invitename['username']) . '</a>.';
+                $notice = rc_tok('MSG_NEWS_DELETED_INVITE', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>', '<a href="spieler.php?uid=' . $invitename['id'] . '">' . addslashes($invitename['username']) . '</a>');
                 $database->insertAlliNotice($session->alliance, $notice);
                 break; // am procesat invitația → ieșim din buclă
             }
@@ -349,7 +349,7 @@ class Alliance {
                     $database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
                     $database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
 					// Log notice în alianță
-                    $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has joined the alliance.';
+                    $notice = rc_tok('MSG_NEWS_JOINED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
                     $database->insertAlliNotice($invite['alliance'], $notice);
                 } else {
 					// Alianța este plină
@@ -397,7 +397,7 @@ class Alliance {
         $database->updateUserField($session->uid, "alliance", $aid, 1);
         $database->procAllyPop($aid);
         $database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
-        $notice = 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.';
+        $notice = rc_tok('MSG_ALLIANCE_FOUNDED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
         $database->insertAlliNotice($aid, $notice);
         header("Location: build.php?gid=18");
         exit;
@@ -421,7 +421,7 @@ class Alliance {
 		// ==================== ERORI ? ====================
         if ($form->returnErrors() == 0) {
             $database->setAlliName($session->alliance, $newName, $newTag);
-            $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance name.';
+            $notice = rc_tok('MSG_NEWS_NAME_CHANGED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
             $database->insertAlliNotice($session->alliance, $notice);
             $form->addError("perm", NAME_OR_TAG_CHANGED);
             $_SESSION['errorarray'] = $form->getErrors();
@@ -447,7 +447,7 @@ class Alliance {
 			// ==================== ACTUALIZARE PROFIL ====================
             $database->submitAlliProfile($session->alliance, $post['be2'] ?? '', $post['be1'] ?? '');
 			// Log notice în alianță
-            $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance description.';
+            $notice = rc_tok('MSG_NEWS_DESC_CHANGED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
             $database->insertAlliNotice($session->alliance, $notice);
         }
     }
@@ -494,7 +494,7 @@ class Alliance {
             } else {
 				// Log notice în alianță
                 $username = $database->getUserField($targetUID, "username", 0);
-                $notice = '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed permissions of ' . addslashes($username) . '.';
+                $notice = rc_tok('MSG_NEWS_PERMS_CHANGED', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>', addslashes($username));
                 $database->insertAlliNotice($session->alliance, $notice);
 				// Mesaj de succes (comportament original)
                 $_SESSION['success'] = ALLY_PERMISSIONS_UPDATED;
@@ -536,7 +536,7 @@ class Alliance {
         $kickedUsername = $UserData['username'];
         $database->evictUserFromAlliance($targetUID);
         $database->deleteAlliPermissions($targetUID);
-        $notice = '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($kickedUsername) . '</a> has been expelled from the alliance by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.';
+        $notice = rc_tok('MSG_NEWS_EXPELLED', '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($kickedUsername) . '</a>', '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>');
         $database->insertAlliNotice($allyId, $notice);
         $database->deleteAlliance($allyId);
         $form->addError("perm", $kickedUsername . ALLY_USER_KICKED);
@@ -606,7 +606,7 @@ class Alliance {
         $database->deleteAlliPermissions($uid);
 		// șterge alianța dacă e goală (comportament original)
         $database->deleteAlliance($allyId);
-        $notice = '<a href="spieler.php?uid=' . $uid . '">' . addslashes($session->username) . '</a> has quit the alliance.';
+        $notice = rc_tok('MSG_NEWS_QUIT', '<a href="spieler.php?uid=' . $uid . '">' . addslashes($session->username) . '</a>');
         $database->insertAlliNotice($allyId, $notice);
         header("Location: spieler.php?uid=" . $uid);
         exit;
@@ -630,13 +630,14 @@ class Alliance {
         if (!$database->diplomacyCheckLimits($session->alliance, $diplType)) { $form->addError("name", ALLY_TOO_MUCH_PACTS); return; }
 
         $database->diplomacyInviteAdd($session->alliance, $targetAllianceID, $diplType);
-        if ($diplType == 1) $noticeText = OFFERED_CONFED_TO;
-        elseif ($diplType == 2) $noticeText = OFFERED_NON_AGGRESION_PACT_TO;
-        elseif ($diplType == 3) $noticeText = DECLARED_WAR_ON;
-        else $noticeText = '';
+        if ($diplType == 1) $diploKey = 'MSG_NEWS_DIPLO_CONFED';
+        elseif ($diplType == 2) $diploKey = 'MSG_NEWS_DIPLO_NAP';
+        elseif ($diplType == 3) $diploKey = 'MSG_NEWS_DIPLO_WAR';
+        else $diploKey = '';
         $myAllianceName = $database->getAllianceName($session->alliance);
-        $database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid=' . $session->alliance . '">' . $myAllianceName . '</a> ' . $noticeText . ' <a href="allianz.php?aid=' . $targetAllianceID . '">' . $targetAllianceName . '</a>.');
-        $database->insertAlliNotice($targetAllianceID, '<a href="allianz.php?aid=' . $session->alliance . '">' . $myAllianceName . '</a> ' . $noticeText . ' <a href="allianz.php?aid=' . $targetAllianceID . '">' . $targetAllianceName . '</a>.');
+        $notice = ($diploKey === '') ? '' : rc_tok($diploKey, '<a href="allianz.php?aid=' . $session->alliance . '">' . $myAllianceName . '</a>', '<a href="allianz.php?aid=' . $targetAllianceID . '">' . $targetAllianceName . '</a>');
+        $database->insertAlliNotice($session->alliance, $notice);
+        $database->insertAlliNotice($targetAllianceID, $notice);
         $form->addError("name", INVITE_SENT);
     }
 }

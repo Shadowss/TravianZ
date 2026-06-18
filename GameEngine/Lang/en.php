@@ -283,6 +283,20 @@ tz_def('MSG_QUIT_REPLACEMENT_BODY', "Hi!\n\nThis is to inform you that the forme
 // Embassy-destruction status lines, appended to the catapult battle report.
 tz_def('MSG_ALLIANCE_DISPERSED_STATUS', "This player's alliance has been dispersed.");
 tz_def('MSG_FORCED_LEAVE_STATUS', 'Player was forced to leave their alliance.');
+// Alliance news-feed notices (rendered in Templates/Alliance/news.tpl)
+tz_def('MSG_INVITE_NOTICE', '%s has invited %s into the alliance.');
+tz_def('MSG_ALLIANCE_FOUNDED', 'The alliance has been founded by %s.');
+tz_def('MSG_NEWS_REJECTED', '%s has rejected the invitation.');
+tz_def('MSG_NEWS_DELETED_INVITE', '%s has deleted the invitation for %s.');
+tz_def('MSG_NEWS_JOINED', '%s has joined the alliance.');
+tz_def('MSG_NEWS_NAME_CHANGED', '%s has changed the alliance name.');
+tz_def('MSG_NEWS_DESC_CHANGED', '%s has changed the alliance description.');
+tz_def('MSG_NEWS_PERMS_CHANGED', '%s has changed permissions of %s.');
+tz_def('MSG_NEWS_EXPELLED', '%s has been expelled from the alliance by %s.');
+tz_def('MSG_NEWS_QUIT', '%s has quit the alliance.');
+tz_def('MSG_NEWS_DIPLO_CONFED', '%s offered a confederation to %s.');
+tz_def('MSG_NEWS_DIPLO_NAP', '%s offered non-aggression pact to %s.');
+tz_def('MSG_NEWS_DIPLO_WAR', '%s declared war to %s.');
 tz_def('CARRY', 'carry');
 tz_def('DEFENDER', 'Defender');
 tz_def('VISITED', 'visited');

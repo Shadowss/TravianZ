@@ -64,7 +64,7 @@ if (!empty($noticeArray)) {
 
         echo "<tr>
 
-            <td class=\"event\">" . html_entity_decode($notice['comment'], ENT_QUOTES, 'UTF-8') . "</td>
+            <td class=\"event\">" . html_entity_decode(tz_expand_report($notice['comment']), ENT_QUOTES, 'UTF-8') . "</td>
 
             <td class=\"dat\">" .
                 $date[0] . " " . $date[1] .
