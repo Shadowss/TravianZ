@@ -110,7 +110,9 @@ if (!isset($SAJAX_INCLUDED)) {
 		else {
 			echo "+:";
 			$result = call_user_func_array($func_name, $args);
-			echo "var res = " . trim(sajax_get_js_repr($result)) . "; res;";
+			// Emit the result as JSON so the client can JSON.parse() it instead
+			// of eval()-ing server output (DOM-XSS / arbitrary code execution).
+			echo json_encode($result);
 		}
 		exit;
 	}
@@ -250,7 +252,7 @@ if (!isset($SAJAX_INCLUDED)) {
 						alert("Error: " + data);
 					else {
 						if (target_id != "")
-							document.getElementById(target_id).innerHTML = eval(data);
+							document.getElementById(target_id).innerHTML = JSON.parse(data);
 						else {
 							try {
 								var callback;
@@ -261,7 +263,7 @@ if (!isset($SAJAX_INCLUDED)) {
 								} else {
 									callback = args[args.length-1];
 								}
-								callback(eval(data), extra_data);
+								callback(JSON.parse(data), extra_data);
 							} catch (e) {
 								sajax_debug("Caught error " + e + ": Could not eval " + data );
 							}
