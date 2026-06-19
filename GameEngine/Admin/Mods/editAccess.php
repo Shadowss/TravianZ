@@ -33,10 +33,16 @@ $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-$access = $_POST['access'];
+// Cast + whitelist the access level. $_POST['access'] was injected raw into
+// the UPDATE below (SQL injection). Only accept the values the admin form
+// offers: 0=Banned, 2=Normal user, 8=Multihunter, 9=Admin.
+$access = (int) $_POST['access'];
+if (!in_array($access, array(0, 2, 8, 9), true)) {
+	die("Invalid access level");
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
-	access = ".$access." 
+mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET
+	access = ".$access."
 	WHERE id = ".$id."") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
