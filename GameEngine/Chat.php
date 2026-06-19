@@ -368,7 +368,7 @@ if (!isset($SAJAX_INCLUDED)) {
 		    $id_user = (int) $session->uid;
 			$alliance = $database->escape($session->alliance);
 			$now = time();
-				echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ($id_user,'$name','$alliance','$now','$msg')";
+				$q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ($id_user,'$name','$alliance','$now','$msg')";
 				mysqli_query($database->dblink,$q);
 		}
 	}
