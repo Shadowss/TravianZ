@@ -57,6 +57,7 @@
 </style>
 
 <form method="post" action="admin.php" style="margin:0">
+<?php echo csrf_field(); ?>
 <input name="action" type="hidden" value="addVillage">
 <input name="uid" type="hidden" value="<?php echo $user['id'];?>">
 <table class="punish-box">

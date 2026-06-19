@@ -69,7 +69,7 @@ function village_type_by_fieldtype_id($id){
 
 function gen_map_tiles_select_list_form($is_ocuppied,$is_oasis,$oasis_type,$fieldtype,$x,$y){
   $not_ocuppied =!$is_ocuppied;
-  $html = '<div class="tile-edit"><b>New Map Tile Type</b><form method="post" action="?p=map_tile&do_save"><select name="new_field_type" class="tile-select">';
+  $html = '<div class="tile-edit"><b>New Map Tile Type</b><form method="post" action="?p=map_tile&do_save">' . csrf_field() . '<select name="new_field_type" class="tile-select">';
   if($is_oasis){
     for($i=1;$i<13;$i++){ $sel=($i==$oasis_type)?' selected':''; $html.='<option value="'.$i.'_0"'.$sel.'>['.$i.'] Oasis '.oasis_type_by_id($i).'</option>'; }
     if($not_ocuppied){ for($i=1;$i<13;$i++){ $html.='<option value="'.$i.'_1">['.$i.'] Valley '.village_type_by_fieldtype_id($i).'</option>'; } }
@@ -158,6 +158,7 @@ elseif(isset($_GET['do_get']) && isset($_POST['x'])){
 
 <div class="tile-wrapper">
   <form class="tile-form" method="post" action="?p=map_tile&do_get">
+    <?php echo csrf_field(); ?>
     <div class="coord-wrap">
       <div class="coord-item">
         <b>X</b>

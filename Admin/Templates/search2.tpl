@@ -43,6 +43,7 @@ foreach($varray as $vil) $totalpop += $vil['pop'];
 </style>
 
 <form action="" method="post">
+	<?php echo csrf_field(); ?>
 	<table id="member" class="search-modern">
 		<thead>
 			<tr>

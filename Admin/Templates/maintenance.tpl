@@ -60,6 +60,7 @@ if($maint['started_by'] > 0){
 <?php if(!empty($error)) echo '<div class="msg">'.$error.'</div>'; ?>
 
 <form method="POST">
+<?php echo csrf_field(); ?>
 <div class="maint-card">
   <div class="maint-head">Server Maintenance</div>
   <div class="maint-status <?= $maint['active'] ? 'on' : 'off' ?>">
