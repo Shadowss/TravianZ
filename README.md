@@ -9,13 +9,113 @@ TravianZ is an open-source browser strategy game inspired by classic Travian-lik
 
 This repository currently targets modern local/server setups with PHP 8.x and MariaDB.
 
-## Project Status
+Project Status
 
-- Version line: `v9` (Incremental Refactor)
-- Stability: playable and actively maintained
-- Migration note: this is not a drop-in upgrade over older `8.3.4` deployments
+* Version: v10 Full Refactor
+* PHP 8.3+ compatible
+* Actively maintained
+* Suitable for production servers
+* Major legacy codebase modernization completed
 
-If you are upgrading from an older installation, do a fresh install and migrate data carefully.
+Upgrading from older versions is not recommended. Perform a fresh installation and migrate data manually if required.
+
+⸻
+
+Version 10 Highlights
+
+Massive Code Refactor
+
+* Fully refactored Templates system.
+* Large portions of GameEngine fully refactored.
+* Automation.php significantly improved and split into smaller methods.
+* Database.php alliance embassy logic completely redesigned.
+* Medal system rewritten and simplified.
+* Removed obsolete and unused code.
+
+Admin Panel
+
+* Complete frontend and backend redesign.
+* New homepage with server statistics.
+* New Server Info page.
+* New Natars Management format.
+* New maintenance mode system.
+* New reset server system.
+* Alliance editor added.
+* Username rename moved into Edit User.
+* Added protection editing.
+* Improved punish and ban systems.
+* Ban history support.
+* Unified log system with detailed logs.
+
+Gameplay Improvements
+
+* Vacation Mode added (9 conditions required).
+* Alliance position management added.
+* Instant demolition with 10 gold.
+* Account Statement added to Travian Plus.
+* Winner registration check.
+* Medal onclick support.
+* Full Preferences system (frontend + backend).
+* Special medals system:
+    * Artifact Owner
+    * WW Owner
+    * WW Winner
+    * Hero Level 100
+    * Great Warehouse Owner
+    * Great Granary Owner
+    * Wall Master
+
+Bug Fixes
+
+* Oasis regeneration fixed.
+* Parallel training exploit fixed.
+* Infinite gold exploit fixed.
+* Race conditions fixed for:
+    * Market
+    * Hero
+    * Troops
+    * Various game mechanics
+
+Security
+
+* Full security improvements.
+* New CSRF protection.
+* Admin panel security enhancements.
+* Game mechanics security updates.
+
+Installer
+
+* New installation design.
+* Multihunter access fixed during installation.
+
+⸻
+
+Refactor Progress
+
+Completed:
+
+* Templates
+* Admin Panel
+* Major parts of GameEngine
+* Automation functions
+* Database alliance systems
+
+Still planned:
+
+* Automation cleanup
+* Database optimization
+* Units system
+* Technology system
+
+⸻
+
+Performance Improvements
+
+* Added caching in critical areas.
+* Dynamic table prefix support.
+* Better query handling.
+* Improved world generation.
+* Improved reset operations.
 
 ## Quick Start (Docker)
 
