@@ -121,6 +121,7 @@ $banHistory = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."banlist
         Add New Ban
       </h3>
       <form method="post" class="ban-form">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="addBan">
         <div class="row">
           <input type="number" name="uid" placeholder="User ID" required>
@@ -174,6 +175,7 @@ $banHistory = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."banlist
         Ban IP Address
       </h3>
       <form method="post" class="ban-form">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="addIpBan">
         <div class="row">
           <input type="text" name="ip" placeholder="IPv4 or IPv6" required>

@@ -57,6 +57,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
       <h2>🏰 WW Villages</h2>
       <div class="body">
         <form method="post" action="../Admin/admin.php?action=addWWVillages">
+          <?php echo csrf_field(); ?>
           <table class="nat-table">
             <tr><th>Number</th><th>Player ID</th><th></th></tr>
             <tr>
@@ -74,6 +75,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
       <h2>✨ Add Artifacts</h2>
       <div class="body">
         <form method="post" action="../Admin/admin.php?action=addArtifacts">
+          <?php echo csrf_field(); ?>
           <table class="nat-table">
             <tr><th>Icon</th><th>Type</th><th>Qty</th><th>Player</th><th></th></tr>
             <tr>

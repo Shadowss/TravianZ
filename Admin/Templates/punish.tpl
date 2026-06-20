@@ -57,6 +57,7 @@ $active = $admin->getUserActive();
 	<tbody>
 		<tr><td>
 			<form method="post" action="admin.php" style="margin:0">
+				<?php echo csrf_field(); ?>
 				<input type="hidden" name="action" value="punish">
 				<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
@@ -80,6 +81,7 @@ $active = $admin->getUserActive();
 		
 		<tr><td>
 			<form method="post" action="admin.php" style="margin:0">
+				<?php echo csrf_field(); ?>
 				<input type="hidden" name="action" value="punish">
 				<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
@@ -92,6 +94,7 @@ $active = $admin->getUserActive();
 		
 		<tr><td>
 			<form method="post" action="admin.php" style="margin:0">
+				<?php echo csrf_field(); ?>
 				<input type="hidden" name="action" value="punish">
 				<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">

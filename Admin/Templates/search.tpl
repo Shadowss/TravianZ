@@ -62,6 +62,7 @@ $search = stripslashes($_POST['s']?? '');
 
   <div class="search-card">
     <form action="" method="post" class="search-form" id="searchForm">
+      <?php echo csrf_field(); ?>
       <select name="p" id="searchType">
         <?php foreach($types as $k=>$v){?>
           <option value="<?php echo $k;?>" <?php echo $current==$k?'selected':'';?>><?php echo $v[1].' '.$v[0];?></option>

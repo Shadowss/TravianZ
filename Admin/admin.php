@@ -30,12 +30,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ─── CSRF TOKEN ───────────────────────────────────────────────────────────────
-// Generat o singură dată per sesiune și stocat în $_SESSION.
-// Toate request-urile POST trebuie să trimită acest token în câmpul _csrf_token.
-if (empty($_SESSION['_csrf_token'])) {
-    $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
-}
+// ─── CSRF PROTECTION ──────────────────────────────────────────────────────────
+// Token init + csrf_token()/csrf_field()/csrf_verify() helpers, shared with the
+// admin Mods (which are POSTed to directly). See GameEngine/Admin/csrf.php.
+include_once("../GameEngine/Admin/csrf.php");
 
 // ─── CORE INCLUDES ───────────────────────────────────────────────────────────
 include_once("../GameEngine/config.php");
@@ -97,42 +95,8 @@ function admin_validated_page(string $raw): string
     return in_array($raw, $whitelist, true) ? $raw : '';
 }
 
-/**
- * Returnează token-ul CSRF curent ca string hex.
- * Folosit pentru injectare în câmpuri ascunse sau header-e AJAX.
- */
-function csrf_token(): string
-{
-    return $_SESSION['_csrf_token'] ?? '';
-}
-
-/**
- * Emite un <input type="hidden"> gata de pus în orice <form> POST din template-uri.
- * Exemplu de utilizare în .tpl: <?php echo csrf_field(); ?>
- */
-function csrf_field(): string
-{
-    return '<input type="hidden" name="_csrf_token" value="' . htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
-}
-
-/**
- * Verifică token-ul CSRF dintr-un request POST.
- * Oprește execuția cu HTTP 403 dacă token-ul lipsește sau nu se potrivește.
- * Apelată automat pe orice $_POST — nu trebuie apelată manual în template-uri.
- *
- * Folosim hash_equals() în loc de === pentru a preveni timing attacks.
- */
-function csrf_verify(): void
-{
-    $submitted = isset($_POST['_csrf_token']) ? (string)$_POST['_csrf_token'] : '';
-    $stored    = csrf_token();
-
-    if ($stored === '' || !hash_equals($stored, $submitted)) {
-        http_response_code(403);
-        // Mesaj generic — nu dezvăluie detalii despre mecanism
-        die('<h1>403 Forbidden</h1><p>Invalid or missing security token. Please go back and try again.</p>');
-    }
-}
+// CSRF helpers — csrf_token() / csrf_field() / csrf_verify() — are defined in
+// GameEngine/Admin/csrf.php (included above), shared with the admin Mods.
 
 /**
  * Look up a user row by ID using a prepared statement.

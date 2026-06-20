@@ -130,6 +130,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
   </div>
 
   <form id="show" action="admin.php?p=map" method="POST" class="map-filters">
+    <?php echo csrf_field(); ?>
     <div class="filter-group">
       <input id="show1" name="show1" type="checkbox" <?php echo $check1;?> value="1">
       <label for="show1">Players</label>
