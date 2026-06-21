@@ -801,6 +801,7 @@ define('RETURNFROM', 'Retour de');
 define('REINFORCEMENTFOR', 'Renfort vers');
 define('ATTACK_ON', 'Attaque sur');
 define('RAID_ON', 'Pillage sur');
+define('MARK_ATTACK', 'Marquer cette attaque (gravité)');
 define('SCOUTING', 'Espionnage');
 define('PRISONERS', 'Prisonniers');
 define('PRISONERSIN', 'Prisonniers à');

@@ -805,6 +805,7 @@ tz_def('RETURNFROM', 'Return from');
 tz_def('REINFORCEMENTFOR', 'Reinforcement to');
 tz_def('ATTACK_ON', 'Attack to');
 tz_def('RAID_ON', 'Raid to');
+tz_def('MARK_ATTACK', 'Mark this attack (severity)');
 tz_def('SCOUTING', 'Scouting');
 tz_def('PRISONERS', 'Prisoners');
 tz_def('PRISONERSIN', 'Prisoners in');
