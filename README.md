@@ -25,38 +25,67 @@ Version 10 Highlights
 
 Massive Code Refactor
 
-* Fully refactored Templates system.
+* Fully refactored Templates folder/system.
+* Added 🇫🇷 French and 🇷🇴 Romanian languages.
 * Large portions of GameEngine fully refactored.
-* Automation.php significantly improved and split into smaller methods.
-* Database.php alliance embassy logic completely redesigned.
-* Medal system rewritten and simplified.
-* Removed obsolete and unused code.
+* Remaining work planned for parts of Automation, Database, Units and Technology.
+* starvation() function in Automation refactored and split into multiple methods.
+* sendUnitsComplete() function fully refactored, reducing a 1711-line function into 26 separate methods.
+* checkAllianceEmbassiesStatus() in Database redesigned and split into multiple functions.
+* Medal system completely rewritten for easier maintenance and readability.
+* Removed obsolete and unused code/folders from both the game and Admin Panel.
+
+⸻
 
 Admin Panel
 
 * Complete frontend and backend redesign.
+* New Admin Panel design.
 * New homepage with server statistics.
 * New Server Info page.
 * New Natars Management format.
-* New maintenance mode system.
-* New reset server system.
-* Alliance editor added.
-* Username rename moved into Edit User.
-* Added protection editing.
-* Improved punish and ban systems.
-* Ban history support.
-* Unified log system with detailed logs.
+* New debug log system.
+* New maintenance mode system (banned players remain banned after maintenance).
+* New server reset system.
+* Username rename moved to Edit User.
+* Added Edit Protection in Edit User.
+* Alliance editor added (frontend & backend).
+* Removed duplicate player pencils; user and alliance editing are now separated.
+* Improved punish system (troop deletion now works correctly).
+* Ban by IP support added.
+* Ban system redesigned:
+    * In-game ban reason visible.
+    * Moderator name visible.
+    * Ban history included.
+* Unified log system:
+    * Admin Panel logs tab.
+    * Village logs.
+    * Technology logs.
+    * Troop logs.
+    * Various game logs.
+* Account deletion page improved:
+    * Displays deletion process status.
+    * Allows cancellation of deletion.
+* Fixed Multihunter access during installation.
+
+⸻
 
 Gameplay Improvements
 
-* Vacation Mode added (9 conditions required).
-* Alliance position management added.
-* Instant demolition with 10 gold.
-* Account Statement added to Travian Plus.
-* Winner registration check.
+* Vacation Mode added (requires 9 conditions).
+* Alliance rank and privilege management added.
+* Main Building instant demolition with 10 gold.
+* Account Statement added in Travian Plus section (received/spent gold history).
+* Winner registration check added.
 * Medal onclick support.
-* Full Preferences system (frontend + backend).
-* Special medals system:
+* Complete Preferences system (frontend & backend):
+    * Language
+    * Time format
+    * Large map
+    * Reports
+    * Auto-completions
+    * Other player settings
+* New Special Medal System:
     * Artifact Owner
     * WW Owner
     * WW Winner
@@ -65,9 +94,11 @@ Gameplay Improvements
     * Great Granary Owner
     * Wall Master
 
+⸻
+
 Bug Fixes
 
-* Oasis regeneration fixed.
+* Oasis regeneration fixed after attacks without conquest.
 * Parallel training exploit fixed.
 * Infinite gold exploit fixed.
 * Race conditions fixed for:
@@ -75,37 +106,38 @@ Bug Fixes
     * Hero
     * Troops
     * Various game mechanics
+* Winner registration issues fixed.
+* Punish troop deletion fixed.
 
-Security
+⸻
 
-* Full security improvements.
-* New CSRF protection.
-* Admin panel security enhancements.
+Security Improvements
+
+* Full Admin Panel security overhaul.
 * Game mechanics security updates.
+* New CSRF protection system implemented.
+* Added protection against race conditions.
+* Improved validation across critical systems.
+
+⸻
+
+New Systems
+
+* Full alliance editing system.
+* New account statement system.
+* New maintenance mode logic.
+* New reset server system.
+* New debug log system.
+* New logging architecture.
+* New Preferences system.
+* New Special Medal system.
+
+⸻
 
 Installer
 
 * New installation design.
 * Multihunter access fixed during installation.
-
-⸻
-
-Refactor Progress
-
-Completed:
-
-* Templates
-* Admin Panel
-* Major parts of GameEngine
-* Automation functions
-* Database alliance systems
-
-Still planned:
-
-* Automation cleanup
-* Database optimization
-* Units system
-* Technology system
 
 ⸻
 
@@ -116,6 +148,38 @@ Performance Improvements
 * Better query handling.
 * Improved world generation.
 * Improved reset operations.
+
+⸻
+
+Refactor Progress
+
+Completed
+
+* Templates system.
+* Admin Panel.
+* Frontend and backend redesign.
+* Major parts of GameEngine.
+* Automation functions.
+* Database alliance systems.
+* Medal system.
+* Logging system.
+
+Still Planned
+
+* Remaining Automation cleanup.
+* Database optimization.
+* Units system refactor.
+* Technology system refactor.
+
+⸻
+
+Miscellaneous
+
+* Added 🇫🇷 French language.
+* Added 🇷🇴 Romanian language.
+* Improved code readability and maintainability across the entire project.
+* Removed hundreds of lines of legacy and duplicate code.
+* Multiple internal optimizations and quality-of-life improvements.
 
 ## Quick Start (Docker)
 
