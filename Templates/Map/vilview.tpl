@@ -68,7 +68,13 @@ function renderReports($database,$generator,$session,$d,$limit,$typeMap=null){
             $icon = '<img src="img/x.gif" class="iReport iReport'.$row['ntype'].'" title="'.$row['topic'].'">';
         }
         $date = $generator->procMtime($row['time']);
-        echo '<tr><td>'.$icon.' <a href="berichte.php?id='.$row['id'].'">'.$date[0].' '.substr($date[1],0,5).'</a></td></tr>';
+        // Reports here are selected by `ally = session alliance` (shared alliance
+        // reports) whenever the viewer is in an alliance, so they may be owned by
+        // an ally rather than the viewer. berichte.php only renders such a report
+        // when the `aid` param is present (its uid-owner branch fails for allies),
+        // hence the blank page. Append &aid= like Alliance/attacks.tpl does.
+        $link = 'berichte.php?id='.$row['id'].($session->alliance? '&amp;aid='.(int)$session->alliance : '');
+        echo '<tr><td>'.$icon.' <a href="'.$link.'">'.$date[0].' '.substr($date[1],0,5).'</a></td></tr>';
     }
 }
 ?>
