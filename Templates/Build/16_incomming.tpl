@@ -6,6 +6,10 @@ include_once 'GameEngine/Data/unitdata.php';
 
 $units = $database->getMovement(34, $village->wid, 1);
 $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3);
+// Rally-point indicator (issue #249): the incoming count is never revealed; an
+// incoming unit type whose stack is smaller than this village's rally point
+// (gid 16) level is flagged with a bold "?" instead of a plain one.
+$rpLevel = (int) $database->getFieldLevelInVillage($village->wid, 16);
 ?>
 
 <style>
@@ -94,8 +98,14 @@ function cycleMarker(moveid, el){
                     if (!$isMine) echo '<td class="none">?</td>';
                     else echo '<td class="'.($val==0?'none':'').'">'.($val==0?'0':$val).'</td>';
                 } else {
-                    if ($artifactsSum['totals']==0) echo '<td class="none">?</td>';
-                    else echo '<td class="'.($val==0?'none':'').'">'.($val==0?'0':'?').'</td>';
+                    // Issue #249: the incoming count is never revealed, it is
+                    // always a "?". That "?" is shown in bold when the stack of
+                    // this unit type is smaller than the defender's rally point
+                    // level. The eyesight artifact still reveals which troop
+                    // types are present (0 for the absent ones).
+                    if ($val == 0) echo '<td class="none">'.($artifactsSum['totals']==0?'?':'0').'</td>';
+                    elseif ($rpLevel > 0 && $val < $rpLevel) echo '<td><b style="color:#000">?</b></td>';
+                    else echo '<td class="none">?</td>';
                 }
             endfor;?>
         </tr>
