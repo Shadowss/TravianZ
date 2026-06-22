@@ -28,6 +28,7 @@ if(isset($_GET['uid']))
 	?>
 
 	<form action="../GameEngine/Admin/Mods/editAccess.php" method="POST">
+		<?php echo csrf_field(); ?>
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="uid" id="uid" value="<?php echo $_GET['uid']; ?>">
 		<table id="member" style="width:300px;">

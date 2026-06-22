@@ -21,6 +21,11 @@ include_once("../../Database.php");
 if (!isset($_SESSION)) session_start();
 if(($_SESSION['access']?? 0) < ADMIN) die("Access Denied: You are not Admin!");
 
+// Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
+// itself (it does not go through admin.php's central csrf_verify()).
+require_once(__DIR__ . '/../csrf.php');
+csrf_verify();
+
 // --- INPUT ---
 $id = (int)($_POST['id']?? 0);
 $admid = (int)($_POST['admid']?? 0);

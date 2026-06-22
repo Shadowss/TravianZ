@@ -132,6 +132,7 @@ function go_url(url){ location=url; return false; }
     </div>
 
 <form name="frmHero" action="../GameEngine/Admin/Mods/editHero.php" method="POST">
+    <?php echo csrf_field(); ?>
     <input type="hidden" name="admid" value="<?php echo $_SESSION['id'];?>">
     <input type="hidden" name="id" value="<?php echo $id;?>" />
     <input type="hidden" name="hid" value="<?php echo $hid;?>" />

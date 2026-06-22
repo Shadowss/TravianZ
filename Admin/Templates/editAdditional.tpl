@@ -72,6 +72,7 @@ if(isset($id)) {
     </div>
 
     <form action="../GameEngine/Admin/Mods/additional.php" method="POST">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
         <input type="hidden" name="id" value="<?php echo $id; ?>" />
 
