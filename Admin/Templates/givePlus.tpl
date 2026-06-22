@@ -55,6 +55,7 @@ $id = $_SESSION['id'];
     <p>Activate Travian Plus for ALL players on the server.</p>
 
     <form action="../GameEngine/Admin/Mods/givePlus.php" method="POST" class="plus-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       <input type="number" name="plus" value="1" min="1" max="365" required>
       <span>Days</span>

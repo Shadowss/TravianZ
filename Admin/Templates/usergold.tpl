@@ -60,6 +60,7 @@ $id = $_SESSION['id'];
     </div>
 
     <form action="../GameEngine/Admin/Mods/gold_1.php" method="POST" class="usergold-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       
       <div class="field">
