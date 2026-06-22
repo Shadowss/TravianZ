@@ -95,7 +95,7 @@ maxlength="4" class="text year">
 
 <!-- DESCRIPTION RIGHT -->
 <td rowspan="<?php echo 7 + count($database->getProfileVillages($session->uid)); ?>" class="desc1">
-<textarea tabindex="7" name="be1"><?= htmlspecialchars($session->userinfo['desc2'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+<textarea tabindex="7" name="be1" maxlength="3000"><?= htmlspecialchars($session->userinfo['desc2'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
 </td>
 </tr>
 
@@ -152,7 +152,7 @@ maxlength="30" class="text">
 <!-- DESCRIPTION LEFT -->
 <tr>
 <td colspan="2" class="desc2">
-<textarea tabindex="8" name="be2"><?= htmlspecialchars($session->userinfo['desc1'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+<textarea tabindex="8" name="be2" maxlength="3000"><?= htmlspecialchars($session->userinfo['desc1'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
 </td>
 </tr>
 

@@ -239,6 +239,11 @@ class Profile {
         $database->setVillageName($varray[$i]['wref'], $newName);
     }
 
+    // Invalidate the 30s session user-cache (see Session::PopulateVar) so the
+    // saved description/birthday/etc. show up immediately on the edit form and
+    // header, without waiting for the cache to expire (issue #250).
+    unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
+
     header("Location: spieler.php?uid=" . $session->uid);
     exit;
 }
