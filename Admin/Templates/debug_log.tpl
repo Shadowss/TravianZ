@@ -10,7 +10,7 @@
   <style>
     .dbg-wrap{max-width:100%;margin:12px;font-family:Tahoma,Verdana,Arial,sans-serif;color:#222}
     .dbg-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .dbg-head h2{margin:0;font-size:16px}
+    .dbg-head h2{margin:0;font-size:16px;color:#ffffff}
     .dbg-state{font-weight:700;padding:3px 10px;border-radius:14px;color:#fff;font-size:11px}
     .dbg-on{background:#16a34a}.dbg-off{background:#dc2626}
     .dbg-card{background:#fff;border:1px solid #bbb;border-radius:6px;padding:12px;margin-bottom:12px}

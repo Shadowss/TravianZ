@@ -13,6 +13,19 @@
  */
 
 include('menu.tpl');
+
+function short($n) {
+    $n = (int)$n;
+    if ($n >= 1000000) {
+        return round($n/1000000,1).'M';
+    }
+    if ($n >= 100000) {
+        return floor($n/1000).'k';
+    }
+    // sub 100k lași normal, cu punct ca la Travian RO
+       return $n;
+}
+
 ?>
 
 <table id="troops" cellpadding="1" cellspacing="1">
@@ -139,7 +152,7 @@ foreach ($varray as $vil) {
 
 		$cl = ($val != 0) ? '' : 'none';
 
-		echo '<td class="'.$cl.'">'.$val.'</td>';
+		echo '<td class="'.$cl.'" title="'.$val.'">'.short($val).'</td>';
 	}
 
 	// hero
@@ -167,13 +180,13 @@ for ($i = $unit_start; $i <= $unit_end; $i++) {
 
 	$cl = ($val != 0) ? '' : 'none';
 
-	echo '<td class="'.$cl.'">'.$val.'</td>';
+	echo '<td class="'.$cl.'" title="'.$val.'">'.short($val).'</td>';
 }
 
 $heroTotal = $unit_total['hero'];
 $cl = ($heroTotal != 0) ? '' : 'none';
 
-echo '<td class="'.$cl.'">'.$heroTotal.'</td>';
+echo '<td class="'.$cl.'" title="'.$heroVal.'">'.short($heroVal).'</td>';
 ?>
 
 </tr>
