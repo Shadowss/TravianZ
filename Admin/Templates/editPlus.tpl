@@ -71,7 +71,7 @@ if($id){
         <input type="hidden" name="uid" value="<?php echo $uid;?>">
         <input type="hidden" name="id" value="<?php echo $id;?>">
 
-        <div class="info-box">ℹ️ The values ​​add up. Put 5 to add 5 days.</div>
+        <div class="info-box">ℹ️ The values ​​add up. Put 5 to add 5 days, -5 to remove 5 days.</div>
 
         <div class="card">
             <h3>📊 Current Active Bonuses</h3>

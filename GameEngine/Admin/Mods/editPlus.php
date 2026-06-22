@@ -64,7 +64,9 @@ if (!$user) {
 foreach ($bonusDuration as $key => $add) {
     $current = (int)($user[$key] ?? 0);
     $base = $current < $time ? $time : $current;
-    $bonusDuration[$key] = $add > 0 ? $base + $add : $current;
+    // A negative value subtracts days (the form advertises "Add / Remove Days").
+    // 0 leaves the current expiry untouched; the clamp below caps it at "expired".
+    $bonusDuration[$key] = $add != 0 ? $base + $add : $current;
     if ($bonusDuration[$key] < $time) {
         $bonusDuration[$key] = 0;
     }
