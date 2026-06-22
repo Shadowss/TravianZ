@@ -64,11 +64,11 @@ if ($check1 == "" && $check2 == "" && $check3 == "") $criteria = "";
 body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Roboto;color:#0f172a}
 .map-wrap{max-width:1200px;margin:16px auto;padding:0 12px}
 .map-header{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.map-header h2{margin:0 0 4px;font-size:20px;font-weight:800}
+.map-header h2{margin:0 0 4px;font-size:20px;font-weight:800;color:#0f172a}
 .map-header p{margin:0;color:#64748b;font-size:13px}
-.map-filters{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.map-filters{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;color:#0f172a}
 .filter-group{display:flex;align-items:center;gap:8px}
-.filter-group label{font-size:13px;font-weight:500;cursor:pointer}
+.filter-group label{font-size:13px;font-weight:500;cursor:pointer;color:#0f172a}
 .filter-group input{width:16px;height:16px;accent-color:#0f172a;cursor:pointer}
 .btn-show{background:#0f172a;color:#fff;border:0;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
 .btn-show:hover{background:#1e293b;transform:translateY(-1px)}
@@ -89,7 +89,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 
 /* Zoom controls modern */
 .zoom-controls{position:absolute;top:10px;right:10px;display:flex;gap:6px;align-items:center;z-index:1000;background:#fff;padding:6px 8px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15);border:1px solid #e5e7eb}
-.zoom-controls button{font-size:13px;padding:6px 9px;border-radius:6px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-weight:600;transition:.15s}
+.zoom-controls button{font-size:13px;padding:6px 9px;border-radius:6px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-weight:600;transition:.15s;color:#0f172a}
 .zoom-controls button:hover{background:#e2e8f0}
 .zoom-controls span{min-width:52px;text-align:center;font:12px system-ui;font-weight:600;color:#334155}
 
@@ -102,22 +102,22 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 #lijn_hor{left:0;right:0;top:50%;height:1px} #lijn_ver{top:0;bottom:0;left:50%;width:1px}
 
 /* Legend cards */
-.legend-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.legend-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);color:#0f172a}
 .legend-head{background:#0f172a;color:#fff;padding:8px 12px;font-size:13px;font-weight:700}
 .legend-body{padding:10px 12px}
 .legend-body table{width:100%;border-collapse:collapse}
-.legend-body td{padding:4px 0;font-size:12px}
+.legend-body td{padding:4px 0;font-size:12px;color:#334155}
 .legend-body td:first-child{width:20px}
 .legend-body img{width:11px;height:11px;display:block}
 
 /* Tooltip */
-.p_info{list-style:none;margin:0;padding:0}
+.p_info{list-style:none;margin:0;padding:0;color:#0f172a}
 .p_info li{margin:3px 0;font-size:12px}
 .p_actions{margin-top:8px;display:flex;gap:6px}
 .p_btn{display:inline-block;font:12px/1 system-ui;padding:5px 9px;border:1px solid #e2e8f0;border-radius:6px;background:#f8fafc;color:#0f172a;text-decoration:none;font-weight:500}
 .p_btn:hover{background:#e2e8f0}
 #tipBackdrop{position:absolute;inset:0;display:none;z-index:1099;background:transparent}
-#stickyTip{position:absolute;z-index:1100;display:none;max-width:300px;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px 12px}
+#stickyTip{position:absolute;z-index:1100;display:none;max-width:300px;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px 12px;color:#0f172a}
 .badge-tribe{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10.5px;font-weight:600;background:#e2e8f0;color:#334155}
 </style>
 </head>

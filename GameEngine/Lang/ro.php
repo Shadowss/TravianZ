@@ -1143,14 +1143,14 @@ define('HIDDEN_UNITS_LEVEL', 'Unități ascunse per resursă la nivelul');
 define('UNITS', 'unități');
 define('CRANNY_DESC', 'Ascunzătoarea îți ascunde o parte din resurse în caz de atac asupra satului. Aceste resurse nu pot fi furate.<br>La nivelul 1 ascunzătoarea poate păstra '.(100*((int)CRANNY_CAPACITY)).' din fiecare resursă. Capacitatea ascunzătorilor galice este de 1,5 ori mai mare.<br>Dacă un erou teuton atacă un sat, ascunzătorile pot ascunde doar 80% din capacitatea lor normală');
 
-define('TOWNHALL', 'Primărie');
+define('TOWNHALL', 'Casă de cultură');
 define('CELEBRATIONS_COMMENCE_TOWNHALL', 'Sărbătorile pot începe când primăria este finalizată.');
 define('GREAT_CELEBRATIONS', 'Sărbătoare mare');
 define('CULTURE_POINTS', 'Puncte culturale');
 define('HOLD', 'ține');
 define('CELEBRATIONS_IN_PROGRESS', 'Sărbătoare în<br>curs');
 define('CELEBRATIONS', 'Sărbători');
-define('TOWNHALL_DESC', 'În primărie poți organiza sărbători pompoase. O astfel de sărbătoare îți crește punctele culturale.<br>Punctele culturale sunt necesare pentru a întemeia sau cuceri sate noi. Fiecare clădire produce puncte culturale, iar cu cât nivelul este mai mare, cu atât produce mai multe');
+define('TOWNHALL_DESC', 'În casa de cultură poți organiza sărbători pompoase. O astfel de sărbătoare îți crește punctele culturale.<br>Punctele culturale sunt necesare pentru a întemeia sau cuceri sate noi. Fiecare clădire produce puncte culturale, iar cu cât nivelul este mai mare, cu atât produce mai multe');
 
 define('RESIDENCE', 'Reședință');
 define('CAPITAL', 'Aceasta este capitala ta');

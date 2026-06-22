@@ -31,19 +31,19 @@ $current = $_POST['p']?? 'player';
 $search = stripslashes($_POST['s']?? '');
 ?>
 <style>
-.search-wrap{max-width:900px;margin:20px auto;font-family:Verdana}
+.search-wrap{max-width:900px;margin:20px auto;font-family:Verdana;color:#222}
 .search-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.search-head svg{width:24px;height:24px}
-.search-head h2{margin:0;font-size:18px}
-.search-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.search-head svg{width:24px;height:24px;fill:#111}
+.search-head h2{margin:0;font-size:18px;color:#111}
+.search-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05);color:#222}
 .search-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.search-form select,.search-form input{padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px}
+.search-form select,.search-form input{padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;background:#fff;color:#111}
 .search-form select{min-width:180px}
 .search-form input[type="text"]{flex:1;min-width:200px}
 .search-form input[type="submit"]{background:#333;color:#fff;border:0;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:bold}
 .search-form input[type="submit"]:hover{background:#000}
 .quick-types{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:14px}
-.qtype{border:1px solid #eee;border-radius:6px;padding:10px;text-align:center;cursor:pointer;background:#fafafa;transition:.15s;font-size:12px}
+.qtype{border:1px solid #eee;border-radius:6px;padding:10px;text-align:center;cursor:pointer;background:#fafafa;transition:.15s;font-size:12px;color:#222}
 .qtype:hover{background:#f0f0f0;transform:translateY(-1px)}
 .qtype.active{background:#333;color:#fff;border-color:#333}
 .qtype span{display:block;font-size:18px;margin-bottom:4px}

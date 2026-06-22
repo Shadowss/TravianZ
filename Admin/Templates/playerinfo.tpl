@@ -144,6 +144,22 @@
 						<td>•••••••</td>
 					</tr>
 					<tr>
+						<th>Last IP</th>
+						<td>
+						<?php
+						$uid = (int)$user['id'];
+						$ipResult = mysqli_query($GLOBALS["link"], "SELECT ip FROM ".TB_PREFIX."login_log WHERE uid = $uid ORDER BY id DESC LIMIT 1");
+						if($ipResult && mysqli_num_rows($ipResult) > 0){
+						$ipRow = mysqli_fetch_assoc($ipResult);
+						$lastIp = htmlspecialchars($ipRow['ip']);
+					echo '<a href="https://ipinfo.io/'.$lastIp.'" target="_blank" style="font-family:monospace;color:#2563eb;font-weight:600;">'.$lastIp.'</a>';
+						} else {
+					echo '<span style="color:#dc2626">Not Available</span>';
+						}
+						?>
+					</td>
+					</tr>
+					<tr>
 						<th>Language</th>
 						<td>
 					<?php

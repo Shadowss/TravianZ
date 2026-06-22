@@ -69,26 +69,26 @@ $reps = $database->query("SELECT * FROM ".TB_PREFIX."ndata WHERE $where ORDER BY
 $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',6=>'wonder',7=>'settlement',8=>'oasis',9=>'artefact',10=>'adventure',14=>'spy'];
 ?>
 <style>
-.reports-wrap{max-width:1100px;margin:20px auto;font-family:Verdana}
+.reports-wrap{max-width:1100px;margin:20px auto;font-family:Verdana;color:#222}
 .reports-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.reports-head h1{margin:0;font-size:18px}
+.reports-head h1{margin:0;font-size:18px;color:#111}
 .filters{display:flex;gap:6px}
 .filters a{padding:6px 10px;border:1px solid #ddd;background:#f7f7f7;border-radius:4px;font-size:12px;text-decoration:none;color:#333}
 .filters a.active{background:#333;color:#fff;border-color:#333}
-.search-box input{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;width:200px}
+.search-box input{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;width:200px;background:#fff;color:#111}
 .reports-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
-.rep-card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;font-size:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:.15s}
+.rep-card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;font-size:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:.15s;color:#222}
 .rep-card:hover{box-shadow:0 2px 6px rgba(0,0,0,.1);transform:translateY(-1px)}
 .rep-top{display:flex;justify-content:space-between;margin-bottom:6px}
-.rep-id{font-weight:bold;color:#333}
-.rep-time{color:#888;font-size:11px}
-.rep-body{color:#444;line-height:1.4;max-height:38px;overflow:hidden}
-.rep-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:11px}
-.badge{padding:2px 6px;border-radius:3px;background:#eee;font-size:10px;text-transform:uppercase}
-.badge.attack{background:#ffe0e0;color:#c00}.badge.defence{background:#e0f0ff;color:#06c}
+.rep-id{font-weight:bold;color:#111}
+.rep-time{color:#666;font-size:11px}
+.rep-body{color:#333;line-height:1.4;max-height:38px;overflow:hidden}
+.rep-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#555}
+.badge{padding:2px 6px;border-radius:3px;background:#eee;font-size:10px;text-transform:uppercase;color:#333}
+.badge.attack{background:#ffe0e0;color:#c00}.badge.defence{background:#e0f0ff;color:#0066cc}
 .badge.scout{background:#fff4e0;color:#e67e22}.badge.trade{background:#e8f5e9;color:#2e7d32}
 .pagination{margin-top:14px;text-align:center}
-.pagination a{padding:5px 9px;margin:0 2px;border:1px solid #ddd;text-decoration:none;color:#333;font-size:12px;border-radius:3px}
+.pagination a{padding:5px 9px;margin:0 2px;border:1px solid #ddd;text-decoration:none;color:#333;font-size:12px;border-radius:3px;background:#fff}
 .pagination a.active{background:#333;color:#fff}
 </style>
 
