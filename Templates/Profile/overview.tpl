@@ -262,7 +262,12 @@ if ($uid == $session->uid) {
 <tr>
 <td colspan="2" class="desc2">
 <div class="desc2div">
+    <!-- Issue #250: the "messages" wrapper re-uses the existing smiley sprite
+         CSS (scoped to div.messages/div.forum) so BBCode smileys render here too;
+         its only layout rule (padding/width) is overridden inline. -->
+    <div class="messages" style="padding:0;width:auto">
     <?php echo nl2br($profiel[0]); ?>
+    </div>
 </div>
     </td>
 </tr>
@@ -273,7 +278,10 @@ if ($uid == $session->uid) {
 
 <td class="desc1">
 <div class="desc1div">
+    <!-- Issue #250: see the matching wrapper above (enables BBCode smileys). -->
+    <div class="messages" style="padding:0;width:auto">
     <?php echo nl2br($profiel[1]); ?>
+    </div>
 </div>
 </td>
 
