@@ -86,7 +86,8 @@ function admin_validated_page(string $raw): string
         'addUsers', 'users', 'admin_log', 'config', 'debug_log',
         'editServerSet', 'editPlusSet', 'editLogSet', 'editNewsboxSet',
         'editExtraSet', 'editAdminInfo', 'resetServer', 'player', 'editUser',
-        'deletion', 'Newmessage', 'editPlus', 'editSitter', 'editOverall',
+        'deletion', 'Newmessage', 'editPlus', 'editSitter', 'editPassword',
+        'editProtection', 'editOverall',
         'editWeek', 'userlogin', 'userillegallog', 'editHero', 'editAdditional',
         'village', 'editResources', 'addTroops', 'addABTroops', 'editVillage',
         'villagelog', 'techlog', 'msg',
@@ -344,6 +345,26 @@ if ($page !== '') {
                 $subpage = 'Edit Sitters (' . e($user['username']) . ')';
             } else {
                 $subpage = 'Edit Sitters';
+            }
+            break;
+
+        case 'editPassword':
+            $uid = admin_input_id($_GET, 'uid');
+            if ($uid !== null) {
+                $user    = $database->getUserArray($uid, 1);
+                $subpage = 'Edit Password (' . e($user['username']) . ')';
+            } else {
+                $subpage = 'Edit Password';
+            }
+            break;
+
+        case 'editProtection':
+            $uid = admin_input_id($_GET, 'uid');
+            if ($uid !== null) {
+                $user    = $database->getUserArray($uid, 1);
+                $subpage = 'Edit Protection (' . e($user['username']) . ')';
+            } else {
+                $subpage = 'Edit Protection';
             }
             break;
 
