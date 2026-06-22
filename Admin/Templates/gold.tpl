@@ -52,6 +52,7 @@ $id = $_SESSION['id'];
     <p>This gold will be added to ALL active players on the server.</p>
 
     <form action="../GameEngine/Admin/Mods/gold.php" method="POST" class="gold-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       <input type="number" name="gold" value="20" min="1" max="9999" required>
       <button type="submit">

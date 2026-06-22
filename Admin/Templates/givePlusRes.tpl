@@ -62,6 +62,7 @@ $id = $_SESSION['id'];
     </div>
 
     <form action="../GameEngine/Admin/Mods/givePlusRes.php" method="POST" class="resbonus-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       
       <div class="res-grid">
