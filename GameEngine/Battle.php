@@ -119,8 +119,8 @@ class Battle {
      ******************************************************************/
     $post['tribe'] = $target[0];
     $_POST['result'] = $this->simulate($post);
-    $newWallLevel = $_POST['result'][7];
-    $oldWallLevel = $_POST['result'][8];
+	$newWallLevel = $_POST['result'][7]?? 0;
+	$oldWallLevel = $_POST['result'][8]?? 0;
 
     /******************************************************************
      * WALL CHANGE RE-SIMULATION
@@ -262,26 +262,23 @@ class Battle {
 
     /******************************************************************
      * DEFENDER INIT
-     ******************************************************************/
-    $defender = [];
-    $def_ab   = [];
-    $defscout = 0;
+    ******************************************************************/
+	
+	$defender = [];
+	$def_ab   = [];
+	$defscout = 0;
 
-    for ($i = 1; $i <= 50; $i++) {
+	for ($i = 1; $i <= 50; $i++) {
+		$units = (int)($post['a2_'.$i] ?? 0);
+		$ab    = (int)($post['f2_'.$i] ?? 0);
 
-        if (!empty($post['a2_'.$i])) {
-            $defender['u'.$i] = (int)$post['a2_'.$i];
-            $def_ab[$i] = (int)$post['f2_'.$i];
+    $defender['u'.$i] = $units;
+    $def_ab[$i]       = $units > 0 ? $ab : 0;
 
-            if ($i == 4 || $i == 14 || $i == 23 || $i == 44) {
-                $defscout += $defender['u'.$i];
-            }
-
-        } else {
-            $defender['u'.$i] = 0;
-            $def_ab[$i] = 0;
-        }
-    }
+    if ($units > 0 && in_array($i, [4,14,23,44])) {
+        $defscout += $units;
+		}
+	}
 
     /******************************************************************
      * BASIC VALUES

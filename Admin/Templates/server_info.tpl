@@ -50,23 +50,23 @@ $uv = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."units");
 $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
 ?>
 <style>
-.sinfo-wrap{max-width:1100px;margin:20px auto;font-family:Verdana}
+.sinfo-wrap{max-width:1100px;margin:20px auto;font-family:Verdana;color:#222}
 .sinfo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-.scard{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.scard h3{margin:0 0 8px;font-size:13px;color:#333;border-bottom:1px solid #eee;padding-bottom:6px}
-.scard .row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px dotted #f0f0f0}
+.scard{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);color:#222}
+.scard h3{margin:0 0 8px;font-size:13px;color:#111;border-bottom:1px solid #eee;padding-bottom:6px}
+.scard .row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px dotted #f0f0f0;color:#444}
 .scard .row:last-child{border:0}
-.scard .val{font-weight:bold}
+.scard .val{font-weight:bold;color:#000}
 .tribe-bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin:4px 0}
 .tribe-bar span{display:block;height:100%}
 .romans{background:#c0392b}.teutons{background:#2980b9}.gauls{background:#27ae60}
-.troops-wrap{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px}
+.troops-wrap{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;color:#222}
 .troops-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.tribe-box{border:1px solid #eee;border-radius:6px;padding:8px}
-.tribe-box h4{margin:0 0 6px;font-size:12px;text-align:center;color:#555}
-.unit{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px dotted #f5f5f5}
+.tribe-box{border:1px solid #eee;border-radius:6px;padding:8px;background:#fff}
+.tribe-box h4{margin:0 0 6px;font-size:12px;text-align:center;color:#111}
+.unit{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px dotted #f5f5f5;color:#444}
 .unit img{width:16px;height:16px;margin-right:4px}
-.unit .cnt{font-weight:bold}
+.unit .cnt{font-weight:bold;color:#000}
 .unit svg{width:16px;height:16px;margin-right:4px;vertical-align:-3px}
 @media(max-width:900px){.sinfo-grid{grid-template-columns:1fr}.troops-grid{grid-template-columns:repeat(2,1fr)}}
 </style>

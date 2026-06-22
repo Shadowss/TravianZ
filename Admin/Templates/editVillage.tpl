@@ -26,25 +26,23 @@ $fdata = $database->getResourceLevel($village['wref']);
 if(isset($id)) { include("search2.tpl"); ?>
 <link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css" rel="stylesheet">
 <style>
-/* centrează mizeria aia de hartă */
 #content.village1 {float: none !important;margin: 0 auto !important;width: 300px;display: block;padding: 20px 0;}
 #content.village1 #village_map {float: none !important;margin: 0 auto !important;left: 0 !important;right: 0 !important;position: relative !important;display: block;}
-.village-page{font-family:system-ui;max-width:1100px;margin:0 auto;padding:0 6px}
-.vcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:12px}
-.vhead{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:8px 12px;font-weight:600;font-size:13px;display:flex;align-items:center}
-.vtable{width:100%;border-collapse:collapse;font-size:12.5px}
-.vtable th{background:#f8fafc;padding:6px;border-bottom:1px solid #e5e7eb;text-align:left;font-weight:600;color:#475569}
-.vtable td{padding:5px 6px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.village-page{font-family:system-ui;max-width:1100px;margin:0 auto;padding:0 6px;color:#1f2937}
+.vcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:12px;color:#1f2937}
+.vhead{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;padding:8px 12px;font-weight:600;font-size:13px;display:flex;align-items:center}
+.vtable{width:100%;border-collapse:collapse;font-size:12.5px;color:#1f2937}
+.vtable th{background:#f8fafc;padding:6px;border-bottom:1px solid #e5e7eb;text-align:left;font-weight:600;color:#334155}
+.vtable td{padding:5px 6px;border-bottom:1px solid #f1f5f9;vertical-align:middle;color:#111}
 .vtable tr:last-child td{border-bottom:0}
-.input-mini{width:60px;padding:4px 6px;border:1px solid #d1d5db;border-radius:5px;font-size:12.5px;text-align:center}
+.input-mini{width:60px;padding:4px 6px;border:1px solid #d1d5db;border-radius:5px;font-size:12.5px;text-align:center;background:#fff;color:#111}
 .btn-save{padding:8px 18px;background:#16a34a;color:#fff;border:0;border-radius:6px;font-weight:600;cursor:pointer}
 .btn-save:hover{background:#15803d}
-.instr-link{margin-left:auto;color:#93c5fd;font-size:12px;text-decoration:none;cursor:pointer}
+.instr-link{margin-left:auto;color:#e0f2fe;font-size:12px;text-decoration:none;cursor:pointer}
 .map-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:900px){.map-wrap{grid-template-columns:1fr}}
-.map-box{background:#fcfcfd;border:1px solid #e5e7eb;border-radius:8px;padding:8px;text-align:center}
+.map-box{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:8px;text-align:center;color:#1f2937}
 </style>
-
 <div class="village-page">
 <form action="../GameEngine/Admin/Mods/editBuildings.php" method="POST">
 <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">

@@ -45,15 +45,15 @@ if($maint['started_by'] > 0){
 }
 ?>
 <style>
-.maint-card{max-width:520px;margin:12px auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui}
-.maint-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 14px;font-weight:600}
+.maint-card{max-width:520px;margin:12px auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui;color:#1f2937}
+.maint-head{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;padding:10px 14px;font-weight:600}
 .maint-status{padding:14px;text-align:center;font-weight:600}
 .maint-status.on{color:#dc2626;background:#fef2f2}
 .maint-status.off{color:#16a34a;background:#f0fdf4}
-.maint-row{display:grid;grid-template-columns:1fr 120px;padding:12px 14px;border-top:1px solid #f1f5f9;align-items:center}
+.maint-row{display:grid;grid-template-columns:1fr 120px;padding:12px 14px;border-top:1px solid #f1f5f9;align-items:center;color:#111;background:#fff}
 .maint-btn{padding:8px;border:0;border-radius:6px;color:#fff;font-weight:500;cursor:pointer;width:100%}
 .start{background:#16a34a}.stop{background:#dc2626}
-.maint-info{font-size:12px;color:#64748b;padding:0 14px 10px}
+.maint-info{font-size:12px;color:#475569;padding:0 14px 10px;background:#fff}
 .msg{padding:8px 12px;margin:8px auto;max-width:520px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:6px;font-weight:600}
 </style>
 

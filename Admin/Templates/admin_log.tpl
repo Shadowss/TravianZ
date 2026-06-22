@@ -9,26 +9,30 @@
   <script src="ajax.js" type="text/javascript"></script>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta http-equiv="imagetoolbar" content="no">
-  <style>
-    .log-wrap{max-width:100%;margin:12px;font-family:Tahoma,Verdana,Arial,sans-serif}
-    .log-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .log-head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:6px;color:#222}
-    .log-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-    .log-filters button{padding:4px 10px;font-size:11px;border:1px solid #bbb;border-radius:14px;background:#f5f5f5;cursor:pointer}
-    .log-filters button.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
-    .log-card{background:#fff;border:1px solid #bbb;border-radius:6px;overflow:hidden}
-    .logTable{width:100%;border-collapse:collapse;font-size:11px}
-    .logTable th{background:#66CCFF;color:#fff;padding:5px 6px;text-align:left;font-weight:bold;font-size:10px;white-space:nowrap}
-    .logTable td{padding:5px 6px;border-bottom:1px solid #eee;vertical-align:top;line-height:14px}
-    .logTable tr:hover{background:#f5f9ff}
-    .logTable a{color:#004a9f;text-decoration:none}
-    .logTable a:hover{text-decoration:underline}
-    .logCat{font-weight:bold;padding:2px 6px;border-radius:3px;color:#fff;font-size:10px;white-space:nowrap}
-    .cat-ban{background:#FF0000} .cat-unban{background:#27ae60}
-    .cat-gold{background:#FFCC00} .cat-plus{background:#33CCFF}
-    .cat-maint{background:#555} .cat-village{background:#66CCFF}
-    .cat-msg{background:#e67e22} .cat-other{background:#CCFF00}
-  </style>
+<style>
+ .log-wrap{max-width:100%;margin:12px;font-family:Tahoma,Verdana,Arial,sans-serif;color:#222}
+.log-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.log-head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:6px;color:#111}
+.log-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.log-filters button{padding:4px 10px;font-size:11px;border:1px solid #bbb;border-radius:14px;background:#f5f5f5;cursor:pointer;color:#222}
+.log-filters button.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
+.log-card{background:#fff;border:1px solid #bbb;border-radius:6px;overflow:hidden;color:#222}
+.logTable{width:100%;border-collapse:collapse;font-size:11px;color:#222}
+.logTable th{background:#0891b2;color:#fff;padding:5px 6px;text-align:left;font-weight:bold;font-size:10px;white-space:nowrap}
+.logTable td{padding:5px 6px;border-bottom:1px solid #eee;vertical-align:top;line-height:14px;color:#111;background:#fff}
+.logTable tr:hover{background:#f5f9ff}
+.logTable a{color:#004a9f;text-decoration:none}
+.logTable a:hover{text-decoration:underline}
+.logCat{font-weight:bold;padding:2px 6px;border-radius:3px;color:#fff;font-size:10px;white-space:nowrap}
+.cat-ban{background:#FF0000} 
+.cat-unban{background:#27ae60}
+.cat-gold{background:#FFCC00;color:#000} 
+.cat-plus{background:#33CCFF;color:#003344}
+.cat-maint{background:#555} 
+.cat-village{background:#66CCFF;color:#003344}
+.cat-msg{background:#e67e22} 
+.cat-other{background:#CCFF00;color:#000}
+</style>
 </head>
 <?php
 

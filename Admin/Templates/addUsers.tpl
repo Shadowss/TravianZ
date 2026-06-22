@@ -54,35 +54,35 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
 }
 ?>
 <style>
-.add-wrap{max-width:520px;margin:14px auto;font-family:Tahoma,Verdana,Arial,sans-serif}
-.add-head h2{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:5px}
-.add-card{background:#fff;border:1px solid #bbb;border-radius:5px;overflow:hidden}
-.add-top{padding:10px;background:#f5f5f5;border-bottom:1px solid #ddd;text-align:center}
+.add-wrap{max-width:520px;margin:14px auto;font-family:Tahoma,Verdana,Arial,sans-serif;color:#222}
+.add-head h2{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:5px;color:#111}
+.add-card{background:#fff;border:1px solid #bbb;border-radius:5px;overflow:hidden;color:#222}
+.add-top{padding:10px;background:#f5f5f5;border-bottom:1px solid #ddd;text-align:center;color:#222}
 .warn-red{color:#c0392b;font-weight:bold;font-size:11px;margin:2px 0}
 .warn-blue{color:#2980b9;font-size:10px;line-height:1.2}
-.add-form{padding:14px}
+.add-form{padding:14px;background:#fff;color:#222}
 .mode-box{display:flex;gap:5px;margin-bottom:10px}
 .mode-box label{flex:1;cursor:pointer}
 .mode-box input{display:none}
-.mode-box span{display:block;text-align:center;padding:5px;border:1px solid #aaa;border-radius:3px;background:#eee;font-size:11px;font-weight:bold}
+.mode-box span{display:block;text-align:center;padding:5px;border:1px solid #aaa;border-radius:3px;background:#eee;font-size:11px;font-weight:bold;color:#222}
 .mode-box input:checked+span{background:#2c3e50;color:#fff;border-color:#2c3e50}
-.examples{font-size:10px;color:#555;background:#f9f9f9;border:1px dashed #ccc;padding:5px;margin:6px 0 10px;border-radius:3px;line-height:1.25}
+.examples{font-size:10px;color:#444;background:#f9f9f9;border:1px dashed #ccc;padding:5px;margin:6px 0 10px;border-radius:3px;line-height:1.25}
 .row{display:flex;align-items:center;margin-bottom:8px;gap:8px}
-.row label{width:110px;font-size:11px;font-weight:bold}
-.row input[type=text]{width:150px;padding:4px;border:1px solid #999;border-radius:3px;font-size:12px}
-.hint{font-size:9px;color:#777;margin-left:118px;margin-top:-5px;margin-bottom:6px}
-.check{margin:10px 0 12px;font-size:11px}
+.row label{width:110px;font-size:11px;font-weight:bold;color:#111}
+.row input[type=text]{width:150px;padding:4px;border:1px solid #999;border-radius:3px;font-size:12px;background:#fff;color:#111}
+.hint{font-size:9px;color:#555;margin-left:118px;margin-top:-5px;margin-bottom:6px}
+.check{margin:10px 0 12px;font-size:11px;color:#222}
 .check label{display:flex;align-items:center;gap:5px}
 
 /* TRIBES VERTICAL */
 .tribe-wrap{margin-top:8px;}
-.tribe-title{font-size:11px;font-weight:bold;margin-bottom:4px;}
+.tribe-title{font-size:11px;font-weight:bold;margin-bottom:4px;color:#111}
 .tribe-grid{display:flex;flex-direction:column;gap:4px;width:140px;}
-.tribe-grid label{display:flex;align-items:center;gap:6px;padding:4px 6px;border:1px solid #bbb;border-radius:3px;background:#fcfcfc;cursor:pointer;min-height:24px;font-size:11px;}
+.tribe-grid label{display:flex;align-items:center;gap:6px;padding:4px 6px;border:1px solid #bbb;border-radius:3px;background:#fff;cursor:pointer;min-height:24px;font-size:11px;color:#222}
 .tribe-grid label:hover{background:#f0f0f0;}
 .tribe-grid input{width:12px;height:12px;margin:0;}
 .tribe-icon{font-size:12px;line-height:1;}
-.tribe-text{font-size:10px;color:#333;line-height:1;}
+.tribe-text{font-size:10px;color:#222;line-height:1;}
 
 .submit{text-align:center;margin-top:12px}
 .submit button{background:#27ae60;color:#fff;border:0;padding:7px 22px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:12px}

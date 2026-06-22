@@ -92,8 +92,8 @@ if ($totalRanks > 0) {
         $uid  = (int)$row['userid'];
         $rank = (int)$i;
 
-        $username = htmlspecialchars($row['username'], ENT_QUOTES, 'UTF-8');
-        $aname    = htmlspecialchars($row['aname'], ENT_QUOTES, 'UTF-8');
+		$username = htmlspecialchars((string)$row['username'], ENT_QUOTES, 'UTF-8');
+		$aname    = htmlspecialchars((string)$row['aname'], ENT_QUOTES, 'UTF-8');
 
         $highlight = ($i == $search) ? " class=\"hl\"" : "";
 
