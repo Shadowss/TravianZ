@@ -1137,6 +1137,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   `clay` int(11) DEFAULT NULL,
   `iron` int(11) DEFAULT NULL,
   `crop` int(11) DEFAULT NULL,
+  `marker` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`moveid`),
   KEY `ref` (`ref`),
   KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`),

@@ -73,7 +73,25 @@ switch($_GET['f']) {
         include("Templates/Ajax/quest_core.tpl");
     }else{
         include("Templates/Ajax/quest_core25.tpl");
-    }    
+    }
         break;
+	// Rally-point attack marker (issue #245): persist the green/yellow/red tag
+	// a defender sets on an incoming attack. setMovementMarker() enforces that
+	// the targeted village belongs to the logged-in user.
+	case 'marker':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0]);
+			break;
+		}
+		$ok = $database->setMovementMarker($_POST['moveid'] ?? 0, $_POST['marker'] ?? 0, $uid);
+		echo json_encode(['ok' => $ok ? 1 : 0]);
+		break;
 }
 ?>

@@ -8,6 +8,33 @@ $units = $database->getMovement(34, $village->wid, 1);
 $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3);
 ?>
 
+<style>
+.atk_marker{position:relative;float:right;width:14px;height:14px;border-radius:50%;border:1px solid #666;margin:0 0 0 6px;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.atk_marker.marker0{background:#dddddd}
+.atk_marker.marker1{background:#3cb043}
+.atk_marker.marker2{background:#f2c200}
+.atk_marker.marker3{background:#e23b3b}
+.atk_marker:hover{box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),0 0 0 1px #333}
+</style>
+<script type="text/javascript">
+function cycleMarker(moveid, el){
+    var cur = parseInt(el.getAttribute('data-marker') || '0', 10);
+    var next = (cur + 1) % 4;
+    var body = 'moveid=' + encodeURIComponent(moveid) + '&marker=' + encodeURIComponent(next);
+    fetch('ajax.php?f=marker', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: body
+    }).then(function(r){ return r.json(); }).then(function(d){
+        if (d && d.ok) {
+            el.setAttribute('data-marker', next);
+            el.className = 'atk_marker marker' + next;
+        }
+    });
+}
+</script>
+
 <?php foreach ($units as $u):
     $session->timer++;
     $sort = (int)$u['sort_type'];
@@ -24,6 +51,19 @@ $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3
         $start = ($tribe - 1) * 10 + 1;
         $end = $tribe * 10;
         $dt = $generator->procMtime($u['endtime']);
+        // Base travel time per troop type (issue #245): distance / unit speed,
+        // WITHOUT tournament square or artefact effects. INCREASE_SPEED is the
+        // server speed multiplier, matching MyGenerator::procDistanceTime().
+        $mtimes = [];
+        if (!$isElders) {
+            $fromInfo = $database->getMInfo($from);
+            $toInfo = $database->getMInfo($u['to']);
+            $dist = $database->getDistance($fromInfo['x'], $fromInfo['y'], $toInfo['x'], $toInfo['y']);
+            for ($i = $start; $i <= $end; $i++) {
+                $spd = isset($GLOBALS['u'.$i]['speed']) ? $GLOBALS['u'.$i]['speed'] : 0;
+                $mtimes[$i] = $spd > 0 ? $generator->getTimeFormat((int) round(($dist / $spd) * 3600 / INCREASE_SPEED)) : '-';
+            }
+        }
 ?>
 <table class="troop_details" cellpadding="1" cellspacing="1">
     <thead><tr>
@@ -33,6 +73,9 @@ $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3
             <?php else:?><a><?php echo VILLAGE_OF_THE_ELDERS; ?></a><?php endif;?>
         </td>
         <td colspan="<?= $colspan?>">
+            <?php if (($atk == 3 || $atk == 4) && !$isElders): $marker = (int)($u['marker'] ?? 0); $mid = (int)$u['moveid'];?>
+            <span class="atk_marker marker<?= $marker?>" data-marker="<?= $marker?>" title="<?= MARK_ATTACK?>" onclick="cycleMarker(<?= $mid?>,this)"></span>
+            <?php endif;?>
             <?php if (!$isElders):?>
                 <a href="karte.php?d=<?= $u['to']?>&c=<?= $generator->getMapCheck($u['to'])?>"><?= $action?> <?= $database->getVillageField($u['to'],'name')?></a>
             <?php else:?><a><?= VILLAGE_OF_THE_ELDERS_TROOPS?></a><?php endif;?>
@@ -40,7 +83,7 @@ $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3
     </tr></thead>
     <tbody class="units">
         <tr><th>&nbsp;</th>
-            <?php for ($i=$start;$i<=$end;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>" title="<?= $technology->getUnitName($i)?>"></td><?php endfor;?>
+            <?php for ($i=$start;$i<=$end;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>" title="<?= $technology->getUnitName($i)?><?= isset($mtimes[$i])? ': '.$mtimes[$i] : ''?>"></td><?php endfor;?>
             <?php if ($u['t11'] && $isMine):?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif;?>
         </tr>
         <tr><th><?= TROOPS?></th>

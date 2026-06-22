@@ -5895,7 +5895,7 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
             $pairs[] = '(0, '.(int) $typeValue.', '.(int) $from[$index].', '.(int) $to[$index].', '.(int) $ref[$index].', '.(int) $ref2[$index].', '.(int) $time[$index].', '.(int) $endtime[$index].', 0, '.(int) $send[$index].', '.(int) $wood[$index].', '.(int) $clay[$index].', '.(int) $iron[$index].', '.(int) $crop[$index].')';
 
             if ($counter++ > 25) {
-                $q = "INSERT INTO " . TB_PREFIX . "movement VALUES ".implode(', ', $pairs);
+                $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES ".implode(', ', $pairs);
                 mysqli_query($this->dblink,$q);
 
                 $pairs = [];
@@ -5904,7 +5904,7 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         }
 
         if ($counter > 0) {
-            $q = "INSERT INTO " . TB_PREFIX . "movement VALUES " . implode( ', ', $pairs );
+            $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES " . implode( ', ', $pairs );
             return mysqli_query( $this->dblink, $q );
         } else {
             return true;
@@ -8037,6 +8037,23 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
+	}
+
+	// Rally-point attack marker (issue #245): a defender can tag an incoming
+	// attack green/yellow/red. The WHERE clause restricts the update to a
+	// movement whose target village (`to`) belongs to $uid, so a player can
+	// only mark attacks incoming on their own villages.
+	function setMovementMarker($moveid, $marker, $uid) {
+		$moveid = (int) $moveid;
+		$marker = (int) $marker;
+		$uid    = (int) $uid;
+		if ($marker < 0 || $marker > 3 || $moveid <= 0 || $uid <= 0) {
+			return false;
+		}
+		$q = "UPDATE ".TB_PREFIX."movement SET marker = ".$marker.
+			" WHERE moveid = ".$moveid.
+			" AND `to` IN (SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = ".$uid.")";
+		return mysqli_query($this->dblink, $q) && mysqli_affected_rows($this->dblink) > 0;
 	}
 
     // no need to cache this method

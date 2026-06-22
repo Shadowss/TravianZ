@@ -801,6 +801,7 @@ define('RETURNFROM', 'Întoarcere din');
 define('REINFORCEMENTFOR', 'Întărire către');
 define('ATTACK_ON', 'Atac către');
 define('RAID_ON', 'Raid către');
+define('MARK_ATTACK', 'Marchează acest atac (gravitate)');
 define('SCOUTING', 'Explorare');
 define('PRISONERS', 'Prizonieri');
 define('PRISONERSIN', 'Prizonieri în');
