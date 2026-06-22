@@ -54,12 +54,31 @@ if (!$admin || (int)$admin['access'] !== 9) {
 // ---------------------------------------------------------------------------
 // Câmpuri
 // ---------------------------------------------------------------------------
-$email    = $database->escape(trim($_POST['email'] ?? ''));
+$email_raw = trim($_POST['email'] ?? '');
+$email     = filter_var($email_raw, FILTER_VALIDATE_EMAIL) ? $email_raw : '';
+$email     = $database->escape($email);
+
 $tribe    = max(1, min(5, (int)($_POST['tribe'] ?? 1)));
-$location = $database->escape(trim($_POST['location'] ?? ''));
-$desc1    = $database->escape($_POST['desc1'] ?? '');
-$desc2    = $database->escape($_POST['desc2'] ?? '');
-$quest    = $database->escape($_POST['quest'] ?? '');
+
+$location_raw = trim($_POST['location'] ?? '');
+$location = $database->escape(
+    $database->RemoveXSS(mb_substr(strip_tags($location_raw), 0, 50))
+);
+
+$desc1_raw = $_POST['desc1'] ?? '';
+$desc1 = $database->escape(
+    $database->RemoveXSS(mb_substr(strip_tags($desc1_raw, '<b><i><u><br>'), 0, 5000))
+);
+
+$desc2_raw = $_POST['desc2'] ?? '';
+$desc2 = $database->escape(
+    $database->RemoveXSS(mb_substr(strip_tags($desc2_raw, '<b><i><u><br>'), 0, 5000))
+);
+
+$quest_raw = trim($_POST['quest'] ?? '');
+$quest = $database->escape(
+    $database->RemoveXSS(mb_substr(strip_tags($quest_raw), 0, 200))
+);
 
 // ---------------------------------------------------------------------------
 // Update
