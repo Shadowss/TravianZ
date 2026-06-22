@@ -4836,13 +4836,14 @@ References: User ID/Message ID, Mode
 	    list($wid, $field) = $this->escape_input((int) $wid, (int) $field);
 
 		global $building, $village, $session;
+		
+		$fLevel = $this->getFieldLevel($wid, $field);
 
 		// check if we're not demolishing an Embassy if the player is in an alliance
 		if ($this->getFieldType($wid,$field) == 18 && $session->alliance) {
 
 		    // get field level, alliance members count and the minimum
 		    // level of Embassy to be able to hold this number of people
-		    $fLevel          = $this->getFieldLevel($wid,$field);
 		    $membersCount    = $this->countAllianceMembers($session->alliance);
 		    $minEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
 		    $isOwner         = $this->isAllianceOwner($session->uid) == $session->alliance;
@@ -4873,14 +4874,8 @@ References: User ID/Message ID, Mode
 		$q = "DELETE FROM ".TB_PREFIX."bdata WHERE field=$field AND wid=$wid";
 		mysqli_query($this->dblink,$q);
 		$uprequire = $building->resourceRequired($field,$village->resarray['f'.$field.'t'],0);
-$newLevel = max(0, $fLevel - 1);
-
-$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
-    ".$wid.",
-    ".$field.",
-    ".$newLevel.",
-    ".(time() + floor($uprequire['time'] / 2))."
-)";
+		$newLevel = max(0, $fLevel - 1);
+		$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (".$wid.",".$field.",".$newLevel.",".(time() + floor($uprequire['time'] / 2)).")";
 		mysqli_query($this->dblink,$q);
 
 		return true;
