@@ -31,7 +31,12 @@ if(isset($id))
 {
 	include_once("../GameEngine/Ranking.php");
 	$varmedal = $database->getProfileMedal($id);
-	$profiel="".$user['desc1']."".md5('skJkev3')."".$user['desc2']."";
+	// Issue #250: escape the user-controlled descriptions before they reach the
+	// raw nl2br() render in playerinfo.tpl, so a stored HTML/JS payload (e.g.
+	// <details open ontoggle="eval(...)">) is shown as inert text. BBCode is
+	// intentionally NOT expanded here: the admin panel has no $generator (the
+	// [coor] tag would fatal) and seeing the raw markup helps moderation.
+	$profiel=htmlspecialchars($user['desc1'] ?? '', ENT_QUOTES, 'UTF-8').md5('skJkev3').htmlspecialchars($user['desc2'] ?? '', ENT_QUOTES, 'UTF-8');
 	$separator="../";
 	require("../Templates/Profile/medal.php");
 	$profiel=explode("".md5('skJkev3')."", $profiel);

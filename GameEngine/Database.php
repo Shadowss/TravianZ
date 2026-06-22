@@ -1309,8 +1309,10 @@ class MYSQLi_DB implements IDbConnection {
     $gender = (int)$gender;
     $location = mb_substr(trim($location), 0, 30, 'UTF-8');
     $birthday = trim($birthday);
-    $desc1 = trim($desc1);
-    $desc2 = trim($desc2);
+    // Issue #250: cap profile descriptions (BBCode is rendered as HTML on
+    // display) so a single field cannot store an oversized payload.
+    $desc1 = mb_substr(trim($desc1), 0, 3000, 'UTF-8');
+    $desc2 = mb_substr(trim($desc2), 0, 3000, 'UTF-8');
 
     $stmt = $this->dblink->prepare(
         "UPDATE `".TB_PREFIX."users` 

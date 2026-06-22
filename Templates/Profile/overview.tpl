@@ -40,8 +40,17 @@ $varmedal     = $database->getProfileMedal($uid);
 // marker legacy (păstrat pentru compatibilitate DB)
 $profileSeparator = md5('skJkev3');
 
-// păstrăm exact formatul original (IMPORTANT pentru medal.php)
-$profiel = $displayarray['desc1'] . $profileSeparator . $displayarray['desc2'];
+// Issue #250: profile descriptions are user-controlled free text. Escape them
+// BEFORE any markup expansion so embedded HTML/JS (e.g. a stored
+// <details open ontoggle="eval(...)"> payload) is rendered inert, then expand
+// the BBCode the form advertises ("Suport BBCode"). The md5 separator and the
+// [#..] medal markers carry no HTML/BBCode-special characters, so they survive
+// htmlspecialchars()/BBCode.php untouched and are still handled by medal.php.
+$input = htmlspecialchars($displayarray['desc1'] ?? '', ENT_QUOTES, 'UTF-8')
+       . $profileSeparator
+       . htmlspecialchars($displayarray['desc2'] ?? '', ENT_QUOTES, 'UTF-8');
+include("GameEngine/BBCode.php");
+$profiel = $bbcoded;
 
 // medal.php se ocupă de procesare (NU îi strica inputul)
 require("medal.php");
