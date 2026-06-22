@@ -125,53 +125,68 @@ class Profile {
 	private function updateLinks($post) {
 		global $database, $session;
 
-		$uid   = (int)$session->uid;
-		$links = [];
+    $uid   = (int)$session->uid;
+    $links = [];
 
-		// Group the row fields (nr0, id0, linkname0, linkziel0, ...) by index.
-		foreach ($post as $key => $value) {
-			if (!is_string($value)) {
-				continue;
-			}
-			$value = trim($value);
+    // Group the row fields (nr0, id0, linkname0, linkziel0, ...) by index.
+    foreach ($post as $key => $value) {
+        if (!is_string($value)) {
+            continue;
+        }
+        $value = trim($value);
 
-			if (strpos($key, 'linkname') === 0) {
-				$links[substr($key, 8)]['name'] = mysqli_real_escape_string($database->dblink, $value);
-			} elseif (strpos($key, 'linkziel') === 0) {
-				$links[substr($key, 8)]['url'] = mysqli_real_escape_string($database->dblink, $value);
-			} elseif (strpos($key, 'nr') === 0) {
-				$links[substr($key, 2)]['nr'] = (int)$value;
-			} elseif (strpos($key, 'id') === 0) {
-				$links[substr($key, 2)]['id'] = (int)$value;
-			}
-		}
+        if (strpos($key, 'linkname') === 0) {
+            $links[substr($key, 8)]['name'] = $value;
+        } elseif (strpos($key, 'linkziel') === 0) {
+            $links[substr($key, 8)]['url'] = $value;
+        } elseif (strpos($key, 'nr') === 0) {
+            $links[substr($key, 2)]['nr'] = (int)$value;
+        } elseif (strpos($key, 'id') === 0) {
+            $links[substr($key, 2)]['id'] = (int)$value;
+        }
+    }
 
-		foreach ($links as $link) {
-			$nr   = isset($link['nr'])   ? (int)$link['nr'] : 0;
-			$id   = isset($link['id'])   ? (int)$link['id'] : 0;
-			$name = isset($link['name']) ? $link['name'] : '';
-			$url  = isset($link['url'])  ? $link['url']  : '';
+    foreach ($links as $link) {
+        $nr = isset($link['nr']) ? (int)$link['nr'] : 0;
+        $id = isset($link['id']) ? (int)$link['id'] : 0;
 
-			if ($nr !== 0 && $name !== '' && $url !== '' && $id === 0) {
-				// New link.
-				mysqli_query(
-					$database->dblink,
-					"INSERT INTO `" . TB_PREFIX . "links` (`userid`, `name`, `url`, `pos`) " .
-					"VALUES ($uid, '$name', '$url', $nr)"
-				);
-			} elseif ($nr !== 0 && $name !== '' && $url !== '' && $id > 0) {
-				// Update existing link (ownership enforced in the WHERE clause).
-				mysqli_query(
-					$database->dblink,
-					"UPDATE `" . TB_PREFIX . "links` SET `name`='$name', `url`='$url', `pos`=$nr " .
-					"WHERE `id`=$id AND `userid`=$uid"
-				);
-			} elseif ($nr === 0 && $name === '' && $url === '' && $id > 0) {
-				// Emptied row -> delete (ownership enforced in the WHERE clause).
-				mysqli_query(
-					$database->dblink,
-					"DELETE FROM `" . TB_PREFIX . "links` WHERE `id`=$id AND `userid`=$uid"
-				);
+        // --- REMOVE XSS ---
+        $name_raw = trim($link['name'] ?? '');
+        $url_raw  = trim($link['url'] ?? '');
+
+        // name : without HTML, maximum 30 characters (as in the game), filtered through RemoveXSS
+        $name = $database->RemoveXSS(mb_substr(strip_tags($name_raw), 0, 30));
+
+        // url: accepts only http/https, max 120 characters, filtered through RemoveXSS
+        $url = '';
+        if ($url_raw !== '' && preg_match('#^https?://#i', $url_raw)) {
+            $url = $database->RemoveXSS(mb_substr($url_raw, 0, 120));
+        }
+
+        // SQL: escape for SQL (keeping the current TravianZ style used in TravianZ)
+        $name_sql = mysqli_real_escape_string($database->dblink, $name);
+        $url_sql  = mysqli_real_escape_string($database->dblink, $url);
+
+        if ($nr !== 0 && $name !== '' && $url !== '' && $id === 0) {
+            // New link.
+            mysqli_query(
+                $database->dblink,
+                "INSERT INTO `" . TB_PREFIX . "links` (`userid`, `name`, `url`, `pos`) " .
+                "VALUES ($uid, '$name_sql', '$url_sql', $nr)"
+            );
+        } elseif ($nr !== 0 && $name !== '' && $url !== '' && $id > 0) {
+            // Update existing link (ownership enforced in the WHERE clause).
+            mysqli_query(
+                $database->dblink,
+                "UPDATE `" . TB_PREFIX . "links` SET `name`='$name_sql', `url`='$url_sql', `pos`=$nr " .
+                "WHERE `id`=$id AND `userid`=$uid"
+            );
+        } elseif ($nr === 0 && $name === '' && $url === '' && $id > 0) {
+            // Emptied row -> delete (ownership enforced in the WHERE clause).
+            mysqli_query(
+                $database->dblink,
+                "DELETE FROM `" . TB_PREFIX . "links` WHERE `id`=$id AND `userid`=$uid"
+            );
 			}
 		}
 	}
@@ -204,9 +219,9 @@ class Profile {
     $birthday = preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $birthday) ? $birthday : '0';
 
     $mw   = (int)($post['mw'] ?? 0);
-    $ort  = trim($post['ort'] ?? '');
-    $be2  = trim($post['be2'] ?? ''); // descrierea stânga
-    $be1  = trim($post['be1'] ?? ''); // descrierea dreapta
+	$ort = $database->RemoveXSS(trim($post['ort'] ?? ''));
+	$be1 = $database->RemoveXSS(trim($post['be1'] ?? '')); // right description
+	$be2 = $database->RemoveXSS(trim($post['be2'] ?? '')); // left description
 
     $database->submitProfile($session->uid, $mw, $ort, $birthday, $be2, $be1);
 
