@@ -91,6 +91,7 @@ function admin_validated_page(string $raw): string
         'editWeek', 'userlogin', 'userillegallog', 'editHero', 'editAdditional',
         'village', 'editResources', 'addTroops', 'addABTroops', 'editVillage',
         'villagelog', 'techlog', 'msg',
+        'alliance', 'editAli', 'delAli',
     ];
 
     return in_array($raw, $whitelist, true) ? $raw : '';
@@ -500,6 +501,37 @@ if ($page !== '') {
                 $subpage = 'Edit Village (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
                 $subpage = 'Edit Village (no village)';
+            }
+            break;
+
+        // ── Alliance-context pages (require a valid ?aid=) ───────────────────
+        case 'alliance':
+            $aid = admin_input_id($_GET, 'aid');
+            if ($aid !== null) {
+                $alidata = $database->getAlliance($aid);
+                $subpage = $alidata ? 'Alliance (' . e($alidata['tag']) . ')' : 'Alliance (ID ' . $aid . ' not found)';
+            } else {
+                $subpage = 'Alliance';
+            }
+            break;
+
+        case 'editAli':
+            $aid = admin_input_id($_GET, 'aid');
+            if ($aid !== null) {
+                $alidata = $database->getAlliance($aid);
+                $subpage = $alidata ? 'Edit Alliance (' . e($alidata['tag']) . ')' : 'Edit Alliance';
+            } else {
+                $subpage = 'Edit Alliance';
+            }
+            break;
+
+        case 'delAli':
+            $aid = admin_input_id($_GET, 'aid');
+            if ($aid !== null) {
+                $alidata = $database->getAlliance($aid);
+                $subpage = $alidata ? 'Delete Alliance (' . e($alidata['tag']) . ')' : 'Delete Alliance';
+            } else {
+                $subpage = 'Delete Alliance';
             }
             break;
 
