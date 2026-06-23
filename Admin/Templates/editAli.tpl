@@ -59,6 +59,7 @@ textarea{width:100%;box-sizing:border-box;min-height:120px;padding:8px;border:1p
     </div>
 
     <form action="../GameEngine/Admin/Mods/editAli.php" method="POST">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="aid" value="<?php echo $aid; ?>">
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 

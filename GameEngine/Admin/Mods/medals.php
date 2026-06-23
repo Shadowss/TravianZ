@@ -11,6 +11,12 @@
 #################################################################################
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+// Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
+// itself (it does not go through admin.php's central csrf_verify()).
+require_once(__DIR__ . '/../csrf.php');
+csrf_verify();
+
 include_once("../../Account.php");
 
 // go max 5 levels up - we don't have folders that go deeper than that
@@ -34,10 +40,12 @@ elseif(isset($_POST['userid']) && !empty($_POST['userid']) && is_numeric($_POST[
     mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."medal set del = 1 WHERE userid = ".$userID."");
 }
 
-$admidID = (int) $_SESSION['id'];
-$name = $database->getUserField($adminID, "name", 0);
+$admid = (int) $_SESSION['id'];
+$uid   = (int) ($_POST['uid'] ?? 0);
+$name  = $database->escape((string) $database->getUserField($uid, "username", 0));
+$medalLogId = isset($medalID) ? $medalID : 0;
 //TODO: Make a dedicated method for logging
-mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."admin_log values (0, $admid, 'Deleted medal id [#".$medalid."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
+mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."admin_log values (0, $admid, 'Deleted medal id [#".$medalLogId."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$_POST['uid']."");
+header("Location: ../../../Admin/admin.php?p=player&uid=".$uid);
 ?>
