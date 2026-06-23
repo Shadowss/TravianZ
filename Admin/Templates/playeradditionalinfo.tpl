@@ -64,11 +64,11 @@
 		</tr>
 		<tr>
 			<td>Sitter 1</td>
-			<td><?php echo $user['sit1'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit1'].'">'.$database->getUserField($user['sit1'],"username",0).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
+			<td><?php echo $user['sit1'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit1'].'">'.htmlspecialchars($database->getUserField($user['sit1'],"username",0)).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
 		</tr>
 		<tr>
 			<td>Sitter 2</td>
-			<td><?php echo $user['sit2'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit2'].'">'.$database->getUserField($user['sit2'],"username",0).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
+			<td><?php echo $user['sit2'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit2'].'">'.htmlspecialchars($database->getUserField($user['sit2'],"username",0)).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
 		</tr>
 		<tr>
 			<td>Beginners Protection</td>

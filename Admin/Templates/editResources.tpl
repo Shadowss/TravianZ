@@ -49,7 +49,7 @@ if($id){
 	<input type="hidden" name="did" id="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
     
     <div class="res-card">
-      <div class="res-head">Modify Resources — <?php echo $village['name']; ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</div>
+      <div class="res-head">Modify Resources — <?php echo htmlspecialchars($village['name']); ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</div>
       
       <table class="res-table">
         <thead>

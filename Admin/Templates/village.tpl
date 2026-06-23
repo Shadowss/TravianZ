@@ -116,7 +116,7 @@ if(isset($id)){
 <div class="vcard">
   <div class="vhead">Village Information</div>
   <table class="vtable">
-    <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo $user['username']; ?></a></td>
+    <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo htmlspecialchars($user['username']); ?></a></td>
       <td style="text-align:right">
         <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
           <?php echo csrf_field(); ?>
@@ -134,7 +134,7 @@ if(isset($id)){
             <?php echo csrf_field(); ?>
             <input type="hidden" name="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
-            <input class="input-mini" type="text" name="villagename" value="<?php echo $village['name']; ?>" style="flex:1">
+            <input class="input-mini" type="text" name="villagename" value="<?php echo htmlspecialchars($village['name']); ?>" style="flex:1">
             <?php if($_SESSION['access'] == ADMIN) { ?>
 			<button class="btn-icon" title="Rename"><?php echo $svgEdit; ?></button>
 			<?php } ?>
@@ -164,7 +164,7 @@ if(isset($id)){
       <div class="vhead">Expansion</div>
       <table class="vtable" style="text-align:center">
         <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>Village</td><td>Pop</td><td>CP</td></tr>
-        <?php for($e = 1; $e < 4; $e++){ $exp = $village['exp'.$e.'']; if($exp == 0){ echo '<tr><td>-</td><td>-</td><td>-</td></tr>'; }else{ $vill = $database->getVillage($exp); echo '<tr><td><a href="admin.php?p=village&did='.$vill['wref'].'" style="color:#2563eb">'.$vill['name'].'</a></td><td>'.$vill['pop'].'</td><td>'.$vill['cp'].'</td></tr>'; } } ?>
+        <?php for($e = 1; $e < 4; $e++){ $exp = $village['exp'.$e.'']; if($exp == 0){ echo '<tr><td>-</td><td>-</td><td>-</td></tr>'; }else{ $vill = $database->getVillage($exp); echo '<tr><td><a href="admin.php?p=village&did='.$vill['wref'].'" style="color:#2563eb">'.htmlspecialchars($vill['name']).'</a></td><td>'.$vill['pop'].'</td><td>'.$vill['cp'].'</td></tr>'; } } ?>
       </table>
     </div>
 
@@ -195,7 +195,7 @@ if(isset($id)){
   </div>
   </br>
   <div class="map-card">
-    <h3>Village Center - <?php echo $village['name']; ?></h3>
+    <h3>Village Center - <?php echo htmlspecialchars($village['name']); ?></h3>
     <?php $WWLevel = $fdata['f99t']; $wallLevel = $fdata['f40t']; if($wallLevel == 0) $wallType = "d2_0"; else { switch($user['tribe']){ case 1: case 5: default: $wallType = "d2_11"; break; case 2: $wallType = "d2_12"; break; case 3: $wallType = "d2_1"; break; } } ?>
     <div id="content" class="village2">
       <div id="village_map" class="<?php echo $wallType; ?>">

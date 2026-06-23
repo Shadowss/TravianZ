@@ -5,7 +5,7 @@
         <strong style="color:#e67e22;"><?php echo $delTime; ?></strong>
     </div>
     <a href="?p=player&uid=<?php echo $user['id']; ?>&action=StopDel" 
-       onclick="return confirm('Cancel deletion for <?php echo $user['username']; ?>?');"
+       onclick="return confirm('Cancel deletion for <?php echo htmlspecialchars(addslashes($user['username'])); ?>?');"
        title="Cancel deletion"
        style="background:#e74c3c; color:#fff; text-decoration:none; padding:6px 10px; border-radius:6px; font-weight:bold;">
        ✖ Cancel

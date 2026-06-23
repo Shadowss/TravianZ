@@ -48,7 +48,7 @@
 
     <thead>
         <tr>
-            <th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo $user['username'];?></a></th>
+            <th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></th>
         </tr>
         <tr>
             <td>Details</td>
