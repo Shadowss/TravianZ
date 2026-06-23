@@ -91,7 +91,7 @@ if ($hero !== false) {
 	<tr><td colspan="3" class="hero-sub" style="text-align:center">Hero #<?php echo $x++; ?></td></tr>
 	<tr>
 		<td width="35%">Hero Name</td> 
-		<td colspan="2" class="hero-name"><?php echo $h['name']; ?></td> 
+		<td colspan="2" class="hero-name"><?php echo htmlspecialchars($h['name']); ?></td>
 	</tr>
 	<tr>
 		<td>Hero Level</td> 

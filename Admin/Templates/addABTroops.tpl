@@ -58,7 +58,7 @@ if(isset($id)){
 <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
 <div class="ab-card">
-  <div class="ab-head">Upgrades – <?php echo $village['name']; ?> (<?php echo $coor['x'].'|'.$coor['y']; ?>)</div>
+  <div class="ab-head">Upgrades – <?php echo htmlspecialchars($village['name']); ?> (<?php echo $coor['x'].'|'.$coor['y']; ?>)</div>
   
   <div class="ab-grid">
     <div class="ab-row header">

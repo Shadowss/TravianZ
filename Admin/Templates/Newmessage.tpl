@@ -50,7 +50,7 @@ $user = $database->getUserArray($id,1);
   <div class="msg-card">
     <div class="msg-head">
       <h4>New Message</h4>
-      <div>to <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo $user['username']; ?></a></div>
+      <div>to <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></div>
     </div>
     
     <form method="post" action="../GameEngine/Admin/Mods/sendMessage.php" name="msg">
@@ -60,7 +60,7 @@ $user = $database->getUserArray($id,1);
         
         <div class="msg-row">
           <div class="msg-label">Recipient</div>
-          <div><strong style="color:#0f172a"><?php echo $user['username']; ?></strong> (UID <?php echo $id; ?>)</div>
+          <div><strong style="color:#0f172a"><?php echo htmlspecialchars($user['username']); ?></strong> (UID <?php echo $id; ?>)</div>
         </div>
         
         <div class="msg-row">

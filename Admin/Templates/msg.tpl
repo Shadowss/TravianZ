@@ -41,14 +41,14 @@ if($nid > 0){
     <link href="../<?php echo GP_LOCATE;?>travian.css?e21d2" rel="stylesheet" type="text/css">
     <div style="max-width:900px;margin:20px auto">
       <a href="?p=msg" style="font-size:12px">← Back to messages</a>
-      <div style="margin:8px 0;font-size:12px"><span class="b">Sent to</span>: <?php echo $database->getUserField($msg[0]['target'],'username',0);?></div>
+      <div style="margin:8px 0;font-size:12px"><span class="b">Sent to</span>: <?php echo htmlspecialchars($database->getUserField($msg[0]['target'],'username',0));?></div>
       <div id="content" class="messages">
         <h1>Message</h1>
         <div id="read_head" class="msg_head"></div>
         <div id="read_content" class="msg_content">
           <img src="../img/x.gif" id="label" class="read" alt="">
           <div id="heading">
-            <div><?php echo $database->getUserField($msg[0]['owner'],'username',0);?></div>
+            <div><?php echo htmlspecialchars($database->getUserField($msg[0]['owner'],'username',0));?></div>
             <div><?php echo htmlspecialchars($msg[0]['topic']);?></div>
           </div>
           <div id="time">

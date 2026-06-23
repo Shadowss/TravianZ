@@ -34,7 +34,7 @@ if(isset($_GET['uid']))
 		<table id="member" style="width:300px;">
 			<thead>
 				<tr>
-					<th colspan="2">Edit <?php echo $player['username']; ?>'s access</th>
+					<th colspan="2">Edit <?php echo htmlspecialchars($player['username']); ?>'s access</th>
 				</tr>
 				<tr>
 					<td></td>

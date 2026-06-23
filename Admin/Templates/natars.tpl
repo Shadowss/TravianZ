@@ -116,8 +116,8 @@ $deletedArtifacts = $database->getDeletedArtifacts();
           <td><?php echo $info['bonus'];?></td>
           <td><?php echo $info['effectInfluence'];?></td>
           <td><?php echo date("d.m.Y H:i:s", $artifact['conquered']);?></td>
-          <td><?php $u=$database->getUserField($artifact['owner'],"username",0); echo $u!="[?]"?'<a href="?p=player&uid='.$artifact['owner'].'">'.$u.'</a>':'<span style="color:gray">'.$u.'</span>';?></td>
-          <td><?php $v=$database->getVillageField($artifact['vref'],"name"); echo $v!="[?]"?'<a href="?p=village&did='.$artifact['vref'].'">'.$v.'</a>':'<span style="color:gray">'.$v.'</span>';?></td>
+          <td><?php $u=htmlspecialchars($database->getUserField($artifact['owner'],"username",0)); echo $u!="[?]"?'<a href="?p=player&uid='.$artifact['owner'].'">'.$u.'</a>':'<span style="color:gray">'.$u.'</span>';?></td>
+          <td><?php $v=htmlspecialchars($database->getVillageField($artifact['vref'],"name")); echo $v!="[?]"?'<a href="?p=village&did='.$artifact['vref'].'">'.$v.'</a>':'<span style="color:gray">'.$v.'</span>';?></td>
         </tr>
         <?php } }?>
       </table>
