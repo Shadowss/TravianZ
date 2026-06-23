@@ -103,6 +103,7 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
     </div>
 
     <form action="../GameEngine/Admin/Mods/addUsers.php" method="POST" class="add-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="id" value="<?php echo $id;?>">
 
       <?php if($errorMsg){?><div class="alert alert-err">✗ <?php echo $errorMsg;?></div><?php }?>

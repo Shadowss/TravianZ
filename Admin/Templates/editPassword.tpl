@@ -75,6 +75,7 @@ function genPw(){
     </div>
 
     <form action="../GameEngine/Admin/Mods/editPassword.php" method="POST">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
         <input type="hidden" name="uid" value="<?php echo $uid; ?>">
 

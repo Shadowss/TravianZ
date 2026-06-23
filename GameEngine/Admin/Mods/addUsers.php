@@ -36,6 +36,11 @@ if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
     die("Access Denied: You are not Admin!");
 }
 
+// Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
+// itself (it does not go through admin.php's central csrf_verify()).
+require_once(__DIR__ . '/../csrf.php');
+csrf_verify();
+
 $wgarray = array(1=>1200,1700,2300,3100,4000,5000,6300,7800,9600,11800,14400,17600,21400,25900,31300,37900,45700,55100,66400,80000);
 
 foreach ($_POST as $key => $value) {

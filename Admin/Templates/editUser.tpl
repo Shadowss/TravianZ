@@ -84,6 +84,7 @@ select.dropdown { width:100%; }
                 <!-- USERNAME EDIT - NOU -->
                 <div class="username-row">
                     <form action="../GameEngine/Admin/Mods/editUsername.php" method="POST">
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
                         <input type="hidden" name="uid" value="<?php echo $uid; ?>">
                         <div class="form-row">
@@ -96,6 +97,7 @@ select.dropdown { width:100%; }
 
                 <!-- RESTUL FORMULUI PRINCIPAL -->
                 <form action="../GameEngine/Admin/Mods/editUser.php" method="POST">
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
                     <input type="hidden" name="uid" value="<?php echo $uid; ?>" />
                     <input type="hidden" name="id" value="<?php echo $id; ?>" />
