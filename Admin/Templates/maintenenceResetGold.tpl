@@ -55,6 +55,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
     </div>
 
     <form action="../GameEngine/Admin/Mods/mainteneceResetGold.php" method="POST" class="resetgold-form" onsubmit="return confirm('Are you SURE you want to reset gold to ALL players?');">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
