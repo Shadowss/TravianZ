@@ -64,6 +64,7 @@ function refresh(tz) {
     <div class="config-title"><?php echo SERV_CONFIG ?></div>
     
     <form action="../GameEngine/Admin/Mods/editServerSet.php" method="POST">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="id" id="id" value="<?php echo $_SESSION['id']; ?>">
         
         <div class="config-card">
