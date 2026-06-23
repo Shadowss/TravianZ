@@ -44,6 +44,7 @@ if($id){
 
 <div class="res-wrap">
   <form action="../GameEngine/Admin/Mods/editResources.php" method="POST">
+    <?php echo csrf_field(); ?>
     <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 	<input type="hidden" name="did" id="did" value="<?php echo $_GET['did']; ?>">
     
