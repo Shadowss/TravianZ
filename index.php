@@ -12,9 +12,10 @@ use App\Utils\AccessLogger;
 ##  Filename:      index.php                            					   ##
 ##  Developed by:  Dzoki & Advocaite & Donnchadh                               ##
 ##  Reworked by:   ZZJHONS                                                     ##
+##  Refactored by: Shadow                                                      ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2018. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travianz.org                         		           ##
 ##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
@@ -201,7 +202,6 @@ AccessLogger::logRequest();
 		</div>
 		<div id="footer">
 			<div class="container">
-				<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" class="logo"><img alt="Licencia Creative Commons" style="border-width:0; height:31px; width:88px;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" class="logo_traviangames" /></a>
 				<ul class="menu">
 					<li><a href="anleitung.php?s=3"><?php echo FAQ; ?></a>|</li>
 					<li><a href="index.php?screenshots"><?php echo SCREENSHOTS; ?></a>|</li>

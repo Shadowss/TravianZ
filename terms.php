@@ -91,7 +91,7 @@ AccessLogger::logRequest();
             <tr>
                 <td><a href="tutorial.php"><span>Tutorial</span></a></td>
                 <td><a href="anleitung.php"><span>Manual</span></a></td>
-                <td><a href="forum.php" target="_blank"><span>Forum</span></a></td>
+                <td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span>Forum</span></a></td>
                 <td><a href="index.php?signup"><span>Register</span></a></td>
                 <td><a href="index.php?login"><span>Login</span></a></td>
             </tr>

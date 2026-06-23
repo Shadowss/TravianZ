@@ -54,7 +54,7 @@ AccessLogger::logRequest();
 
 		<td><a href="anleitung.php"><span>Manual</span></a></td>
 
-		<td><a href="http://forum.travian.com/" target="_blank"><span>Forum</span></a></td>
+		<td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span>Forum</span></a></td>
 
 
 

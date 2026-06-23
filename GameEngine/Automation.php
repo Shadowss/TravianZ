@@ -117,8 +117,9 @@ class Automation {
     }
 
     /**
-     * Returneaza datele utilizatorului cu cache local
-     */
+     * Retrieve user data using local cache.
+    **/
+	
     private function getCachedUser($uid, $mode = 1) {
         global $database;
         $uid = (int)$uid;
@@ -387,7 +388,7 @@ class Automation {
 
     private function culturePoints() {
         global $database;
-
+		
         $database->updateVSumField('cp');
     }
 
@@ -455,7 +456,6 @@ class Automation {
                 // if we updated Embassy, update maximum members that the alliance can take
                 if($indi['type'] == 18) Automation::updateMax($villageOwner);
 
-                // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
                 if ($indi['type'] == 40 && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
                     $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
                 }
@@ -514,7 +514,6 @@ class Automation {
         }
     }
 
-    // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
     private function startNatarAttack($level, $vid, $time) {
         global $database;
 
@@ -4175,10 +4174,10 @@ class Automation {
 
         $varray = $database->getDemolition();
         foreach($varray as $vil) {
-if ($vil['lvl'] < 0) {
-    $database->delDemolition($vil['vref'], true);
-    continue;
-}
+			if ($vil['lvl'] < 0) {
+		$database->delDemolition($vil['vref'], true);
+		continue;
+		}
             if ($vil['timetofinish'] <= time()) {
                 $type = $database->getFieldType($vil['vref'],$vil['buildnumber']);
                 $level = $database->getFieldLevel($vil['vref'],$vil['buildnumber']);
@@ -4209,14 +4208,7 @@ if ($vil['lvl'] < 0) {
                 else $clear = "";
 
                 if ($database->getVillageField($vil['vref'], 'natar') == 1 && $type == 40) $clear = ""; //fix by ronix - fixed by iopietro
-
-$q = "
-UPDATE ".TB_PREFIX."fdata
-SET
-    f".$vil['buildnumber']."=".$newLevel."
-    ".$clear."
-WHERE
-    vref=".(int)$vil['vref'];
+				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".$newLevel." ".$clear." WHERE vref=".(int)$vil['vref'];
                 $database->query($q);
 
                 $pop = $this->getPop($type, $newLevel);
@@ -4351,7 +4343,6 @@ WHERE
         }
     }
 
-    // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {
         global $database, $bid10, $bid38, $bid11, $bid39;
 
@@ -4400,25 +4391,6 @@ WHERE
         }
         mysqli_commit($database->dblink);
     }
-
-    /*private function oasisResourcesProduce() {
-        global $database;
-
-        $speedMultiplier = (8 * (SPEED/3600));
-        $database->query("
-            UPDATE " . TB_PREFIX . "odata
-                SET
-                    lastupdated = UNIX_TIMESTAMP(),
-                    wood = IF(wood + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated)) > maxstore, maxstore, wood + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated))),
-                    clay = IF(clay + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated)) > maxstore, maxstore, clay + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated))),
-                    iron = IF(iron + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated)) > maxstore, maxstore, iron + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated))),
-                    crop = IF(crop + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated)) > maxcrop, maxcrop, crop + ($speedMultiplier * (UNIX_TIMESTAMP() - lastupdated)))
-                WHERE
-                    wood < 800 OR
-                    clay < 800 OR
-                    iron < 800 OR
-                    crop < 800");
-    }*/
 
     private function checkInvitedPlayes() {
         global $database;
@@ -4527,25 +4499,24 @@ WHERE
      * Refactored by iopietro
      */
     
-    //TODO: This function needs to be splitted in many subfunctions (for TravianZ refactor)
     private function starvation() {
         global $database, $technology;
 
-        // Starvation este dezactivat in perioada de pace (sarbatori)
+        // Starvation is disabled during the peace period (holidays).
         if(PEACE) return;
         
         $time = time();
 
-        // 1. Actualizeaza datele de starvation pentru toate satele
+        // 1. Update starvation data for all villages.
         $this->starvationUpdateAllVillages();
 
-        // 2. Incarca satele cu productie negativa
+        // 2. Load villages with negative production.
         $starvarray = $this->starvationGetVillagesWithDeficit();
         if (empty($starvarray)) return;
 
         $vilIDs = array_column($starvarray, 'wref');
         
-        // 3. Pregateste cache-urile pentru a reduce query-urile
+        // 3. Prepare caches to reduce queries.
         $this->starvationPrepareCaches($vilIDs);
 
         foreach ($starvarray as $starv) {
@@ -4554,8 +4525,9 @@ WHERE
     }
 
     /**
-     * Actualizeaza tabela de starvation pentru toate satele
-     */
+     * Update the starvation table for all villages.
+    **/
+	 
     private function starvationUpdateAllVillages() {
         global $database;
         $starvarray = $database->getProfileVillages(0, 7);
@@ -4565,16 +4537,18 @@ WHERE
     }
 
     /**
-     * Returneaza satele cu deficit de crop
-     */
+     * Return villages with crop deficit.
+    **/
+	
     private function starvationGetVillagesWithDeficit() {
         global $database;
         return $database->getStarvation();
     }
 
     /**
-     * Pregateste cache-urile pentru trupe
-     */
+     * Prepare troop caches.
+    **/
+	
     private function starvationPrepareCaches(array $vilIDs) {
         global $database;
         $database->getEnforceVillage($vilIDs, 0);
@@ -4586,18 +4560,19 @@ WHERE
     }
 
     /**
-     * Proceseaza un singur sat pentru starvation
-     */
+     * Process a single village for starvation.
+    **/
+	
     private function starvationProcessVillage($starv, $time) {
         global $database, $technology;
 
         $unitarrays = $this->getAllUnits($starv['wref']);
-        // Formula originala de upkeep - pastrata exact
+        // Original upkeep formula
         $upkeep = $starv['pop'] + $technology->getUpkeep($unitarrays, 0, $starv['wref']);
 
         $troopData = $this->starvationFindFirstTroopGroup($starv);
         if (empty($troopData['troops'])) {
-            // Nu exista trupe, verifica doar resetarea
+            // No troops exist, only check reset.
             $this->starvationCheckReset($starv, $upkeep);
             return;
         }
@@ -4610,12 +4585,12 @@ WHERE
         $cropProd = $database->getCropProdstarv($starv['wref']) - $starv['starv'];
         
         if($cropProd < 0){
-            // Calcul deficit - formula originala pastrata
+            // Deficit calculation
             $starvsec = (abs($cropProd) / 3600);
             $difcrop = ($timedif * $starvsec);
             $oldcrop = $database->getVillageField($starv['wref'], 'crop');
 
-            // Consuma mai intai crop-ul din hambar
+            // Use granary crop first for consumption.
             if ($oldcrop > 100) {
                 $difcrop = $difcrop - $oldcrop;
                 if($difcrop < 0){
@@ -4634,9 +4609,10 @@ WHERE
     }
 
     /**
-     * Gaseste primul grup de trupe care poate muri de foame
-     * Ordinea: enforce oasis, enforce village, prisoners, unitati proprii, atacuri
-     */
+     * Locate the first troop group eligible for starvation.
+     * Processing order: oasis enforcement → village enforcement → prisoners → own units → attacks.
+    **/
+	 
     private function starvationFindFirstTroopGroup($starv) {
         global $database;
         
@@ -4673,8 +4649,9 @@ WHERE
     }
 
     /**
-     * Ucide trupele conform deficitului de crop
-     */
+     * Kill troops according to crop deficit.
+    **/
+	
     private function starvationKillTroops($starv, &$starvingTroops, $type, $subtype, $difcrop, $upkeep, $time) {
         global $database;
 
@@ -4704,7 +4681,7 @@ WHERE
             if($maxtype > 0){
                 $starvingTroops[$utype.$maxtype]--;
                 $killedUnits[$maxtype] = ($killedUnits[$maxtype] ?? 0) + 1;
-                // Formula originala de consum crop per unitate
+                // Original per-unit crop consumption formula unchanged.
                 $unitIndex = $special ? $maxtype + ($tribe - 1) * 10 : $maxtype;
                 $difcrop -= $GLOBALS['u'.$unitIndex]['crop'];
             } else break;
@@ -4713,7 +4690,7 @@ WHERE
         $totalKilledUnits = array_sum($killedUnits);
         $newCrop = 0;
 
-        // Verifica daca eroul moare
+        // Determine whether the hero dies.
         if($starvingTroops[$heroType] > 0 && ($totalUnits == 0 || $totalUnits == $totalKilledUnits)){
             $totalKilledUnits += $starvingTroops[$heroType];
             $totalUnits += $starvingTroops[$heroType];
@@ -4732,8 +4709,9 @@ WHERE
     }
 
     /**
-     * Aplica modificarile in baza de date
-     */
+     * Apply starvation changes to the database.
+    **/
+	 
     private function starvationApplyDatabaseChanges($starv, $starvingTroops, $type, $killedUnits, $totalUnits, $totalKilledUnits, $newCrop, $upkeep, $time) {
         global $database;
 
@@ -4754,10 +4732,10 @@ WHERE
                     $database->modifyUnit($starvingTroops['wref'], ["99o"], [$totalUnits], [0]);
                 }
                 break;
-            case 2: // unitati proprii
+            case 2: // own units
                 $database->modifyUnit($starv['wref'], array_keys($killedUnits), array_values($killedUnits), [0]);
                 break;
-            case 3: // atacuri in miscare
+            case 3: // moving attacks.
                 if($totalKilledUnits < $totalUnits){
                     $database->modifyAttack2($starvingTroops['id'], array_keys($killedUnits), array_values($killedUnits), 0);
                 } else {
@@ -4771,8 +4749,9 @@ WHERE
     }
 
     /**
-     * Verifica daca starvation poate fi resetat
-     */
+     * Verify whether starvation reset is allowed.
+    **/
+	 
     private function starvationCheckReset($starv, $upkeep) {
         global $database;
         $crop = $database->getCropProdstarv($starv['wref'], false);

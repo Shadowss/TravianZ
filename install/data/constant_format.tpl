@@ -3,7 +3,7 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       config.php                                                  ##
-##  Version        8.0                                                         ##
+##  Version        10.0 Full Refactor & Security                               ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
