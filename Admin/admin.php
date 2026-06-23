@@ -91,7 +91,7 @@ function admin_validated_page(string $raw): string
         'editWeek', 'userlogin', 'userillegallog', 'editHero', 'editAdditional',
         'village', 'editResources', 'addTroops', 'addABTroops', 'editVillage',
         'villagelog', 'techlog', 'msg',
-        'alliance', 'editAli', 'delAli',
+        'alliance', 'editAli', 'delAli','editNewFunctions',
     ];
 
     return in_array($raw, $whitelist, true) ? $raw : '';
@@ -273,6 +273,10 @@ if ($page !== '') {
 
         case 'editNewsboxSet':
             $subpage = 'NewsBox Settings';
+            break;
+			
+		case 'editNewFunctions':
+            $subpage = 'New Functions Settings';
             break;
 
         case 'editExtraSet':

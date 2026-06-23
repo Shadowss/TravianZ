@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 5.2.3
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
 -- Generation Time: May 15, 2026 at 02:49 AM
--- Server version: 9.0 INCREMENTAL REFACTOR
+-- Server version: 10.0 INCREMENTAL REFACTOR & SECURITY
 -- PHP Version: 8.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";

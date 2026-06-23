@@ -57,8 +57,8 @@ $role = $_SESSION['access'] == ADMIN ? 'Administrator' : 'MultiHunter';
 /* === HOME.TPL - FORȚAT CU CULORI === */
 .dashboard { max-width:1150px; margin:0 auto; font-family:system-ui, Verdana; }
 .dash-head { text-align:center; margin-bottom:24px; }
-.dash-head h1 { font-size:26px !important; margin:0 !important; color:#0f172a !important; font-weight:800 !important; letter-spacing:-0.5px; }
-.dash-head .sub { color:#475569 !important; font-size:13px !important; margin-top:6px !important; }
+.dash-head h1 { font-size:26px !important; margin:0 !important; color:##ffffff !important; font-weight:800 !important; letter-spacing:-0.5px; }
+.dash-head .sub { color:##ffffff !important; font-size:13px !important; margin-top:6px !important; }
 .dash-head .sub b{color:#2563eb !important;}
 
 /* CARDS CENTRATE */
