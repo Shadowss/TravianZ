@@ -60,10 +60,10 @@
 		<td>'.$delLink.'</td>
 	</tr>';
     }
-    echo '</table><div class="search-foot"><font>'.count($result).'</font> Villages Found "<font>'.$_POST['s'].'</font>"</div>';
+    echo '</table><div class="search-foot"><font>'.count($result).'</font> Villages Found "<font>'.e($_POST['s'] ?? '').'</font>"</div>';
 } else {
     echo '<tr><td colspan="5" class="no-res">No results</td></tr></table>';
-    echo '<div class="search-foot">No Villages Called "<font>'.$_POST['s'].'</font>"</div>';
+    echo '<div class="search-foot">No Villages Called "<font>'.e($_POST['s'] ?? '').'</font>"</div>';
 }
 ?>
 </div>
