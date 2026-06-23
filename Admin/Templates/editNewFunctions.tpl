@@ -58,6 +58,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
     <div class="config-title"><?php echo SERV_CONFIG ?></div>
     
     <form action="../GameEngine/Admin/Mods/editNewFunctions.php" method="POST">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="id" id="id" value="<?php echo $_SESSION['id']; ?>">
         
         <div class="config-card">

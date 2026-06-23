@@ -89,6 +89,7 @@ $autoOff = (int)($cfg['auto_off_hours'] ?? 0);
       <span>Log size: <b><?php echo number_format($logSize / 1024, 1); ?> KB</b></span>
     </div>
     <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST" style="display:inline">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="do" value="toggle">
       <input type="hidden" name="active" value="<?php echo $isOn ? 0 : 1; ?>">
       <button type="submit" class="dbg-btn <?php echo $isOn ? 'red' : 'green'; ?>">
@@ -101,6 +102,7 @@ $autoOff = (int)($cfg['auto_off_hours'] ?? 0);
   <div class="dbg-card">
     <h3>Capture settings</h3>
     <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="do" value="save">
       <div class="dbg-row">
         <label><input type="checkbox" name="lvl_warning"    <?php echo !empty($cfg['lvl_warning'])    ? 'checked' : ''; ?>> Warnings</label>
@@ -127,6 +129,7 @@ $autoOff = (int)($cfg['auto_off_hours'] ?? 0);
       <a class="dbg-btn" href="../GameEngine/Admin/Mods/debugLog.php?do=download">⬇ Download full log</a>
       <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST" style="display:inline"
             onsubmit="return confirm('Clear the debug log file?');">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="do" value="clear">
         <button type="submit" class="dbg-btn red">🗑 Clear log</button>
       </form>

@@ -17,6 +17,15 @@
 if(!isset($_SESSION)) session_start();
 if(($_SESSION['access'] ?? 0) < 9) die("Access denied: You are not Admin!");
 
+// Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
+// itself (it does not go through admin.php's central csrf_verify()). Only POST
+// requests mutate state; the ?do=download link is a plain GET (a read) and must
+// not be blocked, so guard the check on the request method.
+require_once(__DIR__ . '/../csrf.php');
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    csrf_verify();
+}
+
 include_once("../../Database.php");
 
 // Resolve project root (max 5 levels up), like the rest of the codebase.
