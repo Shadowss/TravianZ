@@ -68,6 +68,7 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
     </div>
 
     <form action="../GameEngine/Admin/Mods/sysmessage.php" method="POST" class="sysmsg-form">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="admid" value="<?=$id?>">
         <input type="hidden" name="action" value="execute">
 
@@ -84,7 +85,7 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 <?php else: ?>
 
     <form action="../GameEngine/Admin/Mods/sysmessage.php" method="POST" class="sysmsg-form">
-
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="admid" value="<?=$id?>">
         <input type="hidden" name="action" value="prepare">
 

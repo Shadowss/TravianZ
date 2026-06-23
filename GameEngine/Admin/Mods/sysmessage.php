@@ -24,6 +24,11 @@ if (!isset($_SESSION['access']) || $_SESSION['access'] < ADMIN) {
     die("Access Denied");
 }
 
+// Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
+// itself (it does not go through admin.php's central csrf_verify()).
+require_once(__DIR__ . '/../csrf.php');
+csrf_verify();
+
 // ---------------------------------------------------------------------------
 // Resolve project root (so we can read/write Templates/*.tpl)
 // ---------------------------------------------------------------------------
