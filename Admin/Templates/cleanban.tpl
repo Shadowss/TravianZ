@@ -30,6 +30,7 @@
 </style>
 
 <form action="../GameEngine/Admin/Mods/mainteneceCleanBanData.php" method="POST" onsubmit="return confirm('TRUNCATE banlist? This cannot be undone!')">
+<?php echo csrf_field(); ?>
 <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
 <div class="clean-card">
   <div class="clean-head">Clear – Banlist - Data</div>

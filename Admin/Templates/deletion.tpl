@@ -78,6 +78,7 @@ if(isset($_GET['uid']) && (int)$_GET['uid'] > 0) {
     </div>
 
     <form action="../GameEngine/Admin/Mods/delUser.php" method="post" onsubmit="return confirm('ESTI SIGUR? Se va sterge tot: sate, trupe, rapoarte!')">
+        <?php echo csrf_field(); ?>
         <input type="hidden" name="uid" value="<?php echo $target['id']; ?>">
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
