@@ -66,6 +66,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
       <b>Subject:</b> <span style="color:<?=$_SESSION['mass_color']?>"><?=htmlspecialchars($_SESSION['mass_subject'])?></span>
     </div>
     <form action="../GameEngine/Admin/Mods/massmessage.php" method="POST" class="massmsg-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?=$id?>">
       <input type="hidden" name="action" value="execute">
       <button type="submit" name="confirm" value="Yes" style="background:#27ae60">✓ Yes, Send</button>
@@ -80,6 +81,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 
 <?php else:?>
     <form action="../GameEngine/Admin/Mods/massmessage.php" method="POST" class="massmsg-form">
+      <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?=$id?>">
       <input type="hidden" name="action" value="prepare">
 

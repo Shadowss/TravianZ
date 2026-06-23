@@ -54,6 +54,7 @@ $user = $database->getUserArray($id,1);
     </div>
     
     <form method="post" action="../GameEngine/Admin/Mods/sendMessage.php" name="msg">
+      <?php echo csrf_field(); ?>
       <div class="msg-body">
         <input type="hidden" name="uid" value="<?php echo $id; ?>">
         
