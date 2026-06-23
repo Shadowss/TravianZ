@@ -73,8 +73,13 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 .btn-show{background:#0f172a;color:#fff;border:0;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
 .btn-show:hover{background:#1e293b;transform:translateY(-1px)}
 
-.map-layout{display:grid;grid-template-columns:1fr 240px;gap:14px;align-items:start}
-@media(max-width:900px){.map-layout{grid-template-columns:1fr}}
+/* MAP + LEGEND COLUMN - centered as a whole, like the header/filters above */
+.map-layout{display:flex;flex-direction:column;align-items:center}
+
+/* Legend row - Tribes + Artifacts side by side, same width as the map */
+.legend-row{display:flex;gap:14px;width:100%;max-width:510px;margin:14px auto 0}
+.legend-row .legend-card{flex:1;margin:0;min-width:0}
+@media(max-width:480px){.legend-row{flex-direction:column}}
 
 /* MAP CONTAINER - untouched logic */
 #map {width:510px;height:510px;position:relative;overflow:hidden;border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
@@ -103,12 +108,12 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 
 /* Legend cards */
 .legend-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);color:#0f172a}
-.legend-head{background:#0f172a;color:#fff;padding:8px 12px;font-size:13px;font-weight:700}
-.legend-body{padding:10px 12px}
+.legend-head{background:#0f172a;color:#fff;padding:9px 14px;font-size:13px;font-weight:700}
+.legend-body{padding:12px 14px}
 .legend-body table{width:100%;border-collapse:collapse}
-.legend-body td{padding:4px 0;font-size:12px;color:#334155}
-.legend-body td:first-child{width:20px}
-.legend-body img{width:11px;height:11px;display:block}
+.legend-body td{padding:5px 0;font-size:12.5px;color:#334155}
+.legend-body td:first-child{width:22px}
+.legend-body img{width:13px;height:13px;display:block}
 
 /* Tooltip */
 .p_info{list-style:none;margin:0;padding:0;color:#0f172a}
@@ -147,83 +152,83 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
   </form>
 
   <div class="map-layout">
-    <div>
-      <div id="map" class="grab">
-        <div class="zoom-controls">
-          <button type="button" id="zoomOut">−</button>
-          <span id="zoomLabel">100%</span>
-          <button type="button" id="zoomIn">+</button>
-          <button type="button" id="zoomReset">Reset</button>
-        </div>
-        <div class="zoomlevels">
-          <span id="zl">-<?php echo WORLD_MAX;?></span>
-          <span id="zr"><?php echo WORLD_MAX;?></span>
-          <span id="zb"><?php echo WORLD_MAX;?></span>
-          <span id="zo">-<?php echo WORLD_MAX;?></span>
-          <span id="zc">(0,0)</span>
-          <div id="lijn_hor"></div>
-          <div id="lijn_ver"></div>
-        </div>
-        <div id="map_bg">
-          <svg id="gridSvg" width="510" height="510" aria-hidden="true"></svg>
-          <?php
-          if ($criteria!= "") {
-              $artifactsEffect = ['-', VILLAGE_EFFECT, ACCOUNT_EFFECT, UNIQUE_EFFECT];
-              $array_tribe = ['-', TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5, TRIBE6];
-              $q = "SELECT v.wref, v.owner, v.name, v.capital, v.pop, u.username, u.tribe, u.access, w.x, w.y"
-                  . ($includeSize? ", a.size" : "")
-                  . " FROM ".TB_PREFIX."vdata AS v"
-                  . " LEFT JOIN ".TB_PREFIX."users AS u ON v.owner = u.id"
-                  . " LEFT JOIN ".TB_PREFIX."wdata AS w ON v.wref = w.id "
-                  . $criteria;
-              $player_info = $database->query_return($q);
-              foreach ($player_info as $p_array) {
-                $p_name = htmlspecialchars($p_array['username'], ENT_QUOTES);
-                $p_village = htmlspecialchars($p_array['name'], ENT_QUOTES);
-                $p_pop = (int)$p_array['pop'];
-                $p_tribe = $array_tribe[$p_array['tribe']];
-                $did = (int)$p_array['wref'];
-                $uid = (int)$p_array['owner'];
-                $x = (int)$p_array['x'];
-                $y = (int)$p_array['y'];
-                $imgName = "../img/admin/map_".(isset($p_array['size'])? "1".$p_array['size'] : ($p_array['access']!= ADMIN? $p_array['tribe'] : 0)).".gif";
-                $pixelDiv = 255;
-                $xdiv = $pixelDiv / WORLD_MAX;
-                $p_x = $pixelDiv + ($x * $xdiv);
-                $p_y = $pixelDiv - ($y * $xdiv);
-                $tooltip = "<ul class='p_info'>";
-                $tooltip.= "<li>Player: <b>{$p_name}</b></li>";
-                $tooltip.= "<li>Village: <b>{$p_village}</b></li>";
-                $tooltip.= "<li>Coord: <b>({$x}|{$y})</b></li>";
-                $tooltip.= "<li>Pop: <b>{$p_pop}</b></li>";
-                $tooltip.= "<li>Tribe: <b>{$p_tribe}</b></li>";
-                if ($check3!= "" && isset($p_array['size'])) {
-                    $tooltip.= "<li>Artifact: <b>".$artifactsEffect[$p_array['size']]."</b></li>";
-                }
-                $tooltip.= "</ul>";
-                $tooltip.= "<div class='p_actions'>"
-                        . "<a class='p_btn' href='?p=village&did={$did}' target='_blank'>Village</a>"
-                        . "<a class='p_btn' href='?p=player&uid={$uid}' target='_blank'>Profile</a>"
-                        . "</div>";
-                $tooltipHover = str_replace(["\\", "'"], ["\\\\", "\\'"], $tooltip);
-                $tooltipAttr = htmlspecialchars($tooltip, ENT_QUOTES);
-                echo '<div class="marker" style="left:'.$p_x.'px; top:'.$p_y.'px;" data-tip="'.$tooltipAttr.'">'
-                   . '<img class="pin" src="'.$imgName.'" border="0" '
-                   . ' onmouseout="med_closeDescription()" '
-                   . " onmousemove=\"med_mouseMoveHandler(arguments[0], '".$tooltipHover."')\" "
-                   . '>'
-                   . '</div>';
+    <div id="map" class="grab">
+      <div class="zoom-controls">
+        <button type="button" id="zoomOut">−</button>
+        <span id="zoomLabel">100%</span>
+        <button type="button" id="zoomIn">+</button>
+        <button type="button" id="zoomReset">Reset</button>
+      </div>
+      <div class="zoomlevels">
+        <span id="zl">-<?php echo WORLD_MAX;?></span>
+        <span id="zr"><?php echo WORLD_MAX;?></span>
+        <span id="zb"><?php echo WORLD_MAX;?></span>
+        <span id="zo">-<?php echo WORLD_MAX;?></span>
+        <span id="zc">(0,0)</span>
+        <div id="lijn_hor"></div>
+        <div id="lijn_ver"></div>
+      </div>
+      <div id="map_bg">
+        <svg id="gridSvg" width="510" height="510" aria-hidden="true"></svg>
+        <?php
+        if ($criteria!= "") {
+            $artifactsEffect = ['-', VILLAGE_EFFECT, ACCOUNT_EFFECT, UNIQUE_EFFECT];
+            $array_tribe = ['-', TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5, TRIBE6];
+            $q = "SELECT v.wref, v.owner, v.name, v.capital, v.pop, u.username, u.tribe, u.access, w.x, w.y"
+                . ($includeSize? ", a.size" : "")
+                . " FROM ".TB_PREFIX."vdata AS v"
+                . " LEFT JOIN ".TB_PREFIX."users AS u ON v.owner = u.id"
+                . " LEFT JOIN ".TB_PREFIX."wdata AS w ON v.wref = w.id "
+                . $criteria;
+            $player_info = $database->query_return($q);
+            foreach ($player_info as $p_array) {
+              $p_name = htmlspecialchars($p_array['username'], ENT_QUOTES);
+              $p_village = htmlspecialchars($p_array['name'], ENT_QUOTES);
+              $p_pop = (int)$p_array['pop'];
+              $p_tribe = $array_tribe[$p_array['tribe']];
+              $did = (int)$p_array['wref'];
+              $uid = (int)$p_array['owner'];
+              $x = (int)$p_array['x'];
+              $y = (int)$p_array['y'];
+              $imgName = "../img/admin/map_".(isset($p_array['size'])? "1".$p_array['size'] : ($p_array['access']!= ADMIN? $p_array['tribe'] : 0)).".gif";
+              $pixelDiv = 255;
+              $xdiv = $pixelDiv / WORLD_MAX;
+              $p_x = $pixelDiv + ($x * $xdiv);
+              $p_y = $pixelDiv - ($y * $xdiv);
+              $tooltip = "<ul class='p_info'>";
+              $tooltip.= "<li>Player: <b>{$p_name}</b></li>";
+              $tooltip.= "<li>Village: <b>{$p_village}</b></li>";
+              $tooltip.= "<li>Coord: <b>({$x}|{$y})</b></li>";
+              $tooltip.= "<li>Pop: <b>{$p_pop}</b></li>";
+              $tooltip.= "<li>Tribe: <b>{$p_tribe}</b></li>";
+              if ($check3!= "" && isset($p_array['size'])) {
+                  $tooltip.= "<li>Artifact: <b>".$artifactsEffect[$p_array['size']]."</b></li>";
               }
-}
-         ?>
-        </div>
-
-        <div id="tipBackdrop"></div>
-        <div id="stickyTip"></div>
+              $tooltip.= "</ul>";
+              $tooltip.= "<div class='p_actions'>"
+                      . "<a class='p_btn' href='?p=village&did={$did}' target='_blank'>Village</a>"
+                      . "<a class='p_btn' href='?p=player&uid={$uid}' target='_blank'>Profile</a>"
+                      . "</div>";
+              $tooltipHover = str_replace(["\\", "'"], ["\\\\", "\\'"], $tooltip);
+              $tooltipAttr = htmlspecialchars($tooltip, ENT_QUOTES);
+              echo '<div class="marker" style="left:'.$p_x.'px; top:'.$p_y.'px;" data-tip="'.$tooltipAttr.'">'
+                 . '<img class="pin" src="'.$imgName.'" border="0" '
+                 . ' onmouseout="med_closeDescription()" '
+                 . " onmousemove=\"med_mouseMoveHandler(arguments[0], '".$tooltipHover."')\" "
+                 . '>'
+                 . '</div>';
+            }
+        }
+        ?>
       </div>
 
-      <!-- LEGENDE MUTATE SUB HARTA -->
-      <div class="legend-card" style="margin-top:14px; max-width:510px;">
+      <div id="tipBackdrop"></div>
+      <div id="stickyTip"></div>
+    </div>
+
+    <!-- LEGENDE CENTRATE SUB HARTA - Tribes + Artifacts una langa alta -->
+    <div class="legend-row">
+      <div class="legend-card">
         <div class="legend-head">Tribes</div>
         <div class="legend-body">
           <table>
@@ -235,7 +240,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
           </table>
         </div>
       </div>
-      <div class="legend-card" style="max-width:510px;">
+      <div class="legend-card">
         <div class="legend-head">Artifacts</div>
         <div class="legend-body">
           <table>
@@ -245,11 +250,6 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
           </table>
         </div>
       </div>
-
-    </div>
-
-    <div>
-      <!-- coloana dreapta acum goala -->
     </div>
   </div>
 </div>
