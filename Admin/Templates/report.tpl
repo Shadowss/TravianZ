@@ -102,7 +102,7 @@ $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',
     </div>
     <form class="search-box" method="get">
       <input type="hidden" name="p" value="report">
-      <input type="hidden" name="f" value="<?php echo $filter;?>">
+      <input type="hidden" name="f" value="<?php echo htmlspecialchars($filter);?>">
       <input type="text" name="q" placeholder="Search..." value="<?php echo htmlspecialchars($search);?>">
     </form>
   </div>
@@ -134,7 +134,7 @@ $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',
   <?php if($total > $limit){ $pages = ceil($total/$limit);?>
   <div class="pagination">
     <?php for($p=1;$p<=$pages && $p<=15;$p++){?>
-      <a href="?p=report&page=<?php echo $p;?>&f=<?php echo $filter;?>&q=<?php echo urlencode($search);?>" class="<?php echo $p==$page?'active':'';?>"><?php echo $p;?></a>
+      <a href="?p=report&page=<?php echo $p;?>&f=<?php echo urlencode($filter);?>&q=<?php echo urlencode($search);?>" class="<?php echo $p==$page?'active':'';?>"><?php echo $p;?></a>
     <?php }?>
   </div>
   <?php }?>

@@ -128,7 +128,7 @@ $msgs = $database->query("SELECT * FROM ".TB_PREFIX."mdata WHERE $where ORDER BY
     </div>
     <form class="search-box" method="get">
       <input type="hidden" name="p" value="msg">
-      <input type="hidden" name="f" value="<?php echo $filter;?>">
+      <input type="hidden" name="f" value="<?php echo htmlspecialchars($filter);?>">
       <input type="text" name="q" placeholder="Search..." value="<?php echo htmlspecialchars($search);?>">
     </form>
   </div>
@@ -162,7 +162,7 @@ $msgs = $database->query("SELECT * FROM ".TB_PREFIX."mdata WHERE $where ORDER BY
   <?php if($total > $limit){ $pages = ceil($total/$limit);?>
   <div class="pagination">
     <?php for($p=1;$p<=$pages && $p<=15;$p++){?>
-      <a href="?p=msg&page=<?php echo $p;?>&f=<?php echo $filter;?>&q=<?php echo urlencode($search);?>" class="<?php echo $p==$page?'active':'';?>"><?php echo $p;?></a>
+      <a href="?p=msg&page=<?php echo $p;?>&f=<?php echo urlencode($filter);?>&q=<?php echo urlencode($search);?>" class="<?php echo $p==$page?'active':'';?>"><?php echo $p;?></a>
     <?php }?>
   </div>
   <?php }?>
