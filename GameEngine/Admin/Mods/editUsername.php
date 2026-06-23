@@ -60,7 +60,18 @@ if (!$admin || (int)$admin['access'] !== 9) {
 // ---------------------------------------------------------------------------
 // Validare username
 // ---------------------------------------------------------------------------
-if (strlen($username) < 3 || strlen($username) > 20 || !preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+// Mirror the sign-up rule (Account.php, issue #184) so an admin can rename a
+// player to any name registration would accept. The allowed character set
+// depends on USRNM_SPECIAL: when on, letters/digits/.-_ and single internal
+// spaces; when off, ASCII alphanumerics only.
+$usernameSpecial = defined('USRNM_SPECIAL') ? USRNM_SPECIAL : false;
+$minLen = defined('USRNM_MIN_LENGTH') ? USRNM_MIN_LENGTH : 3;
+$maxLen = defined('USRNM_MAX_LENGTH') ? USRNM_MAX_LENGTH : 15;
+$charsOk = $usernameSpecial
+    ? (bool)preg_match('/^[A-Za-z0-9._-]+(?: [A-Za-z0-9._-]+)*$/D', $username)
+    : !preg_match('/[^0-9A-Za-z]/', $username);
+
+if (strlen($username) < $minLen || strlen($username) > $maxLen || !$charsOk) {
     header("Location: ../../../Admin/admin.php?p=player&uid=$uid&e=invalid");
     exit;
 }
