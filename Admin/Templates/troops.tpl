@@ -52,7 +52,7 @@ $heroCount = $hero ? 1 : 0;
   </div>
   <?php if($_SESSION['access']==ADMIN){ ?>
   <div class="troops-foot">
-    <a href="admin.php?p=addTroops&did=<?=$_GET['did']?>"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>Edit Troops</a>
+    <a href="admin.php?p=addTroops&did=<?=(int)($_GET['did'] ?? 0)?>"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>Edit Troops</a>
     <?php if(isset($_GET['d'])) echo '<span style="color:#dc2626;font-weight:600">Troops edited</span>'; ?>
   </div>
   <?php } ?>

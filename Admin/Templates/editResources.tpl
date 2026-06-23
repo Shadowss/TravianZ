@@ -46,7 +46,7 @@ if($id){
   <form action="../GameEngine/Admin/Mods/editResources.php" method="POST">
     <?php echo csrf_field(); ?>
     <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
-	<input type="hidden" name="did" id="did" value="<?php echo $_GET['did']; ?>">
+	<input type="hidden" name="did" id="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
     
     <div class="res-card">
       <div class="res-head">Modify Resources — <?php echo $village['name']; ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</div>
@@ -82,7 +82,7 @@ if($id){
       </table>
       
       <div class="res-actions">
-        <a href="../Admin/admin.php?p=village&did=<?php echo $_GET['did'];?>" class="btn-back">← Back to village</a>
+        <a href="../Admin/admin.php?p=village&did=<?php echo (int)($_GET['did'] ?? 0);?>" class="btn-back">← Back to village</a>
         <button type="submit" class="btn-save">Save Changes</button>
       </div>
     </div>

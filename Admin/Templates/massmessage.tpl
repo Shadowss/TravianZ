@@ -76,7 +76,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 <?php elseif(isset($_GET['sending'])):?>
     <div style="text-align:center;padding:30px">
       <div style="font-size:16px;margin-bottom:10px">Sending messages...</div>
-      <div style="color:#666"><?=$_GET['msg']?? ''?></div>
+      <div style="color:#666"><?=e($_GET['msg'] ?? '')?></div>
     </div>
 
 <?php else:?>

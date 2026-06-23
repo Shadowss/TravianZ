@@ -57,7 +57,7 @@
           <td>
             <form action="../GameEngine/Admin/Mods/medals.php" method="POST" style="margin:0">
               '.csrf_field().'
-              <input type="hidden" name="uid" value="'.$_GET['uid'].'">
+              <input type="hidden" name="uid" value="'.(int)($_GET['uid'] ?? 0).'">
               <input type="hidden" name="medalid" value="'.$medal['id'].'">
               <button type="submit" class="medals-del" title="Delete medal">
                 <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"/></svg>
@@ -73,7 +73,7 @@
         <td>
           <form action="../GameEngine/Admin/Mods/medals.php" method="POST" style="margin:0">
             '.csrf_field().'
-            <input type="hidden" name="uid" value="'.$_GET['uid'].'">
+            <input type="hidden" name="uid" value="'.(int)($_GET['uid'] ?? 0).'">
             <input type="hidden" name="userid" value="'.$id.'">
             <button type="submit" class="medals-del" title="Delete all medals">
               <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"/></svg>

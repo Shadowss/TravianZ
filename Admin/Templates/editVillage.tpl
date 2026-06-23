@@ -47,7 +47,7 @@ if(isset($id)) { include("search2.tpl"); ?>
 <form action="../GameEngine/Admin/Mods/editBuildings.php" method="POST">
 <?php echo csrf_field(); ?>
 <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
-<input type="hidden" name="id" value="<?php echo $_GET['did']; ?>">
+<input type="hidden" name="id" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
 
 <div class="vcard">
   <div class="vhead">Edit Village – <?php echo htmlspecialchars($village['name']); ?> (<?php echo $coor['x'].'|'.$coor['y']; ?>)

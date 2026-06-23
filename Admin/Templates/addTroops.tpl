@@ -56,7 +56,7 @@ if(isset($id)){
 <div class="addtroops-wrap">
 <form action="../GameEngine/Admin/Mods/addTroops.php" method="POST">
 <?php echo csrf_field(); ?>
-<input type="hidden" name="id" value="<?php echo $_GET['did']; ?>">
+<input type="hidden" name="id" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
 <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
 <div class="addtroops-card">
@@ -79,7 +79,7 @@ if(isset($id)){
   </div>
   
   <div class="addtroops-foot">
-    <button type="button" class="btn btn-back" onclick="location.href='admin.php?p=village&did=<?=$_GET['did']?>'">
+    <button type="button" class="btn btn-back" onclick="location.href='admin.php?p=village&did=<?=(int)($_GET['did'] ?? 0)?>'">
       <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back
     </button>
     <button type="submit" name="save" class="btn btn-save">

@@ -120,7 +120,7 @@ if(isset($id)){
       <td style="text-align:right">
         <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
           <?php echo csrf_field(); ?>
-          <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
+          <input type="hidden" name="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
           <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
           <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
           <?php if($_SESSION['access'] == ADMIN) { ?>
@@ -132,7 +132,7 @@ if(isset($id)){
         <tr><td class="label">Name</td><td colspan="2">
           <form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" style="display:flex;gap:4px">
             <?php echo csrf_field(); ?>
-            <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
+            <input type="hidden" name="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
             <input class="input-mini" type="text" name="villagename" value="<?php echo $village['name']; ?>" style="flex:1">
             <?php if($_SESSION['access'] == ADMIN) { ?>
@@ -140,7 +140,7 @@ if(isset($id)){
 			<?php } ?>
           </form>
         </td></tr>
-        <tr><td class="label">Population</td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
+        <tr><td class="label">Population</td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo (int)($_GET['did'] ?? 0); ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
         <tr><td class="label">Coords</td><td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="_blank" style="color:#16a34a;font-weight:600">(<?php echo $coor['x']."|".$coor['y']; ?>)</a></td></tr>
         <tr><td class="label">ID</td><td colspan="2"><?php echo $village['wref'];?></td></tr>
         <tr><td class="label">Field</td><td colspan="2" class="badge-field"><?php for ($i = 0; $i <= 3; $i++){ $a = $i + 1; echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">'.($i!=3?' | ':''); } ?></td></tr>
@@ -148,7 +148,7 @@ if(isset($id)){
     </div>
 <!-- 2. RESOURCES - FULL WIDTH -->
 <div class="vcard">
-  <div class="vhead">Resources<?php if($_SESSION['access'] == ADMIN) { ?><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a><?php } ?>
+  <div class="vhead">Resources<?php if($_SESSION['access'] == ADMIN) { ?><a href="admin.php?p=editResources&did=<?php echo (int)($_GET['did'] ?? 0); ?>"><?php echo $svgEdit; ?></a><?php } ?>
 	</div>
   <table class="vtable" style="text-align:center">
     <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
@@ -185,7 +185,7 @@ if(isset($id)){
 <div class="vmap-wrap">
   <div class="map-card">
     <h3>Resource Fields</h3>
-    <a href="admin.php?p=editVillage&did=<?php echo $_GET['did']; ?>">
+    <a href="admin.php?p=editVillage&did=<?php echo (int)($_GET['did'] ?? 0); ?>">
       <div id="content" class="village1">
         <div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>">
           <?php for($f = 1; $f < 19; $f++){ $level = $fdata['f'.($f)]; echo "<img src=\"../img/x.gif\" class=\"reslevel rf".$f." level".$level."\">"; } ?>
@@ -226,7 +226,7 @@ if(isset($id)){
   </table>
 </div>
 
-<div style="text-align:center;margin:12px 0"><a href="admin.php?p=villagelog&did=<?php echo $_GET['did']; ?>" style="color:#2563eb;font-weight:500;font-size:13px">Village Build Log →</a></div>
+<div style="text-align:center;margin:12px 0"><a href="admin.php?p=villagelog&did=<?php echo (int)($_GET['did'] ?? 0); ?>" style="color:#2563eb;font-weight:500;font-size:13px">Village Build Log →</a></div>
 
 </div>
 <?php } else { include("404.tpl"); } } ?>
