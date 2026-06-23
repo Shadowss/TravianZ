@@ -44,6 +44,7 @@ $members = $database->getAllMember($aid);
         <div class="warn">⚠ All members will be removed from the alliance, permissions, diplomacy, logs and the alliance forum will be deleted. The action is irreversible!</div>
 
         <form method="POST" action="../GameEngine/Admin/Mods/delAli.php" onsubmit="return confirm('Last warning: DELETE PERMANENTLY?');">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="aid" value="<?php echo $aid;?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id'];?>">
             <button type="submit" class="btn del">YES, DELETE</button>

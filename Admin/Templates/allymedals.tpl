@@ -63,6 +63,7 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
         <td><img src="../gpack/travian_default/img/t/<?=$medal['img']?>.jpg"></td>
         <td>
           <form action="../GameEngine/Admin/Mods/delallymedal.php" method="POST" style="margin:0">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="aid" value="<?=$_GET['aid']?>">
             <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
             <button type="submit" name="medalid" value="<?=$medal['id']?>" class="medal-del" title="Delete">
@@ -81,6 +82,7 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
         <td>Delete All</td>
         <td>
           <form action="../GameEngine/Admin/Mods/delallymedalbyaid.php" method="POST" style="margin:0">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
             <input type="hidden" name="aid" value="<?=$_GET['aid']?>">
             <button type="submit" class="medal-del" title="Delete All">

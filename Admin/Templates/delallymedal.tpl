@@ -63,6 +63,7 @@ $nummedals = $sql['Total'];
 
 
 <form action="../GameEngine/Admin/Mods/delallymedalbyweek.php" method="POST">
+<?php echo csrf_field(); ?>
 <input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 <table id="member">
 	<thead>
