@@ -219,9 +219,13 @@ class Profile {
     $birthday = preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $birthday) ? $birthday : '0';
 
     $mw   = (int)($post['mw'] ?? 0);
-	$ort = $database->RemoveXSS(trim($post['ort'] ?? ''));
-	$be1 = $database->RemoveXSS(trim($post['be1'] ?? '')); // right description
-	$be2 = $database->RemoveXSS(trim($post['be2'] ?? '')); // left description
+	// BUG-3: store the location/descriptions raw. submitProfile() uses a prepared
+	// statement (SQL-safe) and every display site escapes with htmlspecialchars()
+	// before rendering BBCode, so RemoveXSS() here only double-escaped the data
+	// (baked-in backslashes from its SQL escape + literal &quot; entities).
+	$ort = trim($post['ort'] ?? '');
+	$be1 = trim($post['be1'] ?? ''); // right description
+	$be2 = trim($post['be2'] ?? ''); // left description
 
     $database->submitProfile($session->uid, $mw, $ort, $birthday, $be2, $be1);
 
