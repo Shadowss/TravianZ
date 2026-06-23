@@ -119,6 +119,7 @@ if(isset($id)){
     <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo $user['username']; ?></a></td>
       <td style="text-align:right">
         <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
+          <?php echo csrf_field(); ?>
           <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
           <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
           <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
@@ -130,6 +131,7 @@ if(isset($id)){
     </tr>
         <tr><td class="label">Name</td><td colspan="2">
           <form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" style="display:flex;gap:4px">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
             <input class="input-mini" type="text" name="villagename" value="<?php echo $village['name']; ?>" style="flex:1">
