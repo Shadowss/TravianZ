@@ -55,6 +55,7 @@ if(isset($id)){
 
 <div class="addtroops-wrap">
 <form action="../GameEngine/Admin/Mods/addTroops.php" method="POST">
+<?php echo csrf_field(); ?>
 <input type="hidden" name="id" value="<?php echo $_GET['did']; ?>">
 <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
