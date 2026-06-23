@@ -56,6 +56,7 @@
           <td><img class="medal" src="../gpack/travian_default/img/t/'.$medal['img'].'.jpg"></td>
           <td>
             <form action="../GameEngine/Admin/Mods/medals.php" method="POST" style="margin:0">
+              '.csrf_field().'
               <input type="hidden" name="uid" value="'.$_GET['uid'].'">
               <input type="hidden" name="medalid" value="'.$medal['id'].'">
               <button type="submit" class="medals-del" title="Delete medal">
@@ -71,6 +72,7 @@
       echo '<tr class="avg-row"><td style="text-align:left"><b>Average Rank</b></td><td>'.$average.'</td><td></td><td></td><td>Delete All</td>
         <td>
           <form action="../GameEngine/Admin/Mods/medals.php" method="POST" style="margin:0">
+            '.csrf_field().'
             <input type="hidden" name="uid" value="'.$_GET['uid'].'">
             <input type="hidden" name="userid" value="'.$id.'">
             <button type="submit" class="medals-del" title="Delete all medals">
