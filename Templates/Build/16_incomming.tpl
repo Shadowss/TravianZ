@@ -50,7 +50,11 @@ function cycleMarker(moveid, el){
         $isElders = ($from === 0);
         $owner = $isElders? 0 : $database->getVillageField($from, 'owner');
         $isMine = ($owner == $session->uid);
-        $colspan = ($u['t11'] > 0 && $isMine)? 11 : 10;
+        // Issue #267: reveal the hero column whenever the incoming movement
+        // carries a hero, not only for our own movements. For enemy attacks the
+        // count stays hidden ("?") via the troops-row logic below, but the hero
+        // icon column must still be shown so the defender sees an incoming hero.
+        $colspan = ($u['t11'] > 0)? 11 : 10;
         $tribe = $isElders? 4 : $database->getUserField($owner, 'tribe', 0);
         $start = ($tribe - 1) * 10 + 1;
         $end = $tribe * 10;
@@ -88,7 +92,7 @@ function cycleMarker(moveid, el){
     <tbody class="units">
         <tr><th>&nbsp;</th>
             <?php for ($i=$start;$i<=$end;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>" title="<?= $technology->getUnitName($i)?><?= isset($mtimes[$i])? ': '.$mtimes[$i] : ''?>"></td><?php endfor;?>
-            <?php if ($u['t11'] && $isMine):?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif;?>
+            <?php if ($u['t11']):?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif;?>
         </tr>
         <tr><th><?= TROOPS?></th>
             <?php for ($i=1;$i<=$colspan;$i++):
@@ -152,7 +156,7 @@ function cycleMarker(moveid, el){
 <?php foreach ($database->getOasis($village->wid) as $o):
     foreach ($database->getMovement(6,$o['wref'],0) as $m):
         $session->timer++; $owner=$database->getVillageField($m['from'],'owner'); $isMine=($owner==$session->uid);
-        $colspan=($m['t11']&&$isMine)?11:10; $tribe=$database->getUserField($owner,'tribe',0); $start=($tribe-1)*10+1;
+        $colspan=($m['t11'])?11:10; $tribe=$database->getUserField($owner,'tribe',0); $start=($tribe-1)*10+1; // #267: show hero column for incoming attacks too
         $action=($m['attack_type']==2?REINFORCEMENTFOR:($m['attack_type']==3?ATTACK_ON:RAID_ON)); $dt=$generator->procMtime($m['endtime']);
 ?>
 <table class="troop_details" cellpadding="1" cellspacing="1">
@@ -161,7 +165,7 @@ function cycleMarker(moveid, el){
         <td colspan="<?= $colspan?>"><a href="karte.php?d=<?= $m['to']?>&c=<?= $generator->getMapCheck($m['to'])?>"><?= $action?> <?= $database->getOMInfo($m['to'])['name']?></a></td>
     </tr></thead>
     <tbody class="units">
-        <tr><th>&nbsp;</th><?php for($i=$start;$i<$start+10;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>"></td><?php endfor;?><?php if($m['t11']&&$isMine):?><td><img src="img/x.gif" class="unit uhero"></td><?php endif;?></tr>
+        <tr><th>&nbsp;</th><?php for($i=$start;$i<$start+10;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>"></td><?php endfor;?><?php if($m['t11']):?><td><img src="img/x.gif" class="unit uhero"></td><?php endif;?></tr>
         <tr><th><?= TROOPS?></th><?php for($i=1;$i<=$colspan;$i++): $v = isset($m['t'.$i])? $m['t'.$i] : 0;
             if($m['attack_type']==2){ echo $isMine? '<td class="'.($v==0?'none':'').'">'.($v?$v:'0').'</td>' : '<td class="none">?</td>'; }
             else { echo $artifactsSum['totals']==0? '<td class="none">?</td>' : '<td class="'.($v==0?'none':'').'">'.($v==0?'0':'?').'</td>'; }
