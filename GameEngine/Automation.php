@@ -3471,80 +3471,11 @@ class Automation {
 				}
 
                 if($data['from'] == 0){
-					$DefenderID = $database->getVillageField($data['to'], "owner");
-					$database->addEnforce(['from' => $data['from'], 'to' => $data['to'], 't1' => 0, 't2' => 0, 't3' => 0, 't4' => 0, 't5' => 0, 't6' => 0, 't7' => 0, 't8' => 0, 't9' => 0, 't10' => 0, 't11' => 0]);
-					$reinf = $database->getEnforce($data['to'], $data['from']);
-					$database->modifyEnforce($reinf['id'], 31, 1, 1);
-					$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-					$database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
-				}else{
-                    //set base things
-                    $from = $database->getMInfo($data['from']);
-                    $fromF = $database->getVillage($data['from']);
-                    $AttackerID = $from['owner'];
-                    $owntribe = $database->getUserField($AttackerID,"tribe",0);
-                   
-                    $HeroTransfer = $troopsPresent = 0;              
-                    for($i = 1;$i <= 10; $i++) {
-                    	if($data['t'.$i] > 0) {
-                    		$troopsPresent = 1;
-                    		break;
-                    	}
-                    }
-                    
-                    //check if the hero is present and we're not sending him to an occupied oasis
-                    //only add hero if we're sending him alone
-                    if($data['t11'] > 0 && !$isoasis && !$troopsPresent) {
-                    	//check if we're sending a hero between own villages
-                        if($AttackerID == $DefenderID) {             
-                            //check if there's a Mansion at target village
-                            if($this->getTypeLevel(37, $data['to']) > 0){
-                                //don't reinforce, addunit instead
-                                $database->modifyUnit($data['to'], ["hero"], [1], [1]);
-                                $heroid = $database->getHeroField($DefenderID, 'heroid');
-                                $database->modifyHero("wref", $data['to'], $heroid);
-                                $HeroTransfer = 1;
-                            }
-                        }
-                    }                   
-
-                    if($data['t11'] > 0 || $troopsPresent) {
-                        $temphero = $data['t11'];
-                        if ($HeroTransfer) $data['t11'] = 0;
-                        //check if there is defence from town in to town
-                        $check = $database->getEnforce($data['to'], $data['from']);
-                        if (!isset($check['id'])) $database->addEnforce($data);
-                        else
-                        {
-                            //yes
-                            $start = ($owntribe - 1) * 10 + 1;
-                            $end = ($owntribe * 10);
-                            
-                            //add unit.
-                            $t_units = '';
-                            for($i = $start, $j = 1; $i <= $end; $i++, $j++)
-                            {
-                                $t_units .= "u".$i." = u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');
-                            }
-                            
-                            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
-                            $database->query($q);
-                            $database->modifyEnforce($check['id'], 'hero', $data['t11'], 1);
-                        }
-                        $data['t11'] = $temphero;
-                    }
-                    //send rapport
-                    $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
-                    $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
-
-
-                    if($isoasis == 0) $to_name = $to['name'];    
-                    else $to_name = "Oasis ".$database->getVillageField($to['conqured'],"name");                 
-                    
-                    $database->addNotice($from['owner'],$from['wref'],(isset($ownally) ? $ownally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
-                    if($from['owner'] != $to['owner']) {
-                        $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
-                    }
+                    // flow 1: a "village of the elders" reinforcement returning home
+                    $this->completeReinforcementFromElders($data, $to);
+                }else{
+                    // flow 2: a standard reinforcement delivery (hero transfer + enforce merge + report)
+                    $this->completeReinforcementDelivery($data, $to, $isoasis, $DefenderID);
                 }
 
                 //Update starvation data
@@ -3553,12 +3484,113 @@ class Automation {
                 //check empty reinforcement in rally point
                 $e_units = '';
                 for ($i = 1; $i <= 50; $i++) $e_units.= 'u'.$i.'= 0 AND ';
-                
+
                 $e_units.= 'hero = 0';
                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
                 $database->query($q);
             }
         }
+    }
+
+    // Flow 1 of sendreinfunitsComplete(): a "village of the elders" reinforcement
+    // (from = 0) returning home. $targetally / $AttackArrivalTime are intentionally
+    // left undefined here, exactly as in the original inline code.
+    private function completeReinforcementFromElders($data, $to) {
+        global $database;
+
+        $DefenderID = $database->getVillageField($data['to'], "owner");
+        $database->addEnforce(['from' => $data['from'], 'to' => $data['to'], 't1' => 0, 't2' => 0, 't3' => 0, 't4' => 0, 't5' => 0, 't6' => 0, 't7' => 0, 't8' => 0, 't9' => 0, 't10' => 0, 't11' => 0]);
+        $reinf = $database->getEnforce($data['to'], $data['from']);
+        $database->modifyEnforce($reinf['id'], 31, 1, 1);
+        $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
+        $database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
+    }
+
+    // Flow 2 of sendreinfunitsComplete(): a standard reinforcement delivery. Handles
+    // the lone-hero transfer between own villages, the enforcement merge-or-create,
+    // and the reinforcement notices. $ownally / $targetally / $AttackArrivalTime are
+    // intentionally left undefined (guarded by isset()), exactly as in the original.
+    private function completeReinforcementDelivery($data, $to, $isoasis, $DefenderID) {
+        global $database;
+
+        //set base things
+        $from = $database->getMInfo($data['from']);
+        $fromF = $database->getVillage($data['from']);
+        $AttackerID = $from['owner'];
+        $owntribe = $database->getUserField($AttackerID,"tribe",0);
+
+        $HeroTransfer = $troopsPresent = 0;
+        for($i = 1;$i <= 10; $i++) {
+        	if($data['t'.$i] > 0) {
+        		$troopsPresent = 1;
+        		break;
+        	}
+        }
+
+        //check if the hero is present and we're not sending him to an occupied oasis
+        //only add hero if we're sending him alone
+        if($data['t11'] > 0 && !$isoasis && !$troopsPresent) {
+        	//check if we're sending a hero between own villages
+            if($AttackerID == $DefenderID) {
+                //check if there's a Mansion at target village
+                if($this->getTypeLevel(37, $data['to']) > 0){
+                    //don't reinforce, addunit instead
+                    $database->modifyUnit($data['to'], ["hero"], [1], [1]);
+                    $heroid = $database->getHeroField($DefenderID, 'heroid');
+                    $database->modifyHero("wref", $data['to'], $heroid);
+                    $HeroTransfer = 1;
+                }
+            }
+        }
+
+        if($data['t11'] > 0 || $troopsPresent) {
+            $this->mergeOrCreateEnforcement($data, $owntribe, $HeroTransfer);
+        }
+
+        //send rapport
+        $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
+        $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
+
+
+        if($isoasis == 0) $to_name = $to['name'];
+        else $to_name = "Oasis ".$database->getVillageField($to['conqured'],"name");
+
+        $database->addNotice($from['owner'],$from['wref'],(isset($ownally) ? $ownally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
+        if($from['owner'] != $to['owner']) {
+            $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
+        }
+    }
+
+    // Flow 3 of sendreinfunitsComplete(): merge the incoming troops into an existing
+    // enforcement record at the target, or create a new one. When the hero was already
+    // transferred as a unit ($HeroTransfer), his t11 is temporarily zeroed for the
+    // merge and restored afterwards, exactly as in the original.
+    private function mergeOrCreateEnforcement($data, $owntribe, $HeroTransfer) {
+        global $database;
+
+        $temphero = $data['t11'];
+        if ($HeroTransfer) $data['t11'] = 0;
+        //check if there is defence from town in to town
+        $check = $database->getEnforce($data['to'], $data['from']);
+        if (!isset($check['id'])) $database->addEnforce($data);
+        else
+        {
+            //yes
+            $start = ($owntribe - 1) * 10 + 1;
+            $end = ($owntribe * 10);
+
+            //add unit.
+            $t_units = '';
+            for($i = $start, $j = 1; $i <= $end; $i++, $j++)
+            {
+                $t_units .= "u".$i." = u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');
+            }
+
+            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
+            $database->query($q);
+            $database->modifyEnforce($check['id'], 'hero', $data['t11'], 1);
+        }
+        $data['t11'] = $temphero;
     }
 
     private function returnunitsComplete() {
