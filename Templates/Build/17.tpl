@@ -51,7 +51,19 @@ $canRepeat = ($send3 === 1) || ($send3 >= 2 && $send3 <= 3 && $session->goldclub
 $validTarget = $checkexist && $getwref!== $village->wid;
 $validAccess = $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (defined('ADMIN_ALLOW_INCOMING_RAIDS') && ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN));
 
-$showConfirm = ($ft === 'check' && $canRepeat && $validTarget && $allres > 0 && $allres <= $maxTotalCarry && $validAccess && $userVacation == 0);
+// Available resources, using the same getters as the actual send (Market::sendResource),
+// so a request that passes this check also passes the execution step. The client-side
+// "(maxcarry)" shortcut can fill the inputs above the warehouse stock; without this the
+// confirm step only checked the merchant capacity and the send then failed silently.
+$avail = [
+    1 => (int)$database->getWoodAvailable($village->wid),
+    2 => (int)$database->getClayAvailable($village->wid),
+    3 => (int)$database->getIronAvailable($village->wid),
+    4 => (int)$database->getCropAvailable($village->wid),
+];
+$hasResources = ($r[1] <= $avail[1] && $r[2] <= $avail[2] && $r[3] <= $avail[3] && $r[4] <= $avail[4]);
+
+$showConfirm = ($ft === 'check' && $canRepeat && $validTarget && $allres > 0 && $allres <= $maxTotalCarry && $hasResources && $validAccess && $userVacation == 0);
 
 // coordonate prefill din GET
 $coor = ['x' => '', 'y' => ''];
@@ -176,6 +188,8 @@ if (isset($_GET['z'])) {
             $error = '<span class="error"><b>'.ENTER_COORDINATES.'.</b></span>';
         } elseif ($allres > $maxTotalCarry) {
             $error = '<span class="error"><b>'.TOO_FEW_MERCHANTS.'.</b></span>';
+        } elseif (!$hasResources) {
+            $error = '<span class="error"><b>'.NOT_ENOUGH_RESOURCES.'</b></span>';
         }
         echo $error;
     }
