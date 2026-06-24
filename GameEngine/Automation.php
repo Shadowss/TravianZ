@@ -3871,10 +3871,10 @@ class Automation {
  
     	//Calculate the produced resources
     	$timepast = time() - $villageInfoArray['lastupdate'];
-    	$nwood = ($this->bountyGetWoodProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$nclay = ($this->bountyGetClayProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$niron = ($this->bountyGetIronProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$ncrop = (($this->bountyGetCropProd($resArray, $numberOfOasis) - $villagePopulation - $upkeep) / 3600) * $timepast;
+    	$nwood = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 1) / 3600) * $timepast;
+    	$nclay = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 2) / 3600) * $timepast;
+    	$niron = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 3) / 3600) * $timepast;
+    	$ncrop = (($this->bountyGetResourceProd($resArray, $numberOfOasis, 4) - $villagePopulation - $upkeep) / 3600) * $timepast;
     	$database->modifyResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
     	$database->updateVillage($bountywid);
     }
@@ -3979,83 +3979,46 @@ class Automation {
 		return $ownunit;
     }
     
-    private function bountyGetWoodProd($resArray, $oasisNumber) {
-        global $bid1, $bid5;
-        
-        $wood = $sawmill = 0;
-        $woodholder = [];
+    // Production of a single resource (1=wood, 2=clay, 3=iron, 4=crop) for the
+    // given village field layout, used by the bounty/production catch-up. The
+    // four resources only differ by: the production-building data global, the
+    // booster building field-type(s) whose 'attri' adds a % bonus, and the oasis
+    // bonus slot (resourceType - 1). Crop additionally has two boosters
+    // (grain mill type 8, then bakery type 9 applied on the running total) and
+    // the gold-club +25% crop bonus (b4) keyed on the village owner.
+    private function bountyGetResourceProd($resArray, $oasisNumber, $resourceType) {
+        global $bid1, $bid2, $bid3, $bid4, $bid5, $bid6, $bid7, $bid8, $bid9, $database;
+
+        $prodBid = [1 => $bid1, 2 => $bid2, 3 => $bid3, 4 => $bid4][$resourceType];
+        $boosterBid = [5 => $bid5, 6 => $bid6, 7 => $bid7, 8 => $bid8, 9 => $bid9];
+        // Booster field-types per resource, in application order (crop: mill then bakery).
+        $boosterTypes = [1 => [5], 2 => [6], 3 => [7], 4 => [8, 9]][$resourceType];
+
+        $prod = 0;
+        $holders = [];
+        $boosterLevels = array_fill_keys($boosterTypes, 0);
         for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 1) array_push($woodholder,'f'.$i);
-            if($resArray['f'.$i.'t'] == 5) $sawmill = $resArray['f'.$i];
+            if($resArray['f'.$i.'t'] == $resourceType) $holders[] = 'f'.$i;
+            if(isset($boosterLevels[$resArray['f'.$i.'t']])) $boosterLevels[$resArray['f'.$i.'t']] = $resArray['f'.$i];
         }
-        
-        for($i = 0; $i <= count($woodholder) - 1; $i++) $wood += $bid1[$resArray[$woodholder[$i]]]['prod'];
-        
-        if($sawmill >= 1) $wood += $wood / 100 * $bid5[$sawmill]['attri'];
-        if($oasisNumber[0] > 0) $wood += $wood * 0.25 * $oasisNumber[0];
 
-        return round($wood * SPEED);
-    }
-    
-    private function bountyGetClayProd($resArray, $oasisNumber) {
-        global $bid2, $bid6;
-        
-        $clay = $brick = 0;
-        $clayholder = [];
-        for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 2) array_push($clayholder, 'f'.$i);
-        	if($resArray['f'.$i.'t'] == 6) $brick = $resArray['f'.$i];
+        foreach($holders as $holder) $prod += $prodBid[$resArray[$holder]]['prod'];
+
+        foreach($boosterTypes as $bt) {
+            $level = $boosterLevels[$bt];
+            if($level >= 1) $prod += $prod / 100 * (isset($boosterBid[$bt][$level]['attri']) ? $boosterBid[$bt][$level]['attri'] : 0);
         }
-        
-        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay += $bid2[$resArray[$clayholder[$i]]]['prod'];
-        
-        if($brick >= 1) $clay += $clay / 100 * $bid6[$brick]['attri'];
-        if($oasisNumber[1] > 0) $clay += $clay * 0.25 * $oasisNumber[1];
 
-        return round($clay * SPEED);
-    }
+        $oasisIndex = $resourceType - 1;
+        if($oasisNumber[$oasisIndex] > 0) $prod += $prod * 0.25 * $oasisNumber[$oasisIndex];
 
-    private function bountyGetIronProd($resArray, $oasisNumber) {
-        global $bid3, $bid7;
-        
-        $iron = $foundry = 0;
-        $ironholder = [];
-        for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 3) array_push($ironholder, 'f'.$i);               
-        	if($resArray['f'.$i.'t'] == 7) $foundry = $resArray['f'.$i];
-        }
-        
-        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron += $bid3[$resArray[$ironholder[$i]]]['prod'];
-        
-        if($foundry >= 1) $iron += $iron / 100 * $bid7[$foundry]['attri'];
-        if($oasisNumber[2] > 0) $iron += $iron * 0.25 * $oasisNumber[2];
-
-        return round($iron * SPEED);
-    }
-
-    private function bountyGetCropProd($resArray, $oasisNumber) {
-        global $bid4, $bid8, $bid9, $database;
-        
-        $crop = $grainmill = $bakery = 0;
-        $cropholder = [];
-        for($i = 1; $i <= 38;$i++) {
-        	if($resArray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
-        	if($resArray['f'.$i.'t'] == 8) $grainmill = $resArray['f'.$i];
-        	if($resArray['f'.$i.'t'] == 9) $bakery = $resArray['f'.$i];
-        }
-        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop += $bid4[$resArray[$cropholder[$i]]]['prod'];
-        
-        if($grainmill >= 1) $crop += $crop / 100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
-        if($bakery >= 1) $crop += $crop / 100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);                
-        if($oasisNumber[3] > 0) $crop += $crop * 0.25 * $oasisNumber[3];       
-        
-        if(!empty($resArray['vref']) && is_numeric($resArray['vref'])){
-        	$who = $database->getVillageField($resArray['vref'], "owner");
+        if($resourceType == 4 && !empty($resArray['vref']) && is_numeric($resArray['vref'])) {
+            $who = $database->getVillageField($resArray['vref'], "owner");
             $croptrue = $database->getUserField($who, "b4", 0);
-            if($croptrue > time()) $crop *= 1.25;
+            if($croptrue > time()) $prod *= 1.25;
         }
-        
-        return round($crop * SPEED);
+
+        return round($prod * SPEED);
     }
 
     private function trainingComplete() {
