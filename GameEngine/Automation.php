@@ -328,48 +328,42 @@ class Automation {
         }
     }
     
-    private function pruneOResource() {
+    // Clamp resources/storage up to their minimums for the given table (vdata or
+    // odata): negative resources back to 0 and maxstore/maxcrop back to
+    // STORAGE_BASE. This floor pass is identical for both tables, so both
+    // pruneResource() (vdata) and pruneOResource() (odata) share it. The $table
+    // argument is an internal constant string, never user input.
+    private function pruneResourceMinimums($table) {
         global $database;
-        
+
+        $database->query("UPDATE
+                  ".TB_PREFIX.$table."
+              SET
+                  wood = IF(wood < 0, 0, wood),
+                  clay = IF(clay < 0, 0, clay),
+                  iron = IF(iron < 0, 0, iron),
+                  crop = IF(crop < 0, 0, crop),
+                  maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
+                  maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
+              WHERE
+                  maxstore < ".STORAGE_BASE." OR
+                  maxcrop < ".STORAGE_BASE." OR
+                  wood < 0 OR
+                  clay < 0 OR
+                  iron < 0 OR
+                  crop < 0");
+    }
+
+    private function pruneOResource() {
         if(!ALLOW_BURST) {
-            $database->query("UPDATE
-                      ".TB_PREFIX."odata
-                  SET
-                      wood = IF(wood < 0, 0, wood),
-                      clay = IF(clay < 0, 0, clay),
-                      iron = IF(iron < 0, 0, iron),
-                      crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
-                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
-                  WHERE
-                      maxstore < ".STORAGE_BASE." OR
-                      maxcrop < ".STORAGE_BASE." OR
-                      wood < 0 OR
-                      clay < 0 OR
-                      iron < 0 OR
-                      crop < 0");
+            $this->pruneResourceMinimums('odata');
         }
     }
     private function pruneResource() {
         global $database;
-        
+
         if(!ALLOW_BURST) {
-            $database->query("UPDATE
-                      ".TB_PREFIX."vdata
-                  SET
-                      wood = IF(wood < 0, 0, wood),
-                      clay = IF(clay < 0, 0, clay),
-                      iron = IF(iron < 0, 0, iron),
-                      crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
-                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
-                  WHERE
-                      maxstore < ".STORAGE_BASE." OR
-                      maxcrop < ".STORAGE_BASE." OR
-                      wood < 0 OR
-                      clay < 0 OR
-                      iron < 0 OR
-                      crop < 0");
+            $this->pruneResourceMinimums('vdata');
 
             $database->query("UPDATE
                       ".TB_PREFIX."vdata
