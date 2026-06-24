@@ -613,9 +613,16 @@ class Automation {
     }
 
     private function marketComplete() {
+        // Two independent phases share a single cutoff timestamp: sort_type = 0
+        // new trade deliveries, then sort_type = 2 resending of resources.
+        $time = microtime(true);
+        $this->marketCompleteDeliveries($time);
+        $this->marketCompleteResends($time);
+    }
+
+    private function marketCompleteDeliveries($time) {
         global $database, $units;
 
-        $time = microtime(true);
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
 
@@ -653,6 +660,10 @@ class Automation {
             $database->addMovement(2, $data['to'], $data['from'], $data['merchant'], time(), $endtime, $data['send'], $data['wood'], $data['clay'], $data['iron'], $data['crop']);
             $database->setMovementProc($data['moveid']);
         }
+    }
+
+    private function marketCompleteResends($time) {
+        global $database;
 
         $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
