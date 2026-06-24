@@ -393,7 +393,7 @@ class Automation {
     }
 
     private function buildComplete() {
-        global $database, $technology, $bid18, $bid10, $bid11, $bid38, $bid39;
+        global $database;
 
         $time = time();
         // IDs of villages that were affected by this building completion update,
@@ -441,29 +441,15 @@ class Automation {
 
                 // update capacity if we updated a warehouse or a granary
                 if (in_array($indi['type'], [10, 11, 38, 39])) {
-                    $fieldDbName = (in_array($indi['type'], [10, 38]) ? 'maxstore' : 'maxcrop');
-                    $max = $villageData[$fieldDbName];
-
-                    if($level == 1 && $max == STORAGE_BASE) $max = STORAGE_BASE;
-                    
-                    if ($level != 1) $max -= ${'bid'.$indi['type']}[$level - 1]['attri'] * STORAGE_MULTIPLIER;
-
-                    $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
-
+                    [$fieldDbName, $max] = $this->updateStorageCapacity($indi['type'], $level, $villageData);
                     $fieldsToSet[$fieldDbName] = $max;
                 }
 
                 // if we updated Embassy, update maximum members that the alliance can take
                 if($indi['type'] == 18) Automation::updateMax($villageOwner);
 
-                if ($indi['type'] == 40 && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
-                    $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
-                }
-
-                //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
-                if ($indi['type'] == 40 && $indi['level'] == 100) {
-                    mysqli_query($database->dblink,"TRUNCATE ".TB_PREFIX."bdata");
-                }
+                // World Wonder completion handling (Natar attacks, winner lock, last-upgrade time)
+                if ($indi['type'] == 40) $this->completeWorldWonder($indi);
 
                 // TODO: find out what exactly these conditions are for
                 // no special military conditioning for Teutons and Gauls
@@ -473,12 +459,6 @@ class Automation {
                     // special condition for Roman military buildings
                     if ($indi['field'] > 18) $loopconUpdates[$indi['wid']] = ' AND field > 18';                    
                     else $loopconUpdates[$indi['wid']] = ' AND field < 19';                                      
-                }
-
-                // Update ww last finish upgrade
-                if ($indi['type'] == 40) {
-                    $qW = "UPDATE ".TB_PREFIX."fdata set ww_lastupdate = ".time()." where vref = ".(int) $indi['wid'];
-                    $database->query($qW);
                 }
 
                 $dbIdsToDelete[] = (int) $indi['id'];
@@ -512,6 +492,47 @@ class Automation {
         if (count($dbIdsToDelete)) {
             $database->query( "DELETE FROM " . TB_PREFIX . "bdata WHERE id IN(" . implode( ',', $dbIdsToDelete ) . ")" );
         }
+    }
+
+    /**
+     * Recompute a warehouse/granary capacity after a build completion.
+     * Returns [$fieldDbName, $max]: the vdata column to update and its new value.
+     */
+    private function updateStorageCapacity($type, $level, $villageData) {
+        global $bid10, $bid11, $bid38, $bid39;
+
+        $fieldDbName = (in_array($type, [10, 38]) ? 'maxstore' : 'maxcrop');
+        $max = $villageData[$fieldDbName];
+
+        if($level == 1 && $max == STORAGE_BASE) $max = STORAGE_BASE;
+
+        if ($level != 1) $max -= ${'bid'.$type}[$level - 1]['attri'] * STORAGE_MULTIPLIER;
+
+        $max += ${'bid'.$type}[$level]['attri'] * STORAGE_MULTIPLIER;
+
+        return [$fieldDbName, $max];
+    }
+
+    /**
+     * Handle the side effects of completing a World Wonder (type 40) build:
+     * launch the Natar attack waves, lock out further winners at level 100,
+     * and record the last upgrade time.
+     */
+    private function completeWorldWonder($indi) {
+        global $database;
+
+        if (($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
+            $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
+        }
+
+        //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
+        if ($indi['level'] == 100) {
+            mysqli_query($database->dblink,"TRUNCATE ".TB_PREFIX."bdata");
+        }
+
+        // Update ww last finish upgrade
+        $qW = "UPDATE ".TB_PREFIX."fdata set ww_lastupdate = ".time()." where vref = ".(int) $indi['wid'];
+        $database->query($qW);
     }
 
     private function startNatarAttack($level, $vid, $time) {
