@@ -2936,7 +2936,7 @@ class Automation {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
         // Include: batalii, capcane, evaziune erou, distrugere cladiri, cuceriri
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
+        global $bid23, $database, $battle, $technology, $units;
 
         $time = time();
         $dataarray = $this->fetchCompletedAttacks($time);
@@ -3003,7 +3003,6 @@ class Automation {
                     $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $vt['evasion'], $vt['maxevasion'], $vt['gold'], $vt['cannotsend'], $dataarray[$data_num]['attack_type']);
 
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
-                    $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
                     $Defender         = $defUnits['Defender'];
                     $enforDefender    = $defUnits['enforDefender'];
@@ -3051,7 +3050,6 @@ class Automation {
                     $stonemason  = $ot['stonemason'];
 
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
-                    $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
                     $Defender         = $defUnits['Defender'];
                     $enforDefender    = $defUnits['enforDefender'];
@@ -3087,11 +3085,6 @@ class Automation {
                 $defspy = $enforDefender['u4'] > 0 || $enforDefender['u14'] > 0 || $enforDefender['u23'] > 0 || $enforDefender['u44'] > 0;
 
                 if(PEACE == 0 || $targettribe == 4 || $targettribe == 5 || $scout){
-                    if($targettribe == 1) $def_spy = $enforDefender['u4'];                       
-                    elseif($targettribe == 2) $def_spy = $enforDefender['u14'];                      
-                    elseif($targettribe == 3) $def_spy = $enforDefender['u23'];                      
-                    elseif($targettribe == 5) $def_spy = $enforDefender['u44'];
-
                     // trapper resolution + prisoners — extracted to calculateTrappedUnits() [#155]
                     $trapResult = $this->calculateTrappedUnits($data, $Defender, $Attacker, $NatarCapital, $scout, $start, $end);
                     for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $trapResult['traped'][$i];
@@ -3178,13 +3171,9 @@ class Automation {
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
-                   
-                    if ($herosend_att > 0) $unitssend_att_check = $unitssend_att.','.$data['t11'];      
-                    else  $unitssend_att_check = $unitssend_att;            
 
                     //reinforcement report (pre-casualty defender data) — extracted to collectReinforcementReport() [#155]
                     $reinfReport = $this->collectReinforcementReport($data, $targettribe, $Defender);
-                    $DefenderEnf             = $reinfReport['DefenderEnf'];
                     $DefenderHeroesTotArray  = $reinfReport['DefenderHeroesTotArray'];
                     $DefenderHeroesDeadArray = $reinfReport['DefenderHeroesDeadArray'];
                     $unitssend_def           = $reinfReport['unitssend_def'];
@@ -3208,8 +3197,7 @@ class Automation {
                     $alldead = [];
                     
                     for($i = 1; $i <= 50; $i++) $alldead[$i] = 0;
-                    $heroAttackDead = $dead11;
-                    
+
                     //kill own defence — extracted to applyOwnDefenceCasualties() [#155]
                     $owndead = $this->applyOwnDefenceCasualties($data, $targettribe, $battlepart);
 
@@ -3262,10 +3250,6 @@ class Automation {
 
                     $unitsdead_att = $dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10;
                     $unitstraped_att = $traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11;
-                    
-                    if($herosend_att > 0) $unitsdead_att_check = $unitsdead_att.','.$dead11;
-                    else $unitsdead_att_check = $unitsdead_att;
-
 
                     //top 10 attack and defence update
                     $totaldead_att = $dead1 + $dead2 + $dead3 + $dead4 + $dead5 + $dead6 + $dead7 + $dead8 + $dead9 + $dead10 + $dead11;
@@ -3380,16 +3364,13 @@ class Automation {
                 unset(
                     $Attacker
                     ,$Defender
-                    ,$DefenderEnf
                     ,$DefenderHeroesTotArray
                     ,$DefenderHeroesDeadArray
                     ,$DefenderHeroesTot
                     ,$DefenderHeroesDead
-                    ,$enforce
                     ,$unitssend_att
                     ,$unitssend_def
                     ,$battlepart
-                    ,$unitlist
                     ,$unitsdead_def
                     ,$dead
                     ,$steal
@@ -3397,9 +3378,6 @@ class Automation {
                     ,$data
                     ,$data2
                     ,$to
-                    ,$artifact
-                    ,$artifactBig
-                    ,$canclaim
                     ,$data_fail
                     ,$owntribe
                     ,$unitsdead_att
@@ -3413,13 +3391,8 @@ class Automation {
                     ,$totaldead_att
                     ,$totaltraped_att
                     ,$totaldead_def
-                    ,$unitsdead_att_check
                     ,$totalattackdead
-                    ,$enforce1
-                    ,$defheroowner
-                    ,$enforceowner
                     ,$defheroxp
-                    ,$reinfheroxp
                     ,$AttackerWref
                     ,$DefenderWref
                     ,$troopsdead1
