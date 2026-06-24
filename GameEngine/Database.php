@@ -5545,7 +5545,7 @@ References: User ID/Message ID, Mode
             if(!$mode) {
                 $pairs[] = '(0, ' . (int) $refValue . ', ' . (int) $clay[$index] . ', ' . (int) $iron[$index] . ', ' . (int) $crop[$index] . ', ' . (int) $merchant[$index] . ')';
             } else {
-                $pairs[] = (int) $refValule;
+                $pairs[] = (int) $refValue;
             }
         }
 
