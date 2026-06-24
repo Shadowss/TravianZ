@@ -387,7 +387,7 @@ class Automation {
     }
 
     private function buildComplete() {
-        global $database, $technology, $bid18, $bid10, $bid11, $bid38, $bid39;
+        global $database;
 
         $time = time();
         // IDs of villages that were affected by this building completion update,
@@ -435,29 +435,15 @@ class Automation {
 
                 // update capacity if we updated a warehouse or a granary
                 if (in_array($indi['type'], [10, 11, 38, 39])) {
-                    $fieldDbName = (in_array($indi['type'], [10, 38]) ? 'maxstore' : 'maxcrop');
-                    $max = $villageData[$fieldDbName];
-
-                    if($level == 1 && $max == STORAGE_BASE) $max = STORAGE_BASE;
-                    
-                    if ($level != 1) $max -= ${'bid'.$indi['type']}[$level - 1]['attri'] * STORAGE_MULTIPLIER;
-
-                    $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
-
+                    [$fieldDbName, $max] = $this->updateStorageCapacity($indi['type'], $level, $villageData);
                     $fieldsToSet[$fieldDbName] = $max;
                 }
 
                 // if we updated Embassy, update maximum members that the alliance can take
                 if($indi['type'] == 18) Automation::updateMax($villageOwner);
 
-                if ($indi['type'] == 40 && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
-                    $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
-                }
-
-                //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
-                if ($indi['type'] == 40 && $indi['level'] == 100) {
-                    mysqli_query($database->dblink,"TRUNCATE ".TB_PREFIX."bdata");
-                }
+                // World Wonder completion handling (Natar attacks, winner lock, last-upgrade time)
+                if ($indi['type'] == 40) $this->completeWorldWonder($indi);
 
                 // TODO: find out what exactly these conditions are for
                 // no special military conditioning for Teutons and Gauls
@@ -467,12 +453,6 @@ class Automation {
                     // special condition for Roman military buildings
                     if ($indi['field'] > 18) $loopconUpdates[$indi['wid']] = ' AND field > 18';                    
                     else $loopconUpdates[$indi['wid']] = ' AND field < 19';                                      
-                }
-
-                // Update ww last finish upgrade
-                if ($indi['type'] == 40) {
-                    $qW = "UPDATE ".TB_PREFIX."fdata set ww_lastupdate = ".time()." where vref = ".(int) $indi['wid'];
-                    $database->query($qW);
                 }
 
                 $dbIdsToDelete[] = (int) $indi['id'];
@@ -508,6 +488,47 @@ class Automation {
         }
     }
 
+    /**
+     * Recompute a warehouse/granary capacity after a build completion.
+     * Returns [$fieldDbName, $max]: the vdata column to update and its new value.
+     */
+    private function updateStorageCapacity($type, $level, $villageData) {
+        global $bid10, $bid11, $bid38, $bid39;
+
+        $fieldDbName = (in_array($type, [10, 38]) ? 'maxstore' : 'maxcrop');
+        $max = $villageData[$fieldDbName];
+
+        if($level == 1 && $max == STORAGE_BASE) $max = STORAGE_BASE;
+
+        if ($level != 1) $max -= ${'bid'.$type}[$level - 1]['attri'] * STORAGE_MULTIPLIER;
+
+        $max += ${'bid'.$type}[$level]['attri'] * STORAGE_MULTIPLIER;
+
+        return [$fieldDbName, $max];
+    }
+
+    /**
+     * Handle the side effects of completing a World Wonder (type 40) build:
+     * launch the Natar attack waves, lock out further winners at level 100,
+     * and record the last upgrade time.
+     */
+    private function completeWorldWonder($indi) {
+        global $database;
+
+        if (($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
+            $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
+        }
+
+        //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
+        if ($indi['level'] == 100) {
+            mysqli_query($database->dblink,"TRUNCATE ".TB_PREFIX."bdata");
+        }
+
+        // Update ww last finish upgrade
+        $qW = "UPDATE ".TB_PREFIX."fdata set ww_lastupdate = ".time()." where vref = ".(int) $indi['wid'];
+        $database->query($qW);
+    }
+
     private function startNatarAttack($level, $vid, $time) {
         global $database;
 
@@ -515,32 +536,9 @@ class Automation {
         // I took the data from my first ww (first .org world)
         // TODO: get the algo from the real travian with the 100 biggest offs
 
-        $troops = [5 => [[3412, 2814, 4156, 3553, 9, 0], [35, 0, 77, 33, 17, 10]],
-                   10 => [[4314, 3688, 5265, 4621, 13, 0], [65, 0, 175, 77, 28, 17]],
-                   15 => [[4645, 4267, 5659, 5272, 15, 0], [99, 0, 305, 134, 40, 25]],
-                   20 => [[6207, 5881, 7625, 7225, 22, 0], [144, 0, 456, 201, 56, 36]],
-                   25 => [[6004, 5977, 7400, 7277, 23, 0], [152, 0, 499, 220, 58, 37]],
-                   30 => [[7073, 7181, 8730, 8713, 27, 0], [183, 0, 607, 268, 69, 45]],          
-                   35 => [[7090, 7320, 8762, 8856, 28, 0], [186, 0, 620, 278, 70, 45]],           
-                   40 => [[7852, 6967, 9606, 8667, 25, 0], [146, 0, 431, 190, 60, 37]],           
-                   45 => [[8480, 8883, 10490, 10719, 35, 0], [223, 0, 750, 331, 83, 54]],          
-                   50 => [[8522, 9038, 10551, 10883, 35, 0], [224, 0, 757, 335, 83, 54]],            
-                   55 => [[8931, 8690, 10992, 10624, 32, 0], [219, 0, 707, 312, 84, 54]],           
-                   60 => [[12138, 13013, 15040, 15642, 51, 0], [318, 0, 1079, 477, 118, 76]],            
-                   65 => [[13397, 14619, 16622, 17521, 58, 0], [345, 0, 1182, 522, 127, 83]],           
-                   70 => [[16323, 17665, 20240, 21201, 70, 0], [424, 0, 1447, 640, 157, 102]],          
-                   75 => [[20739, 22796, 25746, 27288, 91, 0], [529, 0, 1816, 803, 194, 127]],           
-                   80 => [[21857, 24180, 27147, 28914, 97, 0], [551, 0, 1898, 839, 202, 132]],          
-                   85 => [[22476, 25007, 27928, 29876, 100, 0], [560, 0, 1933, 855, 205, 134]],           
-                   90 => [[31345, 35053, 38963, 41843, 141, 0], [771, 0, 2668, 1180, 281, 184]],           
-                   95 => [[31720, 35635, 39443, 42506, 144, 0], [771, 0, 2671, 1181, 281, 184]],          
-                   96 => [[32885, 37007, 40897, 44130, 150, 0], [795, 0, 2757, 1219, 289, 190]],         
-                   97 => [[32940, 37099, 40968, 44235, 150, 0], [794, 0, 2755, 1219, 289, 190]],       
-                   98 => [[33521, 37691, 41686, 44953, 152, 0], [812, 0, 2816, 1246, 296, 194]],           
-                   99 => [[36251, 40861, 45089, 48714, 165, 0], [872, 0, 3025, 1338, 317, 208]]];
-
         // select the troops^^
-        if (isset($troops[$level])) $units = $troops[$level];          
+        $troops = $this->getNatarTroopTable();
+        if (isset($troops[$level])) $units = $troops[$level];
         else return false;
 
         // get the capital village from the natars
@@ -555,13 +553,51 @@ class Automation {
         mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
         mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')');
 
-        // wave 1
-        $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
-        $database->addMovement(3, $row['wref'], $vid, $ref, $time, $endtime);
+        // two waves: the second one targets the WW (catapult target 40) one second later
+        $this->launchNatarWave($row['wref'], $vid, $units[0], 0, $time, $endtime);
+        $this->launchNatarWave($row['wref'], $vid, $units[1], 40, $time, $endtime + 1);
+    }
 
-        // wave 2
-        $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, ['vid' => $vid, 'endtime' => ($endtime + 1)]);
-        $database->addMovement(3, $row['wref'], $vid, $ref2, $time, $endtime + 1);
+    /**
+     * Fire a single Natar attack wave at a World Wonder village.
+     * $unitRow is one troop row [t2, t3, t5, t6, t7, t8]; $ctar1 is the
+     * catapult target slot (0 for the first wave, 40 for the second).
+     */
+    private function launchNatarWave($source, $vid, $unitRow, $ctar1, $time, $arrival) {
+        global $database;
+
+        $ref = $database->addAttack($source, 0, $unitRow[0], $unitRow[1], 0, $unitRow[2], $unitRow[3], $unitRow[4], $unitRow[5], 0, 0, 0, 3, $ctar1, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
+        $database->addMovement(3, $source, $vid, $ref, $time, $arrival);
+    }
+
+    /**
+     * Hard-coded Natar offensive waves indexed by World Wonder level.
+     * Each level holds two waves, each a troop row [t2, t3, t5, t6, t7, t8].
+     */
+    private function getNatarTroopTable() {
+        return [5 => [[3412, 2814, 4156, 3553, 9, 0], [35, 0, 77, 33, 17, 10]],
+                   10 => [[4314, 3688, 5265, 4621, 13, 0], [65, 0, 175, 77, 28, 17]],
+                   15 => [[4645, 4267, 5659, 5272, 15, 0], [99, 0, 305, 134, 40, 25]],
+                   20 => [[6207, 5881, 7625, 7225, 22, 0], [144, 0, 456, 201, 56, 36]],
+                   25 => [[6004, 5977, 7400, 7277, 23, 0], [152, 0, 499, 220, 58, 37]],
+                   30 => [[7073, 7181, 8730, 8713, 27, 0], [183, 0, 607, 268, 69, 45]],
+                   35 => [[7090, 7320, 8762, 8856, 28, 0], [186, 0, 620, 278, 70, 45]],
+                   40 => [[7852, 6967, 9606, 8667, 25, 0], [146, 0, 431, 190, 60, 37]],
+                   45 => [[8480, 8883, 10490, 10719, 35, 0], [223, 0, 750, 331, 83, 54]],
+                   50 => [[8522, 9038, 10551, 10883, 35, 0], [224, 0, 757, 335, 83, 54]],
+                   55 => [[8931, 8690, 10992, 10624, 32, 0], [219, 0, 707, 312, 84, 54]],
+                   60 => [[12138, 13013, 15040, 15642, 51, 0], [318, 0, 1079, 477, 118, 76]],
+                   65 => [[13397, 14619, 16622, 17521, 58, 0], [345, 0, 1182, 522, 127, 83]],
+                   70 => [[16323, 17665, 20240, 21201, 70, 0], [424, 0, 1447, 640, 157, 102]],
+                   75 => [[20739, 22796, 25746, 27288, 91, 0], [529, 0, 1816, 803, 194, 127]],
+                   80 => [[21857, 24180, 27147, 28914, 97, 0], [551, 0, 1898, 839, 202, 132]],
+                   85 => [[22476, 25007, 27928, 29876, 100, 0], [560, 0, 1933, 855, 205, 134]],
+                   90 => [[31345, 35053, 38963, 41843, 141, 0], [771, 0, 2668, 1180, 281, 184]],
+                   95 => [[31720, 35635, 39443, 42506, 144, 0], [771, 0, 2671, 1181, 281, 184]],
+                   96 => [[32885, 37007, 40897, 44130, 150, 0], [795, 0, 2757, 1219, 289, 190]],
+                   97 => [[32940, 37099, 40968, 44235, 150, 0], [794, 0, 2755, 1219, 289, 190]],
+                   98 => [[33521, 37691, 41686, 44953, 152, 0], [812, 0, 2816, 1246, 296, 194]],
+                   99 => [[36251, 40861, 45089, 48714, 165, 0], [872, 0, 3025, 1338, 317, 208]]];
     }
 
     private function checkWWAttacks() {
@@ -2905,7 +2941,7 @@ class Automation {
         // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
         // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
         // Include: batalii, capcane, evaziune erou, distrugere cladiri, cuceriri
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
+        global $bid23, $database, $battle, $technology, $units;
 
         $time = time();
         $dataarray = $this->fetchCompletedAttacks($time);
@@ -2972,7 +3008,6 @@ class Automation {
                     $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $vt['evasion'], $vt['maxevasion'], $vt['gold'], $vt['cannotsend'], $dataarray[$data_num]['attack_type']);
 
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
-                    $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
                     $Defender         = $defUnits['Defender'];
                     $enforDefender    = $defUnits['enforDefender'];
@@ -3020,7 +3055,6 @@ class Automation {
                     $stonemason  = $ot['stonemason'];
 
                     // defence units gathered — extracted to buildDefenderUnits() [#155]
-                    $rom = $ger = $gal = $nat = $natar = 0;
                     $defUnits = $this->buildDefenderUnits($data['to']);
                     $Defender         = $defUnits['Defender'];
                     $enforDefender    = $defUnits['enforDefender'];
@@ -3056,11 +3090,6 @@ class Automation {
                 $defspy = $enforDefender['u4'] > 0 || $enforDefender['u14'] > 0 || $enforDefender['u23'] > 0 || $enforDefender['u44'] > 0;
 
                 if(PEACE == 0 || $targettribe == 4 || $targettribe == 5 || $scout){
-                    if($targettribe == 1) $def_spy = $enforDefender['u4'];                       
-                    elseif($targettribe == 2) $def_spy = $enforDefender['u14'];                      
-                    elseif($targettribe == 3) $def_spy = $enforDefender['u23'];                      
-                    elseif($targettribe == 5) $def_spy = $enforDefender['u44'];
-
                     // trapper resolution + prisoners — extracted to calculateTrappedUnits() [#155]
                     $trapResult = $this->calculateTrappedUnits($data, $Defender, $Attacker, $NatarCapital, $scout, $start, $end);
                     for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $trapResult['traped'][$i];
@@ -3147,13 +3176,9 @@ class Automation {
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
-                   
-                    if ($herosend_att > 0) $unitssend_att_check = $unitssend_att.','.$data['t11'];      
-                    else  $unitssend_att_check = $unitssend_att;            
 
                     //reinforcement report (pre-casualty defender data) — extracted to collectReinforcementReport() [#155]
                     $reinfReport = $this->collectReinforcementReport($data, $targettribe, $Defender);
-                    $DefenderEnf             = $reinfReport['DefenderEnf'];
                     $DefenderHeroesTotArray  = $reinfReport['DefenderHeroesTotArray'];
                     $DefenderHeroesDeadArray = $reinfReport['DefenderHeroesDeadArray'];
                     $unitssend_def           = $reinfReport['unitssend_def'];
@@ -3177,8 +3202,7 @@ class Automation {
                     $alldead = [];
                     
                     for($i = 1; $i <= 50; $i++) $alldead[$i] = 0;
-                    $heroAttackDead = $dead11;
-                    
+
                     //kill own defence — extracted to applyOwnDefenceCasualties() [#155]
                     $owndead = $this->applyOwnDefenceCasualties($data, $targettribe, $battlepart);
 
@@ -3231,10 +3255,6 @@ class Automation {
 
                     $unitsdead_att = $dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10;
                     $unitstraped_att = $traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11;
-                    
-                    if($herosend_att > 0) $unitsdead_att_check = $unitsdead_att.','.$dead11;
-                    else $unitsdead_att_check = $unitsdead_att;
-
 
                     //top 10 attack and defence update
                     $totaldead_att = $dead1 + $dead2 + $dead3 + $dead4 + $dead5 + $dead6 + $dead7 + $dead8 + $dead9 + $dead10 + $dead11;
@@ -3349,16 +3369,13 @@ class Automation {
                 unset(
                     $Attacker
                     ,$Defender
-                    ,$DefenderEnf
                     ,$DefenderHeroesTotArray
                     ,$DefenderHeroesDeadArray
                     ,$DefenderHeroesTot
                     ,$DefenderHeroesDead
-                    ,$enforce
                     ,$unitssend_att
                     ,$unitssend_def
                     ,$battlepart
-                    ,$unitlist
                     ,$unitsdead_def
                     ,$dead
                     ,$steal
@@ -3366,9 +3383,6 @@ class Automation {
                     ,$data
                     ,$data2
                     ,$to
-                    ,$artifact
-                    ,$artifactBig
-                    ,$canclaim
                     ,$data_fail
                     ,$owntribe
                     ,$unitsdead_att
@@ -3382,13 +3396,8 @@ class Automation {
                     ,$totaldead_att
                     ,$totaltraped_att
                     ,$totaldead_def
-                    ,$unitsdead_att_check
                     ,$totalattackdead
-                    ,$enforce1
-                    ,$defheroowner
-                    ,$enforceowner
                     ,$defheroxp
-                    ,$reinfheroxp
                     ,$AttackerWref
                     ,$DefenderWref
                     ,$troopsdead1
