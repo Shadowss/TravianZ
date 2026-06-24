@@ -328,48 +328,42 @@ class Automation {
         }
     }
     
-    private function pruneOResource() {
+    // Clamp resources/storage up to their minimums for the given table (vdata or
+    // odata): negative resources back to 0 and maxstore/maxcrop back to
+    // STORAGE_BASE. This floor pass is identical for both tables, so both
+    // pruneResource() (vdata) and pruneOResource() (odata) share it. The $table
+    // argument is an internal constant string, never user input.
+    private function pruneResourceMinimums($table) {
         global $database;
-        
+
+        $database->query("UPDATE
+                  ".TB_PREFIX.$table."
+              SET
+                  wood = IF(wood < 0, 0, wood),
+                  clay = IF(clay < 0, 0, clay),
+                  iron = IF(iron < 0, 0, iron),
+                  crop = IF(crop < 0, 0, crop),
+                  maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
+                  maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
+              WHERE
+                  maxstore < ".STORAGE_BASE." OR
+                  maxcrop < ".STORAGE_BASE." OR
+                  wood < 0 OR
+                  clay < 0 OR
+                  iron < 0 OR
+                  crop < 0");
+    }
+
+    private function pruneOResource() {
         if(!ALLOW_BURST) {
-            $database->query("UPDATE
-                      ".TB_PREFIX."odata
-                  SET
-                      wood = IF(wood < 0, 0, wood),
-                      clay = IF(clay < 0, 0, clay),
-                      iron = IF(iron < 0, 0, iron),
-                      crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
-                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
-                  WHERE
-                      maxstore < ".STORAGE_BASE." OR
-                      maxcrop < ".STORAGE_BASE." OR
-                      wood < 0 OR
-                      clay < 0 OR
-                      iron < 0 OR
-                      crop < 0");
+            $this->pruneResourceMinimums('odata');
         }
     }
     private function pruneResource() {
         global $database;
-        
+
         if(!ALLOW_BURST) {
-            $database->query("UPDATE
-                      ".TB_PREFIX."vdata
-                  SET
-                      wood = IF(wood < 0, 0, wood),
-                      clay = IF(clay < 0, 0, clay),
-                      iron = IF(iron < 0, 0, iron),
-                      crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
-                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
-                  WHERE
-                      maxstore < ".STORAGE_BASE." OR
-                      maxcrop < ".STORAGE_BASE." OR
-                      wood < 0 OR
-                      clay < 0 OR
-                      iron < 0 OR
-                      crop < 0");
+            $this->pruneResourceMinimums('vdata');
 
             $database->query("UPDATE
                       ".TB_PREFIX."vdata
@@ -619,9 +613,16 @@ class Automation {
     }
 
     private function marketComplete() {
+        // Two independent phases share a single cutoff timestamp: sort_type = 0
+        // new trade deliveries, then sort_type = 2 resending of resources.
+        $time = microtime(true);
+        $this->marketCompleteDeliveries($time);
+        $this->marketCompleteResends($time);
+    }
+
+    private function marketCompleteDeliveries($time) {
         global $database, $units;
 
-        $time = microtime(true);
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
 
@@ -659,6 +660,10 @@ class Automation {
             $database->addMovement(2, $data['to'], $data['from'], $data['merchant'], time(), $endtime, $data['send'], $data['wood'], $data['clay'], $data['iron'], $data['crop']);
             $database->setMovementProc($data['moveid']);
         }
+    }
+
+    private function marketCompleteResends($time) {
+        global $database;
 
         $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
@@ -3466,80 +3471,11 @@ class Automation {
 				}
 
                 if($data['from'] == 0){
-					$DefenderID = $database->getVillageField($data['to'], "owner");
-					$database->addEnforce(['from' => $data['from'], 'to' => $data['to'], 't1' => 0, 't2' => 0, 't3' => 0, 't4' => 0, 't5' => 0, 't6' => 0, 't7' => 0, 't8' => 0, 't9' => 0, 't10' => 0, 't11' => 0]);
-					$reinf = $database->getEnforce($data['to'], $data['from']);
-					$database->modifyEnforce($reinf['id'], 31, 1, 1);
-					$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-					$database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
-				}else{
-                    //set base things
-                    $from = $database->getMInfo($data['from']);
-                    $fromF = $database->getVillage($data['from']);
-                    $AttackerID = $from['owner'];
-                    $owntribe = $database->getUserField($AttackerID,"tribe",0);
-                   
-                    $HeroTransfer = $troopsPresent = 0;              
-                    for($i = 1;$i <= 10; $i++) {
-                    	if($data['t'.$i] > 0) {
-                    		$troopsPresent = 1;
-                    		break;
-                    	}
-                    }
-                    
-                    //check if the hero is present and we're not sending him to an occupied oasis
-                    //only add hero if we're sending him alone
-                    if($data['t11'] > 0 && !$isoasis && !$troopsPresent) {
-                    	//check if we're sending a hero between own villages
-                        if($AttackerID == $DefenderID) {             
-                            //check if there's a Mansion at target village
-                            if($this->getTypeLevel(37, $data['to']) > 0){
-                                //don't reinforce, addunit instead
-                                $database->modifyUnit($data['to'], ["hero"], [1], [1]);
-                                $heroid = $database->getHeroField($DefenderID, 'heroid');
-                                $database->modifyHero("wref", $data['to'], $heroid);
-                                $HeroTransfer = 1;
-                            }
-                        }
-                    }                   
-
-                    if($data['t11'] > 0 || $troopsPresent) {
-                        $temphero = $data['t11'];
-                        if ($HeroTransfer) $data['t11'] = 0;
-                        //check if there is defence from town in to town
-                        $check = $database->getEnforce($data['to'], $data['from']);
-                        if (!isset($check['id'])) $database->addEnforce($data);
-                        else
-                        {
-                            //yes
-                            $start = ($owntribe - 1) * 10 + 1;
-                            $end = ($owntribe * 10);
-                            
-                            //add unit.
-                            $t_units = '';
-                            for($i = $start, $j = 1; $i <= $end; $i++, $j++)
-                            {
-                                $t_units .= "u".$i." = u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');
-                            }
-                            
-                            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
-                            $database->query($q);
-                            $database->modifyEnforce($check['id'], 'hero', $data['t11'], 1);
-                        }
-                        $data['t11'] = $temphero;
-                    }
-                    //send rapport
-                    $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
-                    $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
-
-
-                    if($isoasis == 0) $to_name = $to['name'];    
-                    else $to_name = "Oasis ".$database->getVillageField($to['conqured'],"name");                 
-                    
-                    $database->addNotice($from['owner'],$from['wref'],(isset($ownally) ? $ownally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
-                    if($from['owner'] != $to['owner']) {
-                        $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
-                    }
+                    // flow 1: a "village of the elders" reinforcement returning home
+                    $this->completeReinforcementFromElders($data, $to);
+                }else{
+                    // flow 2: a standard reinforcement delivery (hero transfer + enforce merge + report)
+                    $this->completeReinforcementDelivery($data, $to, $isoasis, $DefenderID);
                 }
 
                 //Update starvation data
@@ -3548,12 +3484,113 @@ class Automation {
                 //check empty reinforcement in rally point
                 $e_units = '';
                 for ($i = 1; $i <= 50; $i++) $e_units.= 'u'.$i.'= 0 AND ';
-                
+
                 $e_units.= 'hero = 0';
                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
                 $database->query($q);
             }
         }
+    }
+
+    // Flow 1 of sendreinfunitsComplete(): a "village of the elders" reinforcement
+    // (from = 0) returning home. $targetally / $AttackArrivalTime are intentionally
+    // left undefined here, exactly as in the original inline code.
+    private function completeReinforcementFromElders($data, $to) {
+        global $database;
+
+        $DefenderID = $database->getVillageField($data['to'], "owner");
+        $database->addEnforce(['from' => $data['from'], 'to' => $data['to'], 't1' => 0, 't2' => 0, 't3' => 0, 't4' => 0, 't5' => 0, 't6' => 0, 't7' => 0, 't8' => 0, 't9' => 0, 't10' => 0, 't11' => 0]);
+        $reinf = $database->getEnforce($data['to'], $data['from']);
+        $database->modifyEnforce($reinf['id'], 31, 1, 1);
+        $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
+        $database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
+    }
+
+    // Flow 2 of sendreinfunitsComplete(): a standard reinforcement delivery. Handles
+    // the lone-hero transfer between own villages, the enforcement merge-or-create,
+    // and the reinforcement notices. $ownally / $targetally / $AttackArrivalTime are
+    // intentionally left undefined (guarded by isset()), exactly as in the original.
+    private function completeReinforcementDelivery($data, $to, $isoasis, $DefenderID) {
+        global $database;
+
+        //set base things
+        $from = $database->getMInfo($data['from']);
+        $fromF = $database->getVillage($data['from']);
+        $AttackerID = $from['owner'];
+        $owntribe = $database->getUserField($AttackerID,"tribe",0);
+
+        $HeroTransfer = $troopsPresent = 0;
+        for($i = 1;$i <= 10; $i++) {
+        	if($data['t'.$i] > 0) {
+        		$troopsPresent = 1;
+        		break;
+        	}
+        }
+
+        //check if the hero is present and we're not sending him to an occupied oasis
+        //only add hero if we're sending him alone
+        if($data['t11'] > 0 && !$isoasis && !$troopsPresent) {
+        	//check if we're sending a hero between own villages
+            if($AttackerID == $DefenderID) {
+                //check if there's a Mansion at target village
+                if($this->getTypeLevel(37, $data['to']) > 0){
+                    //don't reinforce, addunit instead
+                    $database->modifyUnit($data['to'], ["hero"], [1], [1]);
+                    $heroid = $database->getHeroField($DefenderID, 'heroid');
+                    $database->modifyHero("wref", $data['to'], $heroid);
+                    $HeroTransfer = 1;
+                }
+            }
+        }
+
+        if($data['t11'] > 0 || $troopsPresent) {
+            $this->mergeOrCreateEnforcement($data, $owntribe, $HeroTransfer);
+        }
+
+        //send rapport
+        $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
+        $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
+
+
+        if($isoasis == 0) $to_name = $to['name'];
+        else $to_name = "Oasis ".$database->getVillageField($to['conqured'],"name");
+
+        $database->addNotice($from['owner'],$from['wref'],(isset($ownally) ? $ownally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
+        if($from['owner'] != $to['owner']) {
+            $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
+        }
+    }
+
+    // Flow 3 of sendreinfunitsComplete(): merge the incoming troops into an existing
+    // enforcement record at the target, or create a new one. When the hero was already
+    // transferred as a unit ($HeroTransfer), his t11 is temporarily zeroed for the
+    // merge and restored afterwards, exactly as in the original.
+    private function mergeOrCreateEnforcement($data, $owntribe, $HeroTransfer) {
+        global $database;
+
+        $temphero = $data['t11'];
+        if ($HeroTransfer) $data['t11'] = 0;
+        //check if there is defence from town in to town
+        $check = $database->getEnforce($data['to'], $data['from']);
+        if (!isset($check['id'])) $database->addEnforce($data);
+        else
+        {
+            //yes
+            $start = ($owntribe - 1) * 10 + 1;
+            $end = ($owntribe * 10);
+
+            //add unit.
+            $t_units = '';
+            for($i = $start, $j = 1; $i <= $end; $i++, $j++)
+            {
+                $t_units .= "u".$i." = u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');
+            }
+
+            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
+            $database->query($q);
+            $database->modifyEnforce($check['id'], 'hero', $data['t11'], 1);
+        }
+        $data['t11'] = $temphero;
     }
 
     private function returnunitsComplete() {
@@ -3877,10 +3914,10 @@ class Automation {
  
     	//Calculate the produced resources
     	$timepast = time() - $villageInfoArray['lastupdate'];
-    	$nwood = ($this->bountyGetWoodProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$nclay = ($this->bountyGetClayProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$niron = ($this->bountyGetIronProd($resArray, $numberOfOasis) / 3600) * $timepast;
-    	$ncrop = (($this->bountyGetCropProd($resArray, $numberOfOasis) - $villagePopulation - $upkeep) / 3600) * $timepast;
+    	$nwood = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 1) / 3600) * $timepast;
+    	$nclay = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 2) / 3600) * $timepast;
+    	$niron = ($this->bountyGetResourceProd($resArray, $numberOfOasis, 3) / 3600) * $timepast;
+    	$ncrop = (($this->bountyGetResourceProd($resArray, $numberOfOasis, 4) - $villagePopulation - $upkeep) / 3600) * $timepast;
     	$database->modifyResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
     	$database->updateVillage($bountywid);
     }
@@ -3985,83 +4022,46 @@ class Automation {
 		return $ownunit;
     }
     
-    private function bountyGetWoodProd($resArray, $oasisNumber) {
-        global $bid1, $bid5;
-        
-        $wood = $sawmill = 0;
-        $woodholder = [];
+    // Production of a single resource (1=wood, 2=clay, 3=iron, 4=crop) for the
+    // given village field layout, used by the bounty/production catch-up. The
+    // four resources only differ by: the production-building data global, the
+    // booster building field-type(s) whose 'attri' adds a % bonus, and the oasis
+    // bonus slot (resourceType - 1). Crop additionally has two boosters
+    // (grain mill type 8, then bakery type 9 applied on the running total) and
+    // the gold-club +25% crop bonus (b4) keyed on the village owner.
+    private function bountyGetResourceProd($resArray, $oasisNumber, $resourceType) {
+        global $bid1, $bid2, $bid3, $bid4, $bid5, $bid6, $bid7, $bid8, $bid9, $database;
+
+        $prodBid = [1 => $bid1, 2 => $bid2, 3 => $bid3, 4 => $bid4][$resourceType];
+        $boosterBid = [5 => $bid5, 6 => $bid6, 7 => $bid7, 8 => $bid8, 9 => $bid9];
+        // Booster field-types per resource, in application order (crop: mill then bakery).
+        $boosterTypes = [1 => [5], 2 => [6], 3 => [7], 4 => [8, 9]][$resourceType];
+
+        $prod = 0;
+        $holders = [];
+        $boosterLevels = array_fill_keys($boosterTypes, 0);
         for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 1) array_push($woodholder,'f'.$i);
-            if($resArray['f'.$i.'t'] == 5) $sawmill = $resArray['f'.$i];
+            if($resArray['f'.$i.'t'] == $resourceType) $holders[] = 'f'.$i;
+            if(isset($boosterLevels[$resArray['f'.$i.'t']])) $boosterLevels[$resArray['f'.$i.'t']] = $resArray['f'.$i];
         }
-        
-        for($i = 0; $i <= count($woodholder) - 1; $i++) $wood += $bid1[$resArray[$woodholder[$i]]]['prod'];
-        
-        if($sawmill >= 1) $wood += $wood / 100 * $bid5[$sawmill]['attri'];
-        if($oasisNumber[0] > 0) $wood += $wood * 0.25 * $oasisNumber[0];
 
-        return round($wood * SPEED);
-    }
-    
-    private function bountyGetClayProd($resArray, $oasisNumber) {
-        global $bid2, $bid6;
-        
-        $clay = $brick = 0;
-        $clayholder = [];
-        for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 2) array_push($clayholder, 'f'.$i);
-        	if($resArray['f'.$i.'t'] == 6) $brick = $resArray['f'.$i];
+        foreach($holders as $holder) $prod += $prodBid[$resArray[$holder]]['prod'];
+
+        foreach($boosterTypes as $bt) {
+            $level = $boosterLevels[$bt];
+            if($level >= 1) $prod += $prod / 100 * (isset($boosterBid[$bt][$level]['attri']) ? $boosterBid[$bt][$level]['attri'] : 0);
         }
-        
-        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay += $bid2[$resArray[$clayholder[$i]]]['prod'];
-        
-        if($brick >= 1) $clay += $clay / 100 * $bid6[$brick]['attri'];
-        if($oasisNumber[1] > 0) $clay += $clay * 0.25 * $oasisNumber[1];
 
-        return round($clay * SPEED);
-    }
+        $oasisIndex = $resourceType - 1;
+        if($oasisNumber[$oasisIndex] > 0) $prod += $prod * 0.25 * $oasisNumber[$oasisIndex];
 
-    private function bountyGetIronProd($resArray, $oasisNumber) {
-        global $bid3, $bid7;
-        
-        $iron = $foundry = 0;
-        $ironholder = [];
-        for($i = 1; $i <= 38; $i++) {
-        	if($resArray['f'.$i.'t'] == 3) array_push($ironholder, 'f'.$i);               
-        	if($resArray['f'.$i.'t'] == 7) $foundry = $resArray['f'.$i];
-        }
-        
-        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron += $bid3[$resArray[$ironholder[$i]]]['prod'];
-        
-        if($foundry >= 1) $iron += $iron / 100 * $bid7[$foundry]['attri'];
-        if($oasisNumber[2] > 0) $iron += $iron * 0.25 * $oasisNumber[2];
-
-        return round($iron * SPEED);
-    }
-
-    private function bountyGetCropProd($resArray, $oasisNumber) {
-        global $bid4, $bid8, $bid9, $database;
-        
-        $crop = $grainmill = $bakery = 0;
-        $cropholder = [];
-        for($i = 1; $i <= 38;$i++) {
-        	if($resArray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
-        	if($resArray['f'.$i.'t'] == 8) $grainmill = $resArray['f'.$i];
-        	if($resArray['f'.$i.'t'] == 9) $bakery = $resArray['f'.$i];
-        }
-        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop += $bid4[$resArray[$cropholder[$i]]]['prod'];
-        
-        if($grainmill >= 1) $crop += $crop / 100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
-        if($bakery >= 1) $crop += $crop / 100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);                
-        if($oasisNumber[3] > 0) $crop += $crop * 0.25 * $oasisNumber[3];       
-        
-        if(!empty($resArray['vref']) && is_numeric($resArray['vref'])){
-        	$who = $database->getVillageField($resArray['vref'], "owner");
+        if($resourceType == 4 && !empty($resArray['vref']) && is_numeric($resArray['vref'])) {
+            $who = $database->getVillageField($resArray['vref'], "owner");
             $croptrue = $database->getUserField($who, "b4", 0);
-            if($croptrue > time()) $crop *= 1.25;
+            if($croptrue > time()) $prod *= 1.25;
         }
-        
-        return round($crop * SPEED);
+
+        return round($prod * SPEED);
     }
 
     private function trainingComplete() {
@@ -4244,78 +4244,23 @@ class Automation {
                 $columnValues = [];
                 $modes = [];
                 $lastUpdateTime = $timeNow;
-                $newHealth = -1;
 
-                if((time()-$hdata['lastupdate']) >= 1){
-                    if($hdata['health'] < 100 and $hdata['health'] > 0){
-                        if(SPEED <= 10) $speed = SPEED;                           
-                        else if(SPEED <= 100) $speed = ceil(SPEED / 10);                           
-                        else $speed = ceil(SPEED / 100);
+                // 1. passive HP regeneration
+                $newHealth = $this->calculateHealthRegen($hdata);
 
-                        $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
+                // 2. level-up + score points
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $this->calculateLevelUp($hdata));
 
-                        if($reg <= 100) $newHealth = $reg;                        
-                        else $newHealth = 100;                      
-                    }
-                }
+                // 3. revive completion (forces health to 100 and stamps the update time)
+                $revive = $this->handleReviveCompletion($hdata);
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $revive);
+                if ($revive['health'] !== null) $newHealth = $revive['health'];
+                if ($revive['lastUpdate'] !== null) $lastUpdateTime = $revive['lastUpdate'];
 
-                $herolevel = $hdata['level'];
-                $newLevel = - 1;
-                $scorePoints = false;
-                for ($i = $herolevel + 1; $i < 100; $i++){
-                    if($hdata['experience'] >= $hero_levels[$i]){
-                        $newLevel = $i;
-                        if ($i < 99) $scorePoints = true;
-                    }
-                }
-
-                // upgrade hero to a new level, if needed
-                if ($newLevel > -1) {
-                    $columns[] = 'level';
-                    $columnValues[] = $newLevel;
-                    $modes[] = null;
-                }
-
-                // add as many points as needed, if we're below level 100
-                if ($scorePoints) {
-                    $columns[] = 'points';
-                    $columnValues[] = (5 * ($newLevel - $herolevel));
-                    $modes[] = 1;
-                }
-
-                $villunits = $unitData[$hdata['wref']];
-                if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
-
-                    $columns[] = 'dead';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'inrevive';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'inrevive';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $newHealth = 100;
-                    $lastUpdateTime = (int) $hdata['trainingtime'];
-                }
-
-                if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
-
-                    $columns[] = 'dead';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'intraining';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $lastUpdateTime = (int) $hdata['trainingtime'];
-                }
+                // 4. training completion (does not touch health)
+                $training = $this->handleTrainingCompletion($hdata);
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $training);
+                if ($training['lastUpdate'] !== null) $lastUpdateTime = $training['lastUpdate'];
 
                 // update health, if needed
                 if ($newHealth > -1) {
@@ -4341,6 +4286,107 @@ class Automation {
                 mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
             }
         }
+    }
+
+    // Append a hero column fragment (['columns'=>[], 'values'=>[], 'modes'=>[]])
+    // onto the running modifyHero() arrays, preserving order.
+    private function mergeHeroColumns(&$columns, &$columnValues, &$modes, $fragment) {
+        foreach ($fragment['columns'] as $k => $col) {
+            $columns[]      = $col;
+            $columnValues[] = $fragment['values'][$k];
+            $modes[]        = $fragment['modes'][$k];
+        }
+    }
+
+    // Passive HP regeneration: returns the new health value, or -1 if unchanged.
+    private function calculateHealthRegen($hdata) {
+        if((time()-$hdata['lastupdate']) >= 1){
+            if($hdata['health'] < 100 and $hdata['health'] > 0){
+                if(SPEED <= 10) $speed = SPEED;
+                else if(SPEED <= 100) $speed = ceil(SPEED / 10);
+                else $speed = ceil(SPEED / 100);
+
+                $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
+
+                return ($reg <= 100) ? $reg : 100;
+            }
+        }
+        return -1;
+    }
+
+    // Level-up + score points. Returns a column fragment.
+    private function calculateLevelUp($hdata) {
+        global $hero_levels;
+
+        $columns = [];
+        $values = [];
+        $modes = [];
+
+        $herolevel = $hdata['level'];
+        $newLevel = - 1;
+        $scorePoints = false;
+        for ($i = $herolevel + 1; $i < 100; $i++){
+            if($hdata['experience'] >= $hero_levels[$i]){
+                $newLevel = $i;
+                if ($i < 99) $scorePoints = true;
+            }
+        }
+
+        // upgrade hero to a new level, if needed
+        if ($newLevel > -1) {
+            $columns[] = 'level';
+            $values[]  = $newLevel;
+            $modes[]   = null;
+        }
+
+        // add as many points as needed, if we're below level 100
+        if ($scorePoints) {
+            $columns[] = 'points';
+            $values[]  = (5 * ($newLevel - $herolevel));
+            $modes[]   = 1;
+        }
+
+        return ['columns' => $columns, 'values' => $values, 'modes' => $modes, 'health' => null, 'lastUpdate' => null];
+    }
+
+    // Revive completion: marks the hero unit alive and clears the revive flag.
+    // Returns a column fragment plus the health (100) and lastUpdate overrides.
+    private function handleReviveCompletion($hdata) {
+        global $database;
+
+        if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
+            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
+
+            return [
+                'columns'    => ['dead', 'inrevive', 'inrevive'],
+                'values'     => [0, 0, 0],
+                'modes'      => [null, null, null],
+                'health'     => 100,
+                'lastUpdate' => (int) $hdata['trainingtime'],
+            ];
+        }
+
+        return ['columns' => [], 'values' => [], 'modes' => [], 'health' => null, 'lastUpdate' => null];
+    }
+
+    // Training completion: marks the hero unit alive and clears the training flag.
+    // Returns a column fragment plus the lastUpdate override (health untouched).
+    private function handleTrainingCompletion($hdata) {
+        global $database;
+
+        if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
+            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
+
+            return [
+                'columns'    => ['dead', 'intraining'],
+                'values'     => [0, 0],
+                'modes'      => [null, null],
+                'health'     => null,
+                'lastUpdate' => (int) $hdata['trainingtime'],
+            ];
+        }
+
+        return ['columns' => [], 'values' => [], 'modes' => [], 'health' => null, 'lastUpdate' => null];
     }
 
     private function updateStore() {
@@ -4982,91 +5028,103 @@ class Automation {
      */
     
 	function medals() {
-		global $ranking, $database;
+        global $database;
 
-    // --- Configuration ---
-    $minUid = 5;
-    // Exclude BANNED (0), MH (8), ADMIN (9)
-    $userFilter = "id > $minUid AND access NOT IN (0,8,9)";
-
-    // Helper to insert a user medal
-    $insertMedal = function($userid, $category, $place, $week, $points, $img) use ($database) {
-        $q = "INSERT INTO ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) VALUES (".
-            (int)$userid.", ".(int)$category.", ".(int)$place.", ".(int)$week.", '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
-        mysqli_query($database->dblink, $q);
-    };
-
-    // --- Check if we should award medals now ---
-    $giveMedal = false;
-    $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
-    $result = mysqli_query($database->dblink, $q);
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
-
-        if ($row['lastgavemedal'] == 0 && $stime < time()) {
-            // First run after server start - schedule next run
-            $setDays = round(MEDALINTERVAL / 86400);
-            $newtime = $setDays < 7? strtotime(($setDays + 1).' day midnight') : strtotime('next monday');
-            $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int)$newtime);
-        } elseif ($row['lastgavemedal']!= 0) {
-            $time = $row['lastgavemedal'] + MEDALINTERVAL;
-            $giveMedal = $row['lastgavemedal'] < time();
+        // Check the timing window; $time is the next "last awarded" stamp to write.
+        $time = $this->shouldAwardMedalsNow();
+        if ($time === null) {
+            return;
         }
+
+        // Exclude BANNED (0), MH (8), ADMIN (9)
+        $userFilter = "id > 5 AND access NOT IN (0,8,9)";
+
+        $week = $this->getNextMedalWeek('medal');
+        $allyweek = $this->getNextMedalWeek('allimedal');
+
+        $this->awardPlayerMedals($week, $userFilter);
+        $this->resetWeeklyStats('users', $userFilter, "ap=0, dp=0, Rc=0, clp=0, RR=0");
+        $this->awardAllianceMedals($allyweek);
+        $this->resetWeeklyStats('alidata', '', "ap=0, dp=0, RR=0, clp=0");
+
+        // Update last awarded time
+        $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int)$time);
     }
 
-    if (!($giveMedal && MEDALINTERVAL > 0)) {
-        return;
+    // Returns the next "lastgavemedal" stamp to write if medals are due now, or
+    // null to skip this run. On the very first run after server start it only
+    // schedules the next run (and returns null).
+    private function shouldAwardMedalsNow() {
+        global $database;
+
+        $giveMedal = false;
+        $time = null;
+        $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
+        $result = mysqli_query($database->dblink, $q);
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
+
+            if ($row['lastgavemedal'] == 0 && $stime < time()) {
+                // First run after server start - schedule next run
+                $setDays = round(MEDALINTERVAL / 86400);
+                $newtime = $setDays < 7? strtotime(($setDays + 1).' day midnight') : strtotime('next monday');
+                $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int)$newtime);
+            } elseif ($row['lastgavemedal']!= 0) {
+                $time = $row['lastgavemedal'] + MEDALINTERVAL;
+                $giveMedal = $row['lastgavemedal'] < time();
+            }
+        }
+
+        if (!($giveMedal && MEDALINTERVAL > 0)) {
+            return null;
+        }
+        return $time;
     }
 
-    // --- Determine current week numbers ---
-    $getNextWeek = function($table) use ($database) {
+    // Next week number for a medal table (medal / allimedal).
+    private function getNextMedalWeek($table) {
+        global $database;
+
         $q = "SELECT week FROM ".TB_PREFIX."$table ORDER BY week DESC LIMIT 1";
         $res = mysqli_query($database->dblink, $q);
         return $res && mysqli_num_rows($res)? (mysqli_fetch_assoc($res)['week'] + 1) : 1;
-    };
-    $week = $getNextWeek('medal');
-    $allyweek = $getNextWeek('allimedal');
+    }
 
-    // --- Award top 10 for each category ---
-    $awardTop = function($field, $category, $imgPrefix) use ($database, $userFilter, $week, $insertMedal) {
+    // Insert a user medal row.
+    private function insertUserMedal($userid, $category, $place, $week, $points, $img) {
+        global $database;
+
+        $q = "INSERT INTO ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) VALUES (".
+            (int)$userid.", ".(int)$category.", ".(int)$place.", ".(int)$week.", '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
+        mysqli_query($database->dblink, $q);
+    }
+
+    // Insert an alliance medal row.
+    private function insertAllianceMedal($allyid, $cat, $place, $week, $points, $img) {
+        global $database;
+
+        $q = "INSERT INTO ".TB_PREFIX."allimedal (allyid, categorie, plaats, week, points, img) VALUES (".(int)$allyid.", '".(int)$cat."', ".(int)$place.", '".(int)$week."', '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
+        mysqli_query($database->dblink, $q);
+    }
+
+    // Award the top 10 users for a stat field (one category).
+    private function awardTopMedals($field, $category, $imgPrefix, $week, $userFilter) {
+        global $database;
+
         $q = "SELECT id, $field FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY $field DESC, id DESC LIMIT 10";
         $res = mysqli_query($database->dblink, $q);
         $i = 0;
         while ($row = mysqli_fetch_array($res)) {
             $i++;
-            $insertMedal($row['id'], $category, $i, $week, $row[$field], $imgPrefix.$i);
-        }
-    };
-
-    // Attackers of the week (cat 1)
-    $awardTop('ap', 1, 't2_');
-    // Defenders of the week (cat 2)
-    $awardTop('dp', 2, 't3_');
-    // Climbers of the week (cat 3)
-    $awardTop('Rc', 3, 't1_');
-    // Rank climbers of the week (cat 10)
-    $awardTop('clp', 10, 't6_');
-    // Robbers of the week (cat 4)
-    $awardTop('RR', 4, 't4_');
-
-    // --- Bonus: player in both top10 attack AND defense (cat 5) ---
-    $topAttackers = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY ap DESC, id DESC LIMIT 10");
-    while ($a = mysqli_fetch_array($topAttackers)) {
-        $topDefenders = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY dp DESC, id DESC LIMIT 10");
-        while ($d = mysqli_fetch_array($topDefenders)) {
-            if ($a['id'] == $d['id']) {
-                $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."medal WHERE userid=".(int)$a['id']." AND categorie=5"))[0];
-                if ($cnt <= 2) {
-                    $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
-                    $insertMedal($a['id'], 5, 0, $week, $texts[$cnt], 't22'.$cnt.'_1');
-                }
-            }
+            $this->insertUserMedal($row['id'], $category, $i, $week, $row[$field], $imgPrefix.$i);
         }
     }
 
-    // --- Milestone ribbons for 3/5/10 times in top3 or top10 ---
-    $awardMilestone = function($field, $sourceCat, $topLimit, $targetCat, $imgBase) use ($database, $userFilter, $week, $insertMedal) {
+    // Award milestone ribbons for 3/5/10 appearances in a top3 or top10 category.
+    private function awardMilestoneMedals($field, $sourceCat, $topLimit, $targetCat, $imgBase, $week, $userFilter) {
+        global $database;
+
         $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY $field DESC, id DESC LIMIT 10");
         while ($u = mysqli_fetch_array($res)) {
             $cnt = mysqli_fetch_row(mysqli_query($database->dblink,
@@ -5074,79 +5132,100 @@ class Automation {
 
             $map = ['3' => ['Three', $imgBase.'0_1'], '5' => ['Five', $imgBase.'1_1'], '10' => ['Ten', $imgBase.'2_1']];
             if (isset($map[$cnt])) {
-                $insertMedal($u['id'], $targetCat, 0, $week, $map[$cnt][0], $map[$cnt][1]);
+                $this->insertUserMedal($u['id'], $targetCat, 0, $week, $map[$cnt][0], $map[$cnt][1]);
             }
         }
-    };
-
-    // Attackers milestones
-    $awardMilestone('ap', 1, 3, 6, 't12'); // top3 attackers
-    $awardMilestone('ap', 1, 10, 12, 't13'); // top10 attackers
-    // Defenders milestones
-    $awardMilestone('dp', 2, 3, 7, 't14');
-    $awardMilestone('dp', 2, 10, 13, 't15');
-    // Climbers milestones
-    $awardMilestone('Rc', 3, 3, 8, 't10');
-    $awardMilestone('Rc', 3, 10, 14, 't11');
-    // Rank climbers milestones
-    $awardMilestone('clp', 10, 3, 11, 't20');
-    $awardMilestone('clp', 10, 10, 16, 't21');
-    // Robbers milestones
-    $awardMilestone('RR', 4, 3, 9, 't16');
-    $awardMilestone('RR', 4, 10, 15, 't17');
-
-    // --- Reset weekly stats for eligible users ---
-    $ids = [];
-    $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter");
-    while ($r = mysqli_fetch_row($res)) { $ids[] = (int)$r[0]; }
-    if ($ids) {
-        mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."users SET ap=0, dp=0, Rc=0, clp=0, RR=0 WHERE id IN(".implode(',', $ids).")");
     }
 
-    // --- Alliance medals (no user filter needed) ---
-    $insertAlly = function($allyid, $cat, $place, $week, $points, $img) use ($database) {
-        $q = "INSERT INTO ".TB_PREFIX."allimedal (allyid, categorie, plaats, week, points, img) VALUES (".(int)$allyid.", '".(int)$cat."', ".(int)$place.", '".(int)$week."', '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
-        mysqli_query($database->dblink, $q);
-    };
+    // Player medals: top 10 of each category, the attack+defense bonus, then milestones.
+    private function awardPlayerMedals($week, $userFilter) {
+        global $database;
 
-    $allyCats = [
-        ['ap', 1, 'a2_'],
-        ['dp', 2, 'a3_'],
-        ['RR', 4, 'a4_'],
-        ['clp', 3, 'a1_']
-    ];
-    foreach ($allyCats as [$field, $cat, $img]) {
-        $res = mysqli_query($database->dblink, "SELECT id, $field FROM ".TB_PREFIX."alidata ORDER BY $field DESC, id DESC LIMIT 10");
-        $i = 0;
-        while ($r = mysqli_fetch_array($res)) { $i++; $insertAlly($r['id'], $cat, $i, $allyweek, $r[$field], $img.$i); }
+        // Top 10 for each category
+        $this->awardTopMedals('ap', 1, 't2_', $week, $userFilter);   // Attackers of the week (cat 1)
+        $this->awardTopMedals('dp', 2, 't3_', $week, $userFilter);   // Defenders of the week (cat 2)
+        $this->awardTopMedals('Rc', 3, 't1_', $week, $userFilter);   // Climbers of the week (cat 3)
+        $this->awardTopMedals('clp', 10, 't6_', $week, $userFilter); // Rank climbers of the week (cat 10)
+        $this->awardTopMedals('RR', 4, 't4_', $week, $userFilter);   // Robbers of the week (cat 4)
+
+        // --- Bonus: player in both top10 attack AND defense (cat 5) ---
+        $topAttackers = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY ap DESC, id DESC LIMIT 10");
+        while ($a = mysqli_fetch_array($topAttackers)) {
+            $topDefenders = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY dp DESC, id DESC LIMIT 10");
+            while ($d = mysqli_fetch_array($topDefenders)) {
+                if ($a['id'] == $d['id']) {
+                    $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."medal WHERE userid=".(int)$a['id']." AND categorie=5"))[0];
+                    if ($cnt <= 2) {
+                        $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
+                        $this->insertUserMedal($a['id'], 5, 0, $week, $texts[$cnt], 't22'.$cnt.'_1');
+                    }
+                }
+            }
+        }
+
+        // --- Milestone ribbons for 3/5/10 times in top3 or top10 ---
+        // Attackers milestones
+        $this->awardMilestoneMedals('ap', 1, 3, 6, 't12', $week, $userFilter);  // top3 attackers
+        $this->awardMilestoneMedals('ap', 1, 10, 12, 't13', $week, $userFilter); // top10 attackers
+        // Defenders milestones
+        $this->awardMilestoneMedals('dp', 2, 3, 7, 't14', $week, $userFilter);
+        $this->awardMilestoneMedals('dp', 2, 10, 13, 't15', $week, $userFilter);
+        // Climbers milestones
+        $this->awardMilestoneMedals('Rc', 3, 3, 8, 't10', $week, $userFilter);
+        $this->awardMilestoneMedals('Rc', 3, 10, 14, 't11', $week, $userFilter);
+        // Rank climbers milestones
+        $this->awardMilestoneMedals('clp', 10, 3, 11, 't20', $week, $userFilter);
+        $this->awardMilestoneMedals('clp', 10, 10, 16, 't21', $week, $userFilter);
+        // Robbers milestones
+        $this->awardMilestoneMedals('RR', 4, 3, 9, 't16', $week, $userFilter);
+        $this->awardMilestoneMedals('RR', 4, 10, 15, 't17', $week, $userFilter);
     }
 
-    // Alliance bonus for attack+defense
-    $resA = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC LIMIT 10");
-    while ($a = mysqli_fetch_array($resA)) {
-        $resD = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC LIMIT 10");
-        while ($d = mysqli_fetch_array($resD)) {
-            if ($a['id'] == $d['id']) {
-                $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int)$a['id']." AND categorie=5"))[0];
-                if ($cnt <= 2) {
-                    $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
-                    $insertAlly($a['id'], 5, 0, $allyweek, $texts[$cnt], 't22'.$cnt.'_1');
+    // Alliance medals: top 10 of each category, then the attack+defense bonus.
+    private function awardAllianceMedals($allyweek) {
+        global $database;
+
+        $allyCats = [
+            ['ap', 1, 'a2_'],
+            ['dp', 2, 'a3_'],
+            ['RR', 4, 'a4_'],
+            ['clp', 3, 'a1_']
+        ];
+        foreach ($allyCats as [$field, $cat, $img]) {
+            $res = mysqli_query($database->dblink, "SELECT id, $field FROM ".TB_PREFIX."alidata ORDER BY $field DESC, id DESC LIMIT 10");
+            $i = 0;
+            while ($r = mysqli_fetch_array($res)) { $i++; $this->insertAllianceMedal($r['id'], $cat, $i, $allyweek, $r[$field], $img.$i); }
+        }
+
+        // Alliance bonus for attack+defense
+        $resA = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC LIMIT 10");
+        while ($a = mysqli_fetch_array($resA)) {
+            $resD = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC LIMIT 10");
+            while ($d = mysqli_fetch_array($resD)) {
+                if ($a['id'] == $d['id']) {
+                    $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int)$a['id']." AND categorie=5"))[0];
+                    if ($cnt <= 2) {
+                        $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
+                        $this->insertAllianceMedal($a['id'], 5, 0, $allyweek, $texts[$cnt], 't22'.$cnt.'_1');
+                    }
                 }
             }
         }
     }
 
-    // Reset alliance stats
-    $aliIds = [];
-    $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata");
-    while ($r = mysqli_fetch_row($res)) { $aliIds[] = (int)$r[0]; }
-    if ($aliIds) {
-        mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id IN(".implode(',', $aliIds).")");
-    }
+    // Reset the weekly stat columns for every id in a table (optionally filtered).
+    private function resetWeeklyStats($table, $where, $setClause) {
+        global $database;
 
-    // --- Update last awarded time ---
-    $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int)$time);
-}
+        $ids = [];
+        $sql = "SELECT id FROM ".TB_PREFIX.$table;
+        if ($where !== '') $sql .= " WHERE ".$where;
+        $res = mysqli_query($database->dblink, $sql);
+        while ($r = mysqli_fetch_row($res)) { $ids[] = (int)$r[0]; }
+        if ($ids) {
+            mysqli_query($database->dblink, "UPDATE ".TB_PREFIX.$table." SET ".$setClause." WHERE id IN(".implode(',', $ids).")");
+        }
+    }
 
     private function artefactOfTheFool() {
         global $database;
