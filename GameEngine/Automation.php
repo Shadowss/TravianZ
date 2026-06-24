@@ -4212,78 +4212,23 @@ class Automation {
                 $columnValues = [];
                 $modes = [];
                 $lastUpdateTime = $timeNow;
-                $newHealth = -1;
 
-                if((time()-$hdata['lastupdate']) >= 1){
-                    if($hdata['health'] < 100 and $hdata['health'] > 0){
-                        if(SPEED <= 10) $speed = SPEED;                           
-                        else if(SPEED <= 100) $speed = ceil(SPEED / 10);                           
-                        else $speed = ceil(SPEED / 100);
+                // 1. passive HP regeneration
+                $newHealth = $this->calculateHealthRegen($hdata);
 
-                        $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
+                // 2. level-up + score points
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $this->calculateLevelUp($hdata));
 
-                        if($reg <= 100) $newHealth = $reg;                        
-                        else $newHealth = 100;                      
-                    }
-                }
+                // 3. revive completion (forces health to 100 and stamps the update time)
+                $revive = $this->handleReviveCompletion($hdata);
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $revive);
+                if ($revive['health'] !== null) $newHealth = $revive['health'];
+                if ($revive['lastUpdate'] !== null) $lastUpdateTime = $revive['lastUpdate'];
 
-                $herolevel = $hdata['level'];
-                $newLevel = - 1;
-                $scorePoints = false;
-                for ($i = $herolevel + 1; $i < 100; $i++){
-                    if($hdata['experience'] >= $hero_levels[$i]){
-                        $newLevel = $i;
-                        if ($i < 99) $scorePoints = true;
-                    }
-                }
-
-                // upgrade hero to a new level, if needed
-                if ($newLevel > -1) {
-                    $columns[] = 'level';
-                    $columnValues[] = $newLevel;
-                    $modes[] = null;
-                }
-
-                // add as many points as needed, if we're below level 100
-                if ($scorePoints) {
-                    $columns[] = 'points';
-                    $columnValues[] = (5 * ($newLevel - $herolevel));
-                    $modes[] = 1;
-                }
-
-                $villunits = $unitData[$hdata['wref']];
-                if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
-
-                    $columns[] = 'dead';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'inrevive';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'inrevive';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $newHealth = 100;
-                    $lastUpdateTime = (int) $hdata['trainingtime'];
-                }
-
-                if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
-
-                    $columns[] = 'dead';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $columns[] = 'intraining';
-                    $columnValues[] = 0;
-                    $modes[] = null;
-
-                    $lastUpdateTime = (int) $hdata['trainingtime'];
-                }
+                // 4. training completion (does not touch health)
+                $training = $this->handleTrainingCompletion($hdata);
+                $this->mergeHeroColumns($columns, $columnValues, $modes, $training);
+                if ($training['lastUpdate'] !== null) $lastUpdateTime = $training['lastUpdate'];
 
                 // update health, if needed
                 if ($newHealth > -1) {
@@ -4309,6 +4254,107 @@ class Automation {
                 mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
             }
         }
+    }
+
+    // Append a hero column fragment (['columns'=>[], 'values'=>[], 'modes'=>[]])
+    // onto the running modifyHero() arrays, preserving order.
+    private function mergeHeroColumns(&$columns, &$columnValues, &$modes, $fragment) {
+        foreach ($fragment['columns'] as $k => $col) {
+            $columns[]      = $col;
+            $columnValues[] = $fragment['values'][$k];
+            $modes[]        = $fragment['modes'][$k];
+        }
+    }
+
+    // Passive HP regeneration: returns the new health value, or -1 if unchanged.
+    private function calculateHealthRegen($hdata) {
+        if((time()-$hdata['lastupdate']) >= 1){
+            if($hdata['health'] < 100 and $hdata['health'] > 0){
+                if(SPEED <= 10) $speed = SPEED;
+                else if(SPEED <= 100) $speed = ceil(SPEED / 10);
+                else $speed = ceil(SPEED / 100);
+
+                $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
+
+                return ($reg <= 100) ? $reg : 100;
+            }
+        }
+        return -1;
+    }
+
+    // Level-up + score points. Returns a column fragment.
+    private function calculateLevelUp($hdata) {
+        global $hero_levels;
+
+        $columns = [];
+        $values = [];
+        $modes = [];
+
+        $herolevel = $hdata['level'];
+        $newLevel = - 1;
+        $scorePoints = false;
+        for ($i = $herolevel + 1; $i < 100; $i++){
+            if($hdata['experience'] >= $hero_levels[$i]){
+                $newLevel = $i;
+                if ($i < 99) $scorePoints = true;
+            }
+        }
+
+        // upgrade hero to a new level, if needed
+        if ($newLevel > -1) {
+            $columns[] = 'level';
+            $values[]  = $newLevel;
+            $modes[]   = null;
+        }
+
+        // add as many points as needed, if we're below level 100
+        if ($scorePoints) {
+            $columns[] = 'points';
+            $values[]  = (5 * ($newLevel - $herolevel));
+            $modes[]   = 1;
+        }
+
+        return ['columns' => $columns, 'values' => $values, 'modes' => $modes, 'health' => null, 'lastUpdate' => null];
+    }
+
+    // Revive completion: marks the hero unit alive and clears the revive flag.
+    // Returns a column fragment plus the health (100) and lastUpdate overrides.
+    private function handleReviveCompletion($hdata) {
+        global $database;
+
+        if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
+            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
+
+            return [
+                'columns'    => ['dead', 'inrevive', 'inrevive'],
+                'values'     => [0, 0, 0],
+                'modes'      => [null, null, null],
+                'health'     => 100,
+                'lastUpdate' => (int) $hdata['trainingtime'],
+            ];
+        }
+
+        return ['columns' => [], 'values' => [], 'modes' => [], 'health' => null, 'lastUpdate' => null];
+    }
+
+    // Training completion: marks the hero unit alive and clears the training flag.
+    // Returns a column fragment plus the lastUpdate override (health untouched).
+    private function handleTrainingCompletion($hdata) {
+        global $database;
+
+        if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
+            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
+
+            return [
+                'columns'    => ['dead', 'intraining'],
+                'values'     => [0, 0],
+                'modes'      => [null, null],
+                'health'     => null,
+                'lastUpdate' => (int) $hdata['trainingtime'],
+            ];
+        }
+
+        return ['columns' => [], 'values' => [], 'modes' => [], 'health' => null, 'lastUpdate' => null];
     }
 
     private function updateStore() {
