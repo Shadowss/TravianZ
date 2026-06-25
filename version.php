@@ -5,14 +5,20 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       version.php                                                 ##
-##  Developed by:  Shadow                                                      ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : version.php                                               ##
+##  Type           : VERSION HALL OF FAME                                      ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 use App\Utils\AccessLogger;
@@ -79,15 +85,16 @@ else $building->procBuild($_GET);
     max-width: 900px;
     margin: 0 auto;
 ">
+
 <?php
 $developers = [
-    ["ronix", "Developer"],
     ["Dzoki", "Version starter"],
     ["Shadow", "Project Owner"],
-    ["Advocaite", "Developer"],
+    ["Ferywir", "Active Developer"],
+    ["Advocaite", "Alumni Developer"],
     ["yi12345", "Alumni Developer"],
     ["iopietro", "Alumni Developer"],
-    ["brainiacX", "Alumni Developer"],
+    ["ronix", "Alumni Developer"],
     ["InCube", "Alumni Developer"],
     ["martinambrus", "Alumni Developer"],
     ["KFCSpike", "Alumni Developer"],
@@ -121,6 +128,7 @@ $developers = [
 	["hdmaniak2", " Active Developer"],
 	["newtcv", " Active Developer"],
 	["AlinV2V", " Active Developer"],
+	["brainiacX", "Alumni Developer"],
 	["lietuvis10", " Active Developer"]
 ];
 
