@@ -355,74 +355,7 @@ class Units {
             $troopsTime = $this->getWalkingTroopsTime($village->wid, $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
             $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
             
-            // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
-            // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
-            // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
-            // Fixed by Advocaite and Shadow - Optimized by iopietro
-            
-            $to_owner = $database->getVillageField($data['to_vid'], "owner");
-            $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);
-            
-            $rallyPointLevel = ($village->resarray)['f39'];
-            $invalidBuildings = [];
-            
-            // fill the array with the invalid buildings
-            if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
-                for($i = 1; $i <= 37; $i++){
-                    if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
-                }
-            }
-            else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
-                for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i;
-            }
-            else if($rallyPointLevel >= 10){
-                $invalidBuildings = [23, 31, 32, 33, 34, 36];
-            }
-            
-            if(isset($post['ctar1']) && $post['ctar1'] != 0){
-                // check if the player has selected a valid building
-                if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
-                    $post['ctar1'] = 0;
-                }
-            }
-            
-            if(isset($post['ctar2']) && $post['ctar2'] != 0){
-                // check if there are atleast 20 catapults
-                if($data['u8'] < 20 || $rallyPointLevel != 20){
-                    $post['ctar2'] = 0;
-                }else{
-                    // check if the player has selected a valid building
-                    if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
-                        $post['ctar2'] = 99;
-                    }
-                }
-            }
-            
-            if(isset($post['ctar1'])) {
-                //Is the Brewery built?
-                if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
-                    if($rivalsGreatConfusion['totals'] > 0) {
-                        if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                            $post['ctar1'] = 0;
-                        }
-                    }
-                }
-                else $post['ctar1'] = 0;
-            }
-            else $post['ctar1'] = 0;
-            
-            if(isset($post['ctar2']) && $post['ctar2'] > 0) {
-                //Is the Brewery built?
-                if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
-                    if($rivalsGreatConfusion['totals'] > 0) {
-                        if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                            $post['ctar2'] = 99;
-                        }
-                    }
-                }
-                else $post['ctar2'] = 99;
-            }
-            else $post['ctar2'] = 0;
+            $this->resolveCatapultTargets($post, $data);
             
             if(!isset($post['spy'])) $post['spy'] = 0;
             
@@ -447,6 +380,79 @@ class Units {
             header("Location: build.php?id=39");
             exit;
         }
+    }
+
+    private function resolveCatapultTargets(&$post, $data) {
+        global $database, $village, $session;
+
+        // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
+        // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
+        // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
+        // Fixed by Advocaite and Shadow - Optimized by iopietro
+
+        $to_owner = $database->getVillageField($data['to_vid'], "owner");
+        $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);
+
+        $rallyPointLevel = ($village->resarray)['f39'];
+        $invalidBuildings = [];
+
+        // fill the array with the invalid buildings
+        if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
+            for($i = 1; $i <= 37; $i++){
+                if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
+            }
+        }
+        else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
+            for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i;
+        }
+        else if($rallyPointLevel >= 10){
+            $invalidBuildings = [23, 31, 32, 33, 34, 36];
+        }
+
+        if(isset($post['ctar1']) && $post['ctar1'] != 0){
+            // check if the player has selected a valid building
+            if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
+                $post['ctar1'] = 0;
+            }
+        }
+
+        if(isset($post['ctar2']) && $post['ctar2'] != 0){
+            // check if there are atleast 20 catapults
+            if($data['u8'] < 20 || $rallyPointLevel != 20){
+                $post['ctar2'] = 0;
+            }else{
+                // check if the player has selected a valid building
+                if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+                    $post['ctar2'] = 99;
+                }
+            }
+        }
+
+        if(isset($post['ctar1'])) {
+            //Is the Brewery built?
+            if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                if($rivalsGreatConfusion['totals'] > 0) {
+                    if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                        $post['ctar1'] = 0;
+                    }
+                }
+            }
+            else $post['ctar1'] = 0;
+        }
+        else $post['ctar1'] = 0;
+
+        if(isset($post['ctar2']) && $post['ctar2'] > 0) {
+            //Is the Brewery built?
+            if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                if($rivalsGreatConfusion['totals'] > 0) {
+                    if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                        $post['ctar2'] = 99;
+                    }
+                }
+            }
+            else $post['ctar2'] = 99;
+        }
+        else $post['ctar2'] = 0;
     }
 
     private function sendTroopsBack($post) {
