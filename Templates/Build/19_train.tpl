@@ -1,12 +1,31 @@
 <?php
-// 19_train.tpl - UNIT LIST BARRAKS
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : BARRAKS UNIT LIST                                         ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $session, $technology, $village, $database, $generator, $building, $bid19, $id;
 
 $tribe = (int)$session->tribe;
 $units = ($tribe !== 4) ? range(($tribe-1)*10+1, ($tribe-1)*10+4) : range(31, 40);
 
 foreach ($units as $i) {
-    // skip unități invalide
+    // SKIP INVALID UNITS
     if ($tribe !== 4 && ($i == 4 || $i == 23 || $i == 24)) continue;
     if (!($technology->getTech($i) || $i % 10 == 1)) continue;
 

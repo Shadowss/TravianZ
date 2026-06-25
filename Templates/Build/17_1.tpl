@@ -1,5 +1,24 @@
 <?php
-// 17_1.tpl - MARKETPLACE / OFFERS
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : MARKETPLACE OFFERS                                        ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $database, $session, $village, $market, $generator, $id;
 
 $u = isset($_GET['u']) ? max(0, (int)$_GET['u']) : 0;
@@ -61,7 +80,7 @@ $resIcon = [
     <div class="clear"></div>
 
     <?php
-    // erori
+    // ERRORS
     if (isset($_GET['e1'])) echo '<p class="error2">'.NOT_ENOUGH_RESOURCES.'</p>';
     elseif (isset($_GET['e2'])) echo '<p class="error2">'.INVALID_OFFER.'</p>';
     elseif (isset($_GET['e3'])) echo '<p class="error2">'.NOT_ENOUGH_MERCHANTS.'</p>';

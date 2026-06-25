@@ -1,4 +1,25 @@
 <?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : TREASURY ARTEFACTS AREEA        	                       ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
+
 include_once("GameEngine/Artifacts.php");
 
 $ownArtifacts = $database->getOwnArtefactsInfo($session->uid ?? 0);
@@ -67,7 +88,7 @@ if(count($artifacts) == 0) {
     foreach($artifacts as $artifact){
         $coordinates = $database->getCoor($artifact['vref']);
         $distance = $database->getDistance($village->coor['x'], $village->coor['y'], $coordinates['x'], $coordinates['y']);
-        // cheia unică previne suprascrierea când 2 artefacte sunt la aceeași distanță
+        // unique key prevents overwriting when 2 artifacts are at the same distance
         $rows[$distance.'_'.$artifact['id']] = ['dist' => $distance, 'data' => $artifact];
     }
 

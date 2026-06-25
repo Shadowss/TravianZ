@@ -1,15 +1,34 @@
 <?php
-// PALACE - gid 26 - refactorizat
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE                                                    ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 if(time() - (!empty($_SESSION['time_p']) ? $_SESSION['time_p'] : 0) > 5){
 	$_SESSION['time_p'] = '';
 	$_SESSION['error_p'] = '';
 }
-// --- LOGICA SCHIMBARE CAPITALA ---
+// --- CHANGE CAPITAL LOGIC ---
 if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
 	$pass = $_POST['pass'];
 	$query = mysqli_query($database->dblink, 'SELECT password FROM `'.TB_PREFIX.'users` WHERE `id` = '.(int)$session->uid);
 	$data = mysqli_fetch_assoc($query);
-	// 1. Verifică parola
+	// 1. CHECK PASSWORD
 	if(password_verify($pass, $data['password'])){
 		$query1 = mysqli_query($database->dblink, 'SELECT wref FROM `'.TB_PREFIX.'vdata` WHERE `owner` = '.(int)$session->uid.' AND `capital` = 1');
 		$data1 = mysqli_fetch_assoc($query1);
@@ -17,25 +36,25 @@ if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
 		$newWid = (int)$village->wid;
 
 		if($oldWid != $newWid){
-			// ia datele ambelor sate
+			// TAKE BOTH VILLAGE DATA
 			$query2 = mysqli_query($database->dblink, 'SELECT * FROM `'.TB_PREFIX.'fdata` WHERE `vref` = '.$oldWid);
 			$data2 = mysqli_fetch_assoc($query2);
 			$query3 = mysqli_query($database->dblink, 'SELECT * FROM `'.TB_PREFIX.'fdata` WHERE `vref` = '.$newWid);
 			$data3 = mysqli_fetch_assoc($query3);
 
-			// 1. taie resursele vechii capitale la nivel 10
+			// 1. REMOVE RESOURCE OLD CAPITAL TO LEVEL 10
 			for($i = 1; $i <= 18; ++$i){
 				if($data2['f'.$i] > 10){
 					mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'` = 10 WHERE `vref` = '.$oldWid);
 				}
 			}
-			// 2. șterge Zidarul din vechea capitală
+			// 2. DELETE STONEMANSON LODGE FROM OLD CAPITAL
 			for($i = 19; $i <= 40; ++$i){
 				if($data2['f'.$i.'t'] == 34){
 					mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.$oldWid);
 				}
 			}
-			// 3. FIX: șterge clădirile specifice capitalei din NOUA capitală
+			// 3. DELETE CAPITAL-SPECIFIC BUILDINGS FROM THE NEW CAPITAL
 			$capitalOnly = [29,30,38,39,42];
 			for($i = 19; $i <= 40; ++$i){
 				if(in_array((int)$data3['f'.$i.'t'], $capitalOnly)){
@@ -46,7 +65,7 @@ if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
 			$database->changeCapital($oldWid, 0);
 			$database->changeCapital($newWid);
 
-			// 4. FIX BUG-UL TĂU: recount populație instant
+			// 4. RECOUNT POPULATION
 			if(!isset($automation)){
 				include_once("GameEngine/Automation.php");
 			}

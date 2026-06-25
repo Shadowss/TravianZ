@@ -1,5 +1,24 @@
 <?php
-// 25_progress.tpl - RESIDENCE TRAINING UNITS PROGRESS
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : RESIDENCE TRAINING UNITS PROGRESS                         ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $technology, $generator, $session;
 
 $trainlist = $technology->getTrainingList(4);

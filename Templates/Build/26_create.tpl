@@ -1,10 +1,29 @@
 <?php
-// 26_create.tpl - PALACE / TRAIN SETTLERS
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE TRAIN SETTLERS                                     ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $village, $technology, $generator, $id;
 
-$unitId = 20; // colonist
+$unitId = 20; // SETTLERS
 $unitName = $technology->getUnitName($unitId);
-$costs = $GLOBALS['u'.$unitId]; // $u20 din config
+$costs = $GLOBALS['u'.$unitId];
 $maxTrain = $technology->maxUnit($unitId);
 $available = (int)($village->unitarray['u'.$unitId]?? 0);
 $trainTime = $generator->getTimeFormat(round($costs['time'] / SPEED));

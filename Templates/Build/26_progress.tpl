@@ -1,8 +1,27 @@
 <?php
-// 26_progress.tpl - PALACE / TRAIN PROGRESS
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE TRAIN PROGRESS                                     ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $technology, $generator, $session;
 
-$trainList = $technology->getTrainingList(4); // unit 4 = pentru chief? păstrez ID-ul tău
+$trainList = $technology->getTrainingList(4); // UNIT 4 = FOR CHIEFTAIN
 if (!empty($trainList)):
     $trainCount = 0;
     $nextFinished = '';
@@ -20,7 +39,7 @@ if (!empty($trainList)):
         $trainCount++;
         $isFirst = ($trainCount === 1);
 
-        // timp rămas
+        // REMAINING TIME
         $remaining = max(0, (int)$train['timestamp'] - time());
         $duration = $isFirst? $remaining : (int)$train['eachtime'] * (int)$train['amt'];
 

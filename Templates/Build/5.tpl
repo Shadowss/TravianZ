@@ -1,6 +1,23 @@
 <?php
 
-// SAWMILL
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : SAWMILL                                                   ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 include 'next.tpl';
 
@@ -11,7 +28,7 @@ $buildingType  = $village->resarray[$field . 't'] ?? 0;
 $currentBonus  = $currentLevel > 0 ? $bid5[$currentLevel]['attri'] : 0;
 
 $isMax         = $building->isMax($buildingType, $id);
-$maxLevel      = 5; // sawmill e max 5
+$maxLevel      = 5; // sawmill is max level 5
 
 $nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
 $nextLevel     = min($nextLevelRaw, $maxLevel);

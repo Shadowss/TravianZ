@@ -1,5 +1,24 @@
 <?php
-// 17_3.tpl - MARKETPLACE / NPC Trade
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : MARKETPLACE NPC TRADE                                     ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $database, $session, $village, $id;
 
 if ($session->gold <= 2) {
@@ -26,7 +45,7 @@ $totalRes = $awood + $aclay + $airon + $acrop;
 $maxstore = max(0, (int)$village->maxstore);
 $maxcrop  = max(0, (int)$village->maxcrop);
 
-// valori prefill din GET
+// PREFILL VALUE FROM GET
 $r = [];
 for ($i = 1; $i <= 4; $i++) {
     $r[$i] = isset($_GET['r'.$i])? max(0, (int)$_GET['r'.$i]) : '';

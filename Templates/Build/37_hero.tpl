@@ -1,13 +1,23 @@
 <?php
 
-/*-------------------------------------------------------*\ 
-| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* | 
-+---------------------------------------------------------+ 
-| Developed by:  Manni < manuel_mannhardt@web.de >        | 
-|                Dzoki < dzoki.travian@gmail.com >        |
-| Reworked by: 	 Esfomeado < vps1992@live.com.pt >        |
-| Copyright:     TravianX Project All rights reserved     | 
-\*-------------------------------------------------------*/ 
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HEROSMANSION VIEW PAGE  				                   ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 include_once("GameEngine/Data/hero_full.php");
 global $database; 
@@ -95,21 +105,33 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <tr> 
         <td colspan="5" class="empty"></td> 
     </tr> 
-    <tr> 
-	<?php if($hero_info['experience'] < 495000){ ?>
-        <th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
-        <td class="val"><?php echo (int) (($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100) ?>%</td> 
-		<td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100*2 ?>px;" alt="<?php echo ($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100 ?>%" title="<?php echo ($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100 ?>%" /></td>
+	<tr> 
+		<?php
+			$maxExp = 495000;
+			$curLevel = (int)$hero_info['level'];
+			$curExp   = (int)$hero_info['experience'];
+
+		// fallback-uri ca să nu mai dea notice
+			$expCurrent = $hero_levels[$curLevel] ?? 0;
+			$expNext    = $hero_levels[$curLevel + 1] ?? $maxExp;
+
+		if($curExp < $maxExp && $expNext > $expCurrent && $curLevel < 100){
+			$percent = ($curExp - $expCurrent) / ($expNext - $expCurrent) * 100;
+			$percent = max(0, min(100, $percent));
+		?>
+		<th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
+		<td class="val"><?php echo (int)$percent; ?>%</td>
+		<td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo $percent*2; ?>px;" alt="<?php echo (int)$percent; ?>%" title="<?php echo (int)$percent; ?>%" /></td>
 		<td class="up"></td> 
-        <td class="rem"><?php echo $hero_info['points']; ?></td> 
+		<td class="rem"><?php echo $hero_info['points']; ?></td> 
 	<?php }else{ ?>
-        <th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
-        <td class="val">100%</td> 
+		<th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
+		<td class="val">100%</td> 
 		<td class="xp"><img class="bar" src="img/x.gif" style="width:200px;" alt="100%" title="100%" /></td>
 		<td class="up"></td> 
-        <td class="rem"><?php echo $hero_info['points']; ?></td> 
+		<td class="rem"><?php echo $hero_info['points']; ?></td> 
 	<?php } ?>
-    </tr> 
+	</tr>
     </tbody> 
     </table> 
 	<?php if(isset($_GET['e'])){ 

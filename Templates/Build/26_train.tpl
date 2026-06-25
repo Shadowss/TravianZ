@@ -1,5 +1,24 @@
 <?php
-// 26_train.tpl - PALACE / Antrenare coloniști și șefi
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE TRAIN CHEF/COLONIST                                ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $database, $session, $village, $technology, $generator, $building, $bid26, $id;
 
 $slots = $database->getAvailableExpansionTraining();
@@ -35,7 +54,7 @@ if ($totalSlots > 0): ?>
                 $maxUnit = min($maxByTech, $slotLimit);
                 $available = (int)($village->unitarray['u'.$i] ?? 0);
                 
-                // timp cu bonus palat și artefacte
+                // TIME WITH PALACE BONUS AND ARTEFACT
                 $baseTime = $costs['time'] * ($bid26[$village->resarray['f'.$id]]['attri'] / 100) / SPEED;
                 $duration = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round($baseTime));
                 

@@ -1,17 +1,36 @@
 <?php
-// 26_2.tpl - PALACE / POINT CULTURE
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE CULTURE POINTS                                     ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $database, $session, $village;
 
 $level = (int)$village->resarray['f'.$id];
 $isNatar = (int)$database->getVillageField($village->wid, 'natar') === 1;
 
-// ia datele o singură dată
+// TAKE DATA ONCE
 $cpVillage = $isNatar ? 0 : (int)$database->getVillageField($village->wid, 'cp');
 $cpTotal = (int)$database->getVSumField($session->uid, 'cp');
 $villages = $database->getProfileVillages($session->uid);
 $totalVillages = count($villages);
 
-// calcul pentru următorul sat - fără variable variables
+// calculation for the next village - without variables
 $cpMode = CP; // 0 = normal, 1 = speed
 $cpArrayName = 'cp' . $cpMode;
 $cpArray = $GLOBALS[$cpArrayName] ?? [];

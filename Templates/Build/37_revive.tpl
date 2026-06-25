@@ -1,3 +1,27 @@
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HEROSMANSION REVIVE PAGE				                   ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
+?>
+
+
 <table cellpadding="1" cellspacing="1" class="build_details">
         <thead>
             <tr>
@@ -6,13 +30,6 @@
         </thead>
 
 <?php
-/*-------------------------------------------------------*\
-| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
-+---------------------------------------------------------+
-| Developed by:  Manni < manuel_mannhardt@web.de >        |
-|                Dzoki < dzoki.travian@gmail.com >        |
-| Copyright:     TravianX Project All rights reserved     |
-\*-------------------------------------------------------*/
 
 	// check if there is a hero in revive already
 	$reviving = $training = false;

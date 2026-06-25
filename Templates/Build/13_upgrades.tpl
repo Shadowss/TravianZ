@@ -1,6 +1,23 @@
 <?php
 
-// ARMOURY UPGRADES
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : ARMOURY UPGRADES                                          ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 $abdata = $database->getABTech($village->wid);
 $ABups = $technology->getABUpgrades('a');
@@ -26,7 +43,7 @@ $end = $session->tribe * 10 - 2;
         $unitName = $technology->getUnitName($i);
         $current = (int)$abdata['a'.$j];
 		
-		// câte upgrade-uri sunt deja în coadă pentru unitatea asta
+		// how many upgrades are already in the queue for this unit
         $ups = 0;
         foreach ($ABups as $up) {
             if (in_array('a'.$j, $up)) $ups++;

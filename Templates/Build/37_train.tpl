@@ -1,18 +1,22 @@
 <?php
 
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			        ##
-## ---------------------------------------------------------------------------  ##
-## Project:      TravianZ 							##
-## Version:      01.09.2013 							##
-## Filename :    37_train.tpl 							##
-## Developed by: Dzok			 					##
-## Fixed by:     Shadow / Skype : cata7007 					##
-## License:      TravianZ Project	 					##
-## Copyright:    TravianZ (c) 2010-2013. All rights reserved. 			##
-## URLs:         http://travian.shadowss.ro 					##
-## Source code:  http://github.com/yi12345/TravianZ		 		##
-## 										##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HEROSMANSION TRAIN PAGE				                   ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 //check if there is unit needed in the village

@@ -1,10 +1,27 @@
 <?php
 
-// WOODCUTER
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : WOODCUTER                                                 ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 include 'next.tpl';
 
-// — pregătire date —
+// — PREPARING DATA —
 $field         = 'f' . $id;
 $currentLevel  = (int) ($village->resarray[$field] ?? 0);
 $buildingType  = $village->resarray[$field . 't'] ?? 0;
@@ -14,7 +31,7 @@ $currentProd   = $bid1[$currentLevel]['prod'] * SPEED;
 $isMax         = $building->isMax($buildingType, $id);
 $maxLevel      = ($village->capital == 1) ? 20 : 10;
 
-// calculează nivelul următor luând în calcul queue-urile
+// calculates the next level taking into account queues
 $nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
 $nextLevel     = min($nextLevelRaw, $maxLevel);
 $nextProd      = $bid1[$nextLevel]['prod'] * SPEED;

@@ -1,16 +1,35 @@
 <?php
-// 26_4.tpl - PALACE / CONQUERED VILLAGES
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : PALACE CONQUERED VILLAGES                                 ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 global $database, $village, $generator;
 
 $level = (int)$village->resarray['f'.$id];
 
-// ia toate 3 sloturile o singură dată
+// TAKE ALL SLOTS ONE TIME
 $slots = [
     (int)$database->getVillageField($village->wid, 'exp1'),
     (int)$database->getVillageField($village->wid, 'exp2'),
     (int)$database->getVillageField($village->wid, 'exp3'),
 ];
-$slots = array_filter($slots); // elimină 0
+$slots = array_filter($slots); // REMOVE 0
 ?>
 <div id="build" class="gid26">
     <h1><?php echo PALACE; ?> <span class="level"><?php echo LEVEL.' '.$level; ?></span></h1>
@@ -41,7 +60,7 @@ $slots = array_filter($slots); // elimină 0
         <?php if (!empty($slots)): 
             $i = 1;
             foreach ($slots as $wid):
-                // un singur set de date per sat
+                // ONE DATA TYPE PER VILLAGE
                 $coor = $database->getCoor($wid);
                 $villageData = $database->getVillage($wid); // conține name, owner, pop, created
                 $ownerName = $database->getUserField($villageData['owner'], 'username', 0);

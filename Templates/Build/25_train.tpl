@@ -1,10 +1,27 @@
 <?php
 
-// 25_train.tpl - RESIDENCE TRAINING UNITS PROGRESS
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : RESIDENCE TRAINING UNITS                                  ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
-	$slots = $database->getAvailableExpansionTraining();
+$slots = $database->getAvailableExpansionTraining();
 
-	if ($slots['settlers'] + $slots['chiefs']>0) { ?>
+if ($slots['settlers'] + $slots['chiefs']>0) { ?>
 
 <form method="POST" name="snd" action="build.php">
 <input type="hidden" name="id" value="<?php echo $id; ?>" />

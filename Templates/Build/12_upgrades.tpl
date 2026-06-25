@@ -1,6 +1,23 @@
 <?php
 
-// BLACKSMITH UPGRADES
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : BLACKSMITH UPGRADES                                       ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 $abdata = $database->getABTech($village->wid);
 $ABups = $technology->getABUpgrades('b');
@@ -26,7 +43,7 @@ $end = $session->tribe * 10 - 2;
         $unitName = $technology->getUnitName($i);
         $current = (int)$abdata['b'.$j];
 
-        // câte upgrade-uri sunt deja în coadă pentru unitatea asta
+        //how many upgrades are already in the queue for this unit
         $ups = 0;
         foreach ($ABups as $up) {
             if (in_array('b'.$j, $up)) $ups++;
@@ -64,7 +81,7 @@ $end = $session->tribe * 10 - 2;
                     <?php endif;?>
 
                     <?php
-                    // mesaj resurse insuficiente
+                    //insufficient resources message
                     if ($next['wood'] > $village->awood || $next['clay'] > $village->aclay || $next['iron'] > $village->airon || $next['crop'] > $village->acrop) {
                         if ($village->getProd('crop') > 0 || $village->acrop > $next['crop']) {
                             $time = $technology->calculateAvaliable(12, $next);
@@ -124,7 +141,7 @@ $end = $session->tribe * 10 - 2;
     <?php $count = 0; foreach ($ABups as $black):
         $count++;
         $ABUnit = (int)substr($black['tech'], 1, 2);
-        $abdata['b'.$ABUnit]++; // incrementează pentru afișare corectă
+        $abdata['b'.$ABUnit]++; // increment for correct display
         $unit = ($session->tribe - 1) * 10 + $ABUnit;
         $unitName = $technology->getUnitName($unit);
         $date = $generator->procMtime($black['timestamp']);
