@@ -551,76 +551,59 @@ class Units {
                 $herodata = $GLOBALS["h".$heroarray[0]['unit']];
             }
 
-            $h_atk = $herodata['atk'] + 5 * floor($heroarray[$singleHeroArrayID]['attack'] * $herodata['atkp'] / 5);
-            $h_di = $herodata['di'] + 5 * floor($heroarray[$singleHeroArrayID]['defence'] * $herodata['dip'] / 5);
-            $h_dc = $herodata['dc'] + 5 * floor($heroarray[$singleHeroArrayID]['defence'] * $herodata['dcp'] / 5);
-            $h_ob = 1 + 0.002 * $heroarray[$singleHeroArrayID]['attackbonus'];
-            $h_db = 1 + 0.002 * $heroarray[$singleHeroArrayID]['defencebonus'];
-    
-            return [
-                    'heroid' => $heroarray[$singleHeroArrayID]['heroid'],
-                    'unit' => $heroarray[$singleHeroArrayID]['unit'],
-                    'name' => $heroarray[$singleHeroArrayID]['name'],
-                    'inrevive' => $heroarray[$singleHeroArrayID]['inrevive'],
-                    'intraining' => $heroarray[$singleHeroArrayID]['intraining'],
-                    'trainingtime' => $heroarray[$singleHeroArrayID]['trainingtime'],
-                    'level' => $heroarray[$singleHeroArrayID]['level'],
-                    'attack' => $heroarray[$singleHeroArrayID]['attack'],
-                    'atk' => $h_atk,
-                    'defence' => $heroarray[$singleHeroArrayID]['defence'],
-                    'di' => $h_di,
-                    'dc' => $h_dc,
-                    'attackbonus' => $heroarray[$singleHeroArrayID]['attackbonus'],
-                    'ob' => $h_ob,
-                    'defencebonus' => $heroarray[$singleHeroArrayID]['defencebonus'],
-                    'db' => $h_db,
-                    'regeneration' => $heroarray[$singleHeroArrayID]['regeneration'],
-                    'health' => $heroarray[$singleHeroArrayID]['health'],
-                    'dead' => $heroarray[$singleHeroArrayID]['dead'],
-                    'points' => $heroarray[$singleHeroArrayID]['points'],
-                    'experience' => $heroarray[$singleHeroArrayID]['experience']
-            ];
+            return $this->buildHeroStats($heroarray[$singleHeroArrayID], $herodata);
         } else {
             // build up a full array of heroes and their stats
             $heroes = [];
             foreach ($heroarray as $id => $hero) {
                 $herodata = $GLOBALS["h".$heroarray[$id]['unit']];
-
-                $h_atk = $herodata['atk'] + 5 * floor($heroarray[$id]['attack'] * $herodata['atkp'] / 5);
-                $h_di = $herodata['di'] + 5 * floor($heroarray[$id]['defence'] * $herodata['dip'] / 5);
-                $h_dc = $herodata['dc'] + 5 * floor($heroarray[$id]['defence'] * $herodata['dcp'] / 5);
-                $h_ob = 1 + 0.002 * $heroarray[$id]['attackbonus'];
-                $h_db = 1 + 0.002 * $heroarray[$id]['defencebonus'];
-                
-                $heroes[] = [
-                    'heroid' => $heroarray[$id]['heroid'],
-                    'unit' => $heroarray[$id]['unit'],
-                    'name' => $heroarray[$id]['name'],
-                    'inrevive' => $heroarray[$id]['inrevive'],
-                    'intraining' => $heroarray[$id]['intraining'],
-                    'trainingtime' => $heroarray[$id]['trainingtime'],
-                    'level' => $heroarray[$id]['level'],
-                    'attack' => $heroarray[$id]['attack'],
-                    'atk' => $h_atk,
-                    'defence' => $heroarray[$id]['defence'],
-                    'di' => $h_di,
-                    'dc' => $h_dc,
-                    'attackbonus' => $heroarray[$id]['attackbonus'],
-                    'ob' => $h_ob,
-                    'defencebonus' => $heroarray[$id]['defencebonus'],
-                    'db' => $h_db,
-                    'regeneration' => $heroarray[$id]['regeneration'],
-                    'health' => $heroarray[$id]['health'],
-                    'dead' => $heroarray[$id]['dead'],
-                    'points' => $heroarray[$id]['points'],
-                    'experience' => $heroarray[$id]['experience']
-                ];
+                $heroes[] = $this->buildHeroStats($heroarray[$id], $herodata);
             }
             
             return $heroes;
         }
     }
-    
+
+    /**
+     * Builds the stat array for a single hero entry, deriving atk/di/dc/ob/db
+     * from the unit's base data ($herodata) and the hero's own attack/defence.
+     *
+     * @param array $hero One entry from the getHero() result
+     * @param array $herodata The unit base data ($GLOBALS["h".$hero['unit']])
+     * @return array The hero stats array
+     */
+    private function buildHeroStats($hero, $herodata) {
+        $h_atk = $herodata['atk'] + 5 * floor($hero['attack'] * $herodata['atkp'] / 5);
+        $h_di = $herodata['di'] + 5 * floor($hero['defence'] * $herodata['dip'] / 5);
+        $h_dc = $herodata['dc'] + 5 * floor($hero['defence'] * $herodata['dcp'] / 5);
+        $h_ob = 1 + 0.002 * $hero['attackbonus'];
+        $h_db = 1 + 0.002 * $hero['defencebonus'];
+
+        return [
+            'heroid' => $hero['heroid'],
+            'unit' => $hero['unit'],
+            'name' => $hero['name'],
+            'inrevive' => $hero['inrevive'],
+            'intraining' => $hero['intraining'],
+            'trainingtime' => $hero['trainingtime'],
+            'level' => $hero['level'],
+            'attack' => $hero['attack'],
+            'atk' => $h_atk,
+            'defence' => $hero['defence'],
+            'di' => $h_di,
+            'dc' => $h_dc,
+            'attackbonus' => $hero['attackbonus'],
+            'ob' => $h_ob,
+            'defencebonus' => $hero['defencebonus'],
+            'db' => $h_db,
+            'regeneration' => $hero['regeneration'],
+            'health' => $hero['health'],
+            'dead' => $hero['dead'],
+            'points' => $hero['points'],
+            'experience' => $hero['experience']
+        ];
+    }
+
     /**
      * Function to kill/release prisoners
      * 
