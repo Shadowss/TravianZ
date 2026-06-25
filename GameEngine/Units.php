@@ -24,32 +24,8 @@ class Units {
 
             switch($post['c']) {
                 case 1:
-                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
-                	else
-                	{	
-                        $post = $this->loadUnits($post);
-                        return $post;
-                    }
-                    break;
-                    
                 case 2:
-                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
-                    else
-                    {
-                        $post = $this->loadUnits($post);
-                        return $post;
-                    }
-                    break;
-         
                 case 3:
-                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
-                    else
-                    {
-                        $post = $this->loadUnits($post);
-                        return $post;
-                    }
-                    break;
-                    
                 case 4:
                     if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
                     else
@@ -58,7 +34,7 @@ class Units {
                         return $post;
                     }
                     break;
-                    
+
                 case 5:
                     if (isset($post['a']) && $post['a'] == "new") $this->Settlers($post);
                     else
