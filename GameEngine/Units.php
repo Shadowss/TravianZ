@@ -72,8 +72,60 @@ class Units {
      */
     
     public function checkErrors(&$post){
-        global $database, $village, $session, $generator;
+        global $database, $generator;
 
+        if(($error = $this->parseCoordinates($post)) !== "") return $error;
+
+        $this->resolveTarget($post, $disabled, $disabledr, $isOasis);
+
+        if(!empty($disabledr) && $post['c'] == 2) return "You can't reinforce this village/oasis";
+        if(!empty($disabled) && $post['c'] == 3) return "You can't attack this village/oasis with normal attack";
+        if($post['c'] < 2 || $post['c'] > 4) return "Invalid attack type.";
+
+        //check if at least one troops has been selected
+        $selectedTroops = 0;
+        for($i = 1; $i <= 11; $i++) $selectedTroops += empty($post['t'.$i]) ? 0 : $post['t'.$i];
+        if($selectedTroops == 0) return "You need to select min. one troop";
+
+        if(!empty($post['dname']) && $post['x'] != "" && $post['y'] != "") return "Insert name or coordinates";
+
+        if(isset($post['dname']) && !empty($post['dname'])) {
+            $id = $database->getVillageByName(stripslashes($post['dname']));
+
+            if (!isset($id)) return "Village doesn't exist";
+            else $coor = $database->getCoor($id);
+        }
+
+        // People search by coordinates
+        // We confirm and seek coordinate coordinates Village
+        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
+            $coor = ['x' => $post['x'], 'y' => $post['y']];
+            $id = $generator->getBaseID($coor['x'], $coor['y']);
+
+            if (!$database->getVillageState($id)) return "Coordinates do not exist";
+        }
+
+        if (!empty($coor)) {
+            if(($error = $this->validateTroopSelection($post)) !== "") return $error;
+        }
+
+        if(isset($id)) {
+            if(($error = $this->validateTargetPlayer($id, $isOasis, $villageInfo)) !== "") return $error;
+        }
+
+        //no errors, we can add the additional information to the post array
+        array_push($post, $id, $villageInfo['name'], $villageInfo['owner'], 0);
+
+        return "";
+    }
+
+    /**
+     * Trims, validates and normalises the x/y coordinates in $post.
+     *
+     * @param array $post The request array (modified in place)
+     * @return string An error message, or "" if the coordinates are valid
+     */
+    private function parseCoordinates(&$post) {
         if(isset($post['x'])) $post['x'] = trim($post['x']);
         if(isset($post['y'])) $post['y'] = trim($post['y']);
 
@@ -85,7 +137,22 @@ class Units {
 
             if(abs($post['x']) > WORLD_MAX || abs($post['y']) > WORLD_MAX) return "Coordinates do not exist";
         }
-        
+
+        return "";
+    }
+
+    /**
+     * Resolves the target village from coordinates or name and derives the
+     * reinforce/attack "disabled" flags and whether the target is an oasis.
+     *
+     * @param array  $post      The request array (dname may be unset)
+     * @param string $disabled  Out: "disabled=disabled" when normal attack is forbidden
+     * @param string $disabledr Out: "disabled=disabled" when reinforcing is forbidden
+     * @param mixed  $isOasis   Out: truthy when the target is an oasis
+     */
+    private function resolveTarget(&$post, &$disabled, &$disabledr, &$isOasis) {
+        global $database, $session;
+
         // Search by town name
         // Coordinates and look confirm name people
         if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
@@ -93,7 +160,7 @@ class Units {
             unset($post['dname']);
         }
         else if(isset($post['dname']) && !empty($post['dname'])) $vid = $database->getVillageByName(stripslashes($post['dname']));
-        
+
         if (!empty($vid)) {
             if($isOasis = $database->isVillageOases($vid)){
                 $too = $database->getOasisField($vid, "conqured");
@@ -120,75 +187,66 @@ class Units {
             if($session->sit == 0) $disabled = "";
             else $disabled ="disabled=disabled";
         }
-        
-        if(!empty($disabledr) && $post['c'] == 2) return "You can't reinforce this village/oasis";   
-        if(!empty($disabled) && $post['c'] == 3) return "You can't attack this village/oasis with normal attack";     
-        if($post['c'] < 2 || $post['c'] > 4) return "Invalid attack type.";
-            
-        //check if at least one troops has been selected
-		$selectedTroops = 0;
-        for($i = 1; $i <= 11; $i++) $selectedTroops += empty($post['t'.$i]) ? 0 : $post['t'.$i];        
-        if($selectedTroops == 0) return "You need to select min. one troop";
-        
-        if(!empty($post['dname']) && $post['x'] != "" && $post['y'] != "") return "Insert name or coordinates";
-        
-        if(isset($post['dname']) && !empty($post['dname'])) {
-            $id = $database->getVillageByName(stripslashes($post['dname']));
-            
-            if (!isset($id)) return "Village doesn't exist";
-            else $coor = $database->getCoor($id);
-        }
-            
-        // People search by coordinates
-        // We confirm and seek coordinate coordinates Village
-        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
-            $coor = ['x' => $post['x'], 'y' => $post['y']];
-            $id = $generator->getBaseID($coor['x'], $coor['y']);
-            
-            if (!$database->getVillageState($id)) return "Coordinates do not exist";
-        }
-        
-        if (!empty($coor)) {
-            $Gtribe = $session->tribe == 1 ? "" : $session->tribe - 1;
-            for($i = 1; $i < 12; $i++){
-                if(isset($post['t'.$i])){
-                    if($i < 10) $troophave = $village->unitarray['u'.$Gtribe.$i];
-                    if($i == 10) $troophave = $village->unitarray['u'.floor(intval($Gtribe) + 1) * $i];
-                    if($i == 11) $troophave = $village->unitarray['hero'];
-                    
-                    if(intval($post['t'.$i]) > $troophave) return "You can't send more units than you have";
-                    if(intval($post['t'.$i]) < 0) return "You can't send negative units.";
-                    if(preg_match('/[^0-9]/',$post['t'.$i])) return "Special characters can't entered";
-                }
+    }
+
+    /**
+     * Validates the selected troop amounts against what the village owns.
+     *
+     * @param array $post The request array
+     * @return string An error message, or "" if the selection is valid
+     */
+    private function validateTroopSelection($post) {
+        global $village, $session;
+
+        $Gtribe = $session->tribe == 1 ? "" : $session->tribe - 1;
+        for($i = 1; $i < 12; $i++){
+            if(isset($post['t'.$i])){
+                if($i < 10) $troophave = $village->unitarray['u'.$Gtribe.$i];
+                if($i == 10) $troophave = $village->unitarray['u'.floor(intval($Gtribe) + 1) * $i];
+                if($i == 11) $troophave = $village->unitarray['hero'];
+
+                if(intval($post['t'.$i]) > $troophave) return "You can't send more units than you have";
+                if(intval($post['t'.$i]) < 0) return "You can't send negative units.";
+                if(preg_match('/[^0-9]/',$post['t'.$i])) return "Special characters can't entered";
             }
         }
-        
-        if(isset($id)) {
-            //check if the attacked village/oasis' owner is under beginners protection
-            if($database->hasBeginnerProtection($id) == 1) return "Player is under beginners protection. You can't attack him";
-            
-            //check if it's an oasis or not
-            $villageInfo = (!$isOasis) ? $database->getVillage($id) : $database->getOasisV($id);
-            
-            //check if banned/admin:
-            $villageOwner = $villageInfo['owner'];
-            $userAccess = $database->getUserField($villageOwner, 'access', 0);
-            $userID = $database->getUserField($villageOwner, 'id', 0);
-            //check if he's an Admin and if he's attackable
-            if($userAccess == 0 || ($userAccess == MULTIHUNTER && $userID == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
-                return "Player is Banned. You can't attack him";
-            }
-            
-            //check if the user' is on the vacation mode:
-            if($database->getvacmodexy($id)) return "User is on vacation mode";
-            
-            //check if attacking same village that units are in
-            if($id == $village->wid) return "You cant attack same village you are sending from.";
+
+        return "";
+    }
+
+    /**
+     * Validates the target player (beginners protection, ban/admin, vacation,
+     * self-attack) and loads the target village/oasis info.
+     *
+     * @param int   $id          The target base id
+     * @param mixed $isOasis      Whether the target is an oasis
+     * @param array $villageInfo  Out: the resolved village/oasis row
+     * @return string An error message, or "" if the target can be attacked
+     */
+    private function validateTargetPlayer($id, $isOasis, &$villageInfo) {
+        global $database, $village;
+
+        //check if the attacked village/oasis' owner is under beginners protection
+        if($database->hasBeginnerProtection($id) == 1) return "Player is under beginners protection. You can't attack him";
+
+        //check if it's an oasis or not
+        $villageInfo = (!$isOasis) ? $database->getVillage($id) : $database->getOasisV($id);
+
+        //check if banned/admin:
+        $villageOwner = $villageInfo['owner'];
+        $userAccess = $database->getUserField($villageOwner, 'access', 0);
+        $userID = $database->getUserField($villageOwner, 'id', 0);
+        //check if he's an Admin and if he's attackable
+        if($userAccess == 0 || ($userAccess == MULTIHUNTER && $userID == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
+            return "Player is Banned. You can't attack him";
         }
-        
-        //no errors, we can add the additional information to the post array
-        array_push($post, $id, $villageInfo['name'], $villageInfo['owner'], 0);
-        
+
+        //check if the user' is on the vacation mode:
+        if($database->getvacmodexy($id)) return "User is on vacation mode";
+
+        //check if attacking same village that units are in
+        if($id == $village->wid) return "You cant attack same village you are sending from.";
+
         return "";
     }
     
