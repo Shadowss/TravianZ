@@ -121,42 +121,24 @@ class Technology {
 		$residence = [9, 10, 19, 20, 29, 30, 49, 50];
 		$trapper = [99];
 		
-		if(count($trainingarray) > 0) {
+		$categories = [
+			1 => [$barracks, 0, null],
+			2 => [$stables, 0, null],
+			3 => [$workshop, 0, null],
+			4 => [$residence, 0, null],
+			5 => [$greatbarracks, 60, null],
+			6 => [$greatstables, 60, null],
+			7 => [$greatworkshop, 60, null],
+			8 => [$trapper, 0, 'Trap'],
+		];
+		
+		if(count($trainingarray) > 0 && isset($categories[$type])) {
+			[$units, $offset, $fallback] = $categories[$type];
 			foreach($trainingarray as $train) {
-				if($type == 1 && in_array($train['unit'],$barracks)) {
-				$train['name'] = $this->unarray[$train['unit']];
-				array_push($listarray,$train);
-				}
-				if($type == 2 && in_array($train['unit'],$stables)) {
-					$train['name'] = $this->unarray[$train['unit']];
-					array_push($listarray,$train);
-				}
-				if($type == 3 && in_array($train['unit'],$workshop)) {
-					$train['name'] = $this->unarray[$train['unit']];
-					array_push($listarray,$train);
-				}
-				if($type == 4 && in_array($train['unit'],$residence)) {
-					$train['name'] = $this->unarray[$train['unit']];
-					array_push($listarray,$train);
-				}
-				if($type == 5 && in_array($train['unit'],$greatbarracks)) {
-					$train['name'] = $this->unarray[$train['unit']-60];
-					$train['unit'] -= 60;
-					array_push($listarray,$train);
-				}
-				if($type == 6 && in_array($train['unit'],$greatstables)) {
-					$train['name'] = $this->unarray[$train['unit']-60];
-					$train['unit'] -= 60;
-					array_push($listarray,$train);
-				}
-				if($type == 7 && in_array($train['unit'],$greatworkshop)) {
-					$train['name'] = $this->unarray[$train['unit']-60];
-					$train['unit'] -= 60;
-					array_push($listarray,$train);
-				}
-				if($type == 8 && in_array($train['unit'],$trapper)) {
-					$train['name'] = $this->unarray[$train['unit']]?? 'Trap';
-					array_push($listarray,$train);
+				if(in_array($train['unit'], $units)) {
+					$train['unit'] -= $offset;
+					$train['name'] = $fallback === null ? $this->unarray[$train['unit']] : ($this->unarray[$train['unit']] ?? $fallback);
+					array_push($listarray, $train);
 				}
 			}
 		}
