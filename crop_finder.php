@@ -1,8 +1,24 @@
 <?php
-// crop_finder.php  — fast crop finder using precomputed <TB_PREFIX>croppers
-// Fixes PHP 8:
-//  - Defines $MIN_X/$MAX_X/$MIN_Y/$MAX_Y from WORLD_MAX or DB
-//  - Initializes $R, $tries to avoid undefined in debug panel
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : crop_finder.php                      	                   ##
+##  Type           : In Game Crop Finder Page (GoldClub)                       ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki 						                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
 include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();

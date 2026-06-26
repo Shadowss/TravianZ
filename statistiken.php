@@ -3,14 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       statistiken.php                                             ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : statistiken.php                                           ##
+##  Type           : In Game Statistics Frontend                               ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 
@@ -37,31 +44,39 @@ if(isset($_GET['newdid'])) {
 	<title><?php
 	echo SERVER_NAME . ' &raquo; &raquo; &raquo; ' . STATISTICS . ' (';
 
-	if (!empty($_GET['id'])) {
-	    switch ($_GET['id']) {
-	        case '4':
-	            echo ALLIANCES;
-	            break;
-
-	        case '2':
-	            echo VILLAGES;
-	            break;
-
-	        case '8':
-	            echo HEROES;
-	            break;
-
-	        case '0':
-	            echo GENERAL;
-	            break;
-
-	        case '99':
-	            echo 'WW';
-	            break;
-	    }
-	} else {
-	    echo PLAYERS;
-	}
+if (!empty($_GET['id'])) {
+    switch ($_GET['id']) {
+        case '4':
+            echo ALLIANCES;
+            break;
+        case '2':
+            echo VILLAGES;
+            break;
+        case '8':
+            echo HEROES;
+            break;
+        case '0':
+            echo GENERAL;
+            break;
+        case '99':
+            echo 'WW';
+            break;
+        case '7':
+            echo 'TOP 10';
+            break;
+        case '31':
+            echo 'Atacatori';
+            break;
+        case '32':
+            echo 'Apărători';
+            break;
+        case '1':
+            echo PLAYERS;
+            break;
+    }
+} else {
+    echo PLAYERS;
+}
 
 	echo ')';
 	?></title>

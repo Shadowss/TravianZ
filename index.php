@@ -2,22 +2,23 @@
 use App\Utils\AccessLogger;
 
 #################################################################################
-##                                                                             ##
-##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
-##                                                                             ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##                                                                             ##
-##  Project:       TravianZ                                                    ##
-##  Version:       29.04.2026                                                  ##
-##  Filename:      index.php                            					   ##
-##  Developed by:  Dzoki & Advocaite & Donnchadh                               ##
-##  Reworked by:   ZZJHONS                                                     ##
-##  Refactored by: Shadow                                                      ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travianz.org                         		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : index.php                      	                       ##
+##  Type           : In Game Index Page                                        ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki 						                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 if(!file_exists('var/installed') && @opendir('install')) {

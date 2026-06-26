@@ -3,19 +3,23 @@ include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			                   ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ 							                           ##
-## Version:     01.06.2018 							                           ##
-## Description: When an Admin/MH starts a maintenance                          ##
-##              this page will be showed                                       ##
-## Authors:     iopietro      		                                           ##
-## Page:        maintenance.php                                      		   ##
-## License:     TravianZ Project 						                       ##
-## Copyright:   TravianZ (c) 2010-2018. All rights reserved. 			       ##
-## URLs:        http://travian.shadowss.ro 					                   ##
-## Source code: https://github.com/Shadowss/TravianZ/	 			           ##
-## 										                                       ##
+##  Filename       : maintenance.php                      	                   ##
+##  Type           : In Game Maintenance Page                                  ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : iopietro 						                           ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 use App\Utils\AccessLogger;

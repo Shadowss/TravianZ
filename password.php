@@ -3,15 +3,23 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       password.php                                                ##
-##  Developed by:  Dixie                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : password.php                      	                       ##
+##  Type           : In Game Password Page                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki 						                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 use App\Utils\AccessLogger;
 
 if(!file_exists('var/installed') && @opendir('install')) {

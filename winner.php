@@ -3,21 +3,23 @@ include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			        			##
-## ---------------------------------------------------------------------------  ##
-## Project:     TravianZ 														##
-## Version:     18.02.2014 														##
-## Description: When the player builds Wonder of the World      				##
-##              to level 100 the winner details are shown.      				##
-##              tells the players the game is over              				##
-## Authors:     aggenkeech - and a little help from Eyas95      				##
-## Page:        winner.php                                      				##
-## Fixed by:    Shadow  														##
-## License:     TravianZ Project 												##
-## Copyright:   TravianZ (c) 2010-2026. All rights reserved. 					##
-## URLs:        http://travianz.org      										##
-## Source code: https://github.com/Shadowss/TravianZ/	 						##
-## 																				##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : winner.php                      	                       ##
+##  Type           : In Game Alliance Page                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : aggenkeech - and a little help from Eyas95 			   ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 use App\Utils\AccessLogger;

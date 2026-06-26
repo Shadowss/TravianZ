@@ -8,18 +8,38 @@
 ##  Filename       player_top10.tpl                                            ##
 ##  Refactored by  Shadow					                                   ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travianz.org		  				       	 		   ##
 ##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
 ##                                                                             ##
 #################################################################################
 
 	$place = $place1 = $place2 = $place3 = "?";
 
-
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
+
+    // --- ADDED: Week and Medal Reset calculation (identical to Automation.php) ---
+    $week = 1;
+    $nextReset = time() + MEDALINTERVAL;
+    $q = mysqli_query($database->dblink, "SELECT lastgavemedal FROM ".TB_PREFIX."config LIMIT 1");
+    if($q && $rc = mysqli_fetch_assoc($q)){
+        $last = (int)$rc['lastgavemedal'];
+        if($last > 0){
+            $nextReset = $last;
+            while($nextReset <= time()){ $nextReset += MEDALINTERVAL; }
+        } else {
+            $setDays = round(MEDALINTERVAL/86400);
+            $nextReset = $setDays < 7 ? strtotime(($setDays + 1).' day midnight') : strtotime('next monday');
+        }
+    }
+    $wq = mysqli_query($database->dblink, "SELECT week FROM ".TB_PREFIX."medal ORDER BY week DESC LIMIT 1");
+    if($wq && mysqli_num_rows($wq)){ $week = mysqli_fetch_assoc($wq)['week'] + 1; }
+    $left = max(0, $nextReset - time());
+    $days = floor($left / 86400);
+    $timeLeft = gmdate("H:i:s", $left % 86400);
+    // --- END MEDAL TIMER ---
 
     $result = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY ap DESC, id DESC Limit 10");
     $result2 = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE id = '".$session->uid."' ORDER BY ap DESC, id DESC Limit 1");
@@ -31,6 +51,28 @@
 		</tr>
 	</thead>
 </table>
+
+<!-- ADDED: row with Week / Medal reset -->
+<table cellpadding="1" cellspacing="1" style="width:100%; margin:2px 0;">
+    <tr>
+        <td style="text-align:center; padding:3px;">
+            <b>Week: <?php echo $week; ?></b> &nbsp;&nbsp; <b>Medal reset in:</b> <span id="medalTimer"><?php echo $days; ?>d <?php echo $timeLeft; ?></span>
+        </td>
+    </tr>
+</table>
+<script>
+var medalSeconds = <?php echo $left; ?>;
+setInterval(function(){
+    if(medalSeconds <= 0) return;
+    medalSeconds--;
+    var d = Math.floor(medalSeconds/86400);
+    var h = String(Math.floor((medalSeconds%86400)/3600)).padStart(2,'0');
+    var m = String(Math.floor((medalSeconds%3600)/60)).padStart(2,'0');
+    var s = String(medalSeconds%60).padStart(2,'0');
+    document.getElementById('medalTimer').innerHTML = d+'d '+h+':'+m+':'+s;
+},1000);
+</script>
+
 <table cellpadding="1" cellspacing="1" id="top10_offs" class="top10 row_table_data">
 	<thead>
 		<tr>
@@ -76,7 +118,6 @@
 ?>
          </tbody>
 </table>
-
 
 <?php
     for($i=1;$i<=0;$i++) {
@@ -235,8 +276,6 @@
       echo "<td class=\"val lc\">".$row['RR']."</td>";
       echo "</tr>";
       }
-	  
-//	mysqli_close($con);
 ?>
          </tbody>
 </table>
