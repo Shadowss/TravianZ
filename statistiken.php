@@ -62,13 +62,22 @@ if (!empty($_GET['id'])) {
             echo 'WW';
             break;
         case '7':
-            echo 'TOP 10';
+            echo 'TOP 10 PLAYERS';
             break;
         case '31':
-            echo 'Atacatori';
+            echo 'ATTACKERS';
             break;
         case '32':
-            echo 'Apărători';
+            echo 'DEFENDERS';
+            break;
+		case '41':
+            echo 'ALLIANCES Attackers';
+            break;
+        case '42':
+            echo 'ALLIANCES Defenders';
+            break;
+        case '43':
+            echo 'TOP 10 ALLIANCES';
             break;
         case '1':
             echo PLAYERS;
