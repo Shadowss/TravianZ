@@ -430,83 +430,16 @@ class Technology {
 	}
 
     private function trainUnit($unit, $amt, $great = false) {
-		global $session, $database, ${'u'.$unit}, $building, $village, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid36, $bid41, $bid42;
-
+		global $database, ${'u'.$unit}, $village;
+		
 		if (!$database->getTrainingLock($village->wid)) return;
 		try {
 		if($this->getTech($unit) || $unit % 10 <= 1 || $unit == 99) {
-			$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
-			$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
-			$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
-			$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
-			$trapper = [99];
+			if(!$this->checkTrainingBuilding($unit)) return;
 			
-			//Check if the player is trying to train troops without the needed buildings
-			if((in_array($unit, $footies) && ($building->getTypeLevel(19) == 0 && $building->getTypeLevel(29) == 0)) ||
-			    (in_array($unit, $calvary) && ($building->getTypeLevel(20) == 0 && $building->getTypeLevel(30) == 0)) ||
-			    (in_array($unit, $workshop) && ($building->getTypeLevel(21) == 0 && $building->getTypeLevel(42) == 0)) ||
-			    (in_array($unit, $special) && ($building->getTypeLevel(25) < 10 && $building->getTypeLevel(26) < 10)) ||
-			    (in_array($unit, $trapper) && $building->getTypeLevel(36) == 0)) return;
+			$each = $this->getTrainingTime($unit, $great);
+			$amt = $this->getMaxTrainable($unit, $amt, $great);
 			
-			
-			if(in_array($unit, $footies)) {		    
-				if($great) {
-					$each = round(($bid29[$building->getTypeLevel(29)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				} else {
-					$each = round(($bid19[$building->getTypeLevel(19)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				}
-			}
-			if(in_array($unit, $calvary)) {		    
-				if($great) {
-					$each = round(($bid30[$building->getTypeLevel(30)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
-				} else {
-					$each = round(($bid20[$building->getTypeLevel(20)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
-				}
-			}
-			if(in_array($unit, $workshop)) {	    
-				if($great) {
-					$each = round(($bid42[$building->getTypeLevel(42)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				} else {
-					$each = round(($bid21[$building->getTypeLevel(21)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				}
-			}
-			if(in_array($unit, $special)) {			    
-				if($building->getTypeLevel(25) > 0){
-					$each = round(($bid25[$building->getTypeLevel(25)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				} else {
-					$each = round(($bid26[$building->getTypeLevel(26)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-				}
-			}
-			if(in_array($unit, $trapper)) {
-			    
-					$each = round(($bid19[$building->getTypeLevel(36)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-			}	
-			if($unit % 10 == 0 || $unit % 10 == 9 && $unit != 99) {
-				if($this->maxUnit($unit, $great) < $amt) $amt = 0;
-				else
-				{
-			   		$slots = $database->getAvailableExpansionTraining();
-			   		if($unit % 10 == 0 && $slots['settlers'] <= $amt) $amt = $slots['settlers'];
-			   		if($unit % 10 == 9 && $slots['chiefs'] <= $amt) $amt = $slots['chiefs'];
-				}
-			}else{
-			    if($unit != 99){
-			        if($this->maxUnit($unit, $great) < $amt) $amt = 0;
-			    }else{
-			        $trainlist = $this->getTrainingList(8);
-			        $train_amt = 0;
-			        foreach($trainlist as $train) $train_amt += $train['amt'];
-			        
-			        $max = 0;
-			        for($i = 19; $i < 41; $i++){
-			            if($village->resarray['f'.$i.'t'] == 36){
-			                $max += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
-			            }
-			        }
-			        $max1 = $max - ($village->unitarray['u99'] + $train_amt);
-			        if($max1 < $amt) $amt = 0;
-			    }
-			}
 			$wood = ${'u'.$unit}['wood'] * $amt * ($great ? 3 : 1);
 			$clay = ${'u'.$unit}['clay'] * $amt * ($great ? 3 : 1);
 			$iron = ${'u'.$unit}['iron'] * $amt * ($great ? 3 : 1);
@@ -519,6 +452,103 @@ class Technology {
 		} finally {
 			$database->releaseTrainingLock($village->wid);
 		}
+	}
+
+	private function checkTrainingBuilding($unit) {
+		global $building;
+		
+		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
+		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
+		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
+		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
+		$trapper = [99];
+		
+		//Check if the player is trying to train troops without the needed buildings
+		if((in_array($unit, $footies) && ($building->getTypeLevel(19) == 0 && $building->getTypeLevel(29) == 0)) ||
+		    (in_array($unit, $calvary) && ($building->getTypeLevel(20) == 0 && $building->getTypeLevel(30) == 0)) ||
+		    (in_array($unit, $workshop) && ($building->getTypeLevel(21) == 0 && $building->getTypeLevel(42) == 0)) ||
+		    (in_array($unit, $special) && ($building->getTypeLevel(25) < 10 && $building->getTypeLevel(26) < 10)) ||
+		    (in_array($unit, $trapper) && $building->getTypeLevel(36) == 0)) return false;
+		
+		return true;
+	}
+
+	private function getTrainingTime($unit, $great) {
+		global $building, ${'u'.$unit}, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid41, $bid42;
+		
+		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
+		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
+		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
+		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
+		$trapper = [99];
+		
+		if(in_array($unit, $footies)) {		    
+			if($great) {
+				$each = round(($bid29[$building->getTypeLevel(29)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			} else {
+				$each = round(($bid19[$building->getTypeLevel(19)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			}
+		}
+		if(in_array($unit, $calvary)) {		    
+			if($great) {
+				$each = round(($bid30[$building->getTypeLevel(30)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
+			} else {
+				$each = round(($bid20[$building->getTypeLevel(20)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
+			}
+		}
+		if(in_array($unit, $workshop)) {	    
+			if($great) {
+				$each = round(($bid42[$building->getTypeLevel(42)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			} else {
+				$each = round(($bid21[$building->getTypeLevel(21)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			}
+		}
+		if(in_array($unit, $special)) {			    
+			if($building->getTypeLevel(25) > 0){
+				$each = round(($bid25[$building->getTypeLevel(25)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			} else {
+				$each = round(($bid26[$building->getTypeLevel(26)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			}
+		}
+		if(in_array($unit, $trapper)) {
+		    
+				$each = round(($bid19[$building->getTypeLevel(36)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+		}	
+		
+		return $each;
+	}
+
+	private function getMaxTrainable($unit, $amt, $great) {
+		global $database, $village, $bid36;
+		
+		if($unit % 10 == 0 || $unit % 10 == 9 && $unit != 99) {
+			if($this->maxUnit($unit, $great) < $amt) $amt = 0;
+			else
+			{
+		   		$slots = $database->getAvailableExpansionTraining();
+		   		if($unit % 10 == 0 && $slots['settlers'] <= $amt) $amt = $slots['settlers'];
+		   		if($unit % 10 == 9 && $slots['chiefs'] <= $amt) $amt = $slots['chiefs'];
+			}
+		}else{
+		    if($unit != 99){
+		        if($this->maxUnit($unit, $great) < $amt) $amt = 0;
+		    }else{
+		        $trainlist = $this->getTrainingList(8);
+		        $train_amt = 0;
+		        foreach($trainlist as $train) $train_amt += $train['amt'];
+		        
+		        $max = 0;
+		        for($i = 19; $i < 41; $i++){
+		            if($village->resarray['f'.$i.'t'] == 36){
+		                $max += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
+		            }
+		        }
+		        $max1 = $max - ($village->unitarray['u99'] + $train_amt);
+		        if($max1 < $amt) $amt = 0;
+		    }
+		}
+		
+		return $amt;
 	}
 
 	public function meetRRequirement($tech) {
