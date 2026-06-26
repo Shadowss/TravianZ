@@ -1,4 +1,24 @@
 <?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : sysmsg.tpl                                                ##
+##  Type           : Admin Panel System Messages                               ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 if ($_SESSION['access'] < ADMIN) die("Access Denied");
 
 $id = $_SESSION['id'];

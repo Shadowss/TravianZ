@@ -1,17 +1,24 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-## Filename : massmessage.tpl ##
-## Type : Admin Panel Frontend ##
+##  Filename       : massmessage.tpl                                           ##
+##  Type           : Admin Panel Mass Messages                                 ##
 ## --------------------------------------------------------------------------- ##
-## Developed by : Dzoki (Original) ##
-## Refactored by : Shadow ##
-## Redesign by : Shadow ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
 ## --------------------------------------------------------------------------- ##
-## Project : TravianZ ##
-## GitHub : https://github.com/Shadowss/TravianZ ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 $id = $_SESSION['id'];
 $_SESSION['mass_subject'] = $_SESSION['mass_subject'] ?? '';
