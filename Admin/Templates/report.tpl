@@ -40,6 +40,19 @@ if($bid > 0){
     <link href="../<?php echo GP_LOCATE;?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
     <link href="../<?php echo GP_LOCATE;?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
     <link href="../<?php echo GP_LOCATE;?>travian.css?e21d2" rel="stylesheet" type="text/css">
+    <style>
+    /* FIX: cifre negre - forteaza vizibilitate */
+    #content.reports { background:#fff; padding:15px; border-radius:6px; color:#000; }
+    #content.reports h1 { color:#000 !important; }
+    #content.reports table td,
+    #content.reports table th,
+    #content.reports div,
+    #content.reports span {
+        color:#000 !important;
+        opacity:1 !important;
+    }
+    #content.reports td { font-weight:600 !important; }
+    </style>
     <div style="max-width:900px;margin:20px auto">
       <a href="?p=report" style="font-size:12px">← Back to reports</a>
       <div id="content" class="reports" style="margin-top:10px">
