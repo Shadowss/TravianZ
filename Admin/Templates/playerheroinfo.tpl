@@ -129,12 +129,27 @@ if ($hero !== false) {
 	<tr><td>Defence</td><td><?php echo $h['di']."/".$h['dc']; ?></td><td><?php echo $h['defence']; ?></td></tr> 
 	<tr><td>Off-Bonus</td><td><?php echo ($h['ob']-1)*100; ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
 	<tr><td>Def-Bonus</td><td><?php echo ($h['db']-1)*100; ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
-	<tr><td>Regeneration</td><td><?php echo ($h['regeneration']*5*SPEED); ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
+	<tr><td>Regeneration</td><td><?php echo min(100,$h['regeneration'])*5*SPEED; ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
 	<tr>
 		<?php 
-		$count_level_exp=500-intval($h['attack']+$h['defence']+$h['attackbonus']+$h['defencebonus']+$h['regeneration']);
-		if ($h['points']>$count_level_exp) $h['points']=$count_level_exp;
-		$expPct = ($h['experience'] < 495000) ? (int)(($h['experience'] - $hero_levels[$h['level']]) / ($hero_levels[$h['level']+1] - $hero_levels[$h['level']])*100) : 100;
+		// 1. puncte rămase - nu lăsa negativ
+		$used = (int)$h['attack'] + (int)$h['defence'] + (int)$h['attackbonus'] + (int)$h['defencebonus'] + (int)$h['regeneration'];
+		$count_level_exp = max(0, 500 - $used);
+		if ($h['points'] > $count_level_exp) $h['points'] = $count_level_exp;
+
+		// 2. procent XP - protejat pentru level 100
+		$level = (int)$h['level'];
+		if ($level >= 100 || !isset($hero_levels[$level+1])) {
+		$expPct = 100;
+		} else {
+		$curr = $hero_levels[$level] ?? 0;
+		$next = $hero_levels[$level+1] ?? $curr;
+		$den  = $next - $curr;
+		$expPct = ($den > 0 && $h['experience'] < $next) 
+        ? (int)(($h['experience'] - $curr) * 100 / $den) 
+        : 100;
+		}
+		$expPct = max(0, min(100, $expPct));
 		?>
 		<td>Experience: <?php echo $expPct; ?>%</td> 
 		<td colspan="2"><?php echo $h['points']; ?><div class="hero-bar"><div class="hero-bar-fill" style="width:<?php echo $expPct; ?>%"></div></div></td> 
