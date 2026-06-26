@@ -5,14 +5,21 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       warsim.php                                                  ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : warsim.php                                                ##
+##  Type           : Attack Simulator File                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                    		           ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 use App\Utils\AccessLogger;
@@ -70,37 +77,37 @@ $battle->procSim($_POST);
 if(isset($_POST['result'])) {
 	$target = isset($_POST['target'])? $_POST['target'] : array();
 	$tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
-	include("Templates/Simulator/res_a".$tribe.".tpl");
+	include("Templates/Simulator/res_a".(int)$tribe.".tpl");
     foreach($target as $tar) {
-        include("Templates/Simulator/res_d".$tar.".tpl");
+        include("Templates/Simulator/res_d".(int)$tar.".tpl");
     }
     echo "<p>Type of attack: <b>";
     echo $form->getValue('ktyp') == 0 ? "Normal" : "Raid";
     echo "</b></p>";
     echo "<p>";
-    if (isset($_POST['result'][7]) && isset($_POST['result'][8])){
-        if ($form->getValue('ktyp') == 1) {
-            echo "Hint: The ram does not work during a raid.<br>";
-        }elseif ($_POST['result'][7] == 0){
-            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>0</b></p>";
-        }elseif ($_POST['result'][7] == $_POST['result'][8]){
-            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
-        }else{
-            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$_POST['result'][7]."</b></p>";
-        }
-    }
+	if (isset($_POST['result'][7]) && isset($_POST['result'][8])){
+		if ($form->getValue('ktyp') == 1) {
+			echo "Hint: The ram does not work during a raid.<br>";
+		}elseif ($_POST['result'][7] == 0){
+			echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>0</b></p>";
+		}elseif ($_POST['result'][7] == $_POST['result'][8]){
+			echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
+		}else{
+			echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".(int)$_POST['result'][7]."</b></p>";
+		}
+	}
 
-    if (isset($_POST['result'][3]) && isset($_POST['result'][4])){
-        if ($form->getValue('ktyp') == 1) {
-            echo "Hint: The catapult does not shoot during a raid.</p>";
-        }elseif ($_POST['result'][3] == 0){
-            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>0</b></p>";
-        }elseif ($_POST['result'][3] == $_POST['result'][4]){
-            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$form->getValue('kata')."</b></p></p>";
-        }else{
-            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$_POST['result'][3]."</b></p>";
-        }
-    }
+	if (isset($_POST['result'][3]) && isset($_POST['result'][4])){
+		if ($form->getValue('ktyp') == 1) {
+			echo "Hint: The catapult does not shoot during a raid.</p>";
+		}elseif ($_POST['result'][3] == 0){
+			echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>0</b></p>";
+		}elseif ($_POST['result'][3] == $_POST['result'][4]){
+			echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$form->getValue('kata')."</b></p></p>";
+		}else{
+			echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".(int)$_POST['result'][3]."</b></p>";
+		}
+	}
 }
 
 if (!empty($_GET['target'])) {
@@ -122,7 +129,7 @@ if (!empty($_GET['target'])) {
 $target = isset($_POST['target'])? $_POST['target'] : (!empty($_GET['target']) ? array((int) $_GET['target']) : array());
 $tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
 if(count($target) > 0) {
-	include("Templates/Simulator/att_".preg_replace("/[^a-zA-Z0-9_-]/","",$tribe).".tpl");
+	include("Templates/Simulator/att_".(int)$tribe.".tpl");
 	echo "<table id=\"defender\" class=\"fill_in\" cellpadding=\"1\" cellspacing=\"1\">
 
 	<thead>
@@ -133,7 +140,7 @@ if(count($target) > 0) {
 		</tr>
 	</thead>";
 	foreach($target as $tar) {
-		include("Templates/Simulator/def_".$tar.".tpl");
+		include("Templates/Simulator/def_".(int)$tar.".tpl");
 	}
 	include("Templates/Simulator/def_end.tpl");
 	echo "<div class=\"clear\"></div>";

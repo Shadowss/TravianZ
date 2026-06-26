@@ -22,6 +22,32 @@
         $hero_info = $units->Hero($session->uid);
         $heroes = $units->Hero($session->uid, 1);
         $define['reset_level'] = 3; // Until which level you are able to reset your points
+		// NOTE: $define['reset_level'] doesn't seem to be used in any of the
+		// 37*.tpl files - the "3" threshold is hardcoded directly into 37_hero.tpl. Possible dead code
+		// in these files; I left it unchanged (it can be read
+		// in another part of the project that I don't see here).
+
+		// Explicit lookup instead of if/elseif chain - covers all 15
+		// possible hero types (5 per tribe x 3 tribes). Same behavior:
+		// if $hero_info['unit'] doesn't match any (which shouldn't
+		// happen), $name returns null instead of "undefined variable".
+        $heroUnitNames = [
+            1  => U1,
+            2  => U2,
+            3  => U3,
+            5  => U5,
+            6  => U6,
+            11 => U11,
+            12 => U12,
+            13 => U13,
+            15 => U15,
+            16 => U16,
+            21 => U21,
+            22 => U22,
+            24 => U24,
+            25 => U25,
+            26 => U26,
+        ];
       
 ?>
 
@@ -36,37 +62,7 @@
         
         <?php
         if ($hero_info) {
-            if ( $hero_info['unit'] == 1 ) {
-                $name = U1;
-            } else if ( $hero_info['unit'] == 2 ) {
-                $name = U2;
-            } else if ( $hero_info['unit'] == 3 ) {
-                $name = U3;
-            } else if ( $hero_info['unit'] == 5 ) {
-                $name = U5;
-            } else if ( $hero_info['unit'] == 6 ) {
-                $name = U6;
-            } else if ( $hero_info['unit'] == 11 ) {
-                $name = U11;
-            } else if ( $hero_info['unit'] == 12 ) {
-                $name = U12;
-            } else if ( $hero_info['unit'] == 13 ) {
-                $name = U13;
-            } else if ( $hero_info['unit'] == 15 ) {
-                $name = U15;
-            } else if ( $hero_info['unit'] == 16 ) {
-                $name = U16;
-            } else if ( $hero_info['unit'] == 21 ) {
-                $name = U21;
-            } else if ( $hero_info['unit'] == 22 ) {
-                $name = U22;
-            } else if ( $hero_info['unit'] == 24 ) {
-                $name = U24;
-            } else if ( $hero_info['unit'] == 25 ) {
-                $name = U25;
-            } else if ( $hero_info['unit'] == 26 ) {
-                $name = U26;
-            }
+            $name  = $heroUnitNames[$hero_info['unit']] ?? null;
             $name1 = $hero_info['name'];
         } else {
             $name = 'Mr. Nobody';

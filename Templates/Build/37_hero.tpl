@@ -20,14 +20,36 @@
 #################################################################################
 
 include_once("GameEngine/Data/hero_full.php");
-global $database; 
+global $database;
 
-if (isset($_POST['name']) && !empty($_POST['name'])) { 
-    $_POST['name'] = $database->escape(stripslashes($_POST['name']));
-	mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."hero SET `name`='".$_POST['name']."' where `uid`='".$database->escape($session->uid)."' AND dead = 0") or die("ERROR:".mysqli_error($database->dblink));   
+if (isset($_POST['name']) && !empty($_POST['name'])) {
+	$_POST['name'] = $database->escape(stripslashes($_POST['name']));
+	mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "hero SET `name`='" . $_POST['name'] . "' where `uid`='" . $database->escape($session->uid) . "' AND dead = 0") or die("ERROR:" . mysqli_error($database->dblink));
 	$hero_info['name'] = $_POST['name'];
-	echo "".NAME_CHANGED.""; 
+	echo "" . NAME_CHANGED . "";
 }
+
+// Explicit lookup: action from URL (?add=...) => column from `hero` table.
+// Used for both "(+)" links in the table and for the update
+// in the DB below. Single source of truth instead of 5 identical blocks.
+$heroStatColumns = [
+	'off'    => 'attack',
+	'deff'   => 'defence',
+	'obonus' => 'attackbonus',
+	'dbonus' => 'defencebonus',
+	'reg'    => 'regeneration',
+];
+
+// Render the "(+)" link for a stat, or "(+)" uneditable
+// if the hero has no more points or the stat is already at the top (100).
+// Identical behavior to the original 5 if/else blocks.
+$renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
+	$field = $heroStatColumns[$action];
+	if ($hero_info['points'] > 0 && $hero_info[$field] < 100) {
+		return "<a href=\"build.php?id=" . $id . "&add=" . $action . "\">(<b>+</b>)</a>";
+	}
+	return "<span class=\"none\">(+)</span>";
+};
 ?>
 
 <table id="distribution" cellpadding="1" cellspacing="1"> 
@@ -47,10 +69,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <td class="val"><?php echo $hero_info['atk']; ?></td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['attack'])+1; ?>px;" alt="<?php echo $hero_info['atk']; ?>" title="<?php echo $hero_info['atk']; ?>" /></td> 
         <td class="up"><span class="none"> 
-        <?php 
-        if($hero_info['points'] > 0 && $hero_info['attack'] < 100) echo "<a href=\"build.php?id=".$id."&add=off\">(<b>+</b>)</a>";     
-        else echo "<span class=\"none\">(+)</span>"; 
-        ?> 
+        <?php echo $renderAddLink('off'); ?> 
         </td> 
         <td class="po"><?php echo $hero_info['attack']; ?></td> 
     </tr> 
@@ -59,10 +78,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <td class="val"><?php echo $hero_info['dc'] . "/" . $hero_info['di']; ?></td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['defence'])+1; ?>px;" alt="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>"  title="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>" /></td> 
         <td class="up"><span class="none"> 
-        <?php 
-        if($hero_info['points'] > 0 && $hero_info['defence'] < 100) echo "<a href=\"build.php?id=".$id."&add=deff\">(<b>+</b>)</a>";           
-        else echo "<span class=\"none\">(+)</span>"; 
-        ?> 
+        <?php echo $renderAddLink('deff'); ?> 
         </td> 
         <td class="po"><?php echo $hero_info['defence']; ?></td> 
     </tr> 
@@ -71,10 +87,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <td class="val"><?php echo ($hero_info['ob']-1)*100; ?>%</td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['ob']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['ob']-1)*100; ?>%" title="<?php echo ($hero_info['ob']-1)*100; ?>%" /></td> 
         <td class="up"><span class="none"> 
-        <?php 
-        if($hero_info['points'] > 0 && $hero_info['attackbonus'] < 100) echo "<a href=\"build.php?id=".$id."&add=obonus\">(<b>+</b>)</a>"; 	
-        else echo "<span class=\"none\">(+)</span>"; 
-        ?> 
+        <?php echo $renderAddLink('obonus'); ?> 
         </td> 
         <td class="po"><?php echo $hero_info['attackbonus']; ?></td> 
     </tr> 
@@ -83,10 +96,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <td class="val"><?php echo ($hero_info['db']-1)*100; ?>%</td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['db']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['db']-1)*100; ?>%" title="<?php echo ($hero_info['db']-1)*100; ?>%" /></td> 
         <td class="up"><span class="none"> 
-        <?php 
-        if($hero_info['points'] > 0 && $hero_info['defencebonus'] < 100) echo "<a href=\"build.php?id=".$id."&add=dbonus\">(<b>+</b>)</a>";
-        else echo "<span class=\"none\">(+)</span>";
-        ?> 
+        <?php echo $renderAddLink('dbonus'); ?>
         </td> 
         <td class="po"><?php echo $hero_info['defencebonus']; ?></td> 
     </tr> 
@@ -95,10 +105,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
         <td class="val"><?php echo ($hero_info['regeneration']*5*SPEED); ?>/<?php echo DAY; ?></td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['regeneration']*2)+1; ?>px;" alt="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" title="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" /></td> 
         <td class="up"><span class="none"> 
-        <?php 
-        if($hero_info['points'] > 0 && $hero_info['regeneration'] < 100) echo "<a href=\"build.php?id=".$id."&add=reg\">(<b>+</b>)</a>"; 
-        else echo "<span class=\"none\">(+)</span>"; 
-        ?> 
+        <?php echo $renderAddLink('reg'); ?> 
         </td> 
         <td class="po"><?php echo $hero_info['regeneration']; ?></td> 
     </tr> 
@@ -145,40 +152,25 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
 <p><?php echo YOUR_HERO_HAS; ?> <b><?php echo floor($hero_info['health']); ?></b>% <?php echo OF_HIT_POINTS; ?>.<br/>  
     <?php echo YOUR_HERO_HAS; ?> <?php echo CONQUERED; ?> <b><?php echo $database->VillageOasisCount($village->wid); ?></b> <a href="build.php?id=<?php echo $id; ?>&land"><?php echo OASES; ?></a>.</p> 
 	 
-    <?php  
-     
-    if(isset($_GET['add'])) {
-            if($_GET['add'] == "reset") {
-                if($hero_info['level'] <= 3){
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `points` = (`level` * 5) + 5, `attack` = 0, `defence` = 0, `attackbonus` = 0, `defencebonus` = 0, `regeneration` = 0 WHERE `heroid` = " . $hero_info['heroid'] . " AND `level` <= 3 AND (`attack` != 0 OR `defence` != 0 OR `attackbonus` != 0 OR `defencebonus` != 0 OR `regeneration` != 0)");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-            }
-            if($_GET['add'] == "off") {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `attack` = `attack` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `attack` < 100");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-            if($_GET['add'] == "deff") {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `defence` = `defence` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `defence` < 100");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-          if($_GET['add'] == "obonus") {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = `attackbonus` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `attackbonus` < 100");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-          if($_GET['add'] == "dbonus") {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = `defencebonus` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `defencebonus` < 100");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-          if($_GET['add'] == "reg") {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET `regeneration` = `regeneration` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `regeneration` < 100");
-                    header("Location: build.php?id=".$id."");
-					exit;
-                }
-          }
-         ?>
+<?php
+// NOTE: the actions below are triggered by GET (?add=...) and modify
+// data in the DB. This was the original (without CSRF), I did not change this aspect -
+// it is an existing behavior in all build.php, not specific to this file.
+if (isset($_GET['add'])) {
+	$action = $_GET['add'];
+
+	if ($action == "reset") {
+		if ($hero_info['level'] <= 3) {
+			mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "hero SET `points` = (`level` * 5) + 5, `attack` = 0, `defence` = 0, `attackbonus` = 0, `defencebonus` = 0, `regeneration` = 0 WHERE `heroid` = " . $hero_info['heroid'] . " AND `level` <= 3 AND (`attack` != 0 OR `defence` != 0 OR `attackbonus` != 0 OR `defencebonus` != 0 OR `regeneration` != 0)");
+			header("Location: build.php?id=" . $id . "");
+			exit;
+		}
+	// if level > 3, exactly like in the original: nothing happens (no redirect).
+	} elseif (isset($heroStatColumns[$action])) {
+		$column = $heroStatColumns[$action];
+		mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "hero SET `$column` = `$column` + 1, `points` = `points` - 1 WHERE `heroid` = " . $hero_info['heroid'] . " AND `points` > 0 AND `$column` < 100");
+		header("Location: build.php?id=" . $id . "");
+		exit;
+	}
+}
+?>
