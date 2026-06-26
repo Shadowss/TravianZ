@@ -206,18 +206,26 @@ class Technology {
 		return $max;
 	}
 
+	/**
+	 * Sum the u1..u50 troops (and optionally the hero) of every source row into $ownunit.
+	 */
+	private function addUnits(&$ownunit, $sources, $includeHero = true) {
+		foreach($sources as $src){
+			for($i = 1; $i <= 50; $i++){
+				$ownunit['u' . $i] += $src['u' . $i];
+			}
+			if($includeHero) $ownunit['hero'] += $src['hero'];
+		}
+	}
+
 	public function getUnits() {
 		global $database, $village;
-		
+
 		if(func_num_args() == 1) $base = func_get_arg(0);
 
 		$ownunit = func_num_args() == 2 ? func_get_arg(0) : $database->getUnit($base);
 		$enforcementarray = func_num_args() == 2 ? func_get_arg(1) : $database->getEnforceVillage($base, 0);
-		if(count($enforcementarray) > 0){
-			foreach($enforcementarray as $enforce){
-				for($i = 1; $i <= 50; $i++) $ownunit['u'.$i] += $enforce['u'.$i];
-			}
-		}
+		$this->addUnits($ownunit, $enforcementarray, false);
 		return $ownunit;
 	}
 
@@ -228,25 +236,11 @@ class Technology {
 		$ownunit['u99'] -= $ownunit['u99'];
 		$ownunit['u99o'] -= $ownunit['u99o'];
 		$enforcementarray = $database->getEnforceVillage($base, 0, $useCache);
-		if(count($enforcementarray) > 0){
-			foreach($enforcementarray as $enforce){
-				for($i = 1; $i <= 50; $i++){
-					$ownunit['u' . $i] += $enforce['u' . $i];
-				}
-				$ownunit['hero'] += $enforce['hero'];
-			}
-		}
+		$this->addUnits($ownunit, $enforcementarray);
 		if($mode == 0){
 			$enforceoasis = $database->getOasisEnforce($base, 1, $useCache);
-			if(count($enforceoasis) > 0){
-				foreach($enforceoasis as $enforce){
-					for($i = 1; $i <= 50; $i++){
-						$ownunit['u' . $i] += $enforce['u' . $i];
-					}
-					$ownunit['hero'] += $enforce['hero'];
-				}
-			}
-			
+			$this->addUnits($ownunit, $enforceoasis);
+
 			$prisoners = $database->getPrisoners($base, 1, $useCache);
 			if(!empty($prisoners)){
 				foreach($prisoners as $prisoner){
@@ -405,16 +399,12 @@ class Technology {
             $unit = "u".$i;
             $index = $prisoners == 0 ? $unit : "t".$k;        
             
-            global $$unit; 
+            global $$unit;
             $dataarray = $$unit;
 
-            if($horsedrinking > 0) {
-                if (($i == 4 && $horsedrinking >= 10) || ($i == 5 && $horsedrinking >= 15) || ( $i == 6 && $horsedrinking == 20)) {
-                	$upkeep += ($dataarray['pop'] - 1) * $array[$index];
-                }
-                else $upkeep += ($dataarray['pop'] * $array[$index]);
-            }
-            else $upkeep += ($dataarray['pop'] * $array[$index]);    
+            // Horse Drinking Trough lets a number of cavalry units drink for free (1 crop less each).
+            $freeDrinker = $horsedrinking > 0 && (($i == 4 && $horsedrinking >= 10) || ($i == 5 && $horsedrinking >= 15) || ($i == 6 && $horsedrinking == 20));
+            $upkeep += ($dataarray['pop'] - ($freeDrinker ? 1 : 0)) * $array[$index];
         }
 
         $index = $prisoners > 0 ? 't11' : 'hero';
