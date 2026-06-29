@@ -182,23 +182,23 @@ if (isset($packages[$amount]) && $amount > 0) {
                 <div style="background:#f0f0f0; border:1px solid #d0d0d0; padding:6px 8px; margin:10px 0; border-radius:3px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
                     <div style="display:flex; gap:10px; align-items:center;">
                         <a href="a2b2.php?f=all" style="text-decoration:none; padding:3px 8px; <?php if($f=='all') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
-                            <img src="img/x.gif" class="gold" style="vertical-align:-2px;"> Toate
+                            <img src="img/x.gif" class="gold" style="vertical-align:-2px;"> All
                         </a>
                         <a href="a2b2.php?f=in" style="text-decoration:none; padding:3px 8px; color:#228B22; <?php if($f=='in') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
-                            <b style="font-size:15px;">+</b> Intrări
+                            <b style="font-size:15px;">+</b> Incoming
                         </a>
                         <a href="a2b2.php?f=out" style="text-decoration:none; padding:3px 8px; color:#D00000; <?php if($f=='out') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
-                            <b style="font-size:15px;">−</b> Ieșiri
+                            <b style="font-size:15px;">−</b> Outgoing
                         </a>
                         <a href="a2b2.php?f=gift" style="text-decoration:none; padding:3px 8px; color:#0066cc; <?php if($f=='gift') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
-                            🎁 Cadouri
+                            🎁 Gifts
                         </a>
                     </div>
                     <div>
                         <form method="get" style="margin:0;">
                             <input type="hidden" name="f" value="<?php echo htmlspecialchars($f); ?>">
                             <select name="p" onchange="this.form.submit()" style="font-size:11px; padding:2px;">
-                                <?php for($i=1;$i<=$totalPages;$i++){ echo '<option value="'.$i.'"'.($i==$page?' selected':'').'>Pagina '.$i.' / '.$totalPages.'</option>'; } ?>
+                                <?php for($i=1;$i<=$totalPages;$i++){ echo '<option value="'.$i.'"'.($i==$page?' selected':'').'>Page '.$i.' / '.$totalPages.'</option>'; } ?>
                             </select>
                         </form>
                     </div>
