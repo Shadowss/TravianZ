@@ -18,8 +18,10 @@
 include_once("../../config.php");
 include_once("../../Database.php");
 
+// #299: load CSRF helpers + admin_deny() before the access check below.
+require_once(__DIR__ . '/../csrf.php');
 if (!isset($_SESSION)) session_start();
-if(($_SESSION['access']?? 0) < ADMIN) die("Access Denied: You are not Admin!");
+if(($_SESSION['access']?? 0) < ADMIN) admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
 // itself (it does not go through admin.php's central csrf_verify()).
