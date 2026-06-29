@@ -3,7 +3,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       : TREASURY ARTEFACTS AREEA        	                       ##
+##  Filename       : TREASURY ARTEFACTS AREA        	                       ##
 ##  Type           : BUILDING TEMPLATE                                         ##
 ## --------------------------------------------------------------------------- ##
 ##  Refactored by  : Shadow                                                    ##
@@ -88,11 +88,12 @@ if(count($artifacts) == 0) {
     foreach($artifacts as $artifact){
         $coordinates = $database->getCoor($artifact['vref']);
         $distance = $database->getDistance($village->coor['x'], $village->coor['y'], $coordinates['x'], $coordinates['y']);
-        // unique key prevents overwriting when 2 artifacts are at the same distance
-        $rows[$distance.'_'.$artifact['id']] = ['dist' => $distance, 'data' => $artifact];
+        $rows[] = ['dist' => $distance, 'data' => $artifact];
     }
-
-    ksort($rows);
+	
+    usort($rows, function($a, $b) {
+        return $a['dist'] <=> $b['dist'];
+    });
 
     foreach($rows as $row) {
         $distance = $row['dist'];
