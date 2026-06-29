@@ -1486,8 +1486,16 @@ class MYSQLi_DB implements IDbConnection {
 	    foreach($countedWids as $mode => $totalCount){
 	        foreach($totalCount as $sector => $count){
 	            $generatedWids = $this->generateBase($sector, $mode, $count);
-	            $wids[$mode] = array_merge((array)$wids[$mode], !is_array($generatedWids) ? [$generatedWids] : $generatedWids);
-	            if(empty($i[$mode])) $i[$mode] = 0;
+	            // Bug fix: previously merged every sector's wids into one flat
+	            // $wids[$mode] list and consumed it with a single shared counter
+	            // per mode, regardless of which sector a wid actually came from.
+	            // As soon as a batch needed more than one sector (e.g. WW
+	            // villages spread across all 4 quadrants), villages were handed
+	            // wids strictly in array order, not matching their own kid — so
+	            // most ended up in the wrong quadrant. Keying by [mode][sector]
+	            // keeps each sector's wids separate.
+	            $wids[$mode][$sector] = !is_array($generatedWids) ? [$generatedWids] : $generatedWids;
+	            if(empty($i[$mode][$sector])) $i[$mode][$sector] = 0;
 	        }
 	    }
 	    
@@ -1495,7 +1503,7 @@ class MYSQLi_DB implements IDbConnection {
 		foreach($villageArrays as $village){
 		    
 		    //Check if the village wid isn't already set and assing one among the generated ones
-		    if($village['wid'] == 0) $village['wid'] = $wids[$village['mode']][$i[$village['mode']]++];
+		    if($village['wid'] == 0) $village['wid'] = $wids[$village['mode']][$village['kid']][$i[$village['mode']][$village['kid']]++];
 		    
 		    //Merge the wids into an unique array
 		    $takenWids[] = $village['wid'];
@@ -4145,6 +4153,33 @@ class MYSQLi_DB implements IDbConnection {
         list($user, $cp) = $this->escape_input((int) $user, (int) $cp);
 
         $q = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp where id = $user";
+        return mysqli_query($this->dblink,$q);
+    }
+
+    /**
+     * Mead-Festival (Brewery, building 35 — Teutons only).
+     * Mirrors addCel()/getCel()/clearCel() above, but the festival grants no
+     * culture points: it only gates the temporary combat bonus, the chief
+     * persuasion penalty and the catapult randomization while it is active.
+     */
+    function addFestival($ref, $end) {
+        list($ref, $end) = $this->escape_input((int) $ref, (int) $end);
+
+        $q = "UPDATE " . TB_PREFIX . "vdata set festival = $end where wref = $ref";
+        return mysqli_query($this->dblink,$q);
+    }
+
+    // no need to cache this method
+    function getFestivals() {
+        $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE festival < " . time() . " AND festival != 0";
+        $result = mysqli_query($this->dblink,$q);
+        return $this->mysqli_fetch_all($result);
+    }
+
+    function clearFestival($ref) {
+        list($ref) = $this->escape_input((int) $ref);
+
+        $q = "UPDATE " . TB_PREFIX . "vdata set festival = 0 where wref = $ref";
         return mysqli_query($this->dblink,$q);
     }
 

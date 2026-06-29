@@ -1,14 +1,23 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       buidata.php                                                 ##
-##  Developed by:  Akakori                                                     ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
+##  Filename       : buidata.php                      	                       ##
+##  Type           : Data Page for Buildings                                   ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Akakori     				                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 

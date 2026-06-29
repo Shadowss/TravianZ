@@ -428,9 +428,22 @@ class Units {
             }
         }
 
+        // Bug fix: Brewery (35) is Teuton-only, capital-only, but empire-wide —
+        // the catapult-randomization side effect must be checked on the SENDER'S
+        // CAPITAL (not $village->wid, the village the rally point belongs to,
+        // which may not be the capital), and only while a Mead-Festival is
+        // actually active there — not simply because the Brewery is built.
+        $hasActiveBrewery = false;
+        if ($session->tribe == 2) {
+            $senderCapital = $database->getVillage($session->uid, 3);
+            $hasActiveBrewery = $senderCapital
+                && (int)$senderCapital['festival'] > time()
+                && $database->getFieldLevelInVillage($senderCapital['wref'], 35) > 0;
+        }
+
         if(isset($post['ctar1'])) {
-            //Is the Brewery built?
-            if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+            //Is the Mead-Festival active?
+            if(!$hasActiveBrewery){
                 if($rivalsGreatConfusion['totals'] > 0) {
                     if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
                         $post['ctar1'] = 0;
@@ -442,8 +455,8 @@ class Units {
         else $post['ctar1'] = 0;
 
         if(isset($post['ctar2']) && $post['ctar2'] > 0) {
-            //Is the Brewery built?
-            if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+            //Is the Mead-Festival active?
+            if(!$hasActiveBrewery){
                 if($rivalsGreatConfusion['totals'] > 0) {
                     if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
                         $post['ctar2'] = 99;

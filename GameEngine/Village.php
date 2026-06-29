@@ -137,6 +137,7 @@ class Village {
 		$this->capital = $this->infoarray['capital'];
 		$this->natar = $this->infoarray['natar'];
 		$this->currentcel = $this->infoarray['celebration'];
+		$this->currentfestival = $this->infoarray['festival'];
 		$this->wid = $this->infoarray['wref'];
 		$this->vname = $this->infoarray['name'];
 

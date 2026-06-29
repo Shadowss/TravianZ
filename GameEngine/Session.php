@@ -44,6 +44,7 @@ include_once("Battle.php");
 include_once("Data/buidata.php");
 include_once("Data/cp.php");
 include_once("Data/cel.php");
+include_once("Data/festival.php");
 include_once("Data/resdata.php");
 include_once("Data/unitdata.php");
 include_once("Data/hero_full.php");
@@ -70,6 +71,7 @@ class Session {
     private $time;
 	private $populated = false;
     var $logged_in = false;
+    var $inAdmin = false;
     var $referrer, $url;
     var $username, $uid, $access, $plus, $tribe, $isAdmin, $alliance, $gold, $oldrank, $gpack, $goldclub;
 
@@ -124,7 +126,7 @@ function __construct() {
     if($maint['active'] == 1 && $this->access < 9) {
         // evita loop infinit
         if(strpos($_SERVER['PHP_SELF'], 'maintenance.php') === false) {
-            header('Location: maintenance.php');
+            header('Location: /maintenance.php');
             exit;
         }
     }
@@ -195,11 +197,11 @@ function __construct() {
         $logging->addLoginLog($dbarray['id'], \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'));
 
         if ($dbarray['id'] == 1) {
-            header("Location: nachrichten.php");
+            header("Location: /nachrichten.php");
             exit;
         }
 
-        header("Location: dorf1.php");
+        header("Location: /dorf1.php");
         exit;
     }
 
@@ -242,6 +244,7 @@ function __construct() {
         $admin = false;
 
         $inAdmin = (strpos($_SERVER['REQUEST_URI'], '/Admin') !== false);
+        $this->inAdmin = $inAdmin;
 
         if (!$inAdmin && isset($_SESSION['username'])) {
             $user = $_SESSION['username'];
@@ -262,7 +265,7 @@ function __construct() {
                     'nachrichten.php', 'logout.php', 'statistiken.php',
                     'rules.php', 'karte.php', 'karte2.php', 'spieler.php'
                 ])) {
-                    header('Location: nachrichten.php');
+                    header('Location: /nachrichten.php');
                     exit;
                 }
             }
@@ -284,7 +287,7 @@ function __construct() {
         if ($this->access == BANNED &&
             !in_array(basename($_SERVER['PHP_SELF']), ['banned.php', 'nachrichten.php', 'rules.php'])) {
 
-            header('Location: banned.php');
+            header('Location: /banned.php');
             exit;
         }
     }
@@ -293,7 +296,7 @@ function __construct() {
         if (($_SESSION['ok'] ?? null) == 2 &&
             basename($_SERVER['PHP_SELF']) != 'maintenance.php') {
 
-            header('Location: maintenance.php');
+            header('Location: /maintenance.php');
             exit;
         }
     }
@@ -317,7 +320,7 @@ function __construct() {
                 )
             )
         ) {
-            header('Location: winner.php');
+            header('Location: /winner.php');
             exit;
         }
     }
@@ -332,7 +335,7 @@ function __construct() {
 
         if (!count($this->villages)) {
             $this->Logout();
-            header('Location: login.php');
+            header('Location: /login.php');
             exit;
         }
 
@@ -486,6 +489,18 @@ function __construct() {
      */
     private function SurfControl() {
 
+        // Bug fix: GameEngine/Admin/Mods/*.php scripts (addUsers.php, gold.php,
+        // cp.php, editResources.php, ...) are POSTed to directly and already
+        // enforce their own access-level guard (access >= 9) plus CSRF. They
+        // are not "pages" in the player-facing $pagearray sense below, and
+        // routing them through this player login/page-redirect logic sent
+        // them to a relative "login.php" that resolved under
+        // GameEngine/Admin/Mods/ instead of the site root -> 404, regardless
+        // of whether the admin session was actually valid.
+        if ($this->inAdmin) {
+            return;
+        }
+
         $page = SERVER_WEB_ROOT
             ? $_SERVER['SCRIPT_NAME']
             : basename($_SERVER['SCRIPT_NAME']);
@@ -497,18 +512,18 @@ function __construct() {
 
         if (!$this->logged_in) {
             if (!in_array($page, $pagearray) || $page == "logout.php") {
-                header("Location: login.php");
+                header("Location: /login.php");
                 exit;
             }
         } else {
             if (in_array($page, $pagearray)) {
 
                 if (($this->uid ?? 0) == 1) {
-                    header("Location: nachrichten.php");
+                    header("Location: /nachrichten.php");
                     exit;
                 }
 
-                header("Location: dorf1.php");
+                header("Location: /dorf1.php");
                 exit;
             }
         }

@@ -3,14 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       cel.php                                                     ##
-##  Developed by:  G3n3s!s & JimJam & LoppyLukas                               ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : cel.php                         	                       ##
+##  Type           : Data Page for Celebration                                 ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : G3n3s!s & JimJam & LoppyLukas 						       ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 /**

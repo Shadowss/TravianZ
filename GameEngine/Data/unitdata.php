@@ -1,15 +1,23 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       unitdata.php                                                ##
-##  Developed by:  Akakori                                                     ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : unitdata.php                      	                       ##
+##  Type           : Data Page for Units                                       ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki 						                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $unitsbytype=array('infantry'=>array(1,2,3,11,12,13,14,21,22,31,32,33,34,41,42,43,44),'cavalry'=>array(4,5,6,15,16,23,24,25,26,35,36,45,46),'siege'=>array(7,8,17,18,27,28,37,38,47,48),'ram'=>array(7,17,27,47),'catapult'=>array(8,18,28,48),'expansion'=>array(9,10,19,20,29,30,39,40,49,50),'scout'=>array(4,14,23,44),'chief'=>array(9,19,29,49));

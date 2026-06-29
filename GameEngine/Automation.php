@@ -92,7 +92,7 @@ class Automation {
         
         $methodsArrays = ["culturePoints", "updateHero", "clearDeleting", "buildComplete",
         				  "demolitionComplete", "marketComplete", "researchComplete",
-        				  "trainingComplete", "starvation", "celebrationComplete",
+        				  "trainingComplete", "starvation", "celebrationComplete", "festivalComplete",
         				  "sendUnitsComplete", "loyaltyRegeneration", "sendreinfunitsComplete",
         				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
         				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts"];
@@ -1268,7 +1268,17 @@ class Automation {
 
             $reducedLoyalty /= $battlepart['moralBonus'];
 
-            if ($owntribe == 2 && $this->getTypeLevel(35, $data['from']) > 0) $reducedLoyalty /= 2;
+            // Bug fix: Brewery (35) is capital-only but empire-wide — its effect
+            // must be checked on the attacker's CAPITAL, not on $data['from'] (the
+            // launching village, which may not be the capital at all), and only
+            // while a Mead-Festival is actually active there, not just because
+            // the Brewery has been built (it has no permanent effect).
+            if ($owntribe == 2) {
+                $attackerCapital = $database->getVillage($from['owner'], 3);
+                if ($attackerCapital && (int)$attackerCapital['festival'] > $time && $this->getTypeLevel(35, $attackerCapital['wref']) > 0) {
+                    $reducedLoyalty /= 2;
+                }
+            }
 
             $reducedLoyaltyTotal += $reducedLoyalty;
         }
@@ -4175,6 +4185,20 @@ class Automation {
             $cp = ($type == 1) ? 500 : 2000;           
             $database->clearCel($id);
             $database->setCelCp($user, $cp);
+        }
+    }
+
+    /**
+     * Expires Mead-Festivals (Brewery, building 35). Unlike celebrationComplete()
+     * this grants no reward — the festival only gated the temporary combat
+     * bonus / chief penalty / catapult randomization while it was active.
+     */
+    private function festivalComplete() {
+        global $database;
+
+        $varray = $database->getFestivals();
+        foreach($varray as $vil){
+            $database->clearFestival($vil['wref']);
         }
     }
 
