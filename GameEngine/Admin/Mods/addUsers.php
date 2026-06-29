@@ -73,6 +73,17 @@ $chooseTribe = function(int $postTribe) {
     return max(1, min(3, $postTribe));
 };
 
+/* ===================== FIX UNIT BUG ===================== */
+
+function ensureUnitsRow($wid) {
+    $q = mysqli_query($GLOBALS["link"], "SELECT vref FROM ".TB_PREFIX."units WHERE vref=".(int)$wid);
+    if (mysqli_num_rows($q) == 0) {
+        mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."units (vref) VALUES (".(int)$wid.")");
+    }
+}
+
+/* ===================== CREATE VILLAGE ===================== */
+
 // convenience closure: builds/units/resources for one village
 $createVillage = function(int $uid, string $villageName, int $tribe, bool $isCapital) use ($database, $automation, $wgarray) : int {
     // Random quad
@@ -106,14 +117,19 @@ $createVillage = function(int $uid, string $villageName, int $tribe, bool $isCap
     $automation->recountPop($wid);
 
     // units: random per tribe (same as your code)
-    $q = "UPDATE " . TB_PREFIX . "units SET
-            u".(($tribe-1)*10+1)." = ".rand(100, 2000).",
-            u".(($tribe-1)*10+2)." = ".rand(100, 2400).",
-            u".(($tribe-1)*10+3)." = ".rand(100, 1600).",
-            u".(($tribe-1)*10+4)." = ".rand(100, 1500).",
-            u".(($tribe-1)*10+5)." = ".rand(48, 1700).",
-            u".(($tribe-1)*10+6)." = ".rand(60, 1800)."
-          WHERE vref = '".$wid."'";
+    /* ===================== FIX HERE ===================== */
+    ensureUnitsRow($wid);
+
+    $offset = ($tribe-1)*10;
+
+    $q = "UPDATE ".TB_PREFIX."units SET
+        u".($offset+1)." = ".rand(100, 2000).",
+        u".($offset+2)." = ".rand(100, 2400).",
+        u".($offset+3)." = ".rand(100, 1600).",
+        u".($offset+4)." = ".rand(100, 1500).",
+        u".($offset+5)." = ".rand(48, 1700).",
+        u".($offset+6)." = ".rand(60, 1800)."
+        WHERE vref = ".(int)$wid;
     mysqli_query($GLOBALS["link"], $q) or die(mysqli_error($database->dblink));
 
     return $wid;
@@ -132,9 +148,6 @@ if ($mode === 'many_accounts') {
 
     $created = 0;
     $skipped = 0;
-    $addUnitsWrefs = [];
-    $addTechWrefs  = [];
-    $addABTechWrefs= [];
 
     for ($i=1; $i <= $amount; $i++) {
         $userName = $baseName . $i;
@@ -166,9 +179,9 @@ if ($mode === 'many_accounts') {
         $villageName = $userName . "'s village";
         $wid = $createVillage($uid, $villageName, $tribe, true);
 
-        $addUnitsWrefs[]  = $wid;
-        $addTechWrefs[]   = $wid;
-        $addABTechWrefs[] = $wid;
+        $database->addUnits([$wid]);
+        $database->addTech([$wid]);
+        $database->addABTech([$wid]);
 
         $database->updateUserField($uid,"access",USER,1);
 
@@ -223,29 +236,19 @@ if ($mode === 'single_with_villages') {
 
     $database->updateUserField($uid,"act","",1);
 
-    $addUnitsWrefs = [];
-    $addTechWrefs  = [];
-    $addABTechWrefs= [];
-
     for ($v=1; $v <= $villagesRequested; $v++) {
         $isCapital   = ($v === 1);
         $villageName = $userName . ($isCapital ? " (Capital)" : " #" . $v);
         $wid = $createVillage($uid, $villageName, $tribe, $isCapital);
 
-        $addUnitsWrefs[]  = $wid;
-        $addTechWrefs[]   = $wid;
-        $addABTechWrefs[] = $wid;
-
         // Set the first village as active/capital in the usual tables if your code expects it:
         if ($isCapital) {
             // ensure vdata.capital already 1; if you have any “default village” linkage, set that here.
         }
+		$database->addUnits([$wid]);
+        $database->addTech([$wid]);
+        $database->addABTech([$wid]);
     }
-
-    // Tech & ABTech for all villages
-    $database->addUnits($addUnitsWrefs);
-    $database->addTech($addTechWrefs);
-    $database->addABTech($addABTechWrefs);
 
     // Enable user after villages created
     $database->updateUserField($uid,"access",USER,1);
