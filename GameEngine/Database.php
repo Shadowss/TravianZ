@@ -1416,11 +1416,23 @@ class MYSQLi_DB implements IDbConnection {
                     break;
             }
 
+            // The four sectors must be mutually exclusive: any tile sitting on an
+            // axis (x = 0 or y = 0) used to satisfy two of the predicates below
+            // (e.g. "x <= 0" and "x >= 0" both matched x = 0). When a batch was
+            // spread over several sectors (WW villages, artifact villages),
+            // occupied = 0 was only flipped at the very end by setFieldTaken(),
+            // so two sectors could each pick the SAME axis tile and assign its
+            // wref to two villages. The duplicate addVillage() insert then hit
+            // the vdata PRIMARY KEY(wref) and aborted generateVillages() before
+            // setFieldTaken() ran, leaving the villages in vdata (visible in the
+            // Natars profile) but never marked on the map (issue #301). Using
+            // strict bounds on one side of each axis partitions the plane so a
+            // tile belongs to exactly one sector.
             switch($sector){
-                case 1: $newSector = "x <= 0 AND y >= 0"; break; // - | +       
-                case 2: $newSector = "x >= 0 AND y >= 0"; break; // + | +                   
-                case 3: $newSector = "x <= 0 AND y <= 0"; break; // - | -            
-                default: $newSector = "x >= 0 AND y <= 0"; // + | -                 
+                case 1: $newSector = "x < 0 AND y >= 0"; break; // - | +
+                case 2: $newSector = "x >= 0 AND y > 0"; break; // + | +
+                case 3: $newSector = "x <= 0 AND y < 0"; break; // - | -
+                default: $newSector = "x > 0 AND y <= 0"; // + | -
             }
 
             //Choose villages beetween two circumferences, by using their formula (x^2 + y^2 = r^2)
