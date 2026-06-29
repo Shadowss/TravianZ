@@ -209,13 +209,20 @@ if ($action === 'addSlot' && $lid) {
 
                             <select name="target_id">
                                 <?php
-                                $getwref = "SELECT movement.to, movement.ref, attacks.* 
+                                // Bug fix: previously selected one row per individual past raid
+                                // (no GROUP BY / ORDER BY), so the same target appeared once per
+                                // raid ever sent to it, in whatever order MySQL happened to return
+                                // rows. Group by target so each appears once, ordered by the most
+                                // recent raid time so the latest target is consistently last.
+                                $getwref = "SELECT movement.to, MAX(movement.endtime) AS last_endtime
                                             FROM ".TB_PREFIX."movement movement
                                             INNER JOIN ".TB_PREFIX."attacks attacks 
                                             ON attacks.id = movement.ref
                                             WHERE attacks.attack_type = 4 
                                             AND movement.proc = 1 
-                                            AND movement.from = ".$village->wid;
+                                            AND movement.from = ".$village->wid."
+                                            GROUP BY movement.to
+                                            ORDER BY last_endtime ASC";
 
                                 $arraywref = $database->query_return($getwref);
 
