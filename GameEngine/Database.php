@@ -4239,9 +4239,23 @@ class MYSQLi_DB implements IDbConnection {
         $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` IN($wrefs) AND sort_type = 4) OR (`from` IN($wrefs) AND sort_type = 3))";
         $this->query($q);
         $this->removeOases($wref, 1);
-        
-        $getmovement = $this->getMovement(3, $wref, 1);
-        
+
+        // In-flight attacks still heading for the deleted village(s) must be
+        // bounced straight home. Query them directly instead of using
+        // getMovement(3, $wref, 1): when passed an array, getMovement() returns
+        // the WHOLE movement cache (a map of "type.village.mode" => record list),
+        // not the flat record list this loop expects — so $movedata['moveid'] /
+        // ['starttime'] were NULL and the follow-up waves were never bounced,
+        // leaving them stuck at sort_type=3/proc=0 and looping forever once the
+        // village is gone. Pre-dates the sendunitsComplete() split (issue #298).
+        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks
+              WHERE ".TB_PREFIX."movement.`to` IN($wrefs)
+                AND ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND ".TB_PREFIX."movement.proc = 0
+                AND ".TB_PREFIX."movement.sort_type = 3
+              ORDER BY endtime ASC";
+        $getmovement = $this->mysqli_fetch_all(mysqli_query($this->dblink, $q));
+
         $moveIDs = [];
         $time = microtime(true);
         $types = [];
