@@ -64,9 +64,12 @@ function admin_input_id(array $source, string $key): ?int
  */
 function e(string $value): string
 {
-    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    // decode first prevents &amp;#39; / &#39; double encoding
+    return htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'),
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
 }
-
 /**
  * Whitelist-validate the ?p= parameter.
  * Returns the validated page string, or '' if not in the whitelist.
