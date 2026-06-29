@@ -2962,8 +2962,23 @@ class Automation {
             // cache instead of querying row by row
             $this->preloadBattleData($dataarray);
 
+            // tiles whose village was razed earlier in this same batch (issue #298)
+            $razedTargets = [];
+
             // calculate battles
             foreach($dataarray as $data) {
+                // If an earlier attack in this same batch razed the target village,
+                // its still-in-flight follow-up waves were already bounced straight
+                // home by DelVillage() (issue #298). Re-resolving them here would
+                // fight a now-deleted (phantom) village: getMInfo() returns NULL
+                // vdata columns, so the return trip is computed from a NULL wref
+                // (NULL coordinates) — yielding a bogus arrival time that strands
+                // the troops — and would also duplicate the bounce. Skip them.
+                if (isset($razedTargets[$data['to']])) {
+                    $data_num++;
+                    continue;
+                }
+
                 //set base things
 				$totaltraped_att = 0;
 				for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
@@ -3352,6 +3367,13 @@ class Automation {
 
                     // delete the target village if it was destroyed — extracted to handleVillageDestruction() [#155]
                     $this->handleVillageDestruction($village_destroyed, $can_destroy, $data, $to, $varray);
+
+                    // remember the razed tile so any follow-up wave still queued in
+                    // this same batch is skipped instead of fighting a phantom
+                    // (now-deleted) village — see the guard at the top of the loop (issue #298)
+                    if ($village_destroyed == 1 && $can_destroy == 1) {
+                        $razedTargets[$data['to']] = true;
+                    }
                 }else{
                     //units attack string for battleraport
                     $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
