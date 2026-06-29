@@ -154,13 +154,25 @@ class Profile {
         $name_raw = trim($link['name'] ?? '');
         $url_raw  = trim($link['url'] ?? '');
 
-        // name : without HTML, maximum 30 characters (as in the game), filtered through RemoveXSS
-        $name = $database->RemoveXSS(mb_substr(strip_tags($name_raw), 0, 30));
+        // Bug fix: RemoveXSS() calls htmlspecialchars() (&,<,>,",' -> entities).
+        // Every display site for these values ALREADY escapes correctly on output
+        // (links.tpl's safeHTML(), and preference.tpl's edit-row value=""), so
+        // encoding here too meant a saved "&" was stored as literal "&amp;" text
+        // in the DB, then got escaped AGAIN on redisplay — surviving one level of
+        // browser entity-decoding as visible "&amp;". Worse, it silently broke
+        // any saved link with a real query parameter after the first one (e.g.
+        // build.php?gid=16&t=99): the stored value no longer had a real "&"
+        // separator there, so "t" was never received as its own GET param.
+        // strip_tags() (for name) + mysqli_real_escape_string() (below, for SQL)
+        // are sufficient at save time; HTML-escaping belongs only at display time.
 
-        // url: accepts only http/https, max 120 characters, filtered through RemoveXSS
+        // name : without HTML, maximum 30 characters (as in the game)
+        $name = mb_substr(strip_tags($name_raw), 0, 30);
+
+        // url: accepts only http/https, max 120 characters
         $url = '';
         if ($url_raw !== '' && preg_match('#^https?://#i', $url_raw)) {
-            $url = $database->RemoveXSS(mb_substr($url_raw, 0, 120));
+            $url = mb_substr($url_raw, 0, 120);
         }
 
         // SQL: escape for SQL (keeping the current TravianZ style used in TravianZ)
