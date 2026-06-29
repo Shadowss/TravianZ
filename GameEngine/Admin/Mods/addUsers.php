@@ -28,12 +28,14 @@ include_once($autoprefix."GameEngine/Database.php");
 
 // Admin-rank guard (defense-in-depth). Reaching any file under /Admin already
 // requires an admin session: Session.php's checkLogin() gates the whole /Admin
+// #299: load CSRF helpers + admin_deny() before the access check below.
+require_once(__DIR__ . '/../csrf.php');
 // path on $_SESSION['admin_username'], so a plain player session is bounced to
 // login.php before this point. This re-check aligns addUsers with its sibling
 // Mods (gold.php, cp.php, editResources.php, ...), which all assert the rank
 // here too; it is a redundant safety net, not the sole guard.
 if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
-    die("Access Denied: You are not Admin!");
+    admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
 }
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
