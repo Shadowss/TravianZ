@@ -42,7 +42,7 @@
 </table>
 
 <img id="big_unit" class="big_u6" src="img/x.gif" alt="<?php echo U6; ?>" title="<?php echo U6; ?>" /><div id="t_desc"><?php echo MANUAL_UDESC_6; ?></div>
-<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> <?php echo LEVEL; ?> 10, <a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a> <?php echo LEVEL; ?> 5</div>
+<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> <?php echo LEVEL; ?> 10, <a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a> <?php echo LEVEL; ?> 15</div>
 <map id="nav" name="nav">
     <area href="manual.php?typ=1&amp;s=5" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
