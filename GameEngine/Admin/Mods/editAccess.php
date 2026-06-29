@@ -8,8 +8,10 @@
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+// #299: load CSRF helpers + admin_deny() before the access check below.
+require_once(__DIR__ . '/../csrf.php');
 if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+if($_SESSION['access'] < 9) admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
 // itself (it does not go through admin.php's central csrf_verify()).
@@ -37,7 +39,7 @@ $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id
 $access = mysqli_fetch_array($sql);
 $sessionaccess = $access['access'];
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+if($sessionaccess != 9) admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
 
 // Cast + whitelist the access level. $_POST['access'] was injected raw into
 // the UPDATE below (SQL injection). Only accept the values the admin form
