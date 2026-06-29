@@ -97,6 +97,41 @@ foreach ($varray as $vil) {
 	foreach ($cropholder as $f)  $prod_crop += $bid4[$vresarray[$f]]['prod'];
 
 	// ==========================================================
+	// OASIS
+	// Bug fix: $oasisowned was fetched but never applied — this is the
+	// "time to overflow" timer's own, independent recomputation of the
+	// production rate (used only for display here), and it silently
+	// excluded oasis bonuses entirely. Village::getCropProd()/getWoodProd()
+	// etc. (which actually grow the stored resource in the DB on every
+	// page load via processProduction()) DO add a flat 25% per matching
+	// oasis (Village::sortOasis()), so the real stockpile was growing
+	// faster than this timer's denominator assumed — understating the
+	// rate, and therefore overstating the time remaining. Mirrored here
+	// with the same counting + application order (oasis bonus on the raw
+	// field total, THEN the building bonus below on top of that), so this
+	// rate matches the one actually used to fill the storage.
+	// ==========================================================
+	$oasisowned = $database->getOasis($vid);
+	$ocounter = [0, 0, 0, 0]; // wood, clay, iron, crop
+	foreach ($oasisowned as $oasis) {
+		switch ($oasis['type']) {
+			case 1: case 2: $ocounter[0]++; break;
+			case 3: $ocounter[0]++; $ocounter[3]++; break;
+			case 4: case 5: $ocounter[1]++; break;
+			case 6: $ocounter[1]++; $ocounter[3]++; break;
+			case 7: case 8: $ocounter[2]++; break;
+			case 9: $ocounter[2]++; $ocounter[3]++; break;
+			case 10: case 11: $ocounter[3]++; break;
+			case 12: $ocounter[3] += 2; break;
+		}
+	}
+
+	$prod_wood += $prod_wood * 0.25 * $ocounter[0];
+	$prod_clay += $prod_clay * 0.25 * $ocounter[1];
+	$prod_iron += $prod_iron * 0.25 * $ocounter[2];
+	$prod_crop += $prod_crop * 0.25 * $ocounter[3];
+
+	// ==========================================================
 	// BONUS BUILDINGS
 	// ==========================================================
 	if ($sawmill >= 1)
@@ -115,11 +150,6 @@ foreach ($varray as $vil) {
 
 		$prod_crop += ($prod_crop / 100) * $bonus;
 	}
-
-	// ==========================================================
-	// OASIS (placeholder logic păstrat)
-	// ==========================================================
-	$oasisowned = $database->getOasis($vid);
 
 	// ==========================================================
 	// PLUS ACCOUNT BONUS
