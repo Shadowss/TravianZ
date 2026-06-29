@@ -2967,18 +2967,6 @@ class Automation {
 
             // calculate battles
             foreach($dataarray as $data) {
-                // If an earlier attack in this same batch razed the target village,
-                // its still-in-flight follow-up waves were already bounced straight
-                // home by DelVillage() (issue #298). Re-resolving them here would
-                // fight a now-deleted (phantom) village: getMInfo() returns NULL
-                // vdata columns, so the return trip is computed from a NULL wref
-                // (NULL coordinates) — yielding a bogus arrival time that strands
-                // the troops — and would also duplicate the bounce. Skip them.
-                if (isset($razedTargets[$data['to']])) {
-                    $data_num++;
-                    continue;
-                }
-
                 //set base things
 				$totaltraped_att = 0;
 				for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
@@ -3029,6 +3017,29 @@ class Automation {
                     $wallid       = $vt['wallid'];
                     $tblevel      = $vt['tblevel'];
                     $stonemason   = $vt['stonemason'];
+
+                    // Issue #298: the target village no longer exists — it was razed
+                    // either earlier in this same batch ($razedTargets), or in an
+                    // earlier tick whose still-in-flight follow-up waves DelVillage()
+                    // failed to bounce. getMInfo() then returns NULL vdata columns
+                    // ($to['wref'] is NULL), so resolving a battle here would fight a
+                    // phantom village and compute the return trip from NULL coordinates
+                    // — a bogus arrival time that strands the troops in an endless loop
+                    // (report against "[?]"). Bounce the whole army straight home
+                    // instead, exactly like DelVillage() does for in-flight attacks,
+                    // and mark the movement processed so it stops being re-fetched.
+                    if (isset($razedTargets[$data['to']]) || empty($to['wref'])) {
+                        // only own the bounce if DelVillage() hasn't already handled it
+                        // (setMovementProc() returns true only when it flips proc 0->1),
+                        // so we never create a duplicate return movement
+                        if ($this->setMovementProc($data['moveid'])) {
+                            $bounceTime = $units->getWalkingTroopsTime($from['wref'], $data['to'], $from['owner'], $owntribe, $data, 1, 't');
+                            $bounceEnd  = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $bounceTime) + $AttackArrivalTime;
+                            $database->addMovement(4, $data['to'], $from['wref'], $data['ref'], $AttackArrivalTime, $bounceEnd);
+                        }
+                        $data_num++;
+                        continue;
+                    }
 
                     $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $vt['evasion'], $vt['maxevasion'], $vt['gold'], $vt['cannotsend'], $dataarray[$data_num]['attack_type']);
 
@@ -3369,8 +3380,11 @@ class Automation {
                     $this->handleVillageDestruction($village_destroyed, $can_destroy, $data, $to, $varray);
 
                     // remember the razed tile so any follow-up wave still queued in
-                    // this same batch is skipped instead of fighting a phantom
-                    // (now-deleted) village — see the guard at the top of the loop (issue #298)
+                    // this same batch bounces home instead of fighting a phantom
+                    // (now-deleted) village. Needed on top of the $to['wref'] check
+                    // because getMInfo() is cached: a same-batch wave would still see
+                    // the stale "alive" village row — see the guard right after
+                    // resolveVillageTarget() (issue #298).
                     if ($village_destroyed == 1 && $can_destroy == 1) {
                         $razedTargets[$data['to']] = true;
                     }
