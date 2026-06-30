@@ -126,7 +126,7 @@ function __construct() {
     if($maint['active'] == 1 && $this->access < 9) {
         // evita loop infinit
         if(strpos($_SERVER['PHP_SELF'], 'maintenance.php') === false) {
-            header('Location: /maintenance.php');
+            header('Location: maintenance.php');
             exit;
         }
     }
@@ -197,11 +197,11 @@ function __construct() {
         $logging->addLoginLog($dbarray['id'], \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'));
 
         if ($dbarray['id'] == 1) {
-            header("Location: /nachrichten.php");
+            header("Location: nachrichten.php");
             exit;
         }
 
-        header("Location: /dorf1.php");
+        header("Location: dorf1.php");
         exit;
     }
 
@@ -265,7 +265,7 @@ function __construct() {
                     'nachrichten.php', 'logout.php', 'statistiken.php',
                     'rules.php', 'karte.php', 'karte2.php', 'spieler.php'
                 ])) {
-                    header('Location: /nachrichten.php');
+                    header('Location: nachrichten.php');
                     exit;
                 }
             }
@@ -287,7 +287,7 @@ function __construct() {
         if ($this->access == BANNED &&
             !in_array(basename($_SERVER['PHP_SELF']), ['banned.php', 'nachrichten.php', 'rules.php'])) {
 
-            header('Location: /banned.php');
+            header('Location: banned.php');
             exit;
         }
     }
@@ -296,7 +296,7 @@ function __construct() {
         if (($_SESSION['ok'] ?? null) == 2 &&
             basename($_SERVER['PHP_SELF']) != 'maintenance.php') {
 
-            header('Location: /maintenance.php');
+            header('Location: maintenance.php');
             exit;
         }
     }
@@ -320,7 +320,7 @@ function __construct() {
                 )
             )
         ) {
-            header('Location: /winner.php');
+            header('Location: winner.php');
             exit;
         }
     }
@@ -335,7 +335,7 @@ function __construct() {
 
         if (!count($this->villages)) {
             $this->Logout();
-            header('Location: /login.php');
+            header('Location: login.php');
             exit;
         }
 
@@ -512,18 +512,18 @@ function __construct() {
 
         if (!$this->logged_in) {
             if (!in_array($page, $pagearray) || $page == "logout.php") {
-                header("Location: /login.php");
+                header("Location: login.php");
                 exit;
             }
         } else {
             if (in_array($page, $pagearray)) {
 
                 if (($this->uid ?? 0) == 1) {
-                    header("Location: /nachrichten.php");
+                    header("Location: nachrichten.php");
                     exit;
                 }
 
-                header("Location: /dorf1.php");
+                header("Location: dorf1.php");
                 exit;
             }
         }
