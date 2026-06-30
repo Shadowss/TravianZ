@@ -290,7 +290,7 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 <tbody><tr>
 <td valign="top"><?php foreach($wonders as $w) echo htmlspecialchars($w['village'])." (".$w['level'].")<br>"; if(empty($wonders)) echo "-";?></td>
 <td valign="top"><?php foreach($wonders as $w) echo $w['level']."<br>"; if(empty($wonders)) echo "-";?></td>
-<td valign="top"><?php foreach($artefacts as $a) echo htmlspecialchars($a['name'])." - ".htmlspecialchars($a['username']??'Natura')."<br>"; if(empty($artefacts)) echo "-";?></td>
+<td valign="top"><?php foreach($artefacts as $a) echo htmlspecialchars($a['name'])." - ".htmlspecialchars($a['username']??'Natars')."<br>"; if(empty($artefacts)) echo "-";?></td>
 </tr></tbody>
 </table>
 <br />

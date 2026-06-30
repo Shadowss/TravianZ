@@ -1725,7 +1725,7 @@ KEY `starv` (`starv`),
 KEY `loyalty` (`loyalty`),
 KEY `exp1` (`exp1`),
 KEY `exp2` (`exp2`),
-KEY `exp3` (`exp3`)
+KEY `exp3` (`exp3`),
 KEY `idx_owner_wref` (`owner`, `wref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1857,3 +1857,17 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%debug_log` (
 --
 INSERT INTO `%PREFIX%debug_log` (`id`, `active`, `lvl_warning`, `lvl_notice`, `lvl_deprecated`, `lvl_fatal`, `max_size_mb`, `auto_off_hours`, `started_by`, `started_at`) VALUES
 (1, 0, 1, 1, 1, 1, 5, 6, NULL, NULL);
+
+--
+-- Table structure for table `%PREFIX%milestones`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%milestones` (
+  `type` varchar(20) NOT NULL COMMENT 'settle2,pop1000,artefact,ww,plan',
+  `uid` int(11) NOT NULL,
+  `username` varchar(64) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`type`),
+  KEY `uid` (`uid`),
+  KEY `time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
