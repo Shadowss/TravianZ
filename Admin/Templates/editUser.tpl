@@ -108,6 +108,8 @@ select.dropdown { width:100%; }
                             <option value="1" <?php if($user['tribe']==1)echo"selected"; ?>>1. Roman</option>
                             <option value="2" <?php if($user['tribe']==2)echo"selected"; ?>>2. Teuton</option>
                             <option value="3" <?php if($user['tribe']==3)echo"selected"; ?>>3. Gaul</option>
+							<option value="4" <?php if($user['tribe']==4)echo"selected"; ?>>4. Nature</option>
+							<option value="5" <?php if($user['tribe']==5)echo"selected"; ?>>5. Natars</option>
                         </select>
                     </div>
                     <div class="form-row">
