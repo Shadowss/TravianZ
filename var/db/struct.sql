@@ -1712,7 +1712,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `evasion` tinyint(1) NULL DEFAULT '0',
 PRIMARY KEY (`wref`),
 KEY `owner-capital-pop` (`owner`,`capital`,`pop`),
-  KEY `owner_pop` (`owner`,`pop`),
+KEY `owner_pop` (`owner`,`pop`),
 KEY `maxstore` (`maxstore`),
 KEY `maxcrop` (`maxcrop`),
 KEY `celebration` (`celebration`),
@@ -1726,6 +1726,7 @@ KEY `loyalty` (`loyalty`),
 KEY `exp1` (`exp1`),
 KEY `exp2` (`exp2`),
 KEY `exp3` (`exp3`)
+KEY `idx_owner_wref` (`owner`, `wref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

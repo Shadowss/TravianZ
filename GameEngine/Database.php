@@ -8904,29 +8904,29 @@ References: User ID/Message ID, Mode
     	return mysqli_query($this->dblink, $q);
     }
 
-public function getMaintenance() {
-    $q = "SELECT * FROM ".TB_PREFIX."maintenance WHERE id=1 LIMIT 1";
-    $res = $this->query_return($q);
+	public function getMaintenance() {
+		$q = "SELECT * FROM ".TB_PREFIX."maintenance WHERE id=1 LIMIT 1";
+		$res = $this->query_return($q);
     return $res[0]?? ['active'=>0];
-}
-public function setMaintenance($active, $uid=0) {
-    $time = time();
-    $active = (int)$active;
-    $uid = (int)$uid;
+	}
+	public function setMaintenance($active, $uid=0) {
+		$time = time();
+		$active = (int)$active;
+		$uid = (int)$uid;
     // REPLACE creează rândul dacă nu există
-    return $this->query("REPLACE INTO ".TB_PREFIX."maintenance
+		return $this->query("REPLACE INTO ".TB_PREFIX."maintenance
         (id, active, started_by, started_at)
         VALUES (1, $active, $uid, $time)");
-}
+	}
 
-/**
- * Debug error-log mode (admin-controlled, transparent to players).
- * Returns the single config row, falling back to safe defaults when the
- * table does not exist yet (so deploying the code before creating the table
- * never produces a blank page).
- */
-public function getDebugMode() {
-    $default = [
+	/**
+	* Debug error-log mode (admin-controlled, transparent to players).
+	* Returns the single config row, falling back to safe defaults when the
+	* table does not exist yet (so deploying the code before creating the table
+	* never produces a blank page).
+	*/
+	public function getDebugMode() {
+		$default = [
         'active'         => 0,
         'lvl_warning'    => 1,
         'lvl_notice'     => 1,
@@ -8949,22 +8949,22 @@ public function getDebugMode() {
     }
 }
 
-/**
- * Toggle the debug mode on/off (stamps who/when on activation).
- */
-public function setDebugMode($active, $uid = 0) {
-    $active = (int)$active;
-    $uid    = (int)$uid;
-    $time   = time();
+	/**
+	* Toggle the debug mode on/off (stamps who/when on activation).
+	*/
+	public function setDebugMode($active, $uid = 0) {
+		$active = (int)$active;
+		$uid    = (int)$uid;
+		$time   = time();
     return $this->query("UPDATE ".TB_PREFIX."debug_log
         SET active = $active, started_by = $uid, started_at = $time
         WHERE id = 1");
-}
+	}
 
-/**
- * Persist the debug capture parameters (levels, size cap, auto-off window).
- */
-public function setDebugSettings($warning, $notice, $deprecated, $fatal, $maxSizeMb, $autoOffHours) {
+	/**
+	* Persist the debug capture parameters (levels, size cap, auto-off window).
+	*/
+	public function setDebugSettings($warning, $notice, $deprecated, $fatal, $maxSizeMb, $autoOffHours) {
     $warning      = $warning ? 1 : 0;
     $notice       = $notice ? 1 : 0;
     $deprecated   = $deprecated ? 1 : 0;
@@ -8984,13 +8984,40 @@ public function setDebugSettings($warning, $notice, $deprecated, $fatal, $maxSiz
      * @param int $wref The village ID that will became the new capital
      * @return bool Return true if the query was successful, false otherwise
      */
-    
-    function changeCapital($wref, $mode = 1){
-    	list($wref, $mode) = $this->escape_input($wref, $mode);
-    	
-    	$q = "UPDATE ".TB_PREFIX."vdata SET capital = ".$mode." WHERE wref = $wref";
-    	return mysqli_query($this->dblink, $q);
+	
+	function changeCapital($wref, $mode = 1) {
+    list($wref, $mode) = $this->escape_input($wref, $mode);
+
+    $wref = (int)$wref;
+    $mode = (int)$mode;
+
+    // We retrieve the owner of the current village.
+    $owner = (int)$this->getVillageField($wref, 'owner');
+
+    if ($owner <= 0) {
+        return false;
     }
+
+    // if we are setting a new capital
+    if ($mode == 1) {
+
+        // 1. We reset ALL capitals of that owner (VERY fast)
+        mysqli_query(
+            $this->dblink,
+            "UPDATE " . TB_PREFIX . "vdata 
+             SET capital = 0 
+             WHERE owner = $owner"
+        );
+    }
+
+    // 2. we set the new capital
+    return mysqli_query(
+        $this->dblink,
+        "UPDATE " . TB_PREFIX . "vdata 
+         SET capital = $mode 
+         WHERE wref = $wref"
+    );
+}
 };
 
 
