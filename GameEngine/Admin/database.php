@@ -178,24 +178,50 @@ class adm_DB {
         return $r['id'];
     }
 
-    function AddVillage($post) {
-        global $database;
-        $wid = $this->getWref($post['x'], $post['y']);
-        $uid = (int)$post['uid'];
-        $status = $database->getVillageState($wid);
-        $status = 0;
-        if ($status == 0) {
-            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,". (int)$_SESSION['id']. ",'Added new village <b><a href=\'admin.php?p=village&did=$wid\'>$wid</a></b> to user <b><a href=\'admin.php?p=player&uid=$uid\'>$uid</a></b>',". time(). ")");
-            $database->setFieldTaken($wid);
-            $username = $database->getUserArray($uid, 1);
-            $username = $username['username'];
-            $database->addVillage($wid, $uid, $username, '0');
-            $database->addResourceFields($wid, $database->getVillageType($wid, false));
-            $database->addUnits($wid);
-            $database->addTech($wid);
-            $database->addABTech($wid);
+	function AddVillage($post) {
+		global $database;
+
+    $wid = $this->getWref($post['x'], $post['y']);
+    $uid = (int)$post['uid'];
+    $status = $database->getVillageState($wid);
+    $status = 0;
+
+    if ($status == 0) {
+        $database->setFieldTaken($wid);
+
+        $user = $database->getUserArray($uid, 1);
+        $username = $user['username'];
+
+        $database->addVillage($wid, $uid, $username, '0');
+        $database->addResourceFields($wid, $database->getVillageType($wid, false));
+        $database->addUnits($wid);
+        $database->addTech($wid);
+        $database->addABTech($wid);
+
+        /* ---------------- Admin log ---------------- */
+        $villageName = $database->getVillageField($wid, 'name');
+        if (empty($villageName) || $villageName == '?') {
+            $villageName = $username . "'s village";
         }
+
+        $villageNameSafe = htmlspecialchars($villageName, ENT_QUOTES, 'UTF-8');
+        $userNameSafe = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
+
+        $logText = "Added new village <b><a href='admin.php?p=village&did=$wid'>$villageNameSafe</a></b> to user <b><a href='admin.php?p=player&uid=$uid'>$userNameSafe</a></b>";
+        $logEsc = $database->escape($logText);
+
+        mysqli_query(
+            $this->connection,
+            "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`)
+             VALUES (
+                 0,
+                 " . (int)$_SESSION['id'] . ",
+                 '$logEsc',
+                 " . time() . "
+             )"
+        );
     }
+}
 
     /* ---------------- Pedepsire jucător ---------------- */
 
