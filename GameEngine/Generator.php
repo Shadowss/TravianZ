@@ -98,8 +98,16 @@ class MyGenerator
 
 			$tSquareLevel = $database->getFieldLevelInVillage($vid, 14);
 
-			if ($tSquareLevel > 0 && $distance >= TS_THRESHOLD) {
-				$speed *= ($bid14[$tSquareLevel]['attri'] / 100);
+			if ($tSquareLevel > 0 && $distance >= TS_THRESHOLD && $speed > 0) {
+				// Tournament Square only speeds up the part of the journey
+				// beyond the threshold: the first TS_THRESHOLD tiles are walked
+				// at base speed and the remainder at the boosted speed.
+				// Multiplying the whole distance made far targets arrive sooner
+				// than near ones (issue #304).
+				$boostedSpeed = $speed * ($bid14[$tSquareLevel]['attri'] / 100);
+				$time = (TS_THRESHOLD / $speed) + (($distance - TS_THRESHOLD) / $boostedSpeed);
+
+				return round($time * 3600 / INCREASE_SPEED);
 			}
 		}
 
