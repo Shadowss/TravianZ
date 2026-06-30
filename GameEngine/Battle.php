@@ -844,24 +844,35 @@ class Battle {
     /******************************************************************
      * ATTACK / DEFENSE TOTAL
      ******************************************************************/
-    if ($AttackerWref != 0) {
+    $bonus = 0;
 
-        $typeLevel = $this->getTypeLevel(35, $AttackerWref);
+    // Brewery (35) Mead-Festival attack bonus: Teuton-only, capital-only but
+    // empire-wide, and active ONLY while a festival is running (72h). It must be
+    // read from the attacker's CAPITAL — $AttackerWref is the launching village,
+    // which usually has no Brewery — and gated on the festival being active,
+    // otherwise the bonus is permanent and never reacts to the festival being
+    // started/expired (issue #294). This mirrors the catapult-randomization gate
+    // in Units.php and the chief-penalty gate in Automation.php. The simulator
+    // passes AttackerID = 0, so it keeps a 0 bonus exactly as before.
+    if ($AttackerID != 0 && $att_tribe == 2) {
 
-        $bonus = isset($bid35[$typeLevel])
-            ? $bid35[$typeLevel]['attri']
-            : 0;
+        $attackerCapital = $database->getVillage($AttackerID, 3);
 
-        $rap = round(
-            ($ap + $cap) + (
-                (($ap + $cap) / 100) * $bonus
-            )
-        );
+        if ($attackerCapital && (int)$attackerCapital['festival'] > time()) {
 
-    } else {
+            $typeLevel = $this->getTypeLevel(35, $attackerCapital['wref']);
 
-        $rap = round($ap + $cap);
+            $bonus = isset($bid35[$typeLevel])
+                ? $bid35[$typeLevel]['attri']
+                : 0;
+        }
     }
+
+    $rap = round(
+        ($ap + $cap) + (
+            (($ap + $cap) / 100) * $bonus
+        )
+    );
 
     if ($rap == 0) {
 
