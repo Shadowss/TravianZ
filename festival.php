@@ -47,3 +47,4 @@ if($village->capital == 1 && $village->resarray['f'.$_GET['id'].'t'] == 35 && $s
 }
 header("Location: build.php?id=".$_GET['id']);
 exit;
+?>
