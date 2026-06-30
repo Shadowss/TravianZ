@@ -370,71 +370,183 @@ class adm_DB {
     }
 
     /* ---------------- Ștergere sat ---------------- */
-    function DelVillage($wref, $mode = 0) {
-        global $database;
-        $wref = (int)$wref;
-        if ($mode == 0) {
-            $q = "SELECT Count(*) as Total FROM ". TB_PREFIX. "vdata WHERE `wref` = $wref AND capital = 0";
-        } else {
-            $q = "SELECT Count(*) as Total FROM ". TB_PREFIX. "vdata WHERE `wref` = $wref";
+
+	function DelVillage($wref, $mode = 0) {
+    global $database;
+
+    $wref = (int)$wref;
+    $mode = (int)$mode;
+
+    // Check if village exist
+    if ($mode === 0) {
+        $q = "SELECT COUNT(*) AS Total
+              FROM " . TB_PREFIX . "vdata
+              WHERE wref = $wref AND capital = 0";
+    } else {
+        $q = "SELECT COUNT(*) AS Total
+              FROM " . TB_PREFIX . "vdata
+              WHERE wref = $wref";
+    }
+
+    $result = mysqli_fetch_assoc(mysqli_query($this->connection, $q));
+
+    if (empty($result['Total'])) {
+        return false;
+    }
+
+    // Log admin
+    mysqli_query(
+        $this->connection,
+        "INSERT INTO " . TB_PREFIX . "admin_log
+         VALUES (
+            0,
+            " . (int)$_SESSION['id'] . ",
+            'Deleted village <b>$wref</b>',
+            " . time() . "
+         )"
+    );
+
+    // clean expansion slots
+    $database->clearExpansionSlot($wref);
+
+    // tables
+    $tables = [
+        'abdata'   => 'vref',
+        'bdata'    => 'wid',
+        'market'   => 'vref',
+        'odata'    => 'wref',
+        'research' => 'vref',
+        'tdata'    => 'vref',
+        'fdata'    => 'vref',
+        'training' => 'vref',
+        'units'    => 'vref',
+        'farmlist' => 'wref'
+    ];
+
+    foreach ($tables as $table => $field) {
+        mysqli_query(
+            $this->connection,
+            "DELETE FROM " . TB_PREFIX . "$table
+             WHERE $field = $wref"
+        );
+    }
+
+    // delete raids and unprocessed movements
+    mysqli_query(
+        $this->connection,
+        "DELETE FROM " . TB_PREFIX . "raidlist
+         WHERE towref = $wref"
+    );
+
+    mysqli_query(
+        $this->connection,
+        "DELETE FROM " . TB_PREFIX . "movement
+         WHERE `from` = $wref AND proc = 0"
+    );
+
+    // mark coor as free
+    mysqli_query(
+        $this->connection,
+        "UPDATE " . TB_PREFIX . "wdata
+         SET occupied = 0
+         WHERE id = $wref"
+    );
+
+    // clean exp1/exp2/exp3 from other village
+    mysqli_query(
+        $this->connection,
+        "UPDATE " . TB_PREFIX . "vdata
+         SET
+            exp1 = IF(exp1 = $wref, 0, exp1),
+            exp2 = IF(exp2 = $wref, 0, exp2),
+            exp3 = IF(exp3 = $wref, 0, exp3)
+         WHERE
+            exp1 = $wref
+            OR exp2 = $wref
+            OR exp3 = $wref"
+    );
+
+    // come back all troops
+    $getmovement = $database->getMovement(3, $wref, 1);
+
+    foreach ($getmovement as $movedata) {
+        $time = microtime(true);
+        $time2 = $time - $movedata['starttime'];
+
+        $database->setMovementProc($movedata['moveid']);
+
+        $database->addMovement(
+            4,
+            $movedata['to'],
+            $movedata['from'],
+            $movedata['ref'],
+            $time,
+            $time + $time2
+        );
+    }
+
+    // come back reinforcements
+    $this->returnTroops($wref);
+
+    // delete village
+    mysqli_query(
+        $this->connection,
+        "DELETE FROM " . TB_PREFIX . "vdata
+         WHERE wref = $wref"
+    );
+
+    if (mysqli_affected_rows($this->connection) > 0) {
+
+        mysqli_query(
+            $this->connection,
+            "UPDATE " . TB_PREFIX . "wdata
+             SET occupied = 0
+             WHERE id = $wref"
+        );
+
+        // free the prisoners
+        $getprisoners = $database->getPrisoners($wref);
+
+        foreach ($getprisoners as $pris) {
+            $troops = 0;
+
+            for ($i = 1; $i < 12; $i++) {
+                $troops += (int)$pris['t' . $i];
+            }
+
+            $database->modifyUnit(
+                $pris['wref'],
+                ['99o'],
+                [$troops],
+                [0]
+            );
+
+            $database->deletePrisoners($pris['id']);
         }
 
-        $result = mysqli_fetch_array(mysqli_query($this->connection, $q), MYSQLI_ASSOC);
-        if ($result['Total'] > 0) {
-            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,". (int)$_SESSION['id']. ",'Deleted village <b>$wref</b>',". time(). ")");
+        $getprisoners = $database->getPrisoners3($wref);
 
-            $database->clearExpansionSlot($wref);
+        foreach ($getprisoners as $pris) {
+            $troops = 0;
 
-            $tables = ['abdata', 'bdata', 'market', 'odata', 'research', 'tdata', 'fdata', 'training', 'units', 'farmlist'];
-            foreach ($tables as $t) {
-                $field = ($t == 'bdata')? 'wid' : (($t == 'farmlist' || $t == 'market' || $t == 'research' || $t == 'tdata' || $t == 'fdata' || $t == 'training' || $t == 'abdata')? 'vref' : 'wref');
-                if ($t == 'odata') $field = 'wref';
-                mysqli_query($this->connection, "DELETE FROM ". TB_PREFIX. "$t WHERE $field = $wref");
-            }
-            mysqli_query($this->connection, "DELETE FROM ". TB_PREFIX. "raidlist WHERE towref = $wref");
-            mysqli_query($this->connection, "DELETE FROM ". TB_PREFIX. "movement WHERE `from` = $wref AND proc=0");
-            mysqli_query($this->connection, "UPDATE ". TB_PREFIX. "wdata SET occupied = 0 WHERE id = $wref");
-
-            // curăță sloturi expansiune
-            $q = "UPDATE ". TB_PREFIX. "vdata SET exp1 = IF(exp1 = $wref, 0, exp1), exp2 = IF(exp2 = $wref, 0, exp2), exp3 = IF(exp3 = $wref, 0, exp3) WHERE exp1 = $wref OR exp2 = $wref OR exp3 = $wref";
-            mysqli_query($this->connection, $q);
-
-            $getmovement = $database->getMovement(3, $wref, 1);
-            foreach ($getmovement as $movedata) {
-                $time = microtime(true);
-                $time2 = $time - $movedata['starttime'];
-                $database->setMovementProc($movedata['moveid']);
-                $database->addMovement(4, $movedata['to'], $movedata['from'], $movedata['ref'], $time, $time + $time2);
+            for ($i = 1; $i < 12; $i++) {
+                $troops += (int)$pris['t' . $i];
             }
 
-            $this->returnTroops($wref);
+            $database->modifyUnit(
+                $pris['wref'],
+                ['99o'],
+                [$troops],
+                [0]
+            );
 
-            mysqli_query($this->connection, "DELETE FROM ". TB_PREFIX. "vdata WHERE `wref` = $wref");
-
-            if (mysqli_affected_rows($this->connection) > 0) {
-                mysqli_query($this->connection, "UPDATE ". TB_PREFIX. "wdata SET occupied = 0 WHERE id = $wref");
-
-                $getprisoners = $database->getPrisoners($wref);
-                foreach ($getprisoners as $pris) {
-                    $troops = 0;
-                    for ($i = 1; $i < 12; $i++) {
-                        $troops += $pris['t'. $i];
-                    }
-                    $database->modifyUnit($pris['wref'], array("99o"), array($troops), array(0));
-                    $database->deletePrisoners($pris['id']);
-                }
-                $getprisoners = $database->getPrisoners3($wref);
-                foreach ($getprisoners as $pris) {
-                    $troops = 0;
-                    for ($i = 1; $i < 12; $i++) {
-                        $troops += $pris['t'. $i];
-                    }
-                    $database->modifyUnit($pris['wref'], array("99o"), array($troops), array(0));
-                    $database->deletePrisoners($pris['id']);
-                }
-            }
+            $database->deletePrisoners($pris['id']);
         }
     }
+
+    return true;
+}
+
 
     /* ---------------- Ban / Unban ---------------- */
     function DelBan($uid, $id) {
