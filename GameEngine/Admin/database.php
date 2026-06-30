@@ -676,8 +676,16 @@ class adm_DB {
         }
         $distance = SQRT(POW($xdistance, 2) + POW($ydistance, 2));
         $speed = $ref;
-        if ($this->getTypeLevel(14, $vid)!= 0 && $distance >= TS_THRESHOLD) {
-            $speed = $speed * ($bid14[$this->getTypeLevel(14, $vid)]['attri'] / 100);
+        $tSquareLevel = $this->getTypeLevel(14, $vid);
+
+        if ($tSquareLevel != 0 && $distance >= TS_THRESHOLD && $speed > 0) {
+            // Tournament Square only speeds up the part of the journey beyond
+            // the threshold (issue #304): the first TS_THRESHOLD tiles are
+            // walked at base speed and the remainder at the boosted speed.
+            $boostedSpeed = $speed * ($bid14[$tSquareLevel]['attri'] / 100);
+            $time = (TS_THRESHOLD / $speed) + (($distance - TS_THRESHOLD) / $boostedSpeed);
+
+            return round($time * 3600 / INCREASE_SPEED);
         }
 
         if ($speed!= 0) {
