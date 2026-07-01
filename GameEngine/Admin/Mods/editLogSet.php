@@ -20,7 +20,9 @@ csrf_verify();
 include_once("../../Database.php");
 $id = (int) $_POST['id'];
 
-if (!file_exists('constant_format.tpl')) {
+require_once(__DIR__ . '/config_template.php');
+
+if (!admin_config_template_available()) {
     die(
         'You seem to be running a new version of TravianZ which was installed using an old installer.<br />' .
         'Please download <strong>constant_format.tpl</strong> file and copy it into the <strong>GameEngine/Admin/Mods</strong> ' .
@@ -67,7 +69,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM = (NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MILESTONES = (NEW_FUNCTIONS_MILESTONES == false ? 'false' : 'true');
 
-		$text = file_get_contents("constant_format.tpl");
+		$text = admin_config_template_contents();
 		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
 		$text = preg_replace("'%ERROR%'", $ERRORREPORT, $text);
 		$text = preg_replace("'%SERVERNAME%'", SERVER_NAME, $text);
