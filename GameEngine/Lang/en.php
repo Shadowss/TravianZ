@@ -882,6 +882,7 @@ tz_def('STATISTICS', 'Statistics');
 tz_def('ALLIANCES', 'Alliances');
 tz_def('HEROES', 'Heroes');
 tz_def('GENERAL', 'General');
+tz_def('MILESTONES', 'Milestones');
 tz_def('OASIS', 'Oasis');
 tz_def('NO_OASIS', 'You do not own any oases.');
 tz_def('NO_VILLAGES', 'There are no villages.');
