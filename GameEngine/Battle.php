@@ -390,15 +390,19 @@ class Battle {
      ******************************************************************/
     foreach ($resourcearray as $key => $value) {
 
-        // faster than array_keys + strpos + preg_replace
+        // The building TYPE is stored in the 'f<n>t' columns of fdata (e.g. the
+        // Brewery on slot 20 is 'f20t' == 35); the matching level lives in 'f<n>'.
+        // Match on the 't' SUFFIX, not the first character — a previous rewrite
+        // tested $key[0] === 't', which never matched 'f<n>t' and made this
+        // return 0 for every building (issue #294: Brewery bonus never applied).
+        // Mirrors Building::getTypeLevel()/Automation::getTypeLevel().
         if (
             isset($value)
             && $value == $tid
-            && isset($key[0])
-            && $key[0] === 't'
+            && strpos($key, 't') !== false
         ) {
 
-            $keyholder[] = (int)substr($key, 1);
+            $keyholder[] = (int)preg_replace('/[^0-9]/', '', $key);
         }
     }
     $element = count($keyholder);
