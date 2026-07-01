@@ -48,10 +48,11 @@ $current = $level > 0 ? (int)$bid35[$level]['attri'] : 0;
         </tr>
         <?php endif;?>
     </table>
-
+	</br>
     <?php if ($level > 0):?>
         <?php include("35_1.tpl");?>
     <?php else:?>
+	</br>
         <p><b><?php echo MEAD_FESTIVAL_COMMENCE_BREWERY;?></b></p>
     <?php endif;?>
 

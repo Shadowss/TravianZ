@@ -116,6 +116,7 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
     <tr><td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">5 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td>Medal Veteran Player 10a <em class="tooltip">?<span class="classic">10 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
 	<tr><td>Special Medals<em class="tooltip">?<span class="classic">Special Medals</span></em></td><td><?php echo NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td>Server Milestones<em class="tooltip">?<span class="classic">Server Milestones</span></em></td><td><?php echo NEW_FUNCTIONS_MILESTONES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
   </table>
 </div>
 

@@ -24,7 +24,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 <style>
 .nat-wrap{max-width:1150px;margin:18px auto;font-family:Verdana;font-size:12px}
 .nat-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.nat-head h1{margin:0;font-size:18px;color:#2c3e50}
+.nat-head h1{margin:0;font-size:18px;color:#ffffff} /* MODIFICAT */
 .nat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:950px){.nat-grid{grid-template-columns:1fr}}
 .nat-card{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
@@ -35,7 +35,8 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 .nat-card button:hover{background:#1a68d1}
 .nat-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 .nat-table th{background:#34495e;color:#fff;padding:6px;text-align:left;font-weight:normal}
-.nat-table td{padding:6px;border-bottom:1px solid #eee;text-align:center}
+.nat-table td{padding:6px;border-bottom:1px solid #eee;text-align:center;color:#000000} /* MODIFICAT */
+.nat-table td a{color:#000000;text-decoration:none} /* ADAUGAT */
 .nat-table tr:hover{background:#f9f9f9}
 .nat-table td.icon img{width:20px;height:20px}
 .bon{color:#27ae60;font-weight:bold}

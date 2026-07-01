@@ -7854,6 +7854,78 @@ References: User ID/Message ID, Mode
 
         return $cachedData[$vref];
     }
+	
+	/**
+	 * =====================================================================
+	 * SERVER MILESTONES (NEW_FUNCTIONS_MILESTONES)
+	 * =====================================================================
+	 * "First player on the server to..." achievements. Each milestone_key
+	 * is recorded AT MOST ONCE, ever — the table's UNIQUE KEY on
+	 * milestone_key does the actual "first wins" enforcement at the DB
+	 * level via INSERT IGNORE, so this is race-condition-safe even if two
+	 * players' actions are processed in the same cron batch: only one
+	 * INSERT can ever succeed for a given key, no matter how many
+	 * processes attempt it concurrently.
+	 */
+
+	/**
+	 * Attempts to record a milestone. Only the very first call for a given
+	 * $key across the server's lifetime actually stores anything.
+	 *
+	 * @param string $key  Unique milestone identifier, e.g. 'second_village'
+	 * @param int    $uid  The user who achieved it
+	 * @param int    $vref The village where it happened (0 if not applicable)
+	 * @param string $extra Optional free-form context (e.g. alliance name)
+	 * @return bool true if THIS call is the one that recorded the milestone
+	 */
+	function recordMilestoneIfFirst($key, $uid, $vref = 0, $extra = '') {
+	    list($key, $extra) = $this->escape_input((string) $key, (string) $extra);
+	    list($uid, $vref) = [(int) $uid, (int) $vref];
+
+	    $time = time();
+	    $q = "INSERT IGNORE INTO " . TB_PREFIX . "milestones (milestone_key, uid, vref, extra, achieved_time)
+	          VALUES ('$key', $uid, $vref, '$extra', $time)";
+	    mysqli_query($this->dblink, $q);
+
+	    return mysqli_affected_rows($this->dblink) > 0;
+	}
+
+	/**
+	 * @return array All recorded milestones, keyed by milestone_key, each
+	 *               row enriched with the achiever's username and (if
+	 *               applicable) the village name.
+	 */
+	function getMilestones() {
+	    $q = "SELECT m.milestone_key, m.uid, m.vref, m.extra, m.achieved_time,
+	                 u.username, v.name AS village_name
+	          FROM " . TB_PREFIX . "milestones m
+	          LEFT JOIN " . TB_PREFIX . "users u ON u.id = m.uid
+	          LEFT JOIN " . TB_PREFIX . "vdata v ON v.wref = m.vref";
+	    $result = mysqli_query($this->dblink, $q);
+	    $rows = $this->mysqli_fetch_all($result);
+
+	    $byKey = [];
+	    foreach ($rows as $row) {
+	        $byKey[$row['milestone_key']] = $row;
+	    }
+	    return $byKey;
+	}
+
+	/**
+	 * @param int $uid
+	 * @return int How many villages this user currently owns. Deliberately
+	 *             uncached (always a fresh COUNT) since it's used right
+	 *             after a village INSERT to decide a one-time milestone.
+	 */
+	function countVillages($uid) {
+	    list($uid) = $this->escape_input((int) $uid);
+
+	    $q = "SELECT COUNT(*) AS total FROM " . TB_PREFIX . "vdata WHERE owner = $uid";
+	    $result = mysqli_query($this->dblink, $q);
+	    $row = mysqli_fetch_assoc($result);
+
+	    return $row ? (int) $row['total'] : 0;
+	}
 
 	function claimArtefact($vref, $ovref, $id) {
 	    list($vref, $ovref, $id) = $this->escape_input((int) $vref, (int) $ovref, (int) $id);
@@ -7863,7 +7935,23 @@ References: User ID/Message ID, Mode
 		
 		if(mysqli_query($this->dblink, $q))
 		{ 
-		    $artifactID = reset($this->getOwnArtefactInfo($vref, false))['id'];
+		    $artifactInfo = reset($this->getOwnArtefactInfo($vref, false));
+		    $artifactID = $artifactInfo['id'];
+
+		    // Milestones: first artifact EVER captured by any player (any
+		    // type, including the WW Building Plan), and — separately —
+		    // the first WW Building Plan (artefacts.type == 11) specifically.
+		    // claimArtefact() is the single function that transfers artifact
+		    // ownership (both the "conquer the artifact's own village" path
+		    // and the "hero carries it home" path call this), so hooking
+		    // here covers every capture route with no risk of missing one.
+		    if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES) {
+		        $this->recordMilestoneIfFirst('first_artifact', $id, $vref);
+		        if ((int)($artifactInfo['type'] ?? 0) === 11) {
+		            $this->recordMilestoneIfFirst('first_ww_plan', $id, $vref);
+		        }
+		    }
+
 		    return $this->addArtifactsChronology($artifactID, $id, $vref, $time);
 		}
 		else return false;
@@ -8985,39 +9073,34 @@ References: User ID/Message ID, Mode
      * @return bool Return true if the query was successful, false otherwise
      */
 	
-	function changeCapital($wref, $mode = 1) {
-    list($wref, $mode) = $this->escape_input($wref, $mode);
+    function changeCapital($wref, $mode = 1){
+    	list($wref, $mode) = $this->escape_input($wref, $mode);
 
-    $wref = (int)$wref;
-    $mode = (int)$mode;
+    	if ($mode == 1) {
+    	    // Bug fix: this function only ever did `SET capital = $mode WHERE
+    	    // wref = $wref` — it set the NEW capital's flag but never cleared
+    	    // any OTHER village belonging to the same owner that was already
+    	    // flagged capital = 1. Nothing enforces uniqueness at the schema
+    	    // level (no UNIQUE key on owner+capital), so after any capital
+    	    // change that doesn't delete the old village, the owner was left
+    	    // with two (or more) rows with capital = 1. This was harmless for
+    	    // years because nothing queried "owner=X AND capital=1" expecting
+    	    // a single row — until getVillage(..., 3) (added for the Brewery
+    	    // Mead-Festival empire-wide bonus lookup) started relying on that
+    	    // invariant, at which point a stale duplicate could be the row
+    	    // returned (no ORDER BY / LIMIT 1 on an ambiguous match), silently
+    	    // pointing Brewery's bonus/penalty checks at the wrong village.
+    	    $owner = $this->getVillageField($wref, 'owner');
+    	    if ($owner !== false && $owner !== null) {
+    	        $owner = (int) $owner;
+    	        $q = "UPDATE " . TB_PREFIX . "vdata SET capital = 0 WHERE owner = $owner AND wref != $wref";
+    	        mysqli_query($this->dblink, $q);
+    	    }
+    	}
 
-    // We retrieve the owner of the current village.
-    $owner = (int)$this->getVillageField($wref, 'owner');
-
-    if ($owner <= 0) {
-        return false;
+    	$q = "UPDATE ".TB_PREFIX."vdata SET capital = ".$mode." WHERE wref = $wref";
+    	return mysqli_query($this->dblink, $q);
     }
-
-    // if we are setting a new capital
-    if ($mode == 1) {
-
-        // 1. We reset ALL capitals of that owner (VERY fast)
-        mysqli_query(
-            $this->dblink,
-            "UPDATE " . TB_PREFIX . "vdata 
-             SET capital = 0 
-             WHERE owner = $owner"
-        );
-    }
-
-    // 2. we set the new capital
-    return mysqli_query(
-        $this->dblink,
-        "UPDATE " . TB_PREFIX . "vdata 
-         SET capital = $mode 
-         WHERE wref = $wref"
-    );
-}
 };
 
 

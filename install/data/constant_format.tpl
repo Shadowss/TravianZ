@@ -333,6 +333,7 @@ define("NEW_FUNCTIONS_MEDAL_3YEAR", %NEW_FUNCTIONS_MEDAL_3YEAR%);
 define("NEW_FUNCTIONS_MEDAL_5YEAR", %NEW_FUNCTIONS_MEDAL_5YEAR%);
 define("NEW_FUNCTIONS_MEDAL_10YEAR", %NEW_FUNCTIONS_MEDAL_10YEAR%);
 define("NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM", %NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%);
+define("NEW_FUNCTIONS_MILESTONES", %NEW_FUNCTIONS_MILESTONES%);
 
 
 //////////////////////////////////////////
@@ -392,7 +393,7 @@ $requse = 0;
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       config.php                                                  ##
-##  Version        4.8.5                                                       ##
+##  Version        10.0 Full Refactor & Security                               ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##

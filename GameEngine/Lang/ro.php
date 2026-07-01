@@ -2592,3 +2592,14 @@ define('MANUAL_NF_D_23', "Medalie acordată jucătorilor care folosesc aceeași 
 define('MANUAL_NF_D_24', "Medalie acordată jucătorilor care folosesc aceeași adresă de e-mail de 5 ani sau mai mult. Poate fi adăugată la descrierea profilului. Această funcție a fost prezentată în Travian T4.");
 define('MANUAL_NF_D_25', "Medalie acordată jucătorilor care folosesc aceeași adresă de e-mail de 10 ani sau mai mult. Poate fi adăugată la descrierea profilului. Această funcție a fost prezentată în Travian T4.");
 define('MANUAL_NF_D_26', "Medalie acordată jucătorilor care folosesc aceeași adresă de e-mail de 10 ani sau mai mult. Poate fi adăugată la descrierea profilului. Această funcție a fost prezentată în Travian T4.");
+
+// ===== Server Milestones (NEW_FUNCTIONS_MILESTONES) =====
+define('TZ_SERVER_MILESTONES', 'Recorduri de Server');
+define('TZ_MILESTONE_NOT_YET', 'Neatins încă');
+define('TZ_MILESTONE_SECOND_VILLAGE', 'Primul care a fondat al 2-lea sat');
+define('TZ_MILESTONE_POPULATION_1000', 'Primul care a atins 1.000 populație');
+define('TZ_MILESTONE_FIRST_ARTIFACT', 'Primul care a capturat un artefact');
+define('TZ_MILESTONE_FIRST_WW', 'Primul care a cucerit un Wonder of the World');
+define('TZ_MILESTONE_FIRST_WW_PLAN', 'Primul care a cucerit un Plan WW');
+define('TZ_MILESTONE_FIRST_ALLIANCE', 'Prima alianță fondată');
+define('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'Primul sat cucerit de la un jucător');

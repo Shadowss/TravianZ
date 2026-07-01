@@ -403,6 +403,12 @@ class Alliance {
         }
         $maxMembers = $bid18[$building->getTypeLevel(18)]['attri'];
         $aid = $database->createAlliance($tag, $name, $session->uid, $maxMembers);
+		
+		// Milestone: first alliance ever founded on the server.
+        if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES) {
+            $database->recordMilestoneIfFirst('first_alliance', $session->uid, 0, $tag . ' - ' . $name);
+        }
+		
         $database->updateUserField($session->uid, "alliance", $aid, 1);
         $database->procAllyPop($aid);
         $database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');

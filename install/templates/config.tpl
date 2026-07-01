@@ -206,7 +206,8 @@ $mechs = [
     'new_functions_medal_3year'           => 'Medal 3y',
     'new_functions_medal_5year'           => 'Medal 5y',
     'new_functions_medal_10year'          => 'Medal 10y',
-	'new_functions_special_medals_system' => 'Special Medals System'
+	'new_functions_special_medals_system' => 'Special Medals System',
+	'new_functions_milestones'            => 'Server Milestones'
 ];
 
 foreach($mechs as $k => $l){

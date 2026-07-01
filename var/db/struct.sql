@@ -1857,3 +1857,24 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%debug_log` (
 --
 INSERT INTO `%PREFIX%debug_log` (`id`, `active`, `lvl_warning`, `lvl_notice`, `lvl_deprecated`, `lvl_fatal`, `max_size_mb`, `auto_off_hours`, `started_by`, `started_at`) VALUES
 (1, 0, 1, 1, 1, 1, 5, 6, NULL, NULL);
+
+--
+-- Table structure for `%PREFIX%milestones`
+--
+-- Records server "first player to..." achievements (NEW_FUNCTIONS_MILESTONES).
+-- One row per milestone_key, EVER: the UNIQUE KEY makes the very first
+-- INSERT for a given key the permanent, race-condition-safe winner — any
+-- later attempt to insert the same key is silently ignored by the DB itself.
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%milestones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `milestone_key` varchar(50) NOT NULL,
+  `uid` int(11) NULL,
+  `vref` int(11) NULL DEFAULT '0',
+  `extra` varchar(100) NULL DEFAULT '',
+  `achieved_time` int(11) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `milestone_key` (`milestone_key`),
+  KEY `uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

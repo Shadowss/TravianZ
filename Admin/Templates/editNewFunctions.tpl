@@ -211,6 +211,17 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td class="b">Server Milestones <em class="tooltip">?<span class="classic">Enable (Disable) the "Server Milestones" widget (first player to settle a 2nd village, reach 1000 population, capture an artefact, conquer a WW, conquer a WW building plan, found an alliance, or conquer a village from another player) shown at the top of Statistics &raquo; General</span></em>
+                    <?php if (!defined('NEW_FUNCTIONS_MILESTONES')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
+                    </td>
+                    <td>
+                        <select name="new_functions_milestones">
+                            <option value="True" <?php if(defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTIONS_MILESTONES') || NEW_FUNCTIONS_MILESTONES == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

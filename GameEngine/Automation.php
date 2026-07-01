@@ -152,6 +152,23 @@ class Automation {
 		$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 		mysqli_query($database->dblink, $q);
 		$owner = $database->getVillageField($vid, "owner");
+		
+		// Milestone: first player ever to reach 1000 total population,
+		// summed across all their villages. recountPop() is the single
+		// funnel every population-changing event (building, demolishing,
+		// founding/conquering a village) already passes through, so this
+		// is the one place that's guaranteed to catch the threshold being
+		// crossed regardless of which village/action caused it.
+		// Excludes owner 3 (Natars) — see Artifacts::NATARS_UID — same
+		// convention already used elsewhere in this file (e.g. the
+		// "fix natar report by ronix" check a few hundred lines below).
+		if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES && $owner > 0 && $owner != 3) {
+			$totalPop = (int) $database->getVSumField($owner, 'pop', false);
+			if ($totalPop >= 1000) {
+				$database->recordMilestoneIfFirst('population_1000', $owner, $vid);
+			}
+		}
+		
 		$this->procClimbers($owner);
 
         return $popTot;
@@ -1304,6 +1321,23 @@ class Automation {
         }
 
         $database->setVillageFields($data['to'], ['loyalty', 'owner'], [0, $database->getVillageField($data['from'], 'owner')]);
+		
+		// Milestones: first WW village ever conquered, and — separately —
+        // first village ever conquered FROM ANOTHER PLAYER (not from
+        // Natars). $to is this function's own parameter (not re-fetched),
+        // so $to['natar']/$to['owner'] still reflect the village's state
+        // from BEFORE this conquest, which is exactly what we need here.
+        // natar==1 marks one of the 13 pre-built WW conquest targets (see
+        // Artifacts::createWWVillages()) — Natars' capital and artifact/
+        // plan villages are natar=0, so this check cannot misfire on those.
+        if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES) {
+            $newOwner = $database->getVillageField($data['from'], 'owner');
+            if ((int)($to['natar'] ?? 0) === 1) {
+                $database->recordMilestoneIfFirst('first_ww', $newOwner, $data['to']);
+            } elseif ((int)($to['owner'] ?? 0) !== 3) {
+                $database->recordMilestoneIfFirst('first_pvp_conquest', $newOwner, $data['to']);
+            }
+        }
 
         $database->query("DELETE FROM " . TB_PREFIX . "abdata WHERE vref = " . (int)$data['to']);
         $database->addABTech($data['to']);
@@ -3790,6 +3824,15 @@ class Automation {
 				// Report: new village founded (issue #178)
 				$ncoor = $database->getCoor($data['to']);
 				$database->addNotice($to['owner'], $data['to'], 0, 24, 'New village founded', ($ncoor['x'] ?? 0) . ',' . ($ncoor['y'] ?? 0), time());
+				
+				// Milestone: first player ever to settle their 2nd village.
+				// Checked right after the new village row exists, so the
+				// COUNT below already includes it.
+				if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES) {
+					if ($database->countVillages($to['owner']) == 2) {
+						$database->recordMilestoneIfFirst('second_village', $to['owner'], $data['to']);
+					}
+				}
             }else{
                 // here must come movement from returning settlers
                 $types[] = 4;

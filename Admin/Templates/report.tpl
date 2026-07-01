@@ -84,7 +84,7 @@ $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',
 <style>
 .reports-wrap{max-width:1100px;margin:20px auto;font-family:Verdana;color:#222}
 .reports-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.reports-head h1{margin:0;font-size:18px;color:#111}
+.reports-head h1{margin:0;font-size:18px;color:#ffffff}
 .filters{display:flex;gap:6px}
 .filters a{padding:6px 10px;border:1px solid #ddd;background:#f7f7f7;border-radius:4px;font-size:12px;text-decoration:none;color:#333}
 .filters a.active{background:#333;color:#fff;border-color:#333}

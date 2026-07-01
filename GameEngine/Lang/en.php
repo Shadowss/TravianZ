@@ -2315,6 +2315,17 @@ tz_def('TZ_YOUR_VILLAGE_AND_YOUR_NEIGHBOURS', 'Your village and your neighbours'
 tz_def('TZ_YOU_CAN_UNDO_THE_REGISTRATION_AND', 'You can undo the registration and re-register with a');
 tz_def('TZ_YOU_CAN_USE_THIS_GOLD_FOR_PLUS_OR', '. You can use this gold for Plus or any gold advantage.');
 
+// ===== Server Milestones (NEW_FUNCTIONS_MILESTONES) =====
+tz_def('TZ_SERVER_MILESTONES', 'Server Milestones');
+tz_def('TZ_MILESTONE_NOT_YET', 'Not yet achieved');
+tz_def('TZ_MILESTONE_SECOND_VILLAGE', 'First to Settle a 2nd Village');
+tz_def('TZ_MILESTONE_POPULATION_1000', 'First to reach 1,000 Population');
+tz_def('TZ_MILESTONE_FIRST_ARTIFACT', 'First to Capture an Artefact');
+tz_def('TZ_MILESTONE_FIRST_WW', 'First to Conquer a Wonder of the World');
+tz_def('TZ_MILESTONE_FIRST_WW_PLAN', 'First to Conquer a WW Building Plan');
+tz_def('TZ_MILESTONE_FIRST_ALLIANCE', 'First Alliance Founded');
+tz_def('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'First Village Conquered from a Player');
+
 // ===== i18n etape 2 (lot suivant) =====
 tz_def('TZ_ACCOUNT_OR_INCREASE_YOUR_RESOURCE', '-Account or increase your resource production.To do so click');
 tz_def('TZ_ADDITIONALLY_THE_TRAVIAN_TEAM_WILL', 'Additionally, the Travian Team will not provide information concerning bans to any person, other than the account owner.');

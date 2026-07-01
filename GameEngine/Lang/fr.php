@@ -2604,4 +2604,15 @@ define('MANUAL_NF_D_23', "Médaille décernée aux joueurs utilisant la même ad
 define('MANUAL_NF_D_24', "Médaille décernée aux joueurs utilisant la même adresse e-mail depuis 5 ans ou plus. Peut être ajoutée à la description du profil. Cette fonction a été présentée dans Travian T4.");
 define('MANUAL_NF_D_25', "Médaille décernée aux joueurs utilisant la même adresse e-mail depuis 10 ans ou plus. Peut être ajoutée à la description du profil. Cette fonction a été présentée dans Travian T4.");
 define('MANUAL_NF_D_26', "Médaille décernée aux joueurs utilisant la même adresse e-mail depuis 10 ans ou plus. Peut être ajoutée à la description du profil. Cette fonction a été présentée dans Travian T4.");
+
+// ===== Server Milestones (NEW_FUNCTIONS_MILESTONES) =====
+define('TZ_SERVER_MILESTONES', 'Jalons du serveur');
+define('TZ_MILESTONE_NOT_YET', 'Pas encore atteint');
+define('TZ_MILESTONE_SECOND_VILLAGE', 'Premier à fonder un 2e village');
+define('TZ_MILESTONE_POPULATION_1000', 'Premier à atteindre 1 000 population');
+define('TZ_MILESTONE_FIRST_ARTIFACT', 'Premier à capturer un artefact');
+define('TZ_MILESTONE_FIRST_WW', 'Premier à conquérir une Merveille du Monde');
+define('TZ_MILESTONE_FIRST_WW_PLAN', 'Premier à conquérir un Plan de Merveille');
+define('TZ_MILESTONE_FIRST_ALLIANCE', 'Première alliance fondée');
+define('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'Premier village conquis sur un joueur');
 ?>
