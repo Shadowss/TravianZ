@@ -8295,7 +8295,7 @@ References: User ID/Message ID, Mode
                 ${'t'.$i} = 0;
             }
         }
-		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
+		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', distance = '$dist', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}
 
