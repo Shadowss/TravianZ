@@ -2603,3 +2603,5 @@ define('TZ_MILESTONE_FIRST_WW', 'Primul care a cucerit un Wonder of the World');
 define('TZ_MILESTONE_FIRST_WW_PLAN', 'Primul care a cucerit un Plan WW');
 define('TZ_MILESTONE_FIRST_ALLIANCE', 'Prima alianță fondată');
 define('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'Primul sat cucerit de la un jucător');
+define('TZ_MILESTONE_FIVE_VILLAGES', 'Primul care a fondat 5 sate');
+define('TZ_MILESTONE_FOUNDED_BY', 'Fondată de');

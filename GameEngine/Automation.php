@@ -3829,8 +3829,12 @@ class Automation {
 				// Checked right after the new village row exists, so the
 				// COUNT below already includes it.
 				if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES) {
-					if ($database->countVillages($to['owner']) == 2) {
+					$villageCount = $database->countVillages($to['owner']);
+					if ($villageCount == 2) {
 						$database->recordMilestoneIfFirst('second_village', $to['owner'], $data['to']);
+					}
+				if ($villageCount == 5) {
+						$database->recordMilestoneIfFirst('five_villages', $to['owner'], $data['to']);
 					}
 				}
             }else{

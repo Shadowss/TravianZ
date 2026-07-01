@@ -53,16 +53,18 @@ $milestoneIcons = [
     'plan' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 4h9l4 4v12H6z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 4v4h4" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 11h7M8.5 14h7M8.5 17h4.5" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>',
     'alliance' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 3v5.5c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 12l2.3 2.3L15.8 9.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     'conquest' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l7 7M4 4l1 3.2L7.2 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4l-7 7M20 4l-1 3.2L16.8 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20l6.5-6.5M21 20l-6.5-6.5" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M11 13l1 1 1-1" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'five_villages' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 22V14.5L8 12L11 14.5V22" stroke="white" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 22v-3h2v3" stroke="white" stroke-width="1.4" stroke-linejoin="round"/><path d="M11 16L13.5 14L16 16V22H11" stroke="white" stroke-width="1.3" stroke-linejoin="round" opacity="0.9"/><path d="M2.5 17L4 16l2 1" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/><path d="M2.5 17V22H5" stroke="white" stroke-width="1.2" stroke-linejoin="round" opacity="0.75"/><path d="M19 16l1.5-1L22 16V22h-3" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/><circle cx="12" cy="6" r="1.8" stroke="white" stroke-width="1.3"/><path d="M10 8.5l2 1.5 2-1.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 ];
 
 $milestoneDefs = [
-    'second_village'     => ['label' => TZ_MILESTONE_SECOND_VILLAGE,     'icon' => 'village',    'color' => '#c0783c'],
-    'population_1000'    => ['label' => TZ_MILESTONE_POPULATION_1000,    'icon' => 'population', 'color' => '#3c78c0'],
-    'first_artifact'     => ['label' => TZ_MILESTONE_FIRST_ARTIFACT,     'icon' => 'artifact',   'color' => '#8a4fc0'],
-    'first_ww'           => ['label' => TZ_MILESTONE_FIRST_WW,           'icon' => 'wonder',     'color' => '#c0a030'],
-    'first_ww_plan'      => ['label' => TZ_MILESTONE_FIRST_WW_PLAN,      'icon' => 'plan',       'color' => '#2f9e8f'],
-    'first_alliance'     => ['label' => TZ_MILESTONE_FIRST_ALLIANCE,     'icon' => 'alliance',   'color' => '#3fa14a'],
-    'first_pvp_conquest' => ['label' => TZ_MILESTONE_FIRST_PVP_CONQUEST, 'icon' => 'conquest',   'color' => '#b6362f'],
+    'second_village'     => ['label' => TZ_MILESTONE_SECOND_VILLAGE,     'icon' => 'village',       'color' => '#c0783c'],
+    'population_1000'    => ['label' => TZ_MILESTONE_POPULATION_1000,    'icon' => 'population',    'color' => '#3c78c0'],
+    'first_artifact'     => ['label' => TZ_MILESTONE_FIRST_ARTIFACT,     'icon' => 'artifact',      'color' => '#8a4fc0'],
+    'first_ww'           => ['label' => TZ_MILESTONE_FIRST_WW,           'icon' => 'wonder',        'color' => '#c0a030'],
+    'first_ww_plan'      => ['label' => TZ_MILESTONE_FIRST_WW_PLAN,      'icon' => 'plan',          'color' => '#2f9e8f'],
+    'first_alliance'     => ['label' => TZ_MILESTONE_FIRST_ALLIANCE,     'icon' => 'alliance',      'color' => '#3fa14a'],
+    'first_pvp_conquest' => ['label' => TZ_MILESTONE_FIRST_PVP_CONQUEST, 'icon' => 'conquest',      'color' => '#b6362f'],
+    'five_villages'      => ['label' => TZ_MILESTONE_FIVE_VILLAGES,      'icon' => 'five_villages', 'color' => '#7a6030'],
 ];
 
 // =========================
@@ -224,19 +226,49 @@ return isset($units[$k])? (int)$units[$k] : 0;
 				? sprintf('background:radial-gradient(circle at 32%% 28%%, %s, %s 55%%, %s 100%%);border-color:rgba(255,255,255,0.35);', $light, $mdef['color'], $dark)
 				: 'background:#d8d8d8;border-color:rgba(0,0,0,0.08);';
 			$title = htmlspecialchars($mdef['label'], ENT_QUOTES, 'UTF-8');
-			$meta = $achieved
-				? htmlspecialchars(($achieved['username'] ?: '-') . ' — ' . date('d.m.y G:i:s', (int)$achieved['achieved_time']), ENT_QUOTES, 'UTF-8')
-				: htmlspecialchars(TZ_MILESTONE_NOT_YET, ENT_QUOTES, 'UTF-8');
+
+			// Caption text under badge:
+			// - first_alliance shows the alliance name/tag (stored in `extra`)
+			// - all others show the player username
+			if ($achieved) {
+				if ($mkey === 'first_alliance') {
+					$caption = htmlspecialchars($achieved['extra'] ?: $achieved['username'] ?: '', ENT_QUOTES, 'UTF-8');
+				} else {
+					$caption = htmlspecialchars($achieved['username'] ?: '', ENT_QUOTES, 'UTF-8');
+				}
+			} else {
+				$caption = '';
+			}
+
+			// Tooltip meta line:
+			// - first_alliance: shows alliance name on first line, founder + date on second
+			// - all others: "Username — dd.mm.yy H:i:s"
+			if ($achieved) {
+				if ($mkey === 'first_alliance') {
+					$meta = htmlspecialchars(
+						($achieved['extra'] ?: '-') . "\n" .
+						TZ_MILESTONE_FOUNDED_BY . ' ' . ($achieved['username'] ?: '-') . ' — ' . date('d.m.y G:i:s', (int)$achieved['achieved_time']),
+						ENT_QUOTES, 'UTF-8'
+					);
+				} else {
+					$meta = htmlspecialchars(
+						($achieved['username'] ?: '-') . ' — ' . date('d.m.y G:i:s', (int)$achieved['achieved_time']),
+						ENT_QUOTES, 'UTF-8'
+					);
+				}
+			} else {
+				$meta = htmlspecialchars(TZ_MILESTONE_NOT_YET, ENT_QUOTES, 'UTF-8');
+			}
 		?>
 		<div class="tzms-badge<?php echo $achieved ? ' tzms-achieved' : ' tzms-locked'; ?>"
 			 data-title="<?php echo $title; ?>"
 			 data-meta="<?php echo $meta; ?>"
-			 onmouseover="tzmsShow(this)"
-			 onmouseout="tzmsHide()">
+			 onmouseenter="tzmsShow(this)"
+			 onmouseleave="tzmsHide()">
 			<?php if ($achieved): ?><a href="spieler.php?uid=<?php echo (int)$achieved['uid']; ?>" class="tzms-icon" style="<?php echo $bg; ?>"><?php echo $milestoneIcons[$mdef['icon']] ?? ''; ?></a>
 			<?php else: ?><span class="tzms-icon" style="<?php echo $bg; ?>"><?php echo $milestoneIcons[$mdef['icon']] ?? ''; ?></span>
 			<?php endif; ?>
-			<div class="tzms-caption"><?php echo $achieved ? htmlspecialchars($achieved['username'] ?: '', ENT_QUOTES, 'UTF-8') : ''; ?></div>
+			<div class="tzms-caption"><?php echo $caption; ?></div>
 		</div>
 		<?php endforeach; ?>
 	</div>
@@ -255,9 +287,11 @@ return isset($units[$k])? (int)$units[$k] : 0;
 .tzms-badge.tzms-locked svg{opacity:0.55;}
 .tzms-icon svg{width:28px;height:28px;}
 .tzms-caption{margin-top:5px;font-size:10px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:64px;margin-left:auto;margin-right:auto;}
-.tzms-tooltip{display:none;position:absolute;z-index:9999;background:#1b1b1b;color:#fff;padding:8px 12px;border-radius:5px;font-size:12px;line-height:1.5;box-shadow:0 3px 10px rgba(0,0,0,0.4);max-width:260px;text-align:left;}
+/* position:fixed — tooltip is always anchored to the viewport, immune to
+   any overflow:hidden or position:relative on parent containers */
+.tzms-tooltip{display:none;position:fixed;z-index:99999;background:#1b1b1b;color:#fff;padding:8px 12px;border-radius:5px;font-size:12px;line-height:1.55;box-shadow:0 3px 10px rgba(0,0,0,0.4);max-width:260px;text-align:left;pointer-events:none;white-space:pre-line;}
 .tzms-tip-title{font-weight:bold;color:#fff;}
-.tzms-tip-meta{color:#b7b7b7;font-size:11px;margin-top:2px;}
+.tzms-tip-meta{color:#b7b7b7;font-size:11px;margin-top:3px;white-space:pre-line;}
 </style>
 <script type="text/javascript">
 function tzmsShow(el) {
@@ -274,14 +308,16 @@ function tzmsShow(el) {
 	tip.appendChild(meta);
 	tip.style.display = 'block';
 
+	// position:fixed — coords are already viewport-relative, no scroll offset needed
 	var rect = el.getBoundingClientRect();
-	var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-	var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-	var top = rect.bottom + scrollY + 8;
-	var left = rect.left + scrollX;
-	var maxLeft = document.documentElement.clientWidth - 270;
-	if (left > maxLeft) left = Math.max(8, maxLeft);
-	tip.style.top = top + 'px';
+	var top  = rect.bottom + 8;
+	var left = rect.left;
+	var maxLeft = (document.documentElement.clientWidth || window.innerWidth) - 270;
+	if (left > maxLeft) left = Math.max(4, maxLeft);
+	if (top + 80 > (document.documentElement.clientHeight || window.innerHeight)) {
+		top = rect.top - 80; // flip above if near bottom of viewport
+	}
+	tip.style.top  = top + 'px';
 	tip.style.left = left + 'px';
 }
 function tzmsHide() {

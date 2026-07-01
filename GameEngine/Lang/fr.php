@@ -2615,4 +2615,6 @@ define('TZ_MILESTONE_FIRST_WW', 'Premier à conquérir une Merveille du Monde');
 define('TZ_MILESTONE_FIRST_WW_PLAN', 'Premier à conquérir un Plan de Merveille');
 define('TZ_MILESTONE_FIRST_ALLIANCE', 'Première alliance fondée');
 define('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'Premier village conquis sur un joueur');
+define('TZ_MILESTONE_FIVE_VILLAGES', 'Premier à fonder 5 villages');
+define('TZ_MILESTONE_FOUNDED_BY', 'Fondée par');
 ?>
