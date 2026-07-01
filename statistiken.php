@@ -82,6 +82,9 @@ if (!empty($_GET['id'])) {
         case '1':
             echo PLAYERS;
             break;
+		case '3':
+            echo MILESTONES;
+            break;
     }
 } else {
     echo PLAYERS;
@@ -134,6 +137,9 @@ if (!empty($_GET['id'])) {
  | <a href="statistiken.php?id=2" <?php if(isset($_GET['id']) && $_GET['id'] == 2) { echo "class=\"selected \""; } ?>><?php echo VILLAGES; ?></a>
  | <a href="statistiken.php?id=8" <?php if(isset($_GET['id']) && $_GET['id'] == 8) { echo "class=\"selected \""; } ?>><?php echo HEROES; ?></a>
  | <a href="statistiken.php?id=0" <?php if(isset($_GET['id']) && $_GET['id'] == 0) { echo "class=\"selected \""; } ?>><?php echo GENERAL; ?></a>
+<?php if (defined('NEW_FUNCTIONS_MILESTONES') && NEW_FUNCTIONS_MILESTONES): ?>
+ | <a href="statistiken.php?id=3"<?php if (isset($_GET['id']) && $_GET['id'] == 3) echo ' class="selected"'; ?>><?php echo MILESTONES; ?></a>
+<?php endif; ?>
  <?php if(WW == true) { echo
  '|'; } else { echo ''; } ?> <a href="statistiken.php?id=99" <?php if(isset($_GET['id']) && $_GET['id'] == 99) { echo "class=\"selected \""; } ?>><?php if(WW == true) { echo
  'WW'; } else { echo ''; }?></a>
@@ -152,6 +158,9 @@ if(isset($_GET['id'])) {
 			break;
 		case 2:
 			include("Templates/Ranking/villages.tpl");
+			break;
+		case 3:
+			include("Templates/Ranking/milestones.tpl");
 			break;
 		case 4:
 			include("Templates/Ranking/alliance.tpl");
