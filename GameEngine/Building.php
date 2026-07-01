@@ -3,18 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:        TravianZ                                                   ##
-##  Version:        12.05.2026                                                 ##
-##  Filename:       Building.php                                               ##
-##  Developed by:   Dzoki & Dixie                                              ##
-##  Refactored by:  Shadow (cata7007@gmail.com)								   ##
-##  Reworked/Fix:   ronix                                                      ##
-##  License:        TravianZ Project                                           ##
-##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : Building.php                      	                       ##
+##  Type           : Building System Backend                                   ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Dixie          	                               ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 

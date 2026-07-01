@@ -3,19 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:        TravianZ                                                   ##
-##  Version:        12.05.2026                                                 ##
-##  Filename:       Ranking.php                                                ##
-##  Developed by:   Dzoki & Dixie                                              ##
-##  Refactored by:  Shadow                                                     ##
-##  Reworked/Fix:   ronix                                                      ##
-##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##
-##                                                                             ##
-##  License:        TravianZ Project                                           ##
-##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
-##  URLs:           https://travianz.org                                       ##
-##                  https://github.com/Shadowss/TravianZ                       ##
-##                                                                             ##
+##  Filename       : Ranking.php                      	                       ##
+##  Type           : Ranking System Backend                                    ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki           			                               ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 	class Ranking {

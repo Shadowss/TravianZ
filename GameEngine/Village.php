@@ -3,16 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Version:       13.05.2026	           			       			   		   ##
-##  Filename       Village.php                                                 ##
-##  Developed by:  Dzoki							   						   ##
-##  Refactor by:   Shadow 									 		       	   ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : Village.php                      	                       ##
+##  Type           : Village System Backend                                    ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki           			                               ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 include_once("Session.php");

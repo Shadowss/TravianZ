@@ -3,16 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Version:       30.04.2026	           			       			   		   ##
-##  Filename       BBCode.php                                                  ##
-##  Developed by:  Shadow							   						   ##
-##  Refactor by:   Shadow 									 		       	   ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : BBCode.php                      	                       ##
+##  Type           : BBCode System Backend                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow           			                               ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 include_once("config.php");

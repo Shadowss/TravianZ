@@ -1,16 +1,23 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       Protection.php                                              ##
-##  Developed by:  SlimShady                                                   ##
-##  Edited by:     Dzoki & Dixie                                               ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : Protection.php                    	                       ##
+##  Type           : Protection System Backend                                 ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : SlimShady           			                           ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 //heef npc uitzondering omdat die met speciaal $_post werken

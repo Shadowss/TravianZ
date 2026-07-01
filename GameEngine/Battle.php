@@ -3,20 +3,21 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:        TravianZ                                                   ##
-##  Version:        08.05.2026                                                 ##
-##  Filename:       Battle.php                                                 ##
-##  Developed by:   Dzoki & Dixie                                              ##
-##  Refactored by:  Shadow (cata7007@gmail.com)								   ##
-##  Fixed by:       InCube - double troops                                     ##
-##  Reworked/Fix:   ronix                                                      ##
-##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##
-##  License:        TravianZ Project                                           ##
-##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
-##                                                                             ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : Battle.php                      	                       ##
+##  Type           : Battle System Backend                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Dixie  			                               ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Thanks to      : ronix, InCube, Akakori, Elmar & Kirilloid                 ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 
