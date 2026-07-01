@@ -205,12 +205,13 @@ if($q) while($r=mysqli_fetch_assoc($q))
 
 // Troops
 $units=[]; 
-$result=mysqli_query($database->dblink,"SELECT ".implode(',',array_map(fn($i)=>"SUM(u$i) AS u$i",range(1,30)))." FROM ".TB_PREFIX."units");
+$result = mysqli_query($database->dblink, "SELECT " . implode(',', array_map(fn($i) => "SUM(u$i) AS u$i",range(1,30)))." FROM ".TB_PREFIX."units");
 if($result) 
 	$units=mysqli_fetch_assoc($result);
 function u($units,$k){ 
 return isset($units[$k])? (int)$units[$k] : 0; 
 }
+$isStaff = isset($session) && $session->access >= 8; // MH si Admin
 ?>
 
 <?php if ($milestonesEnabled): ?>
@@ -377,12 +378,14 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 </table>
 <br />
 
+<?php if($isStaff): ?>
 <!-- ================= GOLD ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead><tr><th colspan="2">Total <?= SERVER_NAME?> <img src="./<?= GP_LOCATE?>img/a/gold.gif"> Gold</th></tr></thead>
 <tbody><tr><td><?php echo GOLD;?></td><td><?= $total_gold?></td></tr></tbody>
 </table>
 <br />
+<?php endif; ?>
 
 <!-- ================= TOP ALLIANCES ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
@@ -396,6 +399,7 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 </table>
 <br />
 
+<?php if($isStaff): ?>
 <!-- ================= TROOPS ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead><tr><th colspan="6"><?php echo TROOPS;?></th></tr>
@@ -413,7 +417,9 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 </tbody>
 </table>
 <br />
+<?php endif; ?>
 
+<?php if($isStaff): ?>
 <!-- ================= TOP PLAYERS ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
@@ -447,6 +453,7 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 </tbody>
 </table>
 <br />
+<?php endif; ?>
 
 <!-- ================= ENDGAME ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
