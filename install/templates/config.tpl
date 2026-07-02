@@ -188,7 +188,6 @@ $dbPrefix = $_SESSION['install_random_prefix'];
 <div class="card">
   <span class="f10 c">NEW MECHANICS AND FUNCTIONS</span>
 	<div class="grid-1" style="margin-top:12px;display:flex;flex-direction:column;gap:10px;">
-
 <?php
 $mechs = [
     'new_functions_oasis'                 => 'Display oasis in profile',
@@ -207,6 +206,7 @@ $mechs = [
     'new_functions_medal_5year'           => 'Medal 5y',
     'new_functions_medal_10year'          => 'Medal 10y',
 	'new_functions_special_medals_system' => 'Special Medals System',
+	'new_functions_medal_reset' 		  => 'Medal Reset',
 	'new_functions_milestones'            => 'Server Milestones'
 ];
 

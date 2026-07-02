@@ -53,6 +53,7 @@
 	</thead>
 </table>
 <!-- ADDED: row with Week / Medal reset -->
+<?php if (defined('NEW_FUNCTIONS_MEDAL_RESET') && NEW_FUNCTIONS_MEDAL_RESET): ?>
 <table cellpadding="1" cellspacing="1" style="width:100%; margin:2px 0;">
     <tr>
         <td style="text-align:center; padding:3px;">
@@ -60,6 +61,7 @@
         </td>
     </tr>
 </table>
+<?php endif; ?>
 <script>
 var medalSeconds = <?php echo $left; ?>;
 setInterval(function(){
