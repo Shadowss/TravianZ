@@ -83,10 +83,7 @@ $process = $units->procUnits($_POST);
 
 <html>
 <head>
-<title><?php
-
-echo SERVER_NAME.' - Send Troops'?>
-</title>
+<title><?php echo SERVER_NAME.' - Send Troops'?></title>
 <link rel="shortcut icon" href="favicon.ico" />
 <meta http-equiv="cache-control" content="max-age=0" />
 <meta http-equiv="pragma" content="no-cache" />
@@ -96,19 +93,9 @@ echo SERVER_NAME.' - Send Troops'?>
 <script src="mt-full.js?0faab" type="text/javascript"></script>
 <script src="unx.js?f4b7h" type="text/javascript"></script>
 <script src="new.js?0faab" type="text/javascript"></script>
-<link href="<?php
-
-echo GP_LOCATE;
-
-?>lang/en/lang.css?f4b7d"
-	rel="stylesheet" type="text/css" />
-<link href="<?php
-
-echo GP_LOCATE;
-
-?>lang/en/compact.css?f4b7i"
-	rel="stylesheet" type="text/css" />
-	<?php
+<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
+<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
+<?php
 	
 	if($session->gpack == null || GP_ENABLE == false){
 		echo "
@@ -120,7 +107,7 @@ echo GP_LOCATE;
 	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	}
 	
-	?>
+?>
 	<script type="text/javascript">
 		window.addEvent('domready', start);
 	</script>

@@ -47,15 +47,15 @@ $displayWindow = 432000 / SPEED; // 5 days in seconds
  */
 $spawnEvents = array(
 
-    'Artifacts' => (
+    TZ_WILL_SPAWN_IN_ARTIFACTS => (
         $startDate + (NATARS_SPAWN_TIME * 86400)
     ) - $currentTime,
 
-    'WW villages' => (
+    TZ_WILL_SPAWN_IN_WW => (
         $startDate + (NATARS_WW_SPAWN_TIME * 86400)
     ) - $currentTime,
 
-    'WW building plans' => (
+    TZ_WILL_SPAWN_IN_PLAN => (
         $startDate + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400)
     ) - $currentTime
 );

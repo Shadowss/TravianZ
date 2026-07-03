@@ -2301,6 +2301,9 @@ tz_def('TZ_WE_STRIVE_TO_ENSURE_SPEEDY_PROCESS', 'We strive to ensure speedy proc
 tz_def('TZ_WHY_CAN_T_I_FINISH_SOME_BUILDINGS', 'Why can\'t I finish some buildings with Gold?');
 tz_def('TZ_WILL_BE_ATTACKED_BY_CATAPULT_S', '(will be attacked by catapult(s))');
 tz_def('TZ_WILL_SPAWN_IN', 'will spawn in:');
+tz_def('TZ_WILL_SPAWN_IN_ARTIFACTS', 'Artifacts');
+tz_def('TZ_WILL_SPAWN_IN_WW', 'WW villages');
+tz_def('TZ_WILL_SPAWN_IN_PLAN', 'WW building plans');
 tz_def('TZ_WOODCUTTER_INSTANTLY_COMPLETED', 'Woodcutter instantly completed.');
 tz_def('TZ_WORLD_STATS', 'World Stats');
 tz_def('TZ_WRITE_THE_CODE', 'Write the code');

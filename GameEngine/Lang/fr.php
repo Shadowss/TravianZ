@@ -2300,6 +2300,9 @@ define('TZ_WE_STRIVE_TO_ENSURE_SPEEDY_PROCESS', 'Nous nous efforçons d\'assurer
 define('TZ_WHY_CAN_T_I_FINISH_SOME_BUILDINGS', 'Pourquoi ne puis-je pas terminer certains bâtiments avec de l\'or ?');
 define('TZ_WILL_BE_ATTACKED_BY_CATAPULT_S', '(sera attaqué par catapulte(s))');
 define('TZ_WILL_SPAWN_IN', 'apparaîtra dans :');
+define('TZ_WILL_SPAWN_IN_ARTIFACTS', 'Les artefacts');
+define('TZ_WILL_SPAWN_IN_WW', 'Les villages Merveille du Monde');
+define('TZ_WILL_SPAWN_IN_PLAN', 'Les plans de la Merveille du Monde');
 define('TZ_WOODCUTTER_INSTANTLY_COMPLETED', 'Bûcheron terminé instantanément.');
 define('TZ_WORLD_STATS', 'Statistiques du monde');
 define('TZ_WRITE_THE_CODE', 'Saisissez le code');
