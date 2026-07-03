@@ -4091,6 +4091,10 @@ class MYSQLi_DB implements IDbConnection {
 
         return ($array_passed ? $result : self::$userSumFieldCache[$uid[0].$field]);
     }
+	
+	public static function clearUserSumFieldCache($uid, $field){
+		unset(self::$userSumFieldCache[(int)$uid.$field]);
+	}
 
     function updateVillage($vid) {
         list($vid) = $this->escape_input((int) $vid);
