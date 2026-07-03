@@ -47,7 +47,23 @@ if (
 
     $_SESSION['mass_subject'] = trim($_POST['subject']);
     $_SESSION['mass_message'] = trim($_POST['message']);
-    $_SESSION['mass_color'] = trim($_POST['color']);
+	$allowedColors = array(
+    'black',
+    'red',
+    'green',
+    'blue',
+    'orange',
+    'purple',
+    'brown'
+	);
+
+	$color = strtolower(trim($_POST['color']));
+
+	if (!in_array($color, $allowedColors, true)) {
+    $color = 'black';
+	}
+
+	$_SESSION['mass_color'] = $color;
 
     header("Location: ../../../Admin/admin.php?p=massmessage&confirm=1");
     exit;
@@ -83,23 +99,65 @@ if (
     |--------------------------------------------------------------------------
     */
 
-    $message = preg_replace(
-        "/\[img\](.*?)\[\/img\]/i",
-        "<img src='$1' alt='' />",
-        $message
-    );
+	$message = preg_replace_callback(
+    "/\[img\](.*?)\[\/img\]/is",
+    function ($m) {
 
-    $message = preg_replace(
-        "/\[url\](.*?)\[\/url\]/i",
-        "<a href='$1'>$1</a>",
-        $message
-    );
+        $url = trim($m[1]);
 
-    $message = preg_replace(
-        "/\[url=(.*?)\](.*?)\[\/url\]/i",
-        "<a href='$1'>$2</a>",
-        $message
-    );
+        if (!preg_match('#^https?://#i', $url)) {
+            return '';
+        }
+
+        $safe = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+
+        return '<img src="' . $safe . '" alt="" />';
+    },
+    $message
+	);
+
+	$message = preg_replace_callback(
+    "/\[url\](.*?)\[\/url\]/is",
+    function ($m) {
+
+        $url = trim($m[1]);
+
+        if (!preg_match('#^https?://#i', $url)) {
+            return htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        }
+
+        $safe = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+
+        return '<a href="' .
+               $safe .
+               '" target="_blank" rel="noopener noreferrer">' .
+               $safe .
+               '</a>';
+    },
+    $message
+	);
+
+	$message = preg_replace_callback(
+    "/\[url=(.*?)\](.*?)\[\/url\]/is",
+    function ($m) {
+
+        $url = trim($m[1]);
+        $text = htmlspecialchars($m[2], ENT_QUOTES, 'UTF-8');
+
+        if (!preg_match('#^https?://#i', $url)) {
+            return $text;
+        }
+
+        $safe = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+
+        return '<a href="' .
+               $safe .
+               '" target="_blank" rel="noopener noreferrer">' .
+               $text .
+               '</a>';
+    },
+    $message
+	);
 
     $message = "[message]".$message."[/message]";
 
