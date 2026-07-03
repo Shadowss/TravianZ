@@ -72,16 +72,6 @@ $u47=array('atk'=>250,'di'=>120,'dc'=>150,'wood'=>0,'clay'=>0,'iron'=>0,'crop'=>
 $u48=array('atk'=>60,'di'=>45,'dc'=>10,'wood'=>0,'clay'=>0,'iron'=>0,'crop'=>0,'pop'=>5,'speed'=>3,'time'=>0,'cap'=>0);
 $u49=array('atk'=>80,'di'=>50,'dc'=>50,'wood'=>0,'clay'=>0,'iron'=>0,'crop'=>0,'pop'=>1,'speed'=>5,'time'=>0,'cap'=>0);
 $u50=array('atk'=>30,'di'=>40,'dc'=>40,'wood'=>0,'clay'=>0,'iron'=>0,'crop'=>0,'pop'=>1,'speed'=>5,'time'=>0,'cap'=>0);
-$u51=array('atk'=>10,'di'=>25,'dc'=>20,'wood'=>85,'clay'=>75,'iron'=>120,'crop'=>25,'speed'=>7,'pop'=>1,'time'=>1600,'cap'=>45);
-$u52=array('atk'=>20,'di'=>35,'dc'=>40,'wood'=>125,'clay'=>130,'iron'=>60,'crop'=>40,'speed'=>7,'pop'=>1,'time'=>1800,'cap'=>65);
-$u53=array('atk'=>60,'di'=>40,'dc'=>60,'wood'=>140,'clay'=>150,'iron'=>40,'crop'=>60,'speed'=>6,'pop'=>1,'time'=>1900,'cap'=>80);
-$u54=array('atk'=>10,'di'=>66,'dc'=>50,'wood'=>95,'clay'=>120,'iron'=>65,'crop'=>25,'speed'=>9,'pop'=>1,'time'=>2000,'cap'=>0);
-$u55=array('atk'=>50,'di'=>70,'dc'=>33,'wood'=>250,'clay'=>200,'iron'=>125,'crop'=>45,'speed'=>10,'pop'=>2,'time'=>2000,'cap'=>120);
-$u56=array('atk'=>100,'di'=>80,'dc'=>70,'wood'=>250,'clay'=>125,'iron'=>250,'crop'=>150,'speed'=>9,'pop'=>2,'time'=>2000,'cap'=>150);
-$u57=array('atk'=>250,'di'=>140,'dc'=>200,'wood'=>250,'clay'=>220,'iron'=>135,'crop'=>50,'speed'=>4,'pop'=>3,'time'=>2000,'cap'=>125);
-$u58=array('atk'=>450,'di'=>380,'dc'=>240,'wood'=>125,'clay'=>250,'iron'=>300,'crop'=>65,'speed'=>3,'pop'=>3,'time'=>2000,'cap'=>0);
-$u59=array('atk'=>200,'di'=>170,'dc'=>250,'wood'=>350,'clay'=>350,'iron'=>125,'crop'=>80,'speed'=>5,'pop'=>3,'time'=>70500,'cap'=>0);
-$u60=array('atk'=>600,'di'=>440,'dc'=>520,'wood'=>350,'clay'=>250,'iron'=>135,'crop'=>100,'speed'=>5,'pop'=>5,'time'=>31000,'cap'=>3000);
 $u99=array('atk'=>0,'di'=>0,'dc'=>0,'wood'=>20,'clay'=>30,'iron'=>10,'crop'=>20,'speed'=>0,'pop'=>0,'time'=>600,'cap'=>0);
 // Hero data base values and increase per point
 $h1=array('atk'=>50,'atkp'=>54,'di'=>60,'dip'=>49,'dc'=>85,'dcp'=>62.5);
