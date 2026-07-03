@@ -156,8 +156,23 @@ if($id == 15){
 if($id > 15){
 	include ("Templates/Plus/3.tpl");
 }
-if(isset($_POST['mail'])){
-	$mailer->sendInvite($_POST['mail'], $session->uid, $_POST['text']);
+if (isset($_POST['mail'])) {
+
+	$email = trim($_POST['mail']);
+	$text = isset($_POST['text']) ? trim($_POST['text']) : '';
+
+	// Blocăm CRLF injection și validăm adresa
+	if (
+		strpos($email, "\r") === false &&
+		strpos($email, "\n") === false &&
+		filter_var($email, FILTER_VALIDATE_EMAIL)
+	) {
+		// Limităm dimensiunea și eliminăm caracterele de control
+		$text = substr($text, 0, 2000);
+		$text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $text);
+
+		$mailer->sendInvite($email, $session->uid, $text);
+	}
 }
 ?>
 

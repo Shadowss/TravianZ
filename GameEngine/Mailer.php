@@ -55,24 +55,40 @@ class Mailer
 	 * -------------------------------------------------------------------------
 	 * FIX: $username was undefined -> fallback safe value added
 	 */
-	function sendInvite($email, $uid, $text)
-	{
-		$subject = SERVER_NAME . " registration";
+	function sendInvite($email, $uid, $text){
+		
+	$email = trim($email);
+	$uid = (int)$uid;
+	$text = trim($text);
 
-		// FIX: prevent undefined variable notice
-		$username = "User";
+	// Protecție împotriva Email Header Injection
+	if (
+		strpos($email, "\r") !== false ||
+		strpos($email, "\n") !== false ||
+		!filter_var($email, FILTER_VALIDATE_EMAIL)
+	) {
+		return false;
+	}
 
-		$message =
-			"Hello " . $username . "\n\n" .
-			"Try the new " . SERVER_NAME . "!\n\n\n" .
-			"Link: " . SERVER . "anmelden.php?id=ref" . $uid . "\n\n" .
-			$text . "\n\n\n" .
-			"Greetings,\n" .
-			"Travian";
+	// Curățăm textul
+	$text = substr($text, 0, 2000);
+	$text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $text);
 
-		$headers = "From: " . ADMIN_EMAIL . "\r\n";
+	$subject = SERVER_NAME . " registration";
 
-		@mail($email, $subject, $message, $headers);
+	$username = "User";
+
+	$message =
+		"Hello " . $username . "\n\n" .
+		"Try the new " . SERVER_NAME . "!\n\n\n" .
+		"Link: " . SERVER . "anmelden.php?id=ref" . $uid . "\n\n" .
+		$text . "\n\n\n" .
+		"Greetings,\n" .
+		"Travian";
+
+	$headers = "From: " . ADMIN_EMAIL . "\r\n";
+
+	return @mail($email, $subject, $message, $headers);
 	}
 
 	/**
