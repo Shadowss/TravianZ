@@ -29,7 +29,6 @@ tz_def('TRIBE2', 'Teutons');
 tz_def('TRIBE3', 'Gauls');
 tz_def('TRIBE4', 'Nature');
 tz_def('TRIBE5', 'Natars');
-tz_def('TRIBE6', 'Monsters');
 
 tz_def('HOME', 'Homepage');
 tz_def('INSTRUCT', 'Instructions');
@@ -717,18 +716,6 @@ tz_def('U47', 'War Elephant');
 tz_def('U48', 'Ballista');
 tz_def('U49', 'Natarian Emperor');
 tz_def('U50', 'Natarian Settler');
-
-//MONSTER UNITS
-tz_def('U51', 'Monster Peon');
-tz_def('U52', 'Monster Hunter');
-tz_def('U53', 'Monster Warrior');
-tz_def('U54', 'Ghost');
-tz_def('U55', 'Monster Steed');
-tz_def('U56', 'Monster War Steed');
-tz_def('U57', 'Monster Ram');
-tz_def('U58', 'Monster Catapult');
-tz_def('U59', 'Monster Chief');
-tz_def('U60', 'Monster Settler');
 
 //INDEX.php
 tz_def('LOGIN', 'Login');

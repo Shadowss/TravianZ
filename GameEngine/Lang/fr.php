@@ -26,7 +26,6 @@ define('TRIBE2', 'Germains');
 define('TRIBE3', 'Gaulois');
 define('TRIBE4', 'Nature');
 define('TRIBE5', 'Natars');
-define('TRIBE6', 'Monstres');
 
 define('HOME', 'Accueil');
 define('INSTRUCT', 'Instructions');
@@ -713,18 +712,6 @@ define('U47', 'Éléphant de guerre');
 define('U48', 'Baliste');
 define('U49', 'Empereur natarien');
 define('U50', 'Colon natarien');
-
-//MONSTER UNITS
-define('U51', 'Monstre péon');
-define('U52', 'Chasseur de monstres');
-define('U53', 'Monstre guerrier');
-define('U54', 'Fantôme');
-define('U55', 'Destrier monstrueux');
-define('U56', 'Destrier de guerre monstrueux');
-define('U57', 'Bélier monstre');
-define('U58', 'Catapulte monstre');
-define('U59', 'Chef des monstres');
-define('U60', 'Monstre colon');
 
 //INDEX.php
 define('LOGIN', 'Connexion');

@@ -6792,43 +6792,41 @@ img.u31, img.u32, img.u33, img.u34, img.u35, img.u36, img.u37, img.u38, img.u39,
 img.u41, img.u42, img.u43, img.u44, img.u45, img.u46, img.u47, img.u48, img.u49, img.u50 {
     background-image: url("../../img/u/v5_natars2.gif");
 }
-img.u51, img.u52, img.u53, img.u54, img.u55, img.u56, img.u57, img.u58, img.u59, img.u60 {
-    background-image: url("../../img/u/v6_monsters2.gif");
-}
+
 img.uhab, img.ucata, img.ustock, img.uwall, img.ubarr, img.upal, img.ugeb, img.uhero, img.uunits, img.app {
     background-image: url("../../img/u/specials.gif");
 }
-img.u1, img.u11, img.u21, img.u31, img.u41, img.u51, img.uhab {
+img.u1, img.u11, img.u21, img.u31, img.u41, img.uhab {
     background-position: 0 0;
 }
-img.u2, img.u12, img.u22, img.u32, img.u42, img.u52, img.ucata {
+img.u2, img.u12, img.u22, img.u32, img.u42, img.ucata {
     background-position: -19px 0;
 }
-img.u3, img.u13, img.u23, img.u33, img.u43, img.u53, img.ustock {
+img.u3, img.u13, img.u23, img.u33, img.u43, img.ustock {
     background-position: -38px 0;
 }
-img.u4, img.u14, img.u24, img.u34, img.u44, img.u54, img.uwall {
+img.u4, img.u14, img.u24, img.u34, img.u44, img.uwall {
     background-position: -57px 0;
 }
-img.u5, img.u15, img.u25, img.u35, img.u45, img.u55, img.ubarr {
+img.u5, img.u15, img.u25, img.u35, img.u45, img.ubarr {
     background-position: -76px 0;
 }
-img.u6, img.u16, img.u26, img.u36, img.u46, img.u56, img.upal {
+img.u6, img.u16, img.u26, img.u36, img.u46, img.upal {
     background-position: -95px 0;
 }
-img.u7, img.u17, img.u27, img.u37, img.u47, img.u57, img.ugeb {
+img.u7, img.u17, img.u27, img.u37, img.u47, img.ugeb {
     background-position: -114px 0;
 }
-img.u8, img.u18, img.u28, img.u38, img.u48, img.u58, img.uhero {
+img.u8, img.u18, img.u28, img.u38, img.u48, img.uhero {
     background-position: -133px 0;
 }
-img.u9, img.u19, img.u29, img.u39, img.u49, img.u59, img.uunits {
+img.u9, img.u19, img.u29, img.u39, img.u49, img.uunits {
     background-position: -152px 0;
 }
 img.app {
     background-position: -170px 0;
 }
-img.u10, img.u20, img.u30, img.u40, img.u50, img.u60 {
+img.u10, img.u20, img.u30, img.u40, img.u50 {
     background-position: -171px 0;
 }
 img.u98 {

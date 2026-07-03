@@ -26,7 +26,6 @@ define('TRIBE2', 'Barbari');
 define('TRIBE3', 'Daci');
 define('TRIBE4', 'Natura');
 define('TRIBE5', 'Natari');
-define('TRIBE6', 'Monstrii');
 
 define('HOME', 'Pagina principală');
 define('INSTRUCT', 'Instrucțiuni');
@@ -715,18 +714,6 @@ define('U48', 'Balistă');
 define('U49', 'Împărat natar');
 define('U50', 'Coloniști natari');
 
-//MONSTER UNITS
-define('U51', 'Servitor monstru');
-define('U52', 'Vânător monstru');
-define('U53', 'Războinic monstru');
-define('U54', 'Fantomă');
-define('U55', 'Armăsar monstru');
-define('U56', 'Armăsar de război monstru');
-define('U57', 'Berbec monstru');
-define('U58', 'Catapultă monstru');
-define('U59', 'Căpetenie monstru');
-define('U60', 'Coloniști monștri');
-
 //INDEX.php
 define('LOGIN', 'Autentificare');
 define('PLAYERS', 'Jucători');
@@ -813,7 +800,7 @@ define('CATAPULT_TARGET', 'Țintă catapultă');
 define('INCOMING_TROOPS', 'Trupe în sosire');
 define('TROOPS_ON_THEIR_WAY', 'Trupe în drum');
 define('OWN_TROOPS', 'Trupe proprii');
-define('ON', 'pe');
+define('ON', 'Activeaza');
 define('AT', 'la');
 define('UPKEEP', 'Consum');
 define('SEND_BACK', 'Trimite înapoi');
