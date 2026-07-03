@@ -152,10 +152,7 @@ class Automation {
 		$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 		mysqli_query($database->dblink, $q);
 		$owner = $database->getVillageField($vid, "owner");
-		// Invalidăm cache-ul sumei de populație al jucătorului
-		if ($owner > 0) {
-        Database::clearUserSumFieldCache($owner, 'pop');
-		}
+
 		// Milestone: first player ever to reach 1000 total population,
 		// summed across all their villages. recountPop() is the single
 		// funnel every population-changing event (building, demolishing,
