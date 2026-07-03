@@ -59,25 +59,25 @@ if (!empty($_GET['id'])) {
             echo GENERAL;
             break;
         case '99':
-            echo 'WW';
+            echo WW;
             break;
         case '7':
-            echo 'TOP 10 PLAYERS';
+            echo TOP10A;
             break;
         case '31':
-            echo 'ATTACKERS';
+            echo TOP10PA;
             break;
         case '32':
-            echo 'DEFENDERS';
+            echo TOP10PD;
             break;
 		case '41':
-            echo 'ALLIANCES Attackers';
+            echo TOP10AA;
             break;
         case '42':
-            echo 'ALLIANCES Defenders';
+            echo TOP10AD;
             break;
         case '43':
-            echo 'TOP 10 ALLIANCES';
+            echo TOP10A;
             break;
         case '1':
             echo PLAYERS;
