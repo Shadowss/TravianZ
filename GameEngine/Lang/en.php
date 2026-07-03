@@ -882,7 +882,7 @@ tz_def('STATISTICS', 'Statistics');
 tz_def('ALLIANCES', 'Alliances');
 tz_def('HEROES', 'Heroes');
 tz_def('GENERAL', 'General');
-tz_def('WW', 'World Wonder');
+tz_def('WWS', 'World Wonder');
 tz_def('TOP10P', 'TOP 10 Players');
 tz_def('TOP10PA', 'TOP 10 Attackers');
 tz_def('TOP10PD', 'TOP 10 Defenders');

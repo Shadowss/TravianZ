@@ -878,7 +878,7 @@ define('STATISTICS', 'Statistici');
 define('ALLIANCES', 'Alianțe');
 define('HEROES', 'Eroi');
 define('GENERAL', 'General');
-define('WW', 'Minunea Lumii');
+define('WWS', 'Minunea Lumii');
 define('TOP10P', 'TOP 10 Jucatori');
 define('TOP10PA', 'TOP 10 Atacatori');
 define('TOP10PD', 'TOP 10 Aparatori');

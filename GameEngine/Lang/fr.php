@@ -878,7 +878,7 @@ define('STATISTICS', 'Statistiques');
 define('ALLIANCES', 'Alliances');
 define('HEROES', 'Héros');
 define('GENERAL', 'Général');
-define('WW', 'Merveille du Monde');
+define('WWS', 'Merveille du Monde');
 define('TOP10P', 'TOP 10 Joueurs');
 define('TOP10PA', 'TOP 10 Attaquants');
 define('TOP10PD', 'TOP 10 Défenseurs');

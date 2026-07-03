@@ -59,7 +59,7 @@ if (!empty($_GET['id'])) {
             echo GENERAL;
             break;
         case '99':
-            echo WW;
+            echo WWS;
             break;
         case '7':
             echo TOP10A;
