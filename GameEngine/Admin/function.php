@@ -28,6 +28,11 @@ class funct
     {
         return isset($_SESSION['access']) && $_SESSION['access'] >= MULTIHUNTER && $_SESSION['id'];
     }
+	
+	private function safeRedirect(){
+    header('Location: admin.php');
+    exit;
+	}
 
     function Act($get)
     {
@@ -221,11 +226,7 @@ class funct
                 header("Location: admin.php?p=player&uid=" . $get['uid'] . "&ac=1");
                 exit();
         }
-        if ($get['action'] == 'logout') {
-            header("Location: admin.php");
-        } else {
-            header("Location: " . $_SERVER['HTTP_REFERER']);
-        }
+		$this->safeRedirect();
     }
 
     function Act2($post)
@@ -241,11 +242,11 @@ class funct
                 break;
             case "punish":
                 $admin->Punish($post);
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                $this->safeRedirect();
                 break;
             case "addVillage":
                 $admin->AddVillage($post);
-                header("Location: " . $_SERVER['HTTP_REFERER']);
+                $this->safeRedirect();
                 break;
         }
     }
@@ -257,8 +258,7 @@ class funct
             $_SESSION['admin_username'] = $username;
             $_SESSION['access'] = $database->getUserField($username, 'access', 1);
             $_SESSION['id'] = $database->getUserField($username, 'id', 1);
-            header("Location: " . $_SERVER['HTTP_REFERER']);
-            // header("Location: admin.php");
+            $this->safeRedirect();
         } else {
             echo "Error";
         }
