@@ -1,13 +1,23 @@
 <?php
 
 #################################################################################
-##  TravianZ Project - Map View                                                ##
-##  Incremental Refactor (Shadow Assistant)                                    ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Credits: Advocaite, yi12345, Shadow, MisterX                               ##
-##  Refactor (readability / structure): ChatGPT                                ##
-##  Compatibility: PHP 7+ / legacy                                             ##
-##  Note: No behavior change - only refactor, cleanup, readability             ##
+##  Filename       : mapview.tpl                        	                   ##
+##  Type           : Karte Map Scroll Small Backend                            ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Advocaite & Donnchadh                             ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 /* =========================

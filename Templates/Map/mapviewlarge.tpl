@@ -1,14 +1,23 @@
 <?php
 
 #################################################################################
-##  TravianZ Project - Map View Large                                          ##
-##  Incremental Refactor (Shadow Assistant)                                    ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Credits: Advocaite, yi12345, Shadow, MisterX                               ##
-##  Fixed by: Shadow & MisterX - Attack image view on map                      ##
-##  Refactor (readability / structure): ChatGPT                                ##
-##  Compatibility: PHP 7+ / legacy                                             ##
-##  Note: No behavior change - only refactor, cleanup, readability             ##
+##  Filename       : mapscroll2.tpl                      	                   ##
+##  Type           : Karte Map Scroll Large Backend                            ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Advocaite & Donnchadh                             ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 /* =========================

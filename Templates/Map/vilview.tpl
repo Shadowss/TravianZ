@@ -1,3 +1,27 @@
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : vilview.tpl                         	                   ##
+##  Type           : In-Game Village View Backend                              ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Advocaite & Donnchadh                             ##
+##  Refactored by  : Shadow & Ferywir									       ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
+?>
+
 <div id="content" class="map">
 <?php
 // ---------- 0. SETUP ----------
