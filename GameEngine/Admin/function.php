@@ -30,6 +30,22 @@ class funct
     }
 	
 	private function safeRedirect(){
+		
+    $url = $_SERVER['HTTP_REFERER'] ?? '';
+
+    if (!empty($url)) {
+        $parts = parse_url($url);
+
+        // Acceptăm doar URL-uri locale
+        if (
+            empty($parts['host']) ||
+            $parts['host'] === $_SERVER['HTTP_HOST']
+        ) {
+            header('Location: ' . $url);
+            exit;
+        }
+    }
+
     header('Location: admin.php');
     exit;
 	}
