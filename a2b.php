@@ -60,6 +60,11 @@ if(isset($_GET['r'])) $r = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['r']);
 if(isset($_GET['delprisoners'])){
 	$delprisoners = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['delprisoners']);
 }
+// T4 hero port: release (destroy) captured oasis animals from a nature
+// enforcement row (from = 0). Same sanitization as delprisoners.
+if(isset($_GET['releaseanimals'])){
+	$releaseanimals = preg_replace("/[^0-9]/", "", $_GET['releaseanimals']);
+}
 if(isset($_GET['o'])){
 	$o = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['o']);
 	$oid = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['z']);
@@ -156,6 +161,12 @@ if(!empty($id)){
 		include("Templates/a2b/search.tpl");
 	}
 }else if(isset($delprisoners) && !empty($delprisoners)) $units->deletePrisoners($delprisoners);
+else if(isset($releaseanimals) && !empty($releaseanimals)){
+	// T4 hero port: destroy captured animals, then back to the rally point.
+	$units->releaseNatureEnforcement($releaseanimals);
+	header("Location: build.php?id=39");
+	exit;
+}
 else{
 	if(isset($process['0'])){
 		$coor = $database->getCoor($process['0']);

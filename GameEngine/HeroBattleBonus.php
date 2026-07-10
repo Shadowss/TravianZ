@@ -469,19 +469,23 @@ class HeroBattleBonus
         $used = array_sum($captured);
         $heroItems->removeItem((int) $uid, (int) $cageRow['id'], $used);
 
-        // Station the animals at home: reuse the self-enforcement row if one
-        // exists (vref = from = home), otherwise create it.
+        // Station the animals at home as a NATURE reinforcement: `from` = 0 is
+        // the engine's existing convention for non-player enforcements (the
+        // "taskmaster" rows) - 16.tpl renders those with tribe 4 columns
+        // (u31-u40, the animal icons) and disables the normal Send back flow,
+        // which would otherwise crash on speed lookup for nature units.
+        // Reuse the row if one exists, otherwise create it.
         $homeWref = (int) $homeWref;
         $res = mysqli_query(
             $database->dblink,
             "SELECT id FROM " . TB_PREFIX . "enforcement
-              WHERE vref = $homeWref AND `from` = $homeWref LIMIT 1"
+              WHERE vref = $homeWref AND `from` = 0 LIMIT 1"
         );
         $rowE = $res ? mysqli_fetch_assoc($res) : null;
         if (!$rowE) {
             mysqli_query(
                 $database->dblink,
-                "INSERT INTO " . TB_PREFIX . "enforcement (vref, `from`) VALUES ($homeWref, $homeWref)"
+                "INSERT INTO " . TB_PREFIX . "enforcement (vref, `from`) VALUES ($homeWref, 0)"
             );
             $enfId = (int) mysqli_insert_id($database->dblink);
         } else {

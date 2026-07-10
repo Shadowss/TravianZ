@@ -692,6 +692,33 @@ class Units {
      * @param int the ID of the prisoners you want to release
      */
     
+    /**
+     * T4 hero port: destroy a NATURE enforcement row (captured oasis animals,
+     * `from` = 0) stationed in the CURRENT village. Mirrors deletePrisoners'
+     * ownership model: the row must belong to the village the player is
+     * viewing, which the session already validated as theirs. Nature rows
+     * never travel back (no owner village to walk to) - releasing kills them.
+     */
+    public function releaseNatureEnforcement($id){
+        global $village, $database;
+
+        $id = (int) $id;
+        if ($id <= 0) {
+            return false;
+        }
+
+        $stmt = $database->dblink->prepare(
+            "DELETE FROM " . TB_PREFIX . "enforcement
+              WHERE id = ? AND `from` = 0 AND vref = ? LIMIT 1"
+        );
+        $wid = (int) $village->wid;
+        $stmt->bind_param('ii', $id, $wid);
+        $stmt->execute();
+        $ok = $stmt->affected_rows > 0;
+        $stmt->close();
+        return $ok;
+    }
+
     public function deletePrisoners($id){
         global $village, $database, $session, $building, $bid19, $u99;
         
@@ -794,6 +821,16 @@ class Units {
         if(isset($unitArray[10]) && $unitArray[10] > 0){
             $heroUnit = $database->getHeroField($owner, 'unit');
             $speeds[]  = $GLOBALS['u'.$heroUnit]['speed'];
+        }
+
+        // Defensive: the tribe-offset loop above only inspects the owner's
+        // own 10 unit columns, so an army made purely of foreign/nature units
+        // (e.g. captured oasis animals) yields no speeds and min() would
+        // fatal (the "Send back" crash). Unreachable through normal flows
+        // now that nature rows disable Send back, but never crash movement
+        // creation - fall back to the slowest common speed.
+        if (empty($speeds)) {
+            $speeds[] = 3;
         }
 
         $walkTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode, $from);
