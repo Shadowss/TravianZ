@@ -305,3 +305,19 @@ if (!function_exists('heroItemName')) {
         return isset($heroItemCatalog[$itemid]['name']) ? $heroItemCatalog[$itemid]['name'] : 'Unknown item';
     }
 }
+
+/**
+ * Tribe an item belongs to: 0 = universal (helmets, armors, boots, etc.),
+ * 1/2/3 = Romans/Teutons/Gauls for the unit-bound right-hand weapons
+ * (u1-10 -> 1, u11-20 -> 2, u21-30 -> 3). Single source for both the
+ * adventure drop filter and the tribe-filtered auction listing.
+ */
+if (!function_exists('heroItemTribe')) {
+    function heroItemTribe($itemid) {
+        global $heroItemCatalog;
+        if (!isset($heroItemCatalog[$itemid]['unit'])) {
+            return 0;
+        }
+        return intdiv((int) $heroItemCatalog[$itemid]['unit'] - 1, 10) + 1;
+    }
+}

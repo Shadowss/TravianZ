@@ -32,7 +32,7 @@ if (isset($_POST['t4action'])) {
     }
 }
 
-$t4Open    = $t4Auction->getOpenAuctions();
+$t4Open    = $t4Auction->getOpenAuctions(50, $session->uid);
 $t4MyBids  = $t4Auction->getMyBids($session->uid);
 $t4MySales = $t4Auction->getMySales($session->uid);
 $t4Now     = time();

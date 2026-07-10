@@ -398,7 +398,7 @@ class HeroAdventure
             // if no gear dropped, roll the consumable pool. One item max.
             $itemId = 0; $itemQty = 0;
             if (mt_rand(1, 100) <= (int) ($cfg['equip_chance'] ?? 0)) {
-                $itemId  = $this->rollEquipment();
+                $itemId  = $this->rollEquipment($uid);
                 $itemQty = ($itemId > 0) ? 1 : 0;
             }
             if ($itemId === 0 && mt_rand(1, 100) <= (int) $cfg['item_chance']) {
@@ -531,16 +531,19 @@ class HeroAdventure
     }
 
     /**
-     * Roll one random piece of EQUIPMENT (any non-bag catalog item, including
-     * weapons for other tribes - unusable finds feed the auction house, same
-     * as T4). Tier picked by 'equip_tier_weights' (T1 common, T3 very rare),
-     * then a uniform pick inside that tier. Returns an itemid, or 0 if the
-     * rolled tier happens to be empty (defensive; never true with the
-     * shipped catalog).
+     * Roll one random piece of EQUIPMENT. Universal gear (helmets, armors,
+     * boots, horses, left-hand) drops for everyone; right-hand WEAPONS only
+     * drop for the owner's own tribe (T4 behavior - a Roman never finds a
+     * Teuton club). Tier picked by 'equip_tier_weights' (T1 common, T3 very
+     * rare), then a uniform pick inside that tier. Returns an itemid, or 0
+     * if the rolled tier happens to be empty (defensive; never true with
+     * the shipped catalog).
      */
-    public function rollEquipment()
+    public function rollEquipment($uid = 0)
     {
-        global $heroItemCatalog, $heroAdventureConfig;
+        global $database, $heroItemCatalog, $heroAdventureConfig;
+
+        $tribe = ((int) $uid > 0) ? (int) $database->getUserField((int) $uid, 'tribe', 0) : 0;
 
         $weights = $heroAdventureConfig['equip_tier_weights'];
         $roll = mt_rand(1, 100); $acc = 0; $tier = 1;
@@ -551,9 +554,14 @@ class HeroAdventure
 
         $pool = array();
         foreach ($heroItemCatalog as $iid => $def) {
-            if ((int) $def['slot'] !== HSLOT_BAG && (int) $def['tier'] === $tier) {
-                $pool[] = $iid;
+            if ((int) $def['slot'] === HSLOT_BAG || (int) $def['tier'] !== $tier) {
+                continue;
             }
+            $itemTribe = heroItemTribe($iid);
+            if ($itemTribe !== 0 && $tribe > 0 && $itemTribe !== $tribe) {
+                continue; // foreign-tribe weapon
+            }
+            $pool[] = $iid;
         }
         return count($pool) ? (int) $pool[array_rand($pool)] : 0;
     }

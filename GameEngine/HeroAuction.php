@@ -83,10 +83,22 @@ class HeroAuction
      *  READS
      * ===================================================================== */
 
-    /** All open, unexpired auctions (newest ending first optional; default: ending soonest). */
-    public function getOpenAuctions($limit = 50)
+    /**
+     * All open, unexpired auctions, ending soonest first.
+     * When $viewerUid is given, right-hand WEAPONS of other tribes are
+     * hidden (T4 behavior: a Roman only sees Roman weapon lots). Universal
+     * gear and consumables are always shown. The SQL over-fetches slightly
+     * so the filter still fills the page.
+     */
+    public function getOpenAuctions($limit = 50, $viewerUid = 0)
     {
+        global $database;
         $now = time(); $limit = max(1, (int) $limit);
+
+        $viewerTribe = ((int) $viewerUid > 0)
+            ? (int) $database->getUserField((int) $viewerUid, 'tribe', 0) : 0;
+        $fetch = $viewerTribe > 0 ? $limit * 2 : $limit;
+
         $stmt = $this->db->prepare(
             "SELECT id, seller, itemid, slot, stat_value, quantity,
                     silver_start, silver_current, bidder, created, time_end, status
@@ -94,14 +106,23 @@ class HeroAuction
               WHERE status = " . self::ST_OPEN . " AND time_end > ?
               ORDER BY time_end ASC LIMIT ?"
         );
-        $stmt->bind_param('ii', $now, $limit);
+        $stmt->bind_param('ii', $now, $fetch);
         $stmt->execute();
         $res = $stmt->get_result();
         $out = array();
         while ($row = $res->fetch_assoc()) {
+            if ($viewerTribe > 0) {
+                $itemTribe = heroItemTribe($row['itemid']);
+                if ($itemTribe !== 0 && $itemTribe !== $viewerTribe) {
+                    continue; // foreign-tribe weapon lot
+                }
+            }
             $row['name'] = heroItemName($row['itemid']);
             // bid_max intentionally NOT selected - it's the bidder's secret.
             $out[] = $row;
+            if (count($out) >= $limit) {
+                break;
+            }
         }
         $stmt->close();
         return $out;
