@@ -65,7 +65,7 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
     <?php if (count($t4Open)) { ?>
         <?php foreach ($t4Open as $t4A) { ?>
         <tr>
-            <td><span class="heroT4Item item<?php echo (int) $t4A['itemid']; ?>"></span> <?php echo $t4A['name']; ?>
+            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4A['itemid']; ?>"></span> <?php echo $t4A['name']; ?>
                 <?php if ((int) $t4A['seller'] === 0) { ?><small>(<?php echo HERO_AUC_SELLER_NPC; ?>)</small><?php } ?>
             </td>
             <td style="text-align:center;"><?php echo (int) $t4A['quantity']; ?></td>
@@ -98,7 +98,7 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
     <tbody>
     <?php foreach ($t4MyBids as $t4A) { ?>
         <tr>
-            <td><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
+            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
             <td style="text-align:right;"><?php echo HERO_AUC_PRICE; ?>: <?php echo number_format((int) $t4A['silver_current']); ?></td>
             <td style="text-align:right;"><?php echo HERO_AUC_YOUR_MAX; ?>: <?php echo number_format((int) $t4A['bid_max']); ?></td>
             <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
@@ -116,7 +116,7 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
     <tbody>
     <?php foreach ($t4MySales as $t4A) { ?>
         <tr>
-            <td><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
+            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
             <td style="text-align:right;"><?php echo HERO_AUC_PRICE; ?>: <?php echo number_format((int) $t4A['silver_current']); ?></td>
             <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
         </tr>
@@ -137,7 +137,7 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
             <td>
                 <select name="rowid">
                 <?php foreach ($t4Sellable as $t4Row) { ?>
-                    <option value="<?php echo (int) $t4Row['id']; ?>">
+                    <option value="<?php echo (int) $t4Row['id']; ?>" title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>">
                         <?php echo $t4Row['name']; ?><?php if ((int) $t4Row['quantity'] > 1) echo ' (' . (int) $t4Row['quantity'] . 'x)'; ?>
                     </option>
                 <?php } ?>

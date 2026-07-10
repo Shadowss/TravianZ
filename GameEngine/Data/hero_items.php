@@ -321,3 +321,78 @@ if (!function_exists('heroItemTribe')) {
         return intdiv((int) $heroItemCatalog[$itemid]['unit'] - 1, 10) + 1;
     }
 }
+
+/**
+ * Human-readable effect line for an item, GENERATED from its bonus array so
+ * tooltips can never drift from the actual battle/speed mechanics. Values
+ * are shown as effective for THIS server (speed scaling applied, same rule
+ * as HeroItems::scaledBonusValue). Uses HB_TXT_* lang constants with English
+ * fallbacks, so it works before/without a translation pass.
+ */
+if (!function_exists('heroItemBonusText')) {
+    function heroItemBonusText($itemid) {
+        global $heroItemCatalog;
+        if (!isset($heroItemCatalog[$itemid])) {
+            return '';
+        }
+        $def = $heroItemCatalog[$itemid];
+
+        $txt = function ($const, $fallback) {
+            return defined($const) ? constant($const) : $fallback;
+        };
+        // Effective value on this server (mirrors HeroItems::scaledBonusValue).
+        $scale = function ($value) use ($def) {
+            if (!array_key_exists('x2_on_speed', $def) || !defined('SPEED') || SPEED < 3) {
+                return (int) $value;
+            }
+            return $def['x2_on_speed'] ? (int) $value * 2 : (int) floor($value / 2);
+        };
+
+        $parts = array();
+        foreach ($def['bonus'] as $type => $value) {
+            switch ($type) {
+                case HB_FIGHT:          $parts[] = '+' . $scale($value) . ' ' . $txt('HB_TXT_FIGHT', 'fighting strength'); break;
+                case HB_UNIT_BONUS:
+                    $u = (int) $value['unit'];
+                    $uname = defined('U' . $u) ? constant('U' . $u) : 'unit ' . $u;
+                    $parts[] = '+' . (int) $value['per_unit'] . ' ' . $txt('HB_TXT_UNIT_OFF', 'attack') . ' / +'
+                             . (int) $value['per_unit'] . ' ' . $txt('HB_TXT_UNIT_DEF', 'defense') . ' '
+                             . $txt('HB_TXT_PER', 'per') . ' ' . $uname;
+                    break;
+                case HB_VS_NATARS:      $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_VS_NATARS', 'strength vs Natars'); break;
+                case HB_RAID:           $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_RAID', 'raided resources'); break;
+                case HB_RETURN_SPEED:   $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_RETURN', 'troop return speed'); break;
+                case HB_SPEED_OWN:      $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_SPEED_OWN', 'speed between own villages'); break;
+                case HB_SPEED_ALLY:     $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_SPEED_ALLY', 'speed between ally villages'); break;
+                case HB_XP:             $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_XP', 'experience'); break;
+                case HB_REGEN_HP:       $parts[] = '+' . $scale($value) . ' ' . $txt('HB_TXT_REGEN', 'HP per day'); break;
+                case HB_CP:             $parts[] = '+' . $scale($value) . ' ' . $txt('HB_TXT_CP', 'culture points per day'); break;
+                case HB_TRAIN_CAV:      $parts[] = '-' . $scale($value) . '% ' . $txt('HB_TXT_TRAIN_CAV', 'cavalry training time'); break;
+                case HB_TRAIN_INF:      $parts[] = '-' . $scale($value) . '% ' . $txt('HB_TXT_TRAIN_INF', 'infantry training time'); break;
+                case HB_DMG_REDUCE:     $parts[] = '-' . $scale($value) . ' ' . $txt('HB_TXT_DMG', 'damage taken by the hero'); break;
+                case HB_TROOP_SPEED_20: $parts[] = '+' . $scale($value) . '% ' . $txt('HB_TXT_SPEED20', 'troop speed beyond 20 tiles'); break;
+                case HB_MOUNT_SPEED:    $parts[] = '+' . $scale($value) . ' ' . $txt('HB_TXT_MOUNT', 'fields/hour while mounted'); break;
+                case HB_HORSE_SPEED:    $parts[] = $scale($value) . ' ' . $txt('HB_TXT_HORSE', 'fields/hour hero speed'); break;
+                case HB_HEAL_SELF:      $parts[] = $txt('HB_TXT_OINTMENT', 'Heals 1% hero health per unit (max 99%)'); break;
+                case HB_SCROLL:         $parts[] = '+' . (int) $value . ' ' . $txt('HB_TXT_SCROLL', 'hero experience each'); break;
+                case HB_BUCKET:         $parts[] = $txt('HB_TXT_BUCKET', 'Instantly revives the hero at no cost'); break;
+                case HB_LOYALTY:        $parts[] = $txt('HB_TXT_TABLET', '+1% own village loyalty each (max 125%)'); break;
+                case HB_RESET:          $parts[] = $txt('HB_TXT_BOOK', 'Resets the hero attribute points'); break;
+                case HB_ARTWORK:        $parts[] = $txt('HB_TXT_ARTWORK', 'Culture points equal to your daily production'); break;
+                case HB_HEAL_TROOP:     $parts[] = $txt('HB_TXT_BANDAGE_A', 'Heals') . ' ' . (int) $value . '% ' . $txt('HB_TXT_BANDAGE_B', "of the hero's fallen troops after battle"); break;
+                case HB_CAGE:           $parts[] = $txt('HB_TXT_CAGE', 'Captures 1 oasis animal per cage'); break;
+            }
+        }
+
+        $out = implode(', ', $parts);
+        if (!empty($def['requires_horse'])) {
+            $out .= ' (' . $txt('HB_TXT_NEEDS_HORSE', 'requires an equipped horse') . ')';
+        }
+        if (isset($def['unit'])) {
+            $u = (int) $def['unit'];
+            $uname = defined('U' . $u) ? constant('U' . $u) : 'unit ' . $u;
+            $out .= ' (' . $txt('HB_TXT_ONLY', 'only for a') . ' ' . $uname . ' ' . $txt('HB_TXT_HERO', 'hero') . ')';
+        }
+        return $out;
+    }
+}

@@ -53,7 +53,7 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
         <tr>
             <td style="width:110px;"><b><?php echo constant('HERO_SLOT_' . $t4Slot); ?></b></td>
             <?php if (isset($t4Equipped[$t4Slot])) { $t4Row = $t4Equipped[$t4Slot]; ?>
-            <td><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
+            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
             <td style="width:60px;text-align:center;"><?php echo 'T' . (int) $t4Row['def']['tier']; ?></td>
             <td style="width:110px;text-align:center;">
                 <form action="" method="POST" style="margin:0;">
@@ -85,7 +85,7 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
         $t4IsBag = ((int) $t4Row['def']['slot'] === HSLOT_BAG);
     ?>
         <tr>
-            <td><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
+            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
             <td style="width:80px;text-align:center;">
                 <?php echo $t4IsBag ? (int) $t4Row['quantity'] . 'x' : 'T' . (int) $t4Row['def']['tier']; ?>
             </td>
