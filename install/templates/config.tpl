@@ -207,7 +207,8 @@ $mechs = [
     'new_functions_medal_10year'          => 'Medal 10y',
 	'new_functions_special_medals_system' => 'Special Medals System',
 	'new_functions_medal_reset' 		  => 'Medal Reset',
-	'new_functions_milestones'            => 'Server Milestones'
+	'new_functions_milestones'            => 'Server Milestones',
+	'new_functions_hero_t4'               => 'T4 Hero (items, adventures, auction)'
 ];
 
 foreach($mechs as $k => $l){

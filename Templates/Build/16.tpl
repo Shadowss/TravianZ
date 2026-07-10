@@ -207,6 +207,11 @@ $hasRally = $village->resarray['f39'] > 0;
     $set = $database->getMovement(5,$village->wid,0);
     $cnt = count($set);
     foreach($out as $u) if($u['vref']==$village->wid) $cnt++;
+    // T4 hero port: adventure legs count as troops on their way too.
+    if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+        $cnt += count($database->getMovement(20,$village->wid,0));
+        $cnt += count($database->getMovement(21,$village->wid,1));
+    }
     ?>
     <?php if($cnt>=1): ?>
         <h4><?= TROOPS_ON_THEIR_WAY ?></h4>

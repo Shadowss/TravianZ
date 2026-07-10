@@ -75,6 +75,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM = (NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MILESTONES = (NEW_FUNCTIONS_MILESTONES == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MEDAL_RESET = (NEW_FUNCTIONS_MEDAL_RESET == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_HERO_T4 = (NEW_FUNCTIONS_HERO_T4 == false ? 'false' : 'true');
 
 		$text = admin_config_template_contents();
 		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
@@ -170,6 +171,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%'", $NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MILESTONES%'", $NEW_FUNCTIONS_MILESTONES, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_RESET%'", $NEW_FUNCTIONS_MEDAL_RESET, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_HERO_T4%'", $NEW_FUNCTIONS_HERO_T4, $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

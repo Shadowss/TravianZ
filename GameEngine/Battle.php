@@ -190,6 +190,16 @@ class Battle {
     $h_ob = 1 + (0.010 * ($attackBonus / 5));
     $h_db = 1 + (0.010 * ($defenceBonus / 5));
 
+    // T4 hero port (Phase 5): flat fighting strength from equipped items
+    // (weapons/cuirasses/shields) counts on whichever side the hero fights.
+    // No-ops to 0 when NEW_FUNCTIONS_HERO_T4 is off.
+    $itemStrength = HeroBattleBonus::statBonus($uid);
+    if ($itemStrength > 0) {
+        $h_atk += $itemStrength;
+        $h_di  += $itemStrength;
+        $h_dc  += $itemStrength;
+    }
+
     return [
         'heroid' => (int)$hero['heroid'],
         'unit'   => $heroUnit,
@@ -198,6 +208,8 @@ class Battle {
         'dc'     => $h_dc,
         'ob'     => $h_ob,
         'db'     => $h_db,
+        // T4 hero port: carried along for the offense/defense/damage hooks.
+        'uid'    => (int)$uid,
         'health' => isset($hero['health'])
             ? (int)$hero['health']
             : 0
@@ -550,6 +562,14 @@ class Battle {
                 $units['Def_unit']['hero'] = $Defender['hero'];
                 $own_cdp += $defenderhero['dc'];
                 $own_dp += $defenderhero['di'];
+
+                // T4 hero port (Phase 5): weapon adds +N defense per unit of
+                // its type in the defending army, counted in both pools
+                // (see HeroBattleBonus::unitDefense). No-op when flag is off.
+                $itemDef = HeroBattleBonus::unitDefense($defenderhero['uid'] ?? 0, $Defender);
+                $own_dp  += $itemDef;
+                $own_cdp += $itemDef;
+
                 $own_dp *= $defenderhero['db'];
                 $own_cdp *= $defenderhero['db'];
             }
@@ -762,7 +782,14 @@ class Battle {
             $ap  *= $atkhero['ob'];
             $cap *= $atkhero['ob'];
 
-            $ap += $atkhero['atk'];
+            // T4 hero port (Phase 5): hunting horn boosts the HERO's own
+            // contribution vs the Natars (uid 3); weapon adds +N attack per
+            // accompanying unit of its type. Neutral no-ops when the flag is off.
+            $ap += $atkhero['atk'] * HeroBattleBonus::natarMultiplier($atkhero['uid'] ?? 0, $DefenderID);
+
+            list($itemAp, $itemCap) = HeroBattleBonus::unitOffense($atkhero['uid'] ?? 0, $Attacker, $calvaryLookup);
+            $ap  += $itemAp;
+            $cap += $itemCap;
         }
 
         if ($offhero > 0 || $hero_strenght > 0) {
@@ -1135,6 +1162,10 @@ class Battle {
 
             $hero_health = (int)$fdb['health'];
             $damage_health = round(100 * $result[1]);
+
+            // T4 hero port (Phase 5): armors reduce the health damage the
+            // hero takes in one battle (flat, floored at 0). No-op when off.
+            $damage_health = HeroBattleBonus::reduceDamage($atkhero['uid'] ?? 0, $damage_health);
 
             if ($hero_health <= $damage_health || $damage_health > 90) {
 

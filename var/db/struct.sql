@@ -951,6 +951,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  `level` tinyint(3) NULL,
  `points` int(3) NULL,
  `experience` int(11) NULL,
+ `silver` int(11) NOT NULL DEFAULT 0,
+ `production` tinyint(1) NOT NULL DEFAULT 0,
  `dead` tinyint(1) NULL,
  `health` float(12,9) NULL,
  `attack` tinyint(3) NULL,
@@ -975,6 +977,76 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
 --
 
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%hero_items` (T4 hero port)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%hero_items` (
+ `id`         int(11)     NOT NULL AUTO_INCREMENT,
+ `uid`        int(11)     NOT NULL,
+ `heroid`     int(11)     NOT NULL DEFAULT 0,
+ `itemid`     smallint(5) NOT NULL,
+ `slot`       tinyint(2)  NOT NULL DEFAULT 0,
+ `stat_value` int(11)     NOT NULL DEFAULT 0,
+ `quantity`   int(11)     NOT NULL DEFAULT 1,
+ `equipped`   tinyint(1)  NOT NULL DEFAULT 0,
+ `tstamp`     int(11)     NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `uid_equipped` (`uid`,`equipped`),
+ KEY `uid_slot` (`uid`,`slot`),
+ KEY `itemid` (`itemid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%hero_adventure` (T4 hero port)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%hero_adventure` (
+ `id`         int(11)    NOT NULL AUTO_INCREMENT,
+ `uid`        int(11)    NOT NULL,
+ `wref`       int(11)    NOT NULL DEFAULT 0,
+ `difficulty` tinyint(1) NOT NULL DEFAULT 0,
+ `duration`   int(11)    NOT NULL DEFAULT 0,
+ `created`    int(11)    NOT NULL DEFAULT 0,
+ `expire`     int(11)    NOT NULL DEFAULT 0,
+ `status`     tinyint(1) NOT NULL DEFAULT 0,
+ `moveid`     int(11)    NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `uid_status` (`uid`,`status`),
+ KEY `expire` (`expire`),
+ KEY `moveid` (`moveid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%auction` (T4 hero port)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%auction` (
+ `id`             int(11)     NOT NULL AUTO_INCREMENT,
+ `seller`         int(11)     NOT NULL DEFAULT 0,
+ `itemid`         smallint(5) NOT NULL,
+ `slot`           tinyint(2)  NOT NULL DEFAULT 0,
+ `stat_value`     int(11)     NOT NULL DEFAULT 0,
+ `quantity`       int(11)     NOT NULL DEFAULT 1,
+ `silver_start`   int(11)     NOT NULL DEFAULT 0,
+ `silver_current` int(11)     NOT NULL DEFAULT 0,
+ `bidder`         int(11)     NOT NULL DEFAULT 0,
+ `bid_max`        int(11)     NOT NULL DEFAULT 0,
+ `created`        int(11)     NOT NULL DEFAULT 0,
+ `time_end`       int(11)     NOT NULL DEFAULT 0,
+ `status`         tinyint(1)  NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `status_end` (`status`,`time_end`),
+ KEY `bidder` (`bidder`),
+ KEY `seller` (`seller`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

@@ -171,6 +171,7 @@ class Process {
 		$findReplace["%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%"] = $_POST['new_functions_special_medals_system'];
 		$findReplace["%NEW_FUNCTIONS_MILESTONES%"] = $_POST['new_functions_milestones'];
 		$findReplace["%NEW_FUNCTIONS_MEDAL_RESET%"] = $_POST['new_functions_medal_reset'];
+		$findReplace["%NEW_FUNCTIONS_HERO_T4%"] = $_POST['new_functions_hero_t4'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

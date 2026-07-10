@@ -2678,7 +2678,114 @@ if (!function_exists('tz_loc_topic')) {
             'Unoccupied Oasis'                     => TZ_RT_UNOCC_OASIS,
             'New village founded'                  => TZ_RT_NEW_VILLAGE,
             'Settlers returned - valley occupied'  => TZ_RT_VALLEY_OCCUPIED,
+            // T4 hero port (Phase 6)
+            'Hero returned from an adventure'      => TZ_RT_ADV_RETURNED,
+            'Hero fell on an adventure'            => TZ_RT_ADV_FELL,
+            'Auction won'                          => TZ_RT_AUC_WON,
+            'Auction sold'                         => TZ_RT_AUC_SOLD,
+            'Auction expired'                      => TZ_RT_AUC_EXPIRED,
         );
         return strtr($s, $map);
     }
 }
+
+/* =============================================================================
+ * T4 HERO PORT (Phase 6) - items / adventures / auction house
+ * ========================================================================== */
+tz_def('HERO_T4_TAB_HERO',       'Hero');
+tz_def('HERO_T4_TAB_ITEMS',      'Inventory');
+tz_def('HERO_T4_TAB_ADVENTURES', 'Adventures');
+tz_def('HERO_T4_TAB_AUCTION',    'Auctions');
+
+tz_def('HERO_SILVER',            'Silver');
+tz_def('HERO_EXPERIENCE',        'Experience');
+tz_def('RESOURCES',              'Resources');
+
+/* Equipment slots */
+tz_def('HERO_SLOT_1', 'Helmet');
+tz_def('HERO_SLOT_2', 'Body');
+tz_def('HERO_SLOT_3', 'Right hand');
+tz_def('HERO_SLOT_4', 'Left hand');
+tz_def('HERO_SLOT_5', 'Shoes');
+tz_def('HERO_SLOT_6', 'Horse');
+tz_def('HERO_SLOT_7', 'Bag');
+
+/* Inventory actions */
+tz_def('HERO_ITEMS_EQUIPPED',    'Equipped');
+tz_def('HERO_ITEMS_BAG',         'Inventory');
+tz_def('HERO_ITEMS_EMPTY',       'Your hero owns no items yet. Adventures and the auction house are good places to find some.');
+tz_def('HERO_EQUIP',             'Equip');
+tz_def('HERO_UNEQUIP',           'Take off');
+tz_def('HERO_USE_ITEM',          'Use');
+tz_def('HERO_QUANTITY',          'Amount');
+tz_def('HERO_ITEM_USED_OK',      'The item has been used.');
+tz_def('HERO_ITEM_USE_FAIL',     'This item cannot be used right now.');
+tz_def('HERO_ITEM_USE_BATTLE',   'This item is used automatically (bandages heal returning troops after battles).');
+tz_def('HERO_EQUIP_OK',          'Item equipped.');
+tz_def('HERO_EQUIP_FAIL',        'This item cannot be equipped (wrong hero unit or item type).');
+tz_def('HERO_UNEQUIP_OK',        'Item taken off.');
+
+/* Adventures */
+tz_def('HERO_ADV_NORMAL',        'a normal adventure');
+tz_def('HERO_ADV_HARD',          'a hard adventure');
+tz_def('HERO_ADV_LIST',          'Available adventures');
+tz_def('HERO_ADV_NONE',          'No adventures available right now. New ones appear over time.');
+tz_def('HERO_ADV_DIFFICULTY',    'Difficulty');
+tz_def('HERO_ADV_DIFF_NORMAL',   'Normal');
+tz_def('HERO_ADV_DIFF_HARD',     'Hard');
+tz_def('HERO_ADV_DURATION',      'Travel time (one way)');
+tz_def('HERO_ADV_EXPIRES',       'Expires in');
+tz_def('HERO_ADV_GO',            'Start adventure');
+tz_def('HERO_ADV_RUNNING',       'Your hero is on an adventure and will arrive in');
+tz_def('HERO_ADV_START_OK',      'Your hero has set off on the adventure.');
+tz_def('HERO_ADV_START_NOHERO',  'You need a living hero to start an adventure.');
+tz_def('HERO_ADV_START_AWAY',    'Your hero is not at home.');
+tz_def('HERO_ADV_START_FAIL',    'This adventure is no longer available.');
+tz_def('HERO_ADV_RETURNED',      'Your hero has returned from');
+tz_def('HERO_ADV_REWARD',        'Reward');
+tz_def('HERO_ADV_AMOUNT',        'Amount');
+tz_def('HERO_ADV_ITEM_FOUND',    'Item found');
+tz_def('HERO_ADV_HP_LOST',       'Health lost');
+tz_def('HERO_ADV_DIED',          'Your hero fell on');
+tz_def('HERO_ADV_DIED_INFO',     "All loot was lost. The hero can be revived at the Hero's Mansion.");
+
+/* Auction house */
+tz_def('HERO_AUC_OPEN',          'Open auctions');
+tz_def('HERO_AUC_NONE',          'There are no open auctions at the moment.');
+tz_def('HERO_AUC_ITEM',          'Item');
+tz_def('HERO_AUC_PRICE',         'Current price');
+tz_def('HERO_AUC_FINAL_PRICE',   'Final price');
+tz_def('HERO_AUC_TIME_LEFT',     'Ends in');
+tz_def('HERO_AUC_YOUR_MAX',      'Your maximum');
+tz_def('HERO_AUC_BID',           'Bid');
+tz_def('HERO_AUC_BID_OK',        'Your bid was placed. You are the highest bidder.');
+tz_def('HERO_AUC_BID_OUTBID',    'Your bid was immediately outbid by a higher maximum.');
+tz_def('HERO_AUC_BID_FAIL',      'Your bid was not accepted.');
+tz_def('HERO_AUC_BID_NOSILVER',  'You do not have enough silver for this bid.');
+tz_def('HERO_AUC_MY_BIDS',       'My bids');
+tz_def('HERO_AUC_MY_SALES',      'My sales');
+tz_def('HERO_AUC_SELL',          'Sell an item');
+tz_def('HERO_AUC_SELL_OK',       'Your item has been listed.');
+tz_def('HERO_AUC_SELL_FAIL',     'This item cannot be listed (equipped items must be taken off first).');
+tz_def('HERO_AUC_START_PRICE',   'Starting price');
+tz_def('HERO_AUC_DURATION',      'Duration');
+tz_def('HERO_AUC_LIST',          'List item');
+tz_def('HERO_AUC_SELLER_NPC',    'Merchant');
+tz_def('HERO_AUC_WON',           'You won the auction for');
+tz_def('HERO_AUC_SOLD',          'Your auction sold:');
+tz_def('HERO_AUC_REFUND',        'Refunded from your maximum bid');
+tz_def('HERO_AUC_FEE',           'Auction fee');
+tz_def('HERO_AUC_PAYOUT',        'Payout');
+tz_def('HERO_AUC_EXPIRED',       'Your auction ended without bids. The item was returned to your inventory:');
+
+/* Report topics (raw English strings live in ndata.topic) */
+tz_def('TZ_RT_ADV_RETURNED',     'Hero returned from an adventure');
+tz_def('TZ_RT_ADV_FELL',         'Hero fell on an adventure');
+tz_def('TZ_RT_AUC_WON',          'Auction won');
+tz_def('TZ_RT_AUC_SOLD',         'Auction sold');
+tz_def('TZ_RT_AUC_EXPIRED',      'Auction expired');
+
+/* T4 hero port - movement display (dorf1 + rally point) */
+tz_def('HERO_ADV_MOV_OUT',   'Hero on an adventure');
+tz_def('HERO_ADV_MOV_BACK',  'Hero returning from an adventure');
+tz_def('HERO_ADV_MOV_SHORT', 'Adventure');

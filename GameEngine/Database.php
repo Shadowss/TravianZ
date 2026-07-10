@@ -5863,6 +5863,15 @@ References: User ID/Message ID, Mode
 			case 8:
 				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
 				break;
+			// T4 hero port: hero travelling to an adventure (plain select,
+			// ref points to hero_adventure - NOT to attacks, so no join).
+			case 20:
+				$q = "SELECT * FROM " . TB_PREFIX . "movement where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and sort_type = 20 and proc = 0 ORDER BY endtime ASC";
+				break;
+			// T4 hero port: hero returning from an adventure.
+			case 21:
+				$q = "SELECT * FROM " . TB_PREFIX . "movement where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and sort_type = 21 and proc = 0 ORDER BY endtime ASC";
+				break;
 			case 34:
 				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 or " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 ORDER BY endtime ASC";
 				break;

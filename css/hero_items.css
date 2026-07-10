@@ -1,0 +1,116 @@
+/* AUTO-GENERATED from GameEngine/Data/hero_items.php - regenerate via var/tools/generate_hero_sprites.php
+   Placeholder art: replace img/hero/items.png with real 48x48 sprites on the SAME grid
+   (16 columns, catalog order) and this CSS keeps working unchanged. */
+.heroT4Item{display:inline-block;width:48px;height:48px;vertical-align:middle;
+  background-image:url('../img/hero/items.png');background-repeat:no-repeat;}
+.heroT4Item.item1{background-position:-0px -0px;} /* Helmet of Awareness */
+.heroT4Item.item2{background-position:-48px -0px;} /* Helmet of Enlightenment */
+.heroT4Item.item3{background-position:-96px -0px;} /* Helmet of Wisdom */
+.heroT4Item.item4{background-position:-144px -0px;} /* Helmet of Regeneration */
+.heroT4Item.item5{background-position:-192px -0px;} /* Helmet of Health */
+.heroT4Item.item6{background-position:-240px -0px;} /* Helmet of Healing */
+.heroT4Item.item7{background-position:-288px -0px;} /* Helmet of the Gladiator */
+.heroT4Item.item8{background-position:-336px -0px;} /* Helmet of the Tribune */
+.heroT4Item.item9{background-position:-384px -0px;} /* Helmet of the Consul */
+.heroT4Item.item10{background-position:-432px -0px;} /* Helmet of the Horseman */
+.heroT4Item.item11{background-position:-480px -0px;} /* Helmet of the Cavalry */
+.heroT4Item.item12{background-position:-528px -0px;} /* Helmet of the Heavy Cavalry */
+.heroT4Item.item13{background-position:-576px -0px;} /* Helmet of the Mercenary */
+.heroT4Item.item14{background-position:-624px -0px;} /* Helmet of the Warrior */
+.heroT4Item.item15{background-position:-672px -0px;} /* Helmet of the Ruler */
+.heroT4Item.item20{background-position:-720px -0px;} /* Light Breastplate of Regeneration */
+.heroT4Item.item21{background-position:-0px -48px;} /* Breastplate of Regeneration */
+.heroT4Item.item22{background-position:-48px -48px;} /* Heavy Breastplate of Regeneration */
+.heroT4Item.item23{background-position:-96px -48px;} /* Light Armor */
+.heroT4Item.item24{background-position:-144px -48px;} /* Armor */
+.heroT4Item.item25{background-position:-192px -48px;} /* Heavy Armor */
+.heroT4Item.item26{background-position:-240px -48px;} /* Light Cuirass */
+.heroT4Item.item27{background-position:-288px -48px;} /* Cuirass */
+.heroT4Item.item28{background-position:-336px -48px;} /* Heavy Cuirass */
+.heroT4Item.item29{background-position:-384px -48px;} /* Light Segmented Armor */
+.heroT4Item.item30{background-position:-432px -48px;} /* Segmented Armor */
+.heroT4Item.item31{background-position:-480px -48px;} /* Heavy Segmented Armor */
+.heroT4Item.item40{background-position:-528px -48px;} /* Small Shield */
+.heroT4Item.item41{background-position:-576px -48px;} /* Shield */
+.heroT4Item.item42{background-position:-624px -48px;} /* Great Shield */
+.heroT4Item.item43{background-position:-672px -48px;} /* Small Hunting Horn */
+.heroT4Item.item44{background-position:-720px -48px;} /* Hunting Horn */
+.heroT4Item.item45{background-position:-0px -96px;} /* Great Hunting Horn */
+.heroT4Item.item46{background-position:-48px -96px;} /* Thief's Satchel */
+.heroT4Item.item47{background-position:-96px -96px;} /* Thief's Bag */
+.heroT4Item.item48{background-position:-144px -96px;} /* Thief's Sack */
+.heroT4Item.item49{background-position:-192px -96px;} /* Small Map */
+.heroT4Item.item50{background-position:-240px -96px;} /* Map */
+.heroT4Item.item51{background-position:-288px -96px;} /* Great Map */
+.heroT4Item.item52{background-position:-336px -96px;} /* Small Pennant */
+.heroT4Item.item53{background-position:-384px -96px;} /* Pennant */
+.heroT4Item.item54{background-position:-432px -96px;} /* Great Pennant */
+.heroT4Item.item55{background-position:-480px -96px;} /* Small Standard */
+.heroT4Item.item56{background-position:-528px -96px;} /* Standard */
+.heroT4Item.item57{background-position:-576px -96px;} /* Great Standard */
+.heroT4Item.item60{background-position:-624px -96px;} /* Boots of Regeneration */
+.heroT4Item.item61{background-position:-672px -96px;} /* Boots of Recovery */
+.heroT4Item.item62{background-position:-720px -96px;} /* Boots of Healing */
+.heroT4Item.item63{background-position:-0px -144px;} /* Boots of the Mercenary */
+.heroT4Item.item64{background-position:-48px -144px;} /* Boots of the Warrior */
+.heroT4Item.item65{background-position:-96px -144px;} /* Boots of the Ruler */
+.heroT4Item.item66{background-position:-144px -144px;} /* Small Spurs */
+.heroT4Item.item67{background-position:-192px -144px;} /* Spurs */
+.heroT4Item.item68{background-position:-240px -144px;} /* Great Spurs */
+.heroT4Item.item70{background-position:-288px -144px;} /* Riding Horse */
+.heroT4Item.item71{background-position:-336px -144px;} /* Thoroughbred */
+.heroT4Item.item72{background-position:-384px -144px;} /* Warhorse */
+.heroT4Item.item101{background-position:-432px -144px;} /* Legionnaire's Short Sword */
+.heroT4Item.item102{background-position:-480px -144px;} /* Legionnaire's Sword */
+.heroT4Item.item103{background-position:-528px -144px;} /* Legionnaire's Long Sword */
+.heroT4Item.item104{background-position:-576px -144px;} /* Praetorian's Short Sword */
+.heroT4Item.item105{background-position:-624px -144px;} /* Praetorian's Sword */
+.heroT4Item.item106{background-position:-672px -144px;} /* Praetorian's Long Sword */
+.heroT4Item.item107{background-position:-720px -144px;} /* Imperian's Short Sword */
+.heroT4Item.item108{background-position:-0px -192px;} /* Imperian's Sword */
+.heroT4Item.item109{background-position:-48px -192px;} /* Imperian's Long Sword */
+.heroT4Item.item110{background-position:-96px -192px;} /* Imperatoris' Short Saber */
+.heroT4Item.item111{background-position:-144px -192px;} /* Imperatoris' Saber */
+.heroT4Item.item112{background-position:-192px -192px;} /* Imperatoris' Long Saber */
+.heroT4Item.item113{background-position:-240px -192px;} /* Caesaris' Light Lance */
+.heroT4Item.item114{background-position:-288px -192px;} /* Caesaris' Lance */
+.heroT4Item.item115{background-position:-336px -192px;} /* Caesaris' Heavy Lance */
+.heroT4Item.item116{background-position:-384px -192px;} /* Clubswinger's Cudgel */
+.heroT4Item.item117{background-position:-432px -192px;} /* Clubswinger's Club */
+.heroT4Item.item118{background-position:-480px -192px;} /* Clubswinger's Mace */
+.heroT4Item.item119{background-position:-528px -192px;} /* Spearman's Pitchfork */
+.heroT4Item.item120{background-position:-576px -192px;} /* Spearman's Pike */
+.heroT4Item.item121{background-position:-624px -192px;} /* Spearman's Spear */
+.heroT4Item.item122{background-position:-672px -192px;} /* Axeman's Hatchet */
+.heroT4Item.item123{background-position:-720px -192px;} /* Axeman's Axe */
+.heroT4Item.item124{background-position:-0px -240px;} /* Axeman's Battle Axe */
+.heroT4Item.item125{background-position:-48px -240px;} /* Paladin's Small Hammer */
+.heroT4Item.item126{background-position:-96px -240px;} /* Paladin's Hammer */
+.heroT4Item.item127{background-position:-144px -240px;} /* Paladin's Sledgehammer */
+.heroT4Item.item128{background-position:-192px -240px;} /* Teutonic Knight's Short Sword */
+.heroT4Item.item129{background-position:-240px -240px;} /* Teutonic Knight's Sword */
+.heroT4Item.item130{background-position:-288px -240px;} /* Teutonic Knight's Long Sword */
+.heroT4Item.item131{background-position:-336px -240px;} /* Phalanx's Pitchfork */
+.heroT4Item.item132{background-position:-384px -240px;} /* Phalanx's Spear */
+.heroT4Item.item133{background-position:-432px -240px;} /* Phalanx's Lance */
+.heroT4Item.item134{background-position:-480px -240px;} /* Swordsman's Short Sword */
+.heroT4Item.item135{background-position:-528px -240px;} /* Swordsman's Sword */
+.heroT4Item.item136{background-position:-576px -240px;} /* Swordsman's Long Sword */
+.heroT4Item.item137{background-position:-624px -240px;} /* Thunder's Short Bow */
+.heroT4Item.item138{background-position:-672px -240px;} /* Thunder's Bow */
+.heroT4Item.item139{background-position:-720px -240px;} /* Thunder's Long Bow */
+.heroT4Item.item140{background-position:-0px -288px;} /* Druidrider's Baton */
+.heroT4Item.item141{background-position:-48px -288px;} /* Druidrider's Staff */
+.heroT4Item.item142{background-position:-96px -288px;} /* Druidrider's Great Staff */
+.heroT4Item.item143{background-position:-144px -288px;} /* Haeduan's Light Lance */
+.heroT4Item.item144{background-position:-192px -288px;} /* Haeduan's Lance */
+.heroT4Item.item145{background-position:-240px -288px;} /* Haeduan's Heavy Lance */
+.heroT4Item.item200{background-position:-288px -288px;} /* Ointment */
+.heroT4Item.item201{background-position:-336px -288px;} /* Scroll */
+.heroT4Item.item202{background-position:-384px -288px;} /* Bucket of Water */
+.heroT4Item.item203{background-position:-432px -288px;} /* Law Tablet */
+.heroT4Item.item204{background-position:-480px -288px;} /* Book of Wisdom */
+.heroT4Item.item205{background-position:-528px -288px;} /* Artwork */
+.heroT4Item.item206{background-position:-576px -288px;} /* Small Bandage */
+.heroT4Item.item207{background-position:-624px -288px;} /* Bandage */
+.heroT4Item.item208{background-position:-672px -288px;} /* Cage */

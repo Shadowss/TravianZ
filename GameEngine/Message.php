@@ -452,6 +452,14 @@ class Message
             case 24:
             case 25:
                 return 24;
+
+            // Hero adventure report (T4 hero port)
+            case 26:
+                return 26;
+
+            // Hero auction report (T4 hero port)
+            case 27:
+                return 27;
         }
         return $type;
     }

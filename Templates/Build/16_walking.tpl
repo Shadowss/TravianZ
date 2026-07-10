@@ -20,6 +20,41 @@
 #################################################################################
 
 $outgoing = $database->getMovement(3, $village->wid, 0);
+
+// T4 hero port: hero adventure legs (out = from this village, back = to it).
+$advWalking = [];
+if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+    foreach ($database->getMovement(20, $village->wid, 0) as $m) { $m['t4adv'] = 'out';  $advWalking[] = $m; }
+    foreach ($database->getMovement(21, $village->wid, 1) as $m) { $m['t4adv'] = 'back'; $advWalking[] = $m; }
+}
+?>
+
+<?php foreach ($advWalking as $m):
+    $session->timer++;
+    $action = $m['t4adv'] === 'out'
+        ? (defined('HERO_ADV_MOV_OUT') ? HERO_ADV_MOV_OUT : 'Hero on an adventure')
+        : (defined('HERO_ADV_MOV_BACK') ? HERO_ADV_MOV_BACK : 'Hero returning from an adventure');
+    $dt = $generator->procMtime($m['endtime']);
+?>
+<table class="troop_details" cellpadding="1" cellspacing="1">
+    <thead><tr>
+        <td class="role"><a href="karte.php?d=<?= $village->wid?>&c=<?= $generator->getMapCheck($village->wid)?>"><?= $village->vname?></a></td>
+        <td colspan="2"><?= $action?></td>
+    </tr></thead>
+    <tbody class="units">
+        <tr><th>&nbsp;</th><td style="width:40px;"><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><td>&nbsp;</td></tr>
+        <tr><th><?= TROOPS?></th><td>1</td><td>&nbsp;</td></tr>
+    </tbody>
+    <tbody class="infos"><tr>
+        <th><?= ARRIVAL?></th>
+        <td colspan="2">
+            <div class="in small"><span id="timer<?= $session->timer?>"><?= $generator->getTimeFormat($m['endtime']-time())?></span> h</div>
+            <div class="at"><?= $dt[0]!='today'?ON.' '.$dt[0].' ':''?><?= AT?> <?= $dt[1]?></div>
+        </td>
+    </tr></tbody>
+</table>
+<?php endforeach;?>
+<?php
 ?>
 
 <?php foreach ($outgoing as $m):

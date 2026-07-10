@@ -95,7 +95,8 @@ class Automation {
         				  "trainingComplete", "starvation", "celebrationComplete", "festivalComplete",
         				  "sendUnitsComplete", "loyaltyRegeneration", "sendreinfunitsComplete",
         				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
-        				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts"];
+        				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts",
+        				  "heroAdventureComplete"];
         
         foreach($methodsArrays as $method){
         	$file = fopen($autoprefix."GameEngine/Prevention/".$method.".txt", "w");
@@ -2885,9 +2886,17 @@ class Automation {
                     {                       
                         $returningTroops = [];
                         for($i = 1; $i <= 11; $i++) $returningTroops['t'.$i] = $data['t'.$i] - $traped[$i] - $dead[$i];
+                        // T4 hero port (Phase 6): bandages revive part of the
+                        // losses when the hero comes home alive; revived units
+                        // are written back to the attacks row (the source
+                        // returnunitsComplete reads on arrival). No-op when off.
+                        $returningTroops = HeroBattleBonus::applyBandages($from['owner'], $returningTroops, $dead, (int) $data['ref']);
                         $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $returningTroops, 1, 't');
                         $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);
                         $endtime += $AttackArrivalTime;
+                        // T4 hero port (Phase 5): the map shortens the return
+                        // leg when the SURVIVING hero travels home. No-op when off.
+                        $endtime = HeroBattleBonus::adjustReturnEndtime($from['owner'], $returningTroops['t11'], $AttackArrivalTime, $endtime);
                         if($type == 1){
 							if($from['owner'] == 3){ // fix natar report by ronix
 								$database->addNotice($to['owner'], $to['wref'], $targetally, 20, '' . addslashes($from['name']) . ' scouts ' . addslashes($to['name']) . '', $data2, $AttackArrivalTime);
@@ -3130,6 +3139,15 @@ class Automation {
                     $enforDefender    = $defUnits['enforDefender'];
                     $enforcementarray = $defUnits['enforcementarray'];
 
+                    // T4 hero port (Phase 8): cages capture animals on an
+                    // UNOCCUPIED oasis before the fight - captured animals do
+                    // not defend and are stationed at home as reinforcements.
+                    // No-op when the flag is off, no hero rides along, the
+                    // oasis is owned, or the attacker has no cages.
+                    if ($isoasis != 0 && (int) $conqureby === 0 && (int) $data['t11'] > 0) {
+                        $Defender = HeroBattleBonus::applyCages($from['owner'], (int) $data['from'], (int) $data['to'], $Defender);
+                    }
+
                     // attacker army built — extracted to buildAttackerUnits() [#155]
                     $atkUnits  = $this->buildAttackerUnits($dataarray[$data_num], $owntribe, $isoasis);
                     $Attacker  = $atkUnits['Attacker'];
@@ -3363,7 +3381,10 @@ class Automation {
                     $avcrop  = $resAfter['avcrop'];
 
                     // bounty distributed across the resources available after cranny protection (extracted to applyBounty() [#155])
-                    $steal = $this->applyBounty([$avwood, $avclay, $aviron, $avcrop], $battlepart['bounty']);
+                    // T4 hero port (Phase 5): thief sacks raise the carry
+                    // bounty when the attacker's living hero joined the strike.
+                    $heroBounty = (int) round($battlepart['bounty'] * HeroBattleBonus::raidMultiplier($from['owner'], $data['t11']));
+                    $steal = $this->applyBounty([$avwood, $avclay, $aviron, $avcrop], $heroBounty);
 
                     //chiefing village — extracted to handleConquest() [#155]
                     if (!isset($village_destroyed)) $village_destroyed = 0;
@@ -3431,6 +3452,9 @@ class Automation {
                     $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $data, 1, 't');
                     $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);                
                     $endtime += $AttackArrivalTime;
+                    // T4 hero port (Phase 5): map return-speed bonus, same as
+                    // the combat return leg above. No-op when the flag is off.
+                    $endtime = HeroBattleBonus::adjustReturnEndtime($from['owner'], $data['t11'], $AttackArrivalTime, $endtime);
 
                     $database->setMovementProc($data['moveid']);
                     $database->addMovement(4, $to['wref'], $from['wref'], $data['ref'], $AttackArrivalTime, $endtime);
@@ -4336,6 +4360,28 @@ class Automation {
             }
         }
 
+    }
+
+    /**
+     * T4 Hero port (Phase 3+4): process adventure arrivals (sort_type 20,
+     * rewards + ntype 26 report + return movement), returns (sort_type 21,
+     * hero re-enters units.hero, loot credited), top up offer lists, then
+     * finalize ended auctions and restock the NPC merchant.
+     * Fully feature-flagged - a no-op unless NEW_FUNCTIONS_HERO_T4 is enabled.
+     */
+    private function heroAdventureComplete() {
+        if (!defined('NEW_FUNCTIONS_HERO_T4') || !NEW_FUNCTIONS_HERO_T4) {
+            return;
+        }
+
+        $adventures = new HeroAdventure();
+        $adventures->processArrivals();
+        $adventures->processReturns();
+        $adventures->generateOffersBatch();
+
+        $auctions = new HeroAuction();
+        $auctions->processFinished();
+        $auctions->seedNpcAuctions();
     }
 
     private function updateHero() {

@@ -796,7 +796,12 @@ class Units {
             $speeds[]  = $GLOBALS['u'.$heroUnit]['speed'];
         }
 
-        return $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode, $from);     
+        $walkTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode, $from);
+
+        // T4 hero port (Phase 5): boots (>20 tiles), pennant (own villages)
+        // and standard (ally villages) shorten the trip when the hero rides
+        // along. Returns the input unchanged when NEW_FUNCTIONS_HERO_T4 is off.
+        return HeroBattleBonus::adjustTravelTime($owner, $unitArray[10] ?? 0, $from, $to, $walkTime);
     }
     
     public function startRaidList($post){   

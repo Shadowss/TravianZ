@@ -109,6 +109,11 @@ if ($hero !== false) {
 			<a class="hero-icon edit" href='admin.php?p=editHero&uid=<?php echo $id; ?>&amp;hid=<?php echo $h['heroid'] ?>' title="Edit">
 				<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
 			</a>
+			<?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) { ?>
+			<a class="hero-icon edit" href='admin.php?p=editHeroT4&uid=<?php echo $id; ?>' title="T4 items / silver / auctions">
+				<svg viewBox="0 0 24 24"><path d="M6 2l1.5 4h9L18 2"/><path d="M4 6h16l-2 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L4 6z"/></svg>
+			</a>
+			<?php } ?>
 			<a class="hero-icon kill" href='?action=killHero&uid=<?php echo $id; ?>' title="Kill">
 				<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"/></svg>
 			</a>

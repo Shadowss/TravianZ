@@ -233,6 +233,17 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                         </select>
                     </td>
                 </tr>
+				<tr>
+                    <td class="b">T4 Hero (items, adventures, auction) <em class="tooltip">?<span class="classic">Enable (Disable) the "T4 Hero (items, adventures, auction)" System</span></em>
+                    <?php if (!defined('NEW_FUNCTIONS_HERO_T4')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
+                    </td>
+                    <td>
+                        <select name="new_functions_hero_t4">
+                            <option value="True" <?php if(defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4 == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTIONS_HERO_T4') || NEW_FUNCTIONS_HERO_T4 == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

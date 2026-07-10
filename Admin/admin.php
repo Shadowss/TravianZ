@@ -91,7 +91,7 @@ function admin_validated_page(string $raw): string
         'editExtraSet', 'editAdminInfo', 'resetServer', 'player', 'editUser',
         'deletion', 'Newmessage', 'editPlus', 'editSitter', 'editPassword',
         'editProtection', 'editOverall',
-        'editWeek', 'userlogin', 'userillegallog', 'editHero', 'editAdditional',
+        'editWeek', 'userlogin', 'userillegallog', 'editHero', 'editHeroT4', 'editAdditional',
         'village', 'editResources', 'addTroops', 'addABTroops', 'editVillage',
         'villagelog', 'techlog', 'msg',
         'alliance', 'editAli', 'delAli','editNewFunctions',
@@ -430,6 +430,16 @@ if ($page !== '') {
                 $subpage = 'Edit Hero (' . e($user['username']) . ')';
             } else {
                 $subpage = 'Edit Hero';
+            }
+            break;
+
+        case 'editHeroT4':
+            $uid = admin_input_id($_GET, 'uid');
+            if ($uid !== null) {
+                $user    = $database->getUserArray($uid, 1);
+                $subpage = 'T4 Hero Controls (' . e($user['username']) . ')';
+            } else {
+                $subpage = 'T4 Hero Controls';
             }
             break;
 

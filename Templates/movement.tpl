@@ -112,6 +112,12 @@ $movement3_0 = $database->getMovement(3, $village->wid, 0);
 $movement5_0 = $database->getMovement(5, $village->wid, 0);
 $movement8_1 = $database->getMovement(8, $village->wid, 1);
 $movement9_0 = $database->getMovement(9, $village->wid, 0);
+// T4 hero port: hero adventure movements are only relevant for the hero's
+// home village and only when the feature is on.
+$movement20_0 = (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4)
+    ? $database->getMovement(20, $village->wid, 0) : [];
+$movement21_1 = (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4)
+    ? $database->getMovement(21, $village->wid, 1) : [];
 
 /**
  * ---------------------------------------------------------
@@ -281,6 +287,42 @@ renderMovementRow(
     ARRIVING_REINF_TROOPS_SHORT,
     $ownReinfCount,
     !empty($ownReinfArrival) ? min($ownReinfArrival) : 0,
+    $generator,
+    $session
+);
+
+/**
+ * =========================================================
+ * HERO ADVENTURE (T4 hero port): outbound + returning
+ * =========================================================
+ */
+
+$advOutArrival = array();
+foreach ($movement20_0 as $receive) {
+    $advOutArrival[] = $receive['endtime'];
+}
+renderMovementRow(
+    'att2',
+    'a2',
+    defined('HERO_ADV_MOV_OUT') ? HERO_ADV_MOV_OUT : 'Hero on an adventure',
+    defined('HERO_ADV_MOV_SHORT') ? HERO_ADV_MOV_SHORT : 'Adventure',
+    count($movement20_0),
+    !empty($advOutArrival) ? min($advOutArrival) : 0,
+    $generator,
+    $session
+);
+
+$advBackArrival = array();
+foreach ($movement21_1 as $receive) {
+    $advBackArrival[] = $receive['endtime'];
+}
+renderMovementRow(
+    'def1',
+    'd1',
+    defined('HERO_ADV_MOV_BACK') ? HERO_ADV_MOV_BACK : 'Hero returning from an adventure',
+    defined('HERO_ADV_MOV_SHORT') ? HERO_ADV_MOV_SHORT : 'Adventure',
+    count($movement21_1),
+    !empty($advBackArrival) ? min($advBackArrival) : 0,
     $generator,
     $session
 );

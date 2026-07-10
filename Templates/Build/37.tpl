@@ -71,7 +71,23 @@
 
 		if(isset($_GET['land']) && $village->resarray['f' . $id] >= 1) {
             include_once("37_land.tpl");
+		} else if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4
+            && $village->resarray['f' . $id] >= 1
+            && isset($_GET['t4tab'])
+            && in_array($_GET['t4tab'], ['items', 'adventures', 'auction'], true)) {
+
+            // T4 hero port (Phase 6): items / adventures / auction tabs.
+            // The classic hero flow below stays byte-identical when the
+            // feature flag is off or no tab is selected.
+            $t4tab = $_GET['t4tab'];
+            include_once("37_t4nav.tpl");
+            include_once("37_" . $t4tab . ".tpl");
+
 		} else if ($village->resarray['f' . $id] >= 1) {
+            if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+                $t4tab = 'hero';
+                include_once("37_t4nav.tpl");
+            }
             $include_training = true;
             $include_revive = false;
             if (isset($heroes) && is_array($heroes) && count($heroes)) {
