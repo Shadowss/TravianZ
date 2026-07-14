@@ -813,7 +813,7 @@ if (count($vil)<2){ ?>
 
 <?php } elseif($_SESSION['qst']== 36){
 
-$unarray=array("",CITYWALL,EARTHWALL,"PALISADE");
+$unarray=array("",CITYWALL,EARTHWALL,PALISADE,STONEWALL,MAKESHIFTWALL,DEFENSIVEWALL,BARRICADE);
 
 
 $wall = $village->resarray['f40'];
