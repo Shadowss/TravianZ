@@ -59,7 +59,7 @@ for ($i = 1; $i <= 40; $i++) {
     $gid   = (int)($_POST["id{$i}gid"] ?? 0);
     // limităm la valori rezonabile Travian
     $level = max(0, min(20, $level));
-    $gid   = max(0, min(44, $gid)); // 44 = ziduri speciale
+    $gid   = max(0, min(50, $gid)); // 50 = Barricade (ultima cladire)
     $sets[] = "f{$i} = $level";
     $sets[] = "f{$i}t = $gid";
 }
@@ -74,7 +74,7 @@ if ($gid99 == 40) {
 } else {
     $level99 = max(0, min(20, $level99)); // capcană, etc.
 }
-$gid99 = max(0, min(44, $gid99));
+$gid99 = max(0, min(50, $gid99));
 
 $sets[] = "f99 = " . $level99;
 $sets[] = "f99t = " . $gid99;

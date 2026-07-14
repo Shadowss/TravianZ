@@ -73,15 +73,12 @@ if ($hero !== false) {
 			None &nbsp;&nbsp;<span style="color:#2563eb;font-weight:600">Add Hero</span>
 			<?php
 			$utribe=($user['tribe']-1)*10;
-			echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+1)."'><img class=\"unit u".($utribe+1)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+1)."\" title=\"".$technology->getUnitName($utribe+1)."\" /></a>";
-			echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+2)."'><img class=\"unit u".($utribe+2)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+2)."\" title=\"".$technology->getUnitName($utribe+2)."\" /></a>";
-			if ($utribe!=20) {
-				echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+3)."'><img class=\"unit u".($utribe+3)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+3)."\" title=\"".$technology->getUnitName($utribe+3)."\" /></a>";
-			}else{
-				echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+4)."'><img class=\"unit u".($utribe+4)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+4)."\" title=\"".$technology->getUnitName($utribe+4)."\" /></a>";
+			// Sloturile 1-6 care au erou definit in hero_full.php (generic pentru toate triburile)
+			for ($hs = 1; $hs <= 6; $hs++) {
+				$huid = $utribe + $hs;
+				if (!isset(${'h'.$huid})) continue;
+				echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".$huid."'><img class=\"unit u".$huid."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($huid)."\" title=\"".$technology->getUnitName($huid)."\" /></a>";
 			}
-			echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+5)."'><img class=\"unit u".($utribe+5)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+5)."\" title=\"".$technology->getUnitName($utribe+5)."\" /></a>";
-			echo "&nbsp;<a href='?action=addHero&uid=".$id."&u=".($utribe+6)."'><img class=\"unit u".($utribe+6)."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($utribe+6)."\" title=\"".$technology->getUnitName($utribe+6)."\" /></a>";
 			?>
 		</td>
 	</tr>	

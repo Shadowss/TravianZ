@@ -46,10 +46,10 @@ $troopsPresent = false;
 
 /**
  * ---------------------------------------------------------
- * Loop all possible units (Travian standard max 50)
+ * Loop all possible units (u1-u90, tribes 1-9)
  * ---------------------------------------------------------
  */
-for ($i = 1; $i <= 50; $i++) {
+for ($i = 1; $i <= 90; $i++) {
 
     $unitKey = 'u' . $i;
 

@@ -10,11 +10,11 @@
 $dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));
 
 // ======================== BASIC SETTINGS ========================
-$hasHero = (isset($dataarray[178]) && $dataarray[178] > 0);
+$hasHero = (isset($dataarray[270]) && $dataarray[270] > 0);
 $colspan = $hasHero ? 11 : 10;
 
 // Spy detection (unchanged logic)
-$spy = !empty($dataarray[177]) && !empty($dataarray[176]) && empty($dataarray[195]);
+$spy = !empty($dataarray[269]) && !empty($dataarray[268]) && empty($dataarray[287]);
 
 // ======================== URL SETUP ========================
 
@@ -126,7 +126,7 @@ for ($i = 3; $i <= 12; $i++) {
 }
 
 if ($hasHero) {
-    echo "<td>".$dataarray[178]."</td>";
+    echo "<td>".$dataarray[270]."</td>";
 }
 
 // CASUALTIES
@@ -139,25 +139,25 @@ for ($i = 13; $i <= 22; $i++) {
 }
 
 if ($hasHero) {
-    $tdclass = ($dataarray[179] == 0) ? 'class="none"' : '';
-    echo "<td $tdclass>".$dataarray[179]."</td>";
+    $tdclass = ($dataarray[271] == 0) ? 'class="none"' : '';
+    echo "<td $tdclass>".$dataarray[271]."</td>";
 }
 
 // PRISONERS (unchanged logic but safer sum)
 // Cast to int: some reports carry non-numeric text in these slots (e.g. the
 // "Information" line shifts indices), which made array_sum() warn under PHP 8.
-if (!$spy && array_sum(array_map('intval', array_slice($dataarray, 182, 11))) > 0) {
+if (!$spy && array_sum(array_map('intval', array_slice($dataarray, 274, 11))) > 0) {
     echo "</tr><tr><th>".PRISONERS."</th>";
 
-    for ($i = 182; $i <= 191; $i++) {
+    for ($i = 274; $i <= 283; $i++) {
         echo ($dataarray[$i] == 0)
             ? "<td class=\"none\">0</td>"
             : "<td>".$dataarray[$i]."</td>";
     }
 
     if ($hasHero) {
-        $tdclass = ($dataarray[192] == 0) ? 'class="none"' : '';
-        echo "<td $tdclass>".$dataarray[192]."</td>";
+        $tdclass = ($dataarray[284] == 0) ? 'class="none"' : '';
+        echo "<td $tdclass>".$dataarray[284]."</td>";
     }
 }
 ?>
@@ -166,40 +166,40 @@ if (!$spy && array_sum(array_map('intval', array_slice($dataarray, 182, 11))) > 
 
 <?php
 // ======================== SPECIAL ACTIONS ========================
-if (!empty($dataarray[170]) && !empty($dataarray[171])) {
+if (!empty($dataarray[262]) && !empty($dataarray[263])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[170]; ?>" src="img/x.gif" alt="<?php echo U17; ?>" title="<?php echo U17; ?>" />
-<?php echo $dataarray[171]; ?>
+<img class="unit u<?php echo $dataarray[262]; ?>" src="img/x.gif" alt="<?php echo U17; ?>" title="<?php echo U17; ?>" />
+<?php echo $dataarray[263]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[172]) && !empty($dataarray[173])) {
+if (!empty($dataarray[264]) && !empty($dataarray[265])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[172]; ?>" src="img/x.gif" alt="<?php echo U18; ?>" title="<?php echo U18; ?>" />
-<?php echo $dataarray[173]; ?>
+<img class="unit u<?php echo $dataarray[264]; ?>" src="img/x.gif" alt="<?php echo U18; ?>" title="<?php echo U18; ?>" />
+<?php echo $dataarray[265]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[174]) && !empty($dataarray[175])) {
+if (!empty($dataarray[266]) && !empty($dataarray[267])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[174]; ?>" src="img/x.gif" alt="<?php echo U19; ?>" title="<?php echo U19; ?>" />
-<?php echo $dataarray[175]; ?>
+<img class="unit u<?php echo $dataarray[266]; ?>" src="img/x.gif" alt="<?php echo U19; ?>" title="<?php echo U19; ?>" />
+<?php echo $dataarray[267]; ?>
 </td>
 </tr>
 </tbody>
@@ -211,48 +211,48 @@ if ($spy) {
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<?php echo $dataarray[177]; ?>
+<?php echo $dataarray[269]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[193])) {
+if (!empty($dataarray[285])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<?php echo $dataarray[193]; ?>
+<?php echo $dataarray[285]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[196]) && !empty($dataarray[197])) {
+if (!empty($dataarray[288]) && !empty($dataarray[289])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[196]; ?>" src="img/x.gif" alt="<?php echo U0; ?>" title="<?php echo U0; ?>" />
-<?php echo $dataarray[197]; ?>
+<img class="unit u<?php echo $dataarray[288]; ?>" src="img/x.gif" alt="<?php echo U0; ?>" title="<?php echo U0; ?>" />
+<?php echo $dataarray[289]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[195])) {
+if (!empty($dataarray[287])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<?php echo $dataarray[195]; ?>
+<?php echo $dataarray[287]; ?>
 </td>
 </tr>
 </tbody>
-<?php } elseif (empty($dataarray[176]) && empty($dataarray[177])) { ?>
+<?php } elseif (empty($dataarray[268]) && empty($dataarray[269])) { ?>
 <tbody class="goods">
 <tr>
 <th><?php echo BOUNTY; ?></th>
@@ -274,15 +274,15 @@ if (!empty($dataarray[195])) {
 
 <?php
 // ======================== DEFENDER LOOP ========================
-$defArray = [1, $dataarray[55], $dataarray[76], $dataarray[97], $dataarray[118], $dataarray[139]];
+$defArray = [1, $dataarray[55], $dataarray[76], $dataarray[97], $dataarray[118], $dataarray[139], $dataarray[160], $dataarray[181], $dataarray[202], $dataarray[223]];
 $targetTribe = $dataarray[34];
 
 foreach ($defArray as $index => $value) {
 
     if ($value == 0) continue;
 
-    $heroIndex = ($index == 0 ? 180 : 160 + ($index - 1));
-    $heroDeadIndex = ($index == 0 ? 1 : 5);
+    $heroIndex = ($index == 0 ? 272 : 244 + ($index - 1));
+    $heroDeadIndex = ($index == 0 ? 1 : 9);
 
     $target = ($index == 0 ? $targetTribe : $index) - 1;
     $start = $target * 10 + 1;

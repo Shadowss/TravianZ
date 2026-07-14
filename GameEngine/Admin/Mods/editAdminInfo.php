@@ -73,6 +73,11 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_MEDAL_10YEAR = (NEW_FUNCTIONS_MEDAL_10YEAR == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM = (NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MILESTONES = (NEW_FUNCTIONS_MILESTONES == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_HERO_T4 = (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4 ? 'true' : 'false'); // fix: lipsea (bug preexistent)
+		$NEW_FUNCTION_TRIBE_HUNS = (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_EGIPTEANS = (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_SPARTANS = (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_VIKINGS = (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS ? 'true' : 'false');
 		$NEW_FUNCTIONS_MEDAL_RESET = (NEW_FUNCTIONS_MEDAL_RESET == false ? 'false' : 'true');
 
 		$text = admin_config_template_contents();
@@ -166,6 +171,11 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_10YEAR%'", $NEW_FUNCTIONS_MEDAL_10YEAR, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%'", $NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MILESTONES%'", $NEW_FUNCTIONS_MILESTONES, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_HERO_T4%'", $NEW_FUNCTIONS_HERO_T4, $text); // fix: lipsea
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_HUNS%'", $NEW_FUNCTION_TRIBE_HUNS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_EGIPTEANS%'", $NEW_FUNCTION_TRIBE_EGIPTEANS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_SPARTANS%'", $NEW_FUNCTION_TRIBE_SPARTANS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_VIKINGS%'", $NEW_FUNCTION_TRIBE_VIKINGS, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_RESET%'", $NEW_FUNCTIONS_MEDAL_RESET, $text);
 
 		// PLUS settings need to be kept intact

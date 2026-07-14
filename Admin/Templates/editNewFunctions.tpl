@@ -244,6 +244,50 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        New Tribe: Huns
+                    </td>
+                    <td>
+                        <select name="new_function_tribe_huns">
+                            <option value="True" <?php if(defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTION_TRIBE_HUNS') || NEW_FUNCTION_TRIBE_HUNS == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        New Tribe: Egyptians
+                    </td>
+                    <td>
+                        <select name="new_function_tribe_egipteans">
+                            <option value="True" <?php if(defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTION_TRIBE_EGIPTEANS') || NEW_FUNCTION_TRIBE_EGIPTEANS == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        New Tribe: Spartans
+                    </td>
+                    <td>
+                        <select name="new_function_tribe_spartans">
+                            <option value="True" <?php if(defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTION_TRIBE_SPARTANS') || NEW_FUNCTION_TRIBE_SPARTANS == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        New Tribe: Vikings
+                    </td>
+                    <td>
+                        <select name="new_function_tribe_vikings">
+                            <option value="True" <?php if(defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTION_TRIBE_VIKINGS') || NEW_FUNCTION_TRIBE_VIKINGS == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

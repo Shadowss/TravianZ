@@ -223,20 +223,23 @@ td.email {
 .u21, .u22, .u23, .u24, .u25, .u26, .u27, .u28, .u29, .u30 {background-image:url(../un/u/v3_gauls2.gif); background-repeat: no-repeat;}
 .u31, .u32, .u33, .u34, .u35, .u36, .u37, .u38, .u39, .u40 {background-image:url(../un/u/v4_nature2.gif); background-repeat: no-repeat;}
 .u41, .u42, .u43, .u44, .u45, .u46, .u47, .u48, .u49, .u50 {background-image:url(../un/u/v5_natars2.gif); background-repeat: no-repeat;}
-.u51, .u52, .u53, .u54, .u55, .u56, .u57, .u58, .u59, .u60 {background-image:url(../un/u/v6_monsters2.gif); background-repeat: no-repeat;}
+.u51, .u52, .u53, .u54, .u55, .u56, .u57, .u58, .u59, .u60 {background-image:url(../un/u/v6_huns2.gif); background-repeat: no-repeat;}
+.u61, .u62, .u63, .u64, .u65, .u66, .u67, .u68, .u69, .u70 {background-image:url(../un/u/v7_egyptians2.gif); background-repeat: no-repeat;}
+.u71, .u72, .u73, .u74, .u75, .u76, .u77, .u78, .u79, .u80 {background-image:url(../un/u/v8_spartans2.gif); background-repeat: no-repeat;}
+.u81, .u82, .u83, .u84, .u85, .u86, .u87, .u88, .u89, .u90 {background-image:url(../un/u/v9_vikings2.gif); background-repeat: no-repeat;}
 .uhab, .ucata, .ustock, .uwall, .ubarr, .upal, .ugeb, .uhero, .uunits
 {background-image:url(../un/u/specials.gif); background-repeat: no-repeat;}
 
-.u1, .u11, .u21, .u31, .u41, .u51, .uhab {background-position:      0 0;}
-.u2, .u12, .u22, .u32, .u42, .u52, .ucata {background-position:  -19px 0;}
-.u3, .u13, .u23, .u33, .u43, .u53, .ustock {background-position:  -38px 0;}
-.u4, .u14, .u24, .u34, .u44, .u54, .uwall {background-position:  -57px 0;}
-.u5, .u15, .u25, .u35, .u45, .u55, .ubarr {background-position:  -76px 0;}
-.u6, .u16, .u26, .u36, .u46, .u56, .upal {background-position:  -95px 0;}
-.u7, .u17, .u27, .u37, .u47, .u57, .ugeb {background-position: -114px 0;}
-.u8, .u18, .u28, .u38, .u48, .u58, .uhero {background-position: -133px 0;}
-.u9, .u19, .u29, .u39, .u49, .u59, .uunits {background-position: -152px 0;}
-.u10, .u20, .u30, .u40, .u50, .u60 {background-position:-171px 0;}
+.u1, .u11, .u21, .u31, .u41, .u51, .u61, .u71, .u81, .uhab {background-position:      0 0;}
+.u2, .u12, .u22, .u32, .u42, .u52, .u62, .u72, .u82, .ucata {background-position:  -19px 0;}
+.u3, .u13, .u23, .u33, .u43, .u53, .u63, .u73, .u83, .ustock {background-position:  -38px 0;}
+.u4, .u14, .u24, .u34, .u44, .u54, .u64, .u74, .u84, .uwall {background-position:  -57px 0;}
+.u5, .u15, .u25, .u35, .u45, .u55, .u65, .u75, .u85, .ubarr {background-position:  -76px 0;}
+.u6, .u16, .u26, .u36, .u46, .u56, .u66, .u76, .u86, .upal {background-position:  -95px 0;}
+.u7, .u17, .u27, .u37, .u47, .u57, .u67, .u77, .u87, .ugeb {background-position: -114px 0;}
+.u8, .u18, .u28, .u38, .u48, .u58, .u68, .u78, .u88, .uhero {background-position: -133px 0;}
+.u9, .u19, .u29, .u39, .u49, .u59, .u69, .u79, .u89, .uunits {background-position: -152px 0;}
+.u10, .u20, .u30, .u40, .u50, .u60, .u70, .u80, .u90 {background-position:-171px 0;}
 
 .u98 {background:url(../un/u/98.gif) no-repeat;}
 .u99 {background:url(../un/u/99.gif) no-repeat;}

@@ -145,7 +145,7 @@ class Building {
 
     // Validare zid
     $isValidWall =
-        ($tid != 40 || in_array($id, array(31, 32, 33)));
+        ($tid != 40 || in_array($id, array(31, 32, 33, 42, 43, 47, 50)));
 
     if (
         !isset($village->resarray[$fieldTypeKey]) ||
@@ -456,11 +456,7 @@ class Building {
     foreach ($this->buildArray as $job) {
 
         // verificăm STRICT tipul clădirii
-        if (
-            $job['type'] == 31 ||
-            $job['type'] == 32 ||
-            $job['type'] == 33
-        ) {
+        if (in_array($job['type'], array(31, 32, 33, 42, 43, 47, 50))) {
             return $job['type'];
         }
     }
@@ -538,7 +534,15 @@ class Building {
         39 => GREATGRANARY,
         40 => WONDER,
         41 => HORSEDRINKING,
-        42 => GREATWORKSHOP
+        42 => STONEWALL,
+        43 => MAKESHIFTWALL,
+        44 => COMMANDCENTER,
+        45 => WATERWORKS,
+        46 => HOSPITAL,
+        47 => DEFENSIVEWALL,
+        48 => BIGHOSPITAL,
+        49 => GREATWORKSHOP,
+        50 => BARRICADE
     );
 
     return isset($types[$ref]) ? $types[$ref] : 'Error';
@@ -914,7 +918,7 @@ class Building {
 		if ($tid == 16) {
 		$buildField = 39;
 		}
-		elseif ($tid == 31 || $tid == 32 || $tid == 33) {
+		elseif (in_array($tid, array(31, 32, 33, 42, 43, 47, 50))) {
 		$buildField = 40;
 		}
 
@@ -1166,11 +1170,13 @@ class Building {
                    !$isBuilt;
 
         case 25:
+            if ($session->tribe == 6) return false; // Hunii au Command Center in loc de Residence
             return $getLevel(15) >= 5 &&
                    !$isBuilt &&
                    !$getField(26);
 
         case 26:
+            if ($session->tribe == 6) return false; // Hunii au Command Center in loc de Palace
             return $getLevel(18) >= 1 &&
                    $getLevel(15) >= 5 &&
                    !$isBuilt &&
@@ -1274,11 +1280,57 @@ class Building {
                    $session->tribe == 1 &&
                    !$isBuilt;
 
+        // Stone Wall (Egyptian)
         case 42:
+            return $session->tribe == 7;
+
+        // Makeshift Wall (Hun)
+        case 43:
+            return $session->tribe == 6;
+
+        // Command Center (Hun)
+        case 44:
+            return $session->tribe == 6 &&
+                   $getLevel(15) >= 5 &&
+                   $getLevel(25) == 0 &&
+                   $getLevel(26) == 0 &&
+                   !$isBuilt;
+
+        // Waterworks (Egyptian)
+        case 45:
+            return $session->tribe == 7 &&
+                   $getLevel(37) >= 10 &&
+                   !$isBuilt;
+
+        // Hospital (toate triburile in afara de Spartani/Vikingi, care au Spitalul Mare)
+        case 46:
+            return $session->tribe != 8 &&
+                   $session->tribe != 9 &&
+                   $getLevel(15) >= 10 &&
+                   $getLevel(22) >= 15 &&
+                   !$isBuilt;
+
+        // Defensive Wall (Spartan)
+        case 47:
+            return $session->tribe == 8;
+
+        // Big Hospital (exclusiv Spartani/Vikingi, aceleasi cerinte ca Spitalul)
+        case 48:
+            return ($session->tribe == 8 || $session->tribe == 9) &&
+                   $getLevel(15) >= 10 &&
+                   $getLevel(22) >= 15 &&
+                   !$isBuilt;
+
+        // Great Workshop (mutat de la gid 42)
+        case 49:
             return GREAT_WKS &&
                    $getLevel(21) == 20 &&
                    $village->capital == 0 &&
                    !$isBuilt;
+
+        // Barricade (Viking)
+        case 50:
+            return $session->tribe == 9;
 
         default:
             return false;

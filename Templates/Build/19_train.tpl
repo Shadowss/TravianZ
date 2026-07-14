@@ -19,14 +19,14 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 
-global $session, $technology, $village, $database, $generator, $building, $bid19, $id;
+global $session, $technology, $village, $database, $generator, $building, $bid19, $id, $unitsbytype;
 
 $tribe = (int)$session->tribe;
-$units = ($tribe !== 4) ? range(($tribe-1)*10+1, ($tribe-1)*10+4) : range(31, 40);
+$units = ($tribe !== 4) ? range(($tribe-1)*10+1, $tribe*10) : range(31, 40);
 
 foreach ($units as $i) {
-    // SKIP INVALID UNITS
-    if ($tribe !== 4 && ($i == 4 || $i == 23 || $i == 24)) continue;
+    // doar infanteria tribului (generic: acopera si triburile 6-9)
+    if ($tribe !== 4 && !in_array($i, $unitsbytype['infantry'])) continue;
     if (!($technology->getTech($i) || $i % 10 == 1)) continue;
 
     $unitData = ${'u'.$i};

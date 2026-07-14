@@ -118,6 +118,12 @@ $movement20_0 = (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4)
     ? $database->getMovement(20, $village->wid, 0) : [];
 $movement21_1 = (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4)
     ? $database->getMovement(21, $village->wid, 1) : [];
+if (!empty($movement20_0) || !empty($movement21_1)) {
+    // Dedicated icon classes (adv_out/adv_back) - see css/hero_items.css.
+    // Swapping the icon: replace img/hero/adv_out.gif / adv_back.gif, no
+    // template or CSS edits needed.
+    echo '<link rel="stylesheet" href="css/hero_items.css" type="text/css">';
+}
 
 /**
  * ---------------------------------------------------------
@@ -302,7 +308,7 @@ foreach ($movement20_0 as $receive) {
     $advOutArrival[] = $receive['endtime'];
 }
 renderMovementRow(
-    'att2',
+    'adv_out',
     'a2',
     defined('HERO_ADV_MOV_OUT') ? HERO_ADV_MOV_OUT : 'Hero on an adventure',
     defined('HERO_ADV_MOV_SHORT') ? HERO_ADV_MOV_SHORT : 'Adventure',
@@ -317,7 +323,7 @@ foreach ($movement21_1 as $receive) {
     $advBackArrival[] = $receive['endtime'];
 }
 renderMovementRow(
-    'def1',
+    'adv_back',
     'd1',
     defined('HERO_ADV_MOV_BACK') ? HERO_ADV_MOV_BACK : 'Hero returning from an adventure',
     defined('HERO_ADV_MOV_SHORT') ? HERO_ADV_MOV_SHORT : 'Adventure',

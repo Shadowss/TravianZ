@@ -1,0 +1,8 @@
+<h1><img class="unit ugeb" src="img/x.gif"> <?php echo BARRICADE; ?></h1><img class="building g50" src="img/x.gif" alt="<?php echo BARRICADE; ?>" title="<?php echo BARRICADE; ?>" /><?php echo BARRICADE_DESC; ?><p><b><?php echo COSTS; ?></b> <?php echo constant('AND'); ?> <b><?php echo CONSTRUCTION_TIME; ?></b> <?php echo MANUAL_FOR_LEVEL_1; ?><br /><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" />140 | <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" />130 | <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" />100 | <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" />55 | <img class="r5" src="img/x.gif" alt="<?php echo CROP_CONSUMPTION; ?>" title="<?php echo CROP_CONSUMPTION; ?>" />0 | <span class="dur"><img class="clock" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" src="img/x.gif" />0:33:20</span></p>
+	<p><b><?php echo PREREQUISITES; ?></b><br /><a href="#"><?php echo TRIBE9; ?></a></p>
+<map id="nav" name="nav">
+    <area href="manual.php?typ=4&amp;gid=49" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
+    <area href="manual.php?typ=4&amp;gid=1" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
+</map>
+<img usemap="#nav" src="img/x.gif" class="navi" alt="" />

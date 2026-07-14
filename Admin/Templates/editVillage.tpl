@@ -80,7 +80,7 @@ if(isset($id)) { include("search2.tpl"); ?>
     <div style="margin-top:10px;max-height:180px;overflow:auto;border:1px solid #e5e7eb;border-radius:6px">
       <table class="vtable" style="font-size:11.5px">
         <thead><tr><th style="width:50px">GID</th><th>Name</th></tr></thead>
-        <tbody><?php for($i=1;$i<=42;$i++){ echo '<tr><td>'.$i.'</td><td>'.$funct->procResType($i).'</td></tr>'; } ?></tbody>
+        <tbody><?php for($i=1;$i<=50;$i++){ echo '<tr><td>'.$i.'</td><td>'.$funct->procResType($i).'</td></tr>'; } ?></tbody>
       </table>
     </div>
   </div>
@@ -131,7 +131,7 @@ if(isset($id)) { include("search2.tpl"); ?>
     <!-- 2. Village Center -->
     <div style="text-align:center">
       <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px">Village Center</div>
-      <?php $WW=$fdata['f99t']; $wall=$fdata['f40t']; $wallType=$wall==0?'d2_0':($user['tribe']==2?'d2_12':($user['tribe']==3?'d2_1':'d2_11')); ?>
+      <?php $WW=$fdata['f99t']; $wall=$fdata['f40t']; $wallGfx=[1=>'d2_11',2=>'d2_12',3=>'d2_1',6=>'d2_16',7=>'d2_17',8=>'d2_18',9=>'d2_19']; /* 6-9: bg16-bg19.jpg */ $wallType=$wall==0?'d2_0':($wallGfx[$user['tribe']] ?? 'd2_11'); ?>
       <div id="content" class="village2" style="padding:0">
         <div id="village_map" class="<?php echo $wallType; ?>" style="margin:0 auto;transform:scale(.9);transform-origin:top">
           <?php for($b=1;$b<21;$b++){ $gid=$fdata['f'.($b+18).'t']; echo $gid>0?'<img src="../img/x.gif" class="building d'.$b.' g'.$gid.'">':'<img src="../img/x.gif" class="building d'.$b.' iso">'; }

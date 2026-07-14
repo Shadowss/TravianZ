@@ -75,6 +75,10 @@
                                 else if($user['tribe'] == 3) { echo '<span class="badge-tribe">Gauls</span>'; }
                                 else if($user['tribe'] == 4) { echo '<span class="badge-tribe">Nature</span>'; }
                                 else if($user['tribe'] == 5) { echo '<span class="badge-tribe">Natars</span>'; }
+                                else if($user['tribe'] == 6) { echo '<span class="badge-tribe">Huns</span>'; }
+                                else if($user['tribe'] == 7) { echo '<span class="badge-tribe">Egyptians</span>'; }
+                                else if($user['tribe'] == 8) { echo '<span class="badge-tribe">Spartans</span>'; }
+                                else if($user['tribe'] == 9) { echo '<span class="badge-tribe">Vikings</span>'; }
                           ?>
                         </td>
                     </tr>

@@ -152,7 +152,7 @@ foreach ($heroes as $hero_datarow) {
     </table>
 		<?php
 	} elseif (!$reviving) {
-		if (in_array($hero_datarow['unit'], [1, 11, 21])) {
+		if (in_array($hero_datarow['unit'], [1, 11, 21, 51, 61, 71, 81])) {
 			// basic unit of the tribe - available without research
 			echo $renderReviveRow($hero_datarow, $name, $wood, $clay, $iron, $crop, $training_time, $id);
 		} else {

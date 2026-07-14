@@ -102,6 +102,22 @@
             $this->procRankRaceArray(3);
             $this->setStartByRank($session->uid, "userid");
         break;
+        case 16:
+            $this->procRankRaceArray(6);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 17:
+            $this->procRankRaceArray(7);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 18:
+            $this->procRankRaceArray(8);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 19:
+            $this->procRankRaceArray(9);
+            $this->setStartByRank($session->uid, "userid");
+        break;
         case 31:
             $this->procAttRankArray();
             $this->setStartByRank($session->uid, "userid");
@@ -260,7 +276,7 @@
 				
 				if($GLOBALS['db']->countUser() > 0){
 				$holder = array();
-				$tribeCondition = SHOW_NATARS ? "(u.tribe <= 5) AND (u.id > 5 OR u.id = 3)" : "u.tribe <= 3 AND u.id > 5";
+				$tribeCondition = SHOW_NATARS ? "(u.tribe <= 9) AND (u.id > 5 OR u.id = 3)" : "u.tribe IN (1,2,3,6,7,8,9) AND u.id > 5";
 				$q = "
 				SELECT
 				u.id AS userid,
@@ -352,7 +368,7 @@
 				$holder = array();
 			$q = "SELECT u.id AS userid, u.username, u.apall, COUNT(CASE WHEN v.type != 99 THEN v.wref END) AS totalvillages, COALESCE(SUM(v.pop),0) AS pop
 			FROM " . TB_PREFIX . "users u LEFT JOIN " . TB_PREFIX . "vdata v ON v.owner = u.id
-			WHERE u.apall >= 0 AND u.access < " . (INCLUDE_ADMIN ? 10 : 8) . " AND u.tribe <= 3 AND u.id > 5
+			WHERE u.apall >= 0 AND u.access < " . (INCLUDE_ADMIN ? 10 : 8) . " AND u.tribe IN (1,2,3,6,7,8,9) AND u.id > 5
 			GROUP BY u.id ORDER BY u.apall DESC, pop DESC, u.id DESC";
 				$result = mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink));
 				$datas = [];
@@ -380,7 +396,7 @@
 				$holder = array();
 			$q = "SELECT u.id AS userid, u.username, u.dpall, COUNT(CASE WHEN v.type != 99 THEN v.wref END) AS totalvillages, COALESCE(SUM(v.pop),0) AS pop
 			FROM " . TB_PREFIX . "users u LEFT JOIN " . TB_PREFIX . "vdata v ON v.owner = u.id
-			WHERE u.dpall >= 0 AND u.access < " . (INCLUDE_ADMIN ? 10 : 8) . " AND u.tribe <= 3 AND u.id > 5
+			WHERE u.dpall >= 0 AND u.access < " . (INCLUDE_ADMIN ? 10 : 8) . " AND u.tribe IN (1,2,3,6,7,8,9) AND u.id > 5
 			GROUP BY u.id ORDER BY u.dpall DESC, pop DESC, u.id DESC";
 				$result = mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink));
 				$datas = [];

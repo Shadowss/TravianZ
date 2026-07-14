@@ -3,8 +3,8 @@
                 <tbody><tr>
                         <td class="desc"><?php echo GREATWORKSHOP_DESC ?></td>
                         <td rowspan="3" class="bimg">
-                                <a href="#" onClick="return Popup(42,4);">
-                                <img class="building g42" src="img/x.gif" alt="<?php echo GREATWORKSHOP ?>" title="<?php echo GREATWORKSHOP ?>" /></a>
+                                <a href="#" onClick="return Popup(49,4);">
+                                <img class="building g49" src="img/x.gif" alt="<?php echo GREATWORKSHOP ?>" title="<?php echo GREATWORKSHOP ?>" /></a>
                         </td>
                 </tr>
                 <tr>

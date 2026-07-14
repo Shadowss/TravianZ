@@ -28,7 +28,7 @@ if(isset($_GET['uid'])){
         if ($hdata['heroid'] == $hid) { $hero = $hdata; break; }
     }
 
-    $unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U99,U0);
+    $unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U51,U52,U53,U54,U55,U56,U57,U58,U59,U60,U61,U62,U63,U64,U65,U66,U67,U68,U69,U70,U71,U72,U73,U74,U75,U76,U77,U78,U79,U80,U81,U82,U83,U84,U85,U86,U87,U88,U89,U90,U99,U0);
     $utribe = ($user['tribe']-1)*10;
 	
     $expPct = 0;
@@ -144,8 +144,14 @@ function go_url(url){ location=url; return false; }
             <div class="form-row"><label>Hero Name</label><div class="field"><input name="hname" type="text" value="<?php echo htmlspecialchars($hero['name']);?>"></div></div>
             <div class="form-row"><label>Hero Unit</label><div class="field">
                 <div class="unit-preview"><span id="unt"><img class="unit u<?php echo $hero['unit'];?>" src="img/x.gif"></span>
-                <select name="hunit" onchange="check_unit(this)" style="flex:1;border:none;background:transparent;">
-                    <?php for($i=1;$i<7;$i++){ if(($i==3&&$user['tribe']==4)||($i==4&&$user['tribe']!=3))continue; $v=$utribe+$i; echo "<option value='$v'".($hero['unit']==$v?' selected':'').">".$unarray[$v]."</option>"; }?>
+                <select name="hunit" onchange="check_unit(this)" style="flex:1;padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#0f172a;font-size:13px;">
+                    <?php
+                    // sloturile care au erou definit in hero_full.php (generic pentru toate triburile)
+                    for($i=1;$i<7;$i++){
+                        $v=$utribe+$i;
+                        if(!isset(${'h'.$v})) continue;
+                        echo "<option value='$v'".($hero['unit']==$v?' selected':'').">".$unarray[$v]."</option>";
+                    }?>
                 </select></div>
             </div></div>
             <div class="form-row"><label>❤ Health</label><div class="field"><input name="hhealth" type="text" value="<?php echo round($hero['health']);?>" style="width:80px;"> %</div></div>

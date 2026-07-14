@@ -173,7 +173,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
         <?php
         if ($criteria!= "") {
             $artifactsEffect = ['-', VILLAGE_EFFECT, ACCOUNT_EFFECT, UNIQUE_EFFECT];
-            $array_tribe = ['-', TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5];
+            $array_tribe = ['-', TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5, TRIBE6, TRIBE7, TRIBE8, TRIBE9];
             $q = "SELECT v.wref, v.owner, v.name, v.capital, v.pop, u.username, u.tribe, u.access, w.x, w.y"
                 . ($includeSize? ", a.size" : "")
                 . " FROM ".TB_PREFIX."vdata AS v"
@@ -236,6 +236,10 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
             <tr><td><img src="../img/admin/map_2.gif"></td><td><?php echo TRIBE2;?></td></tr>
             <tr><td><img src="../img/admin/map_3.gif"></td><td><?php echo TRIBE3;?></td></tr>
             <tr><td><img src="../img/admin/map_5.gif"></td><td><?php echo TRIBE5;?></td></tr>
+            <?php if(defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS){ ?><tr><td><img src="../img/admin/map_6.gif"></td><td><?php echo TRIBE6;?></td></tr><?php } ?>
+            <?php if(defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS){ ?><tr><td><img src="../img/admin/map_7.gif"></td><td><?php echo TRIBE7;?></td></tr><?php } ?>
+            <?php if(defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS){ ?><tr><td><img src="../img/admin/map_8.gif"></td><td><?php echo TRIBE8;?></td></tr><?php } ?>
+            <?php if(defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS){ ?><tr><td><img src="../img/admin/map_9.gif"></td><td><?php echo TRIBE9;?></td></tr><?php } ?>
             <tr><td><img src="../img/admin/map_0.gif"></td><td>Multihunters</td></tr>
           </table>
         </div>

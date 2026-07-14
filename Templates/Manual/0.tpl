@@ -12,6 +12,18 @@
 	<?php if(NEW_FUNCTIONS_MANUAL_NATURENATARS){ ?>
 	<li><a href="manual.php?typ=2&amp;s=4"><?php echo TRIBE4; ?></a></li>
 	<li><a href="manual.php?typ=2&amp;s=5"><?php echo TRIBE5; ?></a></li>
+	<?php if(defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS){ ?>
+	<li><a href="manual.php?typ=2&amp;s=6"><?php echo TRIBE6; ?></a></li>
+	<?php } ?>
+	<?php if(defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS){ ?>
+	<li><a href="manual.php?typ=2&amp;s=7"><?php echo TRIBE7; ?></a></li>
+	<?php } ?>
+	<?php if(defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS){ ?>
+	<li><a href="manual.php?typ=2&amp;s=8"><?php echo TRIBE8; ?></a></li>
+	<?php } ?>
+	<?php if(defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS){ ?>
+	<li><a href="manual.php?typ=2&amp;s=9"><?php echo TRIBE9; ?></a></li>
+	<?php } ?>
 	<?php } ?>
 </ul>
 

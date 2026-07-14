@@ -250,7 +250,7 @@ class adm_DB {
             $logPunishment = "<b>troops removal</b>";
             $tribe = (int)$user['tribe'];
             // 1=Romani (1-10), 2=Teutoni (11-20), 3=Gali (21-30), 4=Natura (31-40), 5=Natari (41-50)
-            $unitStart = ($tribe >= 1 && $tribe <= 5) ? (($tribe - 1) * 10 + 1) : 1;
+            $unitStart = ($tribe >= 1 && $tribe <= 9) ? (($tribe - 1) * 10 + 1) : 1;
             $this->DelUnits($vid, $unitStart);
         }
 
@@ -978,7 +978,7 @@ class adm_DB {
         $enforcementarray = $database->getEnforceVillage($base, 0);
         if (count($enforcementarray) > 0) {
             foreach ($enforcementarray as $enforce) {
-                for ($i = 1; $i <= 50; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                     $ownunit['u'. $i] += $enforce['u'. $i];
                 }
                 $ownunit['hero'] += $enforce['hero'];
@@ -988,7 +988,7 @@ class adm_DB {
             $enforceoasis = $database->getOasisEnforce($base, 0);
             if (count($enforceoasis) > 0) {
                 foreach ($enforceoasis as $enforce) {
-                    for ($i = 1; $i <= 50; $i++) {
+                    for ($i = 1; $i <= 90; $i++) {
                         $ownunit['u'. $i] += $enforce['u'. $i];
                     }
                     $ownunit['hero'] += $enforce['hero'];
@@ -997,7 +997,7 @@ class adm_DB {
             $enforceoasis1 = $database->getOasisEnforce($base, 1);
             if (count($enforceoasis1) > 0) {
                 foreach ($enforceoasis1 as $enforce) {
-                    for ($i = 1; $i <= 50; $i++) {
+                    for ($i = 1; $i <= 90; $i++) {
                         $ownunit['u'. $i] += $enforce['u'. $i];
                     }
                     $ownunit['hero'] += $enforce['hero'];
@@ -1023,7 +1023,7 @@ class adm_DB {
         if (!$InVillageOnly) {
             $movement = $database->getVillageMovement($base);
             if (!empty($movement)) {
-                for ($i = 1; $i <= 50; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                     if (isset($movement['u'. $i])) {
                         $ownunit['u'. $i] += $movement['u'. $i];
                     }

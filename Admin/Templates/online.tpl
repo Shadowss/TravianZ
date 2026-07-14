@@ -21,9 +21,9 @@ if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
 $active = $admin->getUserActive();
 $count = count($active);
 
-$tribeName = [1=>'Roman',2=>'Teuton',3=>'Gaul'];
-$tribeColor = [1=>'#c0392b',2=>'#2980b9',3=>'#27ae60'];
-$tribeImg = [1=>'',2=>'1',3=>'2'];
+$tribeName = [1=>'Roman',2=>'Teuton',3=>'Gaul',6=>'Hun',7=>'Egyptian',8=>'Spartan',9=>'Viking'];
+$tribeColor = [1=>'#c0392b',2=>'#2980b9',3=>'#27ae60',6=>'#8e44ad',7=>'#d4a017',8=>'#b03a2e',9=>'#16a085'];
+$tribeImg = [1=>'',2=>'1',3=>'2',6=>'5',7=>'6',8=>'7',9=>'8'];
 
 // MAPARE ACCES -> TEXT
 $accessLabels = [

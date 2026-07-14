@@ -1,10 +1,22 @@
 <?php
+
 #################################################################################
-#  T4 hero auction tab (37_auction.tpl) - Phase 6                               #
-#  POST actions:                                                                #
-#    t4action=bid  (aucid, maxbid)                                              #
-#    t4action=sell (rowid, qty, price, duration)                                #
-#  bid_max is only ever shown for the viewer's OWN bids (getMyBids).           #
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HERO T4 AUCTION PAGE                                      ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Created by     : Shadow                                                    ##
+##  Designed by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $t4Auction = new HeroAuction();

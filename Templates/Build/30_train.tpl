@@ -21,8 +21,9 @@
 
 global $session, $technology, $village, $database, $building, $bid30, $bid41, $generator, $id;
 
-$start = ($session->tribe - 1) * 10 + 3;
-$end = ($session->tribe - 1) * 10 + 6;
+global $unitsbytype;
+$start = ($session->tribe - 1) * 10 + 1;
+$end = $session->tribe * 10;
 $level = (int)$village->resarray['f'.$id];
 $horseDrinking = $building->getTypeLevel(41);
 $success = 0;

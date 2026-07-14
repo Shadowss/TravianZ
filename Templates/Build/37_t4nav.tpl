@@ -1,9 +1,24 @@
 <?php
+
 #################################################################################
-#  T4 hero mansion tab navigation (37_t4nav.tpl) - Phase 6                      #
-#  Included by 37.tpl with $t4tab set to 'hero'|'items'|'adventures'|'auction'. #
-#  Silver balance shown on the right; reuses existing anchor styling.          #
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HERO T4 NAV BAR                                           ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Created by     : Shadow                                                    ##
+##  Designed by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 
 $t4HeroItems  = new HeroItems();
 $t4Silver     = $t4HeroItems->getSilver($session->uid);

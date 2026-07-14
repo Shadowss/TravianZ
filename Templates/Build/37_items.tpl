@@ -1,9 +1,22 @@
 <?php
+
 #################################################################################
-#  T4 hero inventory & equipment tab (37_items.tpl) - Phase 6                   #
-#  Inline POST handling (same convention as 37_hero.tpl's rename form):        #
-#    t4action=equip|unequip|useitem, rowid, qty                                 #
-#  Law tablets target the CURRENT village ($village->wid).                     #
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HERO T4 ITEMS PAGE                                        ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Created by     : Shadow                                                    ##
+##  Designed by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $t4Msg = '';

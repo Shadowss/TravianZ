@@ -43,7 +43,7 @@ $top_query = mysqli_query(
      FROM " . TB_PREFIX . "users 
      WHERE " . (INCLUDE_ADMIN ? '' : 'access < 8 AND ') . "
      id > 5 
-     AND tribe <= 3 
+     AND tribe IN (1,2,3,6,7,8,9) 
      AND tribe > 0 
      ORDER BY oldrank ASC 
      LIMIT 1"

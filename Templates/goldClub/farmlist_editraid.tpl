@@ -85,7 +85,7 @@ if (
     for ($i = 1; $i <= 6; $i++) {
         $unitId = $i + ($session->tribe - 1) * 10;
 
-        if (!in_array($unitId, [4, 14, 23])) {
+        if (!in_array($unitId, [4, 14, 23, 44, 52, 64, 74, 82])) {
             $troops += (int)($_POST['t'.$i] ?? 0);
         }
     }

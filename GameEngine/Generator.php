@@ -88,6 +88,10 @@ class MyGenerator
 			if ($ref == 1) $speed = 16;
 			elseif ($ref == 2) $speed = 12;
 			elseif ($ref == 3) $speed = 24;
+			elseif ($ref == 6) $speed = 20;
+			elseif ($ref == 7) $speed = 16;
+			elseif ($ref == 8) $speed = 14;
+			elseif ($ref == 9) $speed = 18;
 			elseif ($ref == 300) $speed = 5;
 			else $speed = 1;
 		} else {

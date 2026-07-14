@@ -414,7 +414,31 @@ class funct
                 $build = "Horse Drinking Trough";
                 break;
             case 42:
+                $build = "Stone Wall";
+                break;
+            case 43:
+                $build = "Makeshift Wall";
+                break;
+            case 44:
+                $build = "Command Center";
+                break;
+            case 45:
+                $build = "Waterworks";
+                break;
+            case 46:
+                $build = "Hospital";
+                break;
+            case 47:
+                $build = "Defensive Wall";
+                break;
+            case 48:
+                $build = "Big Hospital";
+                break;
+            case 49:
                 $build = "Great Workshop";
+                break;
+            case 50:
+                $build = "Barricade";
                 break;
             default:
                 $build = "Error";

@@ -10,7 +10,15 @@
     <li><a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a></li>
     <li><a href="manual.php?typ=4&amp;gid=29"><?php echo GREATBARRACKS; ?></a></li>
     <li><a href="manual.php?typ=4&amp;gid=30"><?php echo GREATSTABLE; ?></a></li>
-    <li><a href="manual.php?typ=4&amp;gid=42"><?php echo GREATWORKSHOP; ?></a></li>
+    <li><a href="manual.php?typ=4&amp;gid=49"><?php echo GREATWORKSHOP; ?></a></li>
+    <li><a href="manual.php?typ=4&amp;gid=46"><?php echo HOSPITAL; ?></a></li>
+    <?php if(defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS){ ?><li><a href="manual.php?typ=4&amp;gid=44"><?php echo COMMANDCENTER; ?></a></li>
+    <li><a href="manual.php?typ=4&amp;gid=43"><?php echo MAKESHIFTWALL; ?></a></li><?php } ?>
+    <?php if(defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS){ ?><li><a href="manual.php?typ=4&amp;gid=45"><?php echo WATERWORKS; ?></a></li>
+    <li><a href="manual.php?typ=4&amp;gid=42"><?php echo STONEWALL; ?></a></li><?php } ?>
+    <?php if(defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS){ ?><li><a href="manual.php?typ=4&amp;gid=47"><?php echo DEFENSIVEWALL; ?></a></li><?php } ?>
+    <?php if(defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS){ ?><li><a href="manual.php?typ=4&amp;gid=50"><?php echo BARRICADE; ?></a></li><?php } ?>
+    <?php if((defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS) || (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS)){ ?><li><a href="manual.php?typ=4&amp;gid=48"><?php echo BIGHOSPITAL; ?></a></li><?php } ?>
     <li><a href="manual.php?typ=4&amp;gid=36"><?php echo TRAPPER; ?></a></li>
     <li><a href="manual.php?typ=4&amp;gid=37"><?php echo HEROSMANSION; ?></a></li>
 </ul>

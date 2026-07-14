@@ -204,24 +204,25 @@ for ($t = 19; $t <= 39; $t++) {
 
 <?php
 /**
- * Tribul roman nu are postfix CSS
+ * Sufixul graficii satului per trib (galii nu au postfix).
+ * Triburile 6-9 folosesc grafica existenta cea mai apropiata pana la imagini dedicate.
+ * Nota: versiunea veche muta $session->tribe pentru gali - eliminat (efect secundar global).
  */
-if ($session->tribe == 3) {
-    $session->tribe = '';
-}
+$vmapSuffix = [1 => '1', 2 => '2', 3 => '', 4 => '1', 5 => '1', 6 => '6', 7 => '7', 8 => '8', 9 => '9'];
+$suffix = isset($vmapSuffix[$session->tribe]) ? $vmapSuffix[$session->tribe] : '1';
 
 /**
  * Determină clasa hărții
  */
 if ($building->walling()) {
 
-    $vmapc = "d2_1" . $session->tribe;
+    $vmapc = "d2_1" . $suffix;
 
 } else {
 
     $vmapc = ((int)$village->resarray['f40'] === 0)
         ? "d2_0"
-        : "d2_1" . $session->tribe;
+        : "d2_1" . $suffix;
 }
 ?>
 

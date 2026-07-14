@@ -58,6 +58,10 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_MILESTONES = (NEW_FUNCTIONS_MILESTONES == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MEDAL_RESET = (NEW_FUNCTIONS_MEDAL_RESET == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_HERO_T4 = (NEW_FUNCTIONS_HERO_T4 == false ? 'false' : 'true');
+		$NEW_FUNCTION_TRIBE_HUNS = (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_EGIPTEANS = (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_SPARTANS = (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS ? 'true' : 'false');
+		$NEW_FUNCTION_TRIBE_VIKINGS = (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS ? 'true' : 'false');
 
 		// SERVER SETTINGS - we need to keep these intact
 		$text = preg_replace("'%ERRORREPORT%'", ERROR_REPORT, $text);
@@ -150,6 +154,10 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_MILESTONES%'", $NEW_FUNCTIONS_MILESTONES, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_RESET%'", $NEW_FUNCTIONS_MEDAL_RESET, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_HERO_T4%'", $NEW_FUNCTIONS_HERO_T4, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_HUNS%'", $NEW_FUNCTION_TRIBE_HUNS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_EGIPTEANS%'", $NEW_FUNCTION_TRIBE_EGIPTEANS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_SPARTANS%'", $NEW_FUNCTION_TRIBE_SPARTANS, $text);
+		$text = preg_replace("'%NEW_FUNCTION_TRIBE_VIKINGS%'", $NEW_FUNCTION_TRIBE_VIKINGS, $text);
 
 		// PLUS SETTINGS
 		$text = preg_replace("'%PLUS_TIME%'", $_POST['plus_time'], $text);

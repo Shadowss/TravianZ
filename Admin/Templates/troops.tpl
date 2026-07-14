@@ -42,9 +42,9 @@ $heroCount = $hero ? 1 : 0;
 <div class="troops-modern">
   <div class="troops-grid">
   <?php
-    if($tribe==1){$s=1;$e=10;} elseif($tribe==2){$s=11;$e=20;} elseif($tribe==3){$s=21;$e=30;} elseif($tribe==4){$s=31;$e=40;} else{$s=41;$e=50;}
+    if($tribe>=1 && $tribe<=9){$s=($tribe-1)*10+1;$e=$tribe*10;} else {$s=41;$e=50;}
     for($i=$s;$i<=$e;$i++){ $cnt=(int)$units['u'.$i]; $cls=$cnt==0?'zero':'has'; echo '<div class="troop-item"><img src="../img/un/u/'.$i.'.gif"><div class="troop-num '.$cls.'">'.$cnt.'</div></div>'; }
-    if($tribe<=3){
+    if($tribe<=3 || $tribe>=6){
       $hcls=$heroCount==0?'zero':'has';
       echo '<div class="troop-item troop-hero"><svg viewBox="0 0 24 24" fill="#facc15" stroke="#eab308" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><div class="troop-num '.$hcls.'">'.$heroCount.'</div></div>';
     }

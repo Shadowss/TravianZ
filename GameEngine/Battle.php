@@ -48,7 +48,11 @@ class Battle {
             isset($post['a2_v2']) ||
             isset($post['a2_v3']) ||
             isset($post['a2_v4']) ||
-            isset($post['a2_v5'])
+            isset($post['a2_v5']) ||
+            isset($post['a2_v6']) ||
+            isset($post['a2_v7']) ||
+            isset($post['a2_v8']) ||
+            isset($post['a2_v9'])
         )
     ) {
         return;
@@ -59,7 +63,7 @@ class Battle {
      * TARGET BUILD
      ******************************************************************/
     $target = [];
-    for ($i = 1; $i <= 5; $i++) {
+    for ($i = 1; $i <= 9; $i++) {
         if (!empty($post['a2_v'.$i])) {
             $target[] = $i;
         }
@@ -101,7 +105,7 @@ class Battle {
      * WALL LEVELS (OPTIMIZED LOOP)
      ******************************************************************/
     $post['walllevel'] = 0;
-    for ($i = 1; $i <= 5; $i++) {
+    for ($i = 1; $i <= 9; $i++) {
         if (!isset($post['wall'.$i])) {
             continue;
         }
@@ -241,7 +245,7 @@ class Battle {
      ******************************************************************/
     $attacker = [];
 
-    for ($i = 1; $i <= 50; $i++) {
+    for ($i = 1; $i <= 90; $i++) {
         $attacker['u'.$i] = 0;
     }
 
@@ -281,14 +285,14 @@ class Battle {
 	$def_ab   = [];
 	$defscout = 0;
 
-	for ($i = 1; $i <= 50; $i++) {
+	for ($i = 1; $i <= 90; $i++) {
 		$units = (int)($post['a2_'.$i] ?? 0);
 		$ab    = (int)($post['f2_'.$i] ?? 0);
 
     $defender['u'.$i] = $units;
     $def_ab[$i]       = $units > 0 ? $ab : 0;
 
-    if ($units > 0 && in_array($i, [4,14,23,44])) {
+    if ($units > 0 && in_array($i, [4,14,23,44,52,64,74,82])) {
         $defscout += $units;
 		}
 	}
@@ -311,7 +315,7 @@ class Battle {
 
     for ($i = $start; $i <= $start + 9; $i++) {
 
-        if ($i == 4 || $i == 14 || $i == 23 || $i == 44) {
+        if (in_array($i, [4, 14, 23, 44, 52, 64, 74, 82])) {
             continue;
         }
 
@@ -486,9 +490,10 @@ class Battle {
     /******************************************************************
      * UNIT GROUP DEFINITIONS
      ******************************************************************/
-    $calvaryLookup = array_flip([4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46]);
-    $catapultLookup = array_flip([8, 18, 28, 48]);
-    $ramsLookup = array_flip([7, 17, 27, 47]);
+    global $unitsbytype;
+    $calvaryLookup = array_flip($unitsbytype['cavalry']);
+    $catapultLookup = array_flip($unitsbytype['catapult']);
+    $ramsLookup = array_flip($unitsbytype['ram']);
 
     $catp = 0;
     $ram  = 0;
@@ -818,13 +823,10 @@ class Battle {
 
     if ($def_wall > 0) {
 
-        if ($def_tribe == 1) {
-            $factor = 1.030;
-        } elseif ($def_tribe == 2) {
-            $factor = 1.020;
-        } else {
-            $factor = 1.025;
-        }
+        // Factori de zid per trib: 1 City Wall, 2 Earth Wall, 3 Palisade,
+        // 6 Makeshift Wall, 7 Stone Wall, 8 Defensive Wall, 9 Barricade
+        $wallFactors = array(1 => 1.030, 2 => 1.020, 3 => 1.025, 6 => 1.015, 7 => 1.030, 8 => 1.028, 9 => 1.022);
+        $factor = isset($wallFactors[$def_tribe]) ? $wallFactors[$def_tribe] : 1.025;
 
         $wallMultiplier = round(pow($factor, $def_wall), 3);
 
@@ -1359,7 +1361,8 @@ class Battle {
      * SCOUT UNITS ONLY 
      ******************************************************************/
 	 
-    $scoutUnits = [4, 14, 23, 44];
+    global $unitsbytype;
+    $scoutUnits = $unitsbytype['scout'];
 
     foreach ($scoutUnits as $y) {
         $unitAmount = isset($defenders['u'.$y])
@@ -1406,7 +1409,7 @@ class Battle {
     $cdp = 0;
     $invol = 0;
 
-    for ($y = 1; $y <= 50; $y++) {
+    for ($y = 1; $y <= 90; $y++) {
         $unitAmount = isset($defenders['u'.$y])
             ? (int)$defenders['u'.$y]
             : 0;

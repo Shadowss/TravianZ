@@ -61,10 +61,18 @@ $horsedrinkingtrough = $building->getTypeLevel(41);
 $herosmansion = $building->getTypeLevel(37);
 $greatwarehouse = $building->getTypeLevel(38);
 $greatgranary = $building->getTypeLevel(39);
-$greatworkshop = $building->getTypeLevel(42);
+$greatworkshop = $building->getTypeLevel(49);
+$stonewall = $building->getTypeLevel(42);
+$makeshiftwall = $building->getTypeLevel(43);
+$commandcenter = $building->getTypeLevel(44);
+$waterworks = $building->getTypeLevel(45);
+$hospital = $building->getTypeLevel(46);
+$defensivewall = $building->getTypeLevel(47);
+$bighospital = $building->getTypeLevel(48);
+$barricade = $building->getTypeLevel(50);
 
 $typesArray = [];
-for ($i = 1; $i <= 42; $i++) {
+for ($i = 1; $i <= 50; $i++) {
     $typesArray[] = $i;
 }
 
@@ -116,7 +124,11 @@ $horsedrinkingtrough1 = getTypeCount(41);
 $herosmansion1 = getTypeCount(37);
 $greatwarehouse1 = getTypeCount(38);
 $greatgranary1 = getTypeCount(39);
-$greatworkshop1 = getTypeCount(42);
+$greatworkshop1 = getTypeCount(49);
+$commandcenter1 = getTypeCount(44);
+$waterworks1 = getTypeCount(45);
+$hospital1 = getTypeCount(46);
+$bighospital1 = getTypeCount(48);
 
 ?>
 <div id="build" class="gid0"><h1><?php echo CONSTRUCT_NEW_BUILDING;?></h1>
@@ -145,6 +157,18 @@ if($wall == 0 && $wall1 == 0) {
     }
     if($session->tribe == 5 && $id == 40) {
         include("avaliable/citywall.tpl");
+    }
+    if($session->tribe == 6 && $id == 40) {
+        include("avaliable/makeshiftwall.tpl");
+    }
+    if($session->tribe == 7 && $id == 40) {
+        include("avaliable/stonewall.tpl");
+    }
+    if($session->tribe == 8 && $id == 40) {
+        include("avaliable/defensivewall.tpl");
+    }
+    if($session->tribe == 9 && $id == 40) {
+        include("avaliable/barricade.tpl");
     }
 }
 if((($warehouse == 0 && $warehouse1 == 0) || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
@@ -184,13 +208,13 @@ if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $ma
     include("avaliable/marketplace.tpl");
 }
 if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0 && $palace1 == 0) {
-    include("avaliable/residence.tpl");
+    if($session->tribe != 6) include("avaliable/residence.tpl");
 }
 if($academy == 0 && $academy1 == 0 && $mainbuilding >= 3 && $barrack >= 3 && $id != 39 && $id != 40) {
     include("avaliable/academy.tpl");
 }
 if($palace == 0 && $palace1 == 0 && !$building->isCastleBuilt() && $village->natar == 0 && $embassy >= 1 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $residence == 0 && $residence1 == 0) {
-    include("avaliable/palace.tpl");
+    if($session->tribe != 6) include("avaliable/palace.tpl");
 }
 if($blacksmith == 0 && $blacksmith1 == 0 && $academy >= 3 && $mainbuilding >= 3 && $id != 39 && $id != 40) {
     include("avaliable/blacksmith.tpl");
@@ -234,6 +258,18 @@ if($session->tribe == 1 && $horsedrinkingtrough == 0 && $horsedrinkingtrough1 ==
 if($session->tribe == 2 && $village->capital == 1 && $brewery == 0 && $brewery1 == 0 && $rallypoint >= 10 && $granary == 20 && $id != 39 && $id != 40) {
     include("avaliable/brewery.tpl");
 }
+if($session->tribe == 6 && $commandcenter == 0 && $commandcenter1 == 0 && $mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $palace == 0 && $palace1 == 0 && $id != 39 && $id != 40) {
+    include("avaliable/commandcenter.tpl");
+}
+if($session->tribe == 7 && $waterworks == 0 && $waterworks1 == 0 && $herosmansion >= 10 && $id != 39 && $id != 40) {
+    include("avaliable/waterworks.tpl");
+}
+if($session->tribe != 8 && $session->tribe != 9 && $hospital == 0 && $hospital1 == 0 && $mainbuilding >= 10 && $academy >= 15 && $id != 39 && $id != 40) {
+    include("avaliable/hospital.tpl");
+}
+if(($session->tribe == 8 || $session->tribe == 9) && $bighospital == 0 && $bighospital1 == 0 && $mainbuilding >= 10 && $academy >= 15 && $id != 39 && $id != 40) {
+    include("avaliable/bighospital.tpl");
+}
 if($greatbarracks == 0 && $greatbarracks1 == 0 && $barrack == 20 && $village->capital == 0 && $id != 39 && $id != 40) {
     include("avaliable/greatbarracks.tpl");
 }
@@ -274,13 +310,13 @@ if($market == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
     include("soon/marketplace.tpl");
 }
 if($residence == 0 && $mainbuilding <= 4) {
-    include("soon/residence.tpl");
+    if($session->tribe != 6) include("soon/residence.tpl");
 }
 if($academy == 0 && ($mainbuilding <= 2 || $barrack <= 2)) {
     include("soon/academy.tpl");
 }
 if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && !$building->isCastleBuilt() && $village->natar == 0) {
-    include("soon/palace.tpl");
+    if($session->tribe != 6) include("soon/palace.tpl");
 }
 if($blacksmith == 0 && ($academy <= 2 || $mainbuilding <= 2)) {
     include("soon/blacksmith.tpl");
@@ -323,6 +359,18 @@ if($session->tribe == 1 && $horsedrinkingtrough == 0 && $rallypoint <= 9 && $ral
 }
 if($brewery == 0 && $village->capital == 1 && $rallypoint <= 9 && $rallypoint >= 5 || $granary <= 19 && $granary >= 10 && $session->tribe == 2) {
     include("soon/brewery.tpl");
+}
+if($session->tribe == 6 && $commandcenter == 0 && $commandcenter1 == 0 && $mainbuilding < 5 && $residence == 0 && $residence1 == 0 && $palace == 0 && $palace1 == 0) {
+    include("soon/commandcenter.tpl");
+}
+if($session->tribe == 7 && $waterworks == 0 && $waterworks1 == 0 && $herosmansion < 10) {
+    include("soon/waterworks.tpl");
+}
+if($session->tribe != 8 && $session->tribe != 9 && $hospital == 0 && $hospital1 == 0 && ($mainbuilding < 10 || $academy < 15) && $academy >= 5) {
+    include("soon/hospital.tpl");
+}
+if(($session->tribe == 8 || $session->tribe == 9) && $bighospital == 0 && $bighospital1 == 0 && ($mainbuilding < 10 || $academy < 15) && $academy >= 5) {
+    include("soon/bighospital.tpl");
 }
 if($greatbarracks == 0 && $barrack >= 18 && $village->capital == 0) {
     include("soon/greatbarracks.tpl");

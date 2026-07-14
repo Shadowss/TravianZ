@@ -43,6 +43,7 @@ class Village {
 	private $infoarray = [];
 	private $production = [];
 	private $oasisowned, $ocounter = [];
+	private $oasisFactor = 0.25;
 
 	// single-load guards
 	private static $loadedWid = null;
@@ -128,6 +129,7 @@ class Village {
 		$this->type = $database->getVillageType($this->wid);
 		$this->oasisowned = $database->getOasis($this->wid);
 		$this->ocounter = $this->sortOasis();
+		$this->oasisFactor = $this->getOasisBonusFactor();
 
 		$this->unitarray = $database->getUnit($this->wid);
 		$this->enforcetome = $database->getEnforceVillage($this->wid, 0);
@@ -242,7 +244,7 @@ class Village {
 		for ($i = 0; $i < $cnt; $i++) {
 			$wood += $bid1[$this->resarray[$holder[$i]]]['prod'];
 		}
-		$wood += $wood * 0.25 * $this->ocounter[0];
+		$wood += $wood * $this->oasisFactor * $this->ocounter[0];
 		if ($sawmill >= 1) {
 			$wood += $wood / 100 * $bid5[$sawmill]['attri'];
 		}
@@ -263,7 +265,7 @@ class Village {
 		for ($i = 0; $i < $cnt; $i++) {
 			$clay += $bid2[$this->resarray[$holder[$i]]]['prod'];
 		}
-		$clay += $clay * 0.25 * $this->ocounter[1];
+		$clay += $clay * $this->oasisFactor * $this->ocounter[1];
 		if ($brick >= 1) {
 			$clay += $clay / 100 * $bid6[$brick]['attri'];
 		}
@@ -284,7 +286,7 @@ class Village {
 		for ($i = 0; $i < $cnt; $i++) {
 			$iron += $bid3[$this->resarray[$holder[$i]]]['prod'];
 		}
-		$iron += $iron * 0.25 * $this->ocounter[2];
+		$iron += $iron * $this->oasisFactor * $this->ocounter[2];
 		if ($foundry >= 1) {
 			$iron += $iron / 100 * $bid7[$foundry]['attri'];
 		}
@@ -306,7 +308,7 @@ class Village {
 		for ($i = 0; $i < $cnt; $i++) {
 			$crop += $bid4[$this->resarray[$holder[$i]]]['prod'];
 		}
-		$crop += $crop * 0.25 * $this->ocounter[3];
+		$crop += $crop * $this->oasisFactor * $this->ocounter[3];
 		if ($grainmill >= 1 || $bakery >= 1) {
 			$crop += $crop / 100 * (
 				(isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) +
@@ -320,6 +322,24 @@ class Village {
 	/**
 	 * OASIS
 	 */
+	/**
+	 * Bonusul de baza al oazei (25%) crescut de Waterworks (gid 45, Egipteni):
+	 * attri = +5% relativ per nivel, pana la +100% la nivel 20 (0.25 -> 0.50).
+	 */
+	private function getOasisBonusFactor() {
+		global $bid45;
+		$wwLevel = 0;
+		for ($i = 19; $i <= 40; $i++) {
+			if (isset($this->resarray['f'.$i.'t']) && (int)$this->resarray['f'.$i.'t'] == 45) {
+				$wwLevel = max($wwLevel, (int)$this->resarray['f'.$i]);
+			}
+		}
+		if ($wwLevel > 0 && isset($bid45[$wwLevel]['attri'])) {
+			return 0.25 * (1 + $bid45[$wwLevel]['attri']);
+		}
+		return 0.25;
+	}
+
 	private function sortOasis() {
 		$wood = $clay = $iron = $crop = 0;
 		if (!empty($this->oasisowned)) {

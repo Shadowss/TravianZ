@@ -338,7 +338,7 @@ class Units {
                     $u . "7",
                     $u . "8",
                     $u . "9",
-                    $u . $session->tribe . "0",
+                    $session->tribe . "0",
                     "hero"
                 ],
                 [
@@ -403,20 +403,21 @@ class Units {
 
         // fill the array with the invalid buildings
         if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
-            for($i = 1; $i <= 37; $i++){
+            for($i = 1; $i <= 50; $i++){
                 if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
             }
         }
         else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
-            for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i;
+            for($i = 12; $i <= 50; $i++) $invalidBuildings[] = $i;
         }
         else if($rallyPointLevel >= 10){
-            $invalidBuildings = [23, 31, 32, 33, 34, 36];
+            // zidurile nu pot fi tinta directa (31,32,33 + cele noi 42,43,47,50)
+            $invalidBuildings = [23, 31, 32, 33, 34, 36, 42, 43, 47, 50];
         }
 
         if(isset($post['ctar1']) && $post['ctar1'] != 0){
             // check if the player has selected a valid building
-            if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
+            if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 50){
                 $post['ctar1'] = 0;
             }
         }
@@ -427,7 +428,7 @@ class Units {
                 $post['ctar2'] = 0;
             }else{
                 // check if the player has selected a valid building
-                if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+                if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 50 && $post['ctar2'] != 99)){
                     $post['ctar2'] = 99;
                 }
             }

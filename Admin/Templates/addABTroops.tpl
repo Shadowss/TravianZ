@@ -27,7 +27,7 @@ if(isset($id)){
 	$units = $database->getUnit($village['wref']);
 	$coor = $database->getCoor($village['wref']);
 	$tribe = $user['tribe'];
-	if($tribe ==1){ $img = 0;} if($tribe ==2){ $img = 10;} if($tribe ==3){ $img = 20;} if($tribe ==4){ $img = 30;} if($tribe ==5){ $img = 40;} if($tribe ==6){ $img = 50;}
+	$img = ($tribe >= 1 && $tribe <= 9) ? ($tribe - 1) * 10 : 0;
 	include("search2.tpl");
 ?>
 <style>

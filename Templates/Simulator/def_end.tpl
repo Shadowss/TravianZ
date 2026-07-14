@@ -61,6 +61,58 @@
 
 					    </tr>";
                     }
+                    if(in_array(6,$target)) {
+					if(isset($_POST['wall6']) && $_POST['wall6'] != 0){
+					$wall6 = $_POST['wall6'];
+					}else{
+					$wall6 = 0;
+					}
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit uwall\" alt=\"Makeshift Wall\" title=\"Makeshift Wall\" /></td>
+						    <td class=\"desc\">Makeshift Wall</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall6\" value=\"$wall6\" maxlength=\"2\" title=\"level Makeshift Wall\" /></td>
+						    <td class=\"research\"></td>
+				    	</tr>";
+                    }
+                    if(in_array(7,$target)) {
+					if(isset($_POST['wall7']) && $_POST['wall7'] != 0){
+					$wall7 = $_POST['wall7'];
+					}else{
+					$wall7 = 0;
+					}
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit uwall\" alt=\"Stone Wall\" title=\"Stone Wall\" /></td>
+						    <td class=\"desc\">Stone Wall</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall7\" value=\"$wall7\" maxlength=\"2\" title=\"level Stone Wall\" /></td>
+						    <td class=\"research\"></td>
+				    	</tr>";
+                    }
+                    if(in_array(8,$target)) {
+					if(isset($_POST['wall8']) && $_POST['wall8'] != 0){
+					$wall8 = $_POST['wall8'];
+					}else{
+					$wall8 = 0;
+					}
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit uwall\" alt=\"Defensive Wall\" title=\"Defensive Wall\" /></td>
+						    <td class=\"desc\">Defensive Wall</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall8\" value=\"$wall8\" maxlength=\"2\" title=\"level Defensive Wall\" /></td>
+						    <td class=\"research\"></td>
+				    	</tr>";
+                    }
+                    if(in_array(9,$target)) {
+					if(isset($_POST['wall9']) && $_POST['wall9'] != 0){
+					$wall9 = $_POST['wall9'];
+					}else{
+					$wall9 = 0;
+					}
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit uwall\" alt=\"Barricade\" title=\"Barricade\" /></td>
+						    <td class=\"desc\">Barricade</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall9\" value=\"$wall9\" maxlength=\"2\" title=\"level Barricade\" /></td>
+						    <td class=\"research\"></td>
+				    	</tr>";
+                    }
                     ?>
                         <tr>
 					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="<?php echo PALACE; ?>" title="<?php echo PALACE; ?>" /></td>

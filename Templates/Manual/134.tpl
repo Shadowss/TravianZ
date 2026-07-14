@@ -1,4 +1,4 @@
-<h1><img class="unit u44" src="img/x.gif" alt="<?php echo U44; ?>" title="<?php echo U44; ?>" /> <?php echo U44; ?> <span class="tribe">(<?php echo TRIBE5; ?>)</span></h1>
+<h1><img class="unit u34" src="img/x.gif" alt="<?php echo U34; ?>" title="<?php echo U34; ?>" /> <?php echo U34; ?> <span class="tribe">(<?php echo TRIBE4; ?>)</span></h1>
 
 <table id="troop_info" cellpadding="1" cellspacing="1">
 <thead><tr>
@@ -11,9 +11,9 @@
     <th><img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /></th>
 </tr></thead>
 <tbody><tr>
-	<td>—</td>
-	<td>10</td>
-	<td>—</td>
+	<td>80</td>
+	<td>66</td>
+	<td>50</td>
 
 	<td>0</td>
 	<td>0</td>
@@ -25,7 +25,7 @@
 <table id="troop_details" cellpadding="1" cellspacing="1">
 <tbody><tr>
 	<th><?php echo MANUAL_VELOCITY; ?></th>
-	<td><b>25</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
+	<td><b>20</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
 </tr>
 <tr>
 	<th><?php echo MANUAL_CAN_CARRY; ?></th>
@@ -41,11 +41,11 @@
 </tr></tbody>
 </table>
 
-<img id="big_unit" class="big_u44" src="img/x.gif" alt="<?php echo U44; ?>" title="<?php echo U44; ?>" /><div id="t_desc"><?php echo MANUAL_UDESC_44; ?></div>
-<div id="prereqs"><p><b><?php echo PREREQUISITES; ?></b><br><?php echo MANUAL_NPC_NATARS; ?></p></div>
+<img id="big_unit" class="big_u34" src="img/x.gif" alt="<?php echo U34; ?>" title="<?php echo U34; ?>" /><div id="t_desc"><?php printf(MANUAL_UDESC_ANIMAL_EXP, U34, 1); ?></div>
+<div id="prereqs"><p><b><?php echo PREREQUISITES; ?></b><br><?php echo MANUAL_NPC_NATURE; ?></p></div>
 <map id="nav" name="nav">
-    <area href="manual.php?typ=1&amp;s=43" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?typ=1&amp;s=53" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
-    <area href="manual.php?typ=1&amp;s=45" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
+    <area href="manual.php?typ=1&amp;s=55" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />

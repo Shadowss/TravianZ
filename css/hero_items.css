@@ -3,6 +3,13 @@
    (16 columns, catalog order) and this CSS keeps working unchanged. */
 .heroT4Item{display:inline-block;width:48px;height:48px;vertical-align:middle;
   background-image:url('../img/hero/items.png');background-repeat:no-repeat;}
+
+/* Dedicated dorf1/Rally Point movement icons for hero adventures - separate
+   from the shared img.att2/img.def1 classes so swapping this art never
+   touches the normal raid/reinforcement icons. To change the icon: drop
+   your own image at img/hero/adv_out.gif / adv_back.gif - no code edits. */
+img.adv_out{background-image:url('../img/hero/adv_out.gif');height:16px;width:16px;}
+img.adv_back{background-image:url('../img/hero/adv_back.gif');height:16px;width:16px;}
 .heroT4Item.item1{background-position:-0px -0px;} /* Helmet of Awareness */
 .heroT4Item.item2{background-position:-48px -0px;} /* Helmet of Enlightenment */
 .heroT4Item.item3{background-position:-96px -0px;} /* Helmet of Wisdom */

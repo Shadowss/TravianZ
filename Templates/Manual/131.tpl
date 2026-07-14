@@ -15,21 +15,21 @@
 	<td>25</td>
 	<td>20</td>
 
-	<td>85</td>
-	<td>75</td>
-	<td>120</td>
-	<td>25</td>
+	<td>0</td>
+	<td>0</td>
+	<td>0</td>
+	<td>0</td>
 </tr></tbody>
 </table>
 
 <table id="troop_details" cellpadding="1" cellspacing="1">
 <tbody><tr>
 	<th><?php echo MANUAL_VELOCITY; ?></th>
-	<td><b>7</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
+	<td><b>20</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
 </tr>
 <tr>
 	<th><?php echo MANUAL_CAN_CARRY; ?></th>
-	<td><b>45</b> <?php echo RESOURCES; ?></td>
+	<td><b>0</b> <?php echo RESOURCES; ?></td>
 </tr>
 <tr>
 	<th><?php echo UPKEEP; ?></th>
@@ -37,15 +37,15 @@
 </tr>
 <tr>
 	<th><?php echo MANUAL_TRAINING_DURATION; ?></th>
-	<td><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> 0:16:20</td>
+	<td><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> 0</td>
 </tr></tbody>
 </table>
 
-<img id="big_unit" class="big_u31" src="img/x.gif" alt="<?php echo U31; ?>" title="<?php echo U31; ?>" /><div id="t_desc"><?php echo MANUAL_UDESC_31; ?></div>
-<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=26">Baracks</a> <?php echo LEVEL; ?> 1 </div>
+<img id="big_unit" class="big_u31" src="img/x.gif" alt="<?php echo U31; ?>" title="<?php echo U31; ?>" /><div id="t_desc"><?php printf(MANUAL_UDESC_ANIMAL_EXP, U31, 1); ?></div>
+<div id="prereqs"><p><b><?php echo PREREQUISITES; ?></b><br><?php echo MANUAL_NPC_NATURE; ?></p></div>
 <map id="nav" name="nav">
-    <area href="manual.php?typ=1&amp;s=29" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?typ=2&amp;s=4" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
-    <area href="manual.php?s=1" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
+    <area href="manual.php?typ=1&amp;s=52" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />

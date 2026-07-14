@@ -66,6 +66,10 @@ if (isset($_GET['rank']) && is_numeric($_GET['rank'])) {
                     <a title="<?php echo TRIBE1; ?>" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
                     <a title="<?php echo TRIBE2; ?>" href="statistiken.php?id=12"><img class="btn_v2" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
                     <a title="<?php echo TRIBE3; ?>" href="statistiken.php?id=13"><img class="active btn_v3" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
+                    <?php if (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS): ?><a title="<?php echo TRIBE6; ?>" href="statistiken.php?id=16"><img class="btn_v6" src="img/x.gif" alt="<?php echo TRIBE6; ?>"></a><?php endif; ?>
+                    <?php if (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS): ?><a title="<?php echo TRIBE7; ?>" href="statistiken.php?id=17"><img class="btn_v7" src="img/x.gif" alt="<?php echo TRIBE7; ?>"></a><?php endif; ?>
+                    <?php if (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS): ?><a title="<?php echo TRIBE8; ?>" href="statistiken.php?id=18"><img class="btn_v8" src="img/x.gif" alt="<?php echo TRIBE8; ?>"></a><?php endif; ?>
+                    <?php if (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS): ?><a title="<?php echo TRIBE9; ?>" href="statistiken.php?id=19"><img class="btn_v9" src="img/x.gif" alt="<?php echo TRIBE9; ?>"></a><?php endif; ?>
                 </div>
             </th>
         </tr>

@@ -150,7 +150,7 @@ if ($displayarray['access'] == BANNED) {
     <th><?php echo TRIBE; ?></th>
     <td>
         <?php
-        $tribeArrays = [TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5];
+        $tribeArrays = [TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5, TRIBE6, TRIBE7, TRIBE8, TRIBE9];
         echo $tribeArrays[$displayarray['tribe'] - 1];
         ?>
     </td>

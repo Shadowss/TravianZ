@@ -1,51 +1,45 @@
-<h1><img class="unit u33" src="img/x.gif" alt="<?php echo U33; ?>" title="<?php echo U33; ?>" /> <?php echo U33; ?> <span class="tribe">(<?php echo TRIBE4; ?>)</span></h1>
+<h1><img class="unit u53" src="img/x.gif" alt="<?php echo U53; ?>" title="<?php echo U53; ?>" /> <?php echo U53; ?> <span class="tribe">(<?php echo TRIBE6; ?>)</span></h1>
 
 <table id="troop_info" cellpadding="1" cellspacing="1">
 <thead><tr>
 	<th><img class="att_all" src="img/x.gif" alt="<?php echo MANUAL_ATTACK_VALUE; ?>" title="<?php echo MANUAL_ATTACK_VALUE; ?>" /></th>
 	<th><img class="def_i" src="img/x.gif" alt="<?php echo MANUAL_DEF_INFANTRY; ?>" title="<?php echo MANUAL_DEF_INFANTRY; ?>" /></th>
 	<th><img class="def_c" src="img/x.gif" alt="<?php echo MANUAL_DEF_CAVALRY; ?>" title="<?php echo MANUAL_DEF_CAVALRY; ?>" /></th>
-    <th><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /></th>
-    <th><img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /></th>
-    <th><img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /></th>
-    <th><img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /></th>
+	<th><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /></th>
+	<th><img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /></th>
+	<th><img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /></th>
+	<th><img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /></th>
 </tr></thead>
 <tbody><tr>
-	<td>60</td>
-	<td>40</td>
-	<td>60</td>
-
-	<td>0</td>
-	<td>0</td>
-	<td>0</td>
-	<td>0</td>
+	<td>120</td><td>30</td><td>15</td>
+	<td>290</td><td>370</td><td>190</td><td>45</td>
 </tr></tbody>
 </table>
 
 <table id="troop_details" cellpadding="1" cellspacing="1">
 <tbody><tr>
 	<th><?php echo MANUAL_VELOCITY; ?></th>
-	<td><b>20</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
+	<td><b>16</b> <?php echo MANUAL_FIELDS_HOUR; ?></td>
 </tr>
 <tr>
 	<th><?php echo MANUAL_CAN_CARRY; ?></th>
-	<td><b>0</b> <?php echo RESOURCES; ?></td>
+	<td><b>75</b> <?php echo RESOURCES; ?></td>
 </tr>
 <tr>
 	<th><?php echo UPKEEP; ?></th>
-	<td><img class="r5" src="img/x.gif" alt="<?php echo CROP_CONSUMPTION; ?>" title="<?php echo CROP_CONSUMPTION; ?>" /> 1</td>
+	<td><img class="r5" src="img/x.gif" alt="<?php echo CROP_CONSUMPTION; ?>" title="<?php echo CROP_CONSUMPTION; ?>" /> 2</td>
 </tr>
 <tr>
 	<th><?php echo MANUAL_TRAINING_DURATION; ?></th>
-	<td><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> 0</td>
+	<td><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> 0:40:00</td>
 </tr></tbody>
 </table>
 
-<img id="big_unit" class="big_u33" src="img/x.gif" alt="<?php echo U33; ?>" title="<?php echo U33; ?>" /><div id="t_desc"><?php printf(MANUAL_UDESC_ANIMAL_EXP, U33, 1); ?></div>
-<div id="prereqs"><p><b><?php echo PREREQUISITES; ?></b><br><?php echo MANUAL_NPC_NATURE; ?></p></div>
+<img id="big_unit" class="big_u53" src="img/x.gif" alt="<?php echo U53; ?>" title="<?php echo U53; ?>" /><div id="t_desc"><?php echo MANUAL_UDESC_53; ?></div>
+<div id="prereqs"><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> <?php echo LEVEL; ?> 1, <a href="manual.php?typ=4&amp;gid=22"><?php echo ACADEMY; ?></a> <?php echo LEVEL; ?> 5, <a href="manual.php?typ=4&amp;gid=20"><?php echo STABLE; ?></a> <?php echo LEVEL; ?> 3</div>
 <map id="nav" name="nav">
-    <area href="manual.php?typ=1&amp;s=52" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?s=6&amp;typ=2" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
     <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
-    <area href="manual.php?typ=1&amp;s=54" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
+    <area href="manual.php?typ=1&amp;s=54" title="forward" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />

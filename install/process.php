@@ -172,6 +172,10 @@ class Process {
 		$findReplace["%NEW_FUNCTIONS_MILESTONES%"] = $_POST['new_functions_milestones'];
 		$findReplace["%NEW_FUNCTIONS_MEDAL_RESET%"] = $_POST['new_functions_medal_reset'];
 		$findReplace["%NEW_FUNCTIONS_HERO_T4%"] = $_POST['new_functions_hero_t4'];
+		$findReplace["%NEW_FUNCTION_TRIBE_HUNS%"] = $_POST['new_function_tribe_huns'];
+		$findReplace["%NEW_FUNCTION_TRIBE_EGIPTEANS%"] = $_POST['new_function_tribe_egipteans'];
+		$findReplace["%NEW_FUNCTION_TRIBE_SPARTANS%"] = $_POST['new_function_tribe_spartans'];
+		$findReplace["%NEW_FUNCTION_TRIBE_VIKINGS%"] = $_POST['new_function_tribe_vikings'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

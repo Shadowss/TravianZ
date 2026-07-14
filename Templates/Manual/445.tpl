@@ -1,0 +1,8 @@
+<h1><img class="unit ugeb" src="img/x.gif"> <?php echo WATERWORKS; ?></h1><img class="building g45" src="img/x.gif" alt="<?php echo WATERWORKS; ?>" title="<?php echo WATERWORKS; ?>" /><?php echo WATERWORKS_DESC; ?><p><b><?php echo COSTS; ?></b> <?php echo constant('AND'); ?> <b><?php echo CONSTRUCTION_TIME; ?></b> <?php echo MANUAL_FOR_LEVEL_1; ?><br /><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" />720 | <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" />685 | <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" />620 | <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" />250 | <img class="r5" src="img/x.gif" alt="<?php echo CROP_CONSUMPTION; ?>" title="<?php echo CROP_CONSUMPTION; ?>" />1 | <span class="dur"><img class="clock" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" src="img/x.gif" />0:50:00</span></p>
+	<p><b><?php echo PREREQUISITES; ?></b><br /><a href="manual.php?typ=4&amp;gid=37"><?php echo HEROSMANSION; ?></a> <?php echo LEVEL; ?> 10</p>
+<map id="nav" name="nav">
+    <area href="manual.php?typ=4&amp;gid=44" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+    <area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
+    <area href="manual.php?typ=4&amp;gid=46" title="<?php echo FORWARD; ?>" coords="71,0,116,18" shape="rect" alt="" />
+</map>
+<img usemap="#nav" src="img/x.gif" class="navi" alt="" />

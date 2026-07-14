@@ -6238,7 +6238,7 @@ References: User ID/Message ID, Mode
 
         $dbarray     = $this->getUnit( $vid );
         $totalunits  = 0;
-        for ( $i = 1; $i <= 50; $i ++ ) {
+        for ( $i = 1; $i <= 90; $i ++ ) {
             $totalunits += $dbarray[ 'u' . $i ];
         }
         
@@ -6490,6 +6490,72 @@ References: User ID/Message ID, Mode
 	}
 
     // no need to cache this method
+
+	// ==================== HOSPITAL (raniti + vindecare) ====================
+
+	function getWounded($vid) {
+		list($vid) = $this->escape_input((int)$vid);
+		$result = mysqli_query($this->dblink, "SELECT * FROM " . TB_PREFIX . "hospital WHERE vref = $vid");
+		return $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
+	}
+
+	function addWounded($vid, array $units, array $amounts) {
+		list($vid) = $this->escape_input((int)$vid);
+		$cols = []; $vals = []; $upd = [];
+		foreach($units as $k => $u) {
+			$u = (int)$u; $a = (int)$amounts[$k];
+			if($a <= 0 || $u < 1 || $u > 90) continue;
+			$cols[] = "u$u"; $vals[] = $a; $upd[] = "u$u = u$u + $a";
+		}
+		if(empty($cols)) return true;
+		$q = "INSERT INTO " . TB_PREFIX . "hospital (vref, " . implode(',', $cols) . ") VALUES ($vid, " . implode(',', $vals) . ") ON DUPLICATE KEY UPDATE " . implode(',', $upd);
+		return mysqli_query($this->dblink, $q);
+	}
+
+	function deductWounded($vid, $unit, $amt) {
+		list($vid, $unit, $amt) = $this->escape_input((int)$vid, (int)$unit, (int)$amt);
+		return mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "hospital SET u$unit = GREATEST(u$unit - $amt, 0) WHERE vref = $vid");
+	}
+
+	function clearHospital($vid) {
+		list($vid) = $this->escape_input((int)$vid);
+		mysqli_query($this->dblink, "DELETE FROM " . TB_PREFIX . "hospital WHERE vref = $vid");
+		mysqli_query($this->dblink, "DELETE FROM " . TB_PREFIX . "healing WHERE vref = $vid");
+	}
+
+	function getHealing($vid) {
+		list($vid) = $this->escape_input((int)$vid);
+		$result = mysqli_query($this->dblink, "SELECT * FROM " . TB_PREFIX . "healing WHERE vref = $vid ORDER BY id");
+		$rows = [];
+		if($result) while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) $rows[] = $row;
+		return $rows;
+	}
+
+	function getHealingDue($time) {
+		list($time) = $this->escape_input((int)$time);
+		$result = mysqli_query($this->dblink, "SELECT * FROM " . TB_PREFIX . "healing WHERE timestamp2 <= $time AND amt > 0");
+		$rows = [];
+		if($result) while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) $rows[] = $row;
+		return $rows;
+	}
+
+	function healUnit($vid, $unit, $amt, $each) {
+		list($vid, $unit, $amt, $each) = $this->escape_input((int)$vid, (int)$unit, (int)$amt, (int)$each);
+		$now = time();
+		$q = "INSERT INTO " . TB_PREFIX . "healing (vref, unit, amt, timestamp, eachtime, timestamp2) VALUES ($vid, $unit, $amt, $now, $each, " . ($now + $each) . ")";
+		return mysqli_query($this->dblink, $q);
+	}
+
+	function updateHealing($id, $amt, $timestamp2) {
+		list($id, $amt, $timestamp2) = $this->escape_input((int)$id, (int)$amt, (int)$timestamp2);
+		return mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "healing SET amt = $amt, timestamp2 = $timestamp2 WHERE id = $id");
+	}
+
+	function deleteHealing($id) {
+		list($id) = $this->escape_input((int)$id);
+		return mysqli_query($this->dblink, "DELETE FROM " . TB_PREFIX . "healing WHERE id = $id");
+	}
+
 	function getTraining($vid) {
 	    list($vid) = $this->escape_input((int) $vid);
 
@@ -6504,24 +6570,16 @@ References: User ID/Message ID, Mode
 		global $technology;
 
 		if(!$mode) {
-			$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
-			// fix by brainiac - THANK YOU
-			$greatbarracks = [61, 62, 63, 71, 72, 73, 74, 81, 82, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104];
-			$stables = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46];
-			$greatstables = [64, 65, 66, 75, 76, 83, 84, 85, 86, 105, 106];
-			$workshop = [7, 8, 17, 18, 27, 28, 47, 48];
-			$greatworkshop = [67, 68, 77, 78, 87, 88, 107, 108];
-			$residence = [9, 10, 19, 20, 29, 30, 49, 50];
-			$trapper = [99];
+			// Rutare generica pe tipul unitatii (u1-u90 + offsetul +1000 pentru cladirile mari)
+			global $unitsbytype;
+			$isGreat = $unit > 1000;
+			$baseUnit = $isGreat ? $unit - 1000 : $unit;
 
-			if(in_array($unit, $barracks)) $queued = $technology->getTrainingList(1);	
-		    elseif(in_array($unit, $stables)) $queued = $technology->getTrainingList(2);				
-		    elseif(in_array($unit, $workshop)) $queued = $technology->getTrainingList(3);
-	        elseif(in_array($unit, $residence)) $queued = $technology->getTrainingList(4);
-	        elseif(in_array($unit, $greatbarracks)) $queued = $technology->getTrainingList(5);
-            elseif(in_array($unit, $greatstables)) $queued = $technology->getTrainingList(6);	
-			elseif(in_array($unit, $greatworkshop)) $queued = $technology->getTrainingList(7);
-			elseif(in_array($unit, $trapper)) $queued = $technology->getTrainingList(8);
+			if($baseUnit == 99) $queued = $technology->getTrainingList(8);
+			elseif(in_array($baseUnit, $unitsbytype['expansion'])) $queued = $technology->getTrainingList(4);
+			elseif(in_array($baseUnit, $unitsbytype['siege'])) $queued = $technology->getTrainingList($isGreat ? 7 : 3);
+			elseif(in_array($baseUnit, $unitsbytype['cavalry'])) $queued = $technology->getTrainingList($isGreat ? 6 : 2);
+			else $queued = $technology->getTrainingList($isGreat ? 5 : 1);
 		
 			$now = time();
             $uid = $this->getVillageField($vid, "owner");
@@ -7524,8 +7582,14 @@ References: User ID/Message ID, Mode
         $maxslots -= (3 - floor(($palace - 5) / 5));
     }
 
+    // Command Center (Huni) - sloturi de expansiune ca Residence (nivel 10/20)
+    $commandcenter = $building->getTypeLevel(44);
+    if($commandcenter > 0) {
+        $maxslots -= (3 - floor($commandcenter / 10));
+    }
+
     // Units at home
-    $q = "SELECT (u10+u20+u30) as R1, (u9+u19+u29) as R2
+    $q = "SELECT (u10+u20+u30+u60+u70+u80+u90) as R1, (u9+u19+u29+u59+u69+u79+u89) as R2
           FROM " . TB_PREFIX . "units
           WHERE vref = " . (int)$village->wid;
     $result = mysqli_query($this->dblink,$q);
@@ -7553,14 +7617,14 @@ References: User ID/Message ID, Mode
     }
 
     // FIX: Count ALL reinforcements properly (SUM over ALL rows)
-    $q = "SELECT COALESCE(SUM(u10+u20+u30),0) AS s
+    $q = "SELECT COALESCE(SUM(u10+u20+u30+u60+u70+u80+u90),0) AS s
           FROM " . TB_PREFIX . "enforcement
           WHERE `from` = " . (int)$village->wid;
     $result = mysqli_query($this->dblink,$q);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $settlers += (int)$row['s'];
 
-    $q = "SELECT COALESCE(SUM(u9+u19+u29),0) AS c
+    $q = "SELECT COALESCE(SUM(u9+u19+u29+u59+u69+u79+u89),0) AS c
           FROM " . TB_PREFIX . "enforcement
           WHERE `from` = " . (int)$village->wid;
     $result = mysqli_query($this->dblink,$q);

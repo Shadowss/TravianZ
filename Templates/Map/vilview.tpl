@@ -69,7 +69,7 @@ if ($isOasis) {
 
 // ---------- 3. HELPERE ----------
 function tribeName($t){
-    $m = array(1=>TRIBE1,2=>TRIBE2,3=>TRIBE3,4=>TRIBE4,5=>TRIBE5);
+    $m = array(1=>TRIBE1,2=>TRIBE2,3=>TRIBE3,4=>TRIBE4,5=>TRIBE5,6=>TRIBE6,7=>TRIBE7,8=>TRIBE8,9=>TRIBE9);
     return isset($m[$t])? $m[$t] : '';
 }
 function renderBonus($bonusData){

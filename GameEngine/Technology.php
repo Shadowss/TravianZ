@@ -44,7 +44,7 @@ include_once($autoprefix."GameEngine/Lang/en.php");
 
 class Technology {
 
-	public $unarray = [1 => U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15, U16, U17, U18, U19, U20, U21, U22, U23, U24, U25, U26, U27, U28, U29, U30, U31, U32, U33, U34, U35, U36, U37, U38, U39, U40, U41, U42, U43, U44, U45, U46, U47, U48, U49, U50 , U99, U0];
+	public $unarray = [1 => U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15, U16, U17, U18, U19, U20, U21, U22, U23, U24, U25, U26, U27, U28, U29, U30, U31, U32, U33, U34, U35, U36, U37, U38, U39, U40, U41, U42, U43, U44, U45, U46, U47, U48, U49, U50, U51, U52, U53, U54, U55, U56, U57, U58, U59, U60, U61, U62, U63, U64, U65, U66, U67, U68, U69, U70, U71, U72, U73, U74, U75, U76, U77, U78, U79, U80, U81, U82, U83, U84, U85, U86, U87, U88, U89, U90 , U99, U0];
 
 	public function grabAcademyRes() {
 		global $village;
@@ -93,7 +93,52 @@ class Technology {
 				case "t3":
 				$this->procTrain($post,true);
 				break;
+				case "heal":
+				$this->procHeal($post);
+				break;
 			}
+		}
+	}
+
+	/**
+	 * Vindecarea ranitilor din Spital (46) / Spitalul Mare (48).
+	 * Cost: 50% din costul de antrenare al unitatii.
+	 * Timp per unitate: unit_time x attri (1.0 -> 0.1351) / SPEED.
+	 */
+	private function procHeal($post) {
+		global $building, $database, $village;
+		global $bid46, $bid48;
+
+		$unit = isset($post['hunit']) ? (int)$post['hunit'] : 0;
+		$amt = isset($post['hamt'][$unit]) ? (int)$post['hamt'][$unit] : 0;
+		if($unit < 1 || $unit > 90 || $amt <= 0) return;
+
+		$hospital = $building->getTypeLevel(46);
+		$bighospital = $building->getTypeLevel(48);
+		if($hospital <= 0 && $bighospital <= 0) return;
+
+		// doar raniti existenti in spitalul acestui sat
+		$wounded = $database->getWounded($village->wid);
+		$available = !empty($wounded) && isset($wounded['u'.$unit]) ? (int)$wounded['u'.$unit] : 0;
+		if($available <= 0) return;
+		if($amt > $available) $amt = $available;
+
+		if(!isset($GLOBALS['u'.$unit])) return;
+		$unitdata = $GLOBALS['u'.$unit];
+
+		// cost: jumatate din costul de antrenare
+		$wood = (int)ceil($unitdata['wood'] * $amt / 2);
+		$clay = (int)ceil($unitdata['clay'] * $amt / 2);
+		$iron = (int)ceil($unitdata['iron'] * $amt / 2);
+		$crop = (int)ceil($unitdata['crop'] * $amt / 2);
+
+		$attri = $bighospital > 0 ? $bid48[$bighospital]['attri'] : $bid46[$hospital]['attri'];
+		$each = (int)round($unitdata['time'] * $attri / SPEED);
+		if($each < 1) $each = 1;
+
+		if($database->modifyResource($village->wid, $wood, $clay, $iron, $crop, 0)) {
+			$database->deductWounded($village->wid, $unit, $amt);
+			$database->healUnit($village->wid, $unit, $amt, $each);
 		}
 	}
 
@@ -118,14 +163,14 @@ class Technology {
 		global $database,$village;
 		$trainingarray = $database->getTraining($village->wid);
 		$listarray = [];
-		$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
-		// fix by brainiac - THANK YOU
-		$greatbarracks = [61, 62, 63, 71, 72, 73, 74, 81, 82, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104];
-		$stables = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46];
-		$greatstables = [64, 65, 66, 75, 76, 83, 84, 85, 86, 105, 106];
-		$workshop = [7, 8, 17, 18, 27, 28, 47, 48];
-		$greatworkshop = [67, 68, 77, 78, 87, 88, 107, 108];
-		$residence = [9, 10, 19, 20, 29, 30, 49, 50];
+		$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 51, 52, 61, 62, 63, 71, 72, 73, 74, 81, 82, 83, 84];
+		$stables = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46, 53, 54, 55, 56, 64, 65, 66, 75, 76, 85, 86];
+		$workshop = [7, 8, 17, 18, 27, 28, 47, 48, 57, 58, 67, 68, 77, 78, 87, 88];
+		$residence = [9, 10, 19, 20, 29, 30, 49, 50, 59, 60, 69, 70, 79, 80, 89, 90];
+		// great buildings: offset +1000 (vechiul +60 intra in coliziune cu unitatile reale 51-90)
+		$greatbarracks = array_map(function($u){ return $u + 1000; }, $barracks);
+		$greatstables = array_map(function($u){ return $u + 1000; }, $stables);
+		$greatworkshop = array_map(function($u){ return $u + 1000; }, $workshop);
 		$trapper = [99];
 		
 		$categories = [
@@ -133,9 +178,9 @@ class Technology {
 			2 => [$stables, 0, null],
 			3 => [$workshop, 0, null],
 			4 => [$residence, 0, null],
-			5 => [$greatbarracks, 60, null],
-			6 => [$greatstables, 60, null],
-			7 => [$greatworkshop, 60, null],
+			5 => [$greatbarracks, 1000, null],
+			6 => [$greatstables, 1000, null],
+			7 => [$greatworkshop, 1000, null],
 			8 => [$trapper, 0, 'Trap'],
 		];
 		
@@ -218,7 +263,7 @@ class Technology {
 	 */
 	private function addUnits(&$ownunit, $sources, $includeHero = true) {
 		foreach($sources as $src){
-			for($i = 1; $i <= 50; $i++){
+			for($i = 1; $i <= 90; $i++){
 				$ownunit['u' . $i] += $src['u' . $i];
 			}
 			if($includeHero) $ownunit['hero'] += $src['hero'];
@@ -267,7 +312,7 @@ class Technology {
 		if(!$InVillageOnly){
 			$movement = $database->getVillageMovement($base);
 			if(!empty($movement)){
-				for($i = 1; $i <= 50; $i++){
+				for($i = 1; $i <= 90; $i++){
 				    if(!isset($ownunit['u'.$i])) $ownunit['u'.$i] = 0;
 					$ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
 				}
@@ -337,6 +382,54 @@ class Technology {
 
 			case 41:
 			case 50: return $session->tribe == 5;
+
+			case 52:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
+			case 57:
+			case 58:
+			case 59: return $session->tribe == 6 && $this->getTech($unit);
+
+			case 51:
+			case 60: return $session->tribe == 6;
+
+			case 62:
+			case 63:
+			case 64:
+			case 65:
+			case 66:
+			case 67:
+			case 68:
+			case 69: return $session->tribe == 7 && $this->getTech($unit);
+
+			case 61:
+			case 70: return $session->tribe == 7;
+
+			case 72:
+			case 73:
+			case 74:
+			case 75:
+			case 76:
+			case 77:
+			case 78:
+			case 79: return $session->tribe == 8 && $this->getTech($unit);
+
+			case 71:
+			case 80: return $session->tribe == 8;
+
+			case 82:
+			case 83:
+			case 84:
+			case 85:
+			case 86:
+			case 87:
+			case 88:
+			case 89: return $session->tribe == 9 && $this->getTech($unit);
+
+			case 81:
+			case 90: return $session->tribe == 9;
 		}
 	}
 
@@ -358,7 +451,11 @@ class Technology {
 		        (!empty($post['t19']) && !empty($post['t20'])) ||
 		        (!empty($post['t29']) && !empty($post['t30'])) ||
 		        (!empty($post['t39']) && !empty($post['t40'])) ||
-		        (!empty($post['t49']) && !empty($post['t50']))
+		        (!empty($post['t49']) && !empty($post['t50'])) ||
+		        (!empty($post['t59']) && !empty($post['t60'])) ||
+		        (!empty($post['t69']) && !empty($post['t70'])) ||
+		        (!empty($post['t79']) && !empty($post['t80'])) ||
+		        (!empty($post['t89']) && !empty($post['t90']))
 		        )
 		    ) {
 		        $start = ($session->tribe - 1) * 10 + 1;
@@ -394,7 +491,7 @@ class Technology {
         
         if(!$type){
             $start = 1;
-            $end = 50;
+            $end = 90;
         }else{
             $start = ($type - 1) * 10 + 1;
             $end = $type * 10;
@@ -443,7 +540,7 @@ class Technology {
 			$crop = ${'u'.$unit}['crop'] * $amt * ($great ? 3 : 1);
 
 			if($database->modifyResource($village->wid, $wood , $clay, $iron, $crop, 0) && $amt > 0) {
-				$database->trainUnit($village->wid, $unit + ($great ? 60 : 0), $amt, ${'u'.$unit}['pop'], $each, 0);
+				$database->trainUnit($village->wid, $unit + ($great ? 1000 : 0), $amt, ${'u'.$unit}['pop'], $each, 0);
 			}
 		}
 		} finally {
@@ -454,29 +551,30 @@ class Technology {
 	private function checkTrainingBuilding($unit) {
 		global $building;
 		
-		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
-		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
-		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
-		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
+		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 61, 62, 63, 71, 72, 73, 74, 81, 82, 83, 84];
+		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46, 53, 54, 55, 56, 64, 65, 66, 75, 76, 85, 86];
+		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48, 57, 58, 67, 68, 77, 78, 87, 88];
+		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59, 60, 69, 70, 79, 80, 89, 90];
 		$trapper = [99];
 		
 		//Check if the player is trying to train troops without the needed buildings
+		// Great Workshop este acum gid 49; Command Center (44) e alternativa hunilor la Residence/Palace
 		if((in_array($unit, $footies) && ($building->getTypeLevel(19) == 0 && $building->getTypeLevel(29) == 0)) ||
 		    (in_array($unit, $calvary) && ($building->getTypeLevel(20) == 0 && $building->getTypeLevel(30) == 0)) ||
-		    (in_array($unit, $workshop) && ($building->getTypeLevel(21) == 0 && $building->getTypeLevel(42) == 0)) ||
-		    (in_array($unit, $special) && ($building->getTypeLevel(25) < 10 && $building->getTypeLevel(26) < 10)) ||
+		    (in_array($unit, $workshop) && ($building->getTypeLevel(21) == 0 && $building->getTypeLevel(49) == 0)) ||
+		    (in_array($unit, $special) && ($building->getTypeLevel(25) < 10 && $building->getTypeLevel(26) < 10 && $building->getTypeLevel(44) < 10)) ||
 		    (in_array($unit, $trapper) && $building->getTypeLevel(36) == 0)) return false;
 		
 		return true;
 	}
 
 	private function getTrainingTime($unit, $great) {
-		global $building, ${'u'.$unit}, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid41, $bid42;
+		global $building, ${'u'.$unit}, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid41, $bid44, $bid49;
 		
-		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
-		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
-		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
-		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
+		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 61, 62, 63, 71, 72, 73, 74, 81, 82, 83, 84];
+		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46, 53, 54, 55, 56, 64, 65, 66, 75, 76, 85, 86];
+		$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48, 57, 58, 67, 68, 77, 78, 87, 88];
+		$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59, 60, 69, 70, 79, 80, 89, 90];
 		$trapper = [99];
 		
 		if(in_array($unit, $footies)) {		    
@@ -495,7 +593,7 @@ class Technology {
 		}
 		if(in_array($unit, $workshop)) {	    
 			if($great) {
-				$each = round(($bid42[$building->getTypeLevel(42)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+				$each = round(($bid49[$building->getTypeLevel(49)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 			} else {
 				$each = round(($bid21[$building->getTypeLevel(21)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 			}
@@ -503,8 +601,11 @@ class Technology {
 		if(in_array($unit, $special)) {			    
 			if($building->getTypeLevel(25) > 0){
 				$each = round(($bid25[$building->getTypeLevel(25)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-			} else {
+			} elseif($building->getTypeLevel(26) > 0) {
 				$each = round(($bid26[$building->getTypeLevel(26)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
+			} else {
+				// Command Center (Huni) - alternativa la Residence/Palace
+				$each = round(($bid44[$building->getTypeLevel(44)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 			}
 		}
 		if(in_array($unit, $trapper)) {
@@ -605,6 +706,65 @@ class Technology {
 			case 22: return $building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1;
 			
 			case 24: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 3;
+
+			// TRIBE 6-9 (Huns, Egyptians, Spartans, Vikings)
+			// scout de cavalerie (ca 4/23) - Egipteni
+			case 64: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 1;
+
+			// scout de infanterie: Huni (cerinta proiectului) + Spartani (Sentinel: Academie 1 + Fierarie 1)
+			case 52: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(15) >= 5;
+			case 74: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(12) >= 1;
+
+			// infanterie defensiva (ca 2)
+			case 62:
+			case 72: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(13) >= 1;
+
+			// infanterie elita/ofensiva (ca 3)
+			case 73:
+			case 84: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(12) >= 1;
+
+			// infanterie de atac (ca 13/33/43)
+			case 63:
+			case 83: return $building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1;
+
+			// scout de infanterie (ca 14/34/44)
+			case 82: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(15) >= 5;
+
+			// cavalerie usoara de raid (ca 24)
+			case 53: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 3;
+
+			// cavalerie medie (ca 5/25)
+			case 54:
+			case 65:
+			case 85: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 5;
+
+			// cavalerie defensiva (ca 15/35/45)
+			case 75: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(20) >= 3;
+
+			// cavalerie grea/elita (ca 6/16/26)
+			case 55:
+			case 56:
+			case 66:
+			case 76:
+			case 86: return $building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10;
+
+			// berbece (ca 7/17/27)
+			case 57:
+			case 67:
+			case 77:
+			case 87: return $building->getTypeLevel(22) >= 10 && $building->getTypeLevel(21) >= 1;
+
+			// catapulta (ca 8/18/28)
+			case 58:
+			case 68:
+			case 78:
+			case 88: return $building->getTypeLevel(22) >= 15 && $building->getTypeLevel(21) >= 10;
+
+			// chief (ca 9/29)
+			case 59:
+			case 69:
+			case 79:
+			case 89: return $building->getTypeLevel(22) >= 20 && $building->getTypeLevel(16) >= 10;
 		}
 	}
 
@@ -717,7 +877,8 @@ class Technology {
 		$enforce=$database->getEnforceArray($id, 0, $use_cache);
 		$fail=0;
 
-        for ($i=1; $i<50; $i++) {
+        // extins la u90; nota: bucla veche ($i<50) omitea u50 - corectat
+        for ($i=1; $i<=90; $i++) {
             if($enforce['u'.$i.'']>0){
                 $fail=1;
             }

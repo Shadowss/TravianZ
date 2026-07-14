@@ -117,6 +117,34 @@ if(REG_OPEN == true){ ?>
 			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?> />&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?> />&nbsp;<?php echo SE; ?> <b>(+|-)</b></label></td>
 		</tr>
+		<?php if (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS) { ?>
+		<tr<?php if (6 == 9) echo ' class="btm"'; ?>>
+			<td><label><input class="radio" type="radio" name="vid" value="6" <?php echo $form->getRadio('vid',6); ?> />&nbsp;<?php echo TRIBE6; ?></label></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<?php } ?>
+		<?php if (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS) { ?>
+		<tr<?php if (7 == 9) echo ' class="btm"'; ?>>
+			<td><label><input class="radio" type="radio" name="vid" value="7" <?php echo $form->getRadio('vid',7); ?> />&nbsp;<?php echo TRIBE7; ?></label></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<?php } ?>
+		<?php if (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS) { ?>
+		<tr<?php if (8 == 9) echo ' class="btm"'; ?>>
+			<td><label><input class="radio" type="radio" name="vid" value="8" <?php echo $form->getRadio('vid',8); ?> />&nbsp;<?php echo TRIBE8; ?></label></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<?php } ?>
+		<?php if (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS) { ?>
+		<tr<?php if (9 == 9) echo ' class="btm"'; ?>>
+			<td><label><input class="radio" type="radio" name="vid" value="9" <?php echo $form->getRadio('vid',9); ?> />&nbsp;<?php echo TRIBE9; ?></label></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<?php } ?>
 	</tbody>
 </table>
 

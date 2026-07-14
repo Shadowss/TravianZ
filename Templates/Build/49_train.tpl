@@ -19,9 +19,10 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 
-global $session, $technology, $village, $generator, $database, $building, $bid42, $id;
+global $session, $technology, $village, $generator, $database, $building, $bid49, $id;
 
 $success = 0;
+global $unitsbytype;
 $start = ($session->tribe - 1) * 10 + 7;
 $end = $start + 1; // ram + catapult
 
@@ -39,7 +40,7 @@ for ($i = $start; $i <= $end; $i++) {
 
     $dur = $database->getArtifactsValueInfluence(
         $session->uid, $village->wid, 5,
-        round($unit['time'] * ($bid42[$village->resarray['f'.$id]]['attri'] / 100) / SPEED)
+        round($unit['time'] * ($bid49[$village->resarray['f'.$id]]['attri'] / 100) / SPEED)
     );
     $max = $technology->maxUnit($i, true);
 ?>

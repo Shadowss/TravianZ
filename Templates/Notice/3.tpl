@@ -10,7 +10,7 @@
 $dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));
 
 // ======================== CONFIG ========================
-$hasHero = (isset($dataarray[184]) && $dataarray[184] > 0);
+$hasHero = (isset($dataarray[284]) && $dataarray[284] > 0);
 $colspan  = $hasHero ? 11 : 10;
 $colspan2 = 10;
 
@@ -130,7 +130,7 @@ for ($i = 3; $i <= 12; $i++) {
 }
 
 if ($hasHero) {
-    echo "<td>".$dataarray[184]."</td>";
+    echo "<td>".$dataarray[284]."</td>";
 }
 
 // CASUALTIES
@@ -143,24 +143,24 @@ for ($i = 13; $i <= 22; $i++) {
 }
 
 if ($hasHero) {
-    $tdclass = ($dataarray[185] == 0) ? 'class="none"' : '';
-    echo "<td $tdclass>".$dataarray[185]."</td>";
+    $tdclass = ($dataarray[285] == 0) ? 'class="none"' : '';
+    echo "<td $tdclass>".$dataarray[285]."</td>";
 }
 
 // PRISONERS
-if (array_sum(array_slice($dataarray, 186, 11)) > 0) {
+if (array_sum(array_slice($dataarray, 286, 11)) > 0) {
 
     echo "</tr><tr><th>".PRISONERS."</th>";
 
-    for ($i = 186; $i <= 195; $i++) {
+    for ($i = 286; $i <= 295; $i++) {
         echo ($dataarray[$i] == 0)
             ? "<td class=\"none\">0</td>"
             : "<td>".$dataarray[$i]."</td>";
     }
 
     if ($hasHero) {
-        $tdclass = ($dataarray[196] == 0) ? 'class="none"' : '';
-        echo "<td $tdclass>".$dataarray[196]."</td>";
+        $tdclass = ($dataarray[296] == 0) ? 'class="none"' : '';
+        echo "<td $tdclass>".$dataarray[296]."</td>";
     }
 }
 ?>
@@ -171,65 +171,65 @@ if (array_sum(array_slice($dataarray, 186, 11)) > 0) {
 <?php
 // ======================== SPECIAL ACTIONS ========================
 
-if (!empty($dataarray[198]) && !empty($dataarray[199])) {
+if (!empty($dataarray[298]) && !empty($dataarray[299])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[198]; ?>" src="img/x.gif" alt="<?php echo U17; ?>" title="<?php echo U17; ?>" />
-<?php echo $dataarray[199]; ?>
+<img class="unit u<?php echo $dataarray[298]; ?>" src="img/x.gif" alt="<?php echo U17; ?>" title="<?php echo U17; ?>" />
+<?php echo $dataarray[299]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[200]) && !empty($dataarray[201])) {
+if (!empty($dataarray[300]) && !empty($dataarray[301])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[200]; ?>" src="img/x.gif" alt="<?php echo U18; ?>" title="<?php echo U18; ?>" />
-<?php echo $dataarray[201]; ?>
+<img class="unit u<?php echo $dataarray[300]; ?>" src="img/x.gif" alt="<?php echo U18; ?>" title="<?php echo U18; ?>" />
+<?php echo $dataarray[301]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[202]) && !empty($dataarray[203])) {
+if (!empty($dataarray[302]) && !empty($dataarray[303])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[202]; ?>" src="img/x.gif" alt="<?php echo U19; ?>" title="<?php echo U19; ?>" />
-<?php echo $dataarray[203]; ?>
+<img class="unit u<?php echo $dataarray[302]; ?>" src="img/x.gif" alt="<?php echo U19; ?>" title="<?php echo U19; ?>" />
+<?php echo $dataarray[303]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[205]) && !empty($dataarray[206])) {
+if (!empty($dataarray[305]) && !empty($dataarray[306])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[205]; ?>" src="img/x.gif" alt="<?php echo U0; ?>" title="<?php echo U0; ?>" />
-<?php echo $dataarray[206]; ?>
+<img class="unit u<?php echo $dataarray[305]; ?>" src="img/x.gif" alt="<?php echo U0; ?>" title="<?php echo U0; ?>" />
+<?php echo $dataarray[306]; ?>
 </td>
 </tr>
 </tbody>
 <?php }
 
-if (!empty($dataarray[204])) {
+if (!empty($dataarray[304])) {
 ?>
 <tbody class="goods">
 <tr>
 <th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<?php echo $dataarray[204]; ?>
+<?php echo $dataarray[304]; ?>
 </td>
 </tr>
 </tbody>

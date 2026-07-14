@@ -19,15 +19,17 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 
-global $session, $technology, $village, $database, $generator, $building, $bid20, $bid41, $id;
+global $session, $technology, $village, $database, $generator, $building, $bid20, $bid41, $id, $unitsbytype;
 
 $tribe = (int)$session->tribe;
-$start = ($tribe - 1) * 10 + 4 - ($tribe == 3 ? 1 : 0) + ($tribe == 2 ? 1 : 0);
-$end = $tribe * 10 - 4;
+$start = ($tribe - 1) * 10 + 1;
+$end = $tribe * 10;
 $success = 0;
 $horseTrough = $building->getTypeLevel(41);
 
 for ($i = $start; $i <= $end; $i++) {
+    // doar cavaleria tribului (generic: acopera si triburile 6-9)
+    if (!in_array($i, $unitsbytype['cavalry'])) continue;
     if (!$technology->getTech($i)) continue;
 
     $unitData = ${'u'.$i};

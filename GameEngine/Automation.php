@@ -92,7 +92,7 @@ class Automation {
         
         $methodsArrays = ["culturePoints", "updateHero", "clearDeleting", "buildComplete",
         				  "demolitionComplete", "marketComplete", "researchComplete",
-        				  "trainingComplete", "starvation", "celebrationComplete", "festivalComplete",
+        				  "trainingComplete", "healingComplete", "starvation", "celebrationComplete", "festivalComplete",
         				  "sendUnitsComplete", "loyaltyRegeneration", "sendreinfunitsComplete",
         				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
         				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts",
@@ -758,7 +758,8 @@ class Automation {
             $merchant2 = ($this->getTypeLevel(17, $from) > 0)? $this->getTypeLevel(17, $from) : 0;
             $used2 = $database->totalMerchantUsed($from, false);
             $merchantAvail2 = $merchant2 - $used2;
-            $maxcarry2 = ($tribe == 1)? 500 : (($tribe == 2)? 1000 : 750);
+            $carrymap = array(1 => 500, 2 => 1000, 3 => 750, 6 => 500, 7 => 750, 8 => 500, 9 => 750);
+            $maxcarry2 = isset($carrymap[$tribe]) ? $carrymap[$tribe] : 750;
             $maxcarry2 *= TRADER_CAPACITY;
             
             if($this->getTypeLevel(28, $from) != 0) {
@@ -1350,7 +1351,9 @@ class Automation {
         $database->query("DELETE FROM " . TB_PREFIX . "route where wid = " . (int)$data['to'] . " OR `from` = " . (int)$data['to']);
 
         $units2reset = [];
-        for ($u = 1; $u <= 50; $u++) $units2reset[] = 'u' . $u . ' = 0';
+        for ($u = 1; $u <= 90; $u++) $units2reset[] = 'u' . $u . ' = 0';
+        // cucerirea goleste spitalul si coada de vindecare
+        $database->clearHospital($data['to']);
         $units2reset[] = 'u99 = 0';
         $units2reset[] = 'u99o = 0';
         $units2reset[] = 'hero = 0';
@@ -1487,13 +1490,15 @@ class Automation {
 	";
                         }else if($data['spy'] == 2){
                             if ($isoasis == 0){
-                                $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33');
+                                $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33, 42, 43, 47, 50');
                                 $residencelevel = $database->getFieldLevelInVillage($data['to'], 25);
                                 $palacelevel = $database->getFieldLevelInVillage($data['to'], 26);
                                 $residenceimg = "<img src=\"".GP_LOCATE."img/g/g25.gif\" height=\"20\" width=\"15\" alt=\"".RESIDENCE."\" title=\"".RESIDENCE."\" />";
                                 $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"".PALACE."\" title=\"".PALACE."\" />";
                                 $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"".CRANNY."\" title=\"".CRANNY."\" />";
-                                $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"".rc_tok('RC_WALL')."\" title=\"".rc_tok('RC_WALL')."\" />";
+                                $wallgids = array(1 => 31, 2 => 32, 3 => 33, 6 => 43, 7 => 42, 8 => 47, 9 => 50);
+                                $wallgid = isset($wallgids[$targettribe]) ? $wallgids[$targettribe] : 31;
+                                $wallimg = "<img src=\"".GP_LOCATE."img/g/g".$wallgid."Icon.gif\" height=\"20\" width=\"15\" alt=\"".rc_tok('RC_WALL')."\" title=\"".rc_tok('RC_WALL')."\" />";
                                 $info_spy = "".$spy_pic.",";
                                 if($residencelevel > 0) $info_spy .= $residenceimg." ".rc_tok('RC_RESIDENCE_LEVEL')."<b>".$residencelevel."</b><br />";
                                 elseif($palacelevel > 0) $info_spy .= $palaceimg." ".rc_tok('RC_PALACE_LEVEL')." <b>".$palacelevel."</b><br />";
@@ -1676,6 +1681,7 @@ class Automation {
         $unitssend_att, $unitsdead_att, $steal, $battlepart,
         $unitssend_def, $unitsdead_def, $unitssend_deff, $unitsdead_deff,
         $rom, $ger, $gal, $nat, $natar,
+        $hun, $egy, $spa, $vik,
         $DefenderHeroesTot, $DefenderHeroesDead,
         $info_ram, $info_cat, $info_chief, $info_spy,
         $info_trap, $info_hero, $info_troop,
@@ -1692,6 +1698,10 @@ class Automation {
                     .','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat
                     .','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar
                     .','.$unitssend_def[5].','.$unitsdead_def[5]
+                    .','.$hun.','.$unitssend_def[6].','.$unitsdead_def[6]
+                    .','.$egy.','.$unitssend_def[7].','.$unitsdead_def[7]
+                    .','.$spa.','.$unitssend_def[8].','.$unitsdead_def[8]
+                    .','.$vik.','.$unitssend_def[9].','.$unitsdead_def[9]
                     .','.$DefenderHeroesTot.','.$DefenderHeroesDead
                     .','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy
                     .','.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero
@@ -1714,6 +1724,10 @@ class Automation {
                     .','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat
                     .','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar
                     .','.$unitssend_def[5].','.$unitsdead_def[5]
+                    .','.$hun.','.$unitssend_def[6].','.$unitsdead_def[6]
+                    .','.$egy.','.$unitssend_def[7].','.$unitsdead_def[7]
+                    .','.$spa.','.$unitssend_def[8].','.$unitsdead_def[8]
+                    .','.$vik.','.$unitssend_def[9].','.$unitsdead_def[9]
                     .','.$DefenderHeroesTot.','.$DefenderHeroesDead
                     .','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '')
                     .',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero
@@ -1732,6 +1746,10 @@ class Automation {
                     .','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat
                     .','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar
                     .','.$unitssend_deff[5].','.$unitsdead_deff[5]
+                    .','.$hun.','.$unitssend_deff[6].','.$unitsdead_deff[6]
+                    .','.$egy.','.$unitssend_deff[7].','.$unitsdead_deff[7]
+                    .','.$spa.','.$unitssend_deff[8].','.$unitsdead_deff[8]
+                    .','.$vik.','.$unitssend_deff[9].','.$unitsdead_deff[9]
                     .','.$DefenderHeroesTot.','.$DefenderHeroesDead
                     .',,,'.$data['t11'].','.$dead11.','.$unitstraped_att
                     .',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
@@ -1840,6 +1858,13 @@ class Automation {
         // modify units in DB
         $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
 
+        // Spital: o parte din mortii proprii (aparare) devin raniti - doar unitatile de lupta X1-X8
+        $woundedMap = [];
+        for($wi = $start; $wi <= $start + 7; $wi++) {
+            if(!empty($owndead[$wi])) $woundedMap[$wi] = $owndead[$wi];
+        }
+        $this->applyHospitalWounded($data['to'], $woundedMap);
+
         return $owndead;
     }
 
@@ -1867,7 +1892,7 @@ class Automation {
     private function applyReinforcementCasualties($data, $battlepart, $from, $to, $ownally, $AttackArrivalTime, $scout, array &$alldead, array &$DefenderHeroesDeadArray) {
         global $database;
 
-        $rom = $ger = $gal = $nat = $natar = 0;
+        $rom = $ger = $gal = $nat = $natar = $hun = $egy = $spa = $vik = 0;
 
         //kill other defence in village
         // ... once again, units could have changed, so we need to reselect
@@ -1889,6 +1914,10 @@ class Automation {
                 case 2: $ger = 1; break;
                 case 3: $gal = 1; break;
                 case 4: $nat = 1; break;
+                case 6: $hun = 1; break;
+                case 7: $egy = 1; break;
+                case 8: $spa = 1; break;
+                case 9: $vik = 1; break;
                 case 5:
                 default: $natar = 1; break;
             }
@@ -1961,7 +1990,7 @@ class Automation {
             }
         }
 
-        return ['rom' => $rom, 'ger' => $ger, 'gal' => $gal, 'nat' => $nat, 'natar' => $natar];
+        return ['rom' => $rom, 'ger' => $ger, 'gal' => $gal, 'nat' => $nat, 'natar' => $natar, 'hun' => $hun, 'egy' => $egy, 'spa' => $spa, 'vik' => $vik];
     }
 
     /**
@@ -1992,9 +2021,9 @@ class Automation {
         $unitssend_deff = [];
 
         //Resetting the enforcement arrays
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 90; $i++) {
             $DefenderEnf['u'.$i] = 0;
-            if ($i <= 5) {
+            if ($i <= 9) {
                 $DefenderHeroesTotArray[$i] = 0;
                 $DefenderHeroesDeadArray[$i] = 0;
             }
@@ -2004,7 +2033,7 @@ class Automation {
         $enforcementarray2 = $database->getEnforceVillage($data['to'], 0);
         if (count($enforcementarray2) > 0) {
             foreach ($enforcementarray2 as $enforce2) {
-                for ($i = 1; $i <= 50; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                     $DefenderEnf['u'.$i] += $enforce2['u'.$i];
                 }
 
@@ -2027,7 +2056,7 @@ class Automation {
         $unitssend_def[0] = implode(",", $ownTroops);
         $unitssend_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 9; $i++) {
             //Reinforcements
             $reinfTroops = array_slice($DefenderEnf, ($i - 1) * 10, 10);
             $totalsend_alldef += array_sum($reinfTroops);
@@ -2249,15 +2278,15 @@ class Automation {
         $u     = ($owntribe - 1) * 10;
 
         if ($isoasis == 0) {
-            $catapult = [8, 18, 28, 48];
-            $ram      = [7, 17, 27, 47];
-            $chief    = [9, 19, 29, 49];
+            $catapult = [8, 18, 28, 48, 58, 68, 78, 88];
+            $ram      = [7, 17, 27, 47, 57, 67, 77, 87];
+            $chief    = [9, 19, 29, 49, 59, 69, 79, 89];
         } else {
-            $catapult = [8, 18, 28, 38, 48];
-            $ram      = [7, 17, 27, 37, 47];
-            $chief    = [9, 19, 29, 39, 49];
+            $catapult = [8, 18, 28, 38, 48, 58, 68, 78, 88];
+            $ram      = [7, 17, 27, 37, 47, 57, 67, 77, 87];
+            $chief    = [9, 19, 29, 39, 49, 59, 69, 79, 89];
         }
-        $spys = [4, 14, 23, 44];
+        $spys = [4, 14, 23, 44, 52, 64, 74, 82];
 
         $catp_pic = $ram_pic = $chief_pic = $spy_pic = null;
 
@@ -2303,7 +2332,7 @@ class Automation {
 
         if (count($enforcementarray) > 0) {
             foreach ($enforcementarray as $enforce) {
-                for ($i = 1; $i <= 50; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                     if (!isset($enforDefender['u'.$i])) {
                         $enforDefender['u'.$i] = 0;
                     }
@@ -2316,7 +2345,7 @@ class Automation {
             }
         }
 
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 90; $i++) {
             if (!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
                 $Defender['u'.$i] = 0;
             }
@@ -2552,7 +2581,7 @@ class Automation {
         $totaldead_def = 0;
         $totalpoint_att = 0;
 
-        for($i = 1 ;$i <= 50; $i++) {
+        for($i = 1 ;$i <= 90; $i++) {
             $unitarray = $GLOBALS["u".$i];
 
             //Reinforcements dead troops
@@ -2881,6 +2910,16 @@ class Automation {
     private function finalizeReturnOrDeath($data, $from, $to, $owntribe, $type, $isoasis, $conqureby, $AttackArrivalTime, $targetally, $ownally, $data2, $data_fail, $chiefing_village, $DefenderWref, $AttackerWref, $steal, $dead, $traped, $troopsdead, $totalsend_att, $totaldead_att, $totaltraped_att, &$totalstolentaken) {
         global $database, $units;
 
+        // Spital: o parte din trupele proprii moarte IN ATAC devin ranite acasa.
+        // $dead e indexat 1..11 pe sloturile tribului; doar unitatile de lupta (1-8).
+        if($owntribe >= 1 && $owntribe <= 9) {
+            $woundedAtt = [];
+            for($wj = 1; $wj <= 8; $wj++) {
+                if(!empty($dead[$wj])) $woundedAtt[($owntribe - 1) * 10 + $wj] = $dead[$wj];
+            }
+            if(!empty($woundedAtt)) $this->applyHospitalWounded($from['wref'], $woundedAtt);
+        }
+
                     // If the dead units not equal the ammount sent they will return and report
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {                       
@@ -3168,7 +3207,7 @@ class Automation {
                 $attpop  = $popData['attpop'];
 
                 //fix by ronix
-                for ($i = 1; $i <= 50; $i++) {
+                for ($i = 1; $i <= 90; $i++) {
                     if (!isset($enforDefender['u'.$i])) {
                         $enforDefender['u'.$i] = 0;
                     }
@@ -3289,7 +3328,7 @@ class Automation {
                     $owndead = [];
                     $alldead = [];
                     
-                    for($i = 1; $i <= 50; $i++) $alldead[$i] = 0;
+                    for($i = 1; $i <= 90; $i++) $alldead[$i] = 0;
 
                     //kill own defence — extracted to applyOwnDefenceCasualties() [#155]
                     $owndead = $this->applyOwnDefenceCasualties($data, $targettribe, $battlepart);
@@ -3301,6 +3340,10 @@ class Automation {
                     $gal   = $tribesPresent['gal'];
                     $nat   = $tribesPresent['nat'];
                     $natar = $tribesPresent['natar'];
+                    $hun   = $tribesPresent['hun'];
+                    $egy   = $tribesPresent['egy'];
+                    $spa   = $tribesPresent['spa'];
+                    $vik   = $tribesPresent['vik'];
                     $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];              
                     
                     $DefenderHeroesTot = implode(",", $DefenderHeroesTotArray);
@@ -3317,7 +3360,7 @@ class Automation {
                     //Collecting informations for the report
                     $unitsdead_def[0] = implode(",", $ownDeadTroops);
                     $unitsdead_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
-                    for($i = 1; $i <= 5; $i++){
+                    for($i = 1; $i <= 9; $i++){
                         //Counting reinforcements total dead troops
                         $deadTroops = array_slice($alldead, ($i - 1) * 10, 10);
                         $totaldead_alldef += array_sum($deadTroops);
@@ -3412,6 +3455,7 @@ class Automation {
                         $unitssend_att, $unitsdead_att, $steal, $battlepart,
                         $unitssend_def, $unitsdead_def, $unitssend_deff, $unitsdead_deff,
                         $rom, $ger, $gal, $nat, $natar,
+                        $hun, $egy, $spa, $vik,
                         $DefenderHeroesTot, $DefenderHeroesDead,
                         $info_ram, $info_cat, $info_chief, isset($info_spy) ? $info_spy : '',
                         $info_trap, $info_hero, $info_troop,
@@ -3596,7 +3640,7 @@ class Automation {
 
                 //check empty reinforcement in rally point
                 $e_units = '';
-                for ($i = 1; $i <= 50; $i++) $e_units.= 'u'.$i.'= 0 AND ';
+                for ($i = 1; $i <= 90; $i++) $e_units.= 'u'.$i.'= 0 AND ';
 
                 $e_units.= 'hero = 0';
                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
@@ -4096,7 +4140,7 @@ class Automation {
 		
 		if(count($enforcementarray) > 0){
 			foreach($enforcementarray as $enforce){
-				for($i = 1; $i <= 50; $i++){
+				for($i = 1; $i <= 90; $i++){
 					$ownunit['u'.$i] += $enforce['u'.$i];
 				}
 			}
@@ -4105,7 +4149,7 @@ class Automation {
 		$enforceoasis = $database->getOasisEnforce($base, 0, $use_cache);
 		if(count($enforceoasis) > 0){
 			foreach($enforceoasis as $enforce){
-				for($i = 1; $i <= 50; $i++){
+				for($i = 1; $i <= 90; $i++){
 					$ownunit['u'.$i] += $enforce['u'.$i];
 				}
 			}
@@ -4114,7 +4158,7 @@ class Automation {
 		$enforceoasis1 = $database->getOasisEnforce($base, 1, $use_cache);
 		if(count($enforceoasis1) > 0){
 			foreach($enforceoasis1 as $enforce){
-				for($i = 1; $i <= 50; $i++){
+				for($i = 1; $i <= 90; $i++){
 					$ownunit['u'.$i] += $enforce['u'.$i];
 				}
 			}
@@ -4122,7 +4166,7 @@ class Automation {
 		
 		$movement = $database->getVillageMovement($base);
 		if(!empty($movement)){
-			for($i = 1; $i <= 50; $i++){
+			for($i = 1; $i <= 90; $i++){
 				if(!isset($ownunit['u' . $i])){
 					$ownunit['u'.$i] = 0;
 				}
@@ -4190,6 +4234,72 @@ class Automation {
         return round($prod * SPEED);
     }
 
+    /**
+     * Spital (gid 46) / Spital Mare (gid 48): o parte din trupele proprii moarte
+     * in apararea satului devin ranite, in limita capacitatii spitalului.
+     * Cota: 40% (Spital) / 50% (Spital Mare). Capacitate: nivel x 30 / nivel x 60.
+     * Doar unitatile de lupta (X1-X8); chief, settler si eroul nu pot fi raniti.
+     */
+    private function applyHospitalWounded($vref, array $deadByUnit) {
+        global $database;
+
+        $hospital = $database->getFieldLevelInVillage($vref, '46');
+        $bighospital = $database->getFieldLevelInVillage($vref, '48');
+        if($hospital <= 0 && $bighospital <= 0) return;
+
+        $share = $bighospital > 0 ? 0.50 : 0.40;
+        $capacity = $bighospital > 0 ? $bighospital * 60 : $hospital * 30;
+
+        $stored = 0;
+        $current = $database->getWounded($vref);
+        if(!empty($current)) {
+            for($i = 1; $i <= 90; $i++) $stored += isset($current['u'.$i]) ? (int)$current['u'.$i] : 0;
+        }
+        $free = $capacity - $stored;
+        if($free <= 0) return;
+
+        $units = []; $amounts = [];
+        foreach($deadByUnit as $i => $deadAmt) {
+            if(empty($deadAmt)) continue;
+            $wounded = (int)floor($deadAmt * $share);
+            if($wounded <= 0) continue;
+            if($wounded > $free) $wounded = $free;
+            $units[] = $i;
+            $amounts[] = $wounded;
+            $free -= $wounded;
+            if($free <= 0) break;
+        }
+        if(!empty($units)) $database->addWounded($vref, $units, $amounts);
+    }
+
+    /**
+     * Proceseaza coada de vindecare: unitatile vindecate se intorc in sat
+     * incremental (una la fiecare 'eachtime' secunde), ca la antrenare.
+     */
+    private function healingComplete() {
+        global $database;
+
+        $time = time();
+        $healinglist = $database->getHealingDue($time);
+        foreach($healinglist as $heal) {
+            $healed = 1;
+            if($heal['eachtime'] > 0) {
+                $healed += (int)floor(($time - $heal['timestamp2']) / $heal['eachtime']);
+            }
+            if($healed > $heal['amt']) $healed = (int)$heal['amt'];
+            if($healed <= 0) continue;
+
+            $database->modifyUnit($heal['vref'], [$heal['unit']], [$healed], [1]);
+
+            $remaining = (int)$heal['amt'] - $healed;
+            if($remaining <= 0) {
+                $database->deleteHealing($heal['id']);
+            } else {
+                $database->updateHealing($heal['id'], $remaining, (int)$heal['timestamp2'] + $healed * (int)$heal['eachtime']);
+            }
+        }
+    }
+
     private function trainingComplete() {
         global $database, $technology;
 
@@ -4232,8 +4342,8 @@ class Automation {
                     }
                     else $trained = $train['amt'];               
                     
-                    if($train['unit'] > 60 && $train['unit'] != 99){
-                        $database->modifyUnit($train['vref'], [$train['unit'] - 60], [$trained], [1]);
+                    if($train['unit'] > 1000 && $train['unit'] != 99){
+                        $database->modifyUnit($train['vref'], [$train['unit'] - 1000], [$trained], [1]);
                     }
                     else $database->modifyUnit($train['vref'], [$train['unit']], [$trained], [1]);
                 

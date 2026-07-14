@@ -115,26 +115,28 @@ foreach ($varray as $vil) {
 	foreach ($unitsArray as $key => $c) {
 
 		// normalizare specială (păstrată din original)
-		if ($key == 99) $key = 51;
+		// capcanele Trapper (u99): numele e la indexul 91 in unarray (dupa U90)
+		if ($key == 99) $key = 91;
 
 		// determinare categorie unități
 		$gid =
 			in_array($key, $unitsbytype['infantry']) ? 19 :
 			(in_array($key, $unitsbytype['cavalry']) ? 20 :
 			(in_array($key, $unitsbytype['siege']) ? 21 :
-			(in_array(($key - 60), $unitsbytype['infantry']) ? 29 :
-			(in_array(($key - 60), $unitsbytype['cavalry']) ? 30 :
-			($key == 51 ? 36 : ($building->getTypeLevel(26) > 0 ? 26 : 25))))));
+			(in_array(($key - 1000), $unitsbytype['infantry']) ? 29 :
+			(in_array(($key - 1000), $unitsbytype['cavalry']) ? 30 :
+			(in_array(($key - 1000), $unitsbytype['siege']) ? 49 :
+			($key == 91 ? 36 : ($building->getTypeLevel(26) > 0 ? 26 : ($building->getTypeLevel(44) > 0 ? 44 : 25))))))));
 
 		// ajustare offset unități
-		if ($key > 60) {
-			$key -= 60;
+		if ($key > 1000) {
+			$key -= 1000;
 		}
 
 		$unitName = $technology->getUnitName($key);
 
 		$tro .= '<a href="build.php?newdid='.$vid.'&gid='.$gid.'">
-					<img class="unit u'.($key == 51 ? 99 : $key).'"
+					<img class="unit u'.($key == 91 ? 99 : $key).'"
 					src="img/x.gif"
 					title="'.$c.'x '.$unitName.'"
 					alt="'.$c.'x '.$unitName.'">

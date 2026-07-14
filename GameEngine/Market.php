@@ -171,9 +171,9 @@ class Market
 		);
 
         // Merchant carry capacity
-        $this->maxcarry = ($session->tribe == 1)
-            ? 500
-            : (($session->tribe == 2) ? 1000 : 750);
+        // Capacitate negustor per trib: 1=500, 2=1000, 3=750, 6=500, 7=750, 8=500, 9=750
+        $carrymap = array(1 => 500, 2 => 1000, 3 => 750, 6 => 500, 7 => 750, 8 => 500, 9 => 750);
+        $this->maxcarry = isset($carrymap[$session->tribe]) ? $carrymap[$session->tribe] : 750;
 
         $this->maxcarry *= TRADER_CAPACITY;
 

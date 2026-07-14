@@ -196,7 +196,7 @@ if(isset($id)){
   </br>
   <div class="map-card">
     <h3>Village Center - <?php echo htmlspecialchars($village['name']); ?></h3>
-    <?php $WWLevel = $fdata['f99t']; $wallLevel = $fdata['f40t']; if($wallLevel == 0) $wallType = "d2_0"; else { switch($user['tribe']){ case 1: case 5: default: $wallType = "d2_11"; break; case 2: $wallType = "d2_12"; break; case 3: $wallType = "d2_1"; break; } } ?>
+    <?php $WWLevel = $fdata['f99t']; $wallLevel = $fdata['f40t']; if($wallLevel == 0) $wallType = "d2_0"; else { switch($user['tribe']){ case 1: case 5: default: $wallType = "d2_11"; break; case 2: $wallType = "d2_12"; break; case 3: $wallType = "d2_1"; break; case 6: $wallType = "d2_16"; break; case 7: $wallType = "d2_17"; break; case 8: $wallType = "d2_18"; break; case 9: $wallType = "d2_19"; break; } } /* 6-9: bg16-bg19.jpg */ ?>
     <div id="content" class="village2">
       <div id="village_map" class="<?php echo $wallType; ?>">
         <?php for($b = 1; $b < 21; $b++){ $gid = $fdata['f'.($b + 18).'t']; if($gid > 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." g".$gid."\">"; elseif($gid == 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">"; }

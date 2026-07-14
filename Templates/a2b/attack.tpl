@@ -8,17 +8,19 @@ for ($i = 1; $i <= 11; $i++) {
     $t[$i] = (isset($process[$key]) && $process[$key] !== '') ? $process[$key] : 0;
 }
 
-// --- 2. Detectare scout / hero (exact ca originalul) ---
+// --- 2. Detectare scout / hero ---
+// Slotul cercetasului per trib: Gali = 3, Huni/Vikingi = 2, restul = 4
+$scoutSlots = [1 => 4, 2 => 4, 3 => 3, 4 => 4, 5 => 4, 6 => 2, 7 => 4, 8 => 4, 9 => 2];
+$scoutSlot = isset($scoutSlots[$session->tribe]) ? $scoutSlots[$session->tribe] : 4;
 $scout = 0;
-if (!empty($t[3]) && $session->tribe == 3) { $scout = 1; }
-if (!empty($t[4]) && in_array($session->tribe, [1,2,4,5])) { $scout = 1; }
+if (!empty($t[$scoutSlot])) { $scout = 1; }
 
 $showhero = !empty($t[11]) ? 1 : 0;
 
 // --- 3. Total unități fără cercetași (pentru forțarea tipului de atac) ---
 $totalunits = 0;
 for ($i = 1; $i <= 11; $i++) {
-    $isScout = ($session->tribe == 3 && $i == 3) || ($session->tribe != 3 && $i == 4);
+    $isScout = ($i == $scoutSlot);
     if (!$isScout) {
         $totalunits += (!empty($process['t'.$i]) ? (int)$process['t'.$i] : 0);
     }
@@ -157,6 +159,11 @@ $kata = !empty($process['t8']);
                                 <option value="29"><?php echo GREATBARRACKS; ?></option>
                                 <option value="30"><?php echo GREATSTABLE; ?></option>
                                 <option value="37"><?php echo HEROSMANSION; ?></option>
+                                <option value="44"><?php echo COMMANDCENTER; ?></option>
+                                <option value="45"><?php echo WATERWORKS; ?></option>
+                                <option value="46"><?php echo HOSPITAL; ?></option>
+                                <option value="48"><?php echo BIGHOSPITAL; ?></option>
+                                <option value="49"><?php echo GREATWORKSHOP; ?></option>
                             </optgroup>
                             <?php endif; ?>
                         </select>
@@ -189,6 +196,8 @@ $kata = !empty($process['t8']);
                                 <option value="16"><?php echo RALLYPOINT; ?></option><option value="19"><?php echo BARRACKS; ?></option><option value="20"><?php echo STABLE; ?></option>
                                 <option value="21"><?php echo WORKSHOP; ?></option><option value="22"><?php echo ACADEMY; ?></option><option value="29"><?php echo GREATBARRACKS; ?></option>
                                 <option value="30"><?php echo GREATSTABLE; ?></option><option value="37"><?php echo HEROSMANSION; ?></option>
+                                <option value="44"><?php echo COMMANDCENTER; ?></option><option value="45"><?php echo WATERWORKS; ?></option><option value="46"><?php echo HOSPITAL; ?></option>
+                                <option value="48"><?php echo BIGHOSPITAL; ?></option><option value="49"><?php echo GREATWORKSHOP; ?></option>
                             </optgroup>
                             <?php endif; ?>
                         </select>

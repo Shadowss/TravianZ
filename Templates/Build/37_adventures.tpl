@@ -1,8 +1,22 @@
 <?php
+
 #################################################################################
-#  T4 hero adventures tab (37_adventures.tpl) - Phase 6                         #
-#  POST: t4action=startadv, advid. Countdown spans reuse the existing          #
-#  $session->timer JS convention (same as 37.tpl's training timer).            #
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : HERO T4 ADVENTURES PAGE                                   ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Created by     : Shadow                                                    ##
+##  Designed by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $t4Adventures = new HeroAdventure();
@@ -57,7 +71,15 @@ $t4Now     = time();
     <?php if (count($t4Offers)) { ?>
         <?php foreach ($t4Offers as $t4Offer) { ?>
         <tr>
-            <td><?php echo ((int) $t4Offer['difficulty'] === 1) ? HERO_ADV_DIFF_HARD : HERO_ADV_DIFF_NORMAL; ?></td>
+            <td>
+			<?php if ((int)$t4Offer['difficulty'] === 1): ?>
+			<img src="img/hero/dangerGreat.gif" alt="hard" title="<?php echo HERO_ADV_DIFF_HARD; ?>" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;">
+			<?php echo HERO_ADV_DIFF_HARD; ?>
+			<?php else: ?>
+			<img src="img/hero/danger.gif" alt="normal" title="<?php echo HERO_ADV_DIFF_NORMAL; ?>" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;">
+			<?php echo HERO_ADV_DIFF_NORMAL; ?>
+			<?php endif; ?>
+			</td>
             <td><?php echo $generator->getTimeFormat((int) $t4Offer['duration']); ?></td>
             <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4Offer['expire'] - $t4Now)); ?></span></td>
             <td style="width:140px;text-align:center;">

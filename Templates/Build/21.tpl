@@ -47,9 +47,12 @@ $trainlist = $technology->getTrainingList(3);
                 $success = 0;
                 $tribe = (int)$session->tribe;
                 if ($tribe!== 4) {
-                    $starts = [1=>7, 2=>17, 3=>27, 5=>47];
-                    $start = $starts[$tribe]?? 7;
-                    for ($i = $start; $i <= $start+1; $i++) {
+                    global $unitsbytype;
+                    // unitatile de asediu ale tribului (generic: acopera si triburile 6-9)
+                    $siegeUnits = array_values(array_filter($unitsbytype['siege'], function($u) use ($tribe) {
+                        return $u > ($tribe - 1) * 10 && $u <= $tribe * 10;
+                    }));
+                    foreach ($siegeUnits as $i) {
                         if (!$technology->getTech($i)) continue;
                         $unitData = ${'u'.$i};
                         $name = $technology->getUnitName($i);

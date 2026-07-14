@@ -1,0 +1,57 @@
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : COMMANDCENTER CULTURE POINTS                              ##
+##  Type           : BUILDING TEMPLATE                                         ##
+## --------------------------------------------------------------------------- ##
+##  Created by     : Shadow                                                    ##
+##  Designed by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  Test Server    : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
+global $village, $database, $session, $id;
+
+$level = (int)$village->resarray['f'.$id];
+$isNatar = (int)$database->getVillageField($village->wid, 'natar') == 1;
+$villageCp = $isNatar ? 0 : (int)$database->getVillageField($village->wid, 'cp');
+$accountCp = (int)$database->getVSumField($session->uid, 'cp');
+$totalVillages = count($database->getProfileVillages($session->uid));
+
+$mode = CP;
+$nextCpNeeded = ${'cp'.$mode}[$totalVillages + 1];
+?>
+<div id="build" class="gid44">
+    <h1><?php echo COMMANDCENTER;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
+    <p class="build_desc">
+        <a href="#" onClick="return Popup(44,4, 'gid');" class="build_logo">
+            <img class="building g44" src="img/x.gif" alt="<?php echo COMMANDCENTER; ?>" title="<?php echo COMMANDCENTER;?>" />
+        </a>
+        <?php echo COMMANDCENTER_DESC;?>
+    </p>
+
+    <?php include("25_menu.tpl"); ?>
+
+    <p><?php echo COMMANDCENTER_CULTURE_DESC;?></p>
+
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?php echo PRODUCTION_POINTS;?></th>
+            <td><b><?php echo $villageCp;?></b> <?php echo POINTS_DAY;?></td>
+        </tr>
+        <tr>
+            <th><?php echo PRODUCTION_ALL_POINTS;?></th>
+            <td><b><?php echo $accountCp;?></b> <?php echo POINTS_DAY;?></td>
+        </tr>
+    </table>
+    <p><?php echo VILLAGES_PRODUCED;?> <b><?php echo $session->cp;?></b> <?php echo POINTS_NEED;?> <b><?php echo $nextCpNeeded;?></b> <?php echo POINTS;?>.</p>
+</div>
