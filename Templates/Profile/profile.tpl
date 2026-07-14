@@ -231,18 +231,38 @@ foreach ($varmedal as $medal) {
 // =========================
 // TRIBE MEDALS
 // =========================
-if(defined('NEW_FUNCTIONS_TRIBE_IMAGES') && NEW_FUNCTIONS_TRIBE_IMAGES){
 
-    if(($session->userinfo['tribe'] ?? 0) == 1){
-        echo "<tr><td>Tribe Romans</td><td></td><td></td>
-        <td><a href='#' onclick=\"insertMedal('[#roman]'); return false;\">[#roman]</a></td></tr>";
-    } elseif(($session->userinfo['tribe'] ?? 0) == 2){
-        echo "<tr><td>Tribe Teutons</td><td></td><td></td>
-        <td><a href='#' onclick=\"insertMedal('[#teuton]'); return false;\">[#teuton]</a></td></tr>";
-    } elseif(($session->userinfo['tribe'] ?? 0) == 3){
-        echo "<tr><td>Tribe Gauls</td><td></td><td></td>
-        <td><a href='#' onclick=\"insertMedal('[#gaul]'); return false;\">[#gaul]</a></td></tr>";
-    }
+$tribeMedals = [];
+
+if (defined('NEW_FUNCTIONS_TRIBE_IMAGES') && NEW_FUNCTIONS_TRIBE_IMAGES) {
+    $tribeMedals[1] = ['Romans', 'roman'];
+    $tribeMedals[2] = ['Teutons', 'teuton'];
+    $tribeMedals[3] = ['Gauls', 'gaul'];
+}
+
+if (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS) {
+    $tribeMedals[6] = ['Huns', 'huns'];
+}
+
+if (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS) {
+    $tribeMedals[7] = ['Egyptians', 'egyptians'];
+}
+
+if (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS) {
+    $tribeMedals[8] = ['Spartans', 'spartans'];
+}
+
+if (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS) {
+    $tribeMedals[9] = ['Vikings', 'vikings'];
+}
+
+$tribe = $session->userinfo['tribe'] ?? 0;
+
+if (isset($tribeMedals[$tribe])) {
+    [$name, $tag] = $tribeMedals[$tribe];
+
+    echo "<tr><td>Tribe {$name}</td><td></td><td></td>
+    <td><a href='#' onclick=\"insertMedal('[#{$tag}]'); return false;\">[#{$tag}]</a></td></tr>";
 }
 
 // =========================

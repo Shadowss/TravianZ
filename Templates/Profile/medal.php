@@ -38,17 +38,73 @@ $geregistreerd=date('d.m.Y', ($displayarray['regtime']));
 $profiel = preg_replace("/\[#0]/is",'<img src="'.$gpack.'img/t/tnd.gif" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>This player registered his account on '.$geregistreerd.'.</td></tr></table>\')">', $profiel, 1);
 }
 
-// Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if(NEW_FUNCTIONS_TRIBE_IMAGES){
-    if($displayarray['tribe'] == "1"){
-        $profiel = preg_replace("/\[#roman]/is",'<img src="'.$gpack.'../../img/rpage/Roman1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Romans : Because of its high level of social and technological development the Romans are masters at building and its coordination. Also, their troops are part of the elite in Travian. They are very balanced and useful in attacking and defending.</td></tr></table>\')">', $profiel, 1);
-    }elseif($displayarray['tribe'] == "2"){
-        $profiel = preg_replace("/\[#teuton]/is",'<img src="'.$gpack.'../../img/rpage/Teuton1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Teutons : The Teutons are the most aggressive tribe. Their troops are notorious and feared for their rage and frenzy when they attack. They move around as a plundering horde, not even afraid of death. </td></tr></table>\')">', $profiel, 1);
-    }elseif($displayarray['tribe'] == "3"){
-        $profiel = preg_replace("/\[#gaul]/is",'<img src="'.$gpack.'../../img/rpage/Gaul1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Gauls : The Gauls are the most peaceful of all three tribes in Travian. Their troops are trained for an excellent defence, but their ability to attack can still compete with the other two tribes. The Gauls are born riders and their horses are famous for their speed. This means that their riders can hit the enemy exactly where they can cause the most damage and swiftly take care of them.</td></tr></table>\')">', $profiel, 1);
+// Added by Shadow - cata7007@gmail.com
+if (NEW_FUNCTIONS_TRIBE_IMAGES) {
+
+    $tribe = (int)($displayarray['tribe'] ?? 0);
+
+    switch ($tribe) {
+        case 1: // Romans
+            $replacement = '<img src="'.$gpack.'../../img/rpage/Roman1.jpg" border="0" '
+                         . 'onmouseout="med_closeDescription()" '
+                         . 'onmousemove="med_mouseMoveHandler(arguments[0],\''
+                         . '<table><tr><td>The Romans : Because of its high level of social and technological development the Romans are masters at building and its coordination. Also, their troops are part of the elite in Travian. They are very balanced and useful in attacking and defending.</td></tr></table>'
+                         . '\')">';
+            $profiel = preg_replace("/\[#roman]/is", $replacement, $profiel, 1);
+            break;
+
+        case 2: // Teutons
+            $replacement = '<img src="'.$gpack.'../../img/rpage/Teuton1.jpg" border="0" '
+                         . 'onmouseout="med_closeDescription()" '
+                         . 'onmousemove="med_mouseMoveHandler(arguments[0],\''
+                         . '<table><tr><td>The Teutons : The Teutons are the most aggressive tribe. Their troops are notorious and feared for their rage and frenzy when they attack. They move around as a plundering horde, not even afraid of death.</td></tr></table>'
+                         . '\')">';
+            $profiel = preg_replace("/\[#teuton]/is", $replacement, $profiel, 1);
+            break;
+
+        case 3: // Gauls
+            $replacement = '<img src="'.$gpack.'../../img/rpage/Gaul1.jpg" border="0" '
+                         . 'onmouseout="med_closeDescription()" '
+                         . 'onmousemove="med_mouseMoveHandler(arguments[0],\''
+                         . '<table><tr><td>The Gauls : The Gauls are the most peaceful of all three tribes in Travian. Their troops are trained for an excellent defence, but their ability to attack can still compete with the other two tribes. The Gauls are born riders and their horses are famous for their speed. This means that their riders can hit the enemy exactly where they can cause the most damage and swiftly take care of them.</td></tr></table>'
+                         . '\')">';
+            $profiel = preg_replace("/\[#gaul]/is", $replacement, $profiel, 1);
+            break;
+
+        // ==================== NOILE TRIBURI ====================
+		case 6: // Huns
+			$tooltip = '<table><tr><td>The Huns: Fast and deadly, the Huns are known for their lightning raids and powerful cavalry. They live to conquer and leave nothing but ashes behind.</td></tr></table>';
+			$replacement = '<img src="'.$gpack.'../../img/rpage/Huns1.jpg" border="0" '
+                 . 'onmouseout="med_closeDescription()" '
+                 . 'onmousemove="med_mouseMoveHandler(arguments[0], \''.addslashes($tooltip).'\')">';
+			$profiel = preg_replace('/\[#huns\]/i', $replacement, $profiel, 1);
+			break;
+
+		case 7: // Egyptians
+			$tooltip = '<table><tr><td>The Egyptians: Masters of architecture and ancient magic. Their troops are resilient and their cities are fortified with monumental structures.</td></tr></table>';
+			$replacement = '<img src="'.$gpack.'../../img/rpage/Egyptians1.jpg" border="0" '
+                 . 'onmouseout="med_closeDescription()" '
+                 . 'onmousemove="med_mouseMoveHandler(arguments[0], \''.addslashes($tooltip).'\')">';
+			$profiel = preg_replace('/\[#egyptians\]/i', $replacement, $profiel, 1);
+			break;
+
+		case 8: // Spartans
+			$tooltip = '<table><tr><td>The Spartans: Born warriors with unbreakable discipline. &quot;Come back with your shield or on it&quot; is their creed.</td></tr></table>';
+			$replacement = '<img src="'.$gpack.'../../img/rpage/Spartans1.jpg" border="0" '
+                 . 'onmouseout="med_closeDescription()" '
+                 . 'onmousemove="med_mouseMoveHandler(arguments[0], \''.addslashes($tooltip).'\')">';
+			$profiel = preg_replace('/\[#spartans\]/i', $replacement, $profiel, 1);
+			break;
+
+		case 9: // Vikings
+			$tooltip = '<table><tr><td>The Vikings: Fierce seafarers and feared raiders. Their axes sing songs of glory and their longships strike terror across the seas.</td></tr></table>';
+			$replacement = '<img src="'.$gpack.'../../img/rpage/Vikings1.jpg" border="0" '
+                 . 'onmouseout="med_closeDescription()" '
+                 . 'onmousemove="med_mouseMoveHandler(arguments[0], \''.addslashes($tooltip).'\')">';
+			$profiel = preg_replace('/\[#vikings\]/i', $replacement, $profiel, 1);
+			break;
     }
 }
-
 // =========================
 // NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM - DYNAMIC
 // =========================
