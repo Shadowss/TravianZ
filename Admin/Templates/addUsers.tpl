@@ -42,7 +42,7 @@ if(isset($_GET['e'])) {
 }
 elseif(isset($_GET['g']) && $_GET['g']=='OK'){
     $baseName = $_GET['bn']; $mode = $_GET['mo']; $skipped=(int)$_GET['sk']; $bp=(int)$_GET['bp'];
-    $tribe = [0=>RANDOM,1=>TRIBE1,2=>TRIBE2,3=>TRIBE3][$_GET['tr']]??'Unknown';
+    $tribe = [0=>RANDOM,1=>TRIBE1,2=>TRIBE2,3=>TRIBE3,6=>TRIBE6,7=>TRIBE7,8=>TRIBE8,9=>TRIBE9][$_GET['tr']]??'Unknown';
     
     if($mode==='many_accounts'){
         $amount=(int)$_GET['am'];
@@ -149,6 +149,10 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
           <label><input type="radio" name="tribe" value="1"><span class="tribe-icon">🏛</span><span class="tribe-text"><?php echo TRIBE1;?></span></label>
           <label><input type="radio" name="tribe" value="2"><span class="tribe-icon">🪓</span><span class="tribe-text"><?php echo TRIBE2;?></span></label>
           <label><input type="radio" name="tribe" value="3"><span class="tribe-icon">🌾</span><span class="tribe-text"><?php echo TRIBE3;?></span></label>
+		  <label><input type="radio" name="tribe" value="6"><span class="tribe-icon">🏛</span><span class="tribe-text"><?php echo TRIBE6;?></span></label>
+		  <label><input type="radio" name="tribe" value="7"><span class="tribe-icon">🪓</span><span class="tribe-text"><?php echo TRIBE7;?></span></label>
+		  <label><input type="radio" name="tribe" value="8"><span class="tribe-icon">🌾</span><span class="tribe-text"><?php echo TRIBE8;?></span></label>
+		  <label><input type="radio" name="tribe" value="9"><span class="tribe-icon">🏛</span><span class="tribe-text"><?php echo TRIBE9;?></span></label>
         </div>
       </div>
 

@@ -69,8 +69,19 @@ if (strlen($baseName) > 20) {
 
 // convenience closure: pick tribe once (for a user)
 $chooseTribe = function(int $postTribe) {
-    if ($postTribe === 0) return rand(1,3);
-    return max(1, min(3, $postTribe));
+
+    // Random doar triburile jucabile
+    if ($postTribe === 0) {
+        $tribes = [1,2,3,6,7,8,9];
+        return $tribes[array_rand($tribes)];
+    }
+
+    // Permite doar triburile jucabile
+    if (!in_array($postTribe, [1,2,3,6,7,8,9])) {
+        return 1;
+    }
+
+    return $postTribe;
 };
 
 /* ===================== FIX UNIT BUG ===================== */
