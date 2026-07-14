@@ -1309,6 +1309,86 @@ define('GREATWORKSHOP', 'Atelier mare');
 define('TRAINING_COMMENCE_GREATWORKSHOP', 'Antrenamentul poate începe când atelierul mare este finalizat.');
 define('GREATWORKSHOP_DESC', 'Atelierul mare îți permite să construiești un al doilea atelier în același sat, dar catapultele și berbecii costă de 3 ori mai mult.<br>Împreună cu atelierul normal, poți antrena trupele de două ori mai repede într-un sat');
 
+define('STONEWALL', 'Zid de Piatră');
+define('STONEWALL_DESC', 'Zidul de Piatră protejează satul împotriva atacurilor altor jucători. Construcția sa solidă oferă un bonus ridicat de apărare.<br>Specific tribului: doar Egipteni');
+
+define('MAKESHIFTWALL', 'Palisadă Improvizată');
+define('MAKESHIFTWALL_DESC', 'Palisada Improvizată oferă protecție de bază satului tău. Este ieftină și rapid de construit, dar oferă doar un bonus redus de apărare.<br>Specific tribului: doar Huni');
+
+define('COMMANDCENTER', 'Centru de Comandă');
+define('COMMANDCENTER_TRAIN_DESC', 'Ai nevoie de cel puțin nivelul 10 pentru a antrena coloniști și conducători în Centrul de Comandă.');
+define('COMMANDCENTER_CULTURE_DESC', 'Punctele de cultură determină câte sate poți fonda sau cuceri.');
+define('COMMANDCENTER_LOYALTY_DESC', 'Centrul de Comandă protejează satul împotriva conducătorilor inamici. Loialitate curentă:');
+define('COMMANDCENTER_DESC', 'Centrul de Comandă este sediul puterii unui sat hun. Permite antrenarea coloniștilor și conducătorilor și controlul expansiunii fără a fi nevoie de Reședință sau Palat.<br>Specific tribului: doar Huni');
+
+define('WATERWORKS', 'Apeduct');
+define('WATERWORKS_DESC', 'Apeductul mărește cu 5% pe nivel bonusul oferit de oazele anexate acestui sat.<br>Specific tribului: doar Egipteni');
+
+define('HOSPITAL', 'Spital');
+define('HOSPITAL_DESC', 'Spitalul îngrijește trupele rănite. O parte dintre unitățile pierdute în apărare sau atac pot fi vindecate aici în loc să fie pierdute definitiv. Nivelurile mai mari reduc timpul de vindecare.');
+
+define('DEFENSIVEWALL', 'Zid Defensiv');
+define('DEFENSIVEWALL_DESC', 'Zidul Defensiv protejează satul împotriva atacurilor altor jucători. Construit după tradiția marilor fortificații spartane, oferă un bonus puternic de apărare.<br>Specific tribului: doar Spartani');
+
+define('BIGHOSPITAL', 'Spital Mare');
+define('BIGHOSPITAL_DESC', 'Spitalul Mare este o versiune extinsă a Spitalului, permițând vindecarea unui număr și mai mare de trupe rănite după luptă. Nivelurile mai mari reduc timpul de vindecare.<br>Specific tribului: Spartani și Vechingi');
+
+define('BARRICADE', 'Baricadă');
+
+define('HEALING_TIME_NOW', 'Timp de vindecare curent');
+define('WOUNDED_TROOPS', 'Trupe rănite');
+define('NO_WOUNDED', 'Nu există trupe rănite în spital.');
+define('HEAL_BUTTON', 'Vindecă');
+define('HEAL_COST_HINT', 'Vindecarea costă 50% din costul de antrenare al unității.');
+define('HEALING_IN_PROGRESS', 'Vindecare în curs');
+
+define('MANUAL_UDESC_51', "Războinicul Hun reprezintă baza infanteriei hunilor. Ieftin și rapid de antrenat, este un soldat echilibrat, ideal pentru raidurile timpurii și apărarea de bază.");
+define('MANUAL_UDESC_52', "Cercetașul Călare spionează satele inamice cu o viteză impresionantă. Poate fi observat doar de alți cercetași și nu poartă arme pentru luptă.");
+define('MANUAL_UDESC_53', "Arcașul Călare atacă din șa cu săgeți mortale. Este un raider rapid, cu un echilibru excelent între puterea de atac și capacitatea de transport.");
+define('MANUAL_UDESC_54', "Călărețul Stepelor este un luptător agil al câmpiilor. Viteza sa îl face ideal pentru raiduri rapide asupra satelor neapărate.");
+define('MANUAL_UDESC_55', "Lăncierul Hun atacă cu o lance grea. Este o unitate de cavalerie ofensivă puternică, capabilă să țină piept și cavaleriei inamice.");
+define('MANUAL_UDESC_56', "Călărețul de Elită este mândria hoardei hunilor. Extrem de puternic în atac, distruge tot ce îi stă în cale, însă antrenarea sa este costisitoare.");
+define('MANUAL_UDESC_57', "Berbecul este o mașină grea de război folosită pentru distrugerea zidurilor inamice. Protejează-l bine, deoarece este lent și lipsit de apărare.");
+define('MANUAL_UDESC_58', "Catapulta aruncă bolovani la distanțe mari pentru a distruge clădirile și câmpurile inamice. Trebuie protejată de alte trupe.");
+define('MANUAL_UDESC_59', "Conducătorul Tribal reduce loialitatea satelor inamice prin prezența sa impunătoare până când acestea se alătură hoardei hunilor.");
+define('MANUAL_UDESC_60', "Coloniștii sunt supuși curajoși care pleacă pentru a întemeia un nou sat al hunilor. Sunt necesari trei, împreună cu proviziile.");
+
+define('MANUAL_UDESC_61', "Sclavul Înarmat este ieftin și rapid de antrenat. Individual este slab, dar în număr mare poate copleși apărarea cu costuri reduse.");
+define('MANUAL_UDESC_62', "Luptătorul Egiptean este un soldat solid al faraonului, util atât în atac, cât și în apărarea regatului.");
+define('MANUAL_UDESC_63', "Gardianul Templului protejează locurile sfinte ale Egiptului. Este o unitate defensivă excelentă împotriva infanteriei inamice.");
+define('MANUAL_UDESC_64', "Cercetașul Călare merge înaintea armatei pentru a spiona satele inamice. Doar cercetașii inamici îl pot vedea sau opri.");
+define('MANUAL_UDESC_65', "Carul de Luptă străbate câmpul de luptă doborând infanteria. Este o unitate de cavalerie defensivă puternică a armatei egiptene.");
+define('MANUAL_UDESC_66', "Carul Regal transportă elita armatei egiptene. Devastator în atac și simbol al puterii faraonului.");
+define('MANUAL_UDESC_67', "Berbecul este o mașină grea de război folosită pentru distrugerea zidurilor inamice. Protejează-l bine, deoarece este lent și lipsit de apărare.");
+define('MANUAL_UDESC_68', "Catapulta aruncă bolovani la distanțe mari pentru a distruge clădirile și câmpurile inamice. Trebuie protejată de alte trupe.");
+define('MANUAL_UDESC_69', "Nomarhul convinge satele inamice prin daruri și discursuri, reducându-le loialitatea până când se alătură imperiului egiptean.");
+define('MANUAL_UDESC_70', "Coloniștii sunt supuși curajoși care pleacă pentru a întemeia un nou sat al Egiptului. Sunt necesari trei, împreună cu proviziile.");
+
+define('MANUAL_UDESC_71', "Hoplitul Spartan luptă în celebra falangă. Este un excelent soldat de infanterie, puternic atât în atac, cât și în apărare.");
+define('MANUAL_UDESC_72', "Războinicul Agoge a fost crescut pentru război încă din copilărie. Este un apărător ieftin și rezistent al Spartei.");
+define('MANUAL_UDESC_73', "Homoioi sunt cetățenii deplini ai Spartei. Infanterie grea cu o putere de atac impresionantă.");
+define('MANUAL_UDESC_74', "Cercetașul Perioikos urmărește mișcările inamicului pentru Sparta. Doar cercetașii inamici îl pot vedea sau opri.");
+define('MANUAL_UDESC_75', "Călărețul Spartan patrulează granițele Lacedemoniei. Este o unitate rapidă de cavalerie cu valori echilibrate.");
+define('MANUAL_UDESC_76', "Hippeis sunt garda regală a regilor Spartei. Cavalerie de elită care excelează în atac.");
+define('MANUAL_UDESC_77', "Berbecul este o mașină grea de război folosită pentru distrugerea zidurilor inamice. Protejează-l bine, deoarece este lent și lipsit de apărare.");
+define('MANUAL_UDESC_78', "Catapulta aruncă bolovani la distanțe mari pentru a distruge clădirile și câmpurile inamice. Trebuie protejată de alte trupe.");
+define('MANUAL_UDESC_79', "Eforul vorbește cu autoritatea Spartei, reducând loialitatea satelor inamice până când acestea se supun.");
+define('MANUAL_UDESC_80', "Coloniștii sunt supuși curajoși care pleacă pentru a întemeia un nou sat al Spartei. Sunt necesari trei, împreună cu proviziile.");
+
+define('MANUAL_UDESC_81', "Jefuitorul Viking trăiește pentru pradă. Este rapid de antrenat și întotdeauna pregătit pentru următorul raid.");
+define('MANUAL_UDESC_82', "Cercetașul Viking pătrunde neobservat în teritoriile inamice pentru a aduna informații. Doar cercetașii inamici îl pot captura.");
+define('MANUAL_UDESC_83', "Toporașul mânuiește un topor uriaș cu o forță brutală. Este o unitate ofensivă puternică a Nordului.");
+define('MANUAL_UDESC_84', "Berserkerul luptă într-o furie necontrolată, fără teamă de durere sau moarte. Devastator în atac, dar slab în apărare.");
+define('MANUAL_UDESC_85', "Călărețul Viking îmbină rezistența nordică cu viteza calului. Este o unitate versatilă de cavalerie.");
+define('MANUAL_UDESC_86', "Huscarlul este garda de corp credincioasă a Jarlului. Cavalerie grea de elită, temută pe toate mările.");
+define('MANUAL_UDESC_87', "Berbecul este o mașină grea de război folosită pentru distrugerea zidurilor inamice. Protejează-l bine, deoarece este lent și lipsit de apărare.");
+define('MANUAL_UDESC_88', "Catapulta aruncă bolovani la distanțe mari pentru a distruge clădirile și câmpurile inamice. Trebuie protejată de alte trupe.");
+define('MANUAL_UDESC_89', "Jarlul supune satele inamice voinței sale, reducându-le loialitatea până când jură credință Nordului.");
+define('MANUAL_UDESC_90', "Coloniștii sunt supuși curajoși care pleacă pentru a întemeia un nou sat al vikingilor. Sunt necesari trei, împreună cu proviziile.");
+
+define('HEALING_TIME_LEVEL', 'Timp de vindecare la nivelul');
+define('BARRICADE_DESC', 'Baricada protejează satul împotriva atacurilor altor jucători. Construcția sa stratificată din lemn oferă un bonus solid de apărare.<br>Specific tribului: doar Vechingi');
+
 define('BUILDING_MAX_LEVEL_UNDER', 'Clădire la nivel maxim în construcție');
 define('BUILDING_BEING_DEMOLISHED', 'Clădire în curs de demolare');
 define('COSTS_UPGRADING_LEVEL', 'Costuri</b> pentru upgrade la nivelul');
