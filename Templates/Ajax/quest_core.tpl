@@ -785,7 +785,15 @@ if ($residence<10 && $palace<10){?>
 
 // Checking 3 settlers trained or no
 $units = $village->unitall;
-$unarray2=array("","u10", "u20","u30");
+$unarray2 = array(
+    1 => "u10",
+    2 => "u20",
+    3 => "u30",
+    6 => "u60",
+    7 => "u70",
+    8 => "u80",
+    9 => "u90"
+);
 if ($units[$unarray2[$session->userinfo['tribe']]]<3){ $cp = CP;?>
 
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q34; ?><\/h1><br \/><i>&rdquo;<?php echo Q34_DESC; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q34_ORDER; ?><\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"new_village\"><\/div>\n\t\t","number":"-34","reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":99}
