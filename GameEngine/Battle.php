@@ -485,7 +485,7 @@ class Battle {
 		$conqureby,
 		$defReinforcements = null) {
 			
-    global $bid34, $bid35, $database;
+    global $bid34, $bid35, $database, $unitsbytype;
 
     /******************************************************************
      * UNIT GROUP DEFINITIONS
@@ -692,7 +692,7 @@ class Battle {
 
             global ${'u'.$i};
 
-            if ($i == 4 || $i == 14 || $i == 23 || $i == 44) {
+            if (in_array($i, $unitsbytype['scout'])) {
 
                 if ($scoutAB > 0) {
 

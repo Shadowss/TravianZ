@@ -136,6 +136,27 @@ class Technology {
 		$each = (int)round($unitdata['time'] * $attri / SPEED);
 		if($each < 1) $each = 1;
 
+		// nu vindeca gratis: modifyResource limiteaza la 0, deci verificam explicit stocul
+		$have = [(int)$village->awood, (int)$village->aclay, (int)$village->airon, (int)$village->acrop];
+		{
+			if($have[0] < $wood || $have[1] < $clay || $have[2] < $iron || $have[3] < $crop) {
+				// resurse insuficiente: reducem cantitatea la cat isi permite jucatorul
+				$maxByRes = $amt;
+				foreach([['wood', $wood], ['clay', $clay], ['iron', $iron], ['crop', $crop]] as $k => $pair) {
+					if($pair[1] > 0) {
+						$possible = (int)floor($have[$k] * $amt / $pair[1]);
+						if($possible < $maxByRes) $maxByRes = $possible;
+					}
+				}
+				$amt = $maxByRes;
+				if($amt <= 0) return;
+				$wood = (int)ceil($unitdata['wood'] * $amt / 2);
+				$clay = (int)ceil($unitdata['clay'] * $amt / 2);
+				$iron = (int)ceil($unitdata['iron'] * $amt / 2);
+				$crop = (int)ceil($unitdata['crop'] * $amt / 2);
+			}
+		}
+
 		if($database->modifyResource($village->wid, $wood, $clay, $iron, $crop, 0)) {
 			$database->deductWounded($village->wid, $unit, $amt);
 			$database->healUnit($village->wid, $unit, $amt, $each);

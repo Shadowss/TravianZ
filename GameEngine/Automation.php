@@ -3351,7 +3351,11 @@ class Automation {
                     
                     if (empty($alldead['hero'])) $alldead['hero'] = 0;
                     if (empty($owndead['hero'])) $owndead['hero'] = 0;
-                    $deadhero = $owndead['hero'];
+                    // sursa autoritativa: rezultatul luptei (owndead['hero'] se poate pierde
+                    // pe unele cai de executie, iar raportul afisa eroul aparator ca viu)
+                    $deadhero = (int)(isset($battlepart['deadherodef']) && $battlepart['deadherodef'] > 0
+                        ? $battlepart['deadherodef']
+                        : $owndead['hero']);
 
                     //Counting own total dead troops
                     $ownDeadTroops = array_slice($owndead, 0, 10);                   
