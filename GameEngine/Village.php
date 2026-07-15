@@ -38,6 +38,7 @@ class Village {
 	public $enforcetoyou = [];
 	public $enforceoasis = [];
 	public $currentcel = 0;
+	public $currentfestival = 0;
 	public $allcrop = 0;
 	public $loyalty = 0;
 	private $infoarray = [];
