@@ -709,6 +709,18 @@ class Automation {
                 $database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             }
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
+
+            // Push protection: record completed cross-player deliveries so the
+            // admin dashboard can compute 7-day resource balance. Best-effort;
+            // skips own-village transfers internally.
+            if (!$ownTransfer) {
+                PushProtection::logTransfer(
+                    (int)$from['wref'], (int)$to['wref'],
+                    (int)$from['owner'], (int)$to['owner'],
+                    (int)$data['wood'], (int)$data['clay'], (int)$data['iron'], (int)$data['crop'],
+                    (int)$data['endtime']
+                );
+            }
             $targettribe = $userData_to["tribe"];
             $endtime = $units->getWalkingTroopsTime($data['from'], $data['to'], 0, 0, [$targettribe], 0) + $data['endtime'];
             $database->addMovement(2, $data['to'], $data['from'], $data['merchant'], time(), $endtime, $data['send'], $data['wood'], $data['clay'], $data['iron'], $data['crop']);

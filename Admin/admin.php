@@ -42,6 +42,8 @@ include_once("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
 include_once("../GameEngine/Data/buidata.php");
 include_once("../GameEngine/Artifacts.php");
+include_once("../GameEngine/MultiAccount.php");
+include_once("../GameEngine/PushProtection.php");
 
 // ─── SECURITY HELPERS ────────────────────────────────────────────────────────
 
@@ -95,6 +97,8 @@ function admin_validated_page(string $raw): string
         'village', 'editResources', 'addTroops', 'addABTroops', 'editVillage',
         'villagelog', 'techlog', 'msg',
         'alliance', 'editAli', 'delAli','editNewFunctions',
+        'multiacc',
+        'pushprot',
     ];
 
     return in_array($raw, $whitelist, true) ? $raw : '';
@@ -167,6 +171,14 @@ if ($page !== '') {
 
         case 'msg':
             $subpage = 'Search IGMs/Reports';
+            break;
+
+        case 'multiacc':
+            $subpage = 'Multi-Account Detection';
+            break;
+
+        case 'pushprot':
+            $subpage = 'Push Protection';
             break;
 
         case 'massmessage':
@@ -847,6 +859,8 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                         <li class="sub"><a href="#">Admin</a>
                             <ul>
                                 <li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
+                                <li><a href="?p=multiacc"><font color="Red"><b>Multi-Account Detection</b></font></a></li>
+                                <li><a href="?p=pushprot"><font color="Red"><b>Push Protection</b></font></a></li>
                                 <li><a href="?p=debug_log">Debug Error Log</a></li>
                                 <li><a href="?p=config">Server Settings</a></li>
                                 <li><a href="?p=maintenance">Server Maintenance</a></li>
@@ -866,6 +880,8 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                         <li><a href="?p=search">Search</a></li>
                         <li><a href="?p=message">Msg/Rep</a></li>
                         <li><a href="?p=ban">Ban</a></li>
+                        <li><a href="?p=multiacc">Multi-Account Detection</a></li>
+                        <li><a href="?p=pushprot">Push Protection</a></li>
                         <li><a href="?action=logout">Logout</a></li>
                     </ul>
 

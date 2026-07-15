@@ -174,6 +174,9 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_EGIPTEANS%'", $NEW_FUNCTION_TRIBE_EGIPTEANS, $text);
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_SPARTANS%'", $NEW_FUNCTION_TRIBE_SPARTANS, $text);
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_VIKINGS%'", $NEW_FUNCTION_TRIBE_VIKINGS, $text);
+		// Preserve registration-bonus-gold settings (owned by editNewFunctions.php).
+		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD%'", (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD ? 'true' : 'false'), $text);
+		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD_VALUE%'", (string) (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200), $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

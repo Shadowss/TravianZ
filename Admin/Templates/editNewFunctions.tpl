@@ -288,6 +288,23 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                         </select>
                     </td>
                 </tr>
+				<tr>
+                    <td class="b">Registration Bonus Gold <em class="tooltip">?<span class="classic">Enable (Disable) a one-time gold bonus granted to every newly registered player at account creation (system accounts id&le;3 are skipped). The amount is set in the field below.</span></em>
+                    <?php if (!defined('NEW_FUNCTION_REGISTRATION_GOLD')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
+                    </td>
+                    <td>
+                        <select name="new_function_registration_gold">
+                            <option value="True" <?php if(defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD == true) echo "selected";?>>True</option>
+                            <option value="False" <?php if(!defined('NEW_FUNCTION_REGISTRATION_GOLD') || NEW_FUNCTION_REGISTRATION_GOLD == false) echo "selected";?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="b">Registration Bonus Gold &ndash; amount <em class="tooltip">?<span class="classic">How much gold each new player receives when the toggle above is True. Default: 200.</span></em></td>
+                    <td>
+                        <input type="number" min="0" step="1" name="new_function_registration_gold_value" value="<?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200); ?>">
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -136,6 +136,12 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_EGIPTEANS%'", $_POST['new_function_tribe_egipteans'], $text);
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_SPARTANS%'", $_POST['new_function_tribe_spartans'], $text);
 		$text = preg_replace("'%NEW_FUNCTION_TRIBE_VIKINGS%'", $_POST['new_function_tribe_vikings'], $text);
+		// Registration bonus gold: owned by THIS Mod (edited from the New Functions form).
+		$__reg_gold_on  = (isset($_POST['new_function_registration_gold']) && strtolower((string)$_POST['new_function_registration_gold']) === 'true') ? 'true' : 'false';
+		$__reg_gold_val = (int) ($_POST['new_function_registration_gold_value'] ?? 200);
+		if ($__reg_gold_val < 0) { $__reg_gold_val = 0; }
+		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD%'", $__reg_gold_on, $text);
+		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD_VALUE%'", (string) $__reg_gold_val, $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

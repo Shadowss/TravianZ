@@ -834,6 +834,7 @@ class MYSQLi_DB implements IDbConnection {
     if($stmt->execute()){
         $id = $stmt->insert_id ?: $uid;
         $stmt->close();
+		$this->grantRegistrationGold($id);
         return $id;
     }
     $stmt->close();
@@ -849,11 +850,52 @@ class MYSQLi_DB implements IDbConnection {
     if($stmt2->execute()){
         $id = $stmt2->insert_id ?: $uid;
         $stmt2->close();
+		$this->grantRegistrationGold($id);
         return $id;
     }
     $stmt2->close();
     return false;
 }
+	/**
+	 * Registration bonus gold (NEW_FUNCTION_REGISTRATION_GOLD).
+	 * Grants a one-time gold bonus to a freshly created player account. Called
+	 * from register() right after the users row is inserted, so it covers every
+	 * registration path (email activation, instant registration, admin-created
+	 * users). No-ops when disabled, amount <= 0, or system account (id <= 3).
+	 */
+	private function grantRegistrationGold($id) {
+		$id = (int) $id;
+		if ($id <= 3) {
+			return; // system accounts: admin / nature / natars
+		}
+		if (!defined('NEW_FUNCTION_REGISTRATION_GOLD') || !NEW_FUNCTION_REGISTRATION_GOLD) {
+			return;
+		}
+		$amount = defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 0;
+		if ($amount <= 0) {
+			return;
+		}
+		$this->modifyGold($id, $amount, 1); // mode 1 = add
+
+		// Best-effort audit trail. The village does not exist yet, so wid = 0.
+		if (defined('LOG_GOLD_FIN') && LOG_GOLD_FIN) {
+			try {
+				$now     = time();
+				$details = 'Registration bonus';
+				$stmt = $this->dblink->prepare(
+					"INSERT INTO `".TB_PREFIX."gold_fin_log` (wid, uid, action, gold, time, details)
+					 VALUES (0, ?, 'Registration bonus Gold', ?, ?, ?)"
+				);
+				if ($stmt) {
+					$stmt->bind_param("iiis", $id, $amount, $now, $details);
+					$stmt->execute();
+					$stmt->close();
+				}
+			} catch (\Throwable $e) {
+				// swallow: logging must never block account creation
+			}
+		}
+	}
 
 	function activate($username, $password, $email, $tribe, $locate, $act, $act2) {
     $username = trim($username);

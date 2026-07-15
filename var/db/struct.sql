@@ -1121,6 +1121,68 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%mad_session`
+-- (Multi-Account Detection: per-login fingerprint - IP + User-Agent)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%mad_session` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `uid` int(11) NOT NULL,
+ `ip` varbinary(16) DEFAULT NULL,
+ `ip_text` varchar(45) NOT NULL DEFAULT '',
+ `ua_hash` char(32) NOT NULL DEFAULT '',
+ `ua_text` varchar(255) NOT NULL DEFAULT '',
+ `login_time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `uid` (`uid`),
+ KEY `ip` (`ip`),
+ KEY `ua_hash` (`ua_hash`),
+ KEY `login_time` (`login_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%resource_transfer_log`
+-- (Push Protection: completed cross-player marketplace deliveries)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%resource_transfer_log` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `from_vref` int(11) NOT NULL DEFAULT 0,
+ `to_vref` int(11) NOT NULL DEFAULT 0,
+ `from_uid` int(11) NOT NULL DEFAULT 0,
+ `to_uid` int(11) NOT NULL DEFAULT 0,
+ `wood` int(11) NOT NULL DEFAULT 0,
+ `clay` int(11) NOT NULL DEFAULT 0,
+ `iron` int(11) NOT NULL DEFAULT 0,
+ `crop` int(11) NOT NULL DEFAULT 0,
+ `time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `to_uid_time` (`to_uid`,`time`),
+ KEY `from_uid_time` (`from_uid`,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%push_override`
+-- (Push Protection: manual per-player exemptions / custom caps)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%push_override` (
+ `uid` int(11) NOT NULL,
+ `mode` tinyint(2) NOT NULL DEFAULT 0,
+ `custom_limit` bigint(20) NOT NULL DEFAULT 0,
+ `note` varchar(255) NOT NULL DEFAULT '',
+ `set_by` int(11) NOT NULL DEFAULT 0,
+ `time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Dumping data for table `%prefix%login_log`
 --

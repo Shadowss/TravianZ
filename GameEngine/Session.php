@@ -201,6 +201,15 @@ function __construct() {
 
         $logging->addLoginLog($dbarray['id'], \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'));
 
+        // Multi-account detection: record this login's fingerprint (IP + User-Agent).
+        // Best-effort — MultiAccount::recordSession() swallows all errors so it can
+        // never block a login, and it self-creates its table on first use.
+        MultiAccount::recordSession(
+            $dbarray['id'],
+            \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'),
+            $_SERVER['HTTP_USER_AGENT'] ?? ''
+        );
+
         if ($dbarray['id'] == 1) {
             header("Location: nachrichten.php");
             exit;

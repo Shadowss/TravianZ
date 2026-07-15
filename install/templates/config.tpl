@@ -212,7 +212,9 @@ $mechs = [
 	'new_function_tribe_huns'             => 'New Tribe: Huns',
 	'new_function_tribe_egipteans'        => 'New Tribe: Egyptians',
 	'new_function_tribe_spartans'         => 'New Tribe: Spartans',
-	'new_function_tribe_vikings'          => 'New Tribe: Vikings'
+	'new_function_tribe_vikings'          => 'New Tribe: Vikings',
+	'new_function_tribe_vikings'          => 'New Tribe: Vikings',
+	'new_function_registration_gold'      => 'Registration Bonus Gold'
 ];
 
 foreach($mechs as $k => $l){
@@ -226,7 +228,10 @@ foreach($mechs as $k => $l){
     </div>";
 }
 ?>
-
+<div style='display:flex;flex-direction:column;gap:4px;margin-top:4px;'>
+    <label>Registration Bonus Gold &ndash; amount (used only when the toggle above is true)</label>
+    <input class='input' type='number' min='0' step='1' name='new_function_registration_gold_value' id='new_function_registration_gold_value' value='200'>
+</div>                      
 </div>
 </div>
 

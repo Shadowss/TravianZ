@@ -186,6 +186,45 @@ class Market
     /**
      * Send resources.
      */
+    /**
+     * Push-protection enforcement (Travian-Legends style).
+     * Returns true when this send must be BLOCKED because the recipient has
+     * reached the amount of resources it may receive from other players in the
+     * rolling window (see PushProtection::remainingAllowance).
+     *
+     * No-ops (returns false) for: own-village transfers, system accounts, when
+     * the PushProtection engine is absent, or when hard enforcement is globally
+     * disabled via  define("PUSH_PROTECTION_ENFORCE", false);  in config.php
+     * (the dashboard and logging keep working either way — default is ON).
+     *
+     * WW villages and manual "Exempt" overrides return an unlimited allowance
+     * inside remainingAllowance(), so they are never blocked here.
+     */
+    private function exceedsPushLimit($database, $fromWid, $toWid, array $resource)
+    {
+        if (defined('PUSH_PROTECTION_ENFORCE') && !PUSH_PROTECTION_ENFORCE) {
+            return false;
+        }
+        if (!class_exists('PushProtection')) {
+            return false; // engine not deployed -> no enforcement
+        }
+
+        $fromOwner = (int) $database->getVillageField($fromWid, 'owner');
+        $toOwner   = (int) $database->getVillageField($toWid, 'owner');
+
+        // Own transfer or system account -> never limited.
+        if ($fromOwner === $toOwner || $toOwner <= 3) {
+            return false;
+        }
+
+        $sendTotal = (int) $resource[0] + (int) $resource[1] + (int) $resource[2] + (int) $resource[3];
+        if ($sendTotal <= 0) {
+            return false;
+        }
+
+        return $sendTotal > PushProtection::remainingAllowance($toOwner);
+    }
+
     private function sendResource($post)
     {
         global $database, $village, $session, $generator, $logging, $form;
@@ -249,6 +288,16 @@ class Market
             ($post['send3'] > 1 && !$session->goldclub)
         ) {
             $form->addError('error', INVALID_MERCHANTS_REPETITION);
+        } elseif (
+            $this->exceedsPushLimit($database, $village->wid, $id, $resource)
+        ) {
+            // Push protection: recipient has reached its transfer limit for the
+            // current window. Uses a language constant when available, else a
+            // clear English fallback (add PUSH_PROTECTION_LIMIT to your Lang
+            // files to localise).
+            $form->addError('error', defined('PUSH_PROTECTION_LIMIT')
+                ? PUSH_PROTECTION_LIMIT
+                : 'This account has reached its resource-transfer limit for now and cannot receive that many resources. Send less, or wait for the limit to recover.');
         } elseif (
             $availableWood >= $post['r1'] &&
             $availableClay >= $post['r2'] &&

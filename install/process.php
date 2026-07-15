@@ -176,6 +176,8 @@ class Process {
 		$findReplace["%NEW_FUNCTION_TRIBE_EGIPTEANS%"] = $_POST['new_function_tribe_egipteans'];
 		$findReplace["%NEW_FUNCTION_TRIBE_SPARTANS%"] = $_POST['new_function_tribe_spartans'];
 		$findReplace["%NEW_FUNCTION_TRIBE_VIKINGS%"] = $_POST['new_function_tribe_vikings'];
+		$findReplace["%NEW_FUNCTION_REGISTRATION_GOLD%"] = $_POST['new_function_registration_gold'];
+		$findReplace["%NEW_FUNCTION_REGISTRATION_GOLD_VALUE%"] = $_POST['new_function_registration_gold_value'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 
