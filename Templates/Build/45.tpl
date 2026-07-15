@@ -25,6 +25,14 @@ include("next.tpl");
 
 $level = (int)$village->resarray['f'.$id];
 $current = $level > 0 ? (int)round($bid45[$level]['attri'] * 100) : 0;
+
+// numarul de oaze anexate de acest sat (pentru a arata impactul concret)
+$wwOasisCount = 0;
+$wwOasisList = $database->getOasis($village->wid);
+if (!empty($wwOasisList)) $wwOasisCount = count($wwOasisList);
+// procentul efectiv al unei oaze standard (25% de baza)
+$wwEffective = $level > 0 ? 25 * (1 + $bid45[$level]['attri']) : 25;
+$wwEffStr = ($wwEffective == floor($wwEffective)) ? (string)(int)$wwEffective : rtrim(rtrim(number_format($wwEffective, 1, '.', ''), '0'), '.');
 ?>
 <div id="build" class="gid45">
     <a href="#" onClick="return Popup(45,4);" class="build_logo">
@@ -48,6 +56,17 @@ $current = $level > 0 ? (int)round($bid45[$level]['attri'] * 100) : 0;
             <td><b><?php echo $nextBonus;?></b> <?php echo PERCENT;?></td>
         </tr>
         <?php endif;?>
+        <?php if ($level > 0): ?>
+        <tr>
+            <th><?php echo OASIS_EFFECTIVE_BONUS;?></th>
+            <td>25% &rarr; <b><?php echo $wwEffStr;?>%</b></td>
+        </tr>
+        <?php if ($wwOasisCount > 0): ?>
+        <tr>
+            <th><?php echo OASES;?></th>
+            <td><b><?php echo $wwOasisCount;?></b> <?php echo WATERWORKS_AFFECTED;?></td>
+        </tr>
+        <?php endif; endif; ?>
     </table>
 
     <?php include("upgrade.tpl");?>

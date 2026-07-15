@@ -21,6 +21,21 @@
 
 	$oasisarray = $database->getOasis($village->wid);
 
+	// Waterworks (gid 45, Egipteni): creste bonusul oazelor cu +5% relativ / nivel.
+	// Determin nivelul din satul curent si factorul efectiv (25% de baza).
+	global $bid45;
+	$wwLevel = 0;
+	$wwFactor = 0.25;
+	for ($wwi = 19; $wwi <= 40; $wwi++) {
+		if (isset($village->resarray['f'.$wwi.'t']) && (int)$village->resarray['f'.$wwi.'t'] == 45) {
+			$wwLevel = max($wwLevel, (int)$village->resarray['f'.$wwi]);
+		}
+	}
+	if ($wwLevel > 0 && isset($bid45[$wwLevel]['attri'])) {
+		$wwFactor = 0.25 * (1 + $bid45[$wwLevel]['attri']);
+	}
+	$wwMultiplier = $wwFactor / 0.25; // 1.0 fara Waterworks, 1.5 la nivel maxim
+
 	if (isset($_GET['gid']) && $_GET['gid'] == 37 && isset($_GET['del']) && $database->getOasisField($_GET['del'], 'owner') == $session->uid) {
 		$units->returnTroops($village->wid, 1);
 		$database->removeOases($_GET['del']);
@@ -57,7 +72,7 @@
 
 	// Replace the original switch with 12 identical cases as the structure.
 	// Unknown types => empty string, just like the lack of a 'default' in the original switch.
-	$renderOasisBonus = function ($type) use ($oasisResourceIcons, $oasisTypeBonuses) {
+	$renderOasisBonus = function ($type) use ($oasisResourceIcons, $oasisTypeBonuses, $wwMultiplier, $wwLevel) {
 		if (!isset($oasisTypeBonuses[$type])) {
 			return '';
 		}
@@ -66,7 +81,15 @@
 		foreach ($oasisTypeBonuses[$type] as $bonus) {
 			[$resource, $percent] = $bonus;
 			$icon = $oasisResourceIcons[$resource];
-			$html .= '<img class="' . $icon['class'] . '" src="img/x.gif" alt="' . $icon['alt'] . '" title="' . $icon['title'] . '" />+' . $percent . '%';
+			// procentul efectiv (bonusul fizic al oazei x multiplicatorul Waterworks)
+			$effective = $percent * $wwMultiplier;
+			// afisez cifra rotunda daca e intreaga, altfel o zecimala (25 -> 25, 37.5 -> 37.5)
+			$effStr = ($effective == floor($effective)) ? (string)(int)$effective : rtrim(rtrim(number_format($effective, 1, '.', ''), '0'), '.');
+			$html .= '<img class="' . $icon['class'] . '" src="img/x.gif" alt="' . $icon['alt'] . '" title="' . $icon['title'] . '" />+' . $effStr . '%';
+			// cand Waterworks e activ, arat si bonusul de baza barat pentru context
+			if ($wwLevel > 0 && $effective != $percent) {
+				$html .= ' <span class="ww_base">(' . $percent . '%)</span>';
+			}
 		}
 
 		return $html;
@@ -112,3 +135,13 @@ if (!empty($oasisarray)) {
 <?php } ?>
 </tbody>
 </table>
+
+<?php if ($wwLevel > 0): ?>
+<p class="ww_summary">
+	<img class="building g45" src="img/x.gif" alt="<?php echo WATERWORKS; ?>" title="<?php echo WATERWORKS; ?>" />
+	<?php echo WATERWORKS; ?> <?php echo LEVEL; ?> <?php echo $wwLevel; ?> &mdash;
+	<?php echo CURRENT_BONUS; ?> <b>+<?php echo (int)round($bid45[$wwLevel]['attri'] * 100); ?>%</b>
+	<?php echo WATERWORKS_HINT; ?>
+</p>
+<?php endif; ?>
+

@@ -1299,6 +1299,9 @@ tz_def('STONEMASON_DESC', 'The Stonemason is an expert it cutting stone. The hig
 
 tz_def('BREWERY', 'Brewery');
 tz_def('CURRENT_BONUS', 'Current bonus:');
+tz_def('WATERWORKS_HINT', '(Boost by Waterworks)');
+tz_def('WATERWORKS_AFFECTED', 'annexed oases benefit from this bonus.');
+tz_def('OASIS_EFFECTIVE_BONUS', 'Effective oasis bonus:');
 tz_def('BONUS_LEVEL', 'Bonus at level');
 tz_def('BREWERY_DESC', 'Tasty mead is brewed here.Drinks make your soldiers braver and stronger when attacking others (1% per Brewery level). Unfortunately, the persuasive power of leaders is reduced by 50% and catapults can only make random hits. Can only be built in the capital, but affects all your villages. The mead-festivals always last 72 hours.<br>Tribe-specific: Teutons only');
 tz_def('MEAD_FESTIVAL', 'Mead-Festival');

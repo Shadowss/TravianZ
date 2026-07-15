@@ -9517,7 +9517,25 @@ input.accept{width:12px;height:12px;background-image:url(../../img/a/acc.gif);}
     text-align:center;
     margin-top:15px;
 }
-
+/* Waterworks (Egipteni): bonusul efectiv al oazelor in 37_land */
+#oases td.res span.ww_base {
+    color: #999;
+    font-size: 10px;
+    text-decoration: line-through;
+}
+p.ww_summary {
+    margin: 6px 0 0 0;
+    padding: 5px 8px;
+    background: #f3f6ec;
+    border: 1px solid #d9e2c4;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #4a5a2a;
+}
+p.ww_summary img.building {
+    vertical-align: middle;
+    margin-right: 4px;
+}
 .error{
     color:red;
     margin-top:10px;
