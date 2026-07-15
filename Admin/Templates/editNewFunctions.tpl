@@ -245,8 +245,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        New Tribe: Huns
+                    <td class="b">New Tribe: Huns <em class="tooltip">?<span class="classic">Enable (Disable) tribe Huns</span></em>
+                    <?php if (!defined('NEW_FUNCTION_TRIBE_HUNS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
                     </td>
                     <td>
                         <select name="new_function_tribe_huns">
@@ -256,8 +256,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        New Tribe: Egyptians
+                    <td class="b">New Tribe: Egyptians <em class="tooltip">?<span class="classic">Enable (Disable) tribe Egyptians</span></em>
+                    <?php if (!defined('NEW_FUNCTION_TRIBE_EGIPTEANS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
                     </td>
                     <td>
                         <select name="new_function_tribe_egipteans">
@@ -267,8 +267,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        New Tribe: Spartans
+                    <td class="b">New Tribe: Spartans <em class="tooltip">?<span class="classic">Enable (Disable) tribe Spartans</span></em>
+                    <?php if (!defined('NEW_FUNCTION_TRIBE_SPARTANS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
                     </td>
                     <td>
                         <select name="new_function_tribe_spartans">
@@ -278,8 +278,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        New Tribe: Vikings
+                    <td class="b">New Tribe: Vikings <em class="tooltip">?<span class="classic">Enable (Disable) tribe Vikings</span></em>
+                    <?php if (!defined('NEW_FUNCTION_TRIBE_VIKINGS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;">Not present in config.php yet &mdash; saving this form once will add it (defaults to False until then).</span><?php endif; ?>
                     </td>
                     <td>
                         <select name="new_function_tribe_vikings">
