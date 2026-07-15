@@ -152,14 +152,16 @@ class Battle {
     global $database;
     $heroarray = $database->getHero($uid);
     if (empty($heroarray) || empty($heroarray[0])) {
+        // ob/db sunt MULTIPLICATORI: 0 ar anula toata puterea armatei ($ap *= ob).
+        // Un erou lipsa/invalid trebuie sa fie neutru, nu catastrofal.
         return [
             'heroid' => 0,
             'unit'   => '',
             'atk'    => 0,
             'di'     => 0,
             'dc'     => 0,
-            'ob'     => 0,
-            'db'     => 0,
+            'ob'     => 1,
+            'db'     => 1,
             'health' => 0
         ];
     }
@@ -168,14 +170,16 @@ class Battle {
     $heroUnit = $hero['unit'];
     if (!isset($GLOBALS['h'.$heroUnit])) {
 
+        // ob/db sunt MULTIPLICATORI: 0 ar anula toata puterea armatei ($ap *= ob).
+        // Un erou lipsa/invalid trebuie sa fie neutru, nu catastrofal.
         return [
             'heroid' => 0,
             'unit'   => '',
             'atk'    => 0,
             'di'     => 0,
             'dc'     => 0,
-            'ob'     => 0,
-            'db'     => 0,
+            'ob'     => 1,
+            'db'     => 1,
             'health' => 0
         ];
     }
@@ -784,8 +788,9 @@ class Battle {
 
             $units['Att_unit']['hero'] = $Attacker['uhero'];
 
-            $ap  *= $atkhero['ob'];
-            $cap *= $atkhero['ob'];
+            $heroOb = (!empty($atkhero['ob']) && $atkhero['ob'] > 0) ? $atkhero['ob'] : 1;
+            $ap  *= $heroOb;
+            $cap *= $heroOb;
 
             // T4 hero port (Phase 5): hunting horn boosts the HERO's own
             // contribution vs the Natars (uid 3); weapon adds +N attack per

@@ -232,6 +232,80 @@ $heroItemCatalog = array(
     144 => array('name' => "Haeduan's Lance",       'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 26, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 26, 'per_unit' => 12))),
     145 => array('name' => "Haeduan's Heavy Lance", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 26, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 26, 'per_unit' => 15))),
 
+    /* ---------------- WEAPONS: new tribes (Huns / Egyptians / Spartans / Vikings) ----------------
+     * Same unit-bound design as the base weapons. Tribe is derived automatically
+     * by heroItemTribe() from the 'unit' key, so adventure drops and the auction
+     * filter already handle them without any code change. IDs start at 301 to
+     * leave 200-299 free for consumables. */
+
+    // ===== Huns =====
+    301 => array('name' => "Warrior's Hatchet", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 51, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 51, 'per_unit' => 3))),
+    302 => array('name' => "Warrior's Axe", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 51, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 51, 'per_unit' => 4))),
+    303 => array('name' => "Warrior's War Axe", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 51, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 51, 'per_unit' => 5))),
+    304 => array('name' => "Archer's Short Bow", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 53, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 53, 'per_unit' => 6))),
+    305 => array('name' => "Archer's Bow", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 53, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 53, 'per_unit' => 8))),
+    306 => array('name' => "Archer's Long Bow", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 53, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 53, 'per_unit' => 10))),
+    307 => array('name' => "Steppe Short Saber", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 54, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 54, 'per_unit' => 6))),
+    308 => array('name' => "Steppe Saber", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 54, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 54, 'per_unit' => 8))),
+    309 => array('name' => "Steppe Long Saber", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 54, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 54, 'per_unit' => 10))),
+    310 => array('name' => "Lancer's Light Lance", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 55, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 55, 'per_unit' => 9))),
+    311 => array('name' => "Lancer's Lance", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 55, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 55, 'per_unit' => 12))),
+    312 => array('name' => "Lancer's Heavy Lance", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 55, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 55, 'per_unit' => 15))),
+    313 => array('name' => "Elite Light Blade", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 56, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 56, 'per_unit' => 9))),
+    314 => array('name' => "Elite Blade", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 56, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 56, 'per_unit' => 12))),
+    315 => array('name' => "Elite Heavy Blade", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 56, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 56, 'per_unit' => 15))),
+
+    // ===== Egyptians =====
+    316 => array('name' => "Militia's Club", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 61, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 61, 'per_unit' => 3))),
+    317 => array('name' => "Militia's Mace", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 61, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 61, 'per_unit' => 4))),
+    318 => array('name' => "Militia's War Mace", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 61, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 61, 'per_unit' => 5))),
+    319 => array('name' => "Fighter's Short Sword", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 62, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 62, 'per_unit' => 3))),
+    320 => array('name' => "Fighter's Sword", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 62, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 62, 'per_unit' => 4))),
+    321 => array('name' => "Fighter's Long Sword", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 62, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 62, 'per_unit' => 5))),
+    322 => array('name' => "Guardian's Spear", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 63, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 63, 'per_unit' => 3))),
+    323 => array('name' => "Guardian's Pike", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 63, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 63, 'per_unit' => 4))),
+    324 => array('name' => "Guardian's War Pike", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 63, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 63, 'per_unit' => 5))),
+    325 => array('name' => "Chariot Short Whip", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 65, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 65, 'per_unit' => 6))),
+    326 => array('name' => "Chariot Whip", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 65, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 65, 'per_unit' => 8))),
+    327 => array('name' => "Chariot War Whip", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 65, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 65, 'per_unit' => 10))),
+    328 => array('name' => "Royal Light Blade", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 66, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 66, 'per_unit' => 9))),
+    329 => array('name' => "Royal Blade", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 66, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 66, 'per_unit' => 12))),
+    330 => array('name' => "Royal Heavy Blade", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 66, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 66, 'per_unit' => 15))),
+
+    // ===== Spartans =====
+    331 => array('name' => "Hoplite's Short Spear", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 71, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 71, 'per_unit' => 3))),
+    332 => array('name' => "Hoplite's Spear", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 71, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 71, 'per_unit' => 4))),
+    333 => array('name' => "Hoplite's Long Spear", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 71, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 71, 'per_unit' => 5))),
+    334 => array('name' => "Sentinel's Short Sword", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 72, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 72, 'per_unit' => 3))),
+    335 => array('name' => "Sentinel's Sword", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 72, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 72, 'per_unit' => 4))),
+    336 => array('name' => "Sentinel's Long Sword", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 72, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 72, 'per_unit' => 5))),
+    337 => array('name' => "Twin's Short Blade", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 73, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 73, 'per_unit' => 3))),
+    338 => array('name' => "Twin's Blade", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 73, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 73, 'per_unit' => 4))),
+    339 => array('name' => "Twin's Long Blade", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 73, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 73, 'per_unit' => 5))),
+    340 => array('name' => "Spartan Short Saber", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 75, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 75, 'per_unit' => 6))),
+    341 => array('name' => "Spartan Saber", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 75, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 75, 'per_unit' => 8))),
+    342 => array('name' => "Spartan Long Saber", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 75, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 75, 'per_unit' => 10))),
+    343 => array('name' => "Elite Light Lance", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 76, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 76, 'per_unit' => 9))),
+    344 => array('name' => "Elite Lance", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 76, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 76, 'per_unit' => 12))),
+    345 => array('name' => "Elite Heavy Lance", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 76, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 76, 'per_unit' => 15))),
+
+    // ===== Vikings =====
+    346 => array('name' => "Raider's Hatchet", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 81, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 81, 'per_unit' => 3))),
+    347 => array('name' => "Raider's Axe", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 81, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 81, 'per_unit' => 4))),
+    348 => array('name' => "Raider's War Axe", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 81, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 81, 'per_unit' => 5))),
+    349 => array('name' => "Bowman's Short Bow", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 83, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 83, 'per_unit' => 3))),
+    350 => array('name' => "Bowman's Bow", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 83, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 83, 'per_unit' => 4))),
+    351 => array('name' => "Bowman's Long Bow", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 83, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 83, 'per_unit' => 5))),
+    352 => array('name' => "Berserker's Cleaver", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 84, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 84, 'per_unit' => 3))),
+    353 => array('name' => "Berserker's Great Axe", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 84, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 84, 'per_unit' => 4))),
+    354 => array('name' => "Berserker's War Cleaver", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 84, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 84, 'per_unit' => 5))),
+    355 => array('name' => "Viking Short Saber", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 85, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 85, 'per_unit' => 6))),
+    356 => array('name' => "Viking Saber", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 85, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 85, 'per_unit' => 8))),
+    357 => array('name' => "Viking Long Saber", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 85, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 85, 'per_unit' => 10))),
+    358 => array('name' => "Huscarl's Light Lance", 'slot' => HSLOT_RIGHT, 'tier' => 1, 'unit' => 86, 'bonus' => array(HB_FIGHT => 500, HB_UNIT_BONUS => array('unit' => 86, 'per_unit' => 9))),
+    359 => array('name' => "Huscarl's Lance", 'slot' => HSLOT_RIGHT, 'tier' => 2, 'unit' => 86, 'bonus' => array(HB_FIGHT => 1000, HB_UNIT_BONUS => array('unit' => 86, 'per_unit' => 12))),
+    360 => array('name' => "Huscarl's Heavy Lance", 'slot' => HSLOT_RIGHT, 'tier' => 3, 'unit' => 86, 'bonus' => array(HB_FIGHT => 1500, HB_UNIT_BONUS => array('unit' => 86, 'per_unit' => 15))),
+
     /* ---------------- CONSUMABLES (sheet: Consumabile; stackable, bag) ---------------- */
     200 => array('name' => 'Ointment',        'slot' => HSLOT_BAG, 'tier' => 1, 'bonus' => array(HB_HEAL_SELF => 1)),    // +1% HP per unit, max 99%, hero must be alive
     201 => array('name' => 'Scroll',          'slot' => HSLOT_BAG, 'tier' => 1, 'bonus' => array(HB_SCROLL => 10)),      // +10 XP per scroll

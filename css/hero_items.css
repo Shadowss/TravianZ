@@ -3,7 +3,6 @@
    (16 columns, catalog order) and this CSS keeps working unchanged. */
 .heroT4Item{display:inline-block;width:48px;height:48px;vertical-align:middle;
   background-image:url('../img/hero/items.png');background-repeat:no-repeat;}
-
 /* Dedicated dorf1/Rally Point movement icons for hero adventures - separate
    from the shared img.att2/img.def1 classes so swapping this art never
    touches the normal raid/reinforcement icons. To change the icon: drop
@@ -112,12 +111,72 @@ img.adv_back{background-image:url('../img/hero/adv_back.gif');height:16px;width:
 .heroT4Item.item143{background-position:-144px -288px;} /* Haeduan's Light Lance */
 .heroT4Item.item144{background-position:-192px -288px;} /* Haeduan's Lance */
 .heroT4Item.item145{background-position:-240px -288px;} /* Haeduan's Heavy Lance */
-.heroT4Item.item200{background-position:-288px -288px;} /* Ointment */
-.heroT4Item.item201{background-position:-336px -288px;} /* Scroll */
-.heroT4Item.item202{background-position:-384px -288px;} /* Bucket of Water */
-.heroT4Item.item203{background-position:-432px -288px;} /* Law Tablet */
-.heroT4Item.item204{background-position:-480px -288px;} /* Book of Wisdom */
-.heroT4Item.item205{background-position:-528px -288px;} /* Artwork */
-.heroT4Item.item206{background-position:-576px -288px;} /* Small Bandage */
-.heroT4Item.item207{background-position:-624px -288px;} /* Bandage */
-.heroT4Item.item208{background-position:-672px -288px;} /* Cage */
+.heroT4Item.item301{background-position:-288px -288px;} /* Warrior's Hatchet */
+.heroT4Item.item302{background-position:-336px -288px;} /* Warrior's Axe */
+.heroT4Item.item303{background-position:-384px -288px;} /* Warrior's War Axe */
+.heroT4Item.item304{background-position:-432px -288px;} /* Archer's Short Bow */
+.heroT4Item.item305{background-position:-480px -288px;} /* Archer's Bow */
+.heroT4Item.item306{background-position:-528px -288px;} /* Archer's Long Bow */
+.heroT4Item.item307{background-position:-576px -288px;} /* Steppe Short Saber */
+.heroT4Item.item308{background-position:-624px -288px;} /* Steppe Saber */
+.heroT4Item.item309{background-position:-672px -288px;} /* Steppe Long Saber */
+.heroT4Item.item310{background-position:-720px -288px;} /* Lancer's Light Lance */
+.heroT4Item.item311{background-position:-0px -336px;} /* Lancer's Lance */
+.heroT4Item.item312{background-position:-48px -336px;} /* Lancer's Heavy Lance */
+.heroT4Item.item313{background-position:-96px -336px;} /* Elite Light Blade */
+.heroT4Item.item314{background-position:-144px -336px;} /* Elite Blade */
+.heroT4Item.item315{background-position:-192px -336px;} /* Elite Heavy Blade */
+.heroT4Item.item316{background-position:-240px -336px;} /* Militia's Club */
+.heroT4Item.item317{background-position:-288px -336px;} /* Militia's Mace */
+.heroT4Item.item318{background-position:-336px -336px;} /* Militia's War Mace */
+.heroT4Item.item319{background-position:-384px -336px;} /* Fighter's Short Sword */
+.heroT4Item.item320{background-position:-432px -336px;} /* Fighter's Sword */
+.heroT4Item.item321{background-position:-480px -336px;} /* Fighter's Long Sword */
+.heroT4Item.item322{background-position:-528px -336px;} /* Guardian's Spear */
+.heroT4Item.item323{background-position:-576px -336px;} /* Guardian's Pike */
+.heroT4Item.item324{background-position:-624px -336px;} /* Guardian's War Pike */
+.heroT4Item.item325{background-position:-672px -336px;} /* Chariot Short Whip */
+.heroT4Item.item326{background-position:-720px -336px;} /* Chariot Whip */
+.heroT4Item.item327{background-position:-0px -384px;} /* Chariot War Whip */
+.heroT4Item.item328{background-position:-48px -384px;} /* Royal Light Blade */
+.heroT4Item.item329{background-position:-96px -384px;} /* Royal Blade */
+.heroT4Item.item330{background-position:-144px -384px;} /* Royal Heavy Blade */
+.heroT4Item.item331{background-position:-192px -384px;} /* Hoplite's Short Spear */
+.heroT4Item.item332{background-position:-240px -384px;} /* Hoplite's Spear */
+.heroT4Item.item333{background-position:-288px -384px;} /* Hoplite's Long Spear */
+.heroT4Item.item334{background-position:-336px -384px;} /* Sentinel's Short Sword */
+.heroT4Item.item335{background-position:-384px -384px;} /* Sentinel's Sword */
+.heroT4Item.item336{background-position:-432px -384px;} /* Sentinel's Long Sword */
+.heroT4Item.item337{background-position:-480px -384px;} /* Twin's Short Blade */
+.heroT4Item.item338{background-position:-528px -384px;} /* Twin's Blade */
+.heroT4Item.item339{background-position:-576px -384px;} /* Twin's Long Blade */
+.heroT4Item.item340{background-position:-624px -384px;} /* Spartan Short Saber */
+.heroT4Item.item341{background-position:-672px -384px;} /* Spartan Saber */
+.heroT4Item.item342{background-position:-720px -384px;} /* Spartan Long Saber */
+.heroT4Item.item343{background-position:-0px -432px;} /* Elite Light Lance */
+.heroT4Item.item344{background-position:-48px -432px;} /* Elite Lance */
+.heroT4Item.item345{background-position:-96px -432px;} /* Elite Heavy Lance */
+.heroT4Item.item346{background-position:-144px -432px;} /* Raider's Hatchet */
+.heroT4Item.item347{background-position:-192px -432px;} /* Raider's Axe */
+.heroT4Item.item348{background-position:-240px -432px;} /* Raider's War Axe */
+.heroT4Item.item349{background-position:-288px -432px;} /* Bowman's Short Bow */
+.heroT4Item.item350{background-position:-336px -432px;} /* Bowman's Bow */
+.heroT4Item.item351{background-position:-384px -432px;} /* Bowman's Long Bow */
+.heroT4Item.item352{background-position:-432px -432px;} /* Berserker's Cleaver */
+.heroT4Item.item353{background-position:-480px -432px;} /* Berserker's Great Axe */
+.heroT4Item.item354{background-position:-528px -432px;} /* Berserker's War Cleaver */
+.heroT4Item.item355{background-position:-576px -432px;} /* Viking Short Saber */
+.heroT4Item.item356{background-position:-624px -432px;} /* Viking Saber */
+.heroT4Item.item357{background-position:-672px -432px;} /* Viking Long Saber */
+.heroT4Item.item358{background-position:-720px -432px;} /* Huscarl's Light Lance */
+.heroT4Item.item359{background-position:-0px -480px;} /* Huscarl's Lance */
+.heroT4Item.item360{background-position:-48px -480px;} /* Huscarl's Heavy Lance */
+.heroT4Item.item200{background-position:-96px -480px;} /* Ointment */
+.heroT4Item.item201{background-position:-144px -480px;} /* Scroll */
+.heroT4Item.item202{background-position:-192px -480px;} /* Bucket of Water */
+.heroT4Item.item203{background-position:-240px -480px;} /* Law Tablet */
+.heroT4Item.item204{background-position:-288px -480px;} /* Book of Wisdom */
+.heroT4Item.item205{background-position:-336px -480px;} /* Artwork */
+.heroT4Item.item206{background-position:-384px -480px;} /* Small Bandage */
+.heroT4Item.item207{background-position:-432px -480px;} /* Bandage */
+.heroT4Item.item208{background-position:-480px -480px;} /* Cage */

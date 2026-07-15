@@ -1232,9 +1232,16 @@ class Automation {
         for ($i = 1; $i <= 40; $i++) {
             if ($palacelevel['f' . $i . 't'] == 26) $plevel = $i;
             elseif ($palacelevel['f' . $i . 't'] == 25) $plevel = $i;
+            elseif ($palacelevel['f' . $i . 't'] == 44) $plevel = $i; // Command Center (Huni)
         }
 
-        if ($palacelevel['f' . $plevel . 't'] == 26) {
+        // Command Center: sloturi de expansiune ca la Palat (10 -> 1, 15 -> 2, 20 -> 3)
+        if ($palacelevel['f' . $plevel . 't'] == 44) {
+            if ($palacelevel['f' . $plevel] < 10)       $canconquer = 0;
+            elseif ($palacelevel['f' . $plevel] < 15)   $canconquer = 1;
+            elseif ($palacelevel['f' . $plevel] < 20)   $canconquer = 2;
+            else                                         $canconquer = 3;
+        } elseif ($palacelevel['f' . $plevel . 't'] == 26) {
             if ($palacelevel['f' . $plevel] < 10)       $canconquer = 0;
             elseif ($palacelevel['f' . $plevel] < 15)   $canconquer = 1;
             elseif ($palacelevel['f' . $plevel] < 20)   $canconquer = 2;
@@ -1270,7 +1277,7 @@ class Automation {
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
 
-        if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
+        if ($database->getFieldLevelInVillage($data['to'], '25, 26, 44')) {
             $info_chief = $chief_pic . ',' . rc_tok('RC_RESIDENCE_NOT_DESTROYED');
             return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
         }
