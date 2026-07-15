@@ -1380,10 +1380,17 @@ class Automation {
             for ($i = 1; $i <= 39; $i++) {
                 if ($buildlevel['f' . $i] != 0) {
                     if ($buildlevel['f' . $i . 't'] != 35 && $buildlevel['f' . $i . 't'] != 36 && $buildlevel['f' . $i . 't'] != 41) {
+                        // Main Building (gid 15) nu poate cobori sub nivel 1: satul trebuie
+                        // sa ramana locuibil dupa cucerire (altfel pop 0 + nicio cladire).
+                        $minLevel = ($buildlevel['f' . $i . 't'] == 15) ? 1 : 0;
                         $leveldown = $buildlevel['f' . $i] - 1;
+                        if ($leveldown < $minLevel) $leveldown = $minLevel;
                         $newLevels_fieldNames[]  = 'f' . $i;
                         $newLevels_fieldValues[] = $leveldown;
-                        if (!$leveldown > 0) {
+                        // sterge tipul cladirii DOAR daca a ajuns efectiv la 0
+                        // (bug vechi: "!$leveldown > 0" era mereu adevarat pt leveldown==0,
+                        //  deci stergea tipul si cand cladirea cobora la nivel 1)
+                        if ($leveldown <= 0) {
                             $newLevels_fieldNames[]  = 'f' . $i . 't';
                             $newLevels_fieldValues[] = 0;
                         }
