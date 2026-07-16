@@ -1,5 +1,4 @@
 <?php
-if (!class_exists('QuestConfig')) { $__qcf = dirname(__DIR__, 2) . '/GameEngine/QuestConfig.php'; if (is_file($__qcf)) include_once($__qcf); }
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -85,18 +84,21 @@ if (isset($qact)){
 		case '3':
 			$database->updateUserField($_SESSION['username'],'quest','3',0,false);
 			$_SESSION['qst']= 3;
-			QuestConfig::grantReward($database,$session,3);
 			//Give Reward
 			if(!$session->plus){
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error($database->dblink));
 			} else {
+				$plus=$database->getUserField($_SESSION['username'],'plus','username');
+				$plus+=86400;
+				$database->updateUserField($_SESSION['username'],'plus',$plus,0);
 			}
 			break;
 
 		case '4':
 			$database->updateUserField($_SESSION['username'],'quest','4',0);
 			$_SESSION['qst']= 4;
-			QuestConfig::grantReward($database,$session,4);
 			//Give Reward
+			$database->modifyResource($session->villages[0],30,60,30,20,1);
 			break;
 
 		case 'rank':
@@ -106,34 +108,36 @@ if (isset($qact)){
 		case '5':
 			$database->updateUserField($_SESSION['username'],'quest','5',0);
 			$_SESSION['qst']= 5;
-			QuestConfig::grantReward($database,$session,5);
 			//Give Reward
+			$database->modifyResource($session->villages[0],40,30,20,30,1);
 			break;
 
 		case '6':
 			$database->updateUserField($_SESSION['username'],'quest','6',0);
 			$_SESSION['qst']= 6;
-			QuestConfig::grantReward($database,$session,6);
 			$Subject="Message From The Taskmaster";
 			$Subject=Q6_SUBJECT;
 			$Message=Q6_MESSAGE;
 			$database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0,0,0,0,0);
 			$RB=true;
 			//Give Reward
+			$database->modifyResource($session->villages[0],50,60,30,30,1);
 			break;
 
 		case '7':
 			$database->updateUserField($_SESSION['username'],'quest','7',0);
 			$_SESSION['qst']= 7;
-			QuestConfig::grantReward($database,$session,7);
 			//Give Reward
+			$gold=$database->getUserField($_SESSION['username'],'gold','username');
+			$gold+=20;
+			$database->updateUserField($_SESSION['username'],'gold',$gold,0,false);
 			break;
 
 		case '8':
 			$database->updateUserField($_SESSION['username'],'quest','8',0,false);
 			$_SESSION['qst']= 8;
-			QuestConfig::grantReward($database,$session,8);
 			//Give Reward
+			$database->modifyResource($session->villages[0],75,80,30,50,1);
 			break;
 
 		case '9':
@@ -154,17 +158,20 @@ if (isset($qact)){
 		case '10':
 			$database->updateUserField($_SESSION['username'],'quest','10',0);
 			$_SESSION['qst']= 10;
-			QuestConfig::grantReward($database,$session,10);
 			//Give Reward
+			$database->modifyResource($session->villages[0],75,90,30,50,1);
 			break;
 
 		case '11':
 			$database->updateUserField($_SESSION['username'],'quest','11',0);
 			$_SESSION['qst']= 11;
-			QuestConfig::grantReward($database,$session,11);
 			//Give Reward
 			if(!$session->plus){
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
 			} else {
+				$plus=$database->getUserField($_SESSION['username'],'plus','username');
+				$plus+=172800;
+				$database->updateUserField($_SESSION['username'],'plus',$plus,0);
 			}
 			break;
 
@@ -176,22 +183,22 @@ if (isset($qact)){
 		case '12':
 			$database->updateUserField($_SESSION['username'],'quest','12',0);
 			$_SESSION['qst']= 12;
-			QuestConfig::grantReward($database,$session,12);
 			//Give Reward
+			$database->modifyResource($session->villages[0],60,30,40,90,1);
 			break;
 
 		case '13':
 			$database->updateUserField($_SESSION['username'],'quest','13',0);
 			$_SESSION['qst']= 13;
-			QuestConfig::grantReward($database,$session,13);
 			//Give Reward
+			$database->modifyResource($session->villages[0],150,180,30,130,1);
 			break;
 
 		case '14':
 			$database->updateUserField($_SESSION['username'],'quest','14',0);
 			$_SESSION['qst']= 14;
-			QuestConfig::grantReward($database,$session,14);
 			//Give Reward
+			$database->modifyResource($session->villages[0],60,50,40,30,1);
 			break;
 
 		case 'lumber':
@@ -201,145 +208,143 @@ if (isset($qact)){
 		case '15':
 			$database->updateUserField($_SESSION['username'],'quest','15',0);
 			$_SESSION['qst']= 15;
-			QuestConfig::grantReward($database,$session,15);
 			//Give Reward
+			$database->modifyResource($session->villages[0],50,30,60,20,1);
 			break;
 
 		case '16':
 			$database->updateUserField($_SESSION['username'],'quest','16',0);
 			$_SESSION['qst']= 16;
-			QuestConfig::grantReward($database,$session,16);
 			//Give Reward
+			$database->modifyResource($session->villages[0],75,75,40,40,1);
 			break;
 
 		case '17':
 			$database->updateUserField($_SESSION['username'],'quest','17',0);
 			$_SESSION['qst']= 17;
-			QuestConfig::grantReward($database,$session,17);
 			//Give Reward
+			$database->modifyResource($session->villages[0],100,90,100,60,1);
 			break;
 
 		case '18':
 			$database->updateUserField($_SESSION['username'],'quest','18',0);
 			$_SESSION['qst']= 18;
-			QuestConfig::grantReward($database,$session,18);
 			break;
 
 		case '19':
 			$database->updateUserField($_SESSION['username'],'quest','19',0);
 			$_SESSION['qst']= 19;
-			QuestConfig::grantReward($database,$session,19);
 			//Give Reward
+			$database->modifyResource($session->villages[0],80,90,60,40,1);
 			break;
 
 		case '20':
 			$database->updateUserField($_SESSION['username'],'quest','20',0);
 			$_SESSION['qst']= 20;
-			QuestConfig::grantReward($database,$session,20);
 			//Give Reward
+			$database->modifyResource($session->villages[0],70,120,90,50,1);
 			break;
 
 		case '21':
 			$database->updateUserField($_SESSION['username'],'quest','21',0);
 			$_SESSION['qst']= 21;
-			QuestConfig::grantReward($database,$session,21);
 			break;
 
 		case '22':
 			$database->updateUserField($_SESSION['username'],'quest','22',0);
 			$_SESSION['qst']= 22;
-			QuestConfig::grantReward($database,$session,22);
 			//Give Reward
+			$database->modifyResource($session->villages[0],200,200,700,450,1);
 			break;
 
 		case '23':
 			$database->updateUserField($_SESSION['username'],'quest','23',0);
 			$_SESSION['qst']= 23;
-			QuestConfig::grantReward($database,$session,23);
 			break;
 
 		case '24':
 			$database->updateUserField($_SESSION['username'],'quest','24',0);
 			$_SESSION['qst']= 24;
-			QuestConfig::grantReward($database,$session,24);
 			//Give Reward
+			$database->modifyResource($session->villages[0],300,320,360,570,1);
 			break;
 
 		case '28':
 			$dataarray[3] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','28',0);
 			$_SESSION['qst']= 28;
-			QuestConfig::grantReward($database,$session,28);
 			//Give Reward
+			$gold=$database->getUserField($_SESSION['username'],'gold','username');
+			$gold+=15;
+			$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 			break;
 
 		case '29':
 			$dataarray[4] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','29',0);
 			$_SESSION['qst']= 29;
-			QuestConfig::grantReward($database,$session,29);
 			//Give Reward
+			$database->modifyResource($session->villages[0],240,280,180,100,1);
 			break;
 
 		case '30':
 			$dataarray[5] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','30',0);
 			$_SESSION['qst']= 30;
-			QuestConfig::grantReward($database,$session,30);
 			//Give Reward
+			$database->modifyResource($session->villages[0],600,750,600,300,1);
 			break;
 
 		case '31':
 			$dataarray[6] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','31',0);
 			$_SESSION['qst']= 31;
-			QuestConfig::grantReward($database,$session,31);
 			//Give Reward
+			$database->modifyResource($session->villages[0],900,850,600,300,1);
 			break;
 
 		case '32':
 			$dataarray[7] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','32',0);
 			$_SESSION['qst']= 32;
-			QuestConfig::grantReward($database,$session,32);
 			//Give Reward
+			$database->modifyResource($session->villages[0],1800,2000,1650,800,1);
 			break;
 
 		case '33':
 			$dataarray[8] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','33',0);
 			$_SESSION['qst']= 33;
-			QuestConfig::grantReward($database,$session,33);
 			//Give Reward
+			$database->modifyResource($session->villages[0],1600,1800,1950,1200,1);
 			break;
 
 		case '34':
 			$dataarray[9] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','34',0);
 			$_SESSION['qst']= 34;
-			QuestConfig::grantReward($database,$session,34);
 			//Give Reward
+			$database->modifyResource($session->villages[0],3400,2800,3600,2200,1);
 			break;
 
 		case '35':
 			$dataarray[10] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','35',0);
 			$_SESSION['qst']= 35;
-			QuestConfig::grantReward($database,$session,35);
 			//Give Reward
+			$database->modifyResource($session->villages[0],1050,800,900,750,1);
 			break;
 
 		case '36':
 			$database->updateUserField($_SESSION['username'],'quest','36',0);
 			$_SESSION['qst']= 36;
-			QuestConfig::grantReward($database,$session,36);
 			//Give Reward
+			$database->modifyResource($session->villages[0],1600,2000,1800,1300,1);
 			break;
 
 		case '37':
 			$database->updateUserField($_SESSION['username'],'quest','37',0);
 			$_SESSION['qst']= 37;
-			QuestConfig::grantReward($database,$session,37);
 			break;
 
 		case '91':
@@ -361,45 +366,45 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','92',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 92;
-			QuestConfig::grantReward($database,$session,92);
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
+			$database->modifyResource($session->villages[0],217,247,177,207,1);
 			break;
 
 		case '93':
 			$database->updateUserField($_SESSION['username'],'quest','93',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 93;
-			QuestConfig::grantReward($database,$session,93);
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
+			$database->modifyResource($session->villages[0],217,247,177,207,1);
 			break;
 
 		case '94':
 			$database->updateUserField($_SESSION['username'],'quest','94',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 94;
-			QuestConfig::grantReward($database,$session,94);
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
+			$database->modifyResource($session->villages[0],217,247,177,207,1);
 			break;
 
 		case '95':
 			$database->updateUserField($_SESSION['username'],'quest','95',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 95;
-			QuestConfig::grantReward($database,$session,95);
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
+			$database->modifyResource($session->villages[0],217,247,177,207,1);
 			break;
 
 		case '96':
 			$database->updateUserField($_SESSION['username'],'quest','96',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 96;
-			QuestConfig::grantReward($database,$session,96);
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
+			$database->modifyResource($session->villages[0],217,247,177,207,1);
 			break;
 
 		case '97':
@@ -792,6 +797,7 @@ if ($palace >= 10) {
 } elseif ($commandCenter >= 10) {
     $text = COMMANDCENTER; 
 }
+
 if ($residence < 10 && $palace < 10 && $commandCenter < 10) {
 ?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q33; ?><\/h1><br \/><i>&rdquo;<?php echo Q33_DESC; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q33_ORDER; ?><\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"neighbour\"><\/div>\n\t\t","number":"-33","reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":99}
@@ -1365,4 +1371,3 @@ $_SESSION['qst']= 24; ?>
 <?php } else {
 
  }} ?>
-
