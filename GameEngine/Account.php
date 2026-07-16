@@ -207,7 +207,7 @@ class Account {
                 $database->updateUserField(
                     $uid,
                     ["act", "invited"],
-                    ["", (int)($_POST['invited'] ?? 0)],
+                    ["", $_POST['invited'] ?? ''],
                     1
                 );
 
