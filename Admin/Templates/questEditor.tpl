@@ -39,12 +39,14 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 .qe-tabs{display:flex;gap:8px;margin-bottom:14px;}
 .qe-tabs a{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:8px 18px;text-decoration:none;font-size:12px;}
 .qe-tabs a.active{background:#f59e0b;color:#111827;border-color:#f59e0b;font-weight:bold;}
-.qe-table{width:100%;border-collapse:collapse;background:#0b1220;border:1px solid #1f2937;border-radius:8px;overflow:hidden;}
-.qe-table th{background:#111827;text-align:left;padding:8px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#94a3b8;border-bottom:1px solid #1f2937;}
-.qe-table td{padding:5px 8px;border-bottom:1px solid #14203a;vertical-align:middle;}
+.qe-scroll{overflow-x:auto;border-radius:8px;}
+.qe-table{width:100%;border-collapse:collapse;background:#0b1220;border:1px solid #1f2937;border-radius:8px;}
+.qe-table th{background:#111827;text-align:left;padding:7px 6px;font-size:9px;text-transform:uppercase;letter-spacing:.3px;color:#94a3b8;border-bottom:1px solid #1f2937;white-space:nowrap;}
+.qe-table td{padding:4px 6px;border-bottom:1px solid #14203a;vertical-align:middle;}
 .qe-table tr:hover td{background:#0f1a30;}
-.qe-table input[type=number]{background:#0b1220;border:1px solid #334155;border-radius:5px;color:#e2e8f0;padding:5px 6px;width:64px;font-variant-numeric:tabular-nums;}
-.qe-table input.note{width:150px;}
+.qe-table input[type=number]{background:#0b1220;border:1px solid #334155;border-radius:5px;color:#e2e8f0;padding:4px 5px;width:58px;font-variant-numeric:tabular-nums;}
+.qe-qname{color:#cbd5e1;cursor:help;border-bottom:1px dotted #475569;white-space:nowrap;}
+.qe-qname:hover{color:#fde68a;}
 .qe-qid{font-weight:bold;color:#fde68a;font-family:monospace;}
 .qe-bar{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap;}
 .qe-save{background:#f59e0b;color:#111827;font-weight:bold;border:0;border-radius:6px;padding:10px 22px;cursor:pointer;font-size:13px;}
@@ -83,14 +85,15 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
         <input type="hidden" name="do" value="save">
         <input type="hidden" name="variant" value="<?php echo e($variant); ?>">
 
+        <div class="qe-scroll">
         <table class="qe-table">
             <thead>
                 <tr>
                     <th style="width:44px;">Quest</th>
                     <th style="width:44px;">On</th>
                     <th>Wood</th><th>Clay</th><th>Iron</th><th>Crop</th>
-                    <th>Gold</th><th>Plus (days)</th><th>Req. level</th>
-                    <th>Note</th>
+                    <th>Gold</th><th>Plus (days)</th><th>Req.&nbsp;level</th>
+                    <th>Quest (hover)</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,11 +108,16 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
                     <td><input type="number" name="q[<?php echo (int)$qid; ?>][gold]" value="<?php echo (int)$r['gold']; ?>" <?php echo $dis; ?>></td>
                     <td><input type="number" step="0.25" name="q[<?php echo (int)$qid; ?>][plus_days]" value="<?php echo rtrim(rtrim(number_format((float)$r['plus_days'],2,'.',''),'0'),'.') ?: '0'; ?>" <?php echo $dis; ?>></td>
                     <td><input type="number" name="q[<?php echo (int)$qid; ?>][req_level]" value="<?php echo (int)$r['req_level']; ?>" <?php echo $dis; ?>></td>
-                    <td><input class="note" type="text" maxlength="255" name="q[<?php echo (int)$qid; ?>][note]" value="<?php echo e($r['note']); ?>" <?php echo $dis; ?>></td>
+                    <td>
+                        <?php $qi = QuestConfig::questInfo($variant, (int)$qid); ?>
+                        <span class="qe-qname" title="<?php echo e($qi['name'] . ' — ' . $qi['desc']); ?>"><?php echo e($qi['name']); ?></span>
+                        <input type="hidden" name="q[<?php echo (int)$qid; ?>][note]" value="<?php echo e($r['note']); ?>">
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
+        </div>
 
         <div class="qe-bar">
             <button type="submit" class="qe-save">Save all changes</button>

@@ -256,7 +256,15 @@ class QuestConfig
                 return;
             }
 
-            $vil = (isset($session->villages) && isset($session->villages[0])) ? $session->villages[0] : 0;
+            // Grant to the village the player is CURRENTLY on (active village),
+            // not the capital. Village::__construct uses $_SESSION['wid'] as the
+            // active village, falling back to the first village.
+            $vil = 0;
+            if (isset($_SESSION['wid']) && (int) $_SESSION['wid'] > 0) {
+                $vil = (int) $_SESSION['wid'];
+            } elseif (isset($session->villages) && isset($session->villages[0])) {
+                $vil = (int) $session->villages[0];
+            }
             $uid = 0;
             if (isset($session->uid)) {
                 $uid = (int) $session->uid;
@@ -295,6 +303,67 @@ class QuestConfig
     public static function normVariant($v)
     {
         return ($v === self::V_EXTENDED) ? self::V_EXTENDED : self::V_STANDARD;
+    }
+
+    /**
+     * Short human-readable name + objective per quest, for the editor tooltip
+     * (the in-game Q* language constants are not loaded in the admin panel).
+     * Objectives are derived from the requirement checks in quest_core*.tpl.
+     */
+    public static function questInfo($variant, $qid)
+    {
+        $variant = self::normVariant($variant);
+        $qid = (int) $qid;
+
+        // Objectives shared by both variants where the quest number matches its check.
+        $ext = [
+            2  => ['Woodcutter', 'Finish building a Woodcutter to level 1.'],
+            3  => ['Clay Pit', 'Raise a Clay Pit.'],
+            4  => ['Iron Mine', 'Raise an Iron Mine.'],
+            5  => ['Cropland', 'Raise a Cropland.'],
+            6  => ['Resource fields', 'Keep raising your resource fields.'],
+            7  => ['Overview', 'Visit the resource / village overview.'],
+            8  => ['Main Building', 'Build / upgrade the Main Building.'],
+            9  => ['Crop balance', 'Reach the required crop level (costs 200 crop).'],
+            10 => ['Main Building', 'Upgrade the Main Building further.'],
+            11 => ['Plus reward', 'Tutorial milestone — grants Plus.'],
+            12 => ['Marketplace', 'Build a Marketplace.'],
+            13 => ['Embassy', 'Build an Embassy.'],
+            14 => ['Barracks', 'Build a Barracks.'],
+            15 => ['Academy', 'Build an Academy.'],
+            16 => ['Smithy', 'Build a Smithy / Blacksmith.'],
+            17 => ['Rally Point', 'Build a Rally Point.'],
+            18 => ['Train troops', 'Train 2 first-tier units for your tribe.'],
+            19 => ['Cranny', 'Build a Cranny.'],
+            20 => ['Train warriors', 'Train 2 first-tier units for your tribe.'],
+            21 => ['Granary', 'Build a Granary.'],
+            22 => ['Warehouse', 'Build a Warehouse.'],
+            23 => ['Marketplace', 'Trade at the Marketplace.'],
+            24 => ['Expansion', 'Progress the expansion tutorial.'],
+            25 => ['Village', 'Village development.'],
+            26 => ['Bakery / dough', 'Complete the bakery / dough step.'],
+            28 => ['Hero Mansion', 'Build a Hero\'s Mansion.'],
+            29 => ['Adventure', 'Send your hero on an adventure.'],
+            30 => ['Expansion', 'Grow your village.'],
+            31 => ['Buildings', 'Upgrade key buildings.'],
+            32 => ['Buildings', 'Upgrade key buildings.'],
+            33 => ['Residence / Palace / Command Center', 'Raise Residence, Palace or (Huns) Command Center to level 10.'],
+            34 => ['Train settlers', 'Train 3 Settlers for your tribe.'],
+            35 => ['Found a village', 'Settle / found a second village.'],
+            36 => ['Build a wall', 'Build your tribe\'s wall (City Wall / Palisade / Barricade …).'],
+            37 => ['Tutorial complete', 'End of the tutorial quests.'],
+            91 => ['Milestone', 'Milestone reward (fixed atomic logic).'],
+            92 => ['Milestone', 'Milestone reward.'],
+            93 => ['Milestone', 'Milestone reward.'],
+            94 => ['Milestone', 'Milestone reward.'],
+            95 => ['Milestone', 'Milestone reward.'],
+            96 => ['Milestone', 'Milestone reward.'],
+            97 => ['Milestone', 'Final milestone (2 days Plus + 20 gold, fixed atomic logic).'],
+        ];
+        if (isset($ext[$qid])) {
+            return ['name' => $ext[$qid][0], 'desc' => $ext[$qid][1]];
+        }
+        return ['name' => 'Quest ' . $qid, 'desc' => 'Tutorial quest ' . $qid . '.'];
     }
 
     /**

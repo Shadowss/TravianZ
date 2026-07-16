@@ -52,9 +52,11 @@ $js = [
 .hm-layers{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
 .hm-layers button{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:12px;}
 .hm-layers button.active{background:#f59e0b;color:#111827;border-color:#f59e0b;font-weight:bold;}
-.hm-stage{display:flex;gap:14px;align-items:flex-start;flex-wrap:nowrap;}
-.hm-map{position:relative;background:#0b1220;border:1px solid #1f2937;border-radius:8px;padding:8px;flex:1 1 0;min-width:0;}
-.hm-map svg{display:block;background:#0a0f1c;border-radius:4px;width:100%;height:auto;max-width:520px;}
+.hm-stage{display:block;}
+.hm-map{position:relative;background:#0b1220;border:1px solid #1f2937;border-radius:8px;padding:8px;text-align:center;}
+.hm-map svg{display:inline-block;background:#0a0f1c;border-radius:4px;width:100%;height:auto;max-width:600px;}
+.hm-below{display:flex;gap:14px;align-items:flex-start;margin-top:14px;}
+.hm-below .hm-card{flex:1 1 0;min-width:0;margin-bottom:0;}
 .hm-tip{position:absolute;pointer-events:none;background:#0b1220;border:1px solid #475569;border-radius:6px;padding:7px 9px;font-size:11px;color:#e2e8f0;display:none;z-index:10;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5);}
 .hm-side{flex:0 0 186px;min-width:0;}
 .hm-card{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:12px 14px;margin-bottom:14px;}
@@ -104,7 +106,7 @@ $js = [
             <div class="hm-tip" id="hm-tip"></div>
         </div>
 
-        <div class="hm-side">
+        <div class="hm-below">
             <div class="hm-card">
                 <h3>Summary</h3>
                 <div class="hm-stat"><span>Player villages</span><b><?php echo number_format($data['totals']['villages']); ?></b></div>

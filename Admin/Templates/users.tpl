@@ -51,6 +51,10 @@ function tribeLabel($t){
         case 3: return array('Gaul','🌾','#27ae60');
         case 4: return array('Nature','🌲','#16a085');
         case 5: return array('Natars','👑','#8e44ad');
+        case 6: return array('Huns','🐎','#a16207');
+        case 7: return array('Egyptians','🏺','#d97706');
+        case 8: return array('Spartans','🛡','#7c3aed');
+        case 9: return array('Vikings','🪓','#0891b2');
         default: return array('N/A','❓','#95a5a6');
     }
 }
@@ -65,53 +69,53 @@ function accessBadge($a){
 function shortEmail($e){if(!$e)return '-';if(strlen($e)>22)return substr($e,0,19).'...';return $e;}
 ?>
 <style>
-.users-wrap{max-width:100%;margin:8px 0;font-family:Tahoma,Verdana,Arial,sans-serif}
-.users-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.users-head h2{margin:0;font-size:14px;display:flex;align-items:center;gap:4px}
-.users-filters{display:flex;gap:3px;margin-bottom:4px}
-.users-filters a{padding:2px 7px;font-size:10px;border:1px solid #bbb;border-radius:10px;text-decoration:none;color:#333;background:#f5f5f5;line-height:14px}
-.users-filters a.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
-.search-box{margin-bottom:4px}
-.search-box input{width:180px;padding:3px 5px;border:1px solid #aaa;border-radius:3px;font-size:11px}
+.users-wrap{max-width:100%;margin:8px 0;font-family:Tahoma,Verdana,Arial,sans-serif;color:#e2e8f0}
+.users-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.users-head h2{margin:0;font-size:15px;display:flex;align-items:center;gap:6px;color:#f1f5f9}
+.users-filters{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap}
+.users-filters a{padding:3px 10px;font-size:10px;border:1px solid #334155;border-radius:12px;text-decoration:none;color:#cbd5e1;background:#111827;line-height:15px}
+.users-filters a:hover{border-color:#f59e0b;color:#fde68a}
+.users-filters a.active{background:#f59e0b;color:#1a1a2e;border-color:#f59e0b;font-weight:bold}
+.search-box{margin-bottom:6px}
+.search-box input{width:200px;padding:5px 8px;border:1px solid #334155;border-radius:5px;font-size:11px;background:#0b1220;color:#e2e8f0}
 
-.table-wrap{overflow-x:auto;border:1px solid #bbb;background:#fff}
+.table-wrap{overflow-x:auto;border:1px solid #1f2937;border-radius:8px;background:#0b1220}
 .users-table{width:100%;border-collapse:collapse;border-spacing:0;font-size:11px;table-layout:fixed}
-.users-table thead th{background:#3a4f63;color:#fff;padding:2px 3px;text-align:left;white-space:nowrap;font-weight:bold;border-right:1px solid #2c3e50;font-size:10px}
-.users-table thead th:last-child{border-right:0}
-.users-table tbody td{padding:1px 3px;border-bottom:1px solid #e5e5e5;border-right:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:16px}
-.users-table tbody td:last-child{border-right:0}
-.users-table tbody tr:hover{background:#eef4ff}
-.users-table a{color:#004a9f;text-decoration:none}
-.users-table a:hover{text-decoration:underline}
+.users-table thead th{background:#111827;color:#94a3b8;padding:6px 5px;text-align:left;white-space:nowrap;font-weight:bold;border-bottom:1px solid #1f2937;font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+.users-table tbody td{padding:4px 5px;border-bottom:1px solid #14203a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px;color:#cbd5e1}
+.users-table tbody tr:hover td{background:#0f1a30}
+.users-table a{color:#7dd3fc;text-decoration:none}
+.users-table a:hover{text-decoration:underline;color:#bae6fd}
 
 /* LATIMI MINIME */
-.users-table th:nth-child(1),.users-table td:nth-child(1){width:32px;text-align:center}
-.users-table th:nth-child(2),.users-table td:nth-child(2){width:85px}
-.users-table th:nth-child(3),.users-table td:nth-child(3){width:125px}
-.users-table th:nth-child(4),.users-table td:nth-child(4){width:48px;text-align:center}
-.users-table th:nth-child(5),.users-table td:nth-child(5){width:42px;text-align:center;padding:1px 2px}
-.users-table th:nth-child(6),.users-table td:nth-child(6){width:32px;text-align:right;padding-right:4px}
-.users-table th:nth-child(7),.users-table td:nth-child(7){width:72px;text-align:center}
+.users-table th:nth-child(1),.users-table td:nth-child(1){width:34px;text-align:center}
+.users-table th:nth-child(2),.users-table td:nth-child(2){width:90px}
+.users-table th:nth-child(3),.users-table td:nth-child(3){width:130px}
+.users-table th:nth-child(4),.users-table td:nth-child(4){width:50px;text-align:center}
+.users-table th:nth-child(5),.users-table td:nth-child(5){width:52px;text-align:center;padding:2px}
+.users-table th:nth-child(6),.users-table td:nth-child(6){width:44px;text-align:right;padding-right:6px}
+.users-table th:nth-child(7),.users-table td:nth-child(7){width:78px;text-align:center}
 
-.badge{display:inline-block;padding:0 3px;border-radius:2px;color:#fff;font-size:9px;line-height:12px;font-weight:normal}
-.gold{color:#8b6914;font-weight:normal}
-.last{color:#444;font-size:10px}
-.email-cell a{color:#004a9f}
+.badge{display:inline-block;padding:1px 5px;border-radius:3px;color:#fff;font-size:9px;line-height:13px;font-weight:bold}
+.gold{color:#fde68a;font-weight:bold}
+.last{color:#64748b;font-size:10px}
+.email-cell a{color:#7dd3fc}
 
 /* TRIBE CU NUME SUB ICON */
-.tribe-box{display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1}
-.tribe-icon{display:inline-block;width:16px;height:14px;line-height:14px;text-align:center;border-radius:2px;color:#fff;font-size:10px}
-.tribe-name{font-size:8px;color:#888;text-transform:uppercase;letter-spacing:0.2px}
+.tribe-box{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1}
+.tribe-icon{display:inline-block;width:18px;height:16px;line-height:16px;text-align:center;border-radius:3px;color:#fff;font-size:11px}
+.tribe-name{font-size:8px;color:#94a3b8;text-transform:uppercase;letter-spacing:.2px}
 
-.pagination{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:6px;font-size:10px}
-.pagination a{padding:2px 5px;background:#f5f5f5;border:1px solid #bbb;border-radius:2px;text-decoration:none;color:#333}
-.pagination.current{padding:2px 5px;background:#3a4f63;color:#fff;border-radius:2px}
+.pagination{display:flex;justify-content:center;align-items:center;gap:5px;margin-top:10px;font-size:10px}
+.pagination a{padding:3px 8px;background:#111827;border:1px solid #334155;border-radius:4px;text-decoration:none;color:#cbd5e1}
+.pagination a:hover{border-color:#f59e0b;color:#fde68a}
+.pagination .current{padding:3px 8px;background:#f59e0b;color:#1a1a2e;border-radius:4px;font-weight:bold}
 </style>
 
 <div class="users-wrap">
   <div class="users-head">
     <h2>👥 Users</h2>
-    <div style="font-size:11px;color:#666"><?php echo number_format($totalUsers);?> found</div>
+    <div style="font-size:11px;color:#94a3b8"><?php echo number_format($totalUsers);?> found</div>
   </div>
 
 <div class="users-filters">

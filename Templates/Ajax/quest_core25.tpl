@@ -82,7 +82,7 @@ if (isset($qact)){
 		case '3':
 			$database->updateUserField($_SESSION['username'],'quest','3',0);
 			$_SESSION['qst']= 3;
-			QuestConfig::grantReward($database,$session,3);
+			QuestConfig::grantReward($database,$session,3,'standard');
 			//Give Reward
 			if(!$session->plus){
 			} else {
@@ -92,7 +92,7 @@ if (isset($qact)){
 		case '4':
 			$database->updateUserField($_SESSION['username'],'quest','4',0);
 			$_SESSION['qst']= 4;
-			QuestConfig::grantReward($database,$session,4);
+			QuestConfig::grantReward($database,$session,4,'standard');
 			//Give Reward
 			break;
 
@@ -103,14 +103,14 @@ if (isset($qact)){
 		case '5':
 			$database->updateUserField($_SESSION['username'],'quest','5',0);
 			$_SESSION['qst']= 5;
-			QuestConfig::grantReward($database,$session,5);
+			QuestConfig::grantReward($database,$session,5,'standard');
 			//Give Reward
 			break;
 
 		case '6':
 			$database->updateUserField($_SESSION['username'],'quest','6',0);
 			$_SESSION['qst']= 6;
-			QuestConfig::grantReward($database,$session,6);
+			QuestConfig::grantReward($database,$session,6,'standard');
 			$Subject=Q6_SUBJECT;
 			$Message=Q6_MESSAGE;
 			$database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0,0,0,0,0);
@@ -121,7 +121,7 @@ if (isset($qact)){
 		case '7':
 			$database->updateUserField($_SESSION['username'],'quest','7',0);
 			$_SESSION['qst']= 7;
-			QuestConfig::grantReward($database,$session,7);
+			QuestConfig::grantReward($database,$session,7,'standard');
 			//Give Reward
 			break;
 
@@ -133,7 +133,7 @@ if (isset($qact)){
 		case '8':
 			$database->updateUserField($_SESSION['username'],'quest','8',0);
 			$_SESSION['qst']= 8;
-			QuestConfig::grantReward($database,$session,8);
+			QuestConfig::grantReward($database,$session,8,'standard');
 			//Give Reward
 			break;
 
@@ -155,14 +155,14 @@ if (isset($qact)){
 		case '10':
 			$database->updateUserField($_SESSION['username'],'quest','10',0);
 			$_SESSION['qst']= 10;
-			QuestConfig::grantReward($database,$session,10);
+			QuestConfig::grantReward($database,$session,10,'standard');
 			//Give Reward
 			break;
 
 		case '11':
 			$database->updateUserField($_SESSION['username'],'quest','11',0);
 			$_SESSION['qst']= 11;
-			QuestConfig::grantReward($database,$session,11);
+			QuestConfig::grantReward($database,$session,11,'standard');
 			//Give Reward
 			if(!$session->plus){
 			} else {
@@ -172,35 +172,35 @@ if (isset($qact)){
 		case '12':
 			$database->updateUserField($_SESSION['username'],'quest','12',0);
 			$_SESSION['qst']= 12;
-			QuestConfig::grantReward($database,$session,12);
+			QuestConfig::grantReward($database,$session,12,'standard');
 			//Give Reward
 			break;
 
 		case '13':
 			$database->updateUserField($_SESSION['username'],'quest','13',0);
 			$_SESSION['qst']= 13;
-			QuestConfig::grantReward($database,$session,13);
+			QuestConfig::grantReward($database,$session,13,'standard');
 			//Give Reward
 			break;
 
 		case '14':
 			$database->updateUserField($_SESSION['username'],'quest','14',0);
 			$_SESSION['qst']= 14;
-			QuestConfig::grantReward($database,$session,14);
+			QuestConfig::grantReward($database,$session,14,'standard');
 			//Give Reward
 			break;
 
 		case '15':
 			$database->updateUserField($_SESSION['username'],'quest','15',0);
 			$_SESSION['qst']= 15;
-			QuestConfig::grantReward($database,$session,15);
+			QuestConfig::grantReward($database,$session,15,'standard');
 			//Give Reward
 			break;
 
 		case '16':
 			$database->updateUserField($_SESSION['username'],'quest','16',0);
 			$_SESSION['qst']= 16;
-			QuestConfig::grantReward($database,$session,16);
+			QuestConfig::grantReward($database,$session,16,'standard');
 			//Give Reward
 			break;
 
@@ -211,56 +211,56 @@ if (isset($qact)){
 		case '17':
 			$database->updateUserField($_SESSION['username'],'quest','17',0);
 			$_SESSION['qst']= 17;
-			QuestConfig::grantReward($database,$session,17);
+			QuestConfig::grantReward($database,$session,17,'standard');
 			//Give Reward
 			break;
 
 		case '18':
 			$database->updateUserField($_SESSION['username'],'quest','18',0);
 			$_SESSION['qst']= 18;
-			QuestConfig::grantReward($database,$session,18);
+			QuestConfig::grantReward($database,$session,18,'standard');
 			//Give Reward
 			break;
 
 		case '19':
 			$database->updateUserField($_SESSION['username'],'quest','19',0);
 			$_SESSION['qst']= 19;
-			QuestConfig::grantReward($database,$session,19);
+			QuestConfig::grantReward($database,$session,19,'standard');
 			//Give Reward
 			break;
 
 		case '20':
 			$database->updateUserField($_SESSION['username'],'quest','20',0);
 			$_SESSION['qst']= 20;
-			QuestConfig::grantReward($database,$session,20);
+			QuestConfig::grantReward($database,$session,20,'standard');
 			break;
 
 		case '21':
 			$_SESSION['dough']= true;
 			$database->updateUserField($_SESSION['username'],'quest','21',0);
 			$_SESSION['qst']= 21;
-			QuestConfig::grantReward($database,$session,21);
+			QuestConfig::grantReward($database,$session,21,'standard');
 			//Give Reward granary
 			break;
 
 		case '22':
 			$database->updateUserField($_SESSION['username'],'quest','22',0);
 			$_SESSION['qst']= 22;
-			QuestConfig::grantReward($database,$session,22);
+			QuestConfig::grantReward($database,$session,22,'standard');
 			//Give Reward warehouse
 			break;
 
 		case '23':
 			$database->updateUserField($_SESSION['username'],'quest','23',0);
 			$_SESSION['qst']= 23;
-			QuestConfig::grantReward($database,$session,23);
+			QuestConfig::grantReward($database,$session,23,'standard');
 			//Give Reward
 			break;
 
 		case '24':
 			$database->updateUserField($_SESSION['username'],'quest','24',0);
 			$_SESSION['qst']= 24;
-			QuestConfig::grantReward($database,$session,24);
+			QuestConfig::grantReward($database,$session,24,'standard');
 			//Give Reward rally point
 			break;
 
@@ -268,7 +268,7 @@ if (isset($qact)){
 			//$dataarray[3] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','25',0);
 			$_SESSION['qst']= 25;
-			QuestConfig::grantReward($database,$session,25);
+			QuestConfig::grantReward($database,$session,25,'standard');
 			//Give Reward barrack
 			break;
 
@@ -289,7 +289,7 @@ if (isset($qact)){
 			//$dataarray[5] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','27',0);
 			$_SESSION['qst']= 27;
-			QuestConfig::grantReward($database,$session,27);
+			QuestConfig::grantReward($database,$session,27,'standard');
 			//Give Reward
 			break;
 
@@ -301,7 +301,7 @@ if (isset($qact)){
 			//$dataarray[6] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','28',0);
 			$_SESSION['qst']= 28;
-			QuestConfig::grantReward($database,$session,28);
+			QuestConfig::grantReward($database,$session,28,'standard');
 			//Give Reward
 			break;
 
@@ -309,7 +309,7 @@ if (isset($qact)){
 			//$dataarray[7] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','29',0);
 			$_SESSION['qst']= 29;
-			QuestConfig::grantReward($database,$session,29);
+			QuestConfig::grantReward($database,$session,29,'standard');
 			//Give Reward
 			break;
 
@@ -317,7 +317,7 @@ if (isset($qact)){
 			//$dataarray[8] = 1;
 			$database->updateUserField($_SESSION['username'],'quest','30',0);
 			$_SESSION['qst']= 30;
-			QuestConfig::grantReward($database,$session,30);
+			QuestConfig::grantReward($database,$session,30,'standard');
 			//Give Reward
 			break;
 
@@ -340,7 +340,7 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','92',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 92;
-			QuestConfig::grantReward($database,$session,92);
+			QuestConfig::grantReward($database,$session,92,'standard');
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			break;
@@ -349,7 +349,7 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','93',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 93;
-			QuestConfig::grantReward($database,$session,93);
+			QuestConfig::grantReward($database,$session,93,'standard');
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			break;
@@ -358,7 +358,7 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','94',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 94;
-			QuestConfig::grantReward($database,$session,94);
+			QuestConfig::grantReward($database,$session,94,'standard');
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			break;
@@ -367,7 +367,7 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','95',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 95;
-			QuestConfig::grantReward($database,$session,95);
+			QuestConfig::grantReward($database,$session,95,'standard');
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			break;
@@ -376,7 +376,7 @@ if (isset($qact)){
 			$database->updateUserField($_SESSION['username'],'quest','96',0);
 			$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 			$_SESSION['qst']= 96;
-			QuestConfig::grantReward($database,$session,96);
+			QuestConfig::grantReward($database,$session,96,'standard');
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			break;
