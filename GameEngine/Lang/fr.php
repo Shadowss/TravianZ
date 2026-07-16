@@ -772,9 +772,9 @@ define('TUTORIAL', 'Tutoriel');
 define('FAQ', 'FAQ');
 define('SPIELREGELN', 'Règles du jeu');
 define('PLAYER_STATISTICS', 'Statistiques du Joueur');
-define('TOTAL_PLAYERS', .PLAYERS.' au total');
+define('TOTAL_PLAYERS', PLAYERS.' au total');
 define('ACTIVE_PLAYERS', 'Joueurs actifs');
-define('ONLINE_PLAYERS', .PLAYERS.' en ligne');
+define('ONLINE_PLAYERS', PLAYERS.' en ligne');
 define('MP_STRATEGY_GAME', SERVER_NAME.' — le jeu de stratégie multijoueur');
 define('WHAT_IS', SERVER_NAME.' est l\'un des jeux de navigateur les plus populaires au monde. En tant que joueur dans '.SERVER_NAME.', vous bâtirez votre propre empire, recruterez une puissante armée et combattrez avec vos alliés pour l\'hégémonie du monde.');
 define('REGISTER_FOR_FREE', 'Inscrivez-vous gratuitement ici !');
@@ -1030,7 +1030,7 @@ define('TOURNAMENTSQUARE_DESC', 'Vos troupes peuvent augmenter leur endurance à
 define('MAINBUILDING', 'Bâtiment Principal');
 define('CURRENT_CONSTRUCTION_TIME', 'Temps de construction actuel :');
 define('CONSTRUCTION_TIME_LEVEL', 'Temps de construction au niveau');
-define('DEMOLITION_BUILDING', 'Démolition de Bâtiments:</h2><p>Si vous n'avez plus besoin d'un bâtiment, vous pouvez le démolir.</p>');
+define('DEMOLITION_BUILDING', 'Démolition de Bâtiments:</h2><p>Si vous n\'avez plus besoin d\'un bâtiment, vous pouvez le démolir.</p>');
 define('DEMOLISH', 'Démolir');
 define('DEMOLITION_OF', 'Démolition de ');
 define('MAINBUILDING_DESC', 'Les maîtres d\'œuvre du village habitent dans le bâtiment principal. Plus son niveau est élevé, plus vos maîtres d\'œuvre construisent rapidement de nouveaux bâtiments.');
@@ -1368,7 +1368,7 @@ define('COMMANDCENTER', 'Centre de Commandement');
 define('COMMANDCENTER_TRAIN_DESC', 'Vous devez atteindre au moins le niveau 10 pour former des colons et des chefs dans le centre de commandement.');
 define('COMMANDCENTER_CULTURE_DESC', 'Les points de culture déterminent combien de villages vous pouvez fonder ou conquérir.');
 define('COMMANDCENTER_LOYALTY_DESC', 'Le centre de commandement protège le village contre les chefs ennemis. Loyauté actuelle :');
-define('COMMANDCENTER_DESC', 'Le centre de commandement est le siège du pouvoir d\'un village hun. Il vous permet de former des colons et des chefs ainsi que de contrôler votre expansion sans avoir besoin d'une résidence ou d'un palais.<br>Spécifique à la tribu : Huns uniquement');
+define('COMMANDCENTER_DESC', 'Le centre de commandement est le siège du pouvoir d\'un village hun. Il vous permet de former des colons et des chefs ainsi que de contrôler votre expansion sans avoir besoin d\'une résidence ou d\'un palais.<br>Spécifique à la tribu : Huns uniquement');
 define('WATERWORKS', 'Réservoir d\'eau');
 define('WATERWORKS_DESC', 'Le réservoir d\'eau augmentent de 5 % par niveau le bonus apporté par les oasis annexées à ce village.<br>Spécifique à la tribu : Égyptiens uniquement');
 define('HOSPITAL', 'Hôpital');
@@ -1402,7 +1402,6 @@ define('MANUAL_UDESC_65', 'Le char parcourt le champ de bataille à toute allure
 define('MANUAL_UDESC_66', 'Le char royal transporte l\'élite de l\'armée égyptienne. Dévastateur en attaque, il est aussi un symbole de la puissance du pharaon.');
 define('MANUAL_UDESC_67', 'Le bélier est une lourde machine de guerre destinée à démolir les murailles ennemies. Protégez-le bien, car elle est lente et sans défense si elle est isolée.');
 define('MANUAL_UDESC_68', 'La catapulte projette des pierres à grande distance pour détruire les bâtiments et les champs ennemis. Elle doit être bien protégée par d\'autres troupes.');
-151
 define('MANUAL_UDESC_69', 'Le Nomarque persuade les villages ennemis à l\'aide de cadeaux et de discours, réduisant leur loyauté jusqu\'à ce qu\'ils rejoignent l\'Empire Égyptien.');
 define('MANUAL_UDESC_70', 'Les colons sont de courageux sujets qui partent fonder un nouveau village pour l\'Égypte. Il en faut trois, accompagnés de provisions.');
 define('MANUAL_UDESC_71', 'L\'hoplite spartiate combat au sein de la célèbre phalange. C\'est un fantassin polyvalent hors pair, aussi redoutable en attaque qu\'en défense.');
@@ -1948,7 +1947,7 @@ $lang['index'][0][1] = 'Bienvenue sur le '.SERVER_NAME.'!';
 $lang['index'][0][2] = 'Manuel';
 $lang['index'][0][3] = 'Jouez Maintenant (Gratuit!!)';
 $lang['index'][0][4] = 'Qu`est-ce que '.SERVER_NAME.'?';
-$lang['index'][0][5] = 'Le jeu '.SERVER_NAME.' est un <b> jeu sur navigateur </b> inspir&eacute; de Travian, modifi&eacute; et r&eacute;adapt&eacute; par un grand nombre de personnes, dont <b>Sephy</b>, a qui on doit la traduction en fran&ccedil;ais ainsi que <b>l`introduction des peuples Natars, Nature et Monstres</b> </p> <p>La nation Monstres &eacute;tait pr&eacute;sente uniquement dans les icones des troupes, et au niveau de la liste des troupes mais uniquement en php. il a donc fallu &eacute;tendre la base de données, leur trouver un prix, des formations et tout ce qu`il s`ensuit !</p> <p> Il est <strong> gratuit </strong> et ne n&eacute;cessite <strong> aucun t&eacute;l&eacute;chargement</strong>.';
+$lang['index'][0][5] = SERVER_NAME.' est un <b>jeu de navigateur</b> mettant en scène un monde antique captivant avec des milliers d\'autres vrais joueurs.</p><p>Il est <strong>gratuit</strong> et ne nécessite <strong>aucun téléchargement</strong>.';
 $lang['index'][0][6] = 'Clique ici pour jouer &agrave; '.SERVER_NAME;
 $lang['index'][0][7] = 'Total Joueurs';
 $lang['index'][0][8] = 'Joueurs actifs';
@@ -2686,7 +2685,7 @@ define('MANUAL_UDESC_24', 'Les Foudres de Teutatès sont des unités de cavaleri
 define('MANUAL_UDESC_25', 'Cette unité de cavalerie moyenne excelle en défense. Le rôle principal du Druide cavalier est de défendre contre l\'infanterie ennemie. Son coût et son entretien sont relativement élevés.');
 define('MANUAL_UDESC_26', 'Les Héduens sont l\'arme ultime des Gaulois pour attaquer et se défendre contre la cavalerie. Peu d\'unités les égalent sur ces points.<br /><br />Cependant, leur entraînement et leur équipement sont eux aussi très coûteux. Ils consomment 3 unités de céréales par heure, vous devez donc bien réfléchir s\'ils en valent la peine.');
 define('MANUAL_UDESC_28', 'Le Trébuchet est une excellente arme à longue portée ; il sert à détruire les champs et les bâtiments des villages ennemis. Cependant, sans troupes d\'escorte, il est presque sans défense, alors n\'oubliez pas d\'envoyer quelques troupes avec lui.<br /><br />Un point de ralliement de haut niveau rend vos catapultes plus précises et vous permet de cibler des bâtiments ennemis supplémentaires. Avec un point de ralliement de niveau 10, tous les bâtiments peuvent être visés, à l\'exception de la cachette, des tailleurs de pierre et du trappeur.<br />ASTUCE : le Trébuchet tirant au hasard PEUT toucher la cachette, les trappeurs ou les tailleurs de pierre.');
-define('MANUAL_UDESC_29', 'Chaque tribu possède un combattant ancien et expérimenté dont la présence et les discours sont capables de convaincre la population des villages ennemis de rejoindre sa tribu.<br /><br />Plus le Chef de clan parle devant les murs d\'un village ennemi, plus sa loyauté diminue, jusqu'à ce qu'il rejoigne la tribu du Chef de clan.');
+define('MANUAL_UDESC_29', 'Chaque tribu possède un combattant ancien et expérimenté dont la présence et les discours sont capables de convaincre la population des villages ennemis de rejoindre sa tribu.<br /><br />Plus le Chef de clan parle devant les murs d\'un village ennemi, plus sa loyauté diminue, jusqu\'à ce qu\'il rejoigne la tribu du Chef de clan.');
 define('MANUAL_UDESC_31', 'Les rats sont peu coûteux et se reproduisent très vite, mais ne peuvent pas transporter grand-chose.<br /><br />C\'est probablement la plus économique des unités de la nature, et la plus laide.');
 define('MANUAL_UDESC_44', 'Les Natars utilisent des nuées d\'oiseaux pour recueillir des renseignements sur leurs ennemis. Grâce à l\'avantage de l\'observation aérienne, il est presque impossible d\'arrêter les escadrons d\'éclaireurs natariens ; en revanche, même un villageois simple d\'esprit peut facilement remarquer ces nuées criardes et emplumées.');
 define('MANUAL_UDESC_41', 'Leurs longues piques pointues constituent la principale ligne de défense de toute bataille. Les Piquiers natariens sont des guerriers hardis et audacieux qui usent de leur dextérité pour abattre rapidement les cavaliers ennemis et les achever.');
@@ -2697,7 +2696,7 @@ define('MANUAL_UDESC_46', 'Seuls les guerriers les plus habiles et les plus fort
 define('MANUAL_UDESC_47', 'Aucune autre tribu que les Natars ne sait utiliser ces créatures impressionnantes à ses fins. Ni un mur ni une palissade ne peuvent résister aux assauts de l\'Éléphant de guerre. Une machine à tuer ambulante, qui piétine tout ce qui tente de s\'opposer à elle ou de se mettre en travers de son chemin.');
 define('MANUAL_UDESC_48', 'Même en tant qu\'ingénieurs, les Natars ont connu un grand succès. Ils ont créé des machines de guerre bien avant tous les autres et les ont depuis perfectionnées en tout point. La Baliste, une énorme arme semblable à une arbalète, projette ses traits avec une telle force qu\'aucun mur ni bouclier ne peut les dévier. Lorsque les ingénieurs la démontent pour la déplacer vers le champ de bataille suivant, il ne reste généralement que des ruines là où les projectiles ont frappé.');
 define('MANUAL_UDESC_49', 'Un mélange de pure peur, d\'admiration et de crainte révérencielle anime les villageois lorsque l\'Empereur natarien s\'adresse à eux. Cette figure imposante et richement parée est pleinement consciente de l\'effet qu\'elle produit sur les autres et sait comment soumettre un village entier d\'une seule harangue.');
-define('MANUAL_UDESC_50', 'Compagnons audacieux et maîtres bâtisseurs, animés par l'envie d'agir et connaissant le moindre secret de la culture de la terre, de la construction de Palais et de la fortification des villages, les Colons natariens partent par groupes de trois pour revendiquer des terres au nom de leurs seigneurs natariens.');
+define('MANUAL_UDESC_50', 'Compagnons audacieux et maîtres bâtisseurs, animés par l\'envie d\'agir et connaissant le moindre secret de la culture de la terre, de la construction de Palais et de la fortification des villages, les Colons natariens partent par groupes de trois pour revendiquer des terres au nom de leurs seigneurs natariens.');
 
 // ===== manual: new-features pages (PR-C) =====
 define('MANUAL_NF_ENABLED', 'Activé');
@@ -2744,7 +2743,6 @@ define('HERO_T4_TAB_AUCTION',    'Enchères');
 
 define('HERO_SILVER',            'Argent');
 define('HERO_EXPERIENCE',        'Expérience');
-define('RESOURCES',              'Ressources');
 
 /* Equipment slots */
 define('HERO_SLOT_1', 'Casque');
