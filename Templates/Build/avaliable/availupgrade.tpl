@@ -32,7 +32,7 @@ $canNpc = ($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 &
     <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /><?= (int)$uprequire['clay']?> |
     <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /><?= (int)$uprequire['iron']?> |
     <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /><?= (int)$uprequire['crop']?> |
-    <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /><?= (int)$uprequire['pop']?> |
+    <img class="r5" src="img/x.gif" alt="<?php echo CROP_COM; ?>" title="<?php echo CROP_COM; ?>" /><?= (int)$uprequire['pop']?> |
     <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /><?= htmlspecialchars($generator->getTimeFormat($uprequire['time']), ENT_QUOTES, 'UTF-8')?>
     <?php if ($canNpc):?>
         | <a href="build.php?gid=17&amp;t=3&amp;r1=<?= (int)$uprequire['wood']?>&amp;r2=<?= (int)$uprequire['clay']?>&amp;r3=<?= (int)$uprequire['iron']?>&amp;r4=<?= (int)$uprequire['crop']?>" title="<?php echo NPC_TRADE; ?>">
@@ -57,10 +57,10 @@ switch ($bindicator) {
         echo '<span class="none">'.ENOUGH_FOOD_EXPAND_CROPLAND.'</span>';
         break;
     case 5:
-        echo '<span class="none">Upgrade Warehouse.</span>';
+        echo '<span class="none">'.UPGRADE_WAREHOUSE.'</span>';
         break;
     case 6:
-        echo '<span class="none">Upgrade Granary.</span>';
+        echo '<span class="none">'.UPGRADE_GRANARY.'</span>';
         break;
     case 7:
         $needed = $building->calculateAvaliable($id, $bid);
@@ -77,7 +77,7 @@ switch ($bindicator) {
         $url = ($session->access!= BANNED)
           ? "dorf2.php?a={$bid}&id={$id}&c={$session->checker}"
             : "banned.php?a={$bid}&id={$id}&c={$session->checker}";
-        echo '<a class="build" href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'">Construct building. (waiting loop)</a>';
+        echo '<a class="build" href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'">'.CONSTRUCT_BUILD.' '.WAITING_LOOP;'</a>';
         break;
 }
 ?>
