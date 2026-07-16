@@ -113,12 +113,12 @@ if (!function_exists('safeHTML')) {
                         <?php echo safeHTML($buildingName); ?>
                     </a>
 
-                    (Level <?php echo $level; ?>)
+                    (<?php echo LEVEL.' '.$level; ?>)
 
                     <?php
                     // Construcție în waiting loop
                     if ($loopcon == 1) {
-                        echo ' (waiting loop)';
+                        echo WAITING_LOOP;
                     }
                     ?>
 
