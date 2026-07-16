@@ -791,8 +791,6 @@ tz_def('BECOME_COMUNITY', 'Become part of our community now!');
 tz_def('BECOME_COMUNITY2', 'Become a part of one of<br>the biggest gaming<br>communities in the<br>world.');
 tz_def('NEWS', 'News');
 tz_def('SCREENSHOTS', 'Screenshots');
-if(!defined('FAQ')) tz_def('FAQ', 'FAQ');
-if(!defined('SPIELREGELN')) tz_def('SPIELREGELN', 'Rules');
 tz_def('AGB', 'Terms and Conditions');
 tz_def('LEARN1', 'Upgrade your fields and mines to increase your resource production. You will need resources to construct buildings and train soldiers.');
 tz_def('LEARN2', 'Construct and expand the buildings in your village. Buildings improve your overall infrastructure, increase your resource production and allow you to research, train and upgrade your troops.');
@@ -818,7 +816,7 @@ tz_def('SE', 'South East');
 tz_def('RANDOM', 'random');
 tz_def('ACCEPT_RULES', ' I accept the game rules and general terms and conditions.');
 tz_def('ONE_PER_SERVER', 'Each player may only own ONE account per server.');
-tz_def('BEFORE_REGISTER', 'Before you register an account you should read the <a href="/anleitung.php" target="_blank">instructions</a> of Travian ro1 to see the specific advantages and disadvantages of the three tribes.');
+tz_def('BEFORE_REGISTER', 'Before you register an account you should read the <a href="/anleitung.php" target="_blank">instructions</a> of Travian ro1 to see the specific advantages and disadvantages of the each tribes.');
 tz_def('BUILDING_UPGRADING', 'Building:');
 tz_def('HOURS', 'hours');
 
