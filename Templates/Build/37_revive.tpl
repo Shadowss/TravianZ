@@ -37,21 +37,54 @@
 // accessed dynamically in the original - here we just put them in a single array,
 // without changing where the values ​​come from.
 $heroFullData = [
-	1  => $h1_full  ?? [],
-	2  => $h2_full  ?? [],
-	3  => $h3_full  ?? [],
-	5  => $h5_full  ?? [],
-	6  => $h6_full  ?? [],
-	11 => $h11_full ?? [],
-	12 => $h12_full ?? [],
-	13 => $h13_full ?? [],
-	15 => $h15_full ?? [],
-	16 => $h16_full ?? [],
-	21 => $h21_full ?? [],
-	22 => $h22_full ?? [],
-	24 => $h24_full ?? [],
-	25 => $h25_full ?? [],
-	26 => $h26_full ?? [],
+    // Romans
+    1  => $h1_full  ?? [],
+    2  => $h2_full  ?? [],
+    3  => $h3_full  ?? [],
+    5  => $h5_full  ?? [],
+    6  => $h6_full  ?? [],
+
+    // Teutons
+    11 => $h11_full ?? [],
+    12 => $h12_full ?? [],
+    13 => $h13_full ?? [],
+    15 => $h15_full ?? [],
+    16 => $h16_full ?? [],
+
+    // Gauls
+    21 => $h21_full ?? [],
+    22 => $h22_full ?? [],
+    24 => $h24_full ?? [],
+    25 => $h25_full ?? [],
+    26 => $h26_full ?? [],
+
+    // Huns
+    51 => $h51_full ?? [],
+    53 => $h53_full ?? [],
+    54 => $h54_full ?? [],
+    55 => $h55_full ?? [],
+    56 => $h56_full ?? [],
+
+    // Egyptians
+    61 => $h61_full ?? [],
+    62 => $h62_full ?? [],
+    63 => $h63_full ?? [],
+    65 => $h65_full ?? [],
+    66 => $h66_full ?? [],
+
+    // Spartans
+    71 => $h71_full ?? [],
+    72 => $h72_full ?? [],
+    73 => $h73_full ?? [],
+    75 => $h75_full ?? [],
+    76 => $h76_full ?? [],
+
+    // Vikings
+    81 => $h81_full ?? [],
+    83 => $h83_full ?? [],
+    84 => $h84_full ?? [],
+    85 => $h85_full ?? [],
+    86 => $h86_full ?? [],
 ];
 
 // The "can be resurrected" line was duplicated identically in the original: one version
