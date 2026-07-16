@@ -38,6 +38,9 @@ $noticeClass = [
 // Settler reports (issue #178) - sparse indices 24/25
 $noticeClass[24] = TZ_RT_NEW_VILLAGE;
 $noticeClass[25] = TZ_RT_VALLEY_OCCUPIED;
+// HERO T4 REPORTS - sparse indices 24/25
+$noticeClass[26] = HERO_ADV_MOV_OUT;
+$noticeClass[27] = HERO_ADV_MOV_BACK;       
 
 // ======================== GOLD CHECK (cached query) ========================
 $uid = (int)$session->uid;
