@@ -6,7 +6,7 @@
 ##  Filename       : HeroItems.php                                             ##
 ##  Type           : T4 Hero port - items backend (Phase 2)                    ##
 ## --------------------------------------------------------------------------- ##
-##  Refactored by  : Shadow                                                    ##
+##  Developed by   : Shadow 		                                           ##
 ##  Project        : TravianZ                                                  ##
 ##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
 ## --------------------------------------------------------------------------- ##
@@ -15,14 +15,14 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 ##                                                                             ##
-##  Backend for hero inventory / equipment / consumables / silver.            ##
-##  - All statements are prepared (mysqli), all ids cast to int.              ##
-##  - Per-request memoization caches (invalidated on every write), matching   ##
-##    the Database.php cache convention.                                      ##
-##  - Consumables whose game mechanic lands in a later phase (bandages in     ##
-##    battle, cages in oasis attacks, law tablets in loyalty, artwork CP)     ##
-##    return HeroItems::USE_DEFERRED so the caller knows the item exists      ##
-##    but its effect is wired elsewhere. They are NOT silently consumed.      ##
+##  Backend for hero inventory / equipment / consumables / silver.             ##
+##  - All statements are prepared (mysqli), all ids cast to int.               ##
+##  - Per-request memoization caches (invalidated on every write), matching    ##
+##    the Database.php cache convention.                                       ##
+##  - Consumables whose game mechanic lands in a later phase (bandages in      ##
+##    battle, cages in oasis attacks, law tablets in loyalty, artwork CP)      ##
+##    return HeroItems::USE_DEFERRED so the caller knows the item exists       ##
+##    but its effect is wired elsewhere. They are NOT silently consumed.       ##
 ##                                                                             ##
 #################################################################################
 

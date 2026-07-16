@@ -6,7 +6,7 @@
 ##  Filename       : HeroAuction.php                                           ##
 ##  Type           : T4 Hero port - auction house backend (Phase 4)            ##
 ## --------------------------------------------------------------------------- ##
-##  Refactored by  : Shadow                                                    ##
+##  Developed by   : Shadow 		                                           ##
 ##  Project        : TravianZ                                                  ##
 ##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
 ## --------------------------------------------------------------------------- ##

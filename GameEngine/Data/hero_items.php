@@ -6,7 +6,7 @@
 ##  Filename       : hero_items.php                                            ##
 ##  Type           : Static Data / Catalog for T4 Hero port                    ##
 ## --------------------------------------------------------------------------- ##
-##  Refactored by  : Shadow                                                    ##
+##  Developed by   : Shadow 		                                           ##
 ##  Project        : TravianZ                                                  ##
 ##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
 ## --------------------------------------------------------------------------- ##

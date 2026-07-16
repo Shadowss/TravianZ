@@ -3250,6 +3250,7 @@ class Automation {
                     $Attacker        = $trapResult['Attacker'];
 
                     // we need to save the attacker heroid before the battle
+					$AttackerHeroID = 0;
                     if(isset($Attacker['uhero']) && $Attacker['uhero'] > 0){
                         $AttackerHeroID = $database->getHeroField($from['owner'], "heroid");
                     }
@@ -3690,7 +3691,7 @@ class Automation {
         $reinf = $database->getEnforce($data['to'], $data['from']);
         $database->modifyEnforce($reinf['id'], 31, 1, 1);
         $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-        $database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
+		$database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, isset($AttackArrivalTime) ? $AttackArrivalTime : time());
     }
 
     // Flow 2 of sendreinfunitsComplete(): a standard reinforcement delivery. Handles

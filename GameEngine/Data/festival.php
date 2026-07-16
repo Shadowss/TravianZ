@@ -6,9 +6,7 @@
 ##  Filename       : festival.php                      	                       ##
 ##  Type           : Data Page for Festival                                    ##
 ## --------------------------------------------------------------------------- ##
-##  Developed by   : Dzoki 						                               ##
-##  Refactored by  : Shadow                                                    ##
-##  Redesign by    : Shadow                                                    ##
+##  Developed by   : Shadow 		                                           ##
 ## --------------------------------------------------------------------------- ##
 ##  Contact        : cata7007@gmail.com                                        ##
 ##  Project        : TravianZ                                                  ##

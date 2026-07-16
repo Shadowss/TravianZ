@@ -5,16 +5,19 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:        TravianZ                                                   ##
-##  Version:        18.05.2026                                                 ##
-##  Filename:       a2b2.php                                                   ##
-##  Developed by:   Dzoki		                                               ##
-##  Refactored by:  Shadow                                                     ##
-##  License:        TravianZ Project                                           ##
-##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
-##  URLs:           https://travianz.org                                       ##
-##                  https://github.com/Shadowss/TravianZ                       ##
-##                                                                             ##
+##  Filename       : a2b2.php                      	                           ##
+##  Type           : In Game Account Gold Statement                            ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow						                               ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 use App\Utils\AccessLogger;

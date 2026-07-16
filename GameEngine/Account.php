@@ -98,6 +98,11 @@ class Account {
             $form->addError("name", USRNM_TAKEN);
         } elseif (User::exists($database, $_POST['name'])) {
             $form->addError("name", USRNM_TAKEN);
+        } elseif (class_exists('RegBlock') && RegBlock::isBlockedName($database, $_POST['name'])) {
+            // Registration blocklist (admin: blockReg).
+            $form->addError("name", defined('REG_BLOCKED_NAME')
+                ? REG_BLOCKED_NAME
+                : 'This username is not allowed. Please choose another.');
         }
     }
 
@@ -119,6 +124,11 @@ class Account {
         $form->addError("email", EMAIL_INVALID);
     } elseif (User::exists($database, $_POST['email'])) {
         $form->addError("email", EMAIL_TAKEN);
+    } elseif (class_exists('RegBlock') && RegBlock::isBlockedEmail($database, $_POST['email'])) {
+        // Registration blocklist: exact address or whole domain (admin: blockReg).
+        $form->addError("email", defined('REG_BLOCKED_EMAIL')
+            ? REG_BLOCKED_EMAIL
+            : 'Registration with this e-mail address or domain is not allowed.');
     }
 
     // Tribe

@@ -1183,6 +1183,88 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%push_override` (
  PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%reg_block`
+-- (Registration blocklist: blocked usernames / e-mails / e-mail domains)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%reg_block` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `type` varchar(16) NOT NULL DEFAULT 'username',
+ `value` varchar(255) NOT NULL DEFAULT '',
+ `note` varchar(255) NOT NULL DEFAULT '',
+ `added_by` int(11) NOT NULL DEFAULT 0,
+ `time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ UNIQUE KEY `type_value` (`type`,`value`),
+ KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%gold_promo`
+-- (Gold shop: redeemable promo / voucher codes)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%gold_promo` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `code` varchar(64) NOT NULL,
+ `gold` int(11) NOT NULL DEFAULT 0,
+ `max_uses` int(11) NOT NULL DEFAULT 0,
+ `uses` int(11) NOT NULL DEFAULT 0,
+ `per_user` tinyint(1) NOT NULL DEFAULT 1,
+ `expires` int(11) NOT NULL DEFAULT 0,
+ `active` tinyint(1) NOT NULL DEFAULT 1,
+ `note` varchar(255) NOT NULL DEFAULT '',
+ `created_by` int(11) NOT NULL DEFAULT 0,
+ `time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%gold_promo_redeem`
+-- (Gold shop: per-player redemption log)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%gold_promo_redeem` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `promo_id` int(11) NOT NULL DEFAULT 0,
+ `uid` int(11) NOT NULL DEFAULT 0,
+ `gold` int(11) NOT NULL DEFAULT 0,
+ `time` int(11) NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
+ KEY `promo_uid` (`promo_id`,`uid`),
+ KEY `uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%quest_config`
+-- (Quest editor: editable per-variant quest rewards / requirements)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%quest_config` (
+ `variant` varchar(16) NOT NULL DEFAULT 'standard',
+ `quest_id` int(11) NOT NULL,
+ `enabled` tinyint(1) NOT NULL DEFAULT 1,
+ `wood` int(11) NOT NULL DEFAULT 0,
+ `clay` int(11) NOT NULL DEFAULT 0,
+ `iron` int(11) NOT NULL DEFAULT 0,
+ `crop` int(11) NOT NULL DEFAULT 0,
+ `gold` int(11) NOT NULL DEFAULT 0,
+ `plus_days` float NOT NULL DEFAULT 0,
+ `req_level` int(11) NOT NULL DEFAULT 0,
+ `note` varchar(255) NOT NULL DEFAULT '',
+ PRIMARY KEY (`variant`,`quest_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Dumping data for table `%prefix%login_log`
 --

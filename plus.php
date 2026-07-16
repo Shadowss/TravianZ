@@ -35,6 +35,18 @@ if(isset($_GET['newdid'])) {
 }
 else $building->procBuild($_GET);
 
+// Gold shop: promo-code redemption (player-side). Best-effort; the engine
+// self-creates its tables and validates the code (active / expiry / uses /
+// once-per-player) before granting gold.
+$promoMsg = '';
+$promoOk  = false;
+if (isset($_POST['redeem_code']) && class_exists('GoldShop')) {
+    $__uid = isset($session) && isset($session->uid) ? (int)$session->uid : 0;
+    $rr = GoldShop::redeem($__uid, $_POST['redeem_code']);
+    $promoOk  = $rr[0];
+    $promoMsg = $rr[1];
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

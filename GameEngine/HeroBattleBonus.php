@@ -6,7 +6,7 @@
 ##  Filename       : HeroBattleBonus.php                                       ##
 ##  Type           : T4 Hero port - battle & speed integration (Phase 5)       ##
 ## --------------------------------------------------------------------------- ##
-##  Refactored by  : Shadow                                                    ##
+##  Developed by   : Shadow 		                                           ##
 ##  Project        : TravianZ                                                  ##
 ##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
 ## --------------------------------------------------------------------------- ##

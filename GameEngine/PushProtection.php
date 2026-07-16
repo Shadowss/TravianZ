@@ -5,7 +5,7 @@
 ##  Filename       : PushProtection.php                                        ##
 ##  Type           : Push-Protection engine (Admin/Multihunter dashboard)      ##
 ## --------------------------------------------------------------------------- ##
-##  Developed by   : Shadow (Cătălin)                                          ##
+##  Developed by   : Shadow 		                                           ##
 ##  Project        : TravianZ                                                  ##
 ##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
 ## --------------------------------------------------------------------------- ##

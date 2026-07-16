@@ -44,6 +44,10 @@ include_once("../GameEngine/Data/buidata.php");
 include_once("../GameEngine/Artifacts.php");
 include_once("../GameEngine/MultiAccount.php");
 include_once("../GameEngine/PushProtection.php");
+include_once("../GameEngine/RegBlock.php");
+include_once("../GameEngine/Heatmap.php");
+include_once("../GameEngine/GoldShop.php");
+include_once("../GameEngine/QuestConfig.php");
 
 // ─── SECURITY HELPERS ────────────────────────────────────────────────────────
 
@@ -99,6 +103,10 @@ function admin_validated_page(string $raw): string
         'alliance', 'editAli', 'delAli','editNewFunctions',
         'multiacc',
         'pushprot',
+        'blockReg',
+        'heatmap',
+        'goldShop',
+        'questEditor',
     ];
 
     return in_array($raw, $whitelist, true) ? $raw : '';
@@ -179,6 +187,22 @@ if ($page !== '') {
 
         case 'pushprot':
             $subpage = 'Push Protection';
+            break;
+
+        case 'blockReg':
+            $subpage = 'Registration Blocklist';
+            break;
+
+        case 'heatmap':
+            $subpage = 'World Map Heatmap';
+            break;
+
+        case 'goldShop':
+            $subpage = 'Gold Shop & Promo Codes';
+            break;
+
+        case 'questEditor':
+            $subpage = 'Quest Editor';
             break;
 
         case 'massmessage':
@@ -839,6 +863,7 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                             <ul>
                                 <li><a href="?p=gold">Give All Free Gold</a></li>
                                 <li><a href="?p=usergold">Give Free Gold To Specific User</a></li>
+                                <li><a href="?p=goldShop">Gold Shop &amp; Promo Codes</a></li>
                                 <li><a href="?p=maintenenceResetGold">Reset Gold</a></li>
                             </ul>
                         </li>
@@ -854,13 +879,16 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                             <ul>
                                 <li><a href="?p=users">List Users</a></li>
                                 <li><a href="?p=addUsers">Create Users</a></li>
+								<li><a href="?p=multiacc"><font color="Red"><b>Multi-Account Detection</b></font></a></li>
+                                <li><a href="?p=pushprot"><font color="Red"><b>Push Protection</b></font></a></li>
+                                <li><a href="?p=blockReg"><font color="Red"><b>Registration Blocklist</b></font></a></li>
                             </ul>
                         </li>
                         <li class="sub"><a href="#">Admin</a>
                             <ul>
                                 <li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
-                                <li><a href="?p=multiacc"><font color="Red"><b>Multi-Account Detection</b></font></a></li>
-                                <li><a href="?p=pushprot"><font color="Red"><b>Push Protection</b></font></a></li>
+                                <li><a href="?p=heatmap"><font color="Red"><b>World Map Heatmap</b></font></a></li>
+								<li><a href="?p=questEditor"><font color="Red"><b>Quest Editor</b></font></a></li>
                                 <li><a href="?p=debug_log">Debug Error Log</a></li>
                                 <li><a href="?p=config">Server Settings</a></li>
                                 <li><a href="?p=maintenance">Server Maintenance</a></li>
@@ -882,6 +910,7 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                         <li><a href="?p=ban">Ban</a></li>
                         <li><a href="?p=multiacc">Multi-Account Detection</a></li>
                         <li><a href="?p=pushprot">Push Protection</a></li>
+                        <li><a href="?p=heatmap">World Map Heatmap</a></li>
                         <li><a href="?action=logout">Logout</a></li>
                     </ul>
 
