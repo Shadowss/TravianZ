@@ -127,7 +127,7 @@ if (!function_exists('safeHTML')) {
                     <?php echo safeHTML($buildingName); ?>
 					</a>
                     <span class="none">
-                        (Level <?php echo $level; ?>) (master builder)
+                        (<?php echo LEVEL.' '.$level.' ) ('.CONSTRUCTING_MASTER_BUILDER;?>)
                     </span>
 
                 <?php } ?>
