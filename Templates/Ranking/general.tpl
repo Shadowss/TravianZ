@@ -17,19 +17,34 @@
 mysqli_report(MYSQLI_REPORT_OFF);
 
 // =========================
+// TRIBURI ACTIVE (1-3 mereu; 6-9 doar daca flagul e activ)
+// =========================
+$activeTribes = [1, 2, 3];
+$tribeFlagMap = [
+    6 => 'NEW_FUNCTION_TRIBE_HUNS',
+    7 => 'NEW_FUNCTION_TRIBE_EGIPTEANS',
+    8 => 'NEW_FUNCTION_TRIBE_SPARTANS',
+    9 => 'NEW_FUNCTION_TRIBE_VIKINGS',
+];
+foreach ($tribeFlagMap as $tid => $flag) {
+    if (defined($flag) && constant($flag)) $activeTribes[] = $tid;
+}
+$tribeInList = implode(',', $activeTribes); // ex: "1,2,3,6,7"
+
+// =========================
 // TRIBES COUNT
 // =========================
+$tribes = array_fill(1, 9, 0); // tribes[1..9]
 $tribesRes = mysqli_query($database->dblink,
-    "SELECT tribe, COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE tribe BETWEEN 1 AND 3 GROUP BY tribe");
-$tribes = [0, 0, 0];
+    "SELECT tribe, COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE tribe IN ($tribeInList) GROUP BY tribe");
 if ($tribesRes) {
     while ($row = mysqli_fetch_assoc($tribesRes)) {
-        $tribes[(int)$row['tribe']-1] = (int)$row['Total'];
+        $tribes[(int)$row['tribe']] = (int)$row['Total'];
     }
 }
 
 $userRes = mysqli_query($database->dblink,
-    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE tribe BETWEEN 1 AND 3");
+    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE tribe IN ($tribeInList)");
 $users = $userRes? (int)mysqli_fetch_assoc($userRes)['Total'] : 0;
 
 // =========================
@@ -46,13 +61,13 @@ $total_pop = $popRes? (int)mysqli_fetch_assoc($popRes)['totalpop'] : 0;
 // =========================
 $active = 0; 
 $res = mysqli_query($database->dblink,
-    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-86400)." AND tribe BETWEEN 1 AND 3");
+    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-86400)." AND tribe IN ($tribeInList)");
 if($res) 
 	$active = (int)mysqli_fetch_assoc($res)['Total'];
 
 $online = 0; 
 $res = mysqli_query($database->dblink,
-    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-600)." AND tribe BETWEEN 1 AND 3");
+    "SELECT COUNT(*) AS Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-600)." AND tribe IN ($tribeInList)");
 if($res) $online = (int)mysqli_fetch_assoc($res)['Total'];
 
 // =========================
@@ -97,7 +112,7 @@ if($q) while($r=mysqli_fetch_assoc($q))
 // New Players Today
 $newToday = 0; 
 $q = mysqli_query($database->dblink,
-    "SELECT COUNT(*) AS n FROM ".TB_PREFIX."users WHERE regtime > ".(time()-86400)." AND tribe BETWEEN 1 AND 3");
+    "SELECT COUNT(*) AS n FROM ".TB_PREFIX."users WHERE regtime > ".(time()-86400)." AND tribe IN ($tribeInList)");
 if($q) 
 	$newToday = (int)mysqli_fetch_assoc($q)['n'];
 
@@ -107,7 +122,7 @@ $q = mysqli_query($database->dblink,
     "SELECT u.username, COALESCE(SUM(v.pop),0) AS totalpop
      FROM ".TB_PREFIX."users u
      LEFT JOIN ".TB_PREFIX."vdata v ON v.owner = u.id
-     WHERE u.tribe BETWEEN 1 AND 3
+     WHERE u.tribe IN ($tribeInList)
      GROUP BY u.id
      ORDER BY totalpop DESC
      LIMIT 10");
@@ -118,7 +133,7 @@ $topAtk = [];
 $q = mysqli_query($database->dblink,
     "SELECT username, ap AS points 
      FROM ".TB_PREFIX."users 
-     WHERE tribe BETWEEN 1 AND 3 
+     WHERE tribe IN ($tribeInList) 
      ORDER BY ap DESC 
      LIMIT 10");
 if($q) while($r = mysqli_fetch_assoc($q)) 
@@ -128,7 +143,7 @@ $topDef = [];
 $q = mysqli_query($database->dblink,
     "SELECT username, dp AS points 
      FROM ".TB_PREFIX."users 
-     WHERE tribe BETWEEN 1 AND 3 
+     WHERE tribe IN ($tribeInList) 
      ORDER BY dp DESC 
      LIMIT 10");
 if($q) while($r = mysqli_fetch_assoc($q)) 
@@ -152,9 +167,9 @@ $q=mysqli_query($database->dblink,
 if($q) while($r=mysqli_fetch_assoc($q)) 
 	$artefacts[]=$r;
 
-// Troops
+// Troops (toate unitatile 1-90, insumate)
 $units=[]; 
-$result = mysqli_query($database->dblink, "SELECT " . implode(',', array_map(fn($i) => "SUM(u$i) AS u$i",range(1,30)))." FROM ".TB_PREFIX."units");
+$result = mysqli_query($database->dblink, "SELECT " . implode(',', array_map(fn($i) => "SUM(u$i) AS u$i",range(1,90)))." FROM ".TB_PREFIX."units");
 if($result) 
 	$units=mysqli_fetch_assoc($result);
 function u($units,$k){ 
@@ -200,15 +215,13 @@ $isStaff = isset($session) && $session->access >= 8; // MH si Admin
 <thead><tr><th colspan="3"><?php echo TZ_TRIBES;?></th></tr>
 <tr><td><?php echo TRIBE;?></td><td><?php echo TZ_REGISTERED;?></td><td><?php echo PERCENT;?></td></tr></thead>
 <tbody>
-<?php
-$roman=$tribes[0]; $teuton=$tribes[1]; $gaul=$tribes[2];
-$romanPct=($users>0)?round(100*$roman/$users,2):0;
-$teutonPct=($users>0)?round(100*$teuton/$users,2):0;
-$gaulPct=($users>0)?round(100*$gaul/$users,2):0;
+<?php foreach ($activeTribes as $tid):
+    $cnt = $tribes[$tid];
+    $pct = ($users > 0) ? round(100 * $cnt / $users, 2) : 0;
+    $tribeName = defined('TRIBE'.$tid) ? constant('TRIBE'.$tid) : ('Tribe '.$tid);
 ?>
-<tr><td><?php echo TRIBE1;?></td><td><?= $roman?></td><td><?= $romanPct?>%</td></tr>
-<tr><td><?php echo TRIBE2;?></td><td><?= $teuton?></td><td><?= $teutonPct?>%</td></tr>
-<tr><td><?php echo TRIBE3;?></td><td><?= $gaul?></td><td><?= $gaulPct?>%</td></tr>
+<tr><td><?= $tribeName ?></td><td><?= $cnt ?></td><td><?= $pct ?>%</td></tr>
+<?php endforeach; ?>
 </tbody>
 </table>
 <br />
@@ -236,22 +249,46 @@ $gaulPct=($users>0)?round(100*$gaul/$users,2):0;
 
 <?php if($isStaff): ?>
 <!-- ================= TROOPS ================= -->
+<?php
+// imaginile de antet pentru triburile vechi; pentru cele noi folosim numele
+$tribeHeaderImg = [
+	1 => 'gpack/travian_default/img/u/9.gif', 
+	2 => 'gpack/travian_default/img/u/19.gif', 
+	3 => 'gpack/travian_default/img/u/29.gif', 
+	6 => 'gpack/travian_default/img/u/59.gif',
+	7 => 'gpack/travian_default/img/u/69.gif',
+	8 => 'gpack/travian_default/img/u/79.gif',
+	9 => 'gpack/travian_default/img/u/89.gif'
+	];
+// afisez trupele in grupuri de cate 3 triburi (ca sa nu iasa tabelul prea lat)
+$troopChunks = array_chunk($activeTribes, 3);
+foreach ($troopChunks as $chunk):
+?>
 <table cellpadding="1" cellspacing="1" class="world">
-<thead><tr><th colspan="6"><?php echo TROOPS;?></th></tr>
-<tr><td><img src="img/romenai.png"></td><td><?php echo TZ_TOTAL;?></td>
-<td><img src="img/germanai.png"></td><td><?php echo TZ_TOTAL;?></td>
-<td><img src="img/galai.png"></td><td><?php echo TZ_TOTAL;?></td></tr></thead>
+<thead>
+<tr><th colspan="<?= count($chunk)*2 ?>"><?php echo TROOPS;?></th></tr>
+<tr>
+<?php foreach ($chunk as $tid):
+    $tribeName = defined('TRIBE'.$tid) ? constant('TRIBE'.$tid) : ('Tribe '.$tid);
+    if (isset($tribeHeaderImg[$tid])): ?>
+    <td><img src="<?= $tribeHeaderImg[$tid] ?>" alt="<?= $tribeName ?>" title="<?= $tribeName ?>"></td><td><?php echo TZ_TOTAL;?></td>
+    <?php else: ?>
+    <td><b><?= $tribeName ?></b></td><td><?php echo TZ_TOTAL;?></td>
+    <?php endif; endforeach; ?>
+</tr>
+</thead>
 <tbody>
 <?php for($i=1;$i<=10;$i++):?>
 <tr>
-<td><img src="img/x.gif" class="unit u<?=$i?>"></td><td><?=u($units,'u'.$i)?></td>
-<td><img src="img/x.gif" class="unit u<?=$i+10?>"></td><td><?=u($units,'u'.($i+10))?></td>
-<td><img src="img/x.gif" class="unit u<?=$i+20?>"></td><td><?=u($units,'u'.($i+20))?></td>
+<?php foreach ($chunk as $tid): $u = ($tid-1)*10 + $i; ?>
+<td><img src="img/x.gif" class="unit u<?= $u ?>"></td><td><?= u($units,'u'.$u) ?></td>
+<?php endforeach; ?>
 </tr>
 <?php endfor;?>
 </tbody>
 </table>
 <br />
+<?php endforeach; ?>
 <?php endif; ?>
 
 <?php if($isStaff): ?>
