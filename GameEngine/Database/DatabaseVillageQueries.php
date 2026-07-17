@@ -1219,9 +1219,14 @@ trait DatabaseVillageQueries {
 		}
 	}
 
-	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
+	 // FIX #1b (Day 1): param nou optional $setLastupdate - cand e true, lastupdate
+	 // se seteaza in aceeasi interogare (Village::processProduction nu mai are nevoie
+	 // de updateVillage() separat). Default false => zero impact pe restul call-site-urilor.
+	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode, $setLastupdate = false) {
 	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, $wood, $clay, $iron, $crop, $mode);
          $sign = (!$mode ? '-' : '+');
+         $lastupdateSql = ($setLastupdate ? ",
+                    lastupdate = " . time() : "");
 
          $q = "
             UPDATE " . TB_PREFIX . "vdata
@@ -1229,7 +1234,7 @@ trait DatabaseVillageQueries {
                     wood = IF(wood $sign $wood < 0, 0, IF(wood $sign $wood > maxstore, maxstore, wood $sign $wood)),
                     clay = IF(clay $sign $clay < 0, 0, IF(clay $sign $clay > maxstore, maxstore, clay $sign $clay)),
                     iron = IF(iron $sign $iron < 0, 0, IF(iron $sign $iron > maxstore, maxstore, iron $sign $iron)),
-                    crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))
+                    crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))$lastupdateSql
                 WHERE
                     wref = " . $vid ;
 					
