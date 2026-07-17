@@ -47,7 +47,7 @@ if (!function_exists('safeHTML')) {
                 if (isset($session->gold) && $session->gold >= 2) {
                 ?>
                     <a href="?buildingFinish=1"
-                       onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');"
+                       onclick="return confirm('<?php echo FINISH_GOLD; ?>');"
                        title="<?php echo FINISH_GOLD; ?>">
 
                         <img class="clock"
@@ -113,12 +113,12 @@ if (!function_exists('safeHTML')) {
                         <?php echo safeHTML($buildingName); ?>
                     </a>
 
-                    (Level <?php echo $level; ?>)
+                    (<?php echo LEVEL.' '.$level; ?>)
 
                     <?php
                     // Construcție în waiting loop
                     if ($loopcon == 1) {
-                        echo ' (waiting loop)';
+                        echo WAITING_LOOP;
                     }
                     ?>
 
@@ -127,7 +127,7 @@ if (!function_exists('safeHTML')) {
                     <?php echo safeHTML($buildingName); ?>
 					</a>
                     <span class="none">
-                        (Level <?php echo $level; ?>) (master builder)
+                        (<?php echo LEVEL.' '.$level.' ) ('.CONSTRUCTING_MASTER_BUILDER;?>)
                     </span>
 
                 <?php } ?>
@@ -138,7 +138,7 @@ if (!function_exists('safeHTML')) {
 
                 <!-- Timer -->
                 <td>
-                    in
+                    <?php echo P_IN; ?>
                     <span id="timer<?php echo ++$session->timer; ?>">
                         <?php echo $generator->getTimeFormat($remainingTime); ?>
                     </span>
@@ -147,7 +147,7 @@ if (!function_exists('safeHTML')) {
 
                 <!-- Ora finalizare -->
                 <td>
-                    done at <?php echo $finishTime; ?>
+                    <?php echo DONE_AT.' '.$finishTime; ?>
                 </td>
 
             <?php } else { ?>
