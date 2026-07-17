@@ -10,28 +10,33 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta http-equiv="imagetoolbar" content="no">
 <style>
- .log-wrap{max-width:100%;margin:12px;font-family:Tahoma,Verdana,Arial,sans-serif;color:#222}
-.log-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.log-head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:6px;color:#111}
-.log-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.log-filters button{padding:4px 10px;font-size:11px;border:1px solid #bbb;border-radius:14px;background:#f5f5f5;cursor:pointer;color:#222}
-.log-filters button.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
-.log-card{background:#fff;border:1px solid #bbb;border-radius:6px;overflow:hidden;color:#222}
-.logTable{width:100%;border-collapse:collapse;font-size:11px;color:#222}
-.logTable th{background:#0891b2;color:#fff;padding:5px 6px;text-align:left;font-weight:bold;font-size:10px;white-space:nowrap}
-.logTable td{padding:5px 6px;border-bottom:1px solid #eee;vertical-align:top;line-height:14px;color:#111;background:#fff}
-.logTable tr:hover{background:#f5f9ff}
-.logTable a{color:#004a9f;text-decoration:none}
+ .log-wrap{max-width:100%;margin:12px;font-family:Tahoma,Verdana,Arial,sans-serif;color:#e2e8f0}
+.log-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.log-head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:6px;color:#f1f5f9}
+.log-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.log-filters a{padding:4px 11px;font-size:11px;border:1px solid #334155;border-radius:14px;background:#111827;cursor:pointer;color:#cbd5e1;text-decoration:none;line-height:15px}
+.log-filters a:hover{border-color:#f59e0b;color:#fde68a}
+.log-filters a.active{background:#f59e0b;color:#1a1a2e;border-color:#f59e0b;font-weight:bold}
+.log-card{background:#0b1220;border:1px solid #1f2937;border-radius:8px;overflow:hidden;color:#e2e8f0}
+.log-scroll{overflow-x:auto}
+.logTable{width:100%;border-collapse:collapse;font-size:11px;color:#cbd5e1}
+.logTable th{background:#111827;color:#94a3b8;padding:7px 8px;text-align:left;font-weight:bold;font-size:9px;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1f2937}
+.logTable td{padding:6px 8px;border-bottom:1px solid #14203a;vertical-align:top;line-height:16px;color:#cbd5e1}
+.logTable tr:hover td{background:#0f1a30}
+.logTable a{color:#7dd3fc;text-decoration:none}
 .logTable a:hover{text-decoration:underline}
-.logCat{font-weight:bold;padding:2px 6px;border-radius:3px;color:#fff;font-size:10px;white-space:nowrap}
-.cat-ban{background:#FF0000} 
-.cat-unban{background:#27ae60}
-.cat-gold{background:#FFCC00;color:#000} 
-.cat-plus{background:#33CCFF;color:#003344}
-.cat-maint{background:#555} 
-.cat-village{background:#66CCFF;color:#003344}
-.cat-msg{background:#e67e22} 
-.cat-other{background:#CCFF00;color:#000}
+.logCat{font-weight:bold;padding:2px 7px;border-radius:4px;color:#fff;font-size:10px;white-space:nowrap}
+.cat-ban{background:#dc2626}
+.cat-unban{background:#16a34a}
+.cat-gold{background:#d97706;color:#fff}
+.cat-plus{background:#0891b2;color:#fff}
+.cat-maint{background:#475569}
+.cat-village{background:#2563eb;color:#fff}
+.cat-msg{background:#ea580c}
+.cat-other{background:#64748b;color:#fff}
+.log-page a{padding:3px 9px;border:1px solid #334155;background:#111827;color:#cbd5e1;text-decoration:none;margin:0 2px;border-radius:4px}
+.log-page a:hover{border-color:#f59e0b;color:#fde68a}
+.log-page .cur{padding:3px 9px;background:#f59e0b;color:#1a1a2e;margin:0 2px;border-radius:4px;font-weight:bold}
 </style>
 </head>
 <?php
@@ -106,6 +111,15 @@ while($b = mysqli_fetch_assoc($banQ)) {
 
 usort($unified, function($a,$b){ return $b['time'] <=> $a['time']; });
 $unified = array_slice($unified, 0, 300);
+
+// Server-side category filter (applies across ALL entries, not just current page)
+$catFilter = isset($_GET['cat']) ? strtoupper(preg_replace('/[^A-Za-z]/','',$_GET['cat'])) : 'ALL';
+if ($catFilter !== '' && $catFilter !== 'ALL') {
+    $unified = array_values(array_filter($unified, function($e) use ($catFilter) {
+        $c = logCategory($e); return $c[0] === $catFilter;
+    }));
+}
+
 $perPage = 20;
 $page = isset($_GET['pg']) ? max(1,intval($_GET['pg'])) : 1;
 $total = count($unified);
@@ -135,19 +149,24 @@ function logCategory($entry) {
   </div>
 
   <div class="log-filters" id="logFilters">
-    <button class="active" data-filter="all">All</button>
-    <button data-filter="BAN">🔨 Ban</button>
-    <button data-filter="UNBAN">🔓 Unban</button>
-    <button data-filter="GOLD">💰 Gold</button>
-    <button data-filter="PLUS">⭐ Plus</button>
-    <button data-filter="BONUS">📈 Bonus</button>
-    <button data-filter="VILLAGE">🏘 Village</button>
-    <button data-filter="MESSAGE">✉ Message</button>
-    <button data-filter="RESET">⚙ Reset</button>
-    <button data-filter="OTHER">📝 Other</button>
+    <?php
+    $cats = [
+        'all'=>'All','BAN'=>'🔨 Ban','UNBAN'=>'🔓 Unban','GOLD'=>'💰 Gold',
+        'PLUS'=>'⭐ Plus','BONUS'=>'📈 Bonus','VILLAGE'=>'🏘 Village',
+        'MESSAGE'=>'✉ Message','RESET'=>'⚙ Reset','OTHER'=>'📝 Other'
+    ];
+    $curCat = ($catFilter === '' ? 'ALL' : $catFilter);
+    foreach ($cats as $key=>$label):
+        $isAll = ($key === 'all');
+        $active = ($isAll && $curCat === 'ALL') || (!$isAll && $curCat === $key);
+        $href = 'admin.php?p=admin_log' . ($isAll ? '' : '&cat=' . $key);
+    ?>
+        <a href="<?php echo $href; ?>" class="<?php echo $active ? 'active' : ''; ?>"><?php echo $label; ?></a>
+    <?php endforeach; ?>
   </div>
 
 <div class="log-card">
+<div class="log-scroll">
 <table class="logTable" id="logTable">
 <thead>
 <tr>
@@ -180,27 +199,12 @@ foreach($paged as $e) {
 <?php } ?>
 </tbody>
 </table>
-<div style="text-align:center;margin:8px 0;font-size:11px">
-<?php if($page>1){ ?><a href="?p=admin_log&pg=<?php echo $page-1;?>" style="padding:3px 8px;border:1px solid #bbb;background:#f5f5f5;text-decoration:none;margin:0 2px">« Prev</a><?php } ?>
-<span style="padding:3px 8px;background:#3a4f63;color:#fff;margin:0 2px"><?php echo $page;?> / <?php echo $totalPages;?></span>
-<?php if($page<$totalPages){ ?><a href="?p=admin_log&pg=<?php echo $page+1;?>" style="padding:3px 8px;border:1px solid #bbb;background:#f5f5f5;text-decoration:none;margin:0 2px">Next »</a><?php } ?>
+</div>
+<?php $catQS = ($catFilter !== '' && $catFilter !== 'ALL') ? '&cat='.$catFilter : ''; ?>
+<div class="log-page" style="text-align:center;margin:10px 0;font-size:11px">
+<?php if($page>1){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page-1;?><?php echo $catQS;?>">« Prev</a><?php } ?>
+<span class="cur"><?php echo $page;?> / <?php echo max(1,$totalPages);?></span>
+<?php if($page<$totalPages){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page+1;?><?php echo $catQS;?>">Next »</a><?php } ?>
 </div>
 </div>
 </div>
-
-<script>
-(function(){
-  var btns = document.querySelectorAll('#logFilters button');
-  var rows = document.querySelectorAll('#logTable tbody tr');
-  btns.forEach(function(b){
-    b.onclick = function(){
-      btns.forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      var f = b.getAttribute('data-filter');
-      rows.forEach(function(r){
-        r.style.display = (f==='all' || r.getAttribute('data-cat')===f) ? '' : 'none';
-      });
-    };
-  });
-})();
-</script>

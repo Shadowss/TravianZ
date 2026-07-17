@@ -1,0 +1,65 @@
+/* =========================================================================
+   TravianZ Admin — Dark theme override
+   Loaded LAST in admin.php <head> so it wins over admin.css / acp.css.
+   Scoped to body.app (the logged-in panel); login page keeps its own look.
+   Palette: page #0f172a · panel #0b1220 · border #1f2937 · header #111827
+            text #e2e8f0 · muted #94a3b8 · accent #f59e0b · link #7dd3fc
+   ========================================================================= */
+
+body.app{background:#0f172a;color:#e2e8f0}
+
+/* ---- layout containers from admin.css ---- */
+body.app #lmidall,body.app #lmidlc,body.app #lmid1,body.app #lmid2,
+body.app #lmid3,body.app #content,body.app .nb{background:transparent!important;color:#e2e8f0}
+body.app #lmid3 .nb{background:transparent!important}
+
+/* ---- side menu (overrides the white menu declared inline in admin.php) ---- */
+body.app #menu{background:#0b1220!important;border:1px solid #1f2937;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+body.app #menu>li>a{color:#cbd5e1!important;border-left:3px solid transparent}
+body.app #menu>li>a:hover,body.app #menu>li>a.active{background:#111827!important;color:#fde68a!important;border-left-color:#f59e0b}
+body.app #menu li.sub>a:before{color:#f59e0b}
+body.app #menu li.sub ul{background:#0f172a!important}
+body.app #menu li.sub ul li a{color:#94a3b8!important}
+body.app #menu li.sub ul li a:hover,body.app #menu li.sub ul li a.active{color:#fde68a!important}
+
+/* ---- typography & links ---- */
+body.app h1,body.app h2,body.app h3,body.app h4{color:#f1f5f9}
+body.app a{color:#7dd3fc}
+body.app a:hover{color:#bae6fd}
+body.app hr{border:0;border-top:1px solid #1f2937}
+body.app fieldset{border:1px solid #1f2937;border-radius:8px}
+body.app legend{color:#f59e0b}
+
+/* ---- classic Travian tables (.tbg) + generic tables ---- */
+body.app table.tbg,body.app .tbg{background:#0b1220!important;color:#e2e8f0;border-color:#1f2937!important}
+body.app table.tbg th,body.app .tbg th{background:#111827!important;color:#94a3b8!important;border-color:#1f2937!important}
+body.app table.tbg td,body.app .tbg td{background:#0b1220!important;color:#e2e8f0;border-color:#1f2937!important}
+body.app table.tbg tr:hover td,body.app .tbg tr:hover td{background:#0f1a30!important}
+
+/* generic unclassed tables that some pages render via admin.css */
+body.app #lmid3 table:not([class]) th{background:#111827;color:#94a3b8;border-color:#1f2937}
+body.app #lmid3 table:not([class]) td{border-color:#1f2937}
+
+/* ---- form controls ---- */
+body.app input[type=text],body.app input[type=password],body.app input[type=number],
+body.app input[type=email],body.app input[type=search],body.app input[type=date],
+body.app input[type=datetime-local],body.app select,body.app textarea,body.app .fm{
+  background:#0b1220!important;color:#e2e8f0!important;border:1px solid #334155!important;
+  border-radius:5px;padding:5px 7px}
+body.app input::placeholder,body.app textarea::placeholder{color:#64748b}
+body.app input:focus,body.app select:focus,body.app textarea:focus{border-color:#f59e0b!important;outline:none}
+body.app select option{background:#0b1220;color:#e2e8f0}
+
+body.app input[type=submit],body.app input[type=button],body.app button,
+body.app .adminButton,body.app .button{
+  background:#f59e0b;color:#1a1a2e;border:0;border-radius:6px;padding:6px 14px;
+  cursor:pointer;font-weight:bold}
+body.app input[type=submit]:hover,body.app input[type=button]:hover,
+body.app button:hover,body.app .adminButton:hover,body.app .button:hover{background:#fbbf24}
+
+/* checkbox / radio accent */
+body.app input[type=checkbox],body.app input[type=radio]{accent-color:#f59e0b}
+
+/* medal mouseover tooltip layer (from admin.css) */
+body.app #medal_mouseover table{background:#0b1220;color:#e2e8f0;border:1px solid #1f2937}
+body.app #medal_mouseover table th{background:#111827;color:#94a3b8}

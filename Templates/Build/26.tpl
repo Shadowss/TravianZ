@@ -55,7 +55,7 @@ if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
 				}
 			}
 			// 3. DELETE CAPITAL-SPECIFIC BUILDINGS FROM THE NEW CAPITAL
-			$capitalOnly = [29,30,38,39,42];
+			$capitalOnly = [29,30,38,39,49]; // Great Workshop mutat de la 42 la 49
 			for($i = 19; $i <= 40; ++$i){
 				if(in_array((int)$data3['f'.$i.'t'], $capitalOnly)){
 					mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.$newWid);

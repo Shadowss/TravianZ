@@ -54,114 +54,62 @@ $plansStatus = $plans > 0 ? "Launched ($plans) - ".($plansDate ? date('d.m.Y',$p
 $role = $_SESSION['access'] == ADMIN ? 'Administrator' : 'MultiHunter';
 ?>
 <style>
-/* === HOME.TPL - FORȚAT CU CULORI === */
-.dashboard { max-width:1150px; margin:0 auto; font-family:system-ui, Verdana; }
-.dash-head { text-align:center; margin-bottom:24px; }
-.dash-head h1 { font-size:26px !important; margin:0 !important; color:##ffffff !important; font-weight:800 !important; letter-spacing:-0.5px; }
-.dash-head .sub { color:##ffffff !important; font-size:13px !important; margin-top:6px !important; }
-.dash-head .sub b{color:#2563eb !important;}
+/* === HOME.TPL — dark dashboard === */
+.dashboard { max-width:1150px; margin:0 auto; font-family:system-ui, Verdana, Arial, sans-serif; color:#e2e8f0; }
+.dash-head { text-align:center; margin-bottom:22px; }
+.dash-head h1 { font-size:24px !important; margin:0 !important; color:#f1f5f9 !important; font-weight:800 !important; letter-spacing:-0.3px; }
+.dash-head .sub { color:#94a3b8 !important; font-size:13px !important; margin-top:6px !important; }
+.dash-head .sub b{color:#f59e0b !important;}
 
-/* CARDS CENTRATE */
-.cards { 
-    display:grid !important; 
-    grid-template-columns: repeat(4, 1fr) !important; 
-    gap:16px !important; 
-    margin:0 auto 24px !important; 
-    max-width:960px !important;
+/* CARDS — clean auto-fit grid */
+.cards {
+    display:grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap:14px !important;
+    margin:0 auto 22px !important;
 }
-.card { 
-    background:#fff !important; 
-    border:1px solid #e2e8f0 !important; 
-    border-radius:12px !important; 
-    padding:4px !important; 
-    box-shadow:0 2px 8px rgba(0,0,0,.06) !important; 
+.card {
+    background:#0b1220 !important;
+    border:1px solid #1f2937 !important;
+    border-radius:12px !important;
+    padding:14px 12px !important;
+    box-shadow:0 2px 8px rgba(0,0,0,.25) !important;
     text-align:center !important;
-    transition:all .2s;
-    width:90% !important;
+    transition:transform .15s, border-color .15s;
 }
-
-.card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,.1) !important; }
-.card h3 { margin:0 0 8px !important; font-size:11px !important; text-transform:uppercase !important; color:#64748b !important; font-weight:700 !important; letter-spacing:.5px; }
-.card .val { font-size:24px !important; font-weight:800 !important; color:#0f172a !important; line-height:1.2; }
+.card:hover { transform:translateY(-3px); border-color:#334155 !important; }
+.card h3 { margin:0 0 8px !important; font-size:10px !important; text-transform:uppercase !important; color:#94a3b8 !important; font-weight:700 !important; letter-spacing:.5px; }
+.card .val { font-size:24px !important; font-weight:800 !important; color:#f1f5f9 !important; line-height:1.2; }
 .card .subv { font-size:11px !important; color:#64748b !important; margin-top:6px !important; }
-.card.green .val{color:#16a34a !important} 
-.card.red .val{color:#dc2626 !important} 
-.card.blue .val{color:#2563eb !important} 
-.card.orange .val{color:#ea580c !important}
-.card .subv a{color:#2563eb !important; text-decoration:none !important; font-weight:600 !important;}
+.card.green .val{color:#4ade80 !important}
+.card.red .val{color:#f87171 !important}
+.card.blue .val{color:#60a5fa !important}
+.card.orange .val{color:#fb923c !important}
+.card .subv a{color:#7dd3fc !important; text-decoration:none !important; font-weight:600 !important;}
 
 /* PANELS */
-.panel { background:#fff !important; border:1px solid #e2e8f0 !important; border-radius:12px !important; padding:16px !important; margin-bottom:20px !important; box-shadow:0 1px 3px rgba(0,0,0,.05) !important; }
-.panel h2 { margin:0 0 12px !important; font-size:15px !important; color:#0f172a !important; border-bottom:2px solid #f1f5f9 !important; padding-bottom:8px !important; font-weight:700 !important; }
+.panel { background:#0b1220 !important; border:1px solid #1f2937 !important; border-radius:12px !important; padding:16px !important; margin-bottom:18px !important; }
+.panel h2 { margin:0 0 12px !important; font-size:14px !important; color:#f1f5f9 !important; border-bottom:1px solid #1f2937 !important; padding-bottom:8px !important; font-weight:700 !important; }
 
-.timeline { display:grid !important; grid-template-columns: repeat(3,1fr) !important; gap:12px !important; }
-.timeline div { padding:10px !important; background:#f8fafc !important; border-radius:8px !important; font-size:12px !important; color:#334155 !important; border:1px solid #e2e8f0 !important; }
-.timeline b { color:#0f172a !important; font-weight:700 !important; display:block; margin-bottom:3px; }
+.timeline { display:grid !important; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)) !important; gap:10px !important; }
+.timeline div { padding:10px !important; background:#0f172a !important; border-radius:8px !important; font-size:12px !important; color:#cbd5e1 !important; border:1px solid #1f2937 !important; }
+.timeline b { color:#f59e0b !important; font-weight:700 !important; display:block; margin-bottom:3px; }
 
 .grid2 { display:grid !important; grid-template-columns:2fr 1fr !important; gap:16px !important; }
-.logmini { font-size:12px !important; } 
-.logmini div { padding:6px 0 !important; border-bottom:1px dotted #e2e8f0 !important; color:#334155 !important; }
-.logmini b{color:#0f172a !important;}
+.logmini { font-size:12px !important; }
+.logmini div { padding:6px 0 !important; border-bottom:1px dotted #1f2937 !important; color:#cbd5e1 !important; }
+.logmini b{color:#f1f5f9 !important;}
 
-.quick a { display:block !important; padding:9px 12px !important; background:#f8fafc !important; margin-bottom:6px !important; text-decoration:none !important; color:#334155 !important; border-radius:8px !important; font-size:12px !important; border:1px solid #e2e8f0 !important; font-weight:500 !important; transition:all .15s; }
-.quick a:hover { background:#2563eb !important; color:#fff !important; border-color:#2563eb !important; transform:translateX(3px); }
+.quick a { display:block !important; padding:9px 12px !important; background:#0f172a !important; margin-bottom:6px !important; text-decoration:none !important; color:#cbd5e1 !important; border-radius:8px !important; font-size:12px !important; border:1px solid #1f2937 !important; font-weight:500 !important; transition:all .15s; }
+.quick a:hover { background:#f59e0b !important; color:#1a1a2e !important; border-color:#f59e0b !important; transform:translateX(3px); }
 
-/* === CREDITS AGRESIV SHADOW === */
-.credits { 
-    margin-top:5px !important; 
-    padding:22px 16px !important; 
-    text-align:center !important; 
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
-    border:2px solid #dc2626 !important; 
-    border-radius:14px !important; 
-    box-shadow: 0 0 30px rgba(220,38,38,0.4), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-    position:relative !important;
-    overflow:hidden !important;
-}
-.credits::before {
-    content:""; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
-    background: radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 60%);
-    animation: rotate 8s linear infinite;
-}
-.credits .shadow-main { 
-    font-size:17px !important; 
-    font-weight:900 !important; 
-    color:#fff !important; 
-    letter-spacing:1px !important; 
-    text-transform:none !important;
-    position:relative; z-index:2;
-    margin-bottom:6px !important;
-}
-.credits .shadow-main span { 
-    color:#ef4444 !important; 
-    font-size:22px !important; 
-    text-shadow: 0 0 12px rgba(239,68,68,0.9), 0 0 25px rgba(239,68,68,0.6) !important;
-    animation: pulse 1.8s infinite;
-}
-.credits .shadow-sub {
-    font-size:12px !important;
-    color:#cbd5e1 !important;
-    font-weight:600 !important;
-    position:relative; z-index:2;
-    margin-bottom:8px !important;
-}
-.credits .shadow-old {
-    font-size:10px !important;
-    color:#64748b !important;
-    position:relative; z-index:2;
-    border-top:1px solid rgba(255,255,255,0.1) !important;
-    padding-top:8px !important;
-    margin-top:8px !important;
-}
-
-@keyframes pulse {
-    0%,100% { transform: scale(1); opacity:1; }
-    50% { transform: scale(1.05); opacity:0.9; }
-}
-@keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+/* compact footer (replaces the heavy animated credits block) */
+.credits { margin-top:6px !important; padding:12px 16px !important; text-align:center !important;
+    background:#0b1220 !important; border:1px solid #1f2937 !important; border-radius:10px !important; }
+.credits .shadow-main { font-size:12px !important; font-weight:700 !important; color:#cbd5e1 !important; }
+.credits .shadow-main span { color:#f59e0b !important; }
+.credits .shadow-sub { font-size:11px !important; color:#64748b !important; margin-top:3px !important; }
+.credits .shadow-old { font-size:10px !important; color:#475569 !important; margin-top:4px !important; }
 </style>
 
 <div class="dashboard">
@@ -178,7 +126,7 @@ $role = $_SESSION['access'] == ADMIN ? 'Administrator' : 'MultiHunter';
     <div class="card red"><h3>Active Bans</h3><div class="val"><?php echo $activeBans; ?></div><div class="subv"><a href="admin.php?p=ban">manage</a></div></div>
     <div class="card"><h3>Last Registration</h3><div class="val" style="font-size:15px !important"><a href="admin.php?p=player&uid=<?php echo $lastReg['id']; ?>" style="color:#2563eb !important"><?php echo htmlspecialchars($lastReg['username']); ?></a></div><div class="subv">ID #<?php echo $lastReg['id']; ?></div></div>
     <div class="card"><h3>PHP / MySQL</h3><div class="val" style="font-size:15px !important"><?php echo PHP_VERSION; ?></div><div class="subv"><?php echo $database->dblink->server_info; ?></div></div>
-    <div class="card"><h3>Server Load</h3><div class="val" style="font-size:15px !important"><?php echo date('H:i:s'); ?></div><div class="subv">Uptime: <?php echo @exec('uptime -p') ?: 'n/a'; ?></div></div>
+    <div class="card"><h3>Server Clock</h3><div class="val" style="font-size:15px !important"><?php echo date('H:i:s'); ?></div><div class="subv">Uptime: <?php echo @exec('uptime -p') ?: 'n/a'; ?></div></div>
   </div>
   <!-- TIMELINE NOU - IN PLUS -->
   <div class="panel">

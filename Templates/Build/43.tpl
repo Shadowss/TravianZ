@@ -27,6 +27,7 @@ $level = (int)$village->resarray['f'.$id];
 $current = $level > 0 ? (int)$bid43[$level]['attri'] : 0;
 ?>
 <div id="build" class="gid43">
+    <img class="wall-model" src="gpack/travian_default/img/g/g43.gif" alt="<?php echo MAKESHIFTWALL;?>" style="float:right;margin:2px 0 10px 14px;max-width:110px;height:auto;" />
     <h1><?php echo MAKESHIFTWALL;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo MAKESHIFTWALL_DESC;?></p>
 

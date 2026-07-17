@@ -27,6 +27,7 @@ $level = (int)$village->resarray['f'.$id];
 $current = $level > 0 ? (int)$bid33[$level]['attri'] : 0;
 ?>
 <div id="build" class="gid33">
+    <img class="wall-model" src="gpack/travian_default/img/g/g33.gif" alt="<?php echo PALISADE;?>" style="float:right;margin:2px 0 10px 14px;max-width:110px;height:auto;" />
     <h1><?php echo PALISADE;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo PALISADE_DESC;?></p>
 

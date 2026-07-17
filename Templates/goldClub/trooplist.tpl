@@ -1,14 +1,16 @@
 <?php
 
 $start = ($session->tribe - 1) * 10 + 1;
-$end = $start + 5;
+$end = $session->tribe * 10;
 
 /* build unit list once (keeps alignment safe) */
+global $unitsbytype;
 $units = [];
 
 for ($i = $start; $i <= $end; $i++) {
 
-    if (in_array($i, [4, 14, 23])) {
+    // scoutii nu pot fi folositi in farmlist (generic pentru toate triburile)
+    if (in_array($i, $unitsbytype['scout'])) {
         continue;
     }
 

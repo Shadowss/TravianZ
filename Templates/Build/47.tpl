@@ -27,6 +27,7 @@ $level = (int)$village->resarray['f'.$id];
 $current = $level > 0 ? (int)$bid47[$level]['attri'] : 0;
 ?>
 <div id="build" class="gid47">
+    <img class="wall-model" src="gpack/travian_default/img/g/g47.gif" alt="<?php echo DEFENSIVEWALL;?>" style="float:right;margin:2px 0 10px 14px;max-width:110px;height:auto;" />
     <h1><?php echo DEFENSIVEWALL;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo DEFENSIVEWALL_DESC;?></p>
 

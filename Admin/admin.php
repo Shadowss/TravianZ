@@ -887,8 +887,8 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                         <li class="sub"><a href="#">Admin</a>
                             <ul>
                                 <li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
-                                <li><a href="?p=heatmap"><font color="Red"><b>World Map Heatmap</b></font></a></li>
 								<li><a href="?p=questEditor"><font color="Red"><b>Quest Editor</b></font></a></li>
+                                <li><a href="?p=heatmap"><font color="Red"><b>World Map Heatmap</b></font></a></li>
                                 <li><a href="?p=debug_log">Debug Error Log</a></li>
                                 <li><a href="?p=config">Server Settings</a></li>
                                 <li><a href="?p=maintenance">Server Maintenance</a></li>

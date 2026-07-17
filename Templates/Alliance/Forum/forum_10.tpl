@@ -165,124 +165,18 @@ foreach($posts as $pos){
 										class="smiley wink" src="img/x.gif" alt=";)" title=";)" /></a>
 								</div>
 								<div id="text_troops" name="text_troops">
-									<a href="javascript:void(0);" bbType="o" bbTag="tid1"><img
-										class="unit u1" src="img/x.gif" title="<?php echo U1; ?>"
-										alt="<?php echo U1; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid2"><img class="unit u2" src="img/x.gif"
-										title="<?php echo U2; ?>" alt="<?php echo U2; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid3"><img
-										class="unit u3" src="img/x.gif" title="<?php echo U3; ?>"
-										alt="<?php echo U3; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid4"><img class="unit u4" src="img/x.gif"
-										title="<?php echo U4; ?>" alt="<?php echo U4; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid5"><img
-										class="unit u5" src="img/x.gif" title="<?php echo U5; ?>"
-										alt="<?php echo U5; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid6"><img class="unit u6" src="img/x.gif"
-										title="<?php echo U6; ?>" alt="<?php echo U6; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid7"><img
-										class="unit u7" src="img/x.gif" title="<?php echo U17; ?>" alt="<?php echo U17; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid8"><img
-										class="unit u8" src="img/x.gif" title="<?php echo U8; ?>"
-										alt="<?php echo U8; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid9"><img class="unit u9" src="img/x.gif"
-										title="<?php echo U9; ?>" alt="<?php echo U9; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid10"><img
-										class="unit u10" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid11"><img
-										class="unit u11" src="img/x.gif" title="<?php echo TZ_MACEMAN; ?>" alt="<?php echo TZ_MACEMAN; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid12"><img
-										class="unit u12" src="img/x.gif" title="<?php echo U12; ?>"
-										alt="<?php echo U12; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid13"><img class="unit u13" src="img/x.gif"
-										title="<?php echo U13; ?>" alt="<?php echo U13; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid14"><img
-										class="unit u14" src="img/x.gif" title="<?php echo U14; ?>" alt="<?php echo U14; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid15"><img
-										class="unit u15" src="img/x.gif" title="<?php echo U15; ?>" alt="<?php echo U15; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid16"><img
-										class="unit u16" src="img/x.gif" title="<?php echo U16; ?>"
-										alt="<?php echo U16; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid17"><img class="unit u17" src="img/x.gif"
-										title="<?php echo U17; ?>" alt="<?php echo U17; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid18"><img class="unit u18" src="img/x.gif"
-										title="<?php echo U18; ?>" alt="<?php echo U18; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid19"><img
-										class="unit u19" src="img/x.gif" title="<?php echo U29; ?>"
-										alt="<?php echo U29; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid20"><img class="unit u20" src="img/x.gif"
-										title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid21"><img
-										class="unit u21" src="img/x.gif" title="<?php echo U21; ?>" alt="<?php echo U21; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid22"><img
-										class="unit u22" src="img/x.gif" title="<?php echo U22; ?>"
-										alt="<?php echo U22; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid23"><img class="unit u23" src="img/x.gif"
-										title="<?php echo U23; ?>" alt="<?php echo U23; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid24"><img
-										class="unit u24" src="img/x.gif" title="<?php echo U24; ?>"
-										alt="<?php echo U24; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid25"><img class="unit u25" src="img/x.gif"
-										title="<?php echo U25; ?>" alt="<?php echo U25; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid26"><img
-										class="unit u26" src="img/x.gif" title="<?php echo U26; ?>" alt="<?php echo U26; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid27"><img
-										class="unit u27" src="img/x.gif" title="<?php echo U7; ?>"
-										alt="<?php echo U7; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid28"><img class="unit u28" src="img/x.gif"
-										title="<?php echo U28; ?>" alt="<?php echo U28; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid29"><img
-										class="unit u29" src="img/x.gif" title="<?php echo U19; ?>" alt="<?php echo U19; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid30"><img
-										class="unit u30" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid31"><img
-										class="unit u31" src="img/x.gif" title="<?php echo U31; ?>" alt="<?php echo U31; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid32"><img
-										class="unit u32" src="img/x.gif" title="<?php echo U32; ?>" alt="<?php echo U32; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid33"><img
-										class="unit u33" src="img/x.gif" title="<?php echo U33; ?>" alt="<?php echo U33; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid34"><img
-										class="unit u34" src="img/x.gif" title="<?php echo U34; ?>" alt="<?php echo U34; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid35"><img
-										class="unit u35" src="img/x.gif" title="<?php echo U35; ?>"
-										alt="<?php echo U35; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid36"><img class="unit u36" src="img/x.gif"
-										title="<?php echo U36; ?>" alt="<?php echo U36; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid37"><img class="unit u37" src="img/x.gif"
-										title="<?php echo U37; ?>" alt="<?php echo U37; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid38"><img class="unit u38" src="img/x.gif"
-										title="<?php echo U38; ?>" alt="<?php echo U38; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid39"><img
-										class="unit u39" src="img/x.gif" title="<?php echo U39; ?>" alt="<?php echo U39; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid40"><img
-										class="unit u40" src="img/x.gif" title="<?php echo U40; ?>"
-										alt="<?php echo U40; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid41"><img class="unit u41" src="img/x.gif"
-										title="<?php echo U41; ?>" alt="<?php echo U41; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid42"><img
-										class="unit u42" src="img/x.gif" title="<?php echo U42; ?>"
-										alt="<?php echo U42; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid43"><img class="unit u43" src="img/x.gif"
-										title="<?php echo U43; ?>" alt="<?php echo U43; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid44"><img
-										class="unit u44" src="img/x.gif" title="<?php echo U44; ?>"
-										alt="<?php echo U44; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid45"><img class="unit u45" src="img/x.gif"
-										title="<?php echo U45; ?>" alt="<?php echo U45; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid46"><img
-										class="unit u46" src="img/x.gif" title="<?php echo U46; ?>"
-										alt="<?php echo U46; ?>" /></a><a href="javascript:void(0);"
-										bbType="o" bbTag="tid47"><img class="unit u47" src="img/x.gif"
-										title="<?php echo U47; ?>" alt="<?php echo U47; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid48"><img
-										class="unit u48" src="img/x.gif" title="<?php echo U48; ?>"
-										alt="<?php echo U48; ?>" /></a><a href="javascript:void(0);" bbType="o"
-										bbTag="tid49"><img class="unit u49" src="img/x.gif"
-										title="<?php echo U49; ?>" alt="<?php echo U49; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="tid50"><img
-										class="unit u50" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
-										href="javascript:void(0);" bbType="o" bbTag="hero"><img
-										class="unit uhero" src="img/x.gif" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></a>
+									<?php
+// Selector de trupe: unitatile de baza (1-50) + triburile noi (51-90, gate-uite pe flags).
+$__tribeFlags = [6=>'NEW_FUNCTION_TRIBE_HUNS',7=>'NEW_FUNCTION_TRIBE_EGIPTEANS',8=>'NEW_FUNCTION_TRIBE_SPARTANS',9=>'NEW_FUNCTION_TRIBE_VIKINGS'];
+for($__u=1;$__u<=90;$__u++){
+    if($__u>50){
+        $__tr=intdiv($__u-1,10)+1;
+        if(!isset($__tribeFlags[$__tr])||!defined($__tribeFlags[$__tr])||!constant($__tribeFlags[$__tr])) continue;
+    }
+    $__nm=defined('U'.$__u)?constant('U'.$__u):'';
+    echo '<a href="javascript:void(0);" bbType="o" bbTag="tid'.$__u.'" ><img class="unit u'.$__u.'" src="img/x.gif" title="'.$__nm.'" alt="'.$__nm.'" /></a>';
+}
+?><a href="javascript:void(0);" bbType="o" bbTag="hero" ><img class="unit uhero" src="img/x.gif" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></a>
 								</div>
 							</div>
 						</div>
