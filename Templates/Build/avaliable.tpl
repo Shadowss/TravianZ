@@ -65,6 +65,9 @@ $greatworkshop = $building->getTypeLevel(49);
 $stonewall = $building->getTypeLevel(42);
 $makeshiftwall = $building->getTypeLevel(43);
 $commandcenter = $building->getTypeLevel(44);
+// FIX (confirmat): Hunii au Command Center in loc de Palace - echivalentul
+// folosit de cerinta Stonemason (Palace >= 3, respectiv CC >= 3 la tribul 6)
+$palaceEquiv = ($session->tribe == 6 ? $commandcenter : $palace);
 $waterworks = $building->getTypeLevel(45);
 $hospital = $building->getTypeLevel(46);
 $defensivewall = $building->getTypeLevel(47);
@@ -219,7 +222,7 @@ if($palace == 0 && $palace1 == 0 && !$building->isCastleBuilt() && $village->nat
 if($blacksmith == 0 && $blacksmith1 == 0 && $academy >= 3 && $mainbuilding >= 3 && $id != 39 && $id != 40) {
     include("avaliable/blacksmith.tpl");
 }
-if($stonemasonslodge == 0 && $stonemasonslodge1 == 0 && $palace >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
+if($stonemasonslodge == 0 && $stonemasonslodge1 == 0 && $palaceEquiv >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
     include("avaliable/stonemason.tpl");
 }
 if($stable == 0 && $stable1 == 0 && $blacksmith >= 3 && $academy >= 5 && $id != 39 && $id != 40) {
@@ -321,7 +324,7 @@ if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && !$building->isCa
 if($blacksmith == 0 && ($academy <= 2 || $mainbuilding <= 2)) {
     include("soon/blacksmith.tpl");
 }
-if($stonemasonslodge == 0 && $palace <= 2 && $palace != 0 && $mainbuilding >= 2 && $mainbuilding <= 4 && $residence == 0 && $village->capital == 1) {
+if($stonemasonslodge == 0 && $palaceEquiv <= 2 && $palaceEquiv != 0 && $mainbuilding >= 2 && $mainbuilding <= 4 && $residence == 0 && $village->capital == 1) {
     include("soon/stonemason.tpl");
 }
 if($stable == 0 && (($blacksmith <= 2 && $blacksmith != 0) || ($academy >= 2 && $academy <= 4))) {
@@ -395,7 +398,7 @@ if($palace == 0 && ($embassy == 0 || $mainbuilding <= 2) && $village->natar == 0
 if($blacksmith == 0 && ($academy == 0 || $mainbuilding == 1)) {
     include_once("soon/blacksmith.tpl");
 }
-if($stonemasonslodge == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0) {
+if($stonemasonslodge == 0 && ($palaceEquiv == 0 || $mainbuilding <= 2) && $residence == 0) {
     include_once("soon/stonemason.tpl");
 }
 if($stable == 0 && ($blacksmith == 0 || $academy <= 2)) {

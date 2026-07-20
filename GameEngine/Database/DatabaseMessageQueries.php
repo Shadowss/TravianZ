@@ -288,4 +288,44 @@ References: User ID/Message ID, Mode
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
+
+	/**
+	 * UM-W1: numarul de mesaje trimise de $uid in ultimele $seconds secunde.
+	 * Muta flood-check-ul inline din Message::sendMessage()/sendAMessage().
+	 */
+	function countRecentMessages($uid, $seconds = 60) {
+	    list($uid, $seconds) = $this->escape_input((int) $uid, (int) $seconds);
+
+		$q = "SELECT COUNT(*) AS Total FROM " . TB_PREFIX . "mdata WHERE owner = $uid AND time > " . (time() - $seconds);
+		$row = mysqli_fetch_assoc(mysqli_query($this->dblink, $q));
+		return (int) ($row['Total'] ?? 0);
+	}
+
+	/**
+	 * UM-W1: id-urile membrilor unei aliante. Muta query-ul inline din
+	 * Message::sendAMessage().
+	 */
+	function getAllianceMemberIds($alliance) {
+	    list($alliance) = $this->escape_input((int) $alliance);
+
+		$q = "SELECT id FROM " . TB_PREFIX . "users WHERE alliance = $alliance";
+		$result = mysqli_query($this->dblink, $q);
+		$ids = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$ids[] = $row['id'];
+		}
+		return $ids;
+	}
+
+	/**
+	 * UM-W1: target + owner ale unui mesaj (pentru a decide modul de stergere).
+	 * Muta SELECT-ul inline din Message::removeMessage().
+	 */
+	function getMessageOwnership($id) {
+	    list($id) = $this->escape_input((int) $id);
+
+		$q = "SELECT target, owner FROM " . TB_PREFIX . "mdata WHERE id = $id LIMIT 1";
+		$row = mysqli_fetch_assoc(mysqli_query($this->dblink, $q));
+		return $row ?: ['target' => 0, 'owner' => 0];
+	}
 }

@@ -12,7 +12,7 @@
 		</tr>
 		<tr>
 			<td>
-				<a href="#" onClick="return Popup(15,4);"><?php echo MAINBUILDING ?></a> <span title="+4"><?php echo LEVEL ?> 5</span>, <a href="#" onClick="return Popup(26,4);"><?php echo PALACE ?></a> <span title="+3"><?php echo LEVEL ?> 3</span>
+				<a href="#" onClick="return Popup(15,4);"><?php echo MAINBUILDING ?></a> <span title="+4"><?php echo LEVEL ?> 5</span>, <?php if($session->tribe == 6) { /* FIX (confirmat): Hunii au Command Center in loc de Palace */ ?><a href="#" onClick="return Popup(44,4);"><?php echo COMMANDCENTER ?></a><?php } else { ?><a href="#" onClick="return Popup(26,4);"><?php echo PALACE ?></a><?php } ?> <span title="+3"><?php echo LEVEL ?> 3</span>
 			</td>
 		</tr></tbody>
 	</table>

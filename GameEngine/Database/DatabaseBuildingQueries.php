@@ -30,6 +30,91 @@ trait DatabaseBuildingQueries {
 		return mysqli_query($this->dblink,$q);
 	}
 
+	/**
+	 * B-W2: finalizeaza o cladire (nivel + tip) in fdata SI invalideaza cache-ul
+	 * de resource levels. Inlocuieste UPDATE-ul raw din Building::finishAll()
+	 * care ocolea invalidarea din Faza B - recountCP() citea nivelele vechi din
+	 * cache si persista un CP gresit in vdata.
+	 */
+	function finishBuildingLevel($wid, $field, $level, $type) {
+	    list($wid, $field, $level, $type) = $this->escape_input((int) $wid, (int) $field, (int) $level, (int) $type);
+
+		$q = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . " = " . $level . ", f" . $field . "t = " . $type . " WHERE vref = " . $wid;
+		$result = mysqli_query($this->dblink, $q);
+
+		// invalidare: urmatorul getResourceLevel()/getFieldLevel() reciteste din DB
+		self::clearResourseLevelsCache();
+
+		return $result;
+	}
+
+	/**
+	 * B-W2: sterge joburi din bdata dupa id-uri SI invalideaza cache-ul de
+	 * joburi al satului. Inlocuieste DELETE-ul raw din Building::finishAll().
+	 */
+	function deleteBuildings($wid, array $ids) {
+	    $wid = (int) $wid;
+	    $ids = array_map('intval', $ids);
+
+	    if (empty($ids)) {
+	        return true;
+	    }
+
+		$result = mysqli_query($this->dblink, "DELETE FROM " . TB_PREFIX . "bdata WHERE id IN(" . implode(',', $ids) . ")");
+		unset(self::$buildingsUnderConstructionCache[$wid]);
+
+		return $result;
+	}
+
+	/**
+	 * B-W2: promoveaza un job din coada de asteptare (loopcon = 1) in coada
+	 * activa SI invalideaza cache-ul de joburi al satului.
+	 */
+	function promoteLoopJob($wid, $id) {
+	    list($wid, $id) = $this->escape_input((int) $wid, (int) $id);
+
+		$result = mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "bdata SET loopcon = 0 WHERE id = " . $id);
+		unset(self::$buildingsUnderConstructionCache[$wid]);
+
+		return $result;
+	}
+
+	/**
+	 * B-W2: actualizeaza numarul maxim de membri ai aliantei conduse de $leader
+	 * (efectul Embassy-ului). Inlocuieste UPDATE-ul raw din Building::finishAll().
+	 */
+	function updateAllianceMax($leader, $max) {
+	    list($leader, $max) = $this->escape_input((int) $leader, (int) $max);
+
+		return mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "alidata SET max = " . $max . " WHERE leader = " . $leader);
+	}
+
+	/**
+	 * B-W2: log de gold (prepared statement). Inlocuieste INSERT-ul raw din
+	 * Building::finishAll(); acelasi format ca logger-ul din UserQueries.
+	 */
+	function addGoldFinLog($wid, $uid, $action, $gold, $details) {
+		$stmt = $this->dblink->prepare(
+			"INSERT INTO `" . TB_PREFIX . "gold_fin_log` (wid, uid, action, gold, time, details) VALUES (?, ?, ?, ?, ?, ?)"
+		);
+
+		if (!$stmt) {
+			return false;
+		}
+
+		$wid  = (int) $wid;
+		$uid  = (int) $uid;
+		$gold = (int) $gold;
+		$now  = time();
+
+		$stmt->bind_param("iisiis", $wid, $uid, $action, $gold, $now, $details);
+		$ok = $stmt->execute();
+		$stmt->close();
+
+		return $ok;
+	}
+
+
 	function getBuildLock($wid) {
 		$wid = (int) $wid;
 		$result = mysqli_query($this->dblink, "SELECT GET_LOCK('build_village_$wid', 10) AS locked");

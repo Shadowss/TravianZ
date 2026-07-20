@@ -432,10 +432,19 @@ class Profile {
 	private function removeSitter($get) {
 		global $database, $session;
 
+		// UM-W1: validam type in {1,2} inainte de a-l folosi in numele coloanei
+		// (sit1/sit2). DB escapeaza campul, deci nu era injectabil, dar un type
+		// invalid ar fi tintit o coloana inexistenta.
+		$type = isset($get['type']) ? (int)$get['type'] : 0;
+		if ($type !== 1 && $type !== 2) {
+			header("Location: spieler.php?s=" . $get['s']);
+			exit;
+		}
+
 		if ($get['a'] == $session->checker) {
 
-			if ($session->userinfo['sit' . $get['type']] == $get['id']) {
-				$database->updateUserField($session->uid, "sit" . $get['type'], 0, 1);
+			if ($session->userinfo['sit' . $type] == $get['id']) {
+				$database->updateUserField($session->uid, "sit" . $type, 0, 1);
 				// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
 				// removed sitter disappears immediately, without a re-login.
 				unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);

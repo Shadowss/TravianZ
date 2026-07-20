@@ -399,40 +399,16 @@ class Units {
         $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);
 
         $rallyPointLevel = ($village->resarray)['f39'];
-        $invalidBuildings = [];
+        $invalidBuildings = $this->catapultInvalidBuildings($rallyPointLevel);
 
-        // fill the array with the invalid buildings
-        if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
-            for($i = 1; $i <= 50; $i++){
-                if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
-            }
-        }
-        else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
-            for($i = 12; $i <= 50; $i++) $invalidBuildings[] = $i;
-        }
-        else if($rallyPointLevel >= 10){
-            // zidurile nu pot fi tinta directa (31,32,33 + cele noi 42,43,47,50)
-            $invalidBuildings = [23, 31, 32, 33, 34, 36, 42, 43, 47, 50];
-        }
-
-        if(isset($post['ctar1']) && $post['ctar1'] != 0){
-            // check if the player has selected a valid building
-            if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 50){
-                $post['ctar1'] = 0;
-            }
-        }
-
-        if(isset($post['ctar2']) && $post['ctar2'] != 0){
-            // check if there are atleast 20 catapults
-            if($data['u8'] < 20 || $rallyPointLevel != 20){
-                $post['ctar2'] = 0;
-            }else{
-                // check if the player has selected a valid building
-                if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 50 && $post['ctar2'] != 99)){
-                    $post['ctar2'] = 99;
-                }
-            }
-        }
+        // UM-W1: validarea per-tinta extrasa in catapultTargetAllowed(); comportament
+        // identic cu vechile blocuri inline (aceleasi praguri, aceleasi fallback-uri).
+        $post['ctar1'] = $this->normalizeCatapultTarget(
+            $post['ctar1'] ?? 0, 1, $data, $rallyPointLevel, $invalidBuildings
+        );
+        $post['ctar2'] = $this->normalizeCatapultTarget(
+            $post['ctar2'] ?? 0, 2, $data, $rallyPointLevel, $invalidBuildings
+        );
 
         // Bug fix: Brewery (35) is Teuton-only, capital-only, but empire-wide —
         // the catapult-randomization side effect must be checked on the SENDER'S
@@ -447,31 +423,96 @@ class Units {
                 && $database->getFieldLevelInVillage($senderCapital['wref'], 35) > 0;
         }
 
-        if(isset($post['ctar1'])) {
-            //Is the Mead-Festival active?
-            if(!$hasActiveBrewery){
-                if($rivalsGreatConfusion['totals'] > 0) {
-                    if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                        $post['ctar1'] = 0;
-                    }
-                }
-            }
-            else $post['ctar1'] = 0;
-        }
-        else $post['ctar1'] = 0;
+        $post['ctar1'] = $this->applyConfusion(
+            $post['ctar1'] ?? 0, 1, $hasActiveBrewery, $rivalsGreatConfusion
+        );
+        $post['ctar2'] = $this->applyConfusion(
+            $post['ctar2'] ?? 0, 2, $hasActiveBrewery, $rivalsGreatConfusion
+        );
+    }
 
-        if(isset($post['ctar2']) && $post['ctar2'] > 0) {
-            //Is the Mead-Festival active?
-            if(!$hasActiveBrewery){
-                if($rivalsGreatConfusion['totals'] > 0) {
-                    if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                        $post['ctar2'] = 99;
-                    }
+    /**
+     * UM-W1: lista cladirilor care nu pot fi tinta directa de catapulta, in
+     * functie de nivelul Punctului de Adunare. Extrasa 1:1 din vechiul switch.
+     */
+    private function catapultInvalidBuildings($rallyPointLevel) {
+        if ($rallyPointLevel >= 3 && $rallyPointLevel < 5) {
+            $invalid = [];
+            for ($i = 1; $i <= 50; $i++) {
+                if (!in_array($i, [10, 11])) $invalid[] = $i;
+            }
+            return $invalid;
+        }
+
+        if ($rallyPointLevel >= 5 && $rallyPointLevel < 10) {
+            $invalid = [];
+            for ($i = 12; $i <= 50; $i++) $invalid[] = $i;
+            return $invalid;
+        }
+
+        if ($rallyPointLevel >= 10) {
+            // zidurile nu pot fi tinta directa (31,32,33 + cele noi 42,43,47,50)
+            return [23, 31, 32, 33, 34, 36, 42, 43, 47, 50];
+        }
+
+        return [];
+    }
+
+    /**
+     * UM-W1: validarea de baza a unei tinte de catapulta (ctar1 sau ctar2),
+     * inainte de efectul de confuzie. $slot = 1 sau 2. Pastreaza exact regulile
+     * vechi: ctar1 cere RP>=3, minim 1 catapulta si tinta valida; ctar2 cere
+     * minim 20 catapulte, RP == 20 si cade pe 99 (random) cand tinta e invalida.
+     */
+    private function normalizeCatapultTarget($target, $slot, $data, $rallyPointLevel, array $invalidBuildings) {
+        if ($slot == 1) {
+            if ($target != 0) {
+                if ($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($target, $invalidBuildings) || $target < 0 || $target > 50) {
+                    return 0;
                 }
             }
-            else $post['ctar2'] = 99;
+            return $target;
         }
-        else $post['ctar2'] = 0;
+
+        // slot 2
+        if ($target != 0) {
+            if ($data['u8'] < 20 || $rallyPointLevel != 20) {
+                return 0;
+            }
+            if (in_array($target, $invalidBuildings) || ($target < 0 || $target > 50 && $target != 99)) {
+                return 99;
+            }
+        }
+        return $target;
+    }
+
+    /**
+     * UM-W1: efectul artefactului "Rivals' Great Confusion" / festivalul de bere.
+     * ctar1 -> 0 (random), ctar2 -> 99 (random) cand tinta nu e WW(40) sau
+     * Trezorerie(27, exceptata doar de artefactul unic). Comportament 1:1.
+     */
+    private function applyConfusion($target, $slot, $hasActiveBrewery, $rivalsGreatConfusion) {
+        $random = ($slot == 1) ? 0 : 99;
+
+        if ($slot == 2 && $target <= 0) {
+            return 0;
+        }
+
+        if ($hasActiveBrewery) {
+            return $random;
+        }
+
+        // Conditie pastrata IDENTIC cu originalul (verificata prin test de
+        // echivalenta). Nota: ramura "$target == 27 && unique > 0" nu schimba
+        // rezultatul - orice tinta != 40 ajunge random - dar o pastram 1:1 ca
+        // sa nu introducem o schimbare de comportament subtila.
+        if ($rivalsGreatConfusion['totals'] > 0) {
+            if ($target != 40 && ($target != 27 || ($target == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                return $random;
+            }
+        }
+
+        return $target;
     }
 
     private function sendTroopsBack($post) {
@@ -575,10 +616,16 @@ class Units {
     
     public function Settlers($post) {
         global $form, $database, $village, $session;
+        // FIX securitate (UM-D1): tablourile de CP (cp0..cpN) sunt globale, definite
+        // in GameEngine/Data/cp.php. Fara aceste "global", ${'cp'.$mode} era null in
+        // scope-ul metodei, deci $need_cps = null si "$cps >= $need_cps" trecea mereu -
+        // verificarea de puncte de cultura la intemeierea satului era ocolita
+        // server-side (doar UI-ul o respecta). Importam exact tabloul folosit.
+        global ${'cp'.CP};
 
         $mode = CP;
         $total = count($database->getProfileVillages($session->uid));
-        $need_cps = ${'cp'.$mode}[$total + 1];
+        $need_cps = isset(${'cp'.$mode}[$total + 1]) ? ${'cp'.$mode}[$total + 1] : PHP_INT_MAX;
         $cps = $session->cp;
         $rallypoint = $database->getResourceLevel($village->wid);
         

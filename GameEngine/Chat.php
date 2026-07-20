@@ -383,6 +383,11 @@ if (!isset($SAJAX_INCLUDED)) {
 	function get_data() {
 		global $session,$database;
 
+		// FIX: $data initializat inainte de concatenare - fara asta, PHP 8+
+		// arunca "Warning: Undefined variable $data" la fiecare refresh de chat
+		// (umple error log-ul; pe PHP 9 devine mai strict).
+		$data = '';
+
 		$alliance = $database->escape($session->alliance);
 		$query = mysqli_query($database->dblink,"select id_user, name, date, msg from ".TB_PREFIX."chat where alli='$alliance' order by id desc limit 0,13");
 			while ($r = mysqli_fetch_array($query)) {

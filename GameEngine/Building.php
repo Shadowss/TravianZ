@@ -18,6 +18,19 @@
 ##  License        : TravianZ Project                                          ##
 ##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
+##  Refactor B-D1 : finishAll nu mai ocoleste invalidarea de cache (recountCP  ##
+##                  citeste fresh); isCastleBuilt strict pe f{i}t;             ##
+##                  downgradeBuilding sters (mort + apel addBuilding cu 8      ##
+##                  argumente la semnatura de 7); '>=' consecvent la coada;    ##
+##                  FIX confirmat: master finish scade mereu resursele;        ##
+##                  FIX confirmat: Hunii pot construi Stonemason via CC        ##
+##  Refactor B-W1 : static-urile per metoda -> proprietati de instanta cheiate ##
+##                  pe wid (sigur pt. instante multiple / admin switch);       ##
+##                  dependinte trase in constructor; parametri redenumiti      ##
+##                  consecvent ($gid = tipul cladirii, $fieldId = slotul)      ##
+##  Refactor B-W2 : meetRequirement -> tabel declarativ de cerinte + cazuri    ##
+##                  speciale; finishAll spart in helpers; SQL-ul raw mutat in  ##
+##                  metode Database cu invalidare de cache                     ##
 #################################################################################
 
 
@@ -34,21 +47,108 @@ class Building {
 
     public $buildArray = array();
 
+    // B-W1: dependinte trase o singura data - bootstrap-ul din Village.php
+    // construieste $building DUPA $village, deci toate exista deja.
+    private $db;
+    private $sess;
+    private $vil;
+    private $log;
+
+    // B-W1: fostele "static $cache" din interiorul metodelor, mutate pe instanta
+    // si cheiate pe wid unde conteaza. Static-urile per metoda NU se resetau la
+    // "new Building" si nu stiau de sat -> mina pentru multi-village/admin switch.
+    private $wwUpgradeCache = array();        // [wid => bool]
+    private $typeLevelCache = array();        // [vid_gid => nivel]
+    private $typeFieldCache = array();        // [wid_gid => fieldId|false]
+    private $greatStoreArtefactCache = array(); // [wid => bool]
+    private $prodCache = array();             // [wid => [wood, clay, iron, crop]]
+    private $fieldLevelCache = array();       // [wid_fieldId => nivel]
+    private $resourceReqCache = array();      // [fieldId_gid_plus_wid => array]
+
+    // Zidurile per trib (folosite in 3 locuri: canProcess, walling, constructBuilding)
+    private const WALL_GIDS = array(31, 32, 33, 42, 43, 47, 50);
+
+    /**
+     * B-W2: cerintele de constructie per gid, declarativ. Evaluate de
+     * evaluateRequirements(). Chei:
+     *   levels        => [[gid, nivel_minim], ...]   (>=)
+     *   exact         => [[gid, nivel_exact], ...]   (==; [25, 0] = "fara Residence")
+     *   tribe         => [triburi permise]
+     *   notTribe      => [triburi interzise]
+     *   capitalOnly   => true  (doar in capitala)
+     *   notCapital    => true  (doar in non-capitala)
+     *   unique        => false (poate exista deja; default: cere !isBuilt)
+     *   rebuildAtLevel=> N     (se poate construi a doua cand prima e la nivelul N)
+     * Cazurile ne-tabelare (25, 26, 34, 38, 39, 40, 49) raman in switch-ul din
+     * meetRequirement(). Regulile noilor triburi se editeaza aici, intr-un loc.
+     */
+    private const BUILD_REQUIREMENTS = array(
+        1  => array('unique' => false),
+        2  => array('unique' => false),
+        3  => array('unique' => false),
+        4  => array('unique' => false),
+        5  => array('levels' => array(array(1, 10), array(15, 5))),
+        6  => array('levels' => array(array(2, 10), array(15, 5))),
+        7  => array('levels' => array(array(3, 10), array(15, 5))),
+        8  => array('levels' => array(array(4, 5))),
+        9  => array('levels' => array(array(15, 5), array(4, 10), array(8, 5))),
+        10 => array('levels' => array(array(15, 1)), 'rebuildAtLevel' => 20),
+        11 => array('levels' => array(array(15, 1)), 'rebuildAtLevel' => 20),
+        12 => array('levels' => array(array(22, 3), array(15, 3))),
+        13 => array('levels' => array(array(15, 3), array(22, 1))),
+        14 => array('levels' => array(array(16, 15))),
+        15 => array(),
+        16 => array(),
+        17 => array('levels' => array(array(15, 3), array(10, 1), array(11, 1))),
+        18 => array('levels' => array(array(15, 1))),
+        19 => array('levels' => array(array(15, 3), array(16, 1))),
+        20 => array('levels' => array(array(12, 3), array(22, 5))),
+        21 => array('levels' => array(array(22, 10), array(15, 5))),
+        22 => array('levels' => array(array(15, 3), array(19, 3))),
+        23 => array('rebuildAtLevel' => 10),
+        24 => array('levels' => array(array(22, 10), array(15, 10))),
+        27 => array('levels' => array(array(15, 10))),
+        28 => array('exact' => array(array(17, 20)), 'levels' => array(array(20, 10))),
+        29 => array('exact' => array(array(19, 20)), 'notCapital' => true),
+        30 => array('exact' => array(array(20, 20)), 'notCapital' => true),
+        31 => array('tribe' => array(1), 'unique' => false),
+        32 => array('tribe' => array(2), 'unique' => false),
+        33 => array('tribe' => array(3), 'unique' => false),
+        35 => array('levels' => array(array(16, 10)), 'exact' => array(array(11, 20)), 'tribe' => array(2), 'capitalOnly' => true),
+        36 => array('levels' => array(array(16, 1)), 'tribe' => array(3), 'rebuildAtLevel' => 20),
+        37 => array('levels' => array(array(15, 3), array(16, 1))),
+        41 => array('levels' => array(array(16, 10)), 'exact' => array(array(20, 20)), 'tribe' => array(1)),
+        // Noile triburi:
+        42 => array('tribe' => array(7), 'unique' => false),                       // Stone Wall (Egipteni)
+        43 => array('tribe' => array(6), 'unique' => false),                       // Makeshift Wall (Huni)
+        44 => array('tribe' => array(6), 'levels' => array(array(15, 5)), 'exact' => array(array(25, 0), array(26, 0))), // Command Center
+        45 => array('tribe' => array(7), 'levels' => array(array(37, 10))),        // Waterworks
+        46 => array('notTribe' => array(8, 9), 'levels' => array(array(15, 10), array(22, 15))), // Hospital
+        47 => array('tribe' => array(8), 'unique' => false),                       // Defensive Wall (Spartani)
+        48 => array('tribe' => array(8, 9), 'levels' => array(array(15, 10), array(22, 15))),    // Big Hospital
+        50 => array('tribe' => array(9), 'unique' => false),                       // Barricade (Vikingi)
+    );
+
     public function __construct() {
 
-        global $session;
+        global $database, $session, $village, $logging;
+
+        $this->db   = $database;
+        $this->sess = $session;
+        $this->vil  = $village;
+        $this->log  = $logging;
 
         $maxConcurrent = BASIC_MAX;
 
-        if (ALLOW_ALL_TRIBE || $session->tribe == 1) {
+        if (ALLOW_ALL_TRIBE || $this->sess->tribe == 1) {
             $maxConcurrent += INNER_MAX;
         }
 
-        if ($session->plus) {
+        if ($this->sess->plus) {
             $maxConcurrent += PLUS_MAX;
         }
 
-        $this->LoadBuilding();
+        $this->loadBuilding();
 
         if (!empty($this->buildArray)) {
 
@@ -66,89 +166,84 @@ class Building {
 	/*****************************************
 	Function to Allow WW Upgrade
 	*****************************************/
-	
+
 	public function allowWwUpgrade() {
-    global $database, $village, $session;
 
-    static $cached = null;
+    $wid = $this->vil->wid;
 
-    if ($cached !== null) {
-        return $cached;
+    // B-W1: cache pe instanta, cheiat pe wid (era "static $cached" fara cheie)
+    if (isset($this->wwUpgradeCache[$wid])) {
+        return $this->wwUpgradeCache[$wid];
     }
 
-    $wwHighestLevelFound = (int)$village->resarray['f99'];
+    $wwHighestLevelFound = (int) $this->vil->resarray['f99'];
 
-    // Evităm count() pe array doar pentru existență
-    $wwBuildingProgress = $database->getBuildingByType($village->wid, 99);
+    $wwBuildingProgress = $this->db->getBuildingByType($wid, 99);
 
     if (!empty($wwBuildingProgress[0]['level'])) {
-        $queuedLevel = (int)$wwBuildingProgress[0]['level'];
+        $queuedLevel = (int) $wwBuildingProgress[0]['level'];
 
         if ($queuedLevel > $wwHighestLevelFound) {
             $wwHighestLevelFound = $queuedLevel;
         }
     }
 
-    // Cache natural prin static
-    $userHasWWConstructionPlans = $database->getWWConstructionPlans($session->uid);
+    $userHasWWConstructionPlans = $this->db->getWWConstructionPlans($this->sess->uid);
 
-    // Nu mai facem query inutil dacă nu avem alianță
+    // Nu facem query inutil daca nu avem alianta
     $allyHasWWConstructionPlans = false;
 
-    if ($session->alliance > 0) {
-        $allyHasWWConstructionPlans = $database->getWWConstructionPlans(
-            $session->uid,
-            $session->alliance
+    if ($this->sess->alliance > 0) {
+        $allyHasWWConstructionPlans = $this->db->getWWConstructionPlans(
+            $this->sess->uid,
+            $this->sess->alliance
         );
     }
 
-    // Reducem branch-urile
-    $cached = (
+    return $this->wwUpgradeCache[$wid] = (
         $wwHighestLevelFound < 50
             ? $userHasWWConstructionPlans
             : ($userHasWWConstructionPlans && $allyHasWWConstructionPlans)
     );
-
-    return $cached;
 }
 
 	/*****************************************
 	Function to Process
+	$gid = tipul cladirii (bid), $fieldId = slotul (f1..f40, f99)
 	*****************************************/
 
-	public function canProcess($id, $tid) {
-    global $session, $database, $village;
-
-    // Un singur query
-    $levels = $database->getResourceLevel($village->wid);
+	public function canProcess($gid, $fieldId) {
 
     // WW restriction early exit
-    if ($tid == 99 && !$this->allowWwUpgrade()) {
-        $this->redirect($tid);
+    if ($fieldId == 99 && !$this->allowWwUpgrade()) {
+        $this->redirect($fieldId);
     }
 
-    $fieldTypeKey = 'f'.$tid.'t';
+    $fieldTypeKey = 'f'.$fieldId.'t';
 
-    // Mic cache local
-    $currentFieldType = isset($levels[$fieldTypeKey]) ? (int)$levels[$fieldTypeKey] : 0;
+    // B-D1: se citeste direct din resarray (acelasi rand fdata; vechiul
+    // getResourceLevel() suplimentar era un cache hit pe aceleasi date)
+    $currentFieldType = isset($this->vil->resarray[$fieldTypeKey])
+        ? (int) $this->vil->resarray[$fieldTypeKey]
+        : 0;
 
     // Validare slot/building
     $isValidSlot =
         (
-            ($tid >= 1 && $tid <= 18 && $id >= 1 && $id <= 4) ||
-            ($tid >= 19 && $id > 4)
+            ($fieldId >= 1 && $fieldId <= 18 && $gid >= 1 && $gid <= 4) ||
+            ($fieldId >= 19 && $gid > 4)
         );
 
     // Validare building existent
     $isValidFieldType =
-        ($currentFieldType == $id || $currentFieldType == 0);
+        ($currentFieldType == $gid || $currentFieldType == 0);
 
     // Validare zid
     $isValidWall =
-        ($tid != 40 || in_array($id, array(31, 32, 33, 42, 43, 47, 50)));
+        ($fieldId != 40 || in_array($gid, self::WALL_GIDS));
 
     if (
-        !isset($village->resarray[$fieldTypeKey]) ||
+        !isset($this->vil->resarray[$fieldTypeKey]) ||
         !$isValidSlot ||
         !$isValidFieldType ||
         !$isValidWall
@@ -157,10 +252,9 @@ class Building {
         exit;
     }
 
-    // Evităm apel dublu inutil
     if (!isset($_GET['master'])) {
-        if ($this->checkResource($id, $tid) != 4) {
-            $this->redirect($tid);
+        if ($this->checkResource($gid, $fieldId) != 4) {
+            $this->redirect($fieldId);
         }
 
         return;
@@ -169,16 +263,16 @@ class Building {
     // MASTER BUILDER
     if ($currentFieldType == 0) {
         // build nou
-        if (!$this->meetRequirement($id)) {
-            $this->redirect($tid);
+        if (!$this->meetRequirement($gid)) {
+            $this->redirect($fieldId);
         }
     } else {
         // upgrade
-        $loopLevel = $this->isLoop($tid);
-        $currentLevel = $this->isCurrent($tid);
+        $loopLevel = $this->isLoop($fieldId);
+        $currentLevel = $this->isCurrent($fieldId);
 
-        if ($this->isMax($id, $tid, $loopLevel + $currentLevel)) {
-            $this->redirect($tid);
+        if ($this->isMax($gid, $fieldId, $loopLevel + $currentLevel)) {
+            $this->redirect($fieldId);
         }
     }
 }
@@ -187,8 +281,8 @@ class Building {
 	Function to redirect to dorf1 and dorf2
 	*****************************************/
 
-	private function redirect($tid) {
-    header('Location: '.($tid >= 19 ? 'dorf2.php' : 'dorf1.php'));
+	private function redirect($fieldId) {
+    header('Location: '.($fieldId >= 19 ? 'dorf2.php' : 'dorf1.php'));
     exit;
 }
 
@@ -197,12 +291,10 @@ class Building {
 	*****************************************/
 
 	public function procBuild($get) {
-    global $session, $village, $database;
 
-    // Cache checker comparison
     $validChecker = (
         isset($get['c']) &&
-        $get['c'] == $session->checker
+        $get['c'] == $this->sess->checker
     );
 
     // REMOVE / UPGRADE EXISTING
@@ -213,9 +305,9 @@ class Building {
             return;
         }
 
-        $session->changeChecker();
+        $this->sess->changeChecker();
 
-        $fieldType = $village->resarray['f'.$get['a'].'t'];
+        $fieldType = $this->vil->resarray['f'.$get['a'].'t'];
 
         $this->canProcess($fieldType, $get['a']);
         $this->upgradeBuilding($get['a']);
@@ -227,29 +319,30 @@ class Building {
     if (
         isset($get['master'], $get['id']) &&
         $validChecker &&
-        $session->gold >= 1 &&
-        $session->goldclub &&
-        $village->master == 0
+        $this->sess->gold >= 1 &&
+        $this->sess->goldclub &&
+        $this->vil->master == 0
     ) {
 
         $this->canProcess($get['master'], $get['id']);
 
-        $session->changeChecker();
+        $this->sess->changeChecker();
 
-        // Un singur query
-        $level = $database->getResourceLevel($village->wid);
+        $level = $this->db->getResourceLevel($this->vil->wid);
 
-        // Un singur calcul
         $required = $this->resourceRequired($get['id'], $get['master']);
 
-        // Un singur query
-        $queuedBuildings = $database->getBuildingByField(
-            $village->wid,
+        $queuedBuildings = $this->db->getBuildingByField(
+            $this->vil->wid,
             $get['id']
         );
 
-        $database->addBuilding(
-            $village->wid,
+        // NOTA CONVENTIE (capcana, nu bug): pentru joburile master, coloana
+        // timestamp primeste o DURATA ($required['time']), nu un moment absolut.
+        // Automation::MasterBuilder() face "timestamp + time()" la promovarea
+        // jobului in coada reala. Nu "corecta" cu time() + durata aici.
+        $this->db->addBuilding(
+            $this->vil->wid,
             $get['id'],
             $get['master'],
             1,
@@ -267,9 +360,13 @@ class Building {
         $validChecker
     ) {
 
+        // NOTA (capcana, nu bug): $get['id'] e NUMARUL SLOTULUI (f19..f40, respectiv
+        // f99 pentru WW), NU gid-ul cladirii ($get['a'] e gid-ul). Gate-ul de mai
+        // jos valideaza sloturile din dorf2, deci NU blocheaza cladirile cu gid
+        // 41-50 (noile triburi).
         if ($get['id'] > 18 && ($get['id'] < 41 || $get['id'] == 99)) {
 
-            $session->changeChecker();
+            $this->sess->changeChecker();
 
             $this->canProcess($get['a'], $get['id']);
             $this->constructBuilding($get['id'], $get['a']);
@@ -281,85 +378,86 @@ class Building {
     // FINISH ALL
     if (
         isset($get['buildingFinish']) &&
-        $session->gold >= 2 &&
-        $session->sit == 0
+        $this->sess->gold >= 2 &&
+        $this->sess->sit == 0
     ) {
         $this->finishAll();
     }
 }
 
-	public function canBuild($id, $tid) {
-    global $village, $session, $database;
+	/*****************************************
+	Function to can build
+	$fieldId = slotul, $gid = tipul cladirii
+	*****************************************/
 
-    // Query unic
-    $demolition = $database->getDemolition($village->wid);
+	public function canBuild($fieldId, $gid) {
+
+    $demolition = $this->db->getDemolition($this->vil->wid);
 
     if (
         isset($demolition[0]['buildnumber']) &&
-        $demolition[0]['buildnumber'] == $id
+        $demolition[0]['buildnumber'] == $fieldId
     ) {
         return 11;
     }
 
-    // Cache funcții repetitive
-    $loop = $this->isLoop($id);
-    $current = $this->isCurrent($id);
+    $loop = $this->isLoop($fieldId);
+    $current = $this->isCurrent($fieldId);
 
-    if ($this->isMax($tid, $id)) {
+    if ($this->isMax($gid, $fieldId)) {
         return 1;
     }
 
     if (
-        $this->isMax($tid, $id, 1) &&
+        $this->isMax($gid, $fieldId, 1) &&
         ($loop || $current)
     ) {
         return 10;
     }
 
     if (
-        $this->isMax($tid, $id, 2) &&
+        $this->isMax($gid, $fieldId, 2) &&
         $loop &&
         $current
     ) {
         return 10;
     }
 
-    // Evităm query inutil getMasterJobs()
     if (
         $loop &&
         $current &&
-        $this->isMax($tid, $id, 3)
+        $this->isMax($gid, $fieldId, 3)
     ) {
 
-        $masterJobs = $database->getMasterJobs($village->wid);
+        $masterJobs = $this->db->getMasterJobs($this->vil->wid);
 
         if (!empty($masterJobs)) {
             return 10;
         }
     }
 
-    if ($this->allocated > $this->maxConcurrent) {
+    // FIX B4 (B-D1): '>=' in loc de '>' - la allocated == maxConcurrent coada e
+    // deja plina; gate-ul dur din upgradeBuilding() folosea '>=', iar aici '>'
+    // dadea un indicator "ok" urmat de un refuz silentios.
+    if ($this->allocated >= $this->maxConcurrent) {
         return 2;
     }
 
-    // Un singur apel
-    $fieldType = $village->resarray['f'.$id.'t'];
+    $fieldType = $this->vil->resarray['f'.$fieldId.'t'];
 
-    // Un singur apel
-    $resRequired = $this->resourceRequired($id, $fieldType);
+    $resRequired = $this->resourceRequired($fieldId, $fieldType);
 
     $resRequiredPop = isset($resRequired['pop'])
         ? $resRequired['pop']
         : 0;
 
-    // Fallback doar dacă trebuie
+    // Fallback doar daca trebuie (constructie noua: fieldType == 0)
     if (empty($resRequiredPop)) {
-        $buildarray = $GLOBALS['bid'.$tid];
+        $buildarray = $GLOBALS['bid'.$gid];
         $resRequiredPop = $buildarray[1]['pop'];
     }
 
-    // Un singur query
-    $jobs = $database->getJobs($village->wid);
+    $jobs = $this->db->getJobs($this->vil->wid);
 
     $soonPop = 0;
 
@@ -369,34 +467,31 @@ class Building {
 
             $buildarray = $GLOBALS['bid'.$j['type']];
 
-            // Aici era query per job (!)
-            // Reducem drastic CPU + SQL
-            static $fieldLevelCache = array();
+            // B-W1: cache pe instanta (era "static" per metoda, nu se reseta
+            // la instante noi)
+            $cacheKey = $this->vil->wid.'_'.$j['field'];
 
-            $cacheKey = $village->wid.'_'.$j['field'];
-
-            if (!isset($fieldLevelCache[$cacheKey])) {
-                $fieldLevelCache[$cacheKey] = $database->getFieldLevel(
-                    $village->wid,
+            if (!isset($this->fieldLevelCache[$cacheKey])) {
+                $this->fieldLevelCache[$cacheKey] = $this->db->getFieldLevel(
+                    $this->vil->wid,
                     $j['field']
                 );
             }
 
             $soonPop += $buildarray[
-                $fieldLevelCache[$cacheKey] + 1
+                $this->fieldLevelCache[$cacheKey] + 1
             ]['pop'];
         }
     }
 
     if (
-        ($village->allcrop - $village->pop - $soonPop - $resRequiredPop) <= 1 &&
+        ($this->vil->allcrop - $this->vil->pop - $soonPop - $resRequiredPop) <= 1 &&
         $fieldType != 4
     ) {
         return 4;
     }
 
-    // Un singur apel
-    $resourceCheck = $this->checkResource($tid, $id);
+    $resourceCheck = $this->checkResource($gid, $fieldId);
 
     switch ($resourceCheck) {
 
@@ -411,11 +506,11 @@ class Building {
 
         case 4:
 
-            if ($id >= 19) {
+            if ($fieldId >= 19) {
 
                 $hasMainBuilding =
                     (
-                        $session->tribe == 1 ||
+                        $this->sess->tribe == 1 ||
                         ALLOW_ALL_TRIBE
                     )
                         ? $this->inner
@@ -425,7 +520,7 @@ class Building {
                     return 8;
                 }
 
-                if ($session->plus || $tid == 40) {
+                if ($this->sess->plus || $gid == 40) {
                     return ($this->plus == 0 ? 9 : 3);
                 }
 
@@ -434,7 +529,7 @@ class Building {
 
             if ($this->basic == 1) {
 
-                if (($session->plus || $tid == 40) && $this->plus == 0) {
+                if (($this->sess->plus || $gid == 40) && $this->plus == 0) {
                     return 9;
                 }
 
@@ -446,17 +541,14 @@ class Building {
 }
 
 	/*****************************************
-	Function to wall 
+	Function to wall
 	*****************************************/
 
 	public function walling() {
 
-    global $session;
-
     foreach ($this->buildArray as $job) {
 
-        // verificăm STRICT tipul clădirii
-        if (in_array($job['type'], array(31, 32, 33, 42, 43, 47, 50))) {
+        if (in_array($job['type'], self::WALL_GIDS)) {
             return $job['type'];
         }
     }
@@ -476,8 +568,7 @@ class Building {
 
     foreach ($this->buildArray as $job) {
 
-        // comparație directă mai rapidă
-        if ((int)$job['type'] === 16) {
+        if ((int) $job['type'] === 16) {
             return true;
         }
     }
@@ -491,7 +582,6 @@ class Building {
 
 	public static function procResType($ref) {
 
-    // Cache static -> switch-ul nu mai este evaluat constant
     static $types = array(
         1  => WOODCUTTER,
         2  => CLAYPIT,
@@ -553,16 +643,13 @@ class Building {
 	*****************************************/
 
 	public function loadBuilding() {
-    global $database, $village, $session;
 
     $this->basic = 0;
     $this->inner = 0;
     $this->plus = 0;
 
-    // un singur query
-    $this->buildArray = $database->getJobs($village->wid);
+    $this->buildArray = $this->db->getJobs($this->vil->wid);
 
-    // count() o singură dată
     $this->allocated = count($this->buildArray);
 
     if ($this->allocated <= 0) {
@@ -570,12 +657,12 @@ class Building {
         return;
     }
 
-    $romanQueue = ($session->tribe == 1 || ALLOW_ALL_TRIBE);
+    $romanQueue = ($this->sess->tribe == 1 || ALLOW_ALL_TRIBE);
 
     foreach ($this->buildArray as $build) {
 
         // master queue
-        if ((int)$build['loopcon'] === 1) {
+        if ((int) $build['loopcon'] === 1) {
             $this->plus = 1;
             continue;
         }
@@ -602,7 +689,6 @@ class Building {
 	*****************************************/
 
 	private function removeBuilding($d) {
-    global $database, $village, $session;
 
     if (empty($this->buildArray)) {
         return;
@@ -610,31 +696,29 @@ class Building {
 
     foreach ($this->buildArray as $jobs) {
 
-        // early continue
         if ($jobs['id'] != $d) {
             continue;
         }
 
-        // calcul doar când chiar trebuie
         $uprequire = $this->resourceRequired(
             $jobs['field'],
             $jobs['type']
         );
 
         if (
-            $database->removeBuilding(
+            $this->db->removeBuilding(
                 $d,
-                $session->tribe,
-                $village->wid,
-                $village->resarray
+                $this->sess->tribe,
+                $this->vil->wid,
+                $this->vil->resarray
             )
         ) {
 
             // refund doar pentru non-master
-            if ((int)$jobs['master'] === 0) {
+            if ((int) $jobs['master'] === 0) {
 
-                $database->modifyResource(
-                    $village->wid,
+                $this->db->modifyResource(
+                    $this->vil->wid,
                     $uprequire['wood'],
                     $uprequire['clay'],
                     $uprequire['iron'],
@@ -646,19 +730,18 @@ class Building {
             $this->redirect($jobs['field']);
         }
 
-        // nu mai continuăm foreach inutil
         break;
     }
 }
 
 	/*****************************************
 	Function to upgrade building
+	$fieldId = slotul care se upgradeaza
 	*****************************************/
 
-	private function upgradeBuilding($id) {
-    global $database, $village, $session, $logging, ${'bid'.$village->resarray['f'.$id.'t']};
+	private function upgradeBuilding($fieldId) {
 
-    if (!$database->getBuildLock($village->wid)) {
+    if (!$this->db->getBuildLock($this->vil->wid)) {
         return;
     }
 
@@ -670,15 +753,13 @@ class Building {
             return;
         }
 
-        $fieldType = $village->resarray['f'.$id.'t'];
+        $fieldType = $this->vil->resarray['f'.$fieldId.'t'];
 
-        // un singur apel
-        $uprequire = $this->resourceRequired($id, $fieldType);
+        $uprequire = $this->resourceRequired($fieldId, $fieldType);
 
         $time = time() + $uprequire['time'];
 
-        // un singur apel
-        $bindicate = $this->canBuild($id, $fieldType);
+        $bindicate = $this->canBuild($fieldId, $fieldType);
 
         // early exit
         if (in_array($bindicate, array(1, 2, 3, 10, 11))) {
@@ -694,24 +775,23 @@ class Building {
 
             foreach ($this->buildArray as $build) {
 
-                if ($build['field'] == $id) {
+                if ($build['field'] == $fieldId) {
 
                     $loopsame++;
 
-                    // păstrăm logica originală
                     $uprequire = $this->resourceRequired(
-                        $id,
+                        $fieldId,
                         $fieldType,
                         ($loopsame > 0 ? 2 : 1)
                     );
                 }
             }
 
-            $romanQueue = ($session->tribe == 1 || ALLOW_ALL_TRIBE);
+            $romanQueue = ($this->sess->tribe == 1 || ALLOW_ALL_TRIBE);
 
             if ($romanQueue) {
 
-                if ($id >= 19) {
+                if ($fieldId >= 19) {
 
                     foreach ($this->buildArray as $build) {
 
@@ -736,24 +816,22 @@ class Building {
             }
         }
 
-        // un singur query
-        $level = $database->getResourceLevel($village->wid);
+        $level = $this->db->getResourceLevel($this->vil->wid);
 
-        // un singur query
-        $queuedBuildings = $database->getBuildingByField(
-            $village->wid,
-            $id
+        $queuedBuildings = $this->db->getBuildingByField(
+            $this->vil->wid,
+            $fieldId
         );
 
         $nextLevel =
-            $level['f'.$id] +
+            $level['f'.$fieldId] +
             1 +
             count($queuedBuildings);
 
         if (
-            $database->addBuilding(
-                $village->wid,
-                $id,
+            $this->db->addBuilding(
+                $this->vil->wid,
+                $fieldId,
                 $fieldType,
                 $loop,
                 $time + ($loop == 1 ? ceil(60 / SPEED) : 0),
@@ -762,8 +840,8 @@ class Building {
             )
         ) {
 
-            $database->modifyResource(
-                $village->wid,
+            $this->db->modifyResource(
+                $this->vil->wid,
                 $uprequire['wood'],
                 $uprequire['clay'],
                 $uprequire['iron'],
@@ -771,135 +849,35 @@ class Building {
                 0
             );
 
-            $logging->addBuildLog(
-                $village->wid,
+            $this->log->addBuildLog(
+                $this->vil->wid,
                 self::procResType($fieldType),
-                ($village->resarray['f'.$id] + ($loopsame > 0 ? 2 : 1)),
+                ($this->vil->resarray['f'.$fieldId] + ($loopsame > 0 ? 2 : 1)),
                 0
             );
 
-            $this->redirect($id);
+            $this->redirect($fieldId);
         }
 
     } finally {
 
-        $database->releaseBuildLock($village->wid);
+        $this->db->releaseBuildLock($this->vil->wid);
     }
 }
 
-	/*****************************************
-	Function to downgrade building
-	*****************************************/
-
-	private function downgradeBuilding($id) {
-    global $database, $village, $session, $logging;
-
-    if (!$database->getBuildLock($village->wid)) {
-        return;
-    }
-
-    try {
-
-        $this->loadBuilding();
-
-        if ($this->allocated >= $this->maxConcurrent) {
-            return;
-        }
-
-        $fieldType = $village->resarray['f'.$id.'t'];
-        $currentLevel = $village->resarray['f'.$id];
-
-        $name = 'bid'.$fieldType;
-
-        global $$name;
-
-        $dataarray = $$name;
-
-        // calcul o singură dată
-        $buildTime = round($dataarray[$currentLevel - 1]['time'] / 4);
-
-        $time = time() + $buildTime;
-
-        $loop = 0;
-
-        // logică identică, branch-uri reduse
-        if (
-            ($this->inner == 1 || $this->basic == 1) &&
-            (($session->plus || $fieldType == 40) && $this->plus == 0)
-        ) {
-            $loop = 1;
-        }
-
-        if ($loop == 1) {
-
-            $romanQueue = ($session->tribe == 1 || ALLOW_ALL_TRIBE);
-
-            if ($romanQueue) {
-
-                if ($id >= 19) {
-
-                    foreach ($this->buildArray as $build) {
-
-                        if ($build['field'] >= 19) {
-                            $time = $build['timestamp'] + $buildTime;
-                        }
-                    }
-                }
-            } else {
-
-                if (isset($this->buildArray[0]['timestamp'])) {
-                    $time = $this->buildArray[0]['timestamp'] + $buildTime;
-                }
-            }
-        }
-
-        // un singur query
-        $level = $database->getResourceLevel($village->wid);
-
-        // un singur query
-        $queuedBuildings = $database->getBuildingByField(
-            $village->wid,
-            $id
-        );
-
-        if (
-            $database->addBuilding(
-                $village->wid,
-                $id,
-                $fieldType,
-                $loop,
-                $time,
-                0,
-                0,
-                $level['f'.$id] + 1 + count($queuedBuildings)
-            )
-        ) {
-
-            $logging->addBuildLog(
-                $village->wid,
-                self::procResType($fieldType),
-                ($currentLevel - 1),
-                2
-            );
-
-            header('Location: dorf2.php');
-            exit();
-        }
-
-    } finally {
-
-        $database->releaseBuildLock($village->wid);
-    }
-}
+	// B-D1: downgradeBuilding() a fost STEARSA - cod mort (zero apelanti in tot
+	// repo-ul; demolarea merge prin finishDemolition) si continea un bug latent:
+	// apela addBuilding() cu 8 argumente la o semnatura de 7, deci nivelul
+	// calculat era aruncat si jobul s-ar fi inserat cu level = 0.
 
 	/*****************************************
 	Function to construct building
+	$fieldId = slotul, $gid = tipul cladirii
 	*****************************************/
 
-	private function constructBuilding($id, $tid) {
-    global $database, $village, $session, $logging;
+	private function constructBuilding($fieldId, $gid) {
 
-    if (!$database->getBuildLock($village->wid)) {
+    if (!$this->db->getBuildLock($this->vil->wid)) {
         return;
     }
 
@@ -913,28 +891,25 @@ class Building {
             exit;
         }
 
-        // păstrăm exact logica originală
-		$buildField = $id;
-		if ($tid == 16) {
-		$buildField = 39;
-		}
-		elseif (in_array($tid, array(31, 32, 33, 42, 43, 47, 50))) {
-		$buildField = 40;
-		}
+        $buildField = $fieldId;
 
-        // un singur apel
-        $uprequire = $this->resourceRequired($buildField, $tid);
+        if ($gid == 16) {
+            $buildField = 39;
+        } elseif (in_array($gid, self::WALL_GIDS)) {
+            $buildField = 40;
+        }
+
+        $uprequire = $this->resourceRequired($buildField, $gid);
 
         $time = time() + $uprequire['time'];
 
-        // un singur apel
-        $bindicate = $this->canBuild($buildField, $tid);
+        $bindicate = $this->canBuild($buildField, $gid);
 
         $loop = ($bindicate == 9 ? 1 : 0);
 
         if ($loop == 1) {
 
-            $romanQueue = ($session->tribe == 1 || ALLOW_ALL_TRIBE);
+            $romanQueue = ($this->sess->tribe == 1 || ALLOW_ALL_TRIBE);
 
             foreach ($this->buildArray as $build) {
 
@@ -952,18 +927,16 @@ class Building {
         }
 
         // early exit
-        if (!$this->meetRequirement($tid)) {
+        if (!$this->meetRequirement($gid)) {
 
             header('Location: dorf2.php');
             exit;
         }
 
-        // un singur query
-        $level = $database->getResourceLevel($village->wid);
+        $level = $this->db->getResourceLevel($this->vil->wid);
 
-        // un singur query
-        $queuedBuildings = $database->getBuildingByField(
-            $village->wid,
+        $queuedBuildings = $this->db->getBuildingByField(
+            $this->vil->wid,
             $buildField
         );
 
@@ -973,10 +946,10 @@ class Building {
             count($queuedBuildings);
 
         if (
-            $database->addBuilding(
-                $village->wid,
+            $this->db->addBuilding(
+                $this->vil->wid,
                 $buildField,
-                $tid,
+                $gid,
                 $loop,
                 $time,
                 0,
@@ -984,15 +957,15 @@ class Building {
             )
         ) {
 
-            $logging->addBuildLog(
-                $village->wid,
-                self::procResType($tid),
-                ($village->resarray['f'.$buildField] + 1),
+            $this->log->addBuildLog(
+                $this->vil->wid,
+                self::procResType($gid),
+                ($this->vil->resarray['f'.$buildField] + 1),
                 1
             );
 
-            $database->modifyResource(
-                $village->wid,
+            $this->db->modifyResource(
+                $this->vil->wid,
                 $uprequire['wood'],
                 $uprequire['clay'],
                 $uprequire['iron'],
@@ -1006,37 +979,36 @@ class Building {
 
     } finally {
 
-        $database->releaseBuildLock($village->wid);
+        $this->db->releaseBuildLock($this->vil->wid);
     }
 }
 
 	/*****************************************
 	Function to Pallace Build ?
 	*****************************************/
+
 	public function isCastleBuilt() {
 
-    global $database, $session;
-
-    // un singur query
-    $villages = $database->getProfileVillages($session->uid);
+    $villages = $this->db->getProfileVillages($this->sess->uid);
 
     if (empty($villages)) {
         return false;
     }
 
-    // cache local pentru level queries
-    static $villageLevelCache = array();
+    foreach ($villages as $vilRow) {
 
-    foreach ($villages as $vil) {
+        // getResourceLevel e deja cache-uit per request in Database
+        $row = $this->db->getResourceLevel($vilRow['wref']);
 
-        $wid = $vil['wref'];
+        // FIX B2 (B-D1): verificare STRICTA pe tipurile sloturilor dorf2
+        // (f19t..f40t == 26). Vechiul in_array(26, $row) cauta loose in TOT
+        // randul fdata - matchuia si vref == 26, si orice nivel == 26 (WW la
+        // nivelul 26) -> fals pozitiv "are Palace" care bloca Palace-ul peste tot.
+        for ($i = 19; $i <= 40; $i++) {
 
-        if (!isset($villageLevelCache[$wid])) {
-            $villageLevelCache[$wid] = $database->getResourceLevel($wid);
-        }
-
-        if (in_array(26, $villageLevelCache[$wid])) {
-            return true;
+            if (isset($row['f'.$i.'t']) && (int) $row['f'.$i.'t'] == 26) {
+                return true;
+            }
         }
     }
 
@@ -1045,313 +1017,150 @@ class Building {
 
 	/*****************************************
 	Function to meet requirement
+	B-W2: cazuri speciale + tabel declarativ (BUILD_REQUIREMENTS)
 	*****************************************/
 
-	private function meetRequirement($id) {
+	private function meetRequirement($gid) {
 
-    global $village, $session, $database;
+    switch ($gid) {
 
-    // cache local enorm de important
-    static $typeLevelCache = array();
-    static $typeFieldCache = array();
-
-    $getLevel = function($type) use (&$typeLevelCache) {
-
-        if (!isset($typeLevelCache[$type])) {
-            $typeLevelCache[$type] = $this->getTypeLevel($type);
-        }
-
-        return $typeLevelCache[$type];
-    };
-
-    $getField = function($type) use (&$typeFieldCache) {
-
-        if (!isset($typeFieldCache[$type])) {
-            $typeFieldCache[$type] = $this->getTypeField($type);
-        }
-
-        return $typeFieldCache[$type];
-    };
-
-    $isBuilt = $getField($id);
-
-    switch ($id) {
-
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-            return true;
-
-        case 5:
-            return $getLevel(1) >= 10 &&
-                   $getLevel(15) >= 5 &&
-                   !$isBuilt;
-
-        case 6:
-            return $getLevel(2) >= 10 &&
-                   $getLevel(15) >= 5 &&
-                   !$isBuilt;
-
-        case 7:
-            return $getLevel(3) >= 10 &&
-                   $getLevel(15) >= 5 &&
-                   !$isBuilt;
-
-        case 8:
-            return $getLevel(4) >= 5 &&
-                   !$isBuilt;
-
-        case 9:
-            return $getLevel(15) >= 5 &&
-                   $getLevel(4) >= 10 &&
-                   $getLevel(8) >= 5 &&
-                   !$isBuilt;
-
-        case 10:
-        case 11:
-            return $getLevel(15) >= 1 &&
-                   (!$isBuilt || $getLevel($id) == 20);
-
-        case 12:
-            return $getLevel(22) >= 3 &&
-                   $getLevel(15) >= 3 &&
-                   !$isBuilt;
-
-        case 13:
-            return $getLevel(15) >= 3 &&
-                   $getLevel(22) >= 1 &&
-                   !$isBuilt;
-
-        case 14:
-            return $getLevel(16) >= 15 &&
-                   !$isBuilt;
-
-        case 15:
-        case 16:
-            return !$isBuilt;
-
-        case 17:
-            return $getLevel(15) >= 3 &&
-                   $getLevel(10) >= 1 &&
-                   $getLevel(11) >= 1 &&
-                   !$isBuilt;
-
-        case 18:
-            return $getLevel(15) >= 1 &&
-                   !$isBuilt;
-
-        case 19:
-            return $getLevel(15) >= 3 &&
-                   $getLevel(16) >= 1 &&
-                   !$isBuilt;
-
-        case 20:
-            return $getLevel(12) >= 3 &&
-                   $getLevel(22) >= 5 &&
-                   !$isBuilt;
-
-        case 21:
-            return $getLevel(22) >= 10 &&
-                   $getLevel(15) >= 5 &&
-                   !$isBuilt;
-
-        case 22:
-            return $getLevel(15) >= 3 &&
-                   $getLevel(19) >= 3 &&
-                   !$isBuilt;
-
-        case 23:
-            return !$isBuilt || $getLevel($id) == 10;
-
-        case 24:
-            return $getLevel(22) >= 10 &&
-                   $getLevel(15) >= 10 &&
-                   !$isBuilt;
-
+        // Residence: Hunii au Command Center in loc de Residence
         case 25:
-            if ($session->tribe == 6) return false; // Hunii au Command Center in loc de Residence
-            return $getLevel(15) >= 5 &&
-                   !$isBuilt &&
-                   !$getField(26);
+            if ($this->sess->tribe == 6) return false;
+            return $this->getTypeLevel(15) >= 5 &&
+                   !$this->getTypeField(25) &&
+                   !$this->getTypeField(26);
 
+        // Palace: Hunii au Command Center in loc de Palace
         case 26:
-            if ($session->tribe == 6) return false; // Hunii au Command Center in loc de Palace
-            return $getLevel(18) >= 1 &&
-                   $getLevel(15) >= 5 &&
-                   !$isBuilt &&
+            if ($this->sess->tribe == 6) return false;
+            return $this->getTypeLevel(18) >= 1 &&
+                   $this->getTypeLevel(15) >= 5 &&
+                   !$this->getTypeField(26) &&
                    !$this->isCastleBuilt() &&
-                   !$getField(25);
+                   !$this->getTypeField(25);
 
-        case 27:
-            return $getLevel(15) >= 10 &&
-                   !$isBuilt;
-
-        case 28:
-            return $getLevel(17) == 20 &&
-                   $getLevel(20) >= 10 &&
-                   !$isBuilt;
-
-        case 29:
-            return $getLevel(19) == 20 &&
-                   $village->capital == 0 &&
-                   !$isBuilt;
-
-        case 30:
-            return $getLevel(20) == 20 &&
-                   $village->capital == 0 &&
-                   !$isBuilt;
-
-        case 31:
-            return $session->tribe == 1;
-
-        case 32:
-            return $session->tribe == 2;
-
-        case 33:
-            return $session->tribe == 3;
-
+        // Stonemason - doar in capitala
         case 34:
-            return $getLevel(26) >= 3 &&
-                   $getLevel(15) >= 5 &&
-                   $getLevel(25) == 0 &&
-                   $village->capital != 0 &&
-                   !$isBuilt;
+            // FIX confirmat (B-D1): Hunii nu au Palace, deci cerinta "Palace >= 3"
+            // ii bloca definitiv. Pentru tribul 6, echivalentul e Command Center
+            // (gid 44) >= 3.
+            $palaceLevel = ($this->sess->tribe == 6)
+                ? $this->getTypeLevel(44)
+                : $this->getTypeLevel(26);
 
-        case 35:
-            return $getLevel(16) >= 10 &&
-                   $getLevel(11) == 20 &&
-                   $session->tribe == 2 &&
-                   $village->capital != 0 &&
-                   !$isBuilt;
+            return $palaceLevel >= 3 &&
+                   $this->getTypeLevel(15) >= 5 &&
+                   $this->getTypeLevel(25) == 0 &&
+                   $this->vil->capital != 0 &&
+                   !$this->getTypeField(34);
 
-        case 36:
-            return $getLevel(16) >= 1 &&
-                   $session->tribe == 3 &&
-                   (!$isBuilt || $getLevel($id) == 20);
-
-        case 37:
-            return $getLevel(15) >= 3 &&
-                   $getLevel(16) >= 1 &&
-                   !$isBuilt;
-
-        // Great Warehouse
+        // Great Warehouse / Great Granary: Natari sau artefact
         case 38:
-
-            static $greatWarehouseArtefact = null;
-
-            if ($greatWarehouseArtefact === null) {
-
-                $greatWarehouseArtefact =
-                    (
-                        count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 1)) ||
-                        count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0))
-                    );
-            }
-
-            return $getLevel(15) >= 10 &&
-                   (!$isBuilt || $getLevel($id) == 20) &&
-                   ($village->natar == 1 || $greatWarehouseArtefact);
-
-        // Great Granary
         case 39:
+            return $this->getTypeLevel(15) >= 10 &&
+                   (!$this->getTypeField($gid) || $this->getTypeLevel($gid) == 20) &&
+                   ($this->vil->natar == 1 || $this->hasGreatStoreArtefact());
 
-            static $greatGranaryArtefact = null;
-
-            if ($greatGranaryArtefact === null) {
-
-                $greatGranaryArtefact =
-                    (
-                        count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 1)) ||
-                        count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0))
-                    );
-            }
-
-            return $getLevel(15) >= 10 &&
-                   (!$isBuilt || $getLevel($id) == 20) &&
-                   ($village->natar == 1 || $greatGranaryArtefact);
-
+        // Wonder of the World
         case 40:
             return $this->allowWwUpgrade();
 
-        case 41:
-            return $getLevel(16) >= 10 &&
-                   $getLevel(20) == 20 &&
-                   $session->tribe == 1 &&
-                   !$isBuilt;
-
-        // Stone Wall (Egyptian)
-        case 42:
-            return $session->tribe == 7;
-
-        // Makeshift Wall (Hun)
-        case 43:
-            return $session->tribe == 6;
-
-        // Command Center (Hun)
-        case 44:
-            return $session->tribe == 6 &&
-                   $getLevel(15) >= 5 &&
-                   $getLevel(25) == 0 &&
-                   $getLevel(26) == 0 &&
-                   !$isBuilt;
-
-        // Waterworks (Egyptian)
-        case 45:
-            return $session->tribe == 7 &&
-                   $getLevel(37) >= 10 &&
-                   !$isBuilt;
-
-        // Hospital (toate triburile in afara de Spartani/Vikingi, care au Spitalul Mare)
-        case 46:
-            return $session->tribe != 8 &&
-                   $session->tribe != 9 &&
-                   $getLevel(15) >= 10 &&
-                   $getLevel(22) >= 15 &&
-                   !$isBuilt;
-
-        // Defensive Wall (Spartan)
-        case 47:
-            return $session->tribe == 8;
-
-        // Big Hospital (exclusiv Spartani/Vikingi, aceleasi cerinte ca Spitalul)
-        case 48:
-            return ($session->tribe == 8 || $session->tribe == 9) &&
-                   $getLevel(15) >= 10 &&
-                   $getLevel(22) >= 15 &&
-                   !$isBuilt;
-
-        // Great Workshop (mutat de la gid 42)
+        // Great Workshop (GREAT_WKS e constanta runtime -> ramane aici, nu in tabel)
         case 49:
             return GREAT_WKS &&
-                   $getLevel(21) == 20 &&
-                   $village->capital == 0 &&
-                   !$isBuilt;
-
-        // Barricade (Viking)
-        case 50:
-            return $session->tribe == 9;
-
-        default:
-            return false;
+                   $this->getTypeLevel(21) == 20 &&
+                   $this->vil->capital == 0 &&
+                   !$this->getTypeField(49);
     }
+
+    if (!isset(self::BUILD_REQUIREMENTS[$gid])) {
+        return false;
+    }
+
+    return $this->evaluateRequirements($gid, self::BUILD_REQUIREMENTS[$gid]);
+}
+
+	/**
+	 * B-W2: evaluatorul tabelului BUILD_REQUIREMENTS. Conditii pure, fara
+	 * side effects - ordinea evaluarii nu schimba rezultatul.
+	 */
+	private function evaluateRequirements($gid, array $req) {
+
+    if (isset($req['tribe']) && !in_array($this->sess->tribe, $req['tribe'])) {
+        return false;
+    }
+
+    if (isset($req['notTribe']) && in_array($this->sess->tribe, $req['notTribe'])) {
+        return false;
+    }
+
+    if (!empty($req['capitalOnly']) && $this->vil->capital == 0) {
+        return false;
+    }
+
+    if (!empty($req['notCapital']) && $this->vil->capital != 0) {
+        return false;
+    }
+
+    foreach ((isset($req['levels']) ? $req['levels'] : array()) as $pair) {
+        if ($this->getTypeLevel($pair[0]) < $pair[1]) {
+            return false;
+        }
+    }
+
+    foreach ((isset($req['exact']) ? $req['exact'] : array()) as $pair) {
+        if ($this->getTypeLevel($pair[0]) != $pair[1]) {
+            return false;
+        }
+    }
+
+    $unique = array_key_exists('unique', $req) ? $req['unique'] : true;
+
+    if ($unique) {
+
+        $isBuilt = $this->getTypeField($gid);
+
+        if (isset($req['rebuildAtLevel'])) {
+            return !$isBuilt || $this->getTypeLevel($gid) == $req['rebuildAtLevel'];
+        }
+
+        return !$isBuilt;
+    }
+
+    return true;
+}
+
+	/**
+	 * Artefactul de stocare (folosit identic de Great Warehouse si Great Granary).
+	 * B-W1: cache pe instanta cheiat pe wid (erau doua static-uri identice,
+	 * ne-cheiate, in meetRequirement).
+	 */
+	private function hasGreatStoreArtefact() {
+
+    $wid = $this->vil->wid;
+
+    if (!isset($this->greatStoreArtefactCache[$wid])) {
+
+        $this->greatStoreArtefactCache[$wid] =
+            (
+                count($this->db->getOwnUniqueArtefactInfo2($wid, 6, 1, 1)) ||
+                count($this->db->getOwnUniqueArtefactInfo2($this->sess->uid, 6, 2, 0))
+            );
+    }
+
+    return $this->greatStoreArtefactCache[$wid];
 }
 
 	/*****************************************
 	Function to check resources available
+	$gid = tipul cladirii, $fieldId = slotul
 	*****************************************/
 
-	private function checkResource($tid, $id) {
+	private function checkResource($gid, $fieldId) {
 
-    global $village, $database;
+    $dataarray = isset($GLOBALS['bid'.$gid]) ? $GLOBALS['bid'.$gid] : null;
 
-    $name = 'bid'.$tid;
-
-    global $$name;
-
-    $dataarray = $$name;
-
-    // evităm foreach inutil lung
     $plus = 1;
 
     if (!empty($this->buildArray)) {
@@ -1359,8 +1168,8 @@ class Building {
         foreach ($this->buildArray as $job) {
 
             if (
-                $job['type'] == $tid &&
-                $job['field'] == $id
+                $job['type'] == $gid &&
+                $job['field'] == $fieldId
             ) {
                 $plus = 2;
                 break;
@@ -1368,8 +1177,7 @@ class Building {
         }
     }
 
-    // cache local
-    $nextLevel = $village->resarray['f'.$id] + $plus;
+    $nextLevel = $this->vil->resarray['f'.$fieldId] + $plus;
 
     $required = $dataarray[$nextLevel];
 
@@ -1380,24 +1188,24 @@ class Building {
 
     // store limit
     if (
-        $wood > $village->maxstore ||
-        $clay > $village->maxstore ||
-        $iron > $village->maxstore
+        $wood > $this->vil->maxstore ||
+        $clay > $this->vil->maxstore ||
+        $iron > $this->vil->maxstore
     ) {
         return 1;
     }
 
     // granary limit
-    if ($crop > $village->maxcrop) {
+    if ($crop > $this->vil->maxcrop) {
         return 2;
     }
 
     // not enough resources
     if (
-        $wood > $village->awood ||
-        $clay > $village->aclay ||
-        $iron > $village->airon ||
-        $crop > $village->acrop
+        $wood > $this->vil->awood ||
+        $clay > $this->vil->aclay ||
+        $iron > $this->vil->airon ||
+        $crop > $this->vil->acrop
     ) {
         return 3;
     }
@@ -1407,30 +1215,25 @@ class Building {
 
 	/*****************************************
 	Function to building is max level ?
+	$gid = tipul cladirii, $fieldId = slotul
 	*****************************************/
 
-	public function isMax($id, $field, $loop = 0) {
+	public function isMax($gid, $fieldId, $loop = 0) {
 
-    global $village, $session;
+    $dataarray = isset($GLOBALS['bid'.$gid]) ? $GLOBALS['bid'.$gid] : null;
 
-    $name = 'bid'.$id;
-
-    global $$name;
-
-    $dataarray = $$name;
-
-    $currentLevel = $village->resarray['f'.$field];
+    $currentLevel = $this->vil->resarray['f'.$fieldId];
 
     // special MH case
-    if ($session->tribe == 0) {
+    if ($this->sess->tribe == 0) {
         return ($currentLevel == 20);
     }
 
     // resource fields
-    if ($id <= 4) {
+    if ($gid <= 4) {
 
         $maxLevel = (
-            $village->capital == 1
+            $this->vil->capital == 1
                 ? (count($dataarray) - 1 - $loop)
                 : (count($dataarray) - 11 - $loop)
         );
@@ -1448,40 +1251,28 @@ class Building {
 
 	public function getTypeLevel($tid, $vid = 0) {
 
-    global $village, $database, $session;
-
     // support account
-    if ($session->uid == 1) {
+    if ($this->sess->uid == 1) {
         return 0;
     }
 
-    // cache masiv de important
-    static $resourceCache = array();
-    static $typeLevelCache = array();
+    // B-W1: cheia foloseste vid-ul EFECTIV - vechea cheie "tid_0" era ambigua
+    // intre sate cand $village se schimba in acelasi request (admin switch).
+    $effVid = ($vid == 0 ? $this->vil->wid : $vid);
+    $cacheKey = $effVid.'_'.$tid;
 
-    $cacheKey = $tid.'_'.$vid;
-
-    if (isset($typeLevelCache[$cacheKey])) {
-        return $typeLevelCache[$cacheKey];
+    if (isset($this->typeLevelCache[$cacheKey])) {
+        return $this->typeLevelCache[$cacheKey];
     }
 
-    // evităm query-uri repetate
-    if ($vid == 0) {
-
-        $resourcearray = $village->resarray;
-
-    } else {
-
-        if (!isset($resourceCache[$vid])) {
-            $resourceCache[$vid] = $database->getResourceLevel($vid);
-        }
-
-        $resourcearray = $resourceCache[$vid];
-    }
+    // getResourceLevel e deja cache-uit per request in Database - vechiul
+    // $resourceCache local era un duplicat.
+    $resourcearray = ($vid == 0)
+        ? $this->vil->resarray
+        : $this->db->getResourceLevel($vid);
 
     $keyholder = array();
 
-    // mai rapid decât array_keys + strpos
     foreach ($resourcearray as $key => $value) {
 
         if (
@@ -1489,7 +1280,7 @@ class Building {
             strpos($key, 't') !== false
         ) {
 
-            $keyholder[] = (int)preg_replace('/[^0-9]/', '', $key);
+            $keyholder[] = (int) preg_replace('/[^0-9]/', '', $key);
         }
     }
 
@@ -1497,18 +1288,12 @@ class Building {
 
     // no building
     if ($element == 0) {
-        $typeLevelCache[$cacheKey] = 0;
-        return 0;
+        return $this->typeLevelCache[$cacheKey] = 0;
     }
 
     // single building
     if ($element == 1) {
-
-        $result = $resourcearray['f'.$keyholder[0]];
-
-        $typeLevelCache[$cacheKey] = $result;
-
-        return $result;
+        return $this->typeLevelCache[$cacheKey] = $resourcearray['f'.$keyholder[0]];
     }
 
     // multiple buildings
@@ -1547,16 +1332,14 @@ class Building {
         ? $resourcearray['f'.$keyholder[$target]]
         : 0;
 
-    $typeLevelCache[$cacheKey] = $result;
-
-    return $result;
+    return $this->typeLevelCache[$cacheKey] = $result;
 }
 
 	/*****************************************
 	Function to is current ?
 	*****************************************/
 
-	public function isCurrent($id) {
+	public function isCurrent($fieldId) {
 
     if (empty($this->buildArray)) {
         return false;
@@ -1565,7 +1348,7 @@ class Building {
     foreach ($this->buildArray as $build) {
 
         if (
-            $build['field'] == $id &&
+            $build['field'] == $fieldId &&
             $build['loopcon'] != 1
         ) {
             return true;
@@ -1579,7 +1362,7 @@ class Building {
 	Function to is loop ?
 	*****************************************/
 
-	public function isLoop($id = 0) {
+	public function isLoop($fieldId = 0) {
 
     if (empty($this->buildArray)) {
         return false;
@@ -1588,8 +1371,8 @@ class Building {
     foreach ($this->buildArray as $build) {
 
         if (
-            ($build['field'] == $id && $build['loopcon']) ||
-            ($build['loopcon'] == 1 && $id == 0)
+            ($build['field'] == $fieldId && $build['loopcon']) ||
+            ($build['loopcon'] == 1 && $fieldId == 0)
         ) {
             return true;
         }
@@ -1600,49 +1383,41 @@ class Building {
 
 	/*****************************************
 	Function to finish all with gold
+	B-W2: spart in helpers; SQL-ul raw mutat in metode Database cu invalidare
 	*****************************************/
 
 	public function finishAll($redirect_url = '') {
 
-    global $database, $session, $logging, $village;
-    global $bid18, $bid10, $bid11, $technology, $_SESSION;
+    global $technology;
 
     $countPlus2Gold  = false;
     $countMasterGold = false;
 
-    $buildcount = (!empty($this->buildArray)
-        ? count($this->buildArray)
-        : 0);
-
     $deletIDs = array();
 
-    // cache query-uri
-    static $villageResourceCache = array();
-    static $villageFieldCache = array();
+    // cache local (un singur sat pe apel - bucla filtreaza pe wid-ul curent);
+    // e tinut SINCRON dupa fiecare scadere, ca joburile master succesive sa se
+    // cumuleze corect (inainte, a doua scriere suprascria prima scadere).
+    $villageFields = null;
 
     foreach ($this->buildArray as $jobs) {
 
-        if ($jobs['wid'] != $village->wid) {
+        if ($jobs['wid'] != $this->vil->wid) {
             continue;
         }
 
         $wid = $jobs['wid'];
 
-        // cache getResourceLevel
-        if (!isset($villageResourceCache[$wid])) {
-            $villageResourceCache[$wid] = $database->getResourceLevel($wid);
-        }
+        $wwvillage = $this->db->getResourceLevel($wid);
 
-        $wwvillage = $villageResourceCache[$wid];
-
-        // skip WW
+        // INTENTIONAT (confirmat): daca satul detine WW (f99t == 40), finish-ul
+        // cu gold e blocat pentru TOATE cladirile satului, nu doar pentru WW -
+        // anti-exploit pentru rush-ul de WW. Nu "repara" acest skip.
         if ($wwvillage['f99t'] == 40) {
             continue;
         }
 
-        $level = $jobs['level'];
-
-        // skip excluded
+        // Residence / Palace / WW nu se pot termina cu gold
         if (
             $jobs['type'] == 25 ||
             $jobs['type'] == 26 ||
@@ -1663,67 +1438,66 @@ class Building {
         // MASTER BUILDER
         if ($jobs['master'] != 0) {
 
-            if ($this->meetRequirement($jobs['field'])) {
+            // FIX (B-D1, descoperit la implementare): se verifica cerintele
+            // TIPULUI de cladire ($jobs['type']), nu ale numarului de slot -
+            // vechiul meetRequirement($jobs['field']) evalua cerintele unui gid
+            // aleatoriu (slotul 19..40 interpretat ca gid).
+            if ($this->meetRequirement($jobs['type'])) {
 
-                // fix gold edge case
-                if ($session->gold > 2) {
+                if ($this->sess->gold > 2) {
 
-                    // cache village fields
-                    if (!isset($villageFieldCache[$wid])) {
+                    if ($villageFields === null) {
 
-                        $villageFieldCache[$wid] = array(
-                            'wood' => $database->getVillageField($wid, 'wood'),
-                            'clay' => $database->getVillageField($wid, 'clay'),
-                            'iron' => $database->getVillageField($wid, 'iron'),
-                            'crop' => $database->getVillageField($wid, 'crop')
+                        $villageFields = array(
+                            'wood' => $this->db->getVillageField($wid, 'wood'),
+                            'clay' => $this->db->getVillageField($wid, 'clay'),
+                            'iron' => $this->db->getVillageField($wid, 'iron'),
+                            'crop' => $this->db->getVillageField($wid, 'crop')
                         );
                     }
 
-                    $villwood = $villageFieldCache[$wid]['wood'];
-                    $villclay = $villageFieldCache[$wid]['clay'];
-                    $villiron = $villageFieldCache[$wid]['iron'];
-                    $villcrop = $villageFieldCache[$wid]['crop'];
+                    $buildarray = $GLOBALS['bid'.$jobs['type']];
 
-                    $type = $jobs['type'];
-
-                    $buildarray = $GLOBALS['bid'.$type];
-
-                    $buildwood = $buildarray[$level]['wood'];
-                    $buildclay = $buildarray[$level]['clay'];
-                    $buildiron = $buildarray[$level]['iron'];
-                    $buildcrop = $buildarray[$level]['crop'];
+                    $buildwood = $buildarray[$jobs['level']]['wood'];
+                    $buildclay = $buildarray[$jobs['level']]['clay'];
+                    $buildiron = $buildarray[$jobs['level']]['iron'];
+                    $buildcrop = $buildarray[$jobs['level']]['crop'];
 
                     if (
-                        $buildwood < $villwood &&
-                        $buildclay < $villclay &&
-                        $buildiron < $villiron &&
-                        $buildcrop < $villcrop
+                        $buildwood < $villageFields['wood'] &&
+                        $buildclay < $villageFields['clay'] &&
+                        $buildiron < $villageFields['iron'] &&
+                        $buildcrop < $villageFields['crop']
                     ) {
 
                         $jobFinishSuccess = true;
                         $countMasterGold = true;
                         $enought_res = 1;
 
-                        // scădem resurse doar dacă e nevoie
-                        if ($buildcount > 2) {
+                        // FIX confirmat (B-D1): resursele se scad INTOTDEAUNA la
+                        // finish de master. Vechea conditie "$buildcount > 2"
+                        // permitea finish GRATUIT cand erau 1-2 joburi in coada.
+                        $villageFields['wood'] -= $buildwood;
+                        $villageFields['clay'] -= $buildclay;
+                        $villageFields['iron'] -= $buildiron;
+                        $villageFields['crop'] -= $buildcrop;
 
-                            $database->setVillageField(
-                                $wid,
-                                array('wood', 'clay', 'iron', 'crop'),
-                                array(
-                                    ($villwood - $buildwood),
-                                    ($villclay - $buildclay),
-                                    ($villiron - $buildiron),
-                                    ($villcrop - $buildcrop)
-                                )
-                            );
-                        }
+                        $this->db->setVillageField(
+                            $wid,
+                            array('wood', 'clay', 'iron', 'crop'),
+                            array(
+                                $villageFields['wood'],
+                                $villageFields['clay'],
+                                $villageFields['iron'],
+                                $villageFields['crop']
+                            )
+                        );
                     }
 
                 } else {
 
                     $exclude_master = true;
-                    $deletIDs[] = (int)$jobs['id'];
+                    $deletIDs[] = (int) $jobs['id'];
                 }
             }
 
@@ -1735,116 +1509,111 @@ class Building {
         }
 
         // update building
-        if ($jobFinishSuccess) {
-
-            $q = "
-                UPDATE ".TB_PREFIX."fdata
-                SET
-                    f".$jobs['field']." = ".$jobs['level'].",
-                    f".$jobs['field']."t = ".$jobs['type']."
-                WHERE vref = ".$wid;
+        if ($jobFinishSuccess && !$exclude_master) {
 
             if (
-                !$exclude_master &&
-                $database->query($q) &&
+                $this->db->finishBuildingLevel($wid, $jobs['field'], $jobs['level'], $jobs['type']) &&
                 ($enought_res == 1 || $jobs['master'] == 0)
             ) {
 
-                $database->modifyPop(
+                $this->db->modifyPop(
                     $wid,
                     $resource['pop'],
                     0
                 );
 
-                $deletIDs[] = (int)$jobs['id'];
+                $deletIDs[] = (int) $jobs['id'];
 
                 // embassy update
                 if ($jobs['type'] == 18) {
 
-                    $owner = $database->getVillageField(
-                        $wid,
-                        'owner'
-                    );
+                    $owner = $this->db->getVillageField($wid, 'owner');
+                    $max = $GLOBALS['bid18'][$jobs['level']]['attri'];
 
-                    $max = $bid18[$level]['attri'];
-
-					$database->query("UPDATE ".TB_PREFIX."alidata SET max=".$max." WHERE leader=".$owner);
+                    $this->db->updateAllianceMax($owner, $max);
                 }
             }
         }
-
-        // roman queue
-        if (
-            ($jobs['field'] >= 19 &&
-            ($session->tribe == 1 || ALLOW_ALL_TRIBE)) ||
-            (!ALLOW_ALL_TRIBE && $session->tribe != 1)
-        ) {
-            $innertimestamp = $jobs['timestamp'];
-        }
     }
 
-    // single delete query
     if (!empty($deletIDs)) {
-
-        $database->query("
-            DELETE FROM ".TB_PREFIX."bdata
-            WHERE id IN(".implode(',', $deletIDs).")
-        ");
+        $this->db->deleteBuildings($this->vil->wid, $deletIDs);
     }
 
-    $demolition = $database->finishDemolition($village->wid);
+    $demolition = $this->db->finishDemolition($this->vil->wid);
     $tech = $technology->finishTech();
 
     if ($demolition > 0 || $tech > 0) {
 
         $countPlus2Gold = true;
-        $logging->goldFinLog($village->wid);
+        $this->log->goldFinLog($this->vil->wid);
     }
 
-    // gold update
-    if ($countMasterGold || $countPlus2Gold) {
-        $spent = ($countMasterGold && $countPlus2Gold) ? 3 : 2;
-        $newgold = $session->gold - $spent;
+    $this->chargeFinishGold($countMasterGold, $countPlus2Gold);
 
-        $database->updateUserField($session->uid, 'gold', $newgold, 1);
+    $this->promotePendingLoopJob();
 
-        // LOG complet
-        $database->query("INSERT INTO ".TB_PREFIX."gold_fin_log 
-            (wid, uid, action, gold, time, details) 
-            VALUES (".$village->wid.", ".$session->uid.", 'Finish all constructions', -".$spent.", ".time().", 'Finish construction and research with gold')");
+    self::recountCP($this->db, $this->vil->wid);
 
-        $session->gold = $newgold;
-        $_SESSION['gold'] = $newgold;
-        // Invalidate the 30s session user-cache (see Session::PopulateVar); the gold
-        // write is absolute ($session->gold - $spent), so a stale cache would revert
-        // the balance next request and could allow a double-spend.
-        unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
+    header('Location: '.(
+        $redirect_url
+            ? $redirect_url
+            : $this->sess->referrer
+    ));
+
+    exit;
+}
+
+	/**
+	 * B-W2: plata cu gold pentru finishAll + log + invalidarea cache-ului de
+	 * sesiune (anti double-spend, pastrata 1:1).
+	 */
+	private function chargeFinishGold($countMasterGold, $countPlus2Gold) {
+
+    if (!$countMasterGold && !$countPlus2Gold) {
+        return;
     }
 
-    // un singur query
-    $stillbuildingarray = $database->getJobs($village->wid);
+    $spent = ($countMasterGold && $countPlus2Gold) ? 3 : 2;
+    $newgold = $this->sess->gold - $spent;
+
+    $this->db->updateUserField($this->sess->uid, 'gold', $newgold, 1);
+
+    $this->db->addGoldFinLog(
+        $this->vil->wid,
+        $this->sess->uid,
+        'Finish all constructions',
+        -$spent,
+        'Finish construction and research with gold'
+    );
+
+    $this->sess->gold = $newgold;
+    $_SESSION['gold'] = $newgold;
+
+    // Invalidate the 30s session user-cache (see Session::PopulateVar); the gold
+    // write is absolute ($session->gold - $spent), so a stale cache would revert
+    // the balance next request and could allow a double-spend.
+    unset($_SESSION['cache_user_' . (isset($_SESSION['username']) ? $_SESSION['username'] : '')]);
+}
+
+	/**
+	 * B-W2: daca a ramas un singur job si e in coada de asteptare (loopcon = 1),
+	 * il promoveaza in coada activa. getJobs() citeste mereu fresh din DB
+	 * (getBData($wid, false)), deci vede corect starea de dupa stergeri.
+	 */
+	private function promotePendingLoopJob() {
+
+    $stillbuildingarray = $this->db->getJobs($this->vil->wid);
 
     if (
         count($stillbuildingarray) == 1 &&
         $stillbuildingarray[0]['loopcon'] == 1
     ) {
-
-        $database->query("
-            UPDATE ".TB_PREFIX."bdata
-            SET loopcon = 0
-            WHERE id = ".(int)$stillbuildingarray[0]['id']
+        $this->db->promoteLoopJob(
+            $this->vil->wid,
+            (int) $stillbuildingarray[0]['id']
         );
     }
-
-    self::recountCP($database, $village->wid);
-
-    header('Location: '.(
-        $redirect_url
-            ? $redirect_url
-            : $session->referrer
-    ));
-
-    exit;
 }
 
 	/*****************************************
@@ -1853,29 +1622,28 @@ class Building {
 
 	public static function recountCP($database, $vid) {
 
-    $vid = (int)$vid;
+    $vid = (int) $vid;
 
-    // un singur query
-    $fdata = $database->getResourceLevel($vid);
+    // FIX B1 (B-D1): citire FARA cache. recountCP ruleaza imediat dupa scrieri
+    // in fdata si PERSISTA rezultatul in vdata.cp - cu cache-ul de request ar
+    // calcula pe nivelele vechi si ar salva un CP gresit in DB.
+    $fdata = $database->getResourceLevel($vid, false);
 
     $cpTot = 0;
 
-    // micro-optimizare
     for ($i = 1; $i <= 40; $i++) {
 
-        $building = (int)$fdata['f'.$i.'t'];
+        $building = (int) $fdata['f'.$i.'t'];
 
-        // skip rapid
         if ($building <= 0) {
             continue;
         }
 
-        $lvl = (int)$fdata['f'.$i];
+        $lvl = (int) $fdata['f'.$i];
 
         $cpTot += self::buildingCP($building, $lvl);
     }
 
-    // evităm string concat multiplu
     mysqli_query(
         $database->dblink,
         "
@@ -1891,7 +1659,7 @@ class Building {
 
 	public static function buildingCP($f, $lvl) {
 
-    // cache static enorm de util
+    // date pure (bid tables), independente de sat -> static-ul e sigur aici
     static $cpCache = array();
 
     $cacheKey = $f.'_'.$lvl;
@@ -1900,11 +1668,7 @@ class Building {
         return $cpCache[$cacheKey];
     }
 
-    $name = 'bid'.$f;
-
-    global $$name;
-
-    $dataarray = $$name;
+    $dataarray = isset($GLOBALS['bid'.$f]) ? $GLOBALS['bid'.$f] : null;
 
     $cp = (
         isset($dataarray[$lvl]['cp'])
@@ -1919,30 +1683,22 @@ class Building {
 
 	/*****************************************
 	Function to ressource required
+	$fieldId = slotul, $gid = tipul cladirii
 	*****************************************/
 
-	public function resourceRequired($id, $tid, $plus = 1) {
-
-    global $village, $bid15, $database;
-
-    $name = 'bid'.$tid;
-
-    global $$name;
-
-    // cache static foarte important
-    static $resourceCache = array();
+	public function resourceRequired($fieldId, $gid, $plus = 1) {
 
     $cacheKey =
-        $id.'_'.
-        $tid.'_'.
+        $fieldId.'_'.
+        $gid.'_'.
         $plus.'_'.
-        $village->wid;
+        $this->vil->wid;
 
-    if (isset($resourceCache[$cacheKey])) {
-        return $resourceCache[$cacheKey];
+    if (isset($this->resourceReqCache[$cacheKey])) {
+        return $this->resourceReqCache[$cacheKey];
     }
 
-    $dataarray = $$name;
+    $dataarray = isset($GLOBALS['bid'.$gid]) ? $GLOBALS['bid'.$gid] : null;
 
     // safety
     if (!$dataarray) {
@@ -1957,14 +1713,11 @@ class Building {
             'cp'   => 0
         );
 
-        $resourceCache[$cacheKey] = $empty;
-
-        return $empty;
+        return $this->resourceReqCache[$cacheKey] = $empty;
     }
 
-    $level = $village->resarray['f'.$id] + $plus;
+    $level = $this->vil->resarray['f'.$fieldId] + $plus;
 
-    // un singur lookup
     $required = $dataarray[$level];
 
     $result = array(
@@ -1973,102 +1726,94 @@ class Building {
         'iron' => $required['iron'],
         'crop' => $required['crop'],
         'pop'  => $required['pop'],
-        'time' => $database->getBuildingTime(
-            $id,
-            $tid,
+        'time' => $this->db->getBuildingTime(
+            $fieldId,
+            $gid,
             $plus,
-            $village->wid,
-            $village->resarray
+            $this->vil->wid,
+            $this->vil->resarray
         ),
         'cp'   => $required['cp']
     );
 
-    $resourceCache[$cacheKey] = $result;
-
-    return $result;
+    return $this->resourceReqCache[$cacheKey] = $result;
 }
 
 	/*****************************************
-	Function to get type level
+	Function to get type field
 	*****************************************/
 
 	public function getTypeField($type) {
 
-    global $village;
+    // B-W1: cache pe instanta, cheiat pe wid
+    $cacheKey = $this->vil->wid.'_'.$type;
 
-    // cache static
-    static $typeFieldCache = array();
-
-    if (isset($typeFieldCache[$type])) {
-        return $typeFieldCache[$type];
+    if (isset($this->typeFieldCache[$cacheKey])) {
+        return $this->typeFieldCache[$cacheKey];
     }
 
     for ($i = 19; $i <= 40; $i++) {
 
-        if ($village->resarray['f'.$i.'t'] == $type) {
-
-            $typeFieldCache[$type] = $i;
-
-            return $i;
+        if ($this->vil->resarray['f'.$i.'t'] == $type) {
+            return $this->typeFieldCache[$cacheKey] = $i;
         }
     }
 
-    $typeFieldCache[$type] = false;
-
-    return false;
+    return $this->typeFieldCache[$cacheKey] = false;
 }
 
 	/*****************************************
 	Function to calculate avaliable
 	*****************************************/
 
-	public function calculateAvaliable($id, $tid, $plus = 1) {
+	public function calculateAvaliable($fieldId, $gid, $plus = 1) {
 
-    global $village, $generator;
+    global $generator;
 
-    // un singur apel
-    $uprequire = $this->resourceRequired($id, $tid, $plus);
+    $uprequire = $this->resourceRequired($fieldId, $gid, $plus);
 
-    // cache producții
-    static $prodCache = array();
+    // B-W1: cache pe instanta cheiat pe wid (era "static" ne-cheiat: pastra
+    // productia PRIMULUI sat pentru orice alt sat din acelasi request)
+    $wid = $this->vil->wid;
 
-    if (empty($prodCache)) {
+    if (!isset($this->prodCache[$wid])) {
 
-        $prodCache = array(
-            'wood' => $village->getProd('wood'),
-            'clay' => $village->getProd('clay'),
-            'crop' => $village->getProd('crop'),
-            'iron' => $village->getProd('iron')
+        $this->prodCache[$wid] = array(
+            'wood' => $this->vil->getProd('wood'),
+            'clay' => $this->vil->getProd('clay'),
+            'crop' => $this->vil->getProd('crop'),
+            'iron' => $this->vil->getProd('iron')
         );
     }
 
-    $rwood = $uprequire['wood'] - $village->awood;
-    $rclay = $uprequire['clay'] - $village->aclay;
-    $rcrop = $uprequire['crop'] - $village->acrop;
-    $riron = $uprequire['iron'] - $village->airon;
+    $prod = $this->prodCache[$wid];
 
-    // formule identice, branch-uri reduse
+    $rwood = $uprequire['wood'] - $this->vil->awood;
+    $rclay = $uprequire['clay'] - $this->vil->aclay;
+    $rcrop = $uprequire['crop'] - $this->vil->acrop;
+    $riron = $uprequire['iron'] - $this->vil->airon;
+
     $rwtime = (
-        $rwood > 0 && $prodCache['wood'] > 0
-            ? ($rwood / $prodCache['wood']) * 3600
+        $rwood > 0 && $prod['wood'] > 0
+            ? ($rwood / $prod['wood']) * 3600
             : 0
     );
 
     $rcltime = (
-        $rclay > 0 && $prodCache['clay'] > 0
-            ? ($rclay / $prodCache['clay']) * 3600
+        $rclay > 0 && $prod['clay'] > 0
+            ? ($rclay / $prod['clay']) * 3600
             : 0
     );
 
     $rctime = (
-        $rcrop > 0 && $prodCache['crop'] > 0
-            ? ($rcrop / $prodCache['crop']) * 3600
+        $rcrop > 0 && $prod['crop'] > 0
+            ? ($rcrop / $prod['crop']) * 3600
             : 0
     );
 
     $ritime = (
-        $riron > 0 && $prodCache['iron'] > 0
-            ? ($riron / $prodCache['iron']) * 3600
+        $riron > 0 && $prod['iron'] > 0
+            ? ($riron / $prod['iron']) * 3600
             : 0
     );
 
@@ -2082,5 +1827,3 @@ class Building {
     return $generator->procMtime($reqtime);
 }
 };
-
-?>

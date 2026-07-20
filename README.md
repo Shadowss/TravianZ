@@ -27,13 +27,43 @@ Massive Code Refactor
 
 * Fully refactored Templates folder/system.
 * Added 🇫🇷 French and 🇷🇴 Romanian languages.
-* Large portions of GameEngine fully refactored.
-* Remaining work planned for parts of Automation, Database, Units and Technology.
+* GameEngine fully refactored, file by file, with randomized equivalence testing (20k-30k cases per critical function).
+* Database.php (~450 methods) split into 14 domain traits under GameEngine/Database/ - zero call-site changes, validated via reflection parity.
+* Automation.php (~116 methods) split into 11 domain traits under GameEngine/Automation/ using the same method.
+* Village.php: production getters unified, one UPDATE per resource tick instead of two, side-effect-free constructor with explicit tick(), automation lock race (TOCTOU) fixed.
+* Building.php: build requirements rewritten as a declarative table, per-village instance caches, dead code removed (2,085 -> 1,829 lines).
+* Units.php, Market.php, Message.php, Profile.php and Chat.php refactored and hardened.
 * starvation() function in Automation refactored and split into multiple methods.
 * sendUnitsComplete() function fully refactored, reducing a 1711-line function into 26 separate methods.
 * checkAllianceEmbassiesStatus() in Database redesigned and split into multiple functions.
 * Medal system completely rewritten for easier maintenance and readability.
 * Removed obsolete and unused code/folders from both the game and Admin Panel.
+
+⸻
+
+New Playable Tribes
+
+Four fully playable tribes added on top of the original three, across the data layer, game engine and templates:
+
+* Huns (tribe 6, units u51-u60) - Command Center (gid 44) replaces Residence/Palace, Makeshift Wall.
+* Egyptians (tribe 7, units u61-u70) - Waterworks, Stone Wall.
+* Spartans (tribe 8, units u71-u80) - Defensive Wall.
+* Vikings (tribe 9, units u81-u90) - Barricade.
+* New buildings integrated across gids 42-50 (incl. the Hospital family and Great Workshop) with per-tribe build requirements.
+* Unit-range formula (tribe-1)*10+1; Great Building training queue offset moved to +500 to avoid unit-ID conflicts.
+* Per-tribe Academy templates, troops.tpl unit cap raised 50 -> 90, statistics routing and CSS, profile/ranking/map tribe arrays, admin dropdowns, install feature flags.
+* Three-step registration wizard: visual tribe cards -> starting quadrant -> confirmation.
+
+⸻
+
+T4 Hero System
+
+Travian 4-style hero system ported into the T3.6 engine, in phases:
+
+* Items backend (HeroItems.php) with equippable hero items and data layer.
+* Adventures backend (HeroAdventure.php) with adventure generation and rewards.
+* Auction house (HeroAuction.php) for player-to-player item trading.
+* Battle and speed integration (HeroBattleBonus.php + Battle.php hooks): item fighting strength, per-unit weapon bonuses, armor damage reduction, hunting horn and speed effects, artwork culture-point item.
 
 ⸻
 
@@ -85,6 +115,8 @@ Gameplay Improvements
     * Reports
     * Auto-completions
     * Other player settings
+* Server Milestones system (first village, first artifact, WW progress...) with ranking widget and SVG badges.
+* Mead-Festival mechanic for the Brewery (Teuton-only, 72-hour timer) with correct catapult-confusion integration.
 * New Special Medal System:
     * Artifact Owner
     * WW Owner
@@ -108,6 +140,11 @@ Bug Fixes
     * Various game mechanics
 * Winner registration issues fixed.
 * Punish troop deletion fixed.
+* Huns can now build the Stonemason's Lodge (via Command Center >= 3) - engine and templates.
+* Master Builder gold finish now always deducts resources (was free with <= 2 queued jobs) and validates the building type instead of the slot number.
+* finishAll() no longer recomputes culture points from stale cached data (wrong CP was being persisted).
+* isCastleBuilt() strict type check - a WW at level 26 or a matching village ref no longer falsely blocks Palace construction.
+* Undefined-variable warnings on PHP 8 fixed (chat refresh wrote to the error log on every request).
 
 ⸻
 
@@ -118,6 +155,10 @@ Security Improvements
 * New CSRF protection system implemented.
 * Added protection against race conditions.
 * Improved validation across critical systems.
+* Server-side culture-point check on village founding was silently bypassed - fixed (client-side was the only enforcement).
+* IDOR in friend-list operations fixed: client-supplied user ID replaced with the session user.
+* Negative-amount guard on marketplace resource sending.
+* Repo-wide audit (342 PHP files, ~66k lines): systemic cache-invalidation gaps closed via a central invalidateCachesFor(), reflected XSS fixes (warsim.php, Preferences), hardened .htaccess, error_reporting bitmask and MD5-fallback guards.
 
 ⸻
 
@@ -158,18 +199,19 @@ Completed
 * Templates system.
 * Admin Panel.
 * Frontend and backend redesign.
-* Major parts of GameEngine.
-* Automation functions.
-* Database alliance systems.
+* GameEngine (full sweep - all files audited, refactored where needed).
+* Automation functions + split into 11 domain traits.
+* Database split into 14 domain traits, with request-level caching and central invalidation.
+* Units, Technology, Village, Building, Market, Message, Profile and Chat refactors.
 * Medal system.
 * Logging system.
 
 Still Planned
 
-* Remaining Automation cleanup.
-* Database optimization.
-* Units system refactor.
-* Technology system refactor.
+* Automation moved to a real cron job (currently triggered by page loads).
+* Database cleanup with configurable retention (battle reports, chat, stale rows).
+* SQL index audit for hot columns.
+* Static asset compression and browser caching (.htaccess).
 
 ⸻
 

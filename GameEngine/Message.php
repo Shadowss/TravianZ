@@ -307,7 +307,6 @@ class Message
     private function removeMessage($post)
     {
         global $database, $session;
-        $post = $database->escape($post);
         $mode5updates = [];
         $mode7updates = [];
         $mode8updates = [];
@@ -316,14 +315,9 @@ class Message
                 continue;
             }
             $messageId = (int)$post['n' . $i];
-            $query = mysqli_query(
-                $database->dblink,
-                "SELECT target, owner
-                 FROM " . TB_PREFIX . "mdata
-                 WHERE id = " . $messageId . "
-                 LIMIT 1"
-            );
-            $message = mysqli_fetch_array($query);
+            // UM-W1: SELECT-ul de ownership mutat in DB (getMessageOwnership).
+            // $messageId e deja cast la int, deci nu mai e nevoie de escape pe tot $post.
+            $message = $database->getMessageOwnership($messageId);
             if (
                 $message['target'] == $session->uid &&
                 $message['owner'] == $session->uid
@@ -595,34 +589,15 @@ class Message
     {
         global $session, $database;
 
-        // Flood protection
-        $q = "
-            SELECT COUNT(*) AS Total
-            FROM " . TB_PREFIX . "mdata
-            WHERE owner='" . $session->uid . "'
-            AND time > " . (time() - 60);
-        $res = mysqli_fetch_array(
-            mysqli_query($database->dblink, $q),
-            MYSQLI_ASSOC
-        );
-        if ($res['Total'] > 5) {
+        // Flood protection (UM-W1: query mutat in DB)
+        if ($database->countRecentMessages($session->uid, 60) > 5) {
             return;
         }
-        $allmembersQ = mysqli_query(
-            $database->dblink,
-            "SELECT id
-             FROM " . TB_PREFIX . "users
-             WHERE alliance='" . $session->alliance . "'"
-        );
-        $userally = $database->getUserField($session->uid, "alliance", 0);
-        $permission = mysqli_fetch_array(
-            mysqli_query(
-                $database->dblink,
-                "SELECT opt7
-                 FROM " . TB_PREFIX . "ali_permission
-                 WHERE uid='" . $session->uid . "'"
-            )
-        );
+
+        $allmembers  = $database->getAllianceMemberIds($session->alliance);
+        $userally    = $database->getUserField($session->uid, "alliance", 0);
+        $permission  = $database->getAllyMessagePermission($session->uid);
+
         if (defined('WORD_CENSOR')) {
             $topic = $this->wordCensor($topic);
             $text  = $this->wordCensor($text);
@@ -646,11 +621,11 @@ class Message
                 $coor,
                 $report
             );
-            if ($permission['opt7'] == 1) {
+            if ($permission == 1) {
                 if ($userally > 0) {
-                    while ($allmembers = mysqli_fetch_array($allmembersQ)) {
+                    foreach ($allmembers as $memberId) {
                         $database->sendMessage(
-                            $allmembers['id'],
+                            $memberId,
                             $session->uid,
                             htmlspecialchars(addslashes($topic)),
                             htmlspecialchars(addslashes($text)),
@@ -671,19 +646,9 @@ class Message
         global $session, $database;
         $user = $database->getUserField($recieve, "id", 1);
 
-        // Flood protection
+        // Flood protection (UM-W1: query mutat in DB)
         if ($security_check) {
-            $q = "
-                SELECT COUNT(*) AS Total
-                FROM " . TB_PREFIX . "mdata
-                WHERE owner='" . $session->uid . "'
-                AND time > " . (time() - 60);
-
-            $res = mysqli_fetch_array(
-                mysqli_query($database->dblink, $q),
-                MYSQLI_ASSOC
-            );
-            if ($res['Total'] > 5) {
+            if ($database->countRecentMessages($session->uid, 60) > 5) {
                 return;
             }
         }
@@ -842,7 +807,12 @@ class Message
 
     public function addFriends($post)
     {
-        global $database;
+        global $database, $session;
+        // FIX securitate (UM-D1): identitatea proprie se ia din sesiune, NU din
+        // $post['myid'] (hidden field, deci falsificabil de un client modificat).
+        // Inainte, un POST forjat cu alt myid modifica lista de prieteni a altui
+        // jucator (IDOR) - SQL-ul era escapat, dar ownership-ul nu era verificat.
+        $myid = (int) $session->uid;
         for ($i = 0; $i <= 19; $i++) {
             if (empty($post['addfriends' . $i])) {
                 continue;
@@ -859,12 +829,12 @@ class Message
                     continue;
                 }
                 $user = $database->getUserField(
-                    $post['myid'],
+                    $myid,
                     "friend" . $j,
                     0
                 );
                 $userwait = $database->getUserField(
-                    $post['myid'],
+                    $myid,
                     "friend" . $j . "wait",
                     0
                 );
@@ -872,11 +842,11 @@ class Message
                 for ($k = 0; $k <= 19; $k++) {
 
                     $user1 = $database->getUserField(
-                        $post['myid'],
+                        $myid,
                         "friend" . $k,
                         0
                     );
-                    if ($user1 == $uid || $uid == $post['myid']) {
+                    if ($user1 == $uid || $uid == $myid) {
                         $exist = 1;
                     }
                 }
@@ -905,18 +875,18 @@ class Message
                             $database->addFriend(
                                 $uid,
                                 "friend" . $l . "wait",
-                                $post['myid']
+                                $myid
                             );
                             $added1 = 1;
                         }
                     }
                     $database->addFriend(
-                        $post['myid'],
+                        $myid,
                         "friend" . $j,
                         $uid
                     );
                     $database->addFriend(
-                        $post['myid'],
+                        $myid,
                         "friend" . $j . "wait",
                         $uid
                     );

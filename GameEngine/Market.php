@@ -299,11 +299,16 @@ class Market
                 ? PUSH_PROTECTION_LIMIT
                 : 'This account has reached its resource-transfer limit for now and cannot receive that many resources. Send less, or wait for the limit to recover.');
         } elseif (
-            $availableWood >= $post['r1'] &&
-            $availableClay >= $post['r2'] &&
-            $availableIron >= $post['r3'] &&
-            $availableCrop >= $post['r4']
+            $availableWood >= $wtrans &&
+            $availableClay >= $ctrans &&
+            $availableIron >= $itrans &&
+            $availableCrop >= $crtrans
         ) {
+            // UM-D1: comparatia foloseste valorile curatate de semnul minus
+            // ($wtrans/... in loc de $post['r1']/...). Inainte, comparatia se
+            // facea pe POST-ul brut (potential negativ), dar deducerea se facea
+            // pe valoarea pozitiva - un "r1" negativ trecea verificarea si scadea
+            // resurse pozitive.
             $reqMerc = ceil((array_sum($resource) - 0.1) / $this->maxcarry);
 
             // Acquire merchant lock to prevent race conditions
