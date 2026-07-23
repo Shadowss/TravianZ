@@ -95,6 +95,95 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
   </table>
 </div>
 
+<!-- CRON / AUTOMATION -->
+<?php
+// Starea reala a cron-ului, citita din markerul scris de cron.php la fiecare tick.
+// Pragul de 90s e acelasi cu cel din GameEngine/Village.php: sub el, paginile
+// jucatorilor NU mai declanseaza automation (il face cron-ul); peste el, paginile
+// preiau automat ca fallback.
+$cronMarkerFile = __DIR__ . '/../../GameEngine/Prevention/cron_active.txt';
+$cronLastRun    = @is_file($cronMarkerFile) ? (int) @file_get_contents($cronMarkerFile) : 0;
+$cronAge        = $cronLastRun > 0 ? (time() - $cronLastRun) : -1;
+$cronActive     = ($cronAge >= 0 && $cronAge < 90);
+
+$cronLoop = defined('CRON_LOOP_SECONDS') ? (int) CRON_LOOP_SECONDS : 300;
+$cronTick = defined('CRON_TICK_SECONDS') ? (int) CRON_TICK_SECONDS : 60;
+$cronKey  = defined('CRON_KEY') ? (string) CRON_KEY : '';
+
+$cronBase = defined('HOMEPAGE') ? rtrim(HOMEPAGE, '/') : '';
+$cronUrl  = ($cronBase !== '' && $cronKey !== '') ? $cronBase . '/cron.php?key=' . $cronKey : '';
+
+$cronPath = realpath(__DIR__ . '/../../cron.php');
+$cronCmd  = $cronPath ? '*/5 * * * * /usr/local/bin/php ' . $cronPath . ' >/dev/null 2>&1' : '';
+
+// cheia afisata mascat; se dezvaluie la cerere (evita expunerea in screenshot-uri)
+$cronKeyMasked = ($cronKey === '')
+    ? ''
+    : (strlen($cronKey) > 12 ? substr($cronKey, 0, 6) . str_repeat('&bull;', 8) . substr($cronKey, -4) : str_repeat('&bull;', 8));
+?>
+<div class="config-card">
+  <div class="config-head"><span>Cron &amp; Automation</span><a href="admin.php?p=editCronSet" title="Edit Cron &amp; Automation" class="edit-btn"><?php echo $editIcon; ?></a></div>
+  <table class="config-table">
+    <tr><td class="b"><?php echo SERV_VARIABLE ?></td><td class="b"><?php echo SERV_VALUE ?></td></tr>
+
+    <tr>
+      <td>Automation source <em class="tooltip">?<span class="classic">Where the game tick (battles, movements, training, construction) is processed from. When the cron job is running, players' page loads no longer carry the processing.</span></em></td>
+      <td><?php echo $cronActive
+            ? "<span class='badge green'>Cron job</span>"
+            : "<span class='badge red'>Page loads (fallback)</span>"; ?></td>
+    </tr>
+
+    <tr>
+      <td>Last cron tick <em class="tooltip">?<span class="classic">Written by cron.php on every tick into GameEngine/Prevention/cron_active.txt. Under 90 seconds means the cron is alive.</span></em></td>
+      <td><?php
+            if ($cronLastRun > 0) {
+                echo date('d.m.Y H:i:s', $cronLastRun) . ' <span style="color:#777">(' . $cronAge . 's ago)</span>';
+            } else {
+                echo "<span class='badge red'>Never</span>";
+            }
+          ?></td>
+    </tr>
+
+    <tr>
+      <td>Invocation length <em class="tooltip">?<span class="classic">CRON_LOOP_SECONDS - how long one cron.php invocation keeps running. Hosts that only allow a cron every 5 minutes still get a tick every minute this way. 0 = a single tick per invocation.</span></em></td>
+      <td><?php echo $cronLoop > 0
+            ? $cronLoop . ' s <span style="color:#777">(' . (int) floor($cronLoop / max($cronTick, 1)) . ' ticks per invocation)</span>'
+            : "<span class='badge blue'>Single tick</span>"; ?></td>
+    </tr>
+
+    <tr>
+      <td>Tick interval <em class="tooltip">?<span class="classic">CRON_TICK_SECONDS - how often Automation runs inside one invocation. Automation itself expects to run about every 60 seconds.</span></em></td>
+      <td><?php echo $cronTick; ?> s</td>
+    </tr>
+
+    <tr>
+      <td>HTTP trigger key <em class="tooltip">?<span class="classic">CRON_KEY - only needed to call cron.php over HTTP (external cron service). Running it from the server's own cron job does not use this key. Generated automatically at install.</span></em></td>
+      <td><?php if ($cronKey === '') { ?>
+            <span class='badge red'>Not set</span>
+          <?php } else { ?>
+            <span id="cronKeyMask"><?php echo $cronKeyMasked; ?></span>
+            <span id="cronKeyFull" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronKey, ENT_QUOTES, 'UTF-8'); ?></span>
+            <a href="#" style="margin-left:6px" onclick="var m=document.getElementById('cronKeyMask'),f=document.getElementById('cronKeyFull'),u=document.getElementById('cronUrlFull');var hidden=(f.style.display==='none');m.style.display=hidden?'none':'';f.style.display=hidden?'':'none';if(u){u.style.display=hidden?'':'none';}this.textContent=hidden?'hide':'show';return false;">show</a>
+          <?php } ?></td>
+    </tr>
+
+    <?php if ($cronUrl !== '') { ?>
+    <tr>
+      <td>HTTP trigger URL <em class="tooltip">?<span class="classic">Optional. Use this with an external cron service if the host cannot run a local cron job. One HTTP call = one tick.</span></em></td>
+      <td><span style="color:#777">hidden &ndash; use "show" above</span>
+          <span id="cronUrlFull" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronUrl, ENT_QUOTES, 'UTF-8'); ?></span></td>
+    </tr>
+    <?php } ?>
+
+    <?php if ($cronCmd !== '') { ?>
+    <tr>
+      <td>Cron job command <em class="tooltip">?<span class="classic">Add this in cPanel &rarr; Cron Jobs. The path is detected from this installation.</span></em></td>
+      <td style="word-break:break-all"><code><?php echo htmlspecialchars($cronCmd, ENT_QUOTES, 'UTF-8'); ?></code></td>
+    </tr>
+    <?php } ?>
+  </table>
+</div>
+
 <!-- NEW FUNCTIONS -->
 <div class="config-card">
   <div class="config-head"><span>New Mechanics and Functions</span><a href="admin.php?p=editNewFunctions" title="Edit New Mechanics and Functions" class="edit-btn"><?php echo $editIcon; ?></a></div>

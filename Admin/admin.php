@@ -94,6 +94,7 @@ function admin_validated_page(string $raw): string
         'maintenenceResetPlus', 'givePlusRes', 'maintenenceResetPlusBonus',
         'addUsers', 'users', 'admin_log', 'config', 'debug_log',
         'editServerSet', 'editPlusSet', 'editLogSet', 'editNewsboxSet',
+        'editCronSet',
         'editExtraSet', 'editAdminInfo', 'resetServer', 'player', 'editUser',
         'deletion', 'Newmessage', 'editPlus', 'editSitter', 'editPassword',
         'editProtection', 'editOverall',
@@ -300,6 +301,10 @@ if ($page !== '') {
 
         case 'editServerSet':
             $subpage = 'Server Configuration';
+            break;
+
+        case 'editCronSet':
+            $subpage = 'Cron & Automation';
             break;
 
         case 'editPlusSet':

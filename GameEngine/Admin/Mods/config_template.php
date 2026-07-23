@@ -39,9 +39,52 @@ if (!function_exists('admin_config_template_path')) {
         return admin_config_template_path() !== false;
     }
 
-    // Raw template contents (placeholders untouched), or false when unavailable.
+    // Raw template contents, or false when unavailable.
+    //
+    // Placeholders are left untouched for the caller to fill in, with ONE
+    // exception: %CRONKEY%. Every edit*.php mod regenerates config.php from this
+    // template and replaces only the placeholders it knows about, so a value that
+    // no mod handles would be written to config.php literally — breaking the key
+    // used to call cron.php over HTTP. CRON_KEY is not something the admin edits
+    // in any of those forms, so it is resolved here, once, for all callers:
+    //   - existing server  -> keep the current CRON_KEY (survives config saves)
+    //   - key not defined  -> provision a fresh random one (servers installed
+    //                         before CRON_KEY existed in the template)
     function admin_config_template_contents() {
         $path = admin_config_template_path();
-        return $path !== false ? file_get_contents($path) : false;
+
+        if ($path === false) {
+            return false;
+        }
+
+        $text = file_get_contents($path);
+
+        if ($text === false) {
+            return false;
+        }
+
+        if (strpos($text, '%CRONKEY%') !== false) {
+            $cronKey = (defined('CRON_KEY') && CRON_KEY !== '' && CRON_KEY !== '%CRONKEY%')
+                ? CRON_KEY
+                : bin2hex(random_bytes(24));
+
+            $text = str_replace('%CRONKEY%', $cronKey, $text);
+        }
+
+        // Acelasi tratament pentru durata ciclului si intervalul de tick: sunt
+        // editate din ACP (editCronSet), deci orice alt mod care regenereaza
+        // config.php trebuie sa PASTREZE valorile curente, nu sa le reseteze la
+        // cele din template.
+        if (strpos($text, '%CRONLOOP%') !== false) {
+            $cronLoop = defined('CRON_LOOP_SECONDS') ? (int) CRON_LOOP_SECONDS : 300;
+            $text = str_replace('%CRONLOOP%', (string) $cronLoop, $text);
+        }
+
+        if (strpos($text, '%CRONTICK%') !== false) {
+            $cronTick = defined('CRON_TICK_SECONDS') ? (int) CRON_TICK_SECONDS : 60;
+            $text = str_replace('%CRONTICK%', (string) $cronTick, $text);
+        }
+
+        return $text;
     }
 }

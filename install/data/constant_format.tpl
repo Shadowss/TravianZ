@@ -23,6 +23,26 @@ define("ERROR_REPORT","%ERRORREPORT%");
 define('AUTOMATION_LOCK_FILE_NAME', 'automation.lck');
 
 //////////////////////////////////
+// *****  CRON / AUTOMATION *****//
+//////////////////////////////////
+// Automation ruleaza din cron.php (cron job pe server), nu din paginile
+// jucatorilor. Vezi comentariile din cron.php pentru instalarea cron job-ului.
+//
+// CRON_LOOP_SECONDS = cat timp tine o invocare de cron.php.
+//   Multe hosturi nu permit cron mai des de 5 minute, iar Automation vrea sa
+//   ruleze la ~60s. De aceea o invocare ruleaza mai multe tick-uri la rand.
+//   300 = potrivit pentru un cron "*/5 * * * *". Pune 0 daca hostul tau permite
+//   cron la fiecare minut (atunci o invocare = un singur tick).
+// CRON_TICK_SECONDS = la cat timp se repeta un tick in interiorul invocarii.
+define('CRON_LOOP_SECONDS', %CRONLOOP%);
+define('CRON_TICK_SECONDS', %CRONTICK%);
+
+// Cheie pentru apelarea cron.php prin HTTP (wget/curl sau un serviciu extern de
+// cron). Rularea din linia de comanda (cron job cPanel) NU are nevoie de ea.
+// Generata automat la instalare; pastrata la salvarile de configuratie din ACP.
+define('CRON_KEY', '%CRONKEY%');
+
+//////////////////////////////////
 // *****  SERVER SETTINGS  *****//
 //////////////////////////////////
 

@@ -265,6 +265,8 @@ Notes:
   - World data
   - Croppers build
 5. After success, access the game root.
+6. Installation in cPanel (Cron Jobs → Add New Cron Job, every minute):
+   - * * * * * /usr/bin/php /home/USER/public_html/cron.php >/dev/null 2>&1 (REPLACE USER WITH YOUR USERNAME)
 
 ## Environment Configuration
 

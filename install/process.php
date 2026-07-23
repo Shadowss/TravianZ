@@ -107,6 +107,13 @@ class Process {
 		$findReplace["%QTYPE%"] = $_POST['qtype'];  
 		$findReplace["%BEGINNER%"] = $_POST['beginner'];
 		$findReplace["%STARTTIME%"] = time();
+		// Cheie aleatoare pentru apelul HTTP al cron.php (vezi CRON_KEY in config).
+		// Generata o singura data, la instalare; ACP-ul o pastreaza la resalvari.
+		$findReplace["%CRONKEY%"] = bin2hex(random_bytes(24));
+		// Valori implicite pentru ciclul intern al cron.php; editabile ulterior
+		// din ACP (Config -> Cron & Automation -> edit).
+		$findReplace["%CRONLOOP%"] = 300;
+		$findReplace["%CRONTICK%"] = 60;
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
 		$findReplace["%HOMEPAGE%"] = $_POST['homepage'];
 		$findReplace["%SERVER%"] = $_POST['server'];
