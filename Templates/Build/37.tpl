@@ -90,6 +90,12 @@
         }
 
 		if(isset($_GET['land']) && $village->resarray['f' . $id] >= 1) {
+            // FIX: pagina de oaze pierdea meniul T4 - ramura asta e inaintea
+            // celei cu tab-uri si nu includea navigatia deloc.
+            if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+                $t4tab = 'land';
+                include_once("37_t4nav.tpl");
+            }
             include_once("37_land.tpl");
 		} else if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4
             && $village->resarray['f' . $id] >= 1

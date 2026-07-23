@@ -264,10 +264,99 @@ class HeroItems
      *  - anything already in that slot is unequipped first (atomic enough for
      *    a per-user action; both statements touch only this user's rows)
      */
+    /* =========================================================================
+     *  DISPONIBILITATEA EROULUI PENTRU SCHIMBAREA ECHIPAMENTULUI
+     * ===================================================================== */
+
+    /** @var array cache per request: uid => motiv ('' = eroul e acasa) */
+    private static $awayCache = array();
+
+    /**
+     * Motivul pentru care eroul NU poate schimba echipamentul acum.
+     *
+     * Intoarce '' cand eroul e acasa si poate fi echipat, sau una dintre:
+     *   'adventure'     - plecat intr-o aventura
+     *   'attack'        - plecat intr-un atac (singur sau cu trupe), dus sau intors
+     *   'reinforcement' - trimis ca intarire in alt sat
+     *
+     * Comportament ca in Travian original: echipamentul se schimba doar cat timp
+     * eroul e in sat. Eroul MORT nu e blocat - e "acasa", doar fara viata, si in
+     * T4 iti poti pregati echipamentul cat timp astepti invierea.
+     */
+    public function heroAwayReason($uid)
+    {
+        $uid = (int) $uid;
+
+        if (isset(self::$awayCache[$uid])) {
+            return self::$awayCache[$uid];
+        }
+
+        $p = TB_PREFIX;
+
+        // ATENTIE: aliasul pentru miscarea de intoarcere NU poate fi "returning" -
+        // e cuvant rezervat in MariaDB (clauza RETURNING) si strica query-ul.
+        // Un singur query, cu motive separate, ca interfata sa poata afisa
+        // exact de ce e blocat. Coloanele `from`/`to` sunt cuvinte rezervate,
+        // de aceea sunt in backticks.
+        $q = "SELECT
+                (SELECT COUNT(*) FROM {$p}hero
+                  WHERE uid = ? AND COALESCE(intraining, 0) = 0) AS hero_exists,
+                (SELECT COUNT(*) FROM {$p}hero_adventure
+                  WHERE uid = ? AND status = 1) AS adventure,
+                (SELECT IFNULL(SUM(e.hero), 0) FROM {$p}enforcement e
+                  INNER JOIN {$p}vdata v ON v.wref = e.`from`
+                  WHERE v.owner = ?) AS reinforcement,
+                (SELECT IFNULL(SUM(a.t11), 0) FROM {$p}movement m
+                  INNER JOIN {$p}attacks a ON a.id = m.ref
+                  INNER JOIN {$p}vdata v ON v.wref = m.`from`
+                  WHERE v.owner = ? AND m.proc = 0 AND m.sort_type = 3) AS outgoing,
+                (SELECT IFNULL(SUM(a.t11), 0) FROM {$p}movement m
+                  INNER JOIN {$p}attacks a ON a.id = m.ref
+                  INNER JOIN {$p}vdata v ON v.wref = m.`to`
+                  WHERE v.owner = ? AND m.proc = 0 AND m.sort_type = 4) AS atk_return";
+
+        $stmt = $this->db->prepare($q);
+
+        if (!$stmt) {
+            // daca query-ul nu se poate pregati, nu blocam jucatorul
+            return self::$awayCache[$uid] = '';
+        }
+
+        $stmt->bind_param('iiiii', $uid, $uid, $uid, $uid, $uid);
+        $stmt->execute();
+        $stmt->bind_result($heroExists, $adventure, $reinforcement, $outgoing, $atkReturn);
+        $stmt->fetch();
+        $stmt->close();
+
+        $reason = '';
+
+        // Fara erou antrenat nu exista pe cine echipa. Se numara si eroii morti
+        // (randul exista, doar dead = 1): in T4 iti poti pregati echipamentul cat
+        // astepti invierea. Eroii aflati INCA in antrenament (intraining = 1) nu
+        // conteaza - inca nu exista cu adevarat.
+        if ((int) $heroExists === 0) {
+            $reason = 'nohero';
+        } elseif ((int) $adventure > 0) {
+            $reason = 'adventure';
+        } elseif (((int) $outgoing + (int) $atkReturn) > 0) {
+            $reason = 'attack';
+        } elseif ((int) $reinforcement > 0) {
+            $reason = 'reinforcement';
+        }
+
+        return self::$awayCache[$uid] = $reason;
+    }
+
     public function equipItem($uid, $rowId)
     {
         global $database;
         $uid = (int) $uid; $rowId = (int) $rowId;
+
+        // Eroul trebuie sa fie in sat. Verificarea e AICI, nu doar in interfata,
+        // ca un POST trimis manual sa nu poata ocoli regula.
+        if ($this->heroAwayReason($uid) !== '') {
+            return false;
+        }
 
         $row = $this->findRowById($uid, $rowId);
         if (!$row || $row['orphan'] || (int) $row['def']['slot'] === HSLOT_BAG) {
@@ -314,6 +403,11 @@ class HeroItems
     /** Unequip a specific owned row. Returns true on success. */
     public function unequipItem($uid, $rowId)
     {
+        // Acelasi gard ca la echipare (vezi heroAwayReason).
+        if ($this->heroAwayReason($uid) !== '') {
+            return false;
+        }
+
         $uid = (int) $uid; $rowId = (int) $rowId;
         $stmt = $this->db->prepare(
             "UPDATE " . TB_PREFIX . "hero_items SET equipped = 0 WHERE uid = ? AND id = ? AND equipped = 1 LIMIT 1"

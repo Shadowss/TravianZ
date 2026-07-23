@@ -55,6 +55,16 @@ define('CLEANUP_INTERVAL', 3600);
 define('CLEANUP_BATCH', 5000);
 
 //////////////////////////////////
+// *****       EROU        *****//
+//////////////////////////////////
+// Regenerarea de BAZA a vietii eroului, in HP pe zi, independenta de punctele
+// puse in atributul de regenerare (ca in Travian T4). Fara ea, un erou cu 0
+// puncte in regenerare nu si-ar reface niciodata viata si ar muri inevitabil
+// dupa destule aventuri. Se scaleaza cu viteza serverului, ca si regenerarea
+// din atribute. 0 = dezactivata (comportamentul vechi).
+define('HERO_BASE_REGEN', %HEROBASEREGEN%);
+
+//////////////////////////////////
 // *****  SERVER SETTINGS  *****//
 //////////////////////////////////
 

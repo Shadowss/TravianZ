@@ -50,7 +50,11 @@ if (!function_exists('admin_config_template_path')) {
     //   - existing server  -> keep the current CRON_KEY (survives config saves)
     //   - key not defined  -> provision a fresh random one (servers installed
     //                         before CRON_KEY existed in the template)
-    function admin_config_template_contents() {
+    // $overrides permite unui mod de editare sa IMPUNA o valoare pentru un
+    // placeholder pe care altfel l-am pastra din constanta curenta (ex.
+    // editServerSet care schimba HERO_BASE_REGEN). Celelalte module apeleaza
+    // fara argumente si valorile curente raman neatinse.
+    function admin_config_template_contents(array $overrides = array()) {
         $path = admin_config_template_path();
 
         if ($path === false) {
@@ -92,6 +96,15 @@ if (!function_exists('admin_config_template_path')) {
             '%CLEANUPCHAT%'     => array('CLEANUP_CHAT_DAYS', 7),
             '%CLEANUPMESSAGES%' => array('CLEANUP_MESSAGES_DAYS', 0),
         );
+
+        // regenerarea de baza a eroului: acelasi tratament, sa nu fie resetata
+        $cleanupDefaults['%HEROBASEREGEN%'] = array('HERO_BASE_REGEN', 10);
+
+        foreach ($overrides as $ovPlaceholder => $ovValue) {
+            if (strpos($text, $ovPlaceholder) !== false) {
+                $text = str_replace($ovPlaceholder, (string) $ovValue, $text);
+            }
+        }
 
         foreach ($cleanupDefaults as $placeholder => $info) {
             if (strpos($text, $placeholder) === false) {

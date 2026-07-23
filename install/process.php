@@ -147,6 +147,14 @@ class Process {
 
 			$findReplace[$placeholder] = $value;
 		}
+
+		// Regenerarea de baza a vietii eroului (HP pe zi). Vezi HERO_BASE_REGEN.
+		$heroRegen = isset($_POST['hero_base_regen']) ? (int) $_POST['hero_base_regen'] : 10;
+
+		if ($heroRegen < 0)   { $heroRegen = 0; }
+		if ($heroRegen > 100) { $heroRegen = 100; }
+
+		$findReplace["%HEROBASEREGEN%"] = $heroRegen;
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
 		$findReplace["%HOMEPAGE%"] = $_POST['homepage'];
 		$findReplace["%SERVER%"] = $_POST['server'];

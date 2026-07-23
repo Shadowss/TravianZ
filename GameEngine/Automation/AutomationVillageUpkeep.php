@@ -212,8 +212,82 @@ trait AutomationVillageUpkeep {
 
     private function culturePoints() {
         global $database;
-		
+
+        // FIX: punctele de cultura date de coifuri (Gladiator/Tribune/Consul =
+        // 100/400/800 pe zi) nu erau adaugate nicaieri - HB_CP exista doar in
+        // definitia itemelor si in agregarea din HeroItems::getBonuses().
+        // Se aplica INAINTE de updateVSumField, fiindca acela reseteaza
+        // users.lastupdate; asa ambele folosesc exact aceeasi fereastra de timp.
+        $this->applyHeroCulturePoints();
+
         $database->updateVSumField('cp');
+    }
+
+    /**
+     * Adauga in users.cp punctele de cultura ale coifurilor echipate.
+     *
+     * Acumularea imita formula din updateVSumField(): valoarea e "pe zi", iar
+     * ziua de joc e 86400/SPEED (minim o ora), la fel ca pentru cladiri.
+     * Valorile sunt luate din catalog prin scaledBonusValue(), care aplica deja
+     * regula de server rapid (coifurile de cultura se injumatatesc la SPEED>=3).
+     *
+     * Se numara doar eroii vii (hero.dead = 0). Cum exista un singur slot de
+     * coif, un jucator nu poate avea doua iteme cu CP echipate simultan, deci
+     * join-ul nu poate dubla castigul.
+     */
+    private function applyHeroCulturePoints() {
+        global $database, $heroItemCatalog;
+
+        if (!class_exists('HeroBattleBonus') || !HeroBattleBonus::enabled()) {
+            return;
+        }
+
+        if (empty($heroItemCatalog) || !is_array($heroItemCatalog)) {
+            return;
+        }
+
+        $heroItems = new HeroItems();
+        $cpValues  = array();
+
+        foreach ($heroItemCatalog as $itemid => $def) {
+            if (!isset($def['bonus']) || !is_array($def['bonus']) || !isset($def['bonus'][HB_CP])) {
+                continue;
+            }
+
+            $value = (int) $heroItems->scaledBonusValue($def, (int) $def['bonus'][HB_CP]);
+
+            if ($value > 0) {
+                $cpValues[(int) $itemid] = $value;
+            }
+        }
+
+        if (empty($cpValues)) {
+            return;
+        }
+
+        $durDay = 86400 / SPEED;
+
+        if ($durDay < 3600) {
+            $durDay = 3600;
+        }
+
+        $case = '';
+
+        foreach ($cpValues as $itemid => $value) {
+            $case .= ' WHEN ' . (int) $itemid . ' THEN ' . (int) $value;
+        }
+
+        $ids = implode(',', array_map('intval', array_keys($cpValues)));
+
+        $q = "UPDATE " . TB_PREFIX . "users AS u
+              INNER JOIN " . TB_PREFIX . "hero_items AS hi
+                      ON hi.uid = u.id AND hi.equipped = 1 AND hi.itemid IN (" . $ids . ")
+              INNER JOIN " . TB_PREFIX . "hero AS h
+                      ON h.uid = u.id AND h.dead = 0
+              SET u.cp = u.cp + ((CASE hi.itemid" . $case . " END) * (UNIX_TIMESTAMP() - u.lastupdate) / " . $durDay . ")
+              WHERE u.lastupdate < (UNIX_TIMESTAMP() - 600)";
+
+        mysqli_query($database->dblink, $q);
     }
 
     /**

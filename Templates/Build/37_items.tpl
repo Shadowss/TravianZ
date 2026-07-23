@@ -21,6 +21,27 @@
 
 $t4Msg = '';
 
+// Eroul poate schimba echipamentul doar cat timp e in sat (ca in Travian
+// original). Motivul e calculat o singura data si folosit atat pentru mesaj,
+// cat si pentru ascunderea butoanelor. Regula e impusa si in HeroItems, deci
+// un POST trimis manual nu o poate ocoli.
+$t4AwayReason = $t4HeroItems->heroAwayReason($session->uid);
+
+$t4AwayText = '';
+if ($t4AwayReason === 'nohero') {
+    $t4AwayText = defined('HERO_LOCKED_NOHERO') ? HERO_LOCKED_NOHERO
+        : 'You have no hero yet. Train one in the Hero\'s Mansion before equipping items.';
+} elseif ($t4AwayReason === 'adventure') {
+    $t4AwayText = defined('HERO_LOCKED_ADVENTURE') ? HERO_LOCKED_ADVENTURE
+        : 'Your hero is on an adventure. Equipment can only be changed while the hero is in a village.';
+} elseif ($t4AwayReason === 'attack') {
+    $t4AwayText = defined('HERO_LOCKED_ATTACK') ? HERO_LOCKED_ATTACK
+        : 'Your hero is on the move with the army. Equipment can only be changed while the hero is in a village.';
+} elseif ($t4AwayReason === 'reinforcement') {
+    $t4AwayText = defined('HERO_LOCKED_REINFORCEMENT') ? HERO_LOCKED_REINFORCEMENT
+        : 'Your hero is reinforcing another village. Equipment can only be changed while the hero is in a village.';
+}
+
 if (isset($_POST['t4action'], $_POST['rowid'])) {
     $t4RowId = (int) $_POST['rowid'];
 
@@ -53,6 +74,11 @@ $t4Inventory = $t4HeroItems->getInventory($session->uid);
 $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
 ?>
 
+<?php if ($t4AwayText !== '') { ?>
+    <p class="message" style="font-weight:bold;color:#8a6d3b;background:#fcf8e3;border:1px solid #faebcc;padding:6px 9px;border-radius:4px;">
+        <?php echo $t4AwayText; ?>
+    </p>
+<?php } ?>
 <?php if ($t4Msg !== '') { ?>
     <p class="message" style="font-weight:bold;"><?php echo $t4Msg; ?></p>
 <?php } ?>
@@ -69,11 +95,15 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
             <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
             <td style="width:60px;text-align:center;"><?php echo 'T' . (int) $t4Row['def']['tier']; ?></td>
             <td style="width:110px;text-align:center;">
+                <?php if ($t4AwayReason === '') { ?>
                 <form action="" method="POST" style="margin:0;">
                     <input type="hidden" name="t4action" value="unequip">
                     <input type="hidden" name="rowid" value="<?php echo (int) $t4Row['id']; ?>">
                     <input type="submit" value="<?php echo HERO_UNEQUIP; ?>">
                 </form>
+                <?php } else { ?>
+                <span style="color:#999;">&mdash;</span>
+                <?php } ?>
             </td>
             <?php } else { ?>
             <td colspan="3" style="color:#888;">-</td>
@@ -110,9 +140,11 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
                         <input type="hidden" name="t4action" value="useitem">
                         <input type="text" name="qty" value="1" size="3" style="text-align:center;">
                         <input type="submit" value="<?php echo HERO_USE_ITEM; ?>">
-                    <?php } else { ?>
+                    <?php } elseif ($t4AwayReason === '') { ?>
                         <input type="hidden" name="t4action" value="equip">
                         <input type="submit" value="<?php echo HERO_EQUIP; ?>">
+                    <?php } else { ?>
+                        <span style="color:#999;">&mdash;</span>
                     <?php } ?>
                 </form>
             </td>

@@ -309,6 +309,7 @@ foreach($mechs as $k => $l){
     <div><label>Delete unarchived reports after (days)</label><input class="input" name="cleanup_reports" id="cleanup_reports" value="14"></div>
     <div><label>Delete chat messages after (days)</label><input class="input" name="cleanup_chat" id="cleanup_chat" value="7"></div>
     <div><label>Delete messages erased by both sides (days)</label><input class="input" name="cleanup_messages" id="cleanup_messages" value="0"></div>
+    <div><label>Hero base regeneration (HP/day)</label><input class="input" name="hero_base_regen" id="hero_base_regen" value="10"></div>
   </div>
   <div class="f10" style="margin-top:8px;opacity:.75;">
     Automation runs from cron.php instead of players' page loads. One cron invocation keeps working for

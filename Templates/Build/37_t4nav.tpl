@@ -24,6 +24,9 @@ $t4HeroItems  = new HeroItems();
 $t4Silver     = $t4HeroItems->getSilver($session->uid);
 $t4Tabs = [
     'hero'       => ['label' => HERO_T4_TAB_HERO,       'url' => 'build.php?id=' . $id],
+    // Oaze: pagina foloseste parametrul "land", nu "t4tab" (flux mai vechi).
+    'land'       => ['label' => defined('HERO_T4_TAB_OASIS') ? HERO_T4_TAB_OASIS : 'Oasis',
+                     'url'   => 'build.php?id=' . $id . '&land'],
     'items'      => ['label' => HERO_T4_TAB_ITEMS,      'url' => 'build.php?id=' . $id . '&t4tab=items'],
     'adventures' => ['label' => HERO_T4_TAB_ADVENTURES, 'url' => 'build.php?id=' . $id . '&t4tab=adventures'],
     'auction'    => ['label' => HERO_T4_TAB_AUCTION,    'url' => 'build.php?id=' . $id . '&t4tab=auction'],

@@ -2813,6 +2813,7 @@ if (!function_exists('tz_loc_topic')) {
  * T4 HERO PORT (Phase 6) - items / adventures / auction house
  * ========================================================================== */
 tz_def('HERO_T4_TAB_HERO',       'Hero');
+tz_def('HERO_T4_TAB_OASIS',      'Oasis');
 tz_def('HERO_T4_TAB_ITEMS',      'Inventory');
 tz_def('HERO_T4_TAB_ADVENTURES', 'Adventures');
 tz_def('HERO_T4_TAB_AUCTION',    'Auctions');
@@ -2842,6 +2843,7 @@ tz_def('HERO_ITEM_USED_OK',      'The item has been used.');
 tz_def('HERO_ITEM_USE_FAIL',     'This item cannot be used right now.');
 tz_def('HERO_ITEM_USE_BATTLE',   'This item is used automatically (bandages heal returning troops after battles).');
 tz_def('HERO_EQUIP_OK',          'Item equipped.');
+tz_def('HERO_LOCKED_NOHERO', 'You have no hero yet. Train one in the Hero\'s Mansion before equipping items.');
 tz_def('HERO_EQUIP_FAIL',        'This item cannot be equipped (wrong hero unit or item type).');
 tz_def('HERO_UNEQUIP_OK',        'Item taken off.');
 
@@ -2853,6 +2855,9 @@ tz_def('HERO_ADV_NONE',          'No adventures available right now. New ones ap
 tz_def('HERO_ADV_DIFFICULTY',    'Difficulty');
 tz_def('HERO_ADV_DIFF_NORMAL',   'Normal');
 tz_def('HERO_ADV_DIFF_HARD',     'Hard');
+tz_def('HERO_ADV_PLACE', 'Place');
+tz_def('HERO_ADV_DANGER', 'Danger');
+tz_def('HERO_ADV_LINK', 'Link');
 tz_def('HERO_ADV_DURATION',      'Travel time (one way)');
 tz_def('HERO_ADV_EXPIRES',       'Expires in');
 tz_def('HERO_ADV_GO',            'Start adventure');

@@ -17,7 +17,7 @@
 ##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
 #################################################################################
-$array_tribe=array('-',TRIBE1,TRIBE2,TRIBE3,TRIBE4,TRIBE5);
+$array_tribe=array('-',TRIBE1,TRIBE2,TRIBE3,TRIBE4,TRIBE5,TRIBE6,TRIBE7,TRIBE8,TRIBE9);
 $tribename = $array_tribe[$user['tribe']];
 
 $searchresults = $admin->search_player($user['username']);

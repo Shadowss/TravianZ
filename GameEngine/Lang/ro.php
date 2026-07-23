@@ -2736,6 +2736,9 @@ tz_def('HERO_ADV_DIED_INFO',     'Toata prada a fost pierduta. Eroul poate fi in
 tz_def('HERO_ADV_DIFFICULTY',    'Dificultate');
 tz_def('HERO_ADV_DIFF_HARD',     'Grea');
 tz_def('HERO_ADV_DIFF_NORMAL',   'Normala');
+tz_def('HERO_ADV_PLACE', 'Loc');
+tz_def('HERO_ADV_DANGER', 'Pericol');
+tz_def('HERO_ADV_LINK', 'Actiune');
 tz_def('HERO_ADV_DURATION',      'Timp de calatorie (dus)');
 tz_def('HERO_ADV_EXPIRES',       'Expira in');
 tz_def('HERO_ADV_GO',            'Incepe aventura');
@@ -2787,6 +2790,7 @@ tz_def('HERO_AUC_YOUR_MAX',      'Maximul tau');
 
 // Hero - echipare / inventar
 tz_def('HERO_EQUIP',             'Echipeaza');
+tz_def('HERO_LOCKED_NOHERO', 'Nu ai inca un erou. Antreneaza unul in Resedinta Eroului inainte de a echipa iteme.');
 tz_def('HERO_EQUIP_FAIL',        'Acest obiect nu poate fi echipat (unitate de erou gresita sau tip de obiect gresit).');
 tz_def('HERO_EQUIP_OK',          'Obiect echipat.');
 tz_def('HERO_EXPERIENCE',        'Experienta');
@@ -2807,6 +2811,7 @@ tz_def('HERO_SLOT_4', 'Mana stanga');
 tz_def('HERO_SLOT_5', 'Incaltaminte');
 tz_def('HERO_SLOT_6', 'Cal');
 tz_def('HERO_SLOT_7', 'Desaga');
+tz_def('HERO_T4_TAB_OASIS',      'Oaze');
 tz_def('HERO_T4_TAB_ADVENTURES', 'Aventuri');
 tz_def('HERO_T4_TAB_AUCTION',    'Licitatii');
 tz_def('HERO_T4_TAB_HERO',       'Erou');

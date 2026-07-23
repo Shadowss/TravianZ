@@ -74,7 +74,13 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTION_TRIBE_SPARTANS = (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS ? 'true' : 'false');
 		$NEW_FUNCTION_TRIBE_VIKINGS = (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS ? 'true' : 'false');
 
-		$text = admin_config_template_contents();
+		// Regenerarea de baza a vietii eroului (HP pe zi). 0 = dezactivata.
+$heroBaseRegen = isset($_POST['hero_base_regen']) ? (int) $_POST['hero_base_regen'] : 10;
+
+if ($heroBaseRegen < 0)   { $heroBaseRegen = 0; }
+if ($heroBaseRegen > 100) { $heroBaseRegen = 100; }
+
+$text = admin_config_template_contents(array('%HEROBASEREGEN%' => $heroBaseRegen));
 		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
 		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
 		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);

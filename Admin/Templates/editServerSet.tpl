@@ -342,6 +342,13 @@ function refresh(tz) {
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td class="b">Hero base regeneration <em class="tooltip">?<span class="classic">Hit points the hero recovers per day on top of the points invested in the regeneration attribute and any equipped items. Without it, a hero with no regeneration points would never heal and would eventually die on adventures. Scales with server speed. 0 disables it.</span></em></td>
+                    <td>
+                        <input type="number" name="hero_base_regen" min="0" max="100" style="width:90px"
+                               value="<?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?>"> HP / day
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

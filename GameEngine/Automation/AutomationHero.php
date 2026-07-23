@@ -121,18 +121,76 @@ trait AutomationHero {
 
     // Passive HP regeneration: returns the new health value, or -1 if unchanged.
     private function calculateHealthRegen($hdata) {
+        // Eroii morti nu se regenereaza (se ridica prin inviere, nu singuri).
+        if ((int) $hdata['dead'] === 1) {
+            return -1;
+        }
+
         if((time()-$hdata['lastupdate']) >= 1){
-            if($hdata['health'] < 100 and $hdata['health'] > 0){
+            // FIX: conditia veche era "health > 0", deci un erou VIU ajuns exact
+            // la 0 ramanea blocat acolo pentru totdeauna. Acum conteaza doar sa
+            // fie viu si sub 100.
+            if($hdata['health'] < 100){
                 if(SPEED <= 10) $speed = SPEED;
                 else if(SPEED <= 100) $speed = ceil(SPEED / 10);
                 else $speed = ceil(SPEED / 100);
 
-                $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
+                // FIX: bonusul HB_REGEN_HP al coifurilor (Regeneration / Health /
+                // Healing = +10/15/20 HP pe zi) nu era aplicat nicaieri - exista
+                // doar in definitia itemelor. Se adauga la regenerarea proprie a
+                // eroului, scalat cu aceeasi viteza de server ca aceasta, altfel
+                // pe un server rapid ar fi complet nesemnificativ.
+                // ANOMALIE DE SEMNALAT: in T4 valoarea e "HP pe zi" fixa; aici o
+                // scalam cu $speed pentru consecventa cu regenerarea din atribute.
+                // Daca preferi valoarea fixa, scoate "* $speed" de mai jos.
+                $itemRegen = $this->heroItemRegen($hdata);
+
+                // FIX PRINCIPAL: pana acum regenerarea depindea EXCLUSIV de
+                // atributul 'regeneration'. Un erou nou porneste cu acest atribut
+                // pe 0 (vezi INSERT-ul din 37_train.tpl), deci daca jucatorul nu
+                // punea puncte acolo, viata NU se refacea niciodata: scadea la
+                // fiecare aventura sau lupta si nu urca inapoi. Dupa destule
+                // aventuri ajungea la 0 si eroul murea chiar si la o aventura
+                // "Normal" (care ia doar 0-8 HP) - exact simptomul raportat.
+                //
+                // Acum exista o regenerare de BAZA, independenta de atribute, ca
+                // in Travian T4 (implicit 10 HP pe zi). Se poate regla din
+                // GameEngine/config.php:  define('HERO_BASE_REGEN', 10);
+                $baseRegen = defined('HERO_BASE_REGEN') ? (float) HERO_BASE_REGEN : 10;
+
+                // HP pe zi din toate sursele: baza + atribut (5 per punct) + iteme
+                $perDay = $baseRegen + ($hdata['regeneration'] * 5) + $itemRegen;
+
+                $reg = $hdata['health']
+                     + $perDay * $speed / 86400 * (time() - $hdata['lastupdate']);
 
                 return ($reg <= 100) ? $reg : 100;
             }
         }
         return -1;
+    }
+
+    /**
+     * HP pe zi adaugat de itemele echipate (HB_REGEN_HP).
+     *
+     * HeroBattleBonus::bonuses() are gard de feature flag, cache per request si
+     * intoarce null cand sistemul T4 e oprit - deci pe serverele fara erou T4
+     * comportamentul ramane exact ca inainte.
+     */
+    private function heroItemRegen($hdata) {
+        if (!class_exists('HeroBattleBonus') || !HeroBattleBonus::enabled()) {
+            return 0;
+        }
+
+        $uid = isset($hdata['uid']) ? (int) $hdata['uid'] : 0;
+
+        if ($uid <= 0) {
+            return 0;
+        }
+
+        $bonuses = HeroBattleBonus::bonuses($uid);
+
+        return $bonuses ? (float) $bonuses[HB_REGEN_HP] : 0;
     }
 
     // Level-up + score points. Returns a column fragment.

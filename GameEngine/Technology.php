@@ -634,7 +634,75 @@ class Technology {
 				$each = round(($bid19[$building->getTypeLevel(36)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 		}	
 		
+		// FIX: bonusurile de instruire ale eroului (coifuri) nu erau aplicate
+		// NICAIERI - HB_TRAIN_INF si HB_TRAIN_CAV existau doar in definitia
+		// itemelor si in agregarea din HeroItems::getBonuses(), deci "Helmet of
+		// the Ruler" (-20% infanterie) sau "Helmet of the Heavy Cavalry" (-20%
+		// cavalerie) nu schimbau timpul cu nimic.
+		//
+		// Se aplica dupa formula cladirii, pe acelasi $each, deci merge identic
+		// in cazarma/grajd normale si in cele mari (Great Barracks/Great Stable),
+		// fiindca ramura e aleasa dupa TIPUL unitatii, nu dupa cladire.
+		// Nu se aplica la atelier, unitati speciale sau capcane - la fel ca in T4.
+		$each = $this->applyHeroTrainingBonus($each, $unit, $footies, $calvary);
+		
 		return $each;
+	}
+
+	/**
+	 * Reduce timpul de instruire cu procentul dat de coiful echipat al eroului.
+	 *
+	 * Proprietarul e luat din satul in care se face instruirea (nu din sesiune),
+	 * ca sa fie corect si cand codul ruleaza in alt context decat o pagina a
+	 * jucatorului. HeroBattleBonus::bonuses() are deja gard de feature flag si
+	 * cache per request, si intoarce null cand sistemul T4 e oprit.
+	 */
+	private function applyHeroTrainingBonus($each, $unit, array $footies, array $calvary) {
+		global $village, $database;
+
+		if (!class_exists('HeroBattleBonus') || !HeroBattleBonus::enabled()) {
+			return $each;
+		}
+
+		// Proprietarul satului in care se instruieste, NU utilizatorul din
+		// sesiune: asa bonusul e corect si cand un admin lucreaza pe satul
+		// altui jucator (conteaza eroul proprietarului, nu al adminului).
+		// getVillageField e cache-uit per request, deci nu adauga query-uri.
+		$uid = (isset($village->wid) && $database)
+			? (int) $database->getVillageField($village->wid, 'owner')
+			: 0;
+
+		if ($uid <= 0) {
+			return $each;
+		}
+
+		$bonuses = HeroBattleBonus::bonuses($uid);
+
+		if (!$bonuses) {
+			return $each;
+		}
+
+		$percent = 0;
+
+		if (in_array($unit, $footies)) {
+			$percent = (int) $bonuses[HB_TRAIN_INF];
+		} elseif (in_array($unit, $calvary)) {
+			$percent = (int) $bonuses[HB_TRAIN_CAV];
+		}
+
+		if ($percent <= 0) {
+			return $each;
+		}
+
+		// plasa de siguranta: chiar daca s-ar aduna mai multe surse, timpul nu
+		// poate cobori sub 10% din valoarea de baza
+		if ($percent > 90) {
+			$percent = 90;
+		}
+
+		$each = (int) round($each * (100 - $percent) / 100);
+
+		return $each > 0 ? $each : 1;
 	}
 
 	private function getMaxTrainable($unit, $amt, $great) {
