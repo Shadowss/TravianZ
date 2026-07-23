@@ -129,7 +129,10 @@
 
             if ($hero_info === false && $include_training) {
                 include_once("37_train.tpl");
-            } else if($hero_info['intraining'] == 1) {
+            } else if(is_array($hero_info) && $hero_info['intraining'] == 1) {
+                // FIX: fara is_array(), cand eroul nu exista ($hero_info === false)
+                // si $include_training e false, ramura asta accesa false['intraining']
+                // -> "Trying to access array offset on false" la fiecare afisare.
 
 		    $timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
 		?>

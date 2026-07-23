@@ -149,13 +149,13 @@ $runLockPath   = $autoprefix . 'GameEngine/Prevention/cron_running.lock';
 $runLockHandle = @fopen($runLockPath, 'c');
 
 if ($runLockHandle === false) {
-    if ($isCli) { fwrite(STDERR, "cron: nu pot deschide lock-ul ($runLockPath)\n"); }
+    if ($isCli) { fwrite(STDERR, "cron: cannot open lock ($runLockPath)\n"); }
     exit(1);
 }
 
 if (!flock($runLockHandle, LOCK_EX | LOCK_NB)) {
     fclose($runLockHandle);
-    if ($isCli) { echo "cron: o invocare anterioara inca ruleaza, ies\n"; }
+    if ($isCli) { echo "cron: A previous invocation is still running. Exiting.\n"; }
     exit(0);
 }
 
@@ -184,14 +184,14 @@ if (!defined('AUTOMATION_MANUAL_RUN')) {
 $cronMarkerPath = $autoprefix . 'GameEngine/Prevention/cron_active.txt';
 
 /**
- * Clears the database class's request-level caches.
+ * Clears the request-scoped caches of the database class.
  *
- * The static caches in MYSQLi_DB are designed to live only for the duration
- * of a single request. In a process that executes multiple ticks in sequence,
+ * The static caches in MYSQLi_DB are designed to live only for the duration of
+ * a single request. In a long-running process that executes multiple ticks,
  * they would remain populated, causing subsequent ticks to operate on stale
- * data (for example, building levels already modified by the previous tick).
- * Therefore, the caches are reset between ticks so that each tick starts with
- * the same clean state as a new request.
+ * data (e.g. building levels already modified by the previous tick).
+ * We therefore reset them between ticks so that each tick starts as cleanly as
+ * a fresh request.
  *
  * Only static array properties whose names contain "cache" are reset.
  */
@@ -216,56 +216,49 @@ function cron_reset_db_caches()
             }
         }
     } catch (Throwable $e) {
-        // If reflection fails, it is better to continue than to stop Automation.
+        // If reflection fails, it's better to continue than to stop the automation.
     }
 }
 
-/**
- * A tick represents one complete execution of Automation.
- *
- * The first tick includes Automation.php (the file ends with "new Automation",
- * so including it starts the processing automatically). Subsequent ticks simply
- * instantiate the Automation class again, since include_once would not execute
- * the file a second time.
- */
-function cron_run_tick(&$firstTick, $autoprefix, $cronMarkerPath)
-{
-    @file_put_contents($cronMarkerPath, (string)time(), LOCK_EX);
-
-    if ($firstTick) {
-        include_once($autoprefix . 'GameEngine/Automation.php');
-        $firstTick = false;
-        return;
-    }
-
-    cron_reset_db_caches();
-    new Automation();
-}
+// NOTE (bug fixed): Automation.php MUST NOT be included from inside a function.
+// Automation.php, in turn, includes Ranking.php, Units.php, Battle.php, and
+// Technology.php. Those files instantiate their objects at file scope
+// ($ranking = new Ranking; etc.). If the include is performed from within a
+// function, those assignments end up in the function's LOCAL scope instead of
+// the global scope. As a result, methods using "global $ranking" receive null,
+// causing errors such as:
+//   Fatal error: Call to a member function procRankArray() on null
+//
+// For this reason, the first tick is executed below at global scope, while
+// subsequent ticks simply instantiate the already-loaded class with
+// new Automation().
 
 // -----------------------------------------------------------------------------
 // 7. Execution
 // -----------------------------------------------------------------------------
-$firstTick = true;
 $startedAt = time();
+$tickStart = time();
 $ticks     = 0;
 
-do {
-    $tickStart = time();
+// First tick: the include is performed HERE, at global scope, so that
+// $ranking, $units, $battle, $technology, and the other objects created by the
+// files included by Automation.php are truly global. The file ends with
+// "new Automation", so including it automatically starts the first processing
+// cycle.
+@file_put_contents($cronMarkerPath, (string) time(), LOCK_EX);
+include_once($autoprefix . 'GameEngine/Automation.php');
+$ticks++;
 
-    cron_run_tick($firstTick, $autoprefix, $cronMarkerPath);
-    $ticks++;
+// Subsequent ticks: the class is already loaded, so we simply instantiate it again.
+while ($loopSeconds > 0) {
 
-    if ($loopSeconds <= 0) {
-        break;
-    }
-
-    // Is there enough time remaining in the invocation budget for another complete tick?
+    // Is there enough time left in the invocation budget for another complete tick?
     $elapsed = time() - $startedAt;
     if (($elapsed + $tickSeconds) >= $loopSeconds) {
         break;
     }
 
-    // Sleep until the next tick, subtracting the time spent executing the current tick.
+    // Sleep until the next tick, subtracting the time taken by the current tick.
     $spent = time() - $tickStart;
     $sleep = $tickSeconds - $spent;
 
@@ -273,10 +266,17 @@ do {
         sleep($sleep);
     }
 
-} while (true);
+    $tickStart = time();
+
+    cron_reset_db_caches();
+    @file_put_contents($cronMarkerPath, (string) time(), LOCK_EX);
+
+    new Automation();
+    $ticks++;
+}
 
 // -----------------------------------------------------------------------------
-// 8. Release the Lock
+// 8. Release the lock
 // -----------------------------------------------------------------------------
 flock($runLockHandle, LOCK_UN);
 fclose($runLockHandle);
