@@ -43,6 +43,18 @@ define('CRON_TICK_SECONDS', %CRONTICK%);
 define('CRON_KEY', '%CRONKEY%');
 
 //////////////////////////////////
+// *****  DATABASE CLEANUP  *****//
+//////////////////////////////////
+// Tabelele care cresc nelimitat (rapoarte, chat, mesaje sterse) sunt curatate
+// periodic de Automation. 0 = dezactivat pentru fiecare regula in parte.
+// Rapoartele ARHIVATE de jucator nu se sterg niciodata.
+define('CLEANUP_REPORTS_DAYS', %CLEANUPREPORTS%);
+define('CLEANUP_CHAT_DAYS', %CLEANUPCHAT%);
+define('CLEANUP_MESSAGES_DAYS', %CLEANUPMESSAGES%);
+define('CLEANUP_INTERVAL', 3600);
+define('CLEANUP_BATCH', 5000);
+
+//////////////////////////////////
 // *****  SERVER SETTINGS  *****//
 //////////////////////////////////
 

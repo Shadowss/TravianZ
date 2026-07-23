@@ -72,6 +72,7 @@ include_once __DIR__ . '/Automation/AutomationHero.php';
 include_once __DIR__ . '/Automation/AutomationStarvation.php';
 include_once __DIR__ . '/Automation/AutomationNatarsWW.php';
 include_once __DIR__ . '/Automation/AutomationMedals.php';
+include_once __DIR__ . '/Automation/AutomationCleanup.php';
 
 class Automation {
     // === Faza S2: metodele clasei, grupate pe domenii ===
@@ -89,6 +90,7 @@ class Automation {
 
 
 
+    use AutomationCleanup;
     /**
      * @var object The artifacts class, used to create Natars, artifacts and obtaining info about them
      */
@@ -130,7 +132,9 @@ class Automation {
         				  "sendUnitsComplete", "loyaltyRegeneration", "sendreinfunitsComplete",
         				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
         				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts",
-        				  "heroAdventureComplete"];
+        				  "heroAdventureComplete",
+        				  // P3: curatenie periodica (are interval propriu, nu ruleaza la fiecare tick)
+        				  "cleanupOldData"];
         
         foreach($methodsArrays as $method){
         	$file = fopen($autoprefix."GameEngine/Prevention/".$method.".txt", "w");

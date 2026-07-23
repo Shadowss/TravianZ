@@ -114,6 +114,11 @@ class Process {
 		// din ACP (Config -> Cron & Automation -> edit).
 		$findReplace["%CRONLOOP%"] = 300;
 		$findReplace["%CRONTICK%"] = 60;
+		// Retentii implicite pentru curatenia periodica din Automation
+		// (0 = regula dezactivata).
+		$findReplace["%CLEANUPREPORTS%"]  = 14;
+		$findReplace["%CLEANUPCHAT%"]     = 7;
+		$findReplace["%CLEANUPMESSAGES%"] = 0;
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
 		$findReplace["%HOMEPAGE%"] = $_POST['homepage'];
 		$findReplace["%SERVER%"] = $_POST['server'];

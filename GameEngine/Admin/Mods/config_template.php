@@ -85,6 +85,24 @@ if (!function_exists('admin_config_template_path')) {
             $text = str_replace('%CRONTICK%', (string) $cronTick, $text);
         }
 
+        // Retentiile de curatenie: la fel, editate din ACP, deci orice alt mod
+        // care regenereaza config.php trebuie sa le pastreze.
+        $cleanupDefaults = array(
+            '%CLEANUPREPORTS%'  => array('CLEANUP_REPORTS_DAYS', 14),
+            '%CLEANUPCHAT%'     => array('CLEANUP_CHAT_DAYS', 7),
+            '%CLEANUPMESSAGES%' => array('CLEANUP_MESSAGES_DAYS', 0),
+        );
+
+        foreach ($cleanupDefaults as $placeholder => $info) {
+            if (strpos($text, $placeholder) === false) {
+                continue;
+            }
+
+            list($constant, $default) = $info;
+            $value = defined($constant) ? (int) constant($constant) : $default;
+            $text  = str_replace($placeholder, (string) $value, $text);
+        }
+
         return $text;
     }
 }

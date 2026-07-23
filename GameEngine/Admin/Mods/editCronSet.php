@@ -59,6 +59,17 @@ if ($loop > 0 && $loop < $tick) {
     $loop = 0;
 }
 
+// Retentiile de curatenie (0 = regula dezactivata). Limita superioara de 3650
+// zile (10 ani) e doar ca sa nu se scrie valori absurde in config.
+$cleanReports  = isset($_POST['cleanup_reports'])  ? (int) $_POST['cleanup_reports']  : 14;
+$cleanChat     = isset($_POST['cleanup_chat'])     ? (int) $_POST['cleanup_chat']     : 7;
+$cleanMessages = isset($_POST['cleanup_messages']) ? (int) $_POST['cleanup_messages'] : 0;
+
+foreach (array('cleanReports', 'cleanChat', 'cleanMessages') as $var) {
+    if ($$var < 0)    { $$var = 0; }
+    if ($$var > 3650) { $$var = 3650; }
+}
+
 $regenerateKey = !empty($_POST['regenerate_key']);
 
 $cronKey = (defined('CRON_KEY') && CRON_KEY !== '' && CRON_KEY !== '%CRONKEY%')
@@ -115,6 +126,18 @@ if (!cron_set_define($config, 'CRON_KEY', "'" . addcslashes($cronKey, "'\\") . "
     $missing[] = "define('CRON_KEY', '" . addcslashes($cronKey, "'\\") . "');";
 }
 
+if (!cron_set_define($config, 'CLEANUP_REPORTS_DAYS', (string) $cleanReports)) {
+    $missing[] = "define('CLEANUP_REPORTS_DAYS', " . $cleanReports . ");";
+}
+
+if (!cron_set_define($config, 'CLEANUP_CHAT_DAYS', (string) $cleanChat)) {
+    $missing[] = "define('CLEANUP_CHAT_DAYS', " . $cleanChat . ");";
+}
+
+if (!cron_set_define($config, 'CLEANUP_MESSAGES_DAYS', (string) $cleanMessages)) {
+    $missing[] = "define('CLEANUP_MESSAGES_DAYS', " . $cleanMessages . ");";
+}
+
 // Server instalat inainte ca aceste constante sa existe: le adaugam dupa
 // AUTOMATION_LOCK_FILE_NAME (locul lor din template).
 if (!empty($missing)) {
@@ -140,7 +163,7 @@ fwrite($fh, $config);
 fclose($fh);
 
 $database->query(
-    "Insert into " . TB_PREFIX . "admin_log values (0," . $id . ",'Changed Cron & Automation Settings'," . time() . ")"
+    "Insert into " . TB_PREFIX . "admin_log values (0," . $id . ",'Changed Cron, Automation & Cleanup Settings'," . time() . ")"
 );
 
 header("Location: ../../../Admin/admin.php?p=config");

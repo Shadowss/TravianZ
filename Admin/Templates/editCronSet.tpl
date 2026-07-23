@@ -27,6 +27,13 @@ $cronLoop = defined('CRON_LOOP_SECONDS') ? (int) CRON_LOOP_SECONDS : 300;
 $cronTick = defined('CRON_TICK_SECONDS') ? (int) CRON_TICK_SECONDS : 60;
 $cronKey  = defined('CRON_KEY') ? (string) CRON_KEY : '';
 
+$cleanReports  = defined('CLEANUP_REPORTS_DAYS')  ? (int) CLEANUP_REPORTS_DAYS  : 14;
+$cleanChat     = defined('CLEANUP_CHAT_DAYS')     ? (int) CLEANUP_CHAT_DAYS     : 7;
+$cleanMessages = defined('CLEANUP_MESSAGES_DAYS') ? (int) CLEANUP_MESSAGES_DAYS : 0;
+
+$cleanupMarker = __DIR__ . '/../../GameEngine/Prevention/cleanup_last.txt';
+$cleanupInfo   = @is_file($cleanupMarker) ? @json_decode((string) @file_get_contents($cleanupMarker), true) : null;
+
 $cronPath = realpath(__DIR__ . '/../../cron.php');
 $cronCmd  = $cronPath ? '*/5 * * * * /usr/local/bin/php ' . $cronPath . ' >> ' . dirname(dirname($cronPath)) . '/cron.log 2>&1' : '';
 ?>
@@ -128,6 +135,49 @@ code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px;word-br
                         <?php } ?>
                         <span class="hint"><label><input type="checkbox" name="regenerate_key" value="1"> Generate a new key on save</label></span>
                     </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="config-card">
+            <div class="config-head"><span>Database cleanup</span></div>
+            <table class="config-table">
+                <tr>
+                    <td class="b">Last cleanup run</td>
+                    <td><?php
+                        if (is_array($cleanupInfo) && !empty($cleanupInfo['time'])) {
+                            $r = isset($cleanupInfo['removed']) ? $cleanupInfo['removed'] : array();
+                            echo date('d.m.Y H:i:s', (int) $cleanupInfo['time']);
+                            echo ' <span style="color:#777">(removed: '
+                               . (int) ($r['reports'] ?? 0) . ' reports, '
+                               . (int) ($r['chat'] ?? 0) . ' chat, '
+                               . (int) ($r['messages'] ?? 0) . ' messages)</span>';
+                        } else {
+                            echo "<span class='badge blue'>Not run yet</span>";
+                        }
+                        ?>
+                        <span class="hint">Runs from Automation once per hour. Rows are removed in batches, so the first run on an old server catches up over several passes.</span></td>
+                </tr>
+                <tr>
+                    <td class="b">Battle reports (days)
+                        <em class="tooltip">?<span>Unarchived reports older than this are deleted. Reports a player archived are never touched. 0 disables the rule.</span></em>
+                    </td>
+                    <td><input class="fm" type="number" name="cleanup_reports" min="0" max="3650" value="<?php echo $cleanReports; ?>" style="width:100px">
+                        <span class="hint">0 = keep forever.</span></td>
+                </tr>
+                <tr>
+                    <td class="b">Chat messages (days)
+                        <em class="tooltip">?<span>The chat window only ever shows the last 13 messages per alliance, so older history is not used anywhere in the game.</span></em>
+                    </td>
+                    <td><input class="fm" type="number" name="cleanup_chat" min="0" max="3650" value="<?php echo $cleanChat; ?>" style="width:100px">
+                        <span class="hint">0 = keep forever.</span></td>
+                </tr>
+                <tr>
+                    <td class="b">Deleted messages (days)
+                        <em class="tooltip">?<span>Only messages deleted by BOTH the sender and the recipient are removed &mdash; they are no longer visible to anyone in the game. Disabled by default.</span></em>
+                    </td>
+                    <td><input class="fm" type="number" name="cleanup_messages" min="0" max="3650" value="<?php echo $cleanMessages; ?>" style="width:100px">
+                        <span class="hint">0 = disabled (default).</span></td>
                 </tr>
             </table>
         </div>

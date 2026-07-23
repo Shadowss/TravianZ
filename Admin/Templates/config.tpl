@@ -113,6 +113,12 @@ $cronKey  = defined('CRON_KEY') ? (string) CRON_KEY : '';
 $cronBase = defined('HOMEPAGE') ? rtrim(HOMEPAGE, '/') : '';
 $cronUrl  = ($cronBase !== '' && $cronKey !== '') ? $cronBase . '/cron.php?key=' . $cronKey : '';
 
+$cleanReports  = defined('CLEANUP_REPORTS_DAYS')  ? (int) CLEANUP_REPORTS_DAYS  : 14;
+$cleanChat     = defined('CLEANUP_CHAT_DAYS')     ? (int) CLEANUP_CHAT_DAYS     : 7;
+$cleanMessages = defined('CLEANUP_MESSAGES_DAYS') ? (int) CLEANUP_MESSAGES_DAYS : 0;
+$cleanupMarker = __DIR__ . '/../../GameEngine/Prevention/cleanup_last.txt';
+$cleanupInfo   = @is_file($cleanupMarker) ? @json_decode((string) @file_get_contents($cleanupMarker), true) : null;
+
 $cronPath = realpath(__DIR__ . '/../../cron.php');
 $cronCmd  = $cronPath ? '*/5 * * * * /usr/local/bin/php ' . $cronPath . ' >/dev/null 2>&1' : '';
 
@@ -174,6 +180,32 @@ $cronKeyMasked = ($cronKey === '')
           <span id="cronUrlFull" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronUrl, ENT_QUOTES, 'UTF-8'); ?></span></td>
     </tr>
     <?php } ?>
+
+    <tr>
+      <td>Database cleanup <em class="tooltip">?<span>Automation trims tables that would otherwise grow forever. Archived reports are never deleted. 0 disables a rule.</span></em></td>
+      <td><?php
+            $parts = array();
+            $parts[] = 'reports: ' . ($cleanReports > 0 ? $cleanReports . 'd' : 'off');
+            $parts[] = 'chat: '    . ($cleanChat > 0 ? $cleanChat . 'd' : 'off');
+            $parts[] = 'deleted messages: ' . ($cleanMessages > 0 ? $cleanMessages . 'd' : 'off');
+            echo implode(' &nbsp;|&nbsp; ', $parts);
+          ?></td>
+    </tr>
+
+    <tr>
+      <td>Last cleanup run <em class="tooltip">?<span>Cleanup runs once per hour from Automation and deletes in batches, so a first run on an old server catches up over several passes.</span></em></td>
+      <td><?php
+            if (is_array($cleanupInfo) && !empty($cleanupInfo['time'])) {
+                $r = isset($cleanupInfo['removed']) ? $cleanupInfo['removed'] : array();
+                echo date('d.m.Y H:i:s', (int) $cleanupInfo['time'])
+                   . ' <span style="color:#777">(' . (int) ($r['reports'] ?? 0) . ' reports, '
+                   . (int) ($r['chat'] ?? 0) . ' chat, '
+                   . (int) ($r['messages'] ?? 0) . ' messages)</span>';
+            } else {
+                echo "<span class='badge blue'>Not run yet</span>";
+            }
+          ?></td>
+    </tr>
 
     <?php if ($cronCmd !== '') { ?>
     <tr>

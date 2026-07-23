@@ -44,7 +44,7 @@ $currentYear = date('Y');
  * Build version
  * Ușor de modificat ulterior
  */
-$serverVersion = 'v.10.0 Full Refactor&Redesign';
+$serverVersion = 'v.11 Full Refactor';
 ?>
 
 <!-- ===================== FOOTER ===================== -->
