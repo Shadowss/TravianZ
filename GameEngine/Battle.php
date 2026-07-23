@@ -57,6 +57,15 @@ class Battle {
     ) {
         return;
     }
+
+    // [Phase 3] a1_v intra in aritmetica de sloturi ((trib-1)*10+1) din simulate();
+    // in afara 1..9 producea chei u<negative>/inexistente. Invalid => iesire,
+    // exact ca celelalte validari de mai sus. (Schimbare de comportament DOAR
+    // pentru input invalid.)
+    if ((int)$post['a1_v'] < 1 || (int)$post['a1_v'] > 9) {
+        return;
+    }
+
     $_POST['mytribe'] = $post['a1_v'];
 
     /******************************************************************
@@ -245,6 +254,47 @@ class Battle {
 	private function simulate($post) {
 
     /******************************************************************
+     * INPUT PARSING (Phase 3)
+     * Toate cheile din $post se citesc O SINGURA DATA aici, cu ?? si
+     * cast (int) + clamp de interval. Pentru valori VALIDE rezultatul
+     * este identic cu originalul (verificat cu harness-ul de
+     * echivalenta); clamp-urile schimba comportamentul doar pe input
+     * invalid — fiecare e semnalat individual mai jos.
+     ******************************************************************/
+    $attTribe = (int)$post['a1_v'];   // validat 1..9 in procSim()
+
+    // [Phase 3] era (int)$post['h_off'], fara ?? (notice pe cheie lipsa)
+    // si fara podea; forta negativa de erou n-are sens
+    $hero_strenght = max(0, (int)($post['h_off'] ?? 0));
+
+    // [Phase 3] procSim() taia doar plafonul (min 20); adaugata si podeaua 0
+    $offhero  = max(0, min(20, (int)($post['h_off_bonus'] ?? 0)));
+    $deffhero = max(0, min(20, (int)($post['h_def_bonus'] ?? 0)));
+    $palast   = max(0, min(20, (int)($post['palast'] ?? 0)));
+
+    // procSim() garanteaza deja 0..20 pe fluxul normal; clamp-ul e doar plasa
+    $walllevel = max(0, min(20, (int)($post['walllevel'] ?? 0)));
+    $wall      = $walllevel;
+
+    $deftribe = (int)($post['tribe'] ?? 0);   // setat de procSim() = $target[0]
+
+    // [Phase 3] era !empty($post['kata']) ? (int)$post['kata'] : 0, fara plafon;
+    // e nivelul cladirii-tinta pentru catapulte (WW poate ajunge la 100)
+    $kata = max(0, min(100, (int)($post['kata'] ?? 0)));
+
+    // [Phase 3] era $post['stonemason'] pasat brut; nivelul valid e 0..20
+    // (indexeaza $bid34; peste 20 dadea undefined index + durability nula)
+    $stonemason = max(0, min(20, (int)($post['stonemason'] ?? 0)));
+
+    // [Phase 3] erau pasate brute ca attpop/defpop; negative n-au sens in morala
+    $ew1 = max(0, (int)($post['ew1'] ?? 0));
+    $ew2 = max(0, (int)($post['ew2'] ?? 0));
+
+    // [Phase 3] era $post['ktyp'] + 3 brut; doar 0 (=> tip 3, atac normal)
+    // sau 1 (=> tip 4, raid) sunt valori valide
+    $ktyp = ((int)($post['ktyp'] ?? 0) === 1) ? 1 : 0;
+
+    /******************************************************************
      * ATTACKER INIT (KEEP LEGACY STRUCTURE)
      ******************************************************************/
     $attacker = [];
@@ -253,17 +303,14 @@ class Battle {
         $attacker['u'.$i] = 0;
     }
 
-    $start = ((int)$post['a1_v'] - 1) * 10 + 1;
-
-    $offhero       = (int)$post['h_off_bonus'];
-    $hero_strenght = (int)$post['h_off'];
-    $deffhero      = (int)$post['h_def_bonus'];
+    $start = ($attTribe - 1) * 10 + 1;
 
     /******************************************************************
-     * ATTACKER UNITS + ATTACK BONUSES (CRITICAL LEGACY VARS)
+     * ATTACKER UNITS + ATTACK BONUSES
+     * [Phase 3] ${'att_ab'.$index} (variabile dinamice) -> array $att_ab,
+     * conform conventiei proiectului; valorile raman identice
      ******************************************************************/
-    $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = 0;
-    $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
+    $att_ab = array_fill(1, 8, 0);
 
     for ($i = $start, $index = 1; $i <= $start + 9; $i++, $index++) {
 
@@ -271,46 +318,29 @@ class Battle {
             ? (int)$post['a1_'.$index]
             : 0;
 
-        if ($index <= 8) {
-
-            if (!empty($post['f1_'.$index])) {
-                ${'att_ab'.$index} = (int)$post['f1_'.$index];
-            } else {
-                ${'att_ab'.$index} = 0;
-            }
+        if ($index <= 8 && !empty($post['f1_'.$index])) {
+            $att_ab[$index] = (int)$post['f1_'.$index];
         }
     }
 
     /******************************************************************
      * DEFENDER INIT
-    ******************************************************************/
-	
-	$defender = [];
-	$def_ab   = [];
-	$defscout = 0;
-
-	for ($i = 1; $i <= 90; $i++) {
-		$units = (int)($post['a2_'.$i] ?? 0);
-		$ab    = (int)($post['f2_'.$i] ?? 0);
-
-    $defender['u'.$i] = $units;
-    $def_ab[$i]       = $units > 0 ? $ab : 0;
-
-    if ($units > 0 && in_array($i, [4,14,23,44,52,64,74,82])) {
-        $defscout += $units;
-		}
-	}
-
-    /******************************************************************
-     * BASIC VALUES
      ******************************************************************/
-    $deftribe = (int)$post['tribe'];
+    $defender = [];
+    $def_ab   = [];
+    $defscout = 0;
 
-    $walllevel = (int)$post['walllevel'];
-    $wall      = $walllevel;
-    $palast    = (int)$post['palast'];
+    for ($i = 1; $i <= 90; $i++) {
+        $units = (int)($post['a2_'.$i] ?? 0);
+        $ab    = (int)($post['f2_'.$i] ?? 0);
 
-    $kata = !empty($post['kata']) ? (int)$post['kata'] : 0;
+        $defender['u'.$i] = $units;
+        $def_ab[$i]       = $units > 0 ? $ab : 0;
+
+        if ($units > 0 && in_array($i, [4, 14, 23, 44, 52, 64, 74, 82])) {
+            $defscout += $units;
+        }
+    }
 
     /******************************************************************
      * SCOUT CHECK 
@@ -343,53 +373,32 @@ class Battle {
     }
 
     /******************************************************************
-     * FINAL CALL 
+     * FINAL CALL
+     * [Phase 3] cele doua apeluri aproape identice au fost unificate;
+     * difereau doar prin tip (1 vs ktyp+3) si prin zero-urile de erou
+     * de pe ramura de spionaj
      ******************************************************************/
-    if (!$scout) {
-
-        return $this->calculateBattle(
-            $attacker,
-            $defender,
-            $wall,
-            $post['a1_v'],
-            $deftribe,
-            $palast,
-            $post['ew1'],
-            $post['ew2'],
-            $post['ktyp'] + 3,
-            $def_ab,
-            $att_ab1, $att_ab2, $att_ab3, $att_ab4,
-            $att_ab5, $att_ab6, $att_ab7, $att_ab8,
-            $kata,
-            $post['stonemason'],
-            $walllevel,
-            $offhero,
-            $hero_strenght,
-            $deffhero,
-            0, 0, 0, 0, 0
-        );
-
-    } else {
-
-        return $this->calculateBattle(
-            $attacker,
-            $defender,
-            $wall,
-            $post['a1_v'],
-            $deftribe,
-            $palast,
-            $post['ew1'],
-            $post['ew2'],
-            1,
-            $def_ab,
-            $att_ab1, $att_ab2, $att_ab3, $att_ab4,
-            $att_ab5, $att_ab6, $att_ab7, $att_ab8,
-            $kata,
-            $post['stonemason'],
-            $walllevel,
-            0, 0, 0, 0, 0, 0, 0, 0
-        );
-    }
+    return $this->calculateBattle(
+        $attacker,
+        $defender,
+        $wall,
+        $attTribe,
+        $deftribe,
+        $palast,
+        $ew1,
+        $ew2,
+        $scout ? 1 : $ktyp + 3,
+        $def_ab,
+        $att_ab[1], $att_ab[2], $att_ab[3], $att_ab[4],
+        $att_ab[5], $att_ab[6], $att_ab[7], $att_ab[8],
+        $kata,
+        $stonemason,
+        $walllevel,
+        $scout ? 0 : $offhero,
+        $scout ? 0 : $hero_strenght,
+        $scout ? 0 : $deffhero,
+        0, 0, 0, 0, 0
+    );
 }
 		
 	/*****************************************
@@ -473,6 +482,8 @@ class Battle {
 	
 	/*****************************************
 	Function to process Calculate Battle
+	(Phase 2: orchestrator — fiecare sectiune
+	a devenit un helper privat, mai jos)
 	*****************************************/
 
 	function calculateBattle(
@@ -489,35 +500,25 @@ class Battle {
 		$conqureby,
 		$defReinforcements = null) {
 			
-    global $bid34, $bid35, $database, $unitsbytype;
+    global $database, $unitsbytype;
 
     /******************************************************************
      * UNIT GROUP DEFINITIONS
      ******************************************************************/
-    global $unitsbytype;
-    $calvaryLookup = array_flip($unitsbytype['cavalry']);
+    $calvaryLookup  = array_flip($unitsbytype['cavalry']);
     $catapultLookup = array_flip($unitsbytype['catapult']);
-    $ramsLookup = array_flip($unitsbytype['ram']);
-
-    $catp = 0;
-    $ram  = 0;
+    $ramsLookup     = array_flip($unitsbytype['ram']);
 
     /******************************************************************
      * BASE VARIABLES
      ******************************************************************/
-    $result   = [];
-    $units    = [];
-    $involve  = 0;
-    $winner   = false;
+    $result = [];
+    $units  = [];
 
-    $cap = 0;
-    $ap  = 0;
-    $dp  = 0;
-    $cdp = 0;
-    $rap = 0;
-    $rdp = 0;
-
-    $detected = false;
+    $attAb = [
+        1 => $att_ab1, 2 => $att_ab2, 3 => $att_ab3, 4 => $att_ab4,
+        5 => $att_ab5, 6 => $att_ab6, 7 => $att_ab7, 8 => $att_ab8
+    ];
 
     /******************************************************************
      * ARTIFACTS (GLOBAL EFFECTS)
@@ -543,6 +544,257 @@ class Battle {
     }
 
     /******************************************************************
+     * DEFENDER FORCES (BASE + REINFORCEMENTS) — citeste DB, nu scrie
+     ******************************************************************/
+    $defForces = $this->computeDefenderForces(
+        $Defender, $def_ab, $type,
+        $defender_artefact, $defenderhero,
+        $DefenderWref, $defReinforcements
+    );
+
+    $dp       = $defForces['dp'];
+    $cdp      = $defForces['cdp'];
+    $involve  = $defForces['involve'];
+    $detected = $defForces['detected'];
+
+    if ($defForces['def_hero_unit'] !== null) {
+        $units['Def_unit']['hero'] = $defForces['def_hero_unit'];
+    }
+
+    $DefendersAll = $defForces['DefendersAll'];
+
+    /******************************************************************
+     * ATTACKER FORCES (AP/CAP/CATP/RAM + HERO OFFENSE)
+     ******************************************************************/
+    $start = ($att_tribe - 1) * 10 + 1;
+    $end   = $att_tribe * 10;
+
+    $attForces = $this->computeAttackerForces(
+        $Attacker, $att_tribe, $type, $attAb,
+        $attacker_artefact, $atkhero,
+        $offhero, $hero_strenght, $deffhero,
+        $DefenderID,
+        $calvaryLookup, $catapultLookup, $ramsLookup,
+        $dp, $cdp
+    );
+
+    $ap   = $attForces['ap'];
+    $cap  = $attForces['cap'];
+    $catp = $attForces['catp'];
+    $ram  = $attForces['ram'];
+
+    // bonusurile de erou din simulator (deffhero) multiplica apararea,
+    // de aceea dp/cdp trec prin computeAttackerForces() si se intorc aici
+    $dp  = $attForces['dp'];
+    $cdp = $attForces['cdp'];
+
+    $involve += $attForces['involve'];
+
+    if (!empty($attForces['att_units'])) {
+        $units['Att_unit'] = $attForces['att_units'];
+    }
+
+    /******************************************************************
+     * WALL + RESIDENCE
+     ******************************************************************/
+    $walled = $this->applyWallAndResidence($dp, $cdp, $def_wall, $def_tribe, $residence, $type);
+
+    $dp  = $walled['dp'];
+    $cdp = $walled['cdp'];
+
+    /******************************************************************
+     * ATTACK / DEFENSE TOTAL
+     ******************************************************************/
+    $bonus = $this->computeBreweryAttackBonus($AttackerID, $att_tribe);
+
+    $points = $this->computeTotalPoints($ap, $cap, $dp, $cdp, $bonus);
+
+    $rap = $points['rap'];
+    $rdp = $points['rdp'];
+
+    $result['Attack_points'] = $rap;
+    $result['Defend_points'] = $rdp;
+
+    $winner = ($rap > $rdp);
+
+    $safeRap = max(1, (float)$rap);
+    $safeRdp = max(1, (float)$rdp);
+
+    /******************************************************************
+     * MORALE + M FACTOR
+     ******************************************************************/
+    $moralbonus = $this->computeMorale($attpop, $defpop, $isWWVillage, $rap, $rdp);
+    $Mfactor    = $this->computeMfactor($involve, $type);
+
+    /******************************************************************
+     * LOSSES (tip 1/3/4 — izoleaza singurul rand() din fisier)
+     ******************************************************************/
+    $losses = $this->computeLossRatios(
+        $type, $winner, $att_tribe, $detected, $Attacker,
+        $rap, $rdp, $safeRap, $safeRdp,
+        $moralbonus, $Mfactor,
+        $ram, $catp
+    );
+
+    foreach ($losses['result'] as $key => $value) {
+        $result[$key] = $value;
+    }
+
+    $winner = $losses['winner'];
+    $ram    = $losses['ram'];
+    $catp   = $losses['catp'];
+
+    /******************************************************************
+     * CATAPULTS DAMAGE
+     ******************************************************************/
+    $catapultResult = $this->applyCatapultDamage(
+        $catp, $tblevel, $att_ab8, $stonemason,
+        $safeRap, $safeRdp, $attpop, $defpop, $strongerbuildings
+    );
+
+    foreach ($catapultResult as $key => $value) {
+        $result[$key] = $value;
+    }
+
+    /******************************************************************
+     * RAMS DAMAGE
+     ******************************************************************/
+    $ramResult = $this->applyRamDamage(
+        $ram, $walllevel, $att_ab7, $stonemason,
+        $safeRap, $safeRdp, $strongerbuildings
+    );
+
+    foreach ($ramResult as $key => $value) {
+        $result[$key] = $value;
+    }
+
+    /******************************************************************
+     * FINAL MORALE FACTOR
+     ******************************************************************/
+    $result[6] = pow(
+        $safeRap / max($safeRdp * $moralbonus, 1),
+        $Mfactor
+    );
+
+    $result['moralBonus'] = $moralbonus;
+
+    /******************************************************************
+     * CASUALTIES
+     ******************************************************************/
+    // NOTA: pentru tipurile fara ramura de pierderi (ex. 2/5) originalul
+    // citea $result[1] nedefinit (notice per iteratie, valoare 0);
+    // isset-ul de aici pastreaza valoarea (0) fara notice-uri
+    $result['casualties_attacker'] = $this->computeCasualties(
+        isset($result[1]) ? $result[1] : 0,
+        isset($units['Att_unit']) ? $units['Att_unit'] : [],
+        $start,
+        $end
+    );
+
+    /******************************************************************
+     * HERO DAMAGE (ATTACKER)
+     ******************************************************************/
+    if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
+
+        $dead = $this->applyHeroBattleDamage(
+            $atkhero['heroid'],
+            $result[1],
+            // T4 hero port (Phase 5): doar eroul ATACATOR beneficiaza de
+            // reducerea de daune din armuri (comportament original pastrat)
+            $atkhero['uid'] ?? 0
+        );
+
+        if ($dead === 1) {
+            $result['casualties_attacker'][11] = 1;
+        }
+    }
+
+    /******************************************************************
+     * HERO DAMAGE (DEFENDER)
+     ******************************************************************/
+    if (!empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
+
+        $dead = $this->applyHeroBattleDamage($defenderhero['heroid'], $result[2]);
+
+        if ($dead !== null) {
+            $result['deadherodef'] = $dead;
+        }
+    }
+
+    /******************************************************************
+     * HERO DAMAGE (DEFENDER + REINFORCEMENTS)
+     ******************************************************************/
+    if (!empty($DefendersAll)) {
+
+        $battleHeroesCache = [];
+        $villageOwnerCache = [];
+
+        foreach ($DefendersAll as $defenders) {
+
+            if (empty($defenders['hero'])) {
+                continue;
+            }
+
+            $fromVillage = (int)$defenders['from'];
+
+            if (!isset($villageOwnerCache[$fromVillage])) {
+                $villageOwnerCache[$fromVillage] = (int)$database->getVillageField($fromVillage, "owner");
+            }
+
+            $owner = $villageOwnerCache[$fromVillage];
+
+            if (!isset($battleHeroesCache[$owner])) {
+                $battleHeroesCache[$owner] = $this->getBattleHero($owner);
+            }
+
+            $heroarraydefender = $battleHeroesCache[$owner];
+
+            if (empty($heroarraydefender['heroid'])) {
+                continue;
+            }
+
+            $dead = $this->applyHeroBattleDamage($heroarraydefender['heroid'], $result[2]);
+
+            if ($dead !== null) {
+                $result['deadheroref'][$defenders['id']] = $dead;
+            }
+        }
+    }
+
+    /******************************************************************
+     * BOUNTY CALCULATION
+     ******************************************************************/
+    $result['bounty'] = $this->computeBounty(
+        $Attacker,
+        $result['casualties_attacker'],
+        $att_tribe,
+        $start,
+        $end
+    );
+
+    return $result;
+}
+
+	/*****************************************
+	Phase 2 helper: apararea de baza +
+	intaririle (citeste DB, nu scrie nimic)
+	*****************************************/
+
+	private function computeDefenderForces(
+    $Defender, $def_ab, $type,
+    $defender_artefact, $defenderhero,
+    $DefenderWref, $defReinforcements
+) {
+
+    global $database;
+
+    $dp = 0;
+    $cdp = 0;
+    $involve = 0;
+    $detected = false;
+    $defHeroUnit = null;
+
+    /******************************************************************
      * DEFENDER BASE FORCES
      ******************************************************************/
     if ($type == 1) {
@@ -566,23 +818,24 @@ class Battle {
 
         $involve += $datadef['involve'];
 
-        if(isset($Defender['hero']) && $Defender['hero'] != 0){
-			
-                $units['Def_unit']['hero'] = $Defender['hero'];
-                $own_cdp += $defenderhero['dc'];
-                $own_dp += $defenderhero['di'];
+        if (isset($Defender['hero']) && $Defender['hero'] != 0) {
 
-                // T4 hero port (Phase 5): weapon adds +N defense per unit of
-                // its type in the defending army, counted in both pools
-                // (see HeroBattleBonus::unitDefense). No-op when flag is off.
-                $itemDef = HeroBattleBonus::unitDefense($defenderhero['uid'] ?? 0, $Defender);
-                $own_dp  += $itemDef;
-                $own_cdp += $itemDef;
+            $defHeroUnit = $Defender['hero'];
 
-                $own_dp *= $defenderhero['db'];
-                $own_cdp *= $defenderhero['db'];
-            }
-			
+            $own_cdp += $defenderhero['dc'];
+            $own_dp += $defenderhero['di'];
+
+            // T4 hero port (Phase 5): weapon adds +N defense per unit of
+            // its type in the defending army, counted in both pools
+            // (see HeroBattleBonus::unitDefense). No-op when flag is off.
+            $itemDef = HeroBattleBonus::unitDefense($defenderhero['uid'] ?? 0, $Defender);
+            $own_dp  += $itemDef;
+            $own_cdp += $itemDef;
+
+            $own_dp *= $defenderhero['db'];
+            $own_cdp *= $defenderhero['db'];
+        }
+
         $dp += $own_dp;
         $cdp += $own_cdp;
     }
@@ -675,16 +928,47 @@ class Battle {
         }
     }
 
-    /******************************************************************
-     * ATTACKER UNIT CALCULATION
-     ******************************************************************/
+    return [
+        'dp'            => $dp,
+        'cdp'           => $cdp,
+        'involve'       => $involve,
+        'detected'      => $detected,
+        'def_hero_unit' => $defHeroUnit,
+        'DefendersAll'  => $DefendersAll
+    ];
+}
+
+	/*****************************************
+	Phase 2 helper: fortele atacatorului
+	(ap/cap/catp/ram + ofensiva eroului)
+	*****************************************/
+
+	private function computeAttackerForces(
+    $Attacker, $att_tribe, $type, $attAb,
+    $attacker_artefact, $atkhero,
+    $offhero, $hero_strenght, $deffhero,
+    $DefenderID,
+    $calvaryLookup, $catapultLookup, $ramsLookup,
+    $dp, $cdp
+) {
+
+    global $unitsbytype;
+
     $start = ($att_tribe - 1) * 10 + 1;
     $end   = $att_tribe * 10;
 
+    $ap = 0;
+    $cap = 0;
+    $catp = 0;
+    $ram = 0;
+    $involve = 0;
+    $attUnits = [];
+
     if ($type == 1) {
 
-        $abcount = ($att_tribe == 3) ? 3 : 4;
-        $scoutAB = ${'att_ab'.$abcount};
+        // era: $abcount = ($att_tribe == 3) ? 3 : 4; $scoutAB = ${'att_ab'.$abcount};
+        // (galii au cercetasul pe slotul 3, restul triburilor pe slotul 4)
+        $scoutAB = ($att_tribe == 3) ? $attAb[3] : $attAb[4];
 
         for ($i = $start; $i <= $end; $i++) {
 
@@ -715,23 +999,15 @@ class Battle {
             }
 
             $involve += $unitAmount;
-            $units['Att_unit'][$i] = $unitAmount;
+            $attUnits[$i] = $unitAmount;
         }
 
+        // NOTA: artefactul ofensiv al atacatorului se aplica DOAR pe ramura
+        // de spionaj (tip 1), nu si la atacurile normale — comportament
+        // original pastrat 1:1; de verificat separat daca e intentionat
         $ap *= $attacker_artefact;
 
     } else {
-
-        $abValues = [
-            1 => $att_ab1,
-            2 => $att_ab2,
-            3 => $att_ab3,
-            4 => $att_ab4,
-            5 => $att_ab5,
-            6 => $att_ab6,
-            7 => $att_ab7,
-            8 => $att_ab8
-        ];
 
         $abcount = 1;
 
@@ -749,12 +1025,12 @@ class Battle {
             $unitData = ${'u'.$i};
             $unitAttack = $unitData['atk'];
 
-            if ($abcount <= 8 && $abValues[$abcount] > 0) {
+            if ($abcount <= 8 && $attAb[$abcount] > 0) {
 
                 $unitAttack = round(
                     $unitAttack + (
                         $unitAttack + (300 * $unitData['pop'] / 7)
-                    ) * (pow(1.007, $abValues[$abcount]) - 1),
+                    ) * (pow(1.007, $attAb[$abcount]) - 1),
                     4
                 );
             }
@@ -776,7 +1052,7 @@ class Battle {
             }
 
             $involve += $unitAmount;
-            $units['Att_unit'][$i] = $unitAmount;
+            $attUnits[$i] = $unitAmount;
 
             $abcount++;
         }
@@ -786,7 +1062,7 @@ class Battle {
          ******************************************************************/
         if (!empty($Attacker['uhero']) && !empty($atkhero)) {
 
-            $units['Att_unit']['hero'] = $Attacker['uhero'];
+            $attUnits['hero'] = $Attacker['uhero'];
 
             $heroOb = (!empty($atkhero['ob']) && $atkhero['ob'] > 0) ? $atkhero['ob'] : 1;
             $ap  *= $heroOb;
@@ -821,9 +1097,24 @@ class Battle {
         }
     }
 
-    /******************************************************************
-     * WALL + RESIDENCE
-     ******************************************************************/
+    return [
+        'ap'        => $ap,
+        'cap'       => $cap,
+        'catp'      => $catp,
+        'ram'       => $ram,
+        'involve'   => $involve,
+        'att_units' => $attUnits,
+        'dp'        => $dp,
+        'cdp'       => $cdp
+    ];
+}
+
+	/*****************************************
+	Phase 2 helper: zid + resedinta (pur)
+	*****************************************/
+
+	private function applyWallAndResidence($dp, $cdp, $def_wall, $def_tribe, $residence, $type) {
+
     $residenceBonus = (2 * ($residence * $residence)) + 10;
 
     if ($def_wall > 0) {
@@ -880,9 +1171,20 @@ class Battle {
         $cdp += $residenceBonus;
     }
 
-    /******************************************************************
-     * ATTACK / DEFENSE TOTAL
-     ******************************************************************/
+    return ['dp' => $dp, 'cdp' => $cdp];
+}
+
+	/*****************************************
+	Phase 2 helper: bonusul de atac Brewery
+	(citeste DB; extras ca sa ramana
+	computeTotalPoints() pur — vezi tabelul
+	de mapare din livrare)
+	*****************************************/
+
+	private function computeBreweryAttackBonus($AttackerID, $att_tribe) {
+
+    global $bid35, $database;
+
     $bonus = 0;
 
     // Brewery (35) Mead-Festival attack bonus: Teuton-only, capital-only but
@@ -907,6 +1209,15 @@ class Battle {
         }
     }
 
+    return $bonus;
+}
+
+	/*****************************************
+	Phase 2 helper: rap/rdp (pur)
+	*****************************************/
+
+	private function computeTotalPoints($ap, $cap, $dp, $cdp, $bonus) {
+
     $rap = round(
         ($ap + $cap) + (
             (($ap + $cap) / 100) * $bonus
@@ -925,17 +1236,15 @@ class Battle {
         );
     }
 
-    $result['Attack_points'] = $rap;
-    $result['Defend_points'] = $rdp;
+    return ['rap' => $rap, 'rdp' => $rdp];
+}
 
-    $winner = ($rap > $rdp);
+	/*****************************************
+	Phase 2 helper: morala (pur)
+	*****************************************/
 
-    $safeRap = max(1, (float)$rap);
-    $safeRdp = max(1, (float)$rdp);
+	private function computeMorale($attpop, $defpop, $isWWVillage, $rap, $rdp) {
 
-    /******************************************************************
-     * MORALE
-     ******************************************************************/
     if ($attpop > $defpop && !$isWWVillage) {
 
         $moralbonus = 1 / round(
@@ -954,9 +1263,15 @@ class Battle {
         $moralbonus = 1.0;
     }
 
-    /******************************************************************
-     * M FACTOR
-     ******************************************************************/
+    return $moralbonus;
+}
+
+	/*****************************************
+	Phase 2 helper: factorul M (pur)
+	*****************************************/
+
+	private function computeMfactor($involve, $type) {
+
     if ($involve >= 1000 && $type != 1) {
         $Mfactor = 2 * round((1.8592 - pow($involve, 0.015)), 4);
     } else {
@@ -969,9 +1284,26 @@ class Battle {
         $Mfactor = 1.5;
     }
 
-    /******************************************************************
-     * LOSSES
-     ******************************************************************/
+    return $Mfactor;
+}
+
+	/*****************************************
+	Phase 2 helper: ratele de pierderi pentru
+	tipurile 1/3/4 — izoleaza singurul rand()
+	din fisier (hero_fealthy); pentru alte
+	tipuri nu seteaza cheile 1/2, exact ca
+	originalul
+	*****************************************/
+
+	private function computeLossRatios(
+    $type, $winner, $att_tribe, $detected, $Attacker,
+    $rap, $rdp, $safeRap, $safeRdp,
+    $moralbonus, $Mfactor,
+    $ram, $catp
+) {
+
+    $result = [];
+
     if ($type == 1) {
 
         $holder = pow((($rdp * $moralbonus) / $safeRap), $Mfactor);
@@ -994,6 +1326,9 @@ class Battle {
         $result[1] = $winner ? $holder : 1 - $holder;
         $result[2] = $winner ? 1 - $holder : $holder;
 
+        // NOTA: $result[1] e o fractie 0..1, deci "/ 100" face scaderea
+        // aproape mereu 0 (berbecii/catapultele trag cu efectivul de
+        // dinainte de pierderi) — comportament original pastrat 1:1
         $ram  -= round($ram * $result[1] / 100);
         $catp -= round($catp * $result[1] / 100);
 
@@ -1028,6 +1363,10 @@ class Battle {
         $ku = ($att_tribe - 1) * 10 + 9;
 
         $kings = (int)$Attacker['u'.$ku];
+
+        // NOTA: cast-ul (int) trunchiaza fractia la 0, deci $aviables ==
+        // $kings pentru orice pierdere partiala (doar pierderea totala,
+        // result[1] == 1, ii scade) — comportament original pastrat 1:1
         $aviables = $kings - round($kings * (int)$result[1]);
 
         if ($aviables > 0) {
@@ -1043,6 +1382,7 @@ class Battle {
             $result['hero_fealthy'] = $fealthy;
         }
 
+        // NOTA: acelasi "/ 100" pe fractie ca la tipul 4 — pastrat 1:1
         $ram -= ($winner)
             ? round($ram * $result[1] / 100)
             : round($ram * $result[2] / 100);
@@ -1052,285 +1392,205 @@ class Battle {
             : round($catp * $result[2] / 100);
     }
 
-    /******************************************************************
-     * CATAPULTS DAMAGE
-     ******************************************************************/
-    if ($catp > 0 && $tblevel != 0) {
+    return [
+        'result' => $result,
+        'winner' => $winner,
+        'ram'    => $ram,
+        'catp'   => $catp
+    ];
+}
 
-        $upgrades = round(200 * pow(1.0205, $att_ab8)) / 200;
+	/*****************************************
+	Phase 2 helper: daunele catapultelor
+	asupra cladirii-tinta (determinist)
+	*****************************************/
 
-        $durability = ($stonemason > 0)
-            ? $bid34[$stonemason]['attri'] / 100
-            : 1;
+	private function applyCatapultDamage(
+    $catp, $tblevel, $att_ab8, $stonemason,
+    $safeRap, $safeRdp, $attpop, $defpop, $strongerbuildings
+) {
 
-        $attackDefenseRatio = $safeRap / $safeRdp;
+    global $bid34;
 
-        $catpMoraleBonus = min(
-            max(pow(($attpop / max($defpop, 1)), 0.3), 1),
-            3
-        );
+    if ($catp <= 0 || $tblevel == 0) {
+        return [];
+    }
 
-        $catapultsDamage = $this->calculateCatapultsDamage(
-            $catp,
-            $upgrades,
-            $durability,
-            $attackDefenseRatio,
-            $strongerbuildings,
-            $catpMoraleBonus
-        );
+    $upgrades = round(200 * pow(1.0205, $att_ab8)) / 200;
 
-        $result[3] = $this->calculateNewBuildingLevel($tblevel, $catapultsDamage);
-        $result[4] = $tblevel;
+    $durability = ($stonemason > 0)
+        ? $bid34[$stonemason]['attri'] / 100
+        : 1;
 
-        $result['catapults'] = [
+    $attackDefenseRatio = $safeRap / $safeRdp;
+
+    $catpMoraleBonus = min(
+        max(pow(($attpop / max($defpop, 1)), 0.3), 1),
+        3
+    );
+
+    $catapultsDamage = $this->calculateCatapultsDamage(
+        $catp,
+        $upgrades,
+        $durability,
+        $attackDefenseRatio,
+        $strongerbuildings,
+        $catpMoraleBonus
+    );
+
+    return [
+        3 => $this->calculateNewBuildingLevel($tblevel, $catapultsDamage),
+        4 => $tblevel,
+        'catapults' => [
             'upgrades' => $upgrades,
             'durability' => $durability,
             'attackDefenseRatio' => $attackDefenseRatio,
             'strongerBuildings' => $strongerbuildings,
             'moraleBonus' => $catpMoraleBonus
-        ];
+        ]
+    ];
+}
+
+	/*****************************************
+	Phase 2 helper: daunele berbecilor
+	asupra zidului (determinist)
+	*****************************************/
+
+	private function applyRamDamage(
+    $ram, $walllevel, $att_ab7, $stonemason,
+    $safeRap, $safeRdp, $strongerbuildings
+) {
+
+    global $bid34;
+
+    if ($ram <= 0 || $walllevel == 0) {
+        return [];
     }
 
-    /******************************************************************
-     * RAMS DAMAGE
-     ******************************************************************/
-    if ($ram > 0 && $walllevel != 0) {
+    $upgrades = round(200 * pow(1.0205, $att_ab7)) / 200;
 
-        $upgrades = round(200 * pow(1.0205, $att_ab7)) / 200;
+    $durability = ($stonemason > 0)
+        ? $bid34[$stonemason]['attri'] / 100
+        : 1;
 
-        $durability = ($stonemason > 0)
-            ? $bid34[$stonemason]['attri'] / 100
-            : 1;
+    $attackDefenseRatio = $safeRap / $safeRdp;
 
-        $attackDefenseRatio = $safeRap / $safeRdp;
+    $ramsDamage = $this->calculateCatapultsDamage(
+        $ram,
+        $upgrades,
+        $durability,
+        $attackDefenseRatio,
+        $strongerbuildings,
+        1
+    );
 
-        $ramsDamage = $this->calculateCatapultsDamage(
-            $ram,
-            $upgrades,
-            $durability,
-            $attackDefenseRatio,
-            $strongerbuildings,
-            1
-        );
-
-        $result[7] = $this->calculateNewBuildingLevel($walllevel, $ramsDamage);
-        $result[8] = $walllevel;
-
-        $result['rams'] = [
+    return [
+        7 => $this->calculateNewBuildingLevel($walllevel, $ramsDamage),
+        8 => $walllevel,
+        'rams' => [
             'upgrades' => $upgrades,
             'durability' => $durability,
             'attackDefenseRatio' => $attackDefenseRatio,
             'strongerBuildings' => $strongerbuildings,
             'moraleBonus' => 1
-        ];
-    }
+        ]
+    ];
+}
 
-    /******************************************************************
-     * FINAL MORALE FACTOR
-     ******************************************************************/
-    $result[6] = pow(
-        $safeRap / max($safeRdp * $moralbonus, 1),
-        $Mfactor
-    );
+	/*****************************************
+	Phase 2 helper: pierderile atacatorului
+	pe sloturile 1..10 (pur)
+	*****************************************/
 
-    $result['moralBonus'] = $moralbonus;
+	private function computeCasualties($lossRatio, $attUnits, $start, $end) {
 
-    /******************************************************************
-     * CASUALTIES
-     ******************************************************************/
+    $casualties = [];
+
     for ($i = $start; $i <= $end; $i++) {
 
         $y = $i - $start + 1;
 
-        $result['casualties_attacker'][$y] = round(
-            $result[1] * (isset($units['Att_unit'][$i]) ? $units['Att_unit'][$i] : 0)
+        $casualties[$y] = round(
+            $lossRatio * (isset($attUnits[$i]) ? $attUnits[$i] : 0)
         );
     }
 
-    /******************************************************************
-     * HERO DAMAGE (ATTACKER)
-     ******************************************************************/
-    if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
+    return $casualties;
+}
 
-        $hero_id = (int)$atkhero['heroid'];
+	/*****************************************
+	Phase 2 helper: daunele de sanatate ale
+	unui erou dupa lupta — unifica cele 3
+	blocuri DB duplicate (atacator, aparator,
+	intariri); SINGURUL helper care scrie in
+	DB. Intoarce: null = eroul nu exista /
+	era deja mort (nicio scriere), 1 = a
+	murit acum, 0 = a supravietuit (health
+	scazut cu daunele)
+	*****************************************/
 
-        $_result = mysqli_query(
+	private function applyHeroBattleDamage($hero_id, $lossRatio, $reduceForUid = null) {
+
+    global $database;
+
+    $hero_id = (int)$hero_id;
+
+    $_result = mysqli_query(
+        $database->dblink,
+        "SELECT heroid, health
+         FROM " . TB_PREFIX . "hero
+         WHERE dead = 0
+         AND heroid = " . $hero_id . "
+         LIMIT 1"
+    );
+
+    $fdb = mysqli_fetch_assoc($_result);
+
+    if (empty($fdb)) {
+        return null;
+    }
+
+    $hero_health = (int)$fdb['health'];
+    $damage_health = round(100 * $lossRatio);
+
+    // T4 hero port (Phase 5): armors reduce the health damage the
+    // hero takes in one battle (flat, floored at 0). No-op when off.
+    // Se aplica doar cand apelantul trimite un uid (eroul atacator).
+    if ($reduceForUid !== null) {
+        $damage_health = HeroBattleBonus::reduceDamage($reduceForUid, $damage_health);
+    }
+
+    if ($hero_health <= $damage_health || $damage_health > 90) {
+
+        mysqli_query(
             $database->dblink,
-            "SELECT heroid, health
-             FROM " . TB_PREFIX . "hero
-             WHERE dead = 0
-             AND heroid = " . $hero_id . "
+            "UPDATE " . TB_PREFIX . "hero
+             SET dead = 1, health = 0
+             WHERE heroid = " . $hero_id . "
              LIMIT 1"
         );
 
-        $fdb = mysqli_fetch_assoc($_result);
-
-        if (!empty($fdb)) {
-
-            $hero_health = (int)$fdb['health'];
-            $damage_health = round(100 * $result[1]);
-
-            // T4 hero port (Phase 5): armors reduce the health damage the
-            // hero takes in one battle (flat, floored at 0). No-op when off.
-            $damage_health = HeroBattleBonus::reduceDamage($atkhero['uid'] ?? 0, $damage_health);
-
-            if ($hero_health <= $damage_health || $damage_health > 90) {
-
-                $result['casualties_attacker'][11] = 1;
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET dead = 1, health = 0
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-
-            } else {
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET health = health - " . (int)$damage_health . "
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-            }
-        }
+        return 1;
     }
 
-    /******************************************************************
-     * HERO DAMAGE (DEFENDER)
-     ******************************************************************/
-    if (!empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
+    mysqli_query(
+        $database->dblink,
+        "UPDATE " . TB_PREFIX . "hero
+         SET health = health - " . (int)$damage_health . "
+         WHERE heroid = " . $hero_id . "
+         LIMIT 1"
+    );
 
-        $hero_id = (int)$defenderhero['heroid'];
+    return 0;
+}
 
-        $_result = mysqli_query(
-            $database->dblink,
-            "SELECT heroid, health
-             FROM " . TB_PREFIX . "hero
-             WHERE dead = 0
-             AND heroid = " . $hero_id . "
-             LIMIT 1"
-        );
+	/*****************************************
+	Phase 2 helper: prada maxima carata de
+	supravietuitori (pur)
+	*****************************************/
 
-        $fdb = mysqli_fetch_assoc($_result);
+	private function computeBounty($Attacker, $casualties, $att_tribe, $start, $end) {
 
-        if (!empty($fdb)) {
-
-            $hero_health = (int)$fdb['health'];
-            $damage_health = round(100 * $result[2]);
-
-            if ($hero_health <= $damage_health || $damage_health > 90) {
-
-                $result['deadherodef'] = 1;
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET dead = 1, health = 0
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-
-            } else {
-
-                $result['deadherodef'] = 0;
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET health = health - " . (int)$damage_health . "
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-            }
-        }
-    }
-
-    /******************************************************************
-     * HERO DAMAGE (DEFENDER + REINFORCEMENTS)
-     ******************************************************************/
-    if (!empty($DefendersAll)) {
-
-        $battleHeroesCache = [];
-        $villageOwnerCache = [];
-
-        foreach ($DefendersAll as $defenders) {
-
-            if (empty($defenders['hero'])) {
-                continue;
-            }
-
-            $fromVillage = (int)$defenders['from'];
-
-            if (!isset($villageOwnerCache[$fromVillage])) {
-                $villageOwnerCache[$fromVillage] = (int)$database->getVillageField($fromVillage, "owner");
-            }
-
-            $owner = $villageOwnerCache[$fromVillage];
-
-            if (!isset($battleHeroesCache[$owner])) {
-                $battleHeroesCache[$owner] = $this->getBattleHero($owner);
-            }
-
-            $heroarraydefender = $battleHeroesCache[$owner];
-
-            if (empty($heroarraydefender['heroid'])) {
-                continue;
-            }
-
-            $hero_id = (int)$heroarraydefender['heroid'];
-
-            $_result = mysqli_query(
-                $database->dblink,
-                "SELECT heroid, health
-                 FROM " . TB_PREFIX . "hero
-                 WHERE dead = 0
-                 AND heroid = " . $hero_id . "
-                 LIMIT 1"
-            );
-
-            $fdb = mysqli_fetch_assoc($_result);
-
-            if (empty($fdb)) {
-                continue;
-            }
-
-            $hero_health = (int)$fdb['health'];
-            $damage_health = round(100 * $result[2]);
-
-            if ($hero_health <= $damage_health || $damage_health > 90) {
-
-                $result['deadheroref'][$defenders['id']] = 1;
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET dead = 1, health = 0
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-
-            } else {
-
-                $result['deadheroref'][$defenders['id']] = 0;
-
-                mysqli_query(
-                    $database->dblink,
-                    "UPDATE " . TB_PREFIX . "hero
-                     SET health = health - " . (int)$damage_health . "
-                     WHERE heroid = " . $hero_id . "
-                     LIMIT 1"
-                );
-            }
-        }
-    }
-
-    /******************************************************************
-     * BOUNTY CALCULATION
-     ******************************************************************/
     $max_bounty = 0;
 
     for ($i = $start; $i <= $end; $i++) {
@@ -1341,14 +1601,12 @@ class Battle {
 
         $aliveUnits =
             (int)$Attacker['u'.$i]
-            - (int)$result['casualties_attacker'][$y];
+            - (int)$casualties[$y];
 
         $max_bounty += $aliveUnits * (int)${'u'.$i}['cap'];
     }
 
-    $result['bounty'] = $max_bounty;
-
-    return $result;
+    return $max_bounty;
 }
 
 	/*****************************************
@@ -1508,4 +1766,3 @@ class Battle {
 };
 
 $battle = new Battle;
-?>

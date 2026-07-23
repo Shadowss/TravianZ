@@ -27,7 +27,11 @@ $end = $session->tribe * 10;
 $level = (int)$village->resarray['f'.$id];
 
 for ($i = $start; $i <= $end; $i++):
-    if ($i == 4 || $i == 23 || $i == 24) continue;
+    // FIX (triburi noi): Great Barracks antreneaza DOAR infanteria tribului, la
+    // fel ca Barracks-ul normal. Filtrul generic $unitsbytype['infantry'] acopera
+    // si triburile 6-9; vechea excludere 4/23/24 era hardcodata pentru triburile
+    // 1-5 si lasa cavaleria sa treaca la triburile noi.
+    if (!in_array($i, $unitsbytype['infantry'])) continue;
     if (!($technology->getTech($i) || $i % 10 == 1)) continue;
 
     $unit = ${'u'.$i};

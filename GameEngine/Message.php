@@ -596,7 +596,7 @@ class Message
 
         $allmembers  = $database->getAllianceMemberIds($session->alliance);
         $userally    = $database->getUserField($session->uid, "alliance", 0);
-        $permission  = $database->getAllyMessagePermission($session->uid);
+        $permission  = $database->getAllyMessagePermission($session->uid, $session->alliance);
 
         if (defined('WORD_CENSOR')) {
             $topic = $this->wordCensor($topic);

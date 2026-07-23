@@ -318,6 +318,27 @@ References: User ID/Message ID, Mode
 	}
 
 	/**
+	 * UM-W1: permisiunea de mesaj-catre-alianta (opt7) a unui membru. Muta
+	 * query-ul inline din Message::sendAMessage(). Returneaza direct valoarea
+	 * opt7 (0 sau 1), deci in Message.php comparatia devine "$permission == 1"
+	 * in loc de vechiul "$permission['opt7'] == 1" - aceeasi verificare.
+	 * Filtreaza pe uid SI alliance (+ LIMIT 1) ca sa nu ia un rand ramas dintr-o
+	 * alianta anterioara.
+	 */
+	function getAllyMessagePermission($uid, $alliance = 0) {
+	    list($uid, $alliance) = $this->escape_input((int) $uid, (int) $alliance);
+
+		$q = "SELECT opt7 FROM " . TB_PREFIX . "ali_permission WHERE uid = $uid";
+		if ($alliance > 0) {
+			$q .= " AND alliance = $alliance";
+		}
+		$q .= " LIMIT 1";
+
+		$row = mysqli_fetch_assoc(mysqli_query($this->dblink, $q));
+		return (int) ($row['opt7'] ?? 0);
+	}
+
+	/**
 	 * UM-W1: target + owner ale unui mesaj (pentru a decide modul de stergere).
 	 * Muta SELECT-ul inline din Message::removeMessage().
 	 */

@@ -12,3 +12,67 @@
     Order Allow,Deny
     Deny from all
 </Files>
+
+########################################################################
+## PERFORMANTA (P1) - compresie + cache pe statice. Adaugat de refactor.
+## Toate blocurile sunt gardate cu <IfModule>: daca un modul nu e activ
+## pe server, Apache ignora blocul (nu da Error 500).
+########################################################################
+
+## 1. Compresie GZIP - reduce dimensiunea textelor transferate (HTML/CSS/JS)
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+	AddOutputFilterByType DEFLATE application/javascript application/x-javascript text/javascript
+	AddOutputFilterByType DEFLATE application/json application/xml
+	AddOutputFilterByType DEFLATE image/svg+xml
+
+	# Browsere vechi (proxy-uri care strica compresia)
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+	# Nu comprima imaginile deja comprimate (gif/jpg/png sunt deja compresate)
+	SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|webp)$ no-gzip dont-vary
+</IfModule>
+
+## 2. Cache in browser - staticele nu se re-descarca la fiecare vizita
+<IfModule mod_expires.c>
+	ExpiresActive On
+
+	# Imagini: 30 zile (se schimba rar)
+	ExpiresByType image/gif          "access plus 30 days"
+	ExpiresByType image/jpeg         "access plus 30 days"
+	ExpiresByType image/png          "access plus 30 days"
+	ExpiresByType image/webp         "access plus 30 days"
+	ExpiresByType image/x-icon       "access plus 30 days"
+	ExpiresByType image/svg+xml      "access plus 30 days"
+
+	# CSS / JS: 7 zile (se pot schimba la update-uri de joc)
+	ExpiresByType text/css           "access plus 7 days"
+	ExpiresByType application/javascript "access plus 7 days"
+	ExpiresByType text/javascript    "access plus 7 days"
+
+	# HTML si JSON: fara cache (continut dinamic de joc)
+	ExpiresByType text/html          "access plus 0 seconds"
+	ExpiresByType application/json   "access plus 0 seconds"
+</IfModule>
+
+## 3. Cache-Control headers (completeaza Expires; unele CDN-uri le prefera)
+<IfModule mod_headers.c>
+	# Statice: cache public 30 zile
+	<FilesMatch "\.(gif|jpe?g|png|webp|ico|svg|css|js|woff2?|ttf|eot)$">
+		Header set Cache-Control "public, max-age=2592000"
+	</FilesMatch>
+
+	# Paginile dinamice de joc: niciodata cache-uite
+	<FilesMatch "\.php$">
+		Header set Cache-Control "no-cache, no-store, must-revalidate"
+	</FilesMatch>
+
+</IfModule>
+
+## 4. Dezactiveaza ETag global (Expires/Cache-Control sunt suficiente)
+<IfModule mod_headers.c>
+	Header unset ETag
+</IfModule>
+FileETag None

@@ -486,7 +486,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
  `alli` varchar(255) NULL,
  `date` varchar(255) NULL,
  `msg` varchar(255) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `alli` (`alli`(32)),
+ KEY `id_user` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

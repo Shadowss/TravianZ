@@ -29,7 +29,11 @@ $horseDrinking = $building->getTypeLevel(41);
 $success = 0;
 
 for ($i = $start; $i <= $end; $i++):
-    if ($i == 3 || $i == 13 || $i == 14) continue;
+    // FIX (triburi noi): Great Stable antreneaza DOAR cavaleria tribului, la fel
+    // ca Stable-ul normal (20_train.tpl). Filtrul generic $unitsbytype['cavalry']
+    // acopera si triburile 6-9; vechea excludere 3/13/14 lasa sa treaca toate
+    // unitatile (infanterie, berbeci, catapulte).
+    if (!in_array($i, $unitsbytype['cavalry'])) continue;
     if (!$technology->getTech($i)) continue;
     $success++;
 
