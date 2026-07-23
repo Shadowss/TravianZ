@@ -341,7 +341,14 @@ trait DatabaseBuildingQueries {
      */
     
     function modifyBData($wid, $field, $levels, $tribe){
-    	list($wid, $field, $levels, $tribe) = $this->escape_input((int) $wid, (int) $field, (int) $levels, (int) $tribe);
+    	// HOTFIX "array offset on int": $levels e un ARRAY [nivelNou, nivelVechi] (singurul
+    	// apel: AutomationBattleResolution, dupa lovitura de catapulte). Cast-ul (int) de aici
+    	// il transforma in 1, deci $levels[0] era null, "null == 0" era mereu TRUE si ramura
+    	// else (ajustarea nivelului comenzilor din coada) era COD MORT - comenzile de
+    	// constructie erau sterse mereu, chiar daca cladirea nu ajungea la nivelul 0.
+    	// Pastram cast-ul pe celelalte argumente; elementele lui $levels devin int (SQL-safe).
+    	list($wid, $field, $tribe) = $this->escape_input((int) $wid, (int) $field, (int) $tribe);
+    	$levels = array_map('intval', is_array($levels) ? $levels : [$levels, 0]);
         
         if($levels[0] == 0){ 
         	$q = "SELECT id FROM " .TB_PREFIX. "bdata WHERE wid = $wid AND field = $field";

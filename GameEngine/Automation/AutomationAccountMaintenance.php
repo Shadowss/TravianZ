@@ -329,6 +329,10 @@ trait AutomationAccountMaintenance {
             $database->cacheResourceLevels(array_keys($vilIDs));
 
             foreach($villages as $village){
+                // HOTFIX warning "$attri undefined": $attri se seteaza doar daca satul are
+                // un camp tip 18 (Stonemason); fara initializare, valoarea "scapa" din satul
+                // anterior (rezultatul final era acelasi, fiind un max, dar cu warning in log)
+                $attri = 0;
                 $field = $database->getResourceLevel($village['wref'], false);
                 for($i = 19; $i <= 40; $i++){
                     if($field['f'.$i.'t'] == 18){

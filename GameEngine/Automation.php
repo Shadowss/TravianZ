@@ -49,6 +49,7 @@ include_once("Database.php");
 include_once("Data/buidata.php");
 include_once("Data/unitdata.php");
 include_once("Data/hero_full.php");
+include_once("Data/cp.php");
 include_once("Units.php");
 include_once("Battle.php");
 include_once("Technology.php");

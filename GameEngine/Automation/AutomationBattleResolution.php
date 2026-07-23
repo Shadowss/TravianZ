@@ -495,9 +495,14 @@ trait AutomationBattleResolution {
         $expArray = $database->getVillageFields($from['wref'], 'exp1, exp2, exp3');
         $villexp  = ($expArray['exp1'] == 0) ? 0 : (($expArray['exp2'] == 0) ? 1 : (($expArray['exp3'] == 0) ? 2 : 3));
 
+        // HOTFIX "$cp0 undefined" (acelasi tipar ca FIX U1 din Units.php): tabelele $cp0..$cpN
+        // vin din Data/cp.php, incarcat pana acum doar de Session.php - deci pe traseul de CRON
+        // (fara Session) verificarea de CP la cucerire era OCOLITA silentios. Data/cp.php e
+        // acum inclus si in Automation.php; gardul ?? PHP_INT_MAX ramane fail-closed daca
+        // tabelul lipseste totusi (fara date de CP nu se poate cuceri), identic cu Settlers().
         $mode     = CP;
-        $cp_mode  = $GLOBALS['cp' . $mode];
-        $need_cps = $cp_mode[count($varray1) + 1];
+        $cp_mode  = $GLOBALS['cp' . $mode] ?? [];
+        $need_cps = $cp_mode[count($varray1) + 1] ?? PHP_INT_MAX;
         $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
 
         if ($user_cps < $need_cps) {

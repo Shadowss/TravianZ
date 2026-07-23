@@ -271,7 +271,24 @@ trait DatabaseConnectionCore {
     function query($query) {
         // REFACTORIZAT: contorizare centralizată
         $this->countQueryType($query);
-        return mysqli_query($this->dblink,$query);
+
+        // HOTFIX deadlock (log 20-23 iul): pe PHP 8.1+ mysqli arunca mysqli_sql_exception,
+        // deci un deadlock InnoDB (1213) / lock wait timeout (1205) omora tot tick-ul de
+        // automation. Reincercam de maximum 3 ori cu pauza crescatoare; orice alta eroare
+        // se arunca mai departe neschimbata. Sigur fata de tranzactii: singurele tranzactii
+        // explicite din cod (updateStore, populateWorldData) folosesc mysqli_query direct,
+        // nu metoda aceasta - verificat pe tot repo-ul.
+        $attempt = 0;
+        while (true) {
+            try {
+                return mysqli_query($this->dblink, $query);
+            } catch (mysqli_sql_exception $e) {
+                if (!in_array((int) $e->getCode(), [1213, 1205], true) || ++$attempt >= 3) {
+                    throw $e;
+                }
+                usleep(150000 * $attempt); // 150ms, apoi 300ms
+            }
+        }
     }
 
     function RemoveXSS($val) {

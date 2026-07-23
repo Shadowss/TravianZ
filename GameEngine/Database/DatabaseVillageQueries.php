@@ -1846,18 +1846,26 @@ trait DatabaseVillageQueries {
             // clear expansion slots, if this village is an expansion of any other village
             $this->clearExpansionSlot($wref, 1);
             
+            // HOTFIX warning-uri t1..t11/wref/id: pe calea cu array + cache plin,
+            // getPrisoners() intoarce INTREGUL cache (inclusiv intrari goale [] pentru
+            // sate fara prizonieri), nu doar satele cerute - de aici cheile lipsa.
+            // Gardam randurile incomplete; pentru randurile valide comportamentul e identic.
+            // ANOMALIE de urmarit separat: "return self::$prisonersCache" din getPrisoners()
+            // poate livra si prizonierii ALTOR sate decat cele cerute.
             $getprisoners = $this->getPrisoners($wref);
             foreach($getprisoners as $pris) {
+                if (!is_array($pris) || !isset($pris['wref'], $pris['id'])) continue;
                 $troops = 0;
-                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
+                for($i = 1; $i < 12; $i++) $troops += (int) ($pris['t'.$i] ?? 0);
                 $this->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
                 $this->deletePrisoners($pris['id']);
             }
             
             $getprisoners = $this->getPrisoners($wref, 1);
             foreach($getprisoners as $pris) {
+                if (!is_array($pris) || !isset($pris['wref'], $pris['id'])) continue;
                 $troops = 0;
-                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
+                for($i = 1; $i < 12; $i++) $troops += (int) ($pris['t'.$i] ?? 0);
                 $this->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
                 $this->deletePrisoners($pris['id']);
             }
