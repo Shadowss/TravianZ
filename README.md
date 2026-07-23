@@ -21,7 +21,7 @@ Upgrading from older versions is not recommended. Perform a fresh installation a
 
 ⸻
 
-Version 10 Highlights
+Version 11 Highlights
 
 Massive Code Refactor
 
@@ -38,7 +38,7 @@ Massive Code Refactor
 * checkAllianceEmbassiesStatus() in Database redesigned and split into multiple functions.
 * Medal system completely rewritten for easier maintenance and readability.
 * Removed obsolete and unused code/folders from both the game and Admin Panel.
-* Automation moved to a real cron job (currently triggered by page loads).
+* Automation moved to a real cron job.
 * Database cleanup with configurable retention (battle reports, chat, stale rows).
 * SQL index audit for hot columns.
 * Static asset compression and browser caching (.htaccess).
