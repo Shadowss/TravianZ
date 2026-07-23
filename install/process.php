@@ -112,13 +112,41 @@ class Process {
 		$findReplace["%CRONKEY%"] = bin2hex(random_bytes(24));
 		// Valori implicite pentru ciclul intern al cron.php; editabile ulterior
 		// din ACP (Config -> Cron & Automation -> edit).
-		$findReplace["%CRONLOOP%"] = 300;
-		$findReplace["%CRONTICK%"] = 60;
-		// Retentii implicite pentru curatenia periodica din Automation
-		// (0 = regula dezactivata).
-		$findReplace["%CLEANUPREPORTS%"]  = 14;
-		$findReplace["%CLEANUPCHAT%"]     = 7;
-		$findReplace["%CLEANUPMESSAGES%"] = 0;
+		// Setarile de cron si de curatenie vin acum din formularul de instalare
+		// (sectiunea CRON & AUTOMATION). Valorile sunt limitate aici, ca un
+		// formular trimis modificat sa nu scrie ceva absurd in config.php.
+		$cronLoop = isset($_POST['cron_loop']) ? (int) $_POST['cron_loop'] : 300;
+		$cronTick = isset($_POST['cron_tick']) ? (int) $_POST['cron_tick'] : 60;
+
+		if ($cronLoop < 0)    { $cronLoop = 0; }
+		if ($cronLoop > 3300) { $cronLoop = 3300; }
+		if ($cronTick < 15)   { $cronTick = 15; }
+		if ($cronTick > 900)  { $cronTick = 900; }
+
+		// Un ciclu mai scurt decat un tick nu are sens: il tratam ca "o singura
+		// rulare per invocare".
+		if ($cronLoop > 0 && $cronLoop < $cronTick) { $cronLoop = 0; }
+
+		$findReplace["%CRONLOOP%"] = $cronLoop;
+		$findReplace["%CRONTICK%"] = $cronTick;
+
+		// Retentiile curateniei periodice (0 = regula dezactivata).
+		$cleanupFields = array(
+			"%CLEANUPREPORTS%"  => array('cleanup_reports', 14),
+			"%CLEANUPCHAT%"     => array('cleanup_chat', 7),
+			"%CLEANUPMESSAGES%" => array('cleanup_messages', 0),
+		);
+
+		foreach ($cleanupFields as $placeholder => $field) {
+			list($postName, $default) = $field;
+
+			$value = isset($_POST[$postName]) ? (int) $_POST[$postName] : $default;
+
+			if ($value < 0)    { $value = 0; }
+			if ($value > 3650) { $value = 3650; }
+
+			$findReplace[$placeholder] = $value;
+		}
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
 		$findReplace["%HOMEPAGE%"] = $_POST['homepage'];
 		$findReplace["%SERVER%"] = $_POST['server'];

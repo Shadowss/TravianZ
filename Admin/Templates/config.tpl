@@ -182,7 +182,7 @@ $cronKeyMasked = ($cronKey === '')
     <?php } ?>
 
     <tr>
-      <td>Database cleanup <em class="tooltip">?<span>Automation trims tables that would otherwise grow forever. Archived reports are never deleted. 0 disables a rule.</span></em></td>
+      <td>Database cleanup <em class="tooltip">?<span class="classic">Automation trims tables that would otherwise grow forever. Archived reports are never deleted. 0 disables a rule.</span></em></td>
       <td><?php
             $parts = array();
             $parts[] = 'reports: ' . ($cleanReports > 0 ? $cleanReports . 'd' : 'off');
@@ -193,7 +193,7 @@ $cronKeyMasked = ($cronKey === '')
     </tr>
 
     <tr>
-      <td>Last cleanup run <em class="tooltip">?<span>Cleanup runs once per hour from Automation and deletes in batches, so a first run on an old server catches up over several passes.</span></em></td>
+      <td>Last cleanup run <em class="tooltip">?<span class="classic">Cleanup runs once per hour from Automation and deletes in batches, so a first run on an old server catches up over several passes.</span></em></td>
       <td><?php
             if (is_array($cleanupInfo) && !empty($cleanupInfo['time'])) {
                 $r = isset($cleanupInfo['removed']) ? $cleanupInfo['removed'] : array();

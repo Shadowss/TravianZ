@@ -296,6 +296,28 @@ foreach($mechs as $k => $l){
   </div>
 </div>
 
+<div class="card">
+  <span class="f10 c">CRON &amp; AUTOMATION</span>
+  <div class="grid-2" style="margin-top:12px;">
+    <div><label>Cron invocation length (sec)</label><select class="input" name="cron_loop">
+        <option value="300" selected>300 - cron every 5 min (default)</option>
+        <option value="600">600 - cron every 10 min</option>
+        <option value="900">900 - cron every 15 min</option>
+        <option value="0">0 - cron every minute</option>
+    </select></div>
+    <div><label>Cron tick interval (sec)</label><input class="input" name="cron_tick" id="cron_tick" value="60"></div>
+    <div><label>Delete unarchived reports after (days)</label><input class="input" name="cleanup_reports" id="cleanup_reports" value="14"></div>
+    <div><label>Delete chat messages after (days)</label><input class="input" name="cleanup_chat" id="cleanup_chat" value="7"></div>
+    <div><label>Delete messages erased by both sides (days)</label><input class="input" name="cleanup_messages" id="cleanup_messages" value="0"></div>
+  </div>
+  <div class="f10" style="margin-top:8px;opacity:.75;">
+    Automation runs from cron.php instead of players' page loads. One cron invocation keeps working for
+    "invocation length" seconds and processes a tick every "tick interval" seconds &mdash; so a host that only
+    allows a cron every 5 minutes still gets processing every minute. 0 days disables a cleanup rule;
+    reports archived by players are never deleted. All of these can be changed later from the admin panel.
+  </div>
+</div>
+
 <div style="text-align:center;margin:18px 0;">
   <button class="btn" type="submit" name="Submit" id="Submit">Save Configuration →</button>
 </div>
