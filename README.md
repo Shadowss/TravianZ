@@ -38,6 +38,10 @@ Massive Code Refactor
 * checkAllianceEmbassiesStatus() in Database redesigned and split into multiple functions.
 * Medal system completely rewritten for easier maintenance and readability.
 * Removed obsolete and unused code/folders from both the game and Admin Panel.
+* Automation moved to a real cron job (currently triggered by page loads).
+* Database cleanup with configurable retention (battle reports, chat, stale rows).
+* SQL index audit for hot columns.
+* Static asset compression and browser caching (.htaccess).
 
 ⸻
 
@@ -208,10 +212,7 @@ Completed
 
 Still Planned
 
-* Automation moved to a real cron job (currently triggered by page loads).
-* Database cleanup with configurable retention (battle reports, chat, stale rows).
-* SQL index audit for hot columns.
-* Static asset compression and browser caching (.htaccess).
+Nothing for the moment !
 
 ⸻
 
