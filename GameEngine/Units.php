@@ -727,6 +727,11 @@ class Units {
             'defencebonus' => $hero['defencebonus'],
             'db' => $h_db,
             'regeneration' => $hero['regeneration'],
+            // Atributul T4 "Resources" si resursa aleasa. Sunt citite cu ?? 0
+            // fiindca serverele care inca nu au rulat add-hero-resources.sql nu
+            // au coloanele - pagina trebuie sa mearga si asa.
+            'resources' => $hero['resources'] ?? 0,
+            'res_type' => $hero['res_type'] ?? 0,
             'health' => $hero['health'],
             'dead' => $hero['dead'],
             'points' => $hero['points'],

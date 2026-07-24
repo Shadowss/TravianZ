@@ -332,42 +332,13 @@ if ($t4HeroRes && isset($_POST['t4restype'])) {
 	$t4Type = (int) $_POST['t4restype'];
 
 	if ($t4Type >= 0 && $t4Type <= 4) {
-		// Interogarea se construieste din $heroStatColumns, deci acopera automat
-		// exact atributele active (cu sau fara "resources").
-		$t4Cols  = array_values($heroStatColumns);
-		$t4Set   = array();
-		$t4Guard = array();
-
-		foreach ($t4Cols as $t4Col) {
-			$t4Set[]   = "`" . $t4Col . "` = `" . $t4Col . "` + ?";
-			$t4Guard[] = "`" . $t4Col . "` + ? <= 100";
-		}
-
 		$t4Stmt = $database->dblink->prepare(
-			"UPDATE " . TB_PREFIX . "hero SET " . implode(", ", $t4Set) . ",
-					`points` = `points` - ?
-			 WHERE `heroid` = ?
-			   AND `points` >= ?
-			   AND " . implode("\n\t\t\t   AND ", $t4Guard)
+			"UPDATE " . TB_PREFIX . "hero SET `res_type` = ? WHERE `heroid` = ? LIMIT 1"
 		);
 
 		if ($t4Stmt) {
 			$t4HeroId = (int) $hero_info['heroid'];
-
-			// ordinea parametrilor: cresteri, punctele scazute, heroid, garda de
-			// puncte, apoi garzile de maxim 100 pentru fiecare atribut
-			$t4Values = array();
-
-			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
-
-			$t4Values[] = $t4Total;
-			$t4Values[] = $t4HeroId;
-			$t4Values[] = $t4Total;
-
-			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
-
-			$t4Stmt->bind_param(str_repeat('i', count($t4Values)), ...$t4Values);
-
+			$t4Stmt->bind_param('ii', $t4Type, $t4HeroId);
 			$t4Stmt->execute();
 			$t4Stmt->close();
 		}
@@ -377,6 +348,12 @@ if ($t4HeroRes && isset($_POST['t4restype'])) {
 	exit;
 }
 
+// Distribuire IN BLOC (butonul "Save" din interfata cu JS).
+// Siguranta: totul se valideaza pe server intr-un SINGUR UPDATE atomic, cu
+// garzi in WHERE. Daca cineva trimite un POST modificat (mai multe puncte decat
+// are, sau peste 100 la o statistica), conditiile nu se potrivesc, UPDATE-ul nu
+// afecteaza niciun rand si nu se schimba nimic. Fiind o singura instructiune,
+// nici doua cereri trimise simultan nu pot cheltui aceleasi puncte de doua ori.
 if (isset($_POST['t4points'])) {
 
 	$t4Alloc = array();
@@ -394,37 +371,43 @@ if (isset($_POST['t4points'])) {
 	}
 
 	if ($t4Total > 0) {
+		// Interogarea se construieste din $heroStatColumns, deci acopera exact
+		// atributele active. Cu functiile T4 oprite nu apare deloc coloana
+		// `resources`, asa ca pagina merge si pe un server care inca nu a rulat
+		// scriptul add-hero-resources.sql.
+		$t4Cols  = array_values($heroStatColumns);
+		$t4Set   = array();
+		$t4Guard = array();
+
+		foreach ($t4Cols as $t4Col) {
+			$t4Set[]   = "`" . $t4Col . "` = `" . $t4Col . "` + ?";
+			$t4Guard[] = "`" . $t4Col . "` + ? <= 100";
+		}
+
 		$t4Stmt = $database->dblink->prepare(
-			"UPDATE " . TB_PREFIX . "hero SET
-				`attack`        = `attack` + ?,
-				`defence`       = `defence` + ?,
-				`attackbonus`   = `attackbonus` + ?,
-				`defencebonus`  = `defencebonus` + ?,
-				`regeneration`  = `regeneration` + ?,
-				`resources`     = `resources` + ?,
-				`points`        = `points` - ?
+			"UPDATE " . TB_PREFIX . "hero SET " . implode(", ", $t4Set) . ",
+					`points` = `points` - ?
 			 WHERE `heroid` = ?
 			   AND `points` >= ?
-			   AND `attack` + ?       <= 100
-			   AND `defence` + ?      <= 100
-			   AND `attackbonus` + ?  <= 100
-			   AND `defencebonus` + ? <= 100
-			   AND `regeneration` + ? <= 100
-			   AND `resources` + ?    <= 100"
+			   AND " . implode(" AND ", $t4Guard)
 		);
 
 		if ($t4Stmt) {
 			$t4HeroId = (int) $hero_info['heroid'];
 
-			$t4Stmt->bind_param(
-				'iiiiiiiiiiiiiii',
-				$t4Alloc['attack'], $t4Alloc['defence'], $t4Alloc['attackbonus'],
-				$t4Alloc['defencebonus'], $t4Alloc['regeneration'], $t4Alloc['resources'],
-				$t4Total, $t4HeroId, $t4Total,
-				$t4Alloc['attack'], $t4Alloc['defence'], $t4Alloc['attackbonus'],
-				$t4Alloc['defencebonus'], $t4Alloc['regeneration'], $t4Alloc['resources']
-			);
+			// ordinea parametrilor: cresterile, punctele scazute, heroid, garda
+			// de puncte, apoi garzile de maxim 100 pentru fiecare atribut
+			$t4Values = array();
 
+			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
+
+			$t4Values[] = $t4Total;
+			$t4Values[] = $t4HeroId;
+			$t4Values[] = $t4Total;
+
+			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
+
+			$t4Stmt->bind_param(str_repeat('i', count($t4Values)), ...$t4Values);
 			$t4Stmt->execute();
 			$t4Stmt->close();
 		}
