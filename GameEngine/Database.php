@@ -275,6 +275,8 @@ class MYSQLi_DB implements IDbConnection {
          * @var array Cache of heroes.
          */
         $heroCache = [],
+        // cache per request pentru eroul care produce resurse intr-un sat
+        $heroVillageCache = [],
 
         /**
          * @var array Cache of hero field values.

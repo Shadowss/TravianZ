@@ -99,6 +99,10 @@ if (!function_exists('admin_config_template_path')) {
 
         // regenerarea de baza a eroului: acelasi tratament, sa nu fie resetata
         $cleanupDefaults['%HEROBASEREGEN%'] = array('HERO_BASE_REGEN', 10);
+        $cleanupDefaults['%HEROSILVERPERGOLD%'] = array('HERO_SILVER_PER_GOLD', 10);
+        $cleanupDefaults['%HEROSILVERTOGOLD%']  = array('HERO_SILVER_TO_GOLD', 25);
+        $cleanupDefaults['%HERORESALL%'] = array('HERO_RES_PER_POINT_ALL', 3);
+        $cleanupDefaults['%HERORESONE%'] = array('HERO_RES_PER_POINT_ONE', 10);
 
         foreach ($overrides as $ovPlaceholder => $ovValue) {
             if (strpos($text, $ovPlaceholder) !== false) {

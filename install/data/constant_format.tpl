@@ -64,6 +64,20 @@ define('CLEANUP_BATCH', 5000);
 // din atribute. 0 = dezactivata (comportamentul vechi).
 define('HERO_BASE_REGEN', %HEROBASEREGEN%);
 
+// Ratele casei de schimb din casa de licitatii:
+//   HERO_SILVER_PER_GOLD = cat argint primesti pentru 1 aur
+//   HERO_SILVER_TO_GOLD  = cat argint costa 1 aur la schimbul invers
+// Diferenta dintre ele este marja casei (ca in Travian: 1 aur -> 10 argint,
+// dar 25 argint -> 1 aur).
+define('HERO_SILVER_PER_GOLD', %HEROSILVERPERGOLD%);
+define('HERO_SILVER_TO_GOLD', %HEROSILVERTOGOLD%);
+
+// Atributul de erou "Resources" (T4): cate resurse produce un punct pe ora.
+//   ALL = cand bonusul e raspandit egal pe toate patru (implicit 3 din fiecare)
+//   ONE = cand e concentrat pe o singura resursa (implicit 10)
+define('HERO_RES_PER_POINT_ALL', %HERORESALL%);
+define('HERO_RES_PER_POINT_ONE', %HERORESONE%);
+
 //////////////////////////////////
 // *****  SERVER SETTINGS  *****//
 //////////////////////////////////

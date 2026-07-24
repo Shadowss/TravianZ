@@ -92,7 +92,22 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
     <tr><td><?php echo CONF_SERV_PEACESYST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_PEACESYST_TOOLTIP ?></span></em></td><td><?php echo (["None", "Normal", "Christmas", "New Year", "Easter"])[PEACE]; ?></td></tr>
     <tr><td><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td><td><?php echo GP_ENABLE ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td><?php echo CONF_SERV_ERRORREPORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ERRORREPORT_TOOLTIP ?></span></em></td><td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td></tr>
-	<tr><td>Hero base regeneration <em class="tooltip">?<span class="classic">Hit points the hero recovers per day, independent of the regeneration attribute and of equipped items. 0 disables it.</span></em></td><td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b> HP / day</td></tr>
+	    <tr>
+      <td>Hero base regeneration <em class="tooltip">?<span class="classic">Hit points the hero recovers per day, independent of the regeneration attribute and of equipped items. 0 disables it.</span></em></td>
+      <td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b> HP / day</td>
+    </tr>
+    <tr>
+      <td>Hero exchange rates <em class="tooltip">?<span class="classic">Rates of the exchange office in the auction house. The difference between the two directions is the house margin, so trading back and forth loses value instead of creating it.</span></em></td>
+      <td>1 gold &rarr; <b><?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?></b> silver
+          &nbsp;|&nbsp;
+          <b><?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?></b> silver &rarr; 1 gold</td>
+    </tr>
+    <tr>
+      <td>Hero resource production <em class="tooltip">?<span class="classic">Hourly resources produced by each point the hero invested in the Resources attribute, in the village where the hero is. Players choose freely between spreading it over all four resources or concentrating it on one.</span></em></td>
+      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b> of each
+          &nbsp;|&nbsp;
+          <b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b> of one type</td>
+    </tr>
   </table>
 </div>
 

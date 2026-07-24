@@ -155,6 +155,30 @@ class Process {
 		if ($heroRegen > 100) { $heroRegen = 100; }
 
 		$findReplace["%HEROBASEREGEN%"] = $heroRegen;
+
+		// Ratele casei de schimb (aur <-> argint), din formularul de instalare.
+		$silverPerGold = isset($_POST['hero_silver_per_gold']) ? (int) $_POST['hero_silver_per_gold'] : 10;
+		$silverToGold  = isset($_POST['hero_silver_to_gold'])  ? (int) $_POST['hero_silver_to_gold']  : 25;
+
+		if ($silverPerGold < 1)     { $silverPerGold = 1; }
+		if ($silverPerGold > 10000) { $silverPerGold = 10000; }
+		if ($silverToGold < 1)      { $silverToGold = 1; }
+		if ($silverToGold > 10000)  { $silverToGold = 10000; }
+
+		$findReplace["%HEROSILVERPERGOLD%"] = $silverPerGold;
+		$findReplace["%HEROSILVERTOGOLD%"]  = $silverToGold;
+
+		// Atributul de erou "Resources": cate resurse da un punct pe ora.
+		$resAll = isset($_POST['hero_res_all']) ? (int) $_POST['hero_res_all'] : 3;
+		$resOne = isset($_POST['hero_res_one']) ? (int) $_POST['hero_res_one'] : 10;
+
+		if ($resAll < 0)    { $resAll = 0; }
+		if ($resAll > 10000) { $resAll = 10000; }
+		if ($resOne < 0)    { $resOne = 0; }
+		if ($resOne > 10000) { $resOne = 10000; }
+
+		$findReplace["%HERORESALL%"] = $resAll;
+		$findReplace["%HERORESONE%"] = $resOne;
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
 		$findReplace["%HOMEPAGE%"] = $_POST['homepage'];
 		$findReplace["%SERVER%"] = $_POST['server'];

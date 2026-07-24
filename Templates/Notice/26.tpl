@@ -92,10 +92,10 @@ $diffLabel = $difficulty === 1
         <tr>
             <td><?php echo tz_hero_adv('RESOURCES', 'Resources'); ?></td>
             <td style="text-align:right;">
-                <span class="res wood"><?php echo number_format($wood); ?></span>
-                <span class="res clay"><?php echo number_format($clay); ?></span>
-                <span class="res iron"><?php echo number_format($iron); ?></span>
-                <span class="res crop"><?php echo number_format($crop); ?></span>
+                <img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>"> <?php echo number_format($wood); ?>
+                <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>"> <?php echo number_format($clay); ?>
+                <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>"> <?php echo number_format($iron); ?>
+                <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>"> <?php echo number_format($crop); ?>
             </td>
         </tr>
         <?php } ?>

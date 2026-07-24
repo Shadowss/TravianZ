@@ -40,6 +40,19 @@ $heroStatColumns = [
 	'reg'    => 'regeneration',
 ];
 
+// Atributul "Resources" apartine sistemului de erou T4: apare si poate primi
+// puncte doar cand functiile T4 sunt pornite. Tot flag-ul asta decide si daca
+// productia se aplica (vezi Village::loadHeroProd), deci cele doua nu pot ajunge
+// in dezacord - altfel jucatorii ar investi in ceva care nu produce nimic.
+// In plus, cu flag-ul stins interogarile de mai jos nu mai ating coloanele
+// `resources` / `res_type`, deci pagina merge si pe un server care inca nu a
+// rulat scriptul add-hero-resources.sql.
+$t4HeroRes = defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4;
+
+if ($t4HeroRes) {
+	$heroStatColumns['res'] = 'resources';
+}
+
 // Render the "(+)" link for a stat, or "(+)" uneditable
 // if the hero has no more points or the stat is already at the top (100).
 // Identical behavior to the original 5 if/else blocks.
@@ -113,6 +126,58 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
         </td> 
         <td class="po" id="t4po_reg"><?php echo $hero_info['regeneration']; ?></td> 
     </tr> 
+    <?php if ($t4HeroRes) { ?>
+    <tr> 
+        <th><?php echo defined('HERO_RES_PRODUCTION') ? HERO_RES_PRODUCTION : 'Resources'; ?></th> 
+        <td class="val">
+        <?php
+            // Cate resurse produce, dupa cum e setat: 3 din fiecare sau 10 dintr-una.
+            $t4ResPoints = (int) ($hero_info['resources'] ?? 0);
+            $t4ResType   = (int) ($hero_info['res_type'] ?? 0);
+            $t4PerAll    = defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3;
+            $t4PerOne    = defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10;
+            $t4ResIcons  = [1 => 'r1', 2 => 'r2', 3 => 'r3', 4 => 'r4'];
+
+            if ($t4ResType >= 1 && $t4ResType <= 4) {
+                echo '<img class="' . $t4ResIcons[$t4ResType] . '" src="img/x.gif" alt="" /> ';
+                echo (int) round($t4ResPoints * $t4PerOne * SPEED);
+            } else {
+                foreach ($t4ResIcons as $t4Ico) {
+                    echo '<img class="' . $t4Ico . '" src="img/x.gif" alt="" /> '
+                       . (int) round($t4ResPoints * $t4PerAll * SPEED) . ' ';
+                }
+            }
+        ?>
+        /<?php echo defined('HOUR') ? HOUR : 'h'; ?></td> 
+        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($t4ResPoints*2)+1; ?>px;" alt="" title="" /></td> 
+        <td class="up"><span class="none"> 
+        <?php echo $renderAddLink('res'); ?> 
+        </td> 
+        <td class="po" id="t4po_res"><?php echo $t4ResPoints; ?></td> 
+    </tr> 
+    <tr> 
+        <td colspan="5" class="empty"></td> 
+    </tr> 
+    <tr> 
+        <td colspan="5">
+            <form action="" method="POST" style="margin:0;">
+                <?php echo defined('HERO_RES_TYPE') ? HERO_RES_TYPE : 'Produced resource'; ?>:
+                <select name="t4restype" onchange="this.form.submit();">
+                    <option value="0" <?php if ($t4ResType === 0) echo 'selected'; ?>><?php echo defined('HERO_RES_ALL') ? HERO_RES_ALL : 'All resources'; ?> (<?php echo $t4PerAll; ?>)</option>
+                    <option value="1" <?php if ($t4ResType === 1) echo 'selected'; ?>><?php echo LUMBER; ?> (<?php echo $t4PerOne; ?>)</option>
+                    <option value="2" <?php if ($t4ResType === 2) echo 'selected'; ?>><?php echo CLAY; ?> (<?php echo $t4PerOne; ?>)</option>
+                    <option value="3" <?php if ($t4ResType === 3) echo 'selected'; ?>><?php echo IRON; ?> (<?php echo $t4PerOne; ?>)</option>
+                    <option value="4" <?php if ($t4ResType === 4) echo 'selected'; ?>><?php echo CROP; ?> (<?php echo $t4PerOne; ?>)</option>
+                </select>
+                <noscript><input type="submit" value="OK"></noscript>
+                <span style="color:#777;font-size:11px;margin-left:6px;">
+                    <?php echo defined('HERO_RES_TYPE_HINT') ? HERO_RES_TYPE_HINT
+                        : 'Can be changed at any time, free of charge.'; ?>
+                </span>
+            </form>
+        </td> 
+    </tr> 
+    <?php } ?>
         <tr> 
         <td colspan="5" class="empty"></td> 
     </tr> 
@@ -260,6 +325,58 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
 // are, sau peste 100 la o statistica), conditiile nu se potrivesc, UPDATE-ul nu
 // afecteaza niciun rand si nu se schimba nimic. Fiind o singura instructiune,
 // nici doua cereri trimise simultan nu pot cheltui aceleasi puncte de doua ori.
+// Schimbarea resursei favorizate. In T4 setarea asta e libera: nu costa puncte
+// si nu are nevoie de Book of Wisdom, doar redistribuie acelasi bonus.
+if ($t4HeroRes && isset($_POST['t4restype'])) {
+
+	$t4Type = (int) $_POST['t4restype'];
+
+	if ($t4Type >= 0 && $t4Type <= 4) {
+		// Interogarea se construieste din $heroStatColumns, deci acopera automat
+		// exact atributele active (cu sau fara "resources").
+		$t4Cols  = array_values($heroStatColumns);
+		$t4Set   = array();
+		$t4Guard = array();
+
+		foreach ($t4Cols as $t4Col) {
+			$t4Set[]   = "`" . $t4Col . "` = `" . $t4Col . "` + ?";
+			$t4Guard[] = "`" . $t4Col . "` + ? <= 100";
+		}
+
+		$t4Stmt = $database->dblink->prepare(
+			"UPDATE " . TB_PREFIX . "hero SET " . implode(", ", $t4Set) . ",
+					`points` = `points` - ?
+			 WHERE `heroid` = ?
+			   AND `points` >= ?
+			   AND " . implode("\n\t\t\t   AND ", $t4Guard)
+		);
+
+		if ($t4Stmt) {
+			$t4HeroId = (int) $hero_info['heroid'];
+
+			// ordinea parametrilor: cresteri, punctele scazute, heroid, garda de
+			// puncte, apoi garzile de maxim 100 pentru fiecare atribut
+			$t4Values = array();
+
+			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
+
+			$t4Values[] = $t4Total;
+			$t4Values[] = $t4HeroId;
+			$t4Values[] = $t4Total;
+
+			foreach ($t4Cols as $t4Col) { $t4Values[] = $t4Alloc[$t4Col]; }
+
+			$t4Stmt->bind_param(str_repeat('i', count($t4Values)), ...$t4Values);
+
+			$t4Stmt->execute();
+			$t4Stmt->close();
+		}
+	}
+
+	header("Location: build.php?id=" . $id);
+	exit;
+}
+
 if (isset($_POST['t4points'])) {
 
 	$t4Alloc = array();
@@ -284,6 +401,7 @@ if (isset($_POST['t4points'])) {
 				`attackbonus`   = `attackbonus` + ?,
 				`defencebonus`  = `defencebonus` + ?,
 				`regeneration`  = `regeneration` + ?,
+				`resources`     = `resources` + ?,
 				`points`        = `points` - ?
 			 WHERE `heroid` = ?
 			   AND `points` >= ?
@@ -291,19 +409,20 @@ if (isset($_POST['t4points'])) {
 			   AND `defence` + ?      <= 100
 			   AND `attackbonus` + ?  <= 100
 			   AND `defencebonus` + ? <= 100
-			   AND `regeneration` + ? <= 100"
+			   AND `regeneration` + ? <= 100
+			   AND `resources` + ?    <= 100"
 		);
 
 		if ($t4Stmt) {
 			$t4HeroId = (int) $hero_info['heroid'];
 
 			$t4Stmt->bind_param(
-				'iiiiiiiiiiiii',
+				'iiiiiiiiiiiiiii',
 				$t4Alloc['attack'], $t4Alloc['defence'], $t4Alloc['attackbonus'],
-				$t4Alloc['defencebonus'], $t4Alloc['regeneration'],
+				$t4Alloc['defencebonus'], $t4Alloc['regeneration'], $t4Alloc['resources'],
 				$t4Total, $t4HeroId, $t4Total,
 				$t4Alloc['attack'], $t4Alloc['defence'], $t4Alloc['attackbonus'],
-				$t4Alloc['defencebonus'], $t4Alloc['regeneration']
+				$t4Alloc['defencebonus'], $t4Alloc['regeneration'], $t4Alloc['resources']
 			);
 
 			$t4Stmt->execute();

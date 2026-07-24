@@ -43,6 +43,9 @@ class Village {
 	public $enforcetome = [];
 	public $enforcetoyou = [];
 	public $enforceoasis = [];
+
+	/** cache per sat pentru productia adusa de erou (null = neincarcat) */
+	private $heroProd = null;
 	public $currentcel = 0;
 	public $currentfestival = 0;
 	public $allcrop = 0;
@@ -306,9 +309,72 @@ class Village {
 			$amount += $amount / 100 * $bonusPct;
 		}
 
+		// Productia de resurse a eroului (atributul "Resources", ca in T4).
+		// Se adauga DUPA bonusurile de cladiri si oaze (alea se aplica doar campurilor)
+		// dar INAINTE de bonusul de 25% si de inmultirea cu SPEED, fiindca in T4 si
+		// bonusul de 25% si viteza serverului se aplica si productiei eroului.
+		$amount += $this->getHeroProdFor($type);
+
 		if ($this->sess->{$cfg['sessionBonus']} == 1) $amount *= 1.25;
 
 		return round($amount * SPEED);
+	}
+
+	/**
+	 * Productia orara adusa de atributul "Resources" al eroului, pentru satul asta.
+	 *
+	 * Regula T4: fiecare punct produce 3 din FIECARE resursa (res_type = 0) sau 10
+	 * dintr-un singur tip (res_type = 1..4 pentru lemn/lut/fier/cereale).
+	 * Bonusul merge in satul in care se afla eroul (hero.wref), deci mutarea
+	 * eroului muta si productia.
+	 *
+	 * Randul de erou se citeste O SINGURA DATA per instanta de sat.
+	 */
+	private function getHeroProdFor(string $type): float {
+
+		if ($this->heroProd === null) {
+			$this->heroProd = $this->loadHeroProd();
+		}
+
+		return $this->heroProd[$type] ?? 0.0;
+	}
+
+	/** Citeste eroul acestui sat si transforma punctele in productie per resursa. */
+	private function loadHeroProd(): array {
+
+		$empty = ['wood' => 0.0, 'clay' => 0.0, 'iron' => 0.0, 'crop' => 0.0];
+
+		if (!defined('NEW_FUNCTIONS_HERO_T4') || !NEW_FUNCTIONS_HERO_T4) {
+			return $empty;
+		}
+
+		$row = $this->db->getHeroForVillage($this->wid);
+
+		if (!$row) {
+			return $empty;
+		}
+
+		$points = (int) $row['resources'];
+
+		if ($points <= 0) {
+			return $empty;
+		}
+
+		$resType = (int) $row['res_type'];
+		$map     = [1 => 'wood', 2 => 'clay', 3 => 'iron', 4 => 'crop'];
+
+		// 0 = raspandit egal: 3 din fiecare. Altfel: 10 dintr-un singur tip.
+		if ($resType === 0 || !isset($map[$resType])) {
+			$each = $points * (defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3);
+			return ['wood' => $each, 'clay' => $each, 'iron' => $each, 'crop' => $each];
+		}
+
+		$single = $points * (defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10);
+
+		$out = $empty;
+		$out[$map[$resType]] = $single;
+
+		return $out;
 	}
 
 	/**

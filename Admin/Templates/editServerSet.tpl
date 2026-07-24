@@ -349,6 +349,27 @@ function refresh(tz) {
                                value="<?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?>"> HP / day
                     </td>
                 </tr>
+                <tr>
+                    <td class="b">Hero exchange rates <em class="tooltip">?<span class="classic">Exchange office in the auction house. Keep the second value higher than the first, otherwise players could trade back and forth to create gold out of nothing.</span></em></td>
+                    <td>
+                        1 gold &rarr;
+                        <input type="number" name="hero_silver_per_gold" min="1" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?>"> silver
+                        &nbsp;|&nbsp;
+                        <input type="number" name="hero_silver_to_gold" min="1" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?>"> silver &rarr; 1 gold
+                    </td>
+                </tr>
+                <tr>
+                    <td class="b">Hero resource production <em class="tooltip">?<span class="classic">Hourly resources per point invested in the hero's Resources attribute. The first value applies when the player spreads the bonus over all four resources, the second when it is concentrated on a single one. Both scale with server speed.</span></em></td>
+                    <td>
+                        <input type="number" name="hero_res_all" min="0" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?>"> of each
+                        &nbsp;|&nbsp;
+                        <input type="number" name="hero_res_one" min="0" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?>"> of one type
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

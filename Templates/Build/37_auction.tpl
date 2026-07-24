@@ -23,6 +23,36 @@ $t4Auction = new HeroAuction();
 $t4Msg = '';
 
 if (isset($_POST['t4action'])) {
+    // --- SCHIMB AUR <-> ARGINT -------------------------------------------
+    // Validarea si atomicitatea sunt in HeroItems::exchange*(); aici doar
+    // afisam rezultatul si tinem sesiunea sincronizata cu noul sold de aur.
+    if (($_POST['t4action'] === 'g2s' || $_POST['t4action'] === 's2g') && isset($_POST['amount'])) {
+        $t4Items  = new HeroItems();
+        $t4Amount = (int) $_POST['amount'];
+
+        $t4Ex = ($_POST['t4action'] === 'g2s')
+            ? $t4Items->exchangeGoldToSilver($session->uid, $t4Amount)
+            : $t4Items->exchangeSilverToGold($session->uid, $t4Amount);
+
+        if ($t4Ex === HeroItems::EXCHANGE_OK) {
+            $t4Msg = defined('HERO_EXCHANGE_OK') ? HERO_EXCHANGE_OK : 'Exchange completed.';
+
+            // soldul de aur din sesiune trebuie reimprospatat, altfel pagina ar
+            // arata vechea valoare pana la expirarea cache-ului de utilizator
+            $t4NewGold = (int) $database->getUserField($session->uid, 'gold', 0);
+            $session->gold  = $t4NewGold;
+            $_SESSION['gold'] = $t4NewGold;
+            unset($_SESSION['cache_user_' . (isset($_SESSION['username']) ? $_SESSION['username'] : '')]);
+
+        } elseif ($t4Ex === HeroItems::EXCHANGE_NOT_ENOUGH) {
+            $t4Msg = defined('HERO_EXCHANGE_NOTENOUGH') ? HERO_EXCHANGE_NOTENOUGH : 'You do not have enough for this exchange.';
+        } elseif ($t4Ex === HeroItems::EXCHANGE_NO_HERO) {
+            $t4Msg = defined('HERO_LOCKED_NOHERO') ? HERO_LOCKED_NOHERO : 'You have no hero yet.';
+        } else {
+            $t4Msg = defined('HERO_EXCHANGE_FAIL') ? HERO_EXCHANGE_FAIL : 'The exchange could not be completed.';
+        }
+    }
+
     if ($_POST['t4action'] === 'bid' && isset($_POST['aucid'], $_POST['maxbid'])) {
         $t4Result = $t4Auction->placeBid($session->uid, (int) $_POST['aucid'], (int) $_POST['maxbid']);
         if ($t4Result === HeroAuction::BID_OK) {
@@ -61,6 +91,53 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
 <?php if ($t4Msg !== '') { ?>
     <p class="message" style="font-weight:bold;"><?php echo $t4Msg; ?></p>
 <?php } ?>
+
+<?php
+// Soldurile curente si ratele de schimb (configurabile din config.php).
+$t4ExItems  = isset($t4ExItems) ? $t4ExItems : new HeroItems();
+$t4Silver   = $t4ExItems->getSilver($session->uid);
+$t4Gold     = (int) $session->gold;
+$t4RateG2S  = HeroItems::silverPerGold();
+$t4RateS2G  = HeroItems::silverForOneGold();
+?>
+<table id="distribution" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr><th colspan="2"><?php echo defined('HERO_EXCHANGE') ? HERO_EXCHANGE : 'Exchange office'; ?></th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="width:290px;vertical-align:top;">
+                <p style="margin:0 0 6px 0;">
+                    <b><?php echo HERO_SILVER; ?>:</b> <?php echo $t4Silver; ?>
+                    &nbsp;&nbsp;
+                    <b><?php echo defined('GOLD') ? GOLD : 'Gold'; ?>:</b> <?php echo $t4Gold; ?>
+                </p>
+
+                <form action="" method="POST" style="margin:0 0 5px 0;">
+                    <input type="hidden" name="t4action" value="g2s">
+                    <input type="number" name="amount" min="1" max="100000" value="1" style="width:70px">
+                    <input type="submit" value="<?php echo defined('HERO_EXCHANGE_G2S') ? HERO_EXCHANGE_G2S : 'Gold to silver'; ?>">
+                    <small>(1 : <?php echo $t4RateG2S; ?>)</small>
+                </form>
+
+                <form action="" method="POST" style="margin:0;">
+                    <input type="hidden" name="t4action" value="s2g">
+                    <input type="number" name="amount" min="1" max="100000" value="1" style="width:70px">
+                    <input type="submit" value="<?php echo defined('HERO_EXCHANGE_S2G') ? HERO_EXCHANGE_S2G : 'Silver to gold'; ?>">
+                    <small>(<?php echo $t4RateS2G; ?> : 1)</small>
+                </form>
+
+                <p style="margin:6px 0 0 0;color:#777;font-size:11px;">
+                    <?php echo defined('HERO_EXCHANGE_HINT') ? HERO_EXCHANGE_HINT
+                        : 'The amount you type is the gold given or received; silver is calculated at the rate shown.'; ?>
+                </p>
+            </td>
+            <td style="text-align:center;vertical-align:middle;">
+                <img src="img/hero/merchant.png" alt="" style="max-width:280px;">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <table id="distribution" cellpadding="1" cellspacing="1">
     <thead>

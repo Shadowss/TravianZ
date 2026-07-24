@@ -2818,6 +2818,17 @@ tz_def('HERO_T4_TAB_ITEMS',      'Inventory');
 tz_def('HERO_T4_TAB_ADVENTURES', 'Adventures');
 tz_def('HERO_T4_TAB_AUCTION',    'Auctions');
 
+tz_def('HERO_EXCHANGE', 'Exchange office');
+tz_def('HERO_EXCHANGE_G2S', 'Gold to silver');
+tz_def('HERO_EXCHANGE_S2G', 'Silver to gold');
+tz_def('HERO_EXCHANGE_OK', 'Exchange completed.');
+tz_def('HERO_EXCHANGE_NOTENOUGH', 'You do not have enough for this exchange.');
+tz_def('HERO_EXCHANGE_FAIL', 'The exchange could not be completed.');
+tz_def('HERO_EXCHANGE_HINT', 'The amount you type is the gold given or received; silver is calculated at the rate shown.');
+tz_def('HERO_RES_PRODUCTION', 'Resources');
+tz_def('HERO_RES_TYPE', 'Produced resource');
+tz_def('HERO_RES_ALL', 'All resources');
+tz_def('HERO_RES_TYPE_HINT', 'Can be changed at any time, free of charge.');
 tz_def('HERO_SILVER',            'Silver');
 tz_def('HERO_EXPERIENCE',        'Experience');
 tz_def('RESOURCES',              'Resources');

@@ -1002,6 +1002,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  `attackbonus` tinyint(3) NULL,
  `defencebonus` tinyint(3) NULL,
  `regeneration` tinyint(3) NULL,
+ `resources` tinyint(3) NOT NULL DEFAULT 0,
+ `res_type` tinyint(1) NOT NULL DEFAULT 0,
  `autoregen` int(2) NULL,
  `lastupdate` int(11) NULL,
  `trainingtime` int(11) NULL,

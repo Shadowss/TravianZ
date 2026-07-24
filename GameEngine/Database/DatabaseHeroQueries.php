@@ -23,6 +23,33 @@ use App\Utils\Math;
 trait DatabaseHeroQueries {
 
 
+	/**
+	 * Eroul care produce resurse in satul dat (atributul T4 "Resources").
+	 *
+	 * Se ia eroul VIU, terminat de antrenat, al carui sat de resedinta (wref)
+	 * este satul cerut. Intoarce null daca nu exista.
+	 * Rezultatul e cache-uit per request, fiindcă productia se calculeaza des.
+	 */
+	function getHeroForVillage($wid, $use_cache = true) {
+	    $wid = (int) $wid;
+
+	    if ($use_cache && isset(self::$heroVillageCache[$wid])) {
+	        return self::$heroVillageCache[$wid];
+	    }
+
+		$q = "SELECT heroid, uid, wref, resources, res_type
+		        FROM " . TB_PREFIX . "hero
+		       WHERE wref = " . $wid . "
+		         AND dead = 0
+		         AND COALESCE(intraining, 0) = 0
+		       LIMIT 1";
+
+		$result = mysqli_query($this->dblink, $q);
+		$row    = $result ? mysqli_fetch_assoc($result) : null;
+
+		return self::$heroVillageCache[$wid] = ($row ?: null);
+	}
+
 	function getHero($uid=0, $all=0, $include_dead = false, $use_cache = true) {
 	    list($uid,$all) = $this->escape_input((int) $uid,$all);
 

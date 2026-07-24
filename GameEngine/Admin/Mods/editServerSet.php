@@ -80,7 +80,31 @@ $heroBaseRegen = isset($_POST['hero_base_regen']) ? (int) $_POST['hero_base_rege
 if ($heroBaseRegen < 0)   { $heroBaseRegen = 0; }
 if ($heroBaseRegen > 100) { $heroBaseRegen = 100; }
 
-$text = admin_config_template_contents(array('%HEROBASEREGEN%' => $heroBaseRegen));
+// Ratele casei de schimb aur <-> argint.
+$silverPerGold = isset($_POST['hero_silver_per_gold']) ? (int) $_POST['hero_silver_per_gold'] : 10;
+$silverToGold  = isset($_POST['hero_silver_to_gold'])  ? (int) $_POST['hero_silver_to_gold']  : 25;
+
+if ($silverPerGold < 1)     { $silverPerGold = 1; }
+if ($silverPerGold > 10000) { $silverPerGold = 10000; }
+if ($silverToGold < 1)      { $silverToGold = 1; }
+if ($silverToGold > 10000)  { $silverToGold = 10000; }
+
+// Productia de resurse a eroului (atributul "Resources").
+$heroResAll = isset($_POST['hero_res_all']) ? (int) $_POST['hero_res_all'] : 3;
+$heroResOne = isset($_POST['hero_res_one']) ? (int) $_POST['hero_res_one'] : 10;
+
+if ($heroResAll < 0)     { $heroResAll = 0; }
+if ($heroResAll > 10000) { $heroResAll = 10000; }
+if ($heroResOne < 0)     { $heroResOne = 0; }
+if ($heroResOne > 10000) { $heroResOne = 10000; }
+
+$text = admin_config_template_contents(array(
+    '%HEROBASEREGEN%'     => $heroBaseRegen,
+    '%HEROSILVERPERGOLD%' => $silverPerGold,
+    '%HEROSILVERTOGOLD%'  => $silverToGold,
+    '%HERORESALL%'        => $heroResAll,
+    '%HERORESONE%'        => $heroResOne,
+));
 		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
 		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
 		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);

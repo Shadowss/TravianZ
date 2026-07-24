@@ -265,6 +265,162 @@ class HeroItems
      *    a per-user action; both statements touch only this user's rows)
      */
     /* =========================================================================
+     *  SCHIMB AUR <-> ARGINT (casa de licitatii)
+     * ===================================================================== */
+
+    const EXCHANGE_OK         = 1;
+    const EXCHANGE_NO_HERO    = 2;
+    const EXCHANGE_NOT_ENOUGH = 3;
+    const EXCHANGE_INVALID    = 4;
+    const EXCHANGE_FAILED     = 5;
+
+    /** Cat argint primesti pentru 1 aur (implicit 10, ca in Travian). */
+    public static function silverPerGold()
+    {
+        return defined('HERO_SILVER_PER_GOLD') ? max(1, (int) HERO_SILVER_PER_GOLD) : 10;
+    }
+
+    /** Cat argint costa 1 aur la schimbul invers (implicit 25 - diferenta e marja casei). */
+    public static function silverForOneGold()
+    {
+        return defined('HERO_SILVER_TO_GOLD') ? max(1, (int) HERO_SILVER_TO_GOLD) : 25;
+    }
+
+    /**
+     * Aur -> argint. $gold = cat aur dai.
+     *
+     * Ambele scrieri (scaderea aurului si adaugarea argintului) sunt intr-o
+     * TRANZACTIE: sunt tabele diferite (users si hero), iar fara tranzactie o
+     * eroare intre ele ar lasa jucatorul fara aur si fara argint. Scaderea are
+     * conditia "gold >= ?" chiar in UPDATE, deci doua cereri trimise simultan nu
+     * pot cheltui acelasi aur de doua ori.
+     */
+    public function exchangeGoldToSilver($uid, $gold)
+    {
+        $uid  = (int) $uid;
+        $gold = (int) $gold;
+
+        if ($gold <= 0 || $gold > 100000) {
+            return self::EXCHANGE_INVALID;
+        }
+
+        $silver = $gold * self::silverPerGold();
+
+        return $this->runExchange($uid, $gold, $silver, true);
+    }
+
+    /**
+     * Argint -> aur. $gold = cat aur vrei sa primesti.
+     */
+    public function exchangeSilverToGold($uid, $gold)
+    {
+        $uid  = (int) $uid;
+        $gold = (int) $gold;
+
+        if ($gold <= 0 || $gold > 100000) {
+            return self::EXCHANGE_INVALID;
+        }
+
+        $silver = $gold * self::silverForOneGold();
+
+        return $this->runExchange($uid, $gold, $silver, false);
+    }
+
+    /**
+     * Executa schimbul. $goldToSilver = true inseamna "dai aur, primesti argint".
+     */
+    private function runExchange($uid, $gold, $silver, $goldToSilver)
+    {
+        // Fara erou nu exista unde tine argintul.
+        if ($this->heroRowId($uid) === 0) {
+            return self::EXCHANGE_NO_HERO;
+        }
+
+        $this->db->begin_transaction();
+
+        try {
+            if ($goldToSilver) {
+                $take = $this->db->prepare(
+                    "UPDATE " . TB_PREFIX . "users SET gold = gold - ? WHERE id = ? AND gold >= ? LIMIT 1"
+                );
+                $take->bind_param('iii', $gold, $uid, $gold);
+                $take->execute();
+                $taken = $take->affected_rows;
+                $take->close();
+
+                if ($taken < 1) {
+                    $this->db->rollback();
+                    return self::EXCHANGE_NOT_ENOUGH;
+                }
+
+                $give = $this->db->prepare(
+                    "UPDATE " . TB_PREFIX . "hero SET silver = silver + ? WHERE uid = ? LIMIT 1"
+                );
+                $give->bind_param('ii', $silver, $uid);
+                $give->execute();
+                $given = $give->affected_rows;
+                $give->close();
+
+                if ($given < 1) {
+                    $this->db->rollback();
+                    return self::EXCHANGE_FAILED;
+                }
+
+            } else {
+                $take = $this->db->prepare(
+                    "UPDATE " . TB_PREFIX . "hero SET silver = silver - ? WHERE uid = ? AND silver >= ? LIMIT 1"
+                );
+                $take->bind_param('iii', $silver, $uid, $silver);
+                $take->execute();
+                $taken = $take->affected_rows;
+                $take->close();
+
+                if ($taken < 1) {
+                    $this->db->rollback();
+                    return self::EXCHANGE_NOT_ENOUGH;
+                }
+
+                $give = $this->db->prepare(
+                    "UPDATE " . TB_PREFIX . "users SET gold = gold + ? WHERE id = ? LIMIT 1"
+                );
+                $give->bind_param('ii', $gold, $uid);
+                $give->execute();
+                $given = $give->affected_rows;
+                $give->close();
+
+                if ($given < 1) {
+                    $this->db->rollback();
+                    return self::EXCHANGE_FAILED;
+                }
+            }
+
+            $this->db->commit();
+
+            return self::EXCHANGE_OK;
+
+        } catch (Throwable $e) {
+            $this->db->rollback();
+            return self::EXCHANGE_FAILED;
+        }
+    }
+
+    /** Id-ul randului de erou al jucatorului, 0 daca nu exista. */
+    private function heroRowId($uid)
+    {
+        $uid  = (int) $uid;
+        $stmt = $this->db->prepare(
+            "SELECT heroid FROM " . TB_PREFIX . "hero WHERE uid = ? LIMIT 1"
+        );
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+        $stmt->bind_result($heroid);
+        $found = $stmt->fetch();
+        $stmt->close();
+
+        return $found ? (int) $heroid : 0;
+    }
+
+    /* =========================================================================
      *  DISPONIBILITATEA EROULUI PENTRU SCHIMBAREA ECHIPAMENTULUI
      * ===================================================================== */
 
@@ -547,14 +703,20 @@ class HeroItems
             if (!$hero) {
                 return self::USE_INVALID;
             }
-            // Refund all spent points: 5 free points per level gained (same
-            // convention as Automation::calculateLevelUp). Attributes return to 0.
+            // FIX: un erou porneste cu 5 puncte la nivelul 0 (vezi INSERT-ul din
+            // 37_train.tpl), iar fiecare nivel mai da 5 (Automation::calculateLevelUp).
+            // Formula veche, "level * 5", uita punctele initiale: cartea returna cu 5
+            // mai putin decat avusese jucatorul, iar la nivelul 0 le pierdea pe toate
+            // si lasa eroul cu 0 puncte si toate atributele pe zero.
             $level  = (int) $hero['level'];
-            $points = $level * 5;
+            $points = 5 + ($level * 5);
+
+            // resources intra si el in reset (punctele se redistribuie doar cu cartea);
+            // res_type ramane neatins - alegerea resursei se schimba oricand, gratis.
             $stmt = $this->db->prepare(
                 "UPDATE " . TB_PREFIX . "hero
                     SET points = ?, attack = 0, defence = 0, attackbonus = 0,
-                        defencebonus = 0, regeneration = 0
+                        defencebonus = 0, regeneration = 0, resources = 0
                   WHERE heroid = ? LIMIT 1"
             );
             $heroid = (int) $hero['heroid'];

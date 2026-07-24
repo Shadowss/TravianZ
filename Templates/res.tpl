@@ -112,35 +112,6 @@ if (!empty($village)) {
         </tr>
     </table>
 
-    <!-- ================= GOLD / STATUS ================= -->
-    <table cellpadding="1" cellspacing="1">
-        <tr>
-
-            <!-- spacing (kept as original layout) -->
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td></td>
-
-            <!-- Gold display -->
-            <td>
-                <?php
-                if ($session->gold <= 1) {
-                    echo '<font color="#B3B3B3">
-                            <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
-                            ' . $session->gold . ' ' . GOLD . '
-                          </font>';
-                } else {
-                    echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
-                          ' . $session->gold . ' ' . GOLD;
-                }
-                ?>
-            </td>
-
-        </tr>
-    </table>
-
 </div>
 </div>
 

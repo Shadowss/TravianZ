@@ -170,6 +170,30 @@ if ($hour > 1759 || $hour < 500) {
 
         </div>
 
+        <!-- ===================== GOLD (MUTAT DIN RES.TPL - CERCUL VERDE) ===================== -->
+        <?php
+        /**
+         * Gold display - mutat din res.tpl
+         * Afisare intre Messages si Plus
+         */
+        if (!$isRestrictedUser && isset($session->gold)) {
+        ?>
+        <div id="goldHeader">
+            <?php
+            if ($session->gold <= 1) {
+                echo '<font color="#B3B3B3">
+                        <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
+                        ' . $session->gold . ' ' . GOLD . '
+                      </font>';
+            } else {
+                echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
+                      ' . $session->gold . ' ' . GOLD;
+            }
+            ?>
+        </div>
+        <?php } ?>
+        <!-- ===================== END GOLD ===================== -->
+
         <?php
         /**
          * PLUS button
@@ -252,6 +276,26 @@ if ($hour > 1759 || $hour < 500) {
 			height: 18px;
 			display: inline-block;
 	}
+
+        /* GOLD IN CERCUL VERDE */
+        #goldHeader {
+            position: absolute;
+            left: 380px; /* << AICI ESTE CERCUL VERDE - muta 370-400 daca e nevoie */
+            top: 18px;   /* centrat pe bara gri */
+            width: auto;
+            min-width: 100px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 50;
+        }
+
+        #goldHeader img {
+            vertical-align: middle;
+            margin-right: 4px;
+        }
 
         </style>
 
