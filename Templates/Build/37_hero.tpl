@@ -221,13 +221,15 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
 <div class="t4h-panel">
     <table class="t4h-tbl">
     <?php
-        $maxExp     = 495000;
+        // plafonul vine din tabelul de niveluri, nu mai e o valoare fixa
+        $t4MaxLevel = max(array_keys($hero_levels)) - 1;
+        $maxExp     = $hero_levels[$t4MaxLevel];
         $curLevel   = (int) $hero_info['level'];
         $curExp     = (int) $hero_info['experience'];
         $expCurrent = $hero_levels[$curLevel] ?? 0;
         $expNext    = $hero_levels[$curLevel + 1] ?? $maxExp;
 
-        if ($curExp < $maxExp && $expNext > $expCurrent && $curLevel < 100) {
+        if ($curExp < $maxExp && $expNext > $expCurrent && $curLevel < $t4MaxLevel) {
             $percent = ($curExp - $expCurrent) / ($expNext - $expCurrent) * 100;
             $percent = max(0, min(100, $percent));
         } else {
@@ -243,7 +245,7 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
         <tr>
             <td class="t4h-name"><?php echo defined('TZ_HERO_LEVEL') ? TZ_HERO_LEVEL : 'Hero level'; ?></td>
             <td class="t4h-val"><?php echo $curLevel; ?></td>
-            <td class="t4h-barcell" colspan="3"><div class="t4h-bar"><i style="width:<?php echo max(0, min(100, $curLevel)); ?>%"></i></div></td>
+            <td class="t4h-barcell" colspan="3"><div class="t4h-bar"><i style="width:<?php echo (int) max(0, min(100, $curLevel / max(1, $t4MaxLevel) * 100)); ?>%"></i></div></td>
         </tr>
     </table>
 </div>

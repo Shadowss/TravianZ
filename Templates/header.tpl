@@ -302,12 +302,16 @@ if ($hour > 1759 || $hour < 500) {
         #goldHeader {
             position: absolute;
             left: 380px; /* << AICI ESTE CERCUL VERDE - muta 370-400 daca e nevoie */
-            top: 18px;   /* centrat pe bara gri */
+            /* Centrare pe verticala in bara gri: ancoram la mijloc si compensam
+               inaltimea proprie. Asa ramane centrat si acum, cand sunt doua
+               randuri (aur + argint), nu impins spre partea de jos. */
+            top: 50%;
+            transform: translateY(-50%);
             width: auto;
             min-width: 100px;
             height: auto;
             min-height: 22px;
-            line-height: 22px;
+            line-height: 16px;
             text-align: center;
             font-size: 11px;
             font-weight: bold;

@@ -132,16 +132,33 @@ if ($hero !== false) {
 	<tr><td>Off-Bonus</td><td><?php echo ($h['ob']-1)*100; ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
 	<tr><td>Def-Bonus</td><td><?php echo ($h['db']-1)*100; ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
 	<tr><td>Regeneration</td><td><?php echo min(100,$h['regeneration'])*5*SPEED; ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
+	<?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+		$hResPoints = (int) ($h['resources'] ?? 0);
+		$hResType   = (int) ($h['res_type'] ?? 0);
+		$hPerAll    = defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3;
+		$hPerOne    = defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10;
+		$hResNames  = [0 => 'all', 1 => 'lumber', 2 => 'clay', 3 => 'iron', 4 => 'crop'];
+		$hResAmount = ($hResType >= 1 && $hResType <= 4)
+			? (int) round($hResPoints * $hPerOne * SPEED)
+			: (int) round($hResPoints * $hPerAll * SPEED);
+	?>
+	<tr><td>Resources</td><td><?php echo $hResAmount; ?>/h (<?php echo $hResNames[$hResType] ?? 'all'; ?>)</td><td><?php echo $hResPoints; ?></td></tr>
+	<?php } ?>
 	<tr>
 		<?php 
 		// 1. puncte rămase - nu lăsa negativ
-		$used = (int)$h['attack'] + (int)$h['defence'] + (int)$h['attackbonus'] + (int)$h['defencebonus'] + (int)$h['regeneration'];
-		$count_level_exp = max(0, 500 - $used);
+		$used = (int)$h['attack'] + (int)$h['defence'] + (int)$h['attackbonus']
+		      + (int)$h['defencebonus'] + (int)$h['regeneration'] + (int)($h['resources'] ?? 0);
+
+		// totalul de puncte vine din tabelul de niveluri: 5 initiale + 5 per nivel
+		$hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
+		$hMaxPoints = 5 + ($hMaxLevel * 5);
+		$count_level_exp = max(0, $hMaxPoints - $used);
 		if ($h['points'] > $count_level_exp) $h['points'] = $count_level_exp;
 
 		// 2. procent XP - protejat pentru level 100
 		$level = (int)$h['level'];
-		if ($level >= 100 || !isset($hero_levels[$level+1])) {
+		if ($level >= $hMaxLevel || !isset($hero_levels[$level+1])) {
 		$expPct = 100;
 		} else {
 		$curr = $hero_levels[$level] ?? 0;

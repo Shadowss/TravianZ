@@ -54,7 +54,10 @@ if (isset($_POST['id'], $_POST['hid'])) {
 
     // Input curat - cast individual, NU escape global
     $hunit   = (int)($_POST['hunit'] ?? 0);
-    $hlvl    = max(0, min(100, (int)($_POST['hlvl'] ?? 0)));
+    // plafonul vine din tabelul de niveluri (ultimul index e santinela), ca sa
+    // urmeze automat extinderea facuta pentru al 6-lea atribut
+    $hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
+    $hlvl    = max(0, min($hMaxLevel, (int)($_POST['hlvl'] ?? 0)));
     $exp     = (int)($_POST['exp'] ?? 0);
     $hhealth = (float)($_POST['hhealth'] ?? 100);
     $hatk    = (int)($_POST['hatk'] ?? 0);
@@ -62,6 +65,22 @@ if (isset($_POST['id'], $_POST['hid'])) {
     $hob     = (int)($_POST['hob'] ?? 0);
     $hdb     = (int)($_POST['hdb'] ?? 0);
     $hrege   = (int)($_POST['hrege'] ?? 0);
+    $hres    = (int)($_POST['hres'] ?? 0);
+    $hrestype = (int)($_POST['hrestype'] ?? 0);
+
+    // atributele nu pot depasi 100 fiecare (la fel ca in joc)
+    foreach (['hatk','hdef','hob','hdb','hrege','hres'] as $hAttr) {
+        if ($$hAttr < 0)   { $$hAttr = 0; }
+        if ($$hAttr > 100) { $$hAttr = 100; }
+    }
+
+    if ($hrestype < 0 || $hrestype > 4) { $hrestype = 0; }
+
+    // Coloanele T4 se scriu doar daca exista: pe un server care nu a rulat
+    // add-hero-resources.sql, interogarea ar esua si s-ar pierde TOATA salvarea.
+    $hHasResCols = false;
+    $hColCheck = mysqli_query($database->dblink, "SHOW COLUMNS FROM " . TB_PREFIX . "hero LIKE 'resources'");
+    if ($hColCheck && mysqli_num_rows($hColCheck) > 0) { $hHasResCols = true; }
 
     $experience = isset($hero_levels[$hlvl]) ? (int)$hero_levels[$hlvl] : 0;
     $hnameEsc = $database->escape($hname);
@@ -77,7 +96,11 @@ if (isset($_POST['id'], $_POST['hid'])) {
             defence = $hdef,
             attackbonus = $hob,
             defencebonus = $hdb,
-            regeneration = $hrege
+            regeneration = $hrege"
+        . ($hHasResCols ? ",
+            resources = $hres,
+            res_type = $hrestype" : "")
+        . "
           WHERE heroid = $hid AND uid = $id";
 
     $return = $database->query($q);

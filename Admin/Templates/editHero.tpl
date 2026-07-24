@@ -56,6 +56,13 @@ if(isset($_GET['uid'])){
 .hero-head a:hover{text-decoration:underline;}
 
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:12px;}
+/* FIX: pe tema inchisa a panoului (admin_dark.css, incarcat ultimul) cardurile
+   albe mosteneau text deschis si deveneau ilizibile. Fortam culori inchise pe
+   tot ce e in interiorul lor. */
+.card, .card .body, .card .body div, .card .body b, .card .body span,
+.card .form-row, .card .form-row .field, .card table, .card td, .card th{color:#1f2937;}
+.card .body{color:#1f2937;}
+.card .body b{color:#0f172a;}
 .card h3{margin:0;padding:9px 14px;background:#f8fafc;border-bottom:1px solid #e5e7eb;font-size:12px;text-transform:uppercase;color:#475569;letter-spacing:.4px;font-weight:600;display:flex;align-items:center;gap:6px;}
 .card.body{padding:14px;}
 
@@ -146,12 +153,36 @@ function go_url(url){ location=url; return false; }
                 <div class="unit-preview"><span id="unt"><img class="unit u<?php echo $hero['unit'];?>" src="img/x.gif"></span>
                 <select name="hunit" onchange="check_unit(this)" style="flex:1;padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#0f172a;font-size:13px;">
                     <?php
-                    // sloturile care au erou definit in hero_full.php (generic pentru toate triburile)
-                    for($i=1;$i<7;$i++){
-                        $v=$utribe+$i;
-                        if(!isset(${'h'.$v})) continue;
-                        echo "<option value='$v'".($hero['unit']==$v?' selected':'').">".$unarray[$v]."</option>";
-                    }?>
+                    /**
+                     * Unitatile care pot fi erou pentru tribul jucatorului.
+                     *
+                     * Inainte se citeau prin variabile dinamice (${'h'.$v}), ceea ce
+                     * facea greu de vazut ce se intampla si ascundea erorile daca
+                     * lipsea o definitie. Acum construim o lista explicita: un slot
+                     * intra doar daca are si datele de erou (hN), si un nume.
+                     */
+                    $eHeroUnits = [];
+
+                    for ($i = 1; $i < 7; $i++) {
+                        $eUnitId = $utribe + $i;
+
+                        if (!isset($GLOBALS['h' . $eUnitId]) || !isset($unarray[$eUnitId])) {
+                            continue;
+                        }
+
+                        $eHeroUnits[$eUnitId] = $unarray[$eUnitId];
+                    }
+
+                    if (!$eHeroUnits) {
+                        echo "<option value='" . (int) $hero['unit'] . "'>#" . (int) $hero['unit'] . "</option>";
+                    }
+
+                    foreach ($eHeroUnits as $eUnitId => $eUnitName) {
+                        echo "<option value='" . $eUnitId . "'"
+                           . ((int) $hero['unit'] === $eUnitId ? " selected" : "") . ">"
+                           . $eUnitName . "</option>";
+                    }
+                    ?>
                 </select></div>
             </div></div>
             <div class="form-row"><label>❤ Health</label><div class="field"><input name="hhealth" type="text" value="<?php echo round($hero['health']);?>" style="width:80px;"> %</div></div>
@@ -162,11 +193,33 @@ function go_url(url){ location=url; return false; }
     <div class="card">
         <h3>📈 Current Stats</h3>
         <div class="body" style="font-size:12px;line-height:1.8;">
-            <div>Level: <b><?php echo $hero['level'];?></b> | Points: <b><?php echo $hero['atk']+$hero['di']+$hero['dc'];?></b></div>
+            <?php
+                // punctele nefolosite, nu suma statisticilor calculate (era gresit)
+                $eMaxLevel  = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
+                $eUsed      = (int)$hero['attack'] + (int)$hero['defence'] + (int)$hero['attackbonus']
+                            + (int)$hero['defencebonus'] + (int)$hero['regeneration'] + (int)($hero['resources'] ?? 0);
+                $eTotal     = 5 + ($hero['level'] * 5);
+                $eFree      = max(0, $eTotal - $eUsed);
+            ?>
+            <div>Level: <b><?php echo $hero['level'];?></b> / <?php echo $eMaxLevel; ?>
+                 | Points used: <b><?php echo $eUsed; ?></b> of <b><?php echo $eTotal; ?></b>
+                 (free: <b><?php echo $eFree; ?></b>)</div>
             <div>Offence: <b><?php echo $hero['atk'];?></b> (Lv <?php echo $hero['attack'];?>)</div>
             <div>Defence: <b><?php echo $hero['di']."/".$hero['dc'];?></b> (Lv <?php echo $hero['defence'];?>)</div>
             <div>Off-Bonus: <b><?php echo ($hero['ob']-1)*100;?>%</b> | Def-Bonus: <b><?php echo ($hero['db']-1)*100;?>%</b></div>
             <div>Regen: <b><?php echo $hero['regeneration']*5*SPEED;?>/day</b></div>
+            <?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+                $eResPts  = (int)($hero['resources'] ?? 0);
+                $eResType = (int)($hero['res_type'] ?? 0);
+                $ePerAll  = defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3;
+                $ePerOne  = defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10;
+                $eNames   = [0=>'all resources',1=>'lumber',2=>'clay',3=>'iron',4=>'crop'];
+                $eAmount  = ($eResType>=1 && $eResType<=4)
+                    ? (int) round($eResPts * $ePerOne * SPEED)
+                    : (int) round($eResPts * $ePerAll * SPEED);
+            ?>
+            <div>Resources: <b><?php echo $eAmount; ?>/h</b> (<?php echo $eNames[$eResType] ?? 'all resources'; ?>, Lv <?php echo $eResPts; ?>)</div>
+            <?php } ?>
         </div>
     </div>
 
@@ -175,14 +228,25 @@ function go_url(url){ location=url; return false; }
         <div class="body">
             <?php if($isMax):?>
             <div style="text-align:center;padding:8px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;color:#92400e;font-size:12px;margin-bottom:10px;">
-                ⚠ Hero este Level 99 — nu mai poți adăuga puncte.
+                ⚠ Hero is at the maximum level (<?php echo isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119; ?>) — no more points can be added.
             </div>
             <?php endif;?>
             <table class="stat-table">
                 <thead><tr><th>Attribute</th><th style="width:80px;text-align:center;">Current</th><th style="width:120px;text-align:center;">Add</th><th style="width:60px;text-align:center;">New</th></tr></thead>
                 <tbody>
                 <?php
-                $attrs=[['hatk','Offence',$hero['attack']],['hdef','Defence',$hero['defence']],['hob','Off-Bonus',$hero['attackbonus']],['hdb','Def-Bonus',$hero['defencebonus']],['hrege','Regeneration',$hero['regeneration']]];
+                $attrs = [
+                    ['hatk',  'Offence',      $hero['attack']],
+                    ['hdef',  'Defence',      $hero['defence']],
+                    ['hob',   'Off-Bonus',    $hero['attackbonus']],
+                    ['hdb',   'Def-Bonus',    $hero['defencebonus']],
+                    ['hrege', 'Regeneration', $hero['regeneration']],
+                ];
+
+                // al 6-lea atribut exista doar cu functiile T4 pornite
+                if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+                    $attrs[] = ['hres', 'Resources', (int)($hero['resources'] ?? 0)];
+                }
                 foreach($attrs as $a){
                     $plusBtn = $isMax? "<button type='button' class='btn-step' disabled>+</button>" : "<button type='button' class='btn-step' onclick=\"return changeValue(1,'{$a[0]}')\">+</button>";
                     echo '<tr><td>'.$a[1].'</td><td style="text-align:center;">'.$a[2].'</td><td><div class="ctrl"><span id="'.$a[0].'0"><button type="button" class="btn-step" disabled>−</button></span><div class="val-box" id="'.$a[0].'2">0</div><span id="'.$a[0].'1">'.$plusBtn.'</span></div></td><td><input id="'.$a[0].'" name="'.$a[0].'" type="hidden" value="0"><span id="'.$a[0].'2v">0</span></td></tr>';
@@ -190,6 +254,22 @@ function go_url(url){ location=url; return false; }
                ?>
                 </tbody>
             </table>
+            <?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) { ?>
+            <div class="form-row" style="margin-top:10px;">
+                <label>Produced resource</label>
+                <div class="field">
+                    <select name="hrestype" style="padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#0f172a;font-size:13px;">
+                        <?php
+                            $eResOpts = [0=>'All resources',1=>'Lumber',2=>'Clay',3=>'Iron',4=>'Crop'];
+                            $eCur     = (int)($hero['res_type'] ?? 0);
+                            foreach ($eResOpts as $eVal => $eLabel) {
+                                echo "<option value='" . $eVal . "'" . ($eCur === $eVal ? " selected" : "") . ">" . $eLabel . "</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <?php } ?>
             <div style="text-align:center;margin-top:10px;font-size:12px;">Level nou: <b><span id="hlvl">0</span></b></div>
         </div>
     </div>

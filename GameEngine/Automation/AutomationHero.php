@@ -204,10 +204,19 @@ trait AutomationHero {
         $herolevel = $hdata['level'];
         $newLevel = - 1;
         $scorePoints = false;
-        for ($i = $herolevel + 1; $i < 100; $i++){
+        // Nivelul maxim se ia din tabelul de experienta, nu mai e scris in cod:
+        // ultimul index e o santinela care repeta valoarea nivelului maxim real.
+        // Asa, extinderea tabelului (facuta pentru al 6-lea atribut, "Resources")
+        // ridica automat si plafonul de nivel.
+        $maxLevel = max(array_keys($hero_levels)) - 1;
+
+        for ($i = $herolevel + 1; $i <= $maxLevel; $i++){
             if($hdata['experience'] >= $hero_levels[$i]){
                 $newLevel = $i;
-                if ($i < 99) $scorePoints = true;
+                // punctele se acorda pentru FIECARE nivel, inclusiv ultimul:
+                // 5 initiale + 119 niveluri x 5 = 600, adica exact cat trebuie
+                // pentru 6 atribute duse la maximul de 100
+                $scorePoints = true;
             }
         }
 

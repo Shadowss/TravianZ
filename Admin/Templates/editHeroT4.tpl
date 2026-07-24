@@ -35,6 +35,12 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
 ?>
 <style>
 .t4a-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:12px;}
+/* FIX: pe tema inchisa a panoului (admin_dark.css se incarca ultimul) cardurile
+   albe mosteneau text deschis si nu se citea nimic. Fortam culori inchise. */
+.t4a-card, .t4a-card div, .t4a-card span, .t4a-card b, .t4a-card label,
+.t4a-card td, .t4a-card p, .t4a-card li{color:#1f2937;}
+.t4a-card select, .t4a-card input[type=text], .t4a-card input[type=number]{color:#0f172a;background:#fff;}
+.t4a-table td{color:#1f2937;}
 .t4a-card h3{margin:0;padding:9px 14px;background:#f8fafc;border-bottom:1px solid #e5e7eb;font-size:12px;text-transform:uppercase;color:#475569;letter-spacing:.4px;font-weight:600;}
 .t4a-card .body{padding:14px;}
 .t4a-table{width:100%;border-collapse:collapse;font-size:13px;}
