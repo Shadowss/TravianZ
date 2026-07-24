@@ -189,6 +189,27 @@ if ($hour > 1759 || $hour < 500) {
                 echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
                       ' . $session->gold . ' ' . GOLD;
             }
+
+            /**
+             * Argintul eroului, afisat langa aur (doar cu functiile T4 pornite).
+             * Valoarea sta pe randul eroului, in hero.silver. O tinem in
+             * $GLOBALS, nu intr-o variabila "static": intr-un fisier inclus,
+             * "static" nu persista intre includeri, deci nu ar fi un cache real.
+             */
+            if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4 && class_exists('HeroItems')) {
+
+                if (!isset($GLOBALS['t4SilverValue'])) {
+                    $t4SilverItems = new HeroItems();
+                    $GLOBALS['t4SilverValue'] = (int) $t4SilverItems->getSilver($session->uid);
+                }
+
+                $t4SilverLabel = defined('HERO_SILVER') ? HERO_SILVER : 'Silver';
+
+                echo '<div id="silverHeader">'
+                   . '<img src="img/hero/silver.png" alt="' . $t4SilverLabel . '" title="' . $t4SilverLabel . '"/>'
+                   . ' ' . (int) $GLOBALS['t4SilverValue'] . ' ' . $t4SilverLabel
+                   . '</div>';
+            }
             ?>
         </div>
         <?php } ?>
@@ -284,7 +305,8 @@ if ($hour > 1759 || $hour < 500) {
             top: 18px;   /* centrat pe bara gri */
             width: auto;
             min-width: 100px;
-            height: 22px;
+            height: auto;
+            min-height: 22px;
             line-height: 22px;
             text-align: center;
             font-size: 11px;
@@ -295,6 +317,21 @@ if ($hour > 1759 || $hour < 500) {
         #goldHeader img {
             vertical-align: middle;
             margin-right: 4px;
+        }
+
+        /* ARGINT (erou T4) - pe rand propriu, chiar sub aur */
+        #silverHeader {
+            display: block;
+            white-space: nowrap;
+            line-height: 16px;
+            margin-top: -4px;
+        }
+
+        #silverHeader img {
+            vertical-align: middle;
+            margin-right: 4px;
+            width: 12px;
+            height: 12px;
         }
 
         </style>

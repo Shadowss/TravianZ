@@ -69,147 +69,187 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
 };
 ?>
 
-<table id="distribution" cellpadding="1" cellspacing="1"> 
-	<thead><tr>
-		<th colspan="5">
-			<?php  
-				if(isset($_GET['rename'])){ 
-					echo "<form action=\"\" method=\"POST\"><input type=\"hidden\" name=\"userid\" value=\"".$session->uid."\"><input type=\"hidden\" name=\"hero\" value=\"1\"><input type=\"text\" class=\"text\" name=\"name\" maxlength=\"20\" value=\"".$hero_info['name']."\">";             
-				}else{ 
-					echo "<a href=\"build.php?id=".$id."&rename\">".$hero_info['name']."</a></form>"; 
-				} 
-			?>
-			<?php echo LEVEL; ?> <?php echo $hero_info['level']; ?> <span class="info">( <?php echo"<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero_info['unit'])."\" title=\"".$technology->getUnitName($hero_info['unit'])."\" /> ".$technology->getUnitName($hero_info['unit']); ?> )</span></th>
-	</tr></thead> 
-    <tbody><tr> 
-        <th><?php echo OFFENCE; ?></th> 
-        <td class="val"><?php echo $hero_info['atk']; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['attack'])+1; ?>px;" alt="<?php echo $hero_info['atk']; ?>" title="<?php echo $hero_info['atk']; ?>" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('off'); ?> 
-        </td> 
-        <td class="po" id="t4po_off"><?php echo $hero_info['attack']; ?></td> 
-    </tr> 
-    <tr> 
-        <th><?php echo DEFENCE; ?></th> 
-        <td class="val"><?php echo $hero_info['dc'] . "/" . $hero_info['di']; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['defence'])+1; ?>px;" alt="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>"  title="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('deff'); ?> 
-        </td> 
-        <td class="po" id="t4po_deff"><?php echo $hero_info['defence']; ?></td> 
-    </tr> 
-        <tr> 
-        <th><?php echo OFF_BONUS; ?></th> 
-        <td class="val"><?php echo ($hero_info['ob']-1)*100; ?>%</td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['ob']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['ob']-1)*100; ?>%" title="<?php echo ($hero_info['ob']-1)*100; ?>%" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('obonus'); ?> 
-        </td> 
-        <td class="po" id="t4po_obonus"><?php echo $hero_info['attackbonus']; ?></td> 
-    </tr> 
-    <tr> 
-        <th><?php echo DEF_BONUS; ?></th> 
-        <td class="val"><?php echo ($hero_info['db']-1)*100; ?>%</td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['db']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['db']-1)*100; ?>%" title="<?php echo ($hero_info['db']-1)*100; ?>%" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('dbonus'); ?>
-        </td> 
-        <td class="po" id="t4po_dbonus"><?php echo $hero_info['defencebonus']; ?></td> 
-    </tr> 
-    <tr> 
-        <th><?php echo REGENERATION; ?></th> 
-        <td class="val"><?php echo ($hero_info['regeneration']*5*SPEED); ?>/<?php echo DAY; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['regeneration']*2)+1; ?>px;" alt="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" title="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('reg'); ?> 
-        </td> 
-        <td class="po" id="t4po_reg"><?php echo $hero_info['regeneration']; ?></td> 
-    </tr> 
-    <?php if ($t4HeroRes) { ?>
-    <tr> 
-        <th><?php echo defined('HERO_RES_PRODUCTION') ? HERO_RES_PRODUCTION : 'Resources'; ?></th> 
-        <td class="val">
-        <?php
-            // Cate resurse produce, dupa cum e setat: 3 din fiecare sau 10 dintr-una.
+<style>
+/* Aspect in stilul T4 (vezi modelul cerut). Clasele au prefix "t4h-" ca sa nu
+   se amestece cu stilurile paginii; tabelul clasic "distribution" nu mai e
+   folosit AICI, dar restul paginilor raman neatinse. */
+.t4h-wrap{max-width:560px;font-size:12px}
+/* colturi drepte si chenar, ca la tabelele originale din joc; fundalul gri si
+   barile verzi raman cum erau */
+.t4h-panel{background:#f2f2f2;border:1px solid #c9c9c9;padding:6px 8px;margin-bottom:8px}
+.t4h-head{display:flex;justify-content:space-between;align-items:center;font-weight:bold;color:#333;margin-bottom:5px}
+.t4h-tbl{width:100%;border-collapse:collapse}
+.t4h-tbl td{padding:3px 5px;vertical-align:middle;background:none;border:1px solid #dcdcdc}
+.t4h-name{width:112px;color:#333}
+.t4h-val{width:78px;color:#000}
+.t4h-barcell{width:100%}
+.t4h-bar{background:#fff;border:1px solid #c9c9c9;height:13px;overflow:hidden}
+.t4h-bar i{display:block;height:100%;background:#7db72f}
+.t4h-bar.dark i{background:#3f7a12}
+.t4h-up{width:34px;text-align:center;white-space:nowrap}
+/* plusul se pierdea pe fundalul gri - acum e verde inchis si ingrosat */
+.t4h-up a{color:#1f7a1f;font-weight:bold;text-decoration:none;font-size:13px}
+.t4h-up a:hover{color:#0f5c0f;text-decoration:underline}
+.t4h-up .none{color:#b0b0b0}
+.t4h-num{width:38px;text-align:right;font-weight:bold;color:#333}
+/* toate cele 5 optiuni pe acelasi rand, aliniate (inclusiv cerealele) */
+.t4h-res form{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.t4h-res label{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;cursor:pointer}
+.t4h-res .t4h-note{flex-basis:100%;margin-top:2px}
+.t4h-res img.mini{vertical-align:middle;margin:0 2px}
+.t4h-res img.t4h-resall{height:16px;width:auto}
+.t4h-note{color:#777;font-size:11px;margin-top:4px}
+</style>
+
+<div class="t4h-wrap">
+
+<div class="t4h-panel">
+    <div class="t4h-head">
+        <span>
+            <?php
+                if (isset($_GET['rename'])) {
+                    echo "<form action=\"\" method=\"POST\" style=\"display:inline;margin:0;\">"
+                       . "<input type=\"hidden\" name=\"userid\" value=\"" . $session->uid . "\">"
+                       . "<input type=\"hidden\" name=\"hero\" value=\"1\">"
+                       . "<input type=\"text\" class=\"text\" name=\"name\" maxlength=\"20\" value=\"" . $hero_info['name'] . "\">";
+                } else {
+                    echo "<a href=\"build.php?id=" . $id . "&rename\">" . $hero_info['name'] . "</a></form>";
+                }
+            ?>
+            <?php echo LEVEL; ?> <?php echo $hero_info['level']; ?>
+            <span class="info">( <?php
+                echo "<img class=\"unit u" . $hero_info['unit'] . "\" src=\"img/x.gif\" alt=\"" . $technology->getUnitName($hero_info['unit']) . "\" title=\"" . $technology->getUnitName($hero_info['unit']) . "\" /> "
+                   . $technology->getUnitName($hero_info['unit']);
+            ?> )</span>
+        </span>
+        <span><?php echo defined('TZ_POINTS') ? TZ_POINTS : 'Points'; ?></span>
+    </div>
+
+    <table class="t4h-tbl">
+    <?php
+        // nume afisat, valoarea, punctele investite si cheia pentru (+)
+        $t4Rows = array(
+            array(OFFENCE,      $hero_info['atk'],                                 (int) $hero_info['attack'],       'off'),
+            array(DEFENCE,      $hero_info['dc'] . '/' . $hero_info['di'],         (int) $hero_info['defence'],      'deff'),
+            array(OFF_BONUS,    $hero_info['ob'] . '%',                            (int) $hero_info['attackbonus'],  'obonus'),
+            array(DEF_BONUS,    $hero_info['db'] . '%',                            (int) $hero_info['defencebonus'], 'dbonus'),
+            array(REGENERATION, ($hero_info['regeneration'] * 5 * SPEED) . '/' . DAY, (int) $hero_info['regeneration'], 'reg'),
+        );
+
+        if ($t4HeroRes) {
             $t4ResPoints = (int) ($hero_info['resources'] ?? 0);
             $t4ResType   = (int) ($hero_info['res_type'] ?? 0);
             $t4PerAll    = defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3;
             $t4PerOne    = defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10;
-            $t4ResIcons  = [1 => 'r1', 2 => 'r2', 3 => 'r3', 4 => 'r4'];
 
-            if ($t4ResType >= 1 && $t4ResType <= 4) {
-                echo '<img class="' . $t4ResIcons[$t4ResType] . '" src="img/x.gif" alt="" /> ';
-                echo (int) round($t4ResPoints * $t4PerOne * SPEED);
-            } else {
-                foreach ($t4ResIcons as $t4Ico) {
-                    echo '<img class="' . $t4Ico . '" src="img/x.gif" alt="" /> '
-                       . (int) round($t4ResPoints * $t4PerAll * SPEED) . ' ';
-                }
-            }
-        ?>
-        /<?php echo defined('HOUR') ? HOUR : 'h'; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($t4ResPoints*2)+1; ?>px;" alt="" title="" /></td> 
-        <td class="up"><span class="none"> 
-        <?php echo $renderAddLink('res'); ?> 
-        </td> 
-        <td class="po" id="t4po_res"><?php echo $t4ResPoints; ?></td> 
-    </tr> 
-    <tr> 
-        <td colspan="5" class="empty"></td> 
-    </tr> 
-    <tr> 
-        <td colspan="5">
-            <form action="" method="POST" style="margin:0;">
-                <?php echo defined('HERO_RES_TYPE') ? HERO_RES_TYPE : 'Produced resource'; ?>:
-                <select name="t4restype" onchange="this.form.submit();">
-                    <option value="0" <?php if ($t4ResType === 0) echo 'selected'; ?>><?php echo defined('HERO_RES_ALL') ? HERO_RES_ALL : 'All resources'; ?> (<?php echo $t4PerAll; ?>)</option>
-                    <option value="1" <?php if ($t4ResType === 1) echo 'selected'; ?>><?php echo LUMBER; ?> (<?php echo $t4PerOne; ?>)</option>
-                    <option value="2" <?php if ($t4ResType === 2) echo 'selected'; ?>><?php echo CLAY; ?> (<?php echo $t4PerOne; ?>)</option>
-                    <option value="3" <?php if ($t4ResType === 3) echo 'selected'; ?>><?php echo IRON; ?> (<?php echo $t4PerOne; ?>)</option>
-                    <option value="4" <?php if ($t4ResType === 4) echo 'selected'; ?>><?php echo CROP; ?> (<?php echo $t4PerOne; ?>)</option>
-                </select>
-                <noscript><input type="submit" value="OK"></noscript>
-                <span style="color:#777;font-size:11px;margin-left:6px;">
-                    <?php echo defined('HERO_RES_TYPE_HINT') ? HERO_RES_TYPE_HINT
-                        : 'Can be changed at any time, free of charge.'; ?>
-                </span>
-            </form>
-        </td> 
-    </tr> 
+            // valoarea afisata: cat produce efectiv, dupa setarea curenta
+            $t4ResShown = ($t4ResType >= 1 && $t4ResType <= 4)
+                ? (int) round($t4ResPoints * $t4PerOne * SPEED)
+                : (int) round($t4ResPoints * $t4PerAll * SPEED);
+
+            $t4Rows[] = array(
+                defined('HERO_RES_PRODUCTION') ? HERO_RES_PRODUCTION : 'Resources',
+                $t4ResShown,
+                $t4ResPoints,
+                'res'
+            );
+        }
+
+        foreach ($t4Rows as $t4Row) {
+            list($t4Label, $t4Value, $t4Points, $t4Key) = $t4Row;
+            $t4Fill = max(0, min(100, $t4Points));
+    ?>
+        <tr>
+            <td class="t4h-name"><?php echo $t4Label; ?></td>
+            <td class="t4h-val"><?php echo $t4Value; ?></td>
+            <td class="t4h-barcell">
+                <div class="t4h-bar" title="<?php echo $t4Points; ?>/100"><i style="width:<?php echo $t4Fill; ?>%"></i></div>
+            </td>
+            <td class="t4h-up"><?php echo $renderAddLink($t4Key); ?></td>
+            <td class="t4h-num" id="t4po_<?php echo $t4Key; ?>"><?php echo $t4Points; ?></td>
+        </tr>
     <?php } ?>
-        <tr> 
-        <td colspan="5" class="empty"></td> 
-    </tr> 
-	<tr> 
-		<?php
-			$maxExp = 495000;
-			$curLevel = (int)$hero_info['level'];
-			$curExp   = (int)$hero_info['experience'];
+    </table>
+</div>
 
-		// fallback-uri ca să nu mai dea notice
-			$expCurrent = $hero_levels[$curLevel] ?? 0;
-			$expNext    = $hero_levels[$curLevel + 1] ?? $maxExp;
+<?php if ($t4HeroRes) { ?>
+<div class="t4h-panel t4h-res">
+    <div class="t4h-head"><span><?php echo defined('HERO_RES_TYPE') ? HERO_RES_TYPE : 'Change resource production of the hero'; ?></span></div>
+    <form action="" method="POST" style="margin:0;">
+        <?php
+            // fiecare optiune arata CAT ar produce, ca in Travian
+            $t4Opts = array(
+                // pentru "toate" folosim o singura iconita combinata, nu patru alaturate
+                0 => array('img' => 'img/hero/res_all.png', 'amount' => (int) round($t4ResPoints * $t4PerAll * SPEED)),
+                1 => array('icons' => array('r1'), 'amount' => (int) round($t4ResPoints * $t4PerOne * SPEED)),
+                2 => array('icons' => array('r2'), 'amount' => (int) round($t4ResPoints * $t4PerOne * SPEED)),
+                3 => array('icons' => array('r3'), 'amount' => (int) round($t4ResPoints * $t4PerOne * SPEED)),
+                4 => array('icons' => array('r4'), 'amount' => (int) round($t4ResPoints * $t4PerOne * SPEED)),
+            );
 
-		if($curExp < $maxExp && $expNext > $expCurrent && $curLevel < 100){
-			$percent = ($curExp - $expCurrent) / ($expNext - $expCurrent) * 100;
-			$percent = max(0, min(100, $percent));
-		?>
-		<th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
-		<td class="val"><?php echo (int)$percent; ?>%</td>
-		<td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo $percent*2; ?>px;" alt="<?php echo (int)$percent; ?>%" title="<?php echo (int)$percent; ?>%" /></td>
-		<td class="up"></td> 
-		<td class="rem" id="t4rem"><?php echo $hero_info['points']; ?></td> 
-	<?php }else{ ?>
-		<th title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</th> 
-		<td class="val">100%</td> 
-		<td class="xp"><img class="bar" src="img/x.gif" style="width:200px;" alt="100%" title="100%" /></td>
-		<td class="up"></td> 
-		<td class="rem" id="t4rem"><?php echo $hero_info['points']; ?></td> 
-	<?php } ?>
-	</tr>
-    </tbody> 
-    </table> 
+            foreach ($t4Opts as $t4Val => $t4Opt) {
+        ?>
+        <label>
+            <input type="radio" name="t4restype" value="<?php echo $t4Val; ?>"
+                   onchange="this.form.submit();" <?php if ($t4ResType === $t4Val) echo 'checked'; ?>>
+            <?php if (isset($t4Opt['img'])) { ?>
+                <img class="mini t4h-resall" src="<?php echo $t4Opt['img']; ?>" alt="" />
+            <?php } else { foreach ($t4Opt['icons'] as $t4Ico) { ?>
+                <img class="mini <?php echo $t4Ico; ?>" src="img/x.gif" alt="" />
+            <?php } } ?>
+            <?php echo $t4Opt['amount']; ?>
+        </label>
+        <?php } ?>
+        <noscript><input type="submit" value="OK"></noscript>
+        <div class="t4h-note"><?php echo defined('HERO_RES_TYPE_HINT') ? HERO_RES_TYPE_HINT : 'Can be changed at any time, free of charge.'; ?></div>
+    </form>
+</div>
+<?php } ?>
+
+<div class="t4h-panel">
+    <table class="t4h-tbl">
+        <tr>
+            <td class="t4h-name"><?php echo defined('TZ_HEALTH') ? TZ_HEALTH : 'Health'; ?></td>
+            <td class="t4h-val"><?php echo (int) $hero_info['health']; ?>%</td>
+            <td class="t4h-barcell" colspan="3">
+                <div class="t4h-bar dark"><i style="width:<?php echo max(0, min(100, (int) $hero_info['health'])); ?>%"></i></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="t4h-panel">
+    <table class="t4h-tbl">
+    <?php
+        $maxExp     = 495000;
+        $curLevel   = (int) $hero_info['level'];
+        $curExp     = (int) $hero_info['experience'];
+        $expCurrent = $hero_levels[$curLevel] ?? 0;
+        $expNext    = $hero_levels[$curLevel + 1] ?? $maxExp;
+
+        if ($curExp < $maxExp && $expNext > $expCurrent && $curLevel < 100) {
+            $percent = ($curExp - $expCurrent) / ($expNext - $expCurrent) * 100;
+            $percent = max(0, min(100, $percent));
+        } else {
+            $percent = 100;
+        }
+    ?>
+        <tr>
+            <td class="t4h-name" title="<?php echo TZ_UNTIL_THE_NEXT_LEVEL; ?>"><?php echo EXPERIENCE; ?>:</td>
+            <td class="t4h-val"><?php echo $curExp; ?></td>
+            <td class="t4h-barcell" colspan="2"><div class="t4h-bar"><i style="width:<?php echo (int) $percent; ?>%"></i></div></td>
+            <td class="t4h-num" id="t4rem"><?php echo $hero_info['points']; ?></td>
+        </tr>
+        <tr>
+            <td class="t4h-name"><?php echo defined('TZ_HERO_LEVEL') ? TZ_HERO_LEVEL : 'Hero level'; ?></td>
+            <td class="t4h-val"><?php echo $curLevel; ?></td>
+            <td class="t4h-barcell" colspan="3"><div class="t4h-bar"><i style="width:<?php echo max(0, min(100, $curLevel)); ?>%"></i></div></td>
+        </tr>
+    </table>
+</div>
+
+</div>
+
 <?php if ((int) $hero_info['points'] > 0) { ?>
 <form id="t4PointsForm" action="" method="POST" style="margin:6px 0;">
     <input type="hidden" name="t4points" value="1">

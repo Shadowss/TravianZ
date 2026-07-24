@@ -310,20 +310,32 @@ class HeroItems
     }
 
     /**
-     * Argint -> aur. $gold = cat aur vrei sa primesti.
+     * Argint -> aur. $silver = cat ARGINT dai (nu cat aur primesti).
+     *
+     * Asta e citirea naturala a campului din interfata si potriveste Travian:
+     * scrii suma pe care o dai, nu pe cea pe care o primesti. Se schimba doar
+     * multiplii intregi ai ratei; restul de argint sub o unitate de aur ramane
+     * la tine, nu se pierde.
      */
-    public function exchangeSilverToGold($uid, $gold)
+    public function exchangeSilverToGold($uid, $silver)
     {
-        $uid  = (int) $uid;
-        $gold = (int) $gold;
+        $uid    = (int) $uid;
+        $silver = (int) $silver;
 
-        if ($gold <= 0 || $gold > 100000) {
+        if ($silver <= 0 || $silver > 100000000) {
             return self::EXCHANGE_INVALID;
         }
 
-        $silver = $gold * self::silverForOneGold();
+        $rate = self::silverForOneGold();
+        $gold = intdiv($silver, $rate);
 
-        return $this->runExchange($uid, $gold, $silver, false);
+        if ($gold <= 0) {
+            // sub rata de schimb nu se poate obtine nici macar o unitate de aur
+            return self::EXCHANGE_NOT_ENOUGH;
+        }
+
+        // consumam exact cat acopera aurul primit, nu toata suma introdusa
+        return $this->runExchange($uid, $gold, $gold * $rate, false);
     }
 
     /**

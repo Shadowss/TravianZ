@@ -2809,7 +2809,7 @@ tz_def('HERO_EXCHANGE_S2G', 'Argint in aur');
 tz_def('HERO_EXCHANGE_OK', 'Schimb efectuat.');
 tz_def('HERO_EXCHANGE_NOTENOUGH', 'Nu ai suficient pentru acest schimb.');
 tz_def('HERO_EXCHANGE_FAIL', 'Schimbul nu a putut fi efectuat.');
-tz_def('HERO_EXCHANGE_HINT', 'Valoarea introdusa e aurul dat sau primit; argintul se calculeaza la rata afisata.');
+tz_def('HERO_EXCHANGE_HINT', 'Introduci suma pe care o dai. Argintul ramas sub o unitate de aur ramane la tine.');
 tz_def('HERO_RES_PRODUCTION', 'Resurse');
 tz_def('HERO_RES_TYPE', 'Resursa produsa');
 tz_def('HERO_RES_ALL', 'Toate resursele');

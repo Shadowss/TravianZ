@@ -116,20 +116,22 @@ $t4RateS2G  = HeroItems::silverForOneGold();
                 <form action="" method="POST" style="margin:0 0 5px 0;">
                     <input type="hidden" name="t4action" value="g2s">
                     <input type="number" name="amount" min="1" max="100000" value="1" style="width:70px">
+                    <?php echo defined('GOLD') ? GOLD : 'Gold'; ?>
                     <input type="submit" value="<?php echo defined('HERO_EXCHANGE_G2S') ? HERO_EXCHANGE_G2S : 'Gold to silver'; ?>">
                     <small>(1 : <?php echo $t4RateG2S; ?>)</small>
                 </form>
 
                 <form action="" method="POST" style="margin:0;">
                     <input type="hidden" name="t4action" value="s2g">
-                    <input type="number" name="amount" min="1" max="100000" value="1" style="width:70px">
+                    <input type="number" name="amount" min="1" max="100000000" value="<?php echo $t4RateS2G; ?>" style="width:70px">
+                    <?php echo HERO_SILVER; ?>
                     <input type="submit" value="<?php echo defined('HERO_EXCHANGE_S2G') ? HERO_EXCHANGE_S2G : 'Silver to gold'; ?>">
                     <small>(<?php echo $t4RateS2G; ?> : 1)</small>
                 </form>
 
                 <p style="margin:6px 0 0 0;color:#777;font-size:11px;">
                     <?php echo defined('HERO_EXCHANGE_HINT') ? HERO_EXCHANGE_HINT
-                        : 'The amount you type is the gold given or received; silver is calculated at the rate shown.'; ?>
+                        : 'You type the amount you give. Silver left over below one unit of gold stays with you.'; ?>
                 </p>
             </td>
             <td style="text-align:center;vertical-align:middle;">

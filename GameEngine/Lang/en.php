@@ -2824,7 +2824,7 @@ tz_def('HERO_EXCHANGE_S2G', 'Silver to gold');
 tz_def('HERO_EXCHANGE_OK', 'Exchange completed.');
 tz_def('HERO_EXCHANGE_NOTENOUGH', 'You do not have enough for this exchange.');
 tz_def('HERO_EXCHANGE_FAIL', 'The exchange could not be completed.');
-tz_def('HERO_EXCHANGE_HINT', 'The amount you type is the gold given or received; silver is calculated at the rate shown.');
+tz_def('HERO_EXCHANGE_HINT', 'You type the amount you give. Silver left over below one unit of gold stays with you.');
 tz_def('HERO_RES_PRODUCTION', 'Resources');
 tz_def('HERO_RES_TYPE', 'Produced resource');
 tz_def('HERO_RES_ALL', 'All resources');
