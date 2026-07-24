@@ -1675,6 +1675,82 @@ trait DatabaseVillageQueries {
     return $result;
 	}
 
+    /**
+     * Recalculeaza capacitatea de depozitare a unui sat din cladirile lui.
+     *
+     * Aceeasi regula ca recalcularea periodica din Automation::updateStore():
+     * se aduna `attri` * STORAGE_MULTIPLIER pentru fiecare depozit/hambar
+     * (normal si mare) din sloturile f19..f39, cu prag minim STORAGE_BASE.
+     *
+     * De ce recalculare, nu scadere incrementala: `attri` este capacitatea
+     * TOTALA la acel nivel (1200, 1700, 2300...), nu incrementul. Scaderea
+     * folosita la demolare lua toata valoarea nivelului si ignora si
+     * STORAGE_MULTIPLIER, deci taia prea mult - efect mascat de pragul minim.
+     * Recalcularea nu poate ramane in urma, indiferent ce s-a schimbat.
+     */
+    function recalculateStorage($wid) {
+        $wid = (int) $wid;
+
+        global $bid10, $bid11, $bid38, $bid39;
+
+        $fdata = $this->getResourceLevel($wid, false);
+
+        if (!$fdata) {
+            return false;
+        }
+
+        $multiplier = defined('STORAGE_MULTIPLIER') ? STORAGE_MULTIPLIER : 1;
+        $base       = defined('STORAGE_BASE') ? STORAGE_BASE : 0;
+
+        $store = 0;
+        $crop  = 0;
+
+        $map = array(
+            10 => array('store', $bid10),
+            38 => array('store', $bid38),
+            11 => array('crop',  $bid11),
+            39 => array('crop',  $bid39),
+        );
+
+        for ($i = 19; $i < 40; $i++) {
+            $type  = isset($fdata['f' . $i . 't']) ? (int) $fdata['f' . $i . 't'] : 0;
+            $level = isset($fdata['f' . $i])       ? (int) $fdata['f' . $i]       : 0;
+
+            if (!isset($map[$type]) || $level <= 0) {
+                continue;
+            }
+
+            list($target, $data) = $map[$type];
+
+            if (!isset($data[$level]['attri'])) {
+                continue;
+            }
+
+            $amount = $data[$level]['attri'] * $multiplier;
+
+            if ($target === 'store') {
+                $store += $amount;
+            } else {
+                $crop += $amount;
+            }
+        }
+
+        if ($store < $base) { $store = $base; }
+        if ($crop  < $base) { $crop  = $base; }
+
+        $result = mysqli_query(
+            $this->dblink,
+            "UPDATE " . TB_PREFIX . "vdata
+                SET maxstore = " . (int) $store . ", maxcrop = " . (int) $crop . "
+              WHERE wref = " . $wid
+        );
+
+        // randul de sat s-a schimbat: urmatoarea citire trebuie sa vina din DB
+        unset(self::$villageFieldsCache[$wid . '0'], self::$villageFieldsCache[$wid . '3']);
+
+        return $result;
+    }
+
     function modifyPop($vid, $pop, $mode) {
         list($vid, $pop, $mode) = $this->escape_input((int) $vid, (int) $pop, $mode);
 

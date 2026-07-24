@@ -210,23 +210,14 @@ trait AutomationBuildQueue {
 
                 $buildarray = $GLOBALS["bid".$type];
 
-                if ($type == 10 || $type == 38) {
-                    $database->query("
-                        UPDATE ".TB_PREFIX."vdata
-                            SET
-                                `maxstore` = IF(`maxstore` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxstore` - ".$buildarray[$level]['attri'].")
-                            WHERE
-                                wref=".(int) $vil['vref']);
-                }
-
-                if ($type == 11 || $type == 39) {
-                    $database->query("
-                        UPDATE ".TB_PREFIX."vdata
-                            SET
-                                `maxcrop` = IF(`maxcrop` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxcrop` - ".$buildarray[$level]['attri'].")
-                            WHERE
-                                wref=".(int) $vil['vref']);
-                }
+                // FIX: capacitatea de depozitare se RECALCULEAZA din cladirile
+                // ramase, dupa ce nivelul nou e scris mai jos. Scaderea de
+                // dinainte lua `attri` al nivelului, dar `attri` e capacitatea
+                // TOTALA la acel nivel (1200, 1700, 2300...), nu incrementul -
+                // deci taia prea mult. Ignora si STORAGE_MULTIPLIER. Efectul era
+                // ascuns de pragul STORAGE_BASE si "reparat" abia la urmatoarea
+                // rulare a lui updateStore().
+                $needsStorageRecalc = in_array($type, [10, 11, 38, 39]);
 
                 if ($level == 1) $clear = ",f".$vil['buildnumber']."t=0";
                 else $clear = "";
@@ -234,6 +225,10 @@ trait AutomationBuildQueue {
                 if ($database->getVillageField($vil['vref'], 'natar') == 1 && $type == 40) $clear = ""; //fix by ronix - fixed by iopietro
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".$newLevel." ".$clear." WHERE vref=".(int)$vil['vref'];
                 $database->query($q);
+
+                if ($needsStorageRecalc) {
+                    $database->recalculateStorage($vil['vref']);
+                }
 
                 $pop = $this->getPop($type, $newLevel);
                 $database->modifyPop($vil['vref'], $pop[0], 1);

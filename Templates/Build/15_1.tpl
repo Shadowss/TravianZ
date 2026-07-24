@@ -56,11 +56,56 @@ if (!empty($_REQUEST['demolish']) && $_REQUEST['c'] == $session->mchecker) {
             if($currentLvl > 0){
                 // sterge orice demolare in curs
                 $database->delDemolition($village->wid);
+
+                // FIX 2: populatia nu era scazuta deloc la demolarea instant, deci
+                // satul ramanea cu locuitorii unei cladiri care nu mai exista.
+                // Cladirea dispare de la nivelul curent pana la 0, deci trebuie
+                // scazuta populatia TUTUROR nivelurilor, nu doar a ultimului
+                // (demolarea clasica scade cate un nivel pe rand - vezi
+                // Automation::demolitionComplete).
+                $demolishPop = 0;
+                $demolishData = $GLOBALS['bid'.$buildType] ?? null;
+
+                if (is_array($demolishData)) {
+                    for ($demolishLvl = 1; $demolishLvl <= $currentLvl; $demolishLvl++) {
+                        if (isset($demolishData[$demolishLvl]['pop'])) {
+                            $demolishPop += (int) $demolishData[$demolishLvl]['pop'];
+                        }
+                    }
+                }
+
                 // setare nivel 0 direct in DB
                 $database->query("UPDATE ".TB_PREFIX."fdata SET `$field` = 0, `{$field}t` = 0 WHERE `vref` = ".$village->wid);
-                // scade gold
-                $database->modifyGold($session->uid, -10, 0);
+
+                // Capacitatea de depozitare nu era ajustata deloc pe calea cu aur:
+                // demolarea instant a unui Depozit sau Hambar lasa satul cu
+                // capacitatea cladirii disparute. Recalculam din ce a ramas.
+                if (in_array((int) $buildType, [10, 11, 38, 39], true)) {
+                    $database->recalculateStorage($village->wid);
+                }
+
+                if ($demolishPop > 0) {
+                    // modul 1 = scade (vezi Database::modifyPop)
+                    $database->modifyPop($village->wid, $demolishPop, 1);
+                }
+
+                // Punctele de cultura se recalculeaza din cladirile ramase: fara
+                // asta satul ar produce in continuare cultura pentru cladirea
+                // demolata. recountCP citeste starea proaspata din baza de date.
+                if (class_exists('Building')) {
+                    Building::recountCP($database, $village->wid);
+                }
+
+                // FIX 1: modul 0 al lui modifyGold SCADE deja (gold = gold - $amt),
+                // deci valoarea trebuie sa fie POZITIVA. Cu -10 iesea
+                // "gold - (-10)", adica jucatorul PRIMEA 10 aur in loc sa plateasca.
+                $database->modifyGold($session->uid, 10, 0);
                 $session->gold -= 10;
+
+                // soldul din sesiune se poate reciti la urmatoarea cerere din
+                // cache-ul de utilizator; il invalidam ca sa nu reapara vechea valoare
+                unset($_SESSION['cache_user_' . (isset($_SESSION['username']) ? $_SESSION['username'] : '')]);
+
                 $session->changeChecker();
                 header("Location: build.php?gid=15&ty=$type&demolished=1");
                 exit;
