@@ -301,11 +301,11 @@ if ($hour > 1759 || $hour < 500) {
         /* GOLD IN CERCUL VERDE */
         #goldHeader {
             position: absolute;
-            left: 380px; /* << AICI ESTE CERCUL VERDE - muta 370-400 daca e nevoie */
+            left: 370px; /* << AICI ESTE CERCUL VERDE - muta 370-400 daca e nevoie */
             /* Centrare pe verticala in bara gri: ancoram la mijloc si compensam
                inaltimea proprie. Asa ramane centrat si acum, cand sunt doua
                randuri (aur + argint), nu impins spre partea de jos. */
-            top: 50%;
+            top: 40%;
             transform: translateY(-50%);
             width: auto;
             min-width: 100px;
