@@ -2876,7 +2876,7 @@ tz_def('HB_TXT_HERO',       'Héros');
 /* T4 hero port - captured animals release action */
 tz_def('HERO_RELEASE_ANIMALS', 'Relâcher');
 tz_def('HERO_RELEASE_CONFIRM', 'Relâcher ces animaux ? Ils partiront pour de bon.');
-?>
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPLETARE 1:1 dupa en.php (revizuieste traducerile)
@@ -2885,3 +2885,4 @@ tz_def('CATEGORY', 'Catégorie');
 tz_def('SERVER_TIME', 'Heure du serveur :');
 tz_def('STATUS_UPDATED', 'Votre statut a été mis à jour');
 tz_def('TZ_SERVER_MILESTONES', 'Étapes du serveur');
+?>
