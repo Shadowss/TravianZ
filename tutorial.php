@@ -46,23 +46,23 @@ AccessLogger::logRequest();
 <div id="country_select">
 </div>
 <div id="header">
-	<h1>Welcome to <?php echo SERVER_NAME; ?></h1>
+	<h1><?php echo PUBLIC_WELCOME_TO; ?> <?php echo SERVER_NAME; ?></h1>
 </div>
 <div id="navigation">
 <a href="index.php" class="home"><img src="img/x.gif" alt="Travian"/></a>
 	<table class="menu">
 	<tr>
-		<td><a href="tutorial.php"><span>Tutorial</span></a></td>
-		<td><a href="anleitung.php"><span>Manual</span></a></td>
-		<td><a href="http://forum.travian.com/" target="_blank"><span>Forum</span></a></td>
-		<td><a href="index.php?signup"><span>Register</span></a></td>
-		<td><a href="index.php?login"><span>Login</span></a></td>
+		<td><a href="tutorial.php"><span><?php echo TUTORIAL; ?></span></a></td>
+		<td><a href="anleitung.php"><span><?php echo PUBLIC_MANUAL; ?></span></a></td>
+		<td><a href="http://forum.travian.com/" target="_blank"><span><?php echo FORUM; ?></span></a></td>
+		<td><a href="index.php?signup"><span><?php echo PUBLIC_REGISTER; ?></span></a></td>
+		<td><a href="index.php?login"><span><?php echo LOGIN; ?></span></a></td>
 </tr>
 	</table>
 </div>
 <div id="content">
 <div class="grit">
-<h1>Tutorial</h1>
+<h1><?php echo TUTORIAL; ?></h1>
 					<?php
 						if(!isset($_GET['s'])) {
 						$_GET['s'] = ""; }
@@ -86,8 +86,8 @@ AccessLogger::logRequest();
 <div id="iframe_layer" class="overlay">
 <div class="mask closer"></div>
 <div class="overlay_content">
-<a href="index.php" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
-<h2>Anleitung</h2>
+<a href="index.php" class="closer"><img class="dynamic_img" alt="<?php echo PUBLIC_CLOSE; ?>" src="img/un/x.gif" /></a>
+<h2><?php echo PUBLIC_MANUAL; ?></h2>
 <div id="frame_box" >
 </div>
 <div class="footer"></div>
