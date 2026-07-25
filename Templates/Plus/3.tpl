@@ -146,7 +146,7 @@ function formatRemainingTime($endTimestamp, $nowTimestamp) {
 			<td class="dur"><?php echo NOW; ?></td>
 			<td class="cost"><img src="img/x.gif" class="gold" />2</td>
 			<td class="act"><span class="none"><?php
-                echo ($golds['gold']>1) ? '<a href="plus.php?id=7" onclick="if(this.dataset.c) return false; this.dataset.c=1; this.style.pointerEvents=\'none\';"><span>'.ON.'</span></a>' : '<a href="plus.php?s=1"><span class="none">'.TOO_LITTLE_GOLD.'</span></a>';
+                echo ($golds['gold']>1) ? '<a href="plus.php?id=7" onclick="if(this.dataset.c) return false; this.dataset.c=1; this.style.pointerEvents=\'none\';"><span>'.GOLD_ON.'</span></a>' : '<a href="plus.php?s=1"><span class="none">'.TOO_LITTLE_GOLD.'</span></a>';
             ?></span></td>
 		</tr>
 
@@ -201,7 +201,7 @@ if (class_exists('GoldShop')):
                     if($golds['gold']>99){
                         echo '<a href="plus.php?id=15" onclick="if(this.dataset.c) return false; this.dataset.c=1; this.style.pointerEvents=\'none\'; this.style.opacity=\'0.5\';"><span>'.ACTIVATE.'</span></a>';
                     } else echo '<a href="plus.php?s=1"><span class="none">'.TOO_LITTLE_GOLD.'</span></a>';
-                } else echo '<a href="plus.php?id=3"><span class="none">'.ON.'</span></a>';
+                } else echo '<a href="plus.php?id=3"><span class="none">'.GOLD_ON.'</span></a>';
             ?></td>
 		</tr>
 	</tbody>
