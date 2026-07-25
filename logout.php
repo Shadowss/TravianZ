@@ -71,9 +71,9 @@ AccessLogger::logRequest();
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 		<div id="content"  class="logout">
-<h1>Logout successful.</h1><img class="roman" src="img/x.gif" alt="" /><p>Thank you for your visit.</p>
+<h1><?php echo PUBLIC_LOGOUT_SUCCESS_TITLE; ?></h1><img class="roman" src="img/x.gif" alt="" /><p><?php echo PUBLIC_LOGOUT_THANKS; ?></p>
 
-		<p>If other people use this computer too, you should delete your cookies for your own safety:<br /><a href="login.php?del_cookie">&raquo; delete cookies</a></p>
+		<p><?php echo PUBLIC_DELETE_COOKIES_NOTICE; ?><br /><a href="login.php?del_cookie">&raquo; <?php echo PUBLIC_DELETE_COOKIES; ?></a></p>
 </div>
 
 <br /><br /><br /><br /><div id="side_info">
