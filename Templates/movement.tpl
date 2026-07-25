@@ -136,6 +136,8 @@ $totalMovements =
     count($movement3_0) +
     count($movement7_1) +
     count($movement5_0) +
+    count($movement20_0) +
+    count($movement21_1) +
     $oases -
     count($movement8_1) -
     count($movement9_0);
