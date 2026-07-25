@@ -30,7 +30,19 @@ trait DatabaseUserQueries {
     $desc = $desc ?? '';
     $time = time();
     $access = USER;
-    
+
+    // New accounts inherit the configured server language.
+    // English remains the safe fallback if SERVER_LANG is missing or invalid.
+    $serverLang = defined('SERVER_LANG')
+        ? strtolower(trim((string) SERVER_LANG))
+        : 'en';
+
+    $allowedLanguages = ['en', 'fr', 'it', 'ro', 'zh'];
+
+    if (!in_array($serverLang, $allowedLanguages, true)) {
+        $serverLang = 'en';
+    }
+
     $startTime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
     $protectionTime = $uid != 3 ? (($startTime > $time) ? $startTime : $time) + PROTECTION : 0;
 
@@ -46,7 +58,8 @@ trait DatabaseUserQueries {
     if($stmt->execute()){
         $id = $stmt->insert_id ?: $uid;
         $stmt->close();
-		$this->grantRegistrationGold($id);
+        $this->updateUserField($id, "lang", $serverLang, 1);
+        $this->grantRegistrationGold($id);
         return $id;
     }
     $stmt->close();
@@ -62,7 +75,8 @@ trait DatabaseUserQueries {
     if($stmt2->execute()){
         $id = $stmt2->insert_id ?: $uid;
         $stmt2->close();
-		$this->grantRegistrationGold($id);
+        $this->updateUserField($id, "lang", $serverLang, 1);
+        $this->grantRegistrationGold($id);
         return $id;
     }
     $stmt2->close();
