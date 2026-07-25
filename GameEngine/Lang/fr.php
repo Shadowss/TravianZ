@@ -2876,7 +2876,6 @@ tz_def('HB_TXT_HERO',       'Héros');
 /* T4 hero port - captured animals release action */
 tz_def('HERO_RELEASE_ANIMALS', 'Relâcher');
 tz_def('HERO_RELEASE_CONFIRM', 'Relâcher ces animaux ? Ils partiront pour de bon.');
-?>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPLETARE 1:1 dupa en.php (revizuieste traducerile)
@@ -2885,3 +2884,115 @@ tz_def('CATEGORY', 'Catégorie');
 tz_def('SERVER_TIME', 'Heure du serveur :');
 tz_def('STATUS_UPDATED', 'Votre statut a été mis à jour');
 tz_def('TZ_SERVER_MILESTONES', 'Étapes du serveur');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// PANOU DE ADMINISTRARE - etichete de meniu si titluri de pagina
+// (erau scrise direct in Admin/admin.php, deci meniul ramanea in engleza)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADMIN_LOGOUT', 'Déconnexion');
+tz_def('ADMIN_SERVER_HOMEPAGE', 'Page d\'accueil du serveur');
+tz_def('ADMIN_CONTROL_PANEL_HOME', 'Accueil du panneau');
+tz_def('ADMIN_RETURN_TO_THE_SERVER', 'Retour au serveur');
+tz_def('ADMIN_SERVER_INFO', 'Infos du serveur');
+tz_def('ADMIN_ONLINE_USERS', 'Joueurs connectés');
+tz_def('ADMIN_PLAYERS_NOT_ACTIVATED', 'Joueurs non activés');
+tz_def('ADMIN_PLAYERS_INACTIVATE', 'Joueurs inactifs');
+tz_def('ADMIN_PLAYERS_REPORT', 'Signalements de joueurs');
+tz_def('ADMIN_PLAYERS_MESSAGE', 'Messages des joueurs');
+tz_def('ADMIN_MAP', 'Carte');
+tz_def('ADMIN_MAP_TILE', 'Case de la carte');
+tz_def('ADMIN_NATARS_MANAGEMENT', 'Gestion des Natars');
+tz_def('ADMIN_SEARCH', 'Recherche');
+tz_def('ADMIN_GENERAL_SEARCH', 'Recherche générale');
+tz_def('ADMIN_SEARCH_IGMS_REPORTS', 'Rechercher messages/rapports');
+tz_def('ADMIN_MESSAGES', 'Messages');
+tz_def('ADMIN_CREATE_MASS_MESSAGE', 'Créer un message groupé');
+tz_def('ADMIN_CREATE_SYSTEM_MESSAGE', 'Créer un message système');
+tz_def('ADMIN_BAN', 'Bannissement');
+tz_def('ADMIN_BAN_UNBAN_PLAYERS', 'Bannir/débannir des joueurs');
+tz_def('ADMIN_CLEAN_BANLIST_DATA', 'Nettoyer la liste de bannissements');
+tz_def('ADMIN_GOLD', 'Or');
+tz_def('ADMIN_GIVE_ALL_FREE_GOLD', 'Donner de l\'or à tous');
+tz_def('ADMIN_GIVE_FREE_GOLD_TO_SPECIFIC_USER', 'Donner de l\'or à un joueur');
+tz_def('ADMIN_GOLD_SHOP_PROMO_CODES', 'Boutique d\'or et codes promo');
+tz_def('ADMIN_RESET_GOLD', 'Réinitialiser l\'or');
+tz_def('ADMIN_PLUS_RES_BONUS', 'Plus et bonus de ressources');
+tz_def('ADMIN_GIVE_ALL_PLUS', 'Donner Plus à tous');
+tz_def('ADMIN_RESET_PLUS', 'Réinitialiser Plus');
+tz_def('ADMIN_GIVE_ALL_RES_BONUS', 'Donner le bonus de ressources à tous');
+tz_def('ADMIN_RESET_RES_BONUS', 'Réinitialiser le bonus de ressources');
+tz_def('ADMIN_USERS', 'Joueurs');
+tz_def('ADMIN_LIST_USERS', 'Liste des joueurs');
+tz_def('ADMIN_CREATE_USERS', 'Créer des joueurs');
+tz_def('ADMIN_MULTI_ACCOUNT_DETECTION', 'Détection multi-comptes');
+tz_def('ADMIN_PUSH_PROTECTION', 'Protection anti-push');
+tz_def('ADMIN_REGISTRATION_BLOCKLIST', 'Liste de blocage des inscriptions');
+tz_def('ADMIN_ADMIN', 'Administration');
+tz_def('ADMIN_ADMIN_LOG', 'Journal d\'administration');
+tz_def('ADMIN_QUEST_EDITOR', 'Éditeur de quêtes');
+tz_def('ADMIN_WORLD_MAP_HEATMAP', 'Carte de chaleur du monde');
+tz_def('ADMIN_DEBUG_ERROR_LOG', 'Journal des erreurs');
+tz_def('ADMIN_SERVER_SETTINGS', 'Paramètres du serveur');
+tz_def('ADMIN_SERVER_MAINTENANCE', 'Maintenance du serveur');
+tz_def('ADMIN_SERVER_RESETTING', 'Réinitialisation du serveur');
+tz_def('ADMIN_IN_GAME_MESSAGES', 'Messages en jeu');
+tz_def('ADMIN_MSG_REP', 'Msg/Rapports');
+tz_def('ADMIN_MASS_MESSAGE', 'Message groupé');
+tz_def('ADMIN_SYSTEM_MESSAGE', 'Message système');
+tz_def('ADMIN_DELETE_PLAYER_MEDALS', 'Supprimer les médailles de joueur');
+tz_def('ADMIN_DELETE_ALLY_MEDALS', 'Supprimer les médailles d\'alliance');
+tz_def('ADMIN_USERS_LIST', 'Liste des joueurs');
+tz_def('ADMIN_SERVER_CONFIGURATION', 'Configuration du serveur');
+tz_def('ADMIN_CRON_AUTOMATION', 'Cron et automatisation');
+tz_def('ADMIN_PLUS_SETTINGS', 'Paramètres PLUS');
+tz_def('ADMIN_LOG_SETTINGS', 'Paramètres des journaux');
+tz_def('ADMIN_NEWSBOX_SETTINGS', 'Paramètres des actualités');
+tz_def('ADMIN_NEW_FUNCTIONS_SETTINGS', 'Paramètres des nouvelles fonctions');
+tz_def('ADMIN_EXTRA_SETTINGS', 'Paramètres supplémentaires');
+tz_def('ADMIN_EDIT_ADMIN_INFORMATION', 'Modifier les infos administrateur');
+tz_def('ADMIN_PLAYER_DETAILS', 'Détails du joueur');
+tz_def('ADMIN_EDIT_PLAYER', 'Modifier le joueur');
+tz_def('ADMIN_DELETE_PLAYER', 'Supprimer le joueur');
+tz_def('ADMIN_COMPOSE_MESSAGE', 'Écrire un message');
+tz_def('ADMIN_EDIT_PLUS_RESOURCES', 'Modifier Plus et ressources');
+tz_def('ADMIN_EDIT_SITTERS', 'Modifier les remplaçants');
+tz_def('ADMIN_EDIT_PASSWORD', 'Modifier le mot de passe');
+tz_def('ADMIN_EDIT_PROTECTION', 'Modifier la protection');
+tz_def('ADMIN_EDIT_OFF_DEF', 'Modifier attaque et défense');
+tz_def('ADMIN_EDIT_WEEKLY_OFF_DEF', 'Modifier attaque et défense hebdo');
+tz_def('ADMIN_USER_LOGINS', 'Connexions du joueur');
+tz_def('ADMIN_USER_ILLEGALS_LOG', 'Journal des infractions');
+tz_def('ADMIN_EDIT_HERO', 'Modifier le héros');
+tz_def('ADMIN_T4_HERO_CONTROLS', 'Contrôles du héros T4');
+tz_def('ADMIN_EDIT_ADDITIONAL_INFO', 'Modifier les infos supplémentaires');
+tz_def('ADMIN_EDIT_VILLAGE', 'Modifier le village');
+tz_def('ADMIN_EDIT_RESOURCES', 'Modifier les ressources');
+tz_def('ADMIN_EDIT_TROOPS', 'Modifier les troupes');
+tz_def('ADMIN_UPGRADE_TROOPS', 'Améliorer les troupes');
+tz_def('ADMIN_ALLIANCE', 'Alliance');
+tz_def('ADMIN_EDIT_ALLIANCE', 'Modifier l\'alliance');
+tz_def('ADMIN_DELETE_ALLIANCE', 'Supprimer l\'alliance');
+tz_def('ADMIN_BUILD_LOG', 'Journal de construction');
+tz_def('ADMIN_RESEARCH_LOG', 'Journal de recherche');
+tz_def('ADMIN_NO_PLAYER', 'aucun joueur');
+tz_def('ADMIN_NO_VILLAGE', 'aucun village');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// Completare: chei adaugate dupa ultima sincronizare cu en.php (revizuieste traducerile)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('HERO_ADV_DANGER', 'Danger');
+tz_def('HERO_ADV_LINK', 'Action');
+tz_def('HERO_ADV_PLACE', 'Lieu');
+tz_def('HERO_T4_TAB_OASIS', 'Oasis');
+tz_def('HERO_RES_PRODUCTION', 'Ressources');
+tz_def('HERO_RES_TYPE', 'Ressource produite');
+tz_def('HERO_RES_ALL', 'Toutes les ressources');
+tz_def('HERO_RES_TYPE_HINT', 'Modifiable à tout moment, gratuitement.');
+tz_def('HERO_EXCHANGE', 'Bureau de change');
+tz_def('HERO_EXCHANGE_G2S', 'Or en argent');
+tz_def('HERO_EXCHANGE_S2G', 'Argent en or');
+tz_def('HERO_EXCHANGE_OK', 'Échange effectué.');
+tz_def('HERO_EXCHANGE_NOTENOUGH', 'Vous n\'avez pas assez pour cet échange.');
+tz_def('HERO_EXCHANGE_FAIL', 'L\'échange n\'a pas pu être effectué.');
+tz_def('HERO_EXCHANGE_HINT', 'Vous saisissez le montant que vous donnez. L\'argent restant, en dessous d\'une unité d\'or, vous reste.');
+tz_def('HERO_LOCKED_NOHERO', 'Vous n\'avez pas encore de héros. Formez-en un au Manoir du héros avant d\'équiper des objets.');

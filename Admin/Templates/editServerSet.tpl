@@ -85,18 +85,63 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_TIMEZONE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TIMEZONE_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="tzone" onChange="refresh(this.value)">
-                            <option value="Africa/Dakar" <?php if (TIMEZONE=="Africa/Dakar") echo "selected";?>>Africa</option>
-                            <option value="America/New_York" <?php if (TIMEZONE=="America/New_York") echo "selected";?>>America</option>
-                            <option value="Antarctica/Casey" <?php if (TIMEZONE=="Antarctica/Casey") echo "selected";?>>Antarctica</option>
-                            <option value="Arctic/Longyearbyen" <?php if (TIMEZONE=="Arctic/Longyearbyen") echo "selected";?>>Arctic</option>
-                            <option value="Asia/Kuala_Lumpur" <?php if (TIMEZONE=="Asia/Kuala_Lumpur") echo "selected";?>>Asia</option>
-                            <option value="Atlantic/Azores" <?php if (TIMEZONE=="Atlantic/Azores") echo "selected";?>>Atlantic</option>
-                            <option value="Australia/Melbourne" <?php if (TIMEZONE=="Australia/Melbourne") echo "selected";?>>Australia</option>
-                            <option value="Europe/Bucharest" <?php if (TIMEZONE=="Europe/Bucharest") echo "selected";?>>Europe (Bucharest)</option>
-                            <option value="Europe/London" <?php if (TIMEZONE=="Europe/London") echo "selected";?>>Europe (London)</option>
-                            <option value="Europe/Zurich" <?php if (TIMEZONE=="Europe/Zurich") echo "selected";?>>Europe (Switzerland)</option>
-                            <option value="Indian/Maldives" <?php if (TIMEZONE=="Indian/Maldives") echo "selected";?>>Indian</option>
-                            <option value="Pacific/Fiji" <?php if (TIMEZONE=="Pacific/Fiji") echo "selected";?>>Pacific</option>
+                        <?php
+                            /**
+                             * Lista completa de fusuri orare, generata din PHP.
+                             *
+                             * Inainte erau 12 optiuni scrise de mana, cate una de
+                             * continent, asa ca fusuri uzuale (Europe/Paris,
+                             * Europe/Berlin, Europe/Madrid...) nici nu apareau.
+                             * DateTimeZone::listIdentifiers() intoarce lista IANA
+                             * a instalarii, deci ramane corecta si dupa
+                             * actualizarile de date despre ora de vara.
+                             *
+                             * Sunt grupate pe regiune si arata si decalajul curent,
+                             * ca sa fie usor de gasit.
+                             */
+                            $tzCurrent = defined('TIMEZONE') ? TIMEZONE : date_default_timezone_get();
+                            $tzAll     = DateTimeZone::listIdentifiers();
+                            $tzGroups  = array();
+                            $tzNow     = new DateTime('now', new DateTimeZone('UTC'));
+
+                            foreach ($tzAll as $tzId) {
+                                $tzParts  = explode('/', $tzId, 2);
+                                $tzRegion = $tzParts[0];
+
+                                try {
+                                    $tzOffset = (new DateTimeZone($tzId))->getOffset($tzNow);
+                                } catch (Exception $e) {
+                                    continue;
+                                }
+
+                                $tzSign  = $tzOffset < 0 ? '-' : '+';
+                                $tzAbs   = abs($tzOffset);
+                                $tzLabel = sprintf('%s (UTC%s%02d:%02d)',
+                                    str_replace('_', ' ', $tzId),
+                                    $tzSign, intdiv($tzAbs, 3600), intdiv($tzAbs % 3600, 60));
+
+                                $tzGroups[$tzRegion][$tzId] = $tzLabel;
+                            }
+
+                            // daca valoarea din config nu mai e un fus valid, o
+                            // aratam oricum, ca adminul sa vada ce e setat acum
+                            if (!in_array($tzCurrent, $tzAll, true)) {
+                                echo '<option value="' . htmlspecialchars($tzCurrent, ENT_QUOTES, 'UTF-8') . '" selected>'
+                                   . htmlspecialchars($tzCurrent, ENT_QUOTES, 'UTF-8') . ' (?)</option>';
+                            }
+
+                            foreach ($tzGroups as $tzRegion => $tzList) {
+                                echo '<optgroup label="' . htmlspecialchars($tzRegion, ENT_QUOTES, 'UTF-8') . '">';
+
+                                foreach ($tzList as $tzId => $tzLabel) {
+                                    echo '<option value="' . htmlspecialchars($tzId, ENT_QUOTES, 'UTF-8') . '"'
+                                       . ($tzCurrent === $tzId ? ' selected' : '') . '>'
+                                       . htmlspecialchars($tzLabel, ENT_QUOTES, 'UTF-8') . '</option>';
+                                }
+
+                                echo '</optgroup>';
+                            }
+                        ?>
                         </select>
                         <span id="tz" name="tz" style="margin-left:8px;color:#64748b;"><?php echo TIMEZONE;?></span>
                     </td>
@@ -107,7 +152,7 @@ function refresh(tz) {
                         <select name="lang">
                             <option value="en" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="en") echo "selected";?>>English</option>
                             <option value="fr" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="fr") echo "selected";?>>French</option>
-                            <option value="es" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>>Italian</option>
+                            <option value="it" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>>Italian</option>
                             <option value="ro" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="ro") echo "selected";?>>Romanian</option>
                             <option value="zh" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="zh") echo "selected";?>>Chinese</option>
                         </select>

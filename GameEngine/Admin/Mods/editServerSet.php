@@ -108,11 +108,44 @@ $text = admin_config_template_contents(array(
 		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
 		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
 		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
-		$text = preg_replace("'%STIMEZONE%'", $_POST['tzone'], $text);
+		// Fusul orar se scrie intr-un fisier PHP (define("TIMEZONE","...")), deci
+		// valoarea NU are voie sa ajunga acolo nefiltrata: pana acum $_POST['tzone']
+		// era inserat ca atare, ceea ce permitea scrierea de cod in config.php.
+		// Acceptam doar identificatori IANA reali, verificati la rulare.
+		$tzCurrent = defined('TIMEZONE') ? TIMEZONE : date_default_timezone_get();
+		$tzChosen  = $tzCurrent;
+
+		if (isset($_POST['tzone'])) {
+			$tzCandidate = (string) $_POST['tzone'];
+
+			if (in_array($tzCandidate, DateTimeZone::listIdentifiers(), true)) {
+				$tzChosen = $tzCandidate;
+			}
+		}
+
+		$text = str_replace('%STIMEZONE%', $tzChosen, $text);
 		$text = preg_replace("'%STARTTIME%'", COMMENCE, $text);
 		$text = preg_replace("'%SSTARTDATE%'", START_DATE, $text);
 		$text = preg_replace("'%SSTARTTIME%'", START_TIME, $text);
-		$text = preg_replace("'%LANG%'", (defined('SERVER_LANG') ? SERVER_LANG : LANG), $text);
+		// FIX: limba selectata din formular era ignorata - se rescria mereu
+		// constanta deja incarcata, deci salvarea nu schimba nimic.
+		// Validam valoarea primita si verificam si ca fisierul de limba exista:
+		// altfel un POST modificat ar putea scrie in config o limba fara fisier,
+		// iar jocul ar ramane fara traduceri.
+		$serverLangCurrent = defined('SERVER_LANG') ? SERVER_LANG : LANG;
+		$serverLang        = $serverLangCurrent;
+
+		if (isset($_POST['lang'])) {
+			$langCandidate = (string) $_POST['lang'];
+
+			if (preg_match('/^[a-z]{2}$/', $langCandidate)
+				&& file_exists(__DIR__ . '/../../Lang/' . $langCandidate . '.php')) {
+				$serverLang = $langCandidate;
+			}
+		}
+
+		// str_replace, nu preg_replace: valoarea nu e o expresie regulata
+		$text = str_replace('%LANG%', $serverLang, $text);
 		$text = preg_replace("'%SPEED%'", $_POST['speed'], $text);
 		$text = preg_replace("'%MAX%'", WORLD_MAX, $text);
 		$text = preg_replace("'%GP%'", $_POST['gpack'], $text);

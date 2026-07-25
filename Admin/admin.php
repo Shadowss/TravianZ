@@ -150,23 +150,23 @@ if ($page !== '') {
 
         // ── Simple label-only pages ──────────────────────────────────────────
         case 'server_info':
-            $subpage = 'Server Info';
+            $subpage = ADMIN_SERVER_INFO;
             break;
 
         case 'online':
-            $subpage = 'Online Users';
+            $subpage = ADMIN_ONLINE_USERS;
             break;
 
         case 'notregistered':
-            $subpage = 'Players Not Activated';
+            $subpage = ADMIN_PLAYERS_NOT_ACTIVATED;
             break;
 
         case 'inactive':
-            $subpage = 'Players Inactivate';
+            $subpage = ADMIN_PLAYERS_INACTIVATE;
             break;
 
         case 'report':
-            $subpage = 'Players Report';
+            $subpage = ADMIN_PLAYERS_REPORT;
             break;
 
         case 'message':
@@ -175,47 +175,47 @@ if ($page !== '') {
             // ('Players Message') is intentional for the ?p=message route.
             // The 'Search IGMs/Reports' label belongs to ?p=search sub-section
             // which is already covered by the search template include logic.
-            $subpage = 'Players Message';
+            $subpage = ADMIN_PLAYERS_MESSAGE;
             break;
 
         case 'msg':
-            $subpage = 'Search IGMs/Reports';
+            $subpage = ADMIN_SEARCH_IGMS_REPORTS;
             break;
 
         case 'multiacc':
-            $subpage = 'Multi-Account Detection';
+            $subpage = ADMIN_MULTI_ACCOUNT_DETECTION;
             break;
 
         case 'pushprot':
-            $subpage = 'Push Protection';
+            $subpage = ADMIN_PUSH_PROTECTION;
             break;
 
         case 'blockReg':
-            $subpage = 'Registration Blocklist';
+            $subpage = ADMIN_REGISTRATION_BLOCKLIST;
             break;
 
         case 'heatmap':
-            $subpage = 'World Map Heatmap';
+            $subpage = ADMIN_WORLD_MAP_HEATMAP;
             break;
 
         case 'goldShop':
-            $subpage = 'Gold Shop & Promo Codes';
+            $subpage = ADMIN_GOLD_SHOP_PROMO_CODES;
             break;
 
         case 'questEditor':
-            $subpage = 'Quest Editor';
+            $subpage = ADMIN_QUEST_EDITOR;
             break;
 
         case 'massmessage':
-            $subpage = 'Mass Message';
+            $subpage = ADMIN_MASS_MESSAGE;
             break;
 
         case 'sysmessage':
-            $subpage = 'System Message';
+            $subpage = ADMIN_SYSTEM_MESSAGE;
             break;
 
         case 'map':
-            $subpage = 'Map';
+            $subpage = ADMIN_MAP;
             break;
 
         case 'map_tile':
@@ -224,115 +224,115 @@ if ($page !== '') {
             break;
 
         case 'natars':
-            $subpage = 'Natars Management';
+            $subpage = ADMIN_NATARS_MANAGEMENT;
             break;
 
         case 'search':
-            $subpage = 'General Search';
+            $subpage = ADMIN_GENERAL_SEARCH;
             break;
 
         case 'ban':
-            $subpage = 'Ban/Unban Players';
+            $subpage = ADMIN_BAN_UNBAN_PLAYERS;
             break;
 
         case 'maintenance':
-            $subpage = 'Server Maintenance';
+            $subpage = ADMIN_SERVER_MAINTENANCE;
             break;
 
         case 'cleanban':
-            $subpage = 'Clean Banlist Data';
+            $subpage = ADMIN_CLEAN_BANLIST_DATA;
             break;
 
         case 'gold':
-            $subpage = 'Give All Free Gold';
+            $subpage = ADMIN_GIVE_ALL_FREE_GOLD;
             break;
 
         case 'usergold':
-            $subpage = 'Give Free Gold To Specific User';
+            $subpage = ADMIN_GIVE_FREE_GOLD_TO_SPECIFIC_USER;
             break;
 
         case 'maintenenceResetGold':
-            $subpage = 'Reset Gold';
+            $subpage = ADMIN_RESET_GOLD;
             break;
 
         case 'delmedal':
-            $subpage = 'Delete Player Medals';
+            $subpage = ADMIN_DELETE_PLAYER_MEDALS;
             break;
 
         case 'delallymedal':
-            $subpage = 'Delete Ally Medals';
+            $subpage = ADMIN_DELETE_ALLY_MEDALS;
             break;
 
         case 'givePlus':
-            $subpage = 'Give All Plus';
+            $subpage = ADMIN_GIVE_ALL_PLUS;
             break;
 
         case 'maintenenceResetPlus':
-            $subpage = 'Reset Plus';
+            $subpage = ADMIN_RESET_PLUS;
             break;
 
         case 'givePlusRes':
-            $subpage = 'Give All Res Bonus';
+            $subpage = ADMIN_GIVE_ALL_RES_BONUS;
             break;
 
         case 'maintenenceResetPlusBonus':
-            $subpage = 'Reset Res Bonus';
+            $subpage = ADMIN_RESET_RES_BONUS;
             break;
 
         case 'addUsers':
-            $subpage = 'Create Users';
+            $subpage = ADMIN_CREATE_USERS;
             break;
 
         case 'users':
-            $subpage = 'Users List';
+            $subpage = ADMIN_USERS_LIST;
             break;
 
         case 'admin_log':
-            $subpage = 'Admin Log';
+            $subpage = ADMIN_ADMIN_LOG;
             break;
 
         case 'config':
-            $subpage = 'Server Settings';
+            $subpage = ADMIN_SERVER_SETTINGS;
             break;
 
         case 'debug_log':
-            $subpage = 'Debug Error Log';
+            $subpage = ADMIN_DEBUG_ERROR_LOG;
             break;
 
         case 'editServerSet':
-            $subpage = 'Server Configuration';
+            $subpage = ADMIN_SERVER_CONFIGURATION;
             break;
 
         case 'editCronSet':
-            $subpage = 'Cron & Automation';
+            $subpage = ADMIN_CRON_AUTOMATION;
             break;
 
         case 'editPlusSet':
-            $subpage = 'PLUS Settings';
+            $subpage = ADMIN_PLUS_SETTINGS;
             break;
 
         case 'editLogSet':
-            $subpage = 'Log Settings';
+            $subpage = ADMIN_LOG_SETTINGS;
             break;
 
         case 'editNewsboxSet':
-            $subpage = 'NewsBox Settings';
+            $subpage = ADMIN_NEWSBOX_SETTINGS;
             break;
 			
 		case 'editNewFunctions':
-            $subpage = 'New Functions Settings';
+            $subpage = ADMIN_NEW_FUNCTIONS_SETTINGS;
             break;
 
         case 'editExtraSet':
-            $subpage = 'Extra Settings';
+            $subpage = ADMIN_EXTRA_SETTINGS;
             break;
 
         case 'editAdminInfo':
-            $subpage = 'Edit Admin Information';
+            $subpage = ADMIN_EDIT_ADMIN_INFORMATION;
             break;
 
         case 'resetServer':
-            $subpage = 'Server Resetting';
+            $subpage = ADMIN_SERVER_RESETTING;
             break;
 
         // ── User-context pages (require a valid ?uid=) ───────────────────────
@@ -343,7 +343,7 @@ if ($page !== '') {
                 $user         = $displayarray;
                 $subpage      = 'Player Details (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Player Details (no player)';
+                $subpage = ADMIN_PLAYER_DETAILS . ' (' . ADMIN_NO_PLAYER . ')';
             }
             break;
 
@@ -351,9 +351,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Player (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_PLAYER . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Player (no player)';
+                $subpage = ADMIN_EDIT_PLAYER . ' (' . ADMIN_NO_PLAYER . ')';
             }
             break;
 
@@ -361,9 +361,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Delete Player (' . e($user['username']) . ')';
+                $subpage = ADMIN_DELETE_PLAYER . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Delete Player (no player)';
+                $subpage = ADMIN_DELETE_PLAYER . ' (' . ADMIN_NO_PLAYER . ')';
             }
             break;
 
@@ -371,9 +371,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Compose Message (' . e($user['username']) . ')';
+                $subpage = ADMIN_COMPOSE_MESSAGE . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Compose Message';
+                $subpage = ADMIN_COMPOSE_MESSAGE;
             }
             break;
 
@@ -381,9 +381,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Plus &amp; Resources (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_PLUS_RESOURCES . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Plus &amp; Resources';
+                $subpage = ADMIN_EDIT_PLUS_RESOURCES;
             }
             break;
 
@@ -391,9 +391,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Sitters (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_SITTERS . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Sitters';
+                $subpage = ADMIN_EDIT_SITTERS;
             }
             break;
 
@@ -401,9 +401,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Password (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_PASSWORD . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Password';
+                $subpage = ADMIN_EDIT_PASSWORD;
             }
             break;
 
@@ -411,9 +411,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Protection (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_PROTECTION . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Protection';
+                $subpage = ADMIN_EDIT_PROTECTION;
             }
             break;
 
@@ -421,9 +421,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Off &amp; Def (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_OFF_DEF . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Off &amp; Def';
+                $subpage = ADMIN_EDIT_OFF_DEF;
             }
             break;
 
@@ -431,9 +431,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Weekly Off &amp; Def (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_WEEKLY_OFF_DEF . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Weekly Off &amp; Def';
+                $subpage = ADMIN_EDIT_WEEKLY_OFF_DEF;
             }
             break;
 
@@ -447,7 +447,7 @@ if ($page !== '') {
                     ? 'User Logins (' . e($player['username']) . ')'
                     : 'User Logins (player not found)';
             } else {
-                $subpage = 'User Logins (no player)';
+                $subpage = ADMIN_USER_LOGINS . ' (' . ADMIN_NO_PLAYER . ')';
             }
             break;
 
@@ -460,7 +460,7 @@ if ($page !== '') {
                     ? 'User Illegals Log (' . e($player['username']) . ')'
                     : 'User Illegals Log (player not found)';
             } else {
-                $subpage = 'User Illegals Log (no player)';
+                $subpage = ADMIN_USER_ILLEGALS_LOG . ' (' . ADMIN_NO_PLAYER . ')';
             }
             break;
 
@@ -468,9 +468,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Hero (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_HERO . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Hero';
+                $subpage = ADMIN_EDIT_HERO;
             }
             break;
 
@@ -478,9 +478,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'T4 Hero Controls (' . e($user['username']) . ')';
+                $subpage = ADMIN_T4_HERO_CONTROLS . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'T4 Hero Controls';
+                $subpage = ADMIN_T4_HERO_CONTROLS;
             }
             break;
 
@@ -488,9 +488,9 @@ if ($page !== '') {
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $user    = $database->getUserArray($uid, 1);
-                $subpage = 'Edit Additional Info (' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_ADDITIONAL_INFO . ' (' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Additional Info';
+                $subpage = ADMIN_EDIT_ADDITIONAL_INFO;
             }
             break;
 
@@ -501,13 +501,13 @@ if ($page !== '') {
                 $village = $database->getVillage($did);
                 if ($village) {
                     $user    = $database->getUserArray($village['owner'], 1);
-                    $subpage = 'Edit Village (' . e($village['name']) . ' » ' . e($user['username'] ?? '?') . ')';
+                    $subpage = ADMIN_EDIT_VILLAGE . ' (' . e($village['name']) . ' » ' . e($user['username'] ?? '?') . ')';
                 } else {
-                    $subpage = 'Edit Village (ID ' . $did . ' not found)';
+                    $subpage = ADMIN_EDIT_VILLAGE . $did . ' not found)';
                     $village = null;
                 }
             } else {
-                $subpage = 'Edit Village (no village)';
+                $subpage = ADMIN_EDIT_VILLAGE . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -517,15 +517,15 @@ if ($page !== '') {
                 $village = $database->getVillage($did);
                 if ($village) {
                     $user    = $database->getUserArray($village['owner'], 1);
-                    $subpage = 'Edit Resources (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                    $subpage = ADMIN_EDIT_RESOURCES . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
                 } else {
                     // BUGFIX: original used $did which was only set in 'village' case,
                     // causing an undefined variable notice here. Now always defined above.
-                    $subpage = 'Edit Resources (ID ' . $did . ' not found)';
+                    $subpage = ADMIN_EDIT_RESOURCES . $did . ' not found)';
                     $village = null;
                 }
             } else {
-                $subpage = 'Edit Resources (no village)';
+                $subpage = ADMIN_EDIT_RESOURCES . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -534,9 +534,9 @@ if ($page !== '') {
             if ($did !== null) {
                 $village = $database->getVillage($did);
                 $user    = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Edit Troops (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_TROOPS . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Troops (no village)';
+                $subpage = ADMIN_EDIT_TROOPS . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -545,9 +545,9 @@ if ($page !== '') {
             if ($did !== null) {
                 $village = $database->getVillage($did);
                 $user    = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Upgrade Troops (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                $subpage = ADMIN_UPGRADE_TROOPS . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
-                $subpage = 'Upgrade Troops (no village)';
+                $subpage = ADMIN_UPGRADE_TROOPS . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -556,9 +556,9 @@ if ($page !== '') {
             if ($did !== null) {
                 $village = $database->getVillage($did);
                 $user    = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Edit Village (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                $subpage = ADMIN_EDIT_VILLAGE . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
-                $subpage = 'Edit Village (no village)';
+                $subpage = ADMIN_EDIT_VILLAGE . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -569,7 +569,7 @@ if ($page !== '') {
                 $alidata = $database->getAlliance($aid);
                 $subpage = $alidata ? 'Alliance (' . e($alidata['tag']) . ')' : 'Alliance (ID ' . $aid . ' not found)';
             } else {
-                $subpage = 'Alliance';
+                $subpage = ADMIN_ALLIANCE;
             }
             break;
 
@@ -579,7 +579,7 @@ if ($page !== '') {
                 $alidata = $database->getAlliance($aid);
                 $subpage = $alidata ? 'Edit Alliance (' . e($alidata['tag']) . ')' : 'Edit Alliance';
             } else {
-                $subpage = 'Edit Alliance';
+                $subpage = ADMIN_EDIT_ALLIANCE;
             }
             break;
 
@@ -589,7 +589,7 @@ if ($page !== '') {
                 $alidata = $database->getAlliance($aid);
                 $subpage = $alidata ? 'Delete Alliance (' . e($alidata['tag']) . ')' : 'Delete Alliance';
             } else {
-                $subpage = 'Delete Alliance';
+                $subpage = ADMIN_DELETE_ALLIANCE;
             }
             break;
 
@@ -598,9 +598,9 @@ if ($page !== '') {
             if ($did !== null) {
                 $village = $database->getVillage($did);
                 $user    = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Build Log (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                $subpage = ADMIN_BUILD_LOG . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
-                $subpage = 'Build Log (no village)';
+                $subpage = ADMIN_BUILD_LOG . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
 
@@ -609,9 +609,9 @@ if ($page !== '') {
             if ($did !== null) {
                 $village = $database->getVillage($did);
                 $user    = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Research Log (' . e($village['name']) . ' » ' . e($user['username']) . ')';
+                $subpage = ADMIN_RESEARCH_LOG . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
             } else {
-                $subpage = 'Research Log (no village)';
+                $subpage = ADMIN_RESEARCH_LOG . ' (' . ADMIN_NO_VILLAGE . ')';
             }
             break;
     }
@@ -803,7 +803,7 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                     ?>
                     Logged: <b><?php echo e($adminName); ?></b>
                     <span style="color:#999;font-size:11px">(<?php echo e($rank); ?>)</span>
-                    <a href="?action=logout" class="tz-logout">Logout</a>
+                    <a href="?action=logout" class="tz-logout"><?php echo ADMIN_LOGOUT; ?></a>
                 <?php } else { ?>
                     Not Logged in
                 <?php } ?>
@@ -829,75 +829,75 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                     <?php if ($_SESSION['access'] == ADMIN) { ?>
 
                     <ul id="menu">
-                        <li><a href="<?php echo e(HOMEPAGE); ?>">Server Homepage</a></li>
-                        <li><a href="index.php">Control Panel Home</a></li>
-                        <li><a href="<?php echo e(rtrim(SERVER, '/')); ?>/dorf1.php">Return to the server</a></li>
-                        <li><a href="?action=logout">Logout</a></li>
-                        <li class="sub"><a href="#">Server Info</a>
+                        <li><a href="<?php echo e(HOMEPAGE); ?>"><?php echo ADMIN_SERVER_HOMEPAGE; ?></a></li>
+                        <li><a href="index.php"><?php echo ADMIN_CONTROL_PANEL_HOME; ?></a></li>
+                        <li><a href="<?php echo e(rtrim(SERVER, '/')); ?>/dorf1.php"><?php echo ADMIN_RETURN_TO_THE_SERVER; ?></a></li>
+                        <li><a href="?action=logout"><?php echo ADMIN_LOGOUT; ?></a></li>
+                        <li class="sub"><a href="#"><?php echo ADMIN_SERVER_INFO; ?></a>
                             <ul>
-                                <li><a href="?p=server_info">Server Info</a></li>
-                                <li><a href="?p=online">Online Users</a></li>
-                                <li><a href="?p=notregistered">Players Not Activated</a></li>
-                                <li><a href="?p=inactive">Players Inactivate</a></li>
-                                <li><a href="?p=report">Players Report</a></li>
-                                <li><a href="?p=msg">Players Message</a></li>
-                                <li><a href="?p=map">Map</a></li>
-                                <li><a href="?p=map_tile">Map Tile</a></li>
-                                <li><a href="?p=natars">Natars Management</a></li>
+                                <li><a href="?p=server_info"><?php echo ADMIN_SERVER_INFO; ?></a></li>
+                                <li><a href="?p=online"><?php echo ADMIN_ONLINE_USERS; ?></a></li>
+                                <li><a href="?p=notregistered"><?php echo ADMIN_PLAYERS_NOT_ACTIVATED; ?></a></li>
+                                <li><a href="?p=inactive"><?php echo ADMIN_PLAYERS_INACTIVATE; ?></a></li>
+                                <li><a href="?p=report"><?php echo ADMIN_PLAYERS_REPORT; ?></a></li>
+                                <li><a href="?p=msg"><?php echo ADMIN_PLAYERS_MESSAGE; ?></a></li>
+                                <li><a href="?p=map"><?php echo ADMIN_MAP; ?></a></li>
+                                <li><a href="?p=map_tile"><?php echo ADMIN_MAP_TILE; ?></a></li>
+                                <li><a href="?p=natars"><?php echo ADMIN_NATARS_MANAGEMENT; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Search</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_SEARCH; ?></a>
                             <ul>
-                                <li><a href="?p=search">General Search</a></li>
-                                <li><a href="?p=message">Search IGMs/Reports</a></li>
+                                <li><a href="?p=search"><?php echo ADMIN_GENERAL_SEARCH; ?></a></li>
+                                <li><a href="?p=message"><?php echo ADMIN_SEARCH_IGMS_REPORTS; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Messages</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_MESSAGES; ?></a>
                             <ul>
-                                <li><a href="admin.php?p=massmessage">Create Mass Message</a></li>
-                                <li><a href="admin.php?p=sysmessage">Create System Message</a></li>
+                                <li><a href="admin.php?p=massmessage"><?php echo ADMIN_CREATE_MASS_MESSAGE; ?></a></li>
+                                <li><a href="admin.php?p=sysmessage"><?php echo ADMIN_CREATE_SYSTEM_MESSAGE; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Ban</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_BAN; ?></a>
                             <ul>
-                                <li><a href="?p=ban">Ban/Unban Players</a></li>
-                                <li><a href="?p=cleanban">Clean Banlist Data</a></li>
+                                <li><a href="?p=ban"><?php echo ADMIN_BAN_UNBAN_PLAYERS; ?></a></li>
+                                <li><a href="?p=cleanban"><?php echo ADMIN_CLEAN_BANLIST_DATA; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Gold</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_GOLD; ?></a>
                             <ul>
-                                <li><a href="?p=gold">Give All Free Gold</a></li>
-                                <li><a href="?p=usergold">Give Free Gold To Specific User</a></li>
-                                <li><a href="?p=goldShop">Gold Shop &amp; Promo Codes</a></li>
-                                <li><a href="?p=maintenenceResetGold">Reset Gold</a></li>
+                                <li><a href="?p=gold"><?php echo ADMIN_GIVE_ALL_FREE_GOLD; ?></a></li>
+                                <li><a href="?p=usergold"><?php echo ADMIN_GIVE_FREE_GOLD_TO_SPECIFIC_USER; ?></a></li>
+                                <li><a href="?p=goldShop"><?php echo ADMIN_GOLD_SHOP_PROMO_CODES; ?></a></li>
+                                <li><a href="?p=maintenenceResetGold"><?php echo ADMIN_RESET_GOLD; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Plus &amp; Res Bonus</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_PLUS_RES_BONUS; ?></a>
                             <ul>
-                                <li><a href="?p=givePlus">Give All Plus</a></li>
-                                <li><a href="?p=maintenenceResetPlus">Reset Plus</a></li>
-                                <li><a href="?p=givePlusRes">Give All Res Bonus</a></li>
-                                <li><a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a></li>
+                                <li><a href="?p=givePlus"><?php echo ADMIN_GIVE_ALL_PLUS; ?></a></li>
+                                <li><a href="?p=maintenenceResetPlus"><?php echo ADMIN_RESET_PLUS; ?></a></li>
+                                <li><a href="?p=givePlusRes"><?php echo ADMIN_GIVE_ALL_RES_BONUS; ?></a></li>
+                                <li><a href="?p=maintenenceResetPlusBonus"><?php echo ADMIN_RESET_RES_BONUS; ?></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Users</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_USERS; ?></a>
                             <ul>
-                                <li><a href="?p=users">List Users</a></li>
-                                <li><a href="?p=addUsers">Create Users</a></li>
-								<li><a href="?p=multiacc"><font color="Red"><b>Multi-Account Detection</b></font></a></li>
-                                <li><a href="?p=pushprot"><font color="Red"><b>Push Protection</b></font></a></li>
-                                <li><a href="?p=blockReg"><font color="Red"><b>Registration Blocklist</b></font></a></li>
+                                <li><a href="?p=users"><?php echo ADMIN_LIST_USERS; ?></a></li>
+                                <li><a href="?p=addUsers"><?php echo ADMIN_CREATE_USERS; ?></a></li>
+								<li><a href="?p=multiacc"><font color="Red"><b><?php echo ADMIN_MULTI_ACCOUNT_DETECTION; ?></b></font></a></li>
+                                <li><a href="?p=pushprot"><font color="Red"><b><?php echo ADMIN_PUSH_PROTECTION; ?></b></font></a></li>
+                                <li><a href="?p=blockReg"><font color="Red"><b><?php echo ADMIN_REGISTRATION_BLOCKLIST; ?></b></font></a></li>
                             </ul>
                         </li>
-                        <li class="sub"><a href="#">Admin</a>
+                        <li class="sub"><a href="#"><?php echo ADMIN_ADMIN; ?></a>
                             <ul>
-                                <li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
-								<li><a href="?p=questEditor"><font color="Red"><b>Quest Editor</b></font></a></li>
-                                <li><a href="?p=heatmap"><font color="Red"><b>World Map Heatmap</b></font></a></li>
-                                <li><a href="?p=debug_log">Debug Error Log</a></li>
-                                <li><a href="?p=config">Server Settings</a></li>
-                                <li><a href="?p=maintenance">Server Maintenance</a></li>
-                                <li><a href="?p=resetServer">Server Resetting</a></li>
+                                <li><a href="?p=admin_log"><font color="Red"><b><?php echo ADMIN_ADMIN_LOG; ?></b></font></a></li>
+								<li><a href="?p=questEditor"><font color="Red"><b><?php echo ADMIN_QUEST_EDITOR; ?></b></font></a></li>
+                                <li><a href="?p=heatmap"><font color="Red"><b><?php echo ADMIN_WORLD_MAP_HEATMAP; ?></b></font></a></li>
+                                <li><a href="?p=debug_log"><?php echo ADMIN_DEBUG_ERROR_LOG; ?></a></li>
+                                <li><a href="?p=config"><?php echo ADMIN_SERVER_SETTINGS; ?></a></li>
+                                <li><a href="?p=maintenance"><?php echo ADMIN_SERVER_MAINTENANCE; ?></a></li>
+                                <li><a href="?p=resetServer"><?php echo ADMIN_SERVER_RESETTING; ?></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -905,18 +905,18 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                     <?php } elseif ($_SESSION['access'] == MULTIHUNTER) { ?>
 
                     <ul id="menu">
-                        <li><a href="<?php echo e(HOMEPAGE); ?>">Server Homepage</a></li>
-                        <li><a href="index.php">Control Panel Home</a></li>
-                        <li><a href="<?php echo e(rtrim(SERVER, '/')); ?>/nachrichten.php">In-Game Messages</a></li>
-                        <li><a href="?p=server_info">Server Info</a></li>
-                        <li><a href="?p=online">Online users</a></li>
-                        <li><a href="?p=search">Search</a></li>
-                        <li><a href="?p=message">Msg/Rep</a></li>
-                        <li><a href="?p=ban">Ban</a></li>
-                        <li><a href="?p=multiacc">Multi-Account Detection</a></li>
-                        <li><a href="?p=pushprot">Push Protection</a></li>
-                        <li><a href="?p=heatmap">World Map Heatmap</a></li>
-                        <li><a href="?action=logout">Logout</a></li>
+                        <li><a href="<?php echo e(HOMEPAGE); ?>"><?php echo ADMIN_SERVER_HOMEPAGE; ?></a></li>
+                        <li><a href="index.php"><?php echo ADMIN_CONTROL_PANEL_HOME; ?></a></li>
+                        <li><a href="<?php echo e(rtrim(SERVER, '/')); ?>/nachrichten.php"><?php echo ADMIN_IN_GAME_MESSAGES; ?></a></li>
+                        <li><a href="?p=server_info"><?php echo ADMIN_SERVER_INFO; ?></a></li>
+                        <li><a href="?p=online"><?php echo ADMIN_ONLINE_USERS; ?></a></li>
+                        <li><a href="?p=search"><?php echo ADMIN_SEARCH; ?></a></li>
+                        <li><a href="?p=message"><?php echo ADMIN_MSG_REP; ?></a></li>
+                        <li><a href="?p=ban"><?php echo ADMIN_BAN; ?></a></li>
+                        <li><a href="?p=multiacc"><?php echo ADMIN_MULTI_ACCOUNT_DETECTION; ?></a></li>
+                        <li><a href="?p=pushprot"><?php echo ADMIN_PUSH_PROTECTION; ?></a></li>
+                        <li><a href="?p=heatmap"><?php echo ADMIN_WORLD_MAP_HEATMAP; ?></a></li>
+                        <li><a href="?action=logout"><?php echo ADMIN_LOGOUT; ?></a></li>
                     </ul>
 
                     <?php } ?>
