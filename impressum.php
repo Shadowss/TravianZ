@@ -94,7 +94,7 @@ AccessLogger::logRequest();
     <div id="country_select"></div>
 
     <div id="header">
-        <h1>Welcome to <?php echo SERVER_NAME; ?></h1>
+        <h1><?php echo PUBLIC_WELCOME_TO; ?> <?php echo SERVER_NAME; ?></h1>
     </div>
 
     <div id="navigation">
@@ -105,11 +105,11 @@ AccessLogger::logRequest();
 
         <table class="menu">
             <tr>
-                <td><a href="tutorial.php"><span>Tutorial</span></a></td>
-                <td><a href="anleitung.php"><span>Manual</span></a></td>
-                <td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span>Forum</span></a></td>
-                <td><a href="index.php?signup"><span>Register</span></a></td>
-                <td><a href="index.php?login"><span>Login</span></a></td>
+                <td><a href="tutorial.php"><span><?php echo TUTORIAL; ?></span></a></td>
+                <td><a href="anleitung.php"><span><?php echo PUBLIC_MANUAL; ?></span></a></td>
+                <td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span><?php echo FORUM; ?></span></a></td>
+                <td><a href="index.php?signup"><span><?php echo PUBLIC_REGISTER; ?></span></a></td>
+                <td><a href="index.php?login"><span><?php echo LOGIN; ?></span></a></td>
             </tr>
         </table>
 
@@ -129,15 +129,15 @@ AccessLogger::logRequest();
                 <b>Initiator & Lead Developer:</b><br/>
                 Shadow (Catalin Novgorodschi)<br/><br/>
 
-                <b>About this Project:</b><br/>
+                <b><?php echo PUBLIC_ABOUT_PROJECT; ?></b><br/>
                 Open-source Travian 3.6 engine modernization project focused on performance,
                 stability and gameplay preservation.<br/><br/>
 
-                <b>Main Goals:</b><br/>
+                <b><?php echo PUBLIC_MAIN_GOALS; ?></b><br/>
                 - Preserve classic Travian gameplay<br/>
                 - Refactor legacy codebase<br/>
                 - Improve performance and stability<br/>
-                - Add new tribes and mechanics<br/>
+                <?php echo PUBLIC_ADD_TRIBES; ?><br/>
                 - Maintain community-driven development<br/><br/>
 
                 <b>Source Code:</b><br/>
@@ -146,7 +146,7 @@ AccessLogger::logRequest();
                 </a><br/><br/>
 
                 <b>Disclaimer:</b><br/>
-                This is an unofficial fan-made project and is not affiliated with Travian Games GmbH.<br/><br/>
+                <?php echo PUBLIC_UNOFFICIAL_PROJECT; ?><br/><br/>
 
                 © 2010-<?php echo date('Y'); ?> TravianZ Project
 
@@ -169,7 +169,7 @@ AccessLogger::logRequest();
     <div class="overlay_content">
 
         <a href="index.php" class="closer">
-            <img class="dynamic_img" alt="Close" src="img/un/x.gif" />
+            <img class="dynamic_img" alt="<?php echo PUBLIC_CLOSE; ?>" src="img/un/x.gif" />
         </a>
 
         <h2>Anleitung</h2>

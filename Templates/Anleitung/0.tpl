@@ -1,20 +1,20 @@
 <p>
 
-    You can choose between three tribes in Travian: Romans, Gauls and Teutons. Each tribe has advantages and disadvantages and their troops are also very different. It is important to choose the tribe that fits you perfectly.</p>
+    <?php echo ANL_TRIBES_INTRO; ?></p>
 
 
 
-<h2>The Romans</h2>
+<h2><?php echo ANL_ROMANS; ?></h2>
 
 <p>
 
-	<img align="right" src="img/un/h//roemer.jpg" width="128" height="156" border="0" alt="Roman">
+	<img align="right" src="img/un/h//roemer.jpg" width="128" height="156" border="0" alt="<?php echo ANL_ROMAN_ALT; ?>">
 
-Because of its high level of social and technological development the Romans are masters at building and its coordination. Also, their troops are part of the elite in Travian. They are very balanced and useful in attacking and defending.<br><br>
+<?php echo ANL_ROMAN_DESC_1; ?><br><br>
 
-To guarantee this variety the Roman troops are trained for a very long time and their training is expensive. Their infantry is a living legend, but their defence against enemy cavalry isn't as good as that of the other tribes. The amount of resources a Roman merchant is able to carry is very low.<br><br>
+<?php echo ANL_ROMAN_DESC_2; ?><br><br>
 
-Because they are weak at the beginning of the game, they are a bad choice for beginners.</p>
+<?php echo ANL_ROMAN_DESC_3; ?></p>
 
 
 
@@ -26,7 +26,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	<td colspan="10">
 
-	    <h3>The Roman troops</h3>
+	    <h3><?php echo ANL_ROMAN_TROOPS; ?></h3>
 
 	</td>
 
@@ -42,19 +42,19 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	<th>
 
-	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="Attack value" title="Attack value" />
+	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="<?php echo ANL_ATTACK_VALUE; ?>" title="<?php echo ANL_ATTACK_VALUE; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="Defence value against infantry" title="Defence value against infantry" />
+	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_INFANTRY; ?>" title="<?php echo ANL_DEF_INFANTRY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="Defence value against cavalry" title="Defence value against cavalry" />
+	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_CAVALRY; ?>" title="<?php echo ANL_DEF_CAVALRY; ?>" />
 
 	</th>
 
@@ -378,17 +378,17 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 
 
-<h3>The specialties</h3>
+<h3><?php echo ANL_SPECIALTIES; ?></h3>
 
 
 
 <ul class="characteristics">
 
-	<li>Can raise or extend a building and resource field simultaneously</li>
+	<li><?php echo ANL_ROMAN_DUAL_BUILD; ?></li>
 
-<li>The City Wall gives a high defence bonus</li>
+<li><?php echo ANL_ROMAN_WALL_BONUS; ?></li>
 
-<li>Merchants can carry 500 units of resources (speed: 16 fields/hour)</li>
+<li><?php echo ANL_ROMAN_MERCHANT; ?></li>
 
 <li>Very powerful infantry, average cavalry</li>
 
@@ -398,17 +398,17 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 
 
-<h2>The Gauls</h2>
+<h2><?php echo ANL_GAULS; ?></h2>
 
 <p>
 
-	<img align="right" src="img/un/h//gallier.jpg" width="96" height="156" border="0" alt="The Gauls">
+	<img align="right" src="img/un/h//gallier.jpg" width="96" height="156" border="0" alt="<?php echo ANL_GAUL_ALT; ?>">
 
-The Gauls are the most peaceful of all three tribes in Travian. Their troops are trained for an excellent defence, but their ability to attack can still compete with the other two tribes. The Gauls are born riders and their horses are famous for their speed. This means that their riders can hit the enemy exactly where they can cause the most damage and swiftly take care of them.<br><br>
+<?php echo ANL_GAUL_DESC_1; ?><br><br>
 
-This tribe is very easy to defend, but an aggressive tactic is possible too. This gives you the opportunity to develop into any possible strategic direction (defensive or aggressive, lone wolf or reliable helper, merchant or plunderer, infantry or cavalry, settler or conqueror), but you need a bit of experience and talent.<br><br>
+<?php echo ANL_GAUL_DESC_2; ?><br><br>
 
-For beginners and those players who don't know exactly what they want to play, the Gauls are the ideal choice.</p>
+<?php echo ANL_GAUL_DESC_3; ?></p>
 
 
 
@@ -420,7 +420,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	<td colspan="10">
 
-	    <h3>The Gallic Troops</h3>
+	    <h3><?php echo ANL_GALLIC_TROOPS; ?></h3>
 
 	</td>
 
@@ -436,19 +436,19 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	<th>
 
-	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="Attack value" title="Attack value" />
+	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="<?php echo ANL_ATTACK_VALUE; ?>" title="<?php echo ANL_ATTACK_VALUE; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="Defence value against infantry" title="Defence value against infantry" />
+	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_INFANTRY; ?>" title="<?php echo ANL_DEF_INFANTRY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="Defence value against cavalry" title="Defence value against cavalry" />
+	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_CAVALRY; ?>" title="<?php echo ANL_DEF_CAVALRY; ?>" />
 
 	</th>
 
@@ -772,19 +772,19 @@ For beginners and those players who don't know exactly what they want to play, t
 
 
 
-<h3>The specialties</h3>
+<h3><?php echo ANL_SPECIALTIES; ?></h3>
 
 
 
 <ul class="characteristics">
 
-	<li>Speed bonus: Fastest troops in the game</li>
+	<li><?php echo ANL_GAUL_SPEED_BONUS; ?></li>
 
-<li>The palisade gives an average defence bonus</li>
+<li><?php echo ANL_GAUL_PALISADE_BONUS; ?></li>
 
-<li>Merchants can carry 750 units of resources (speed: 24 fields/hour)</li>
+<li><?php echo ANL_GAUL_MERCHANT; ?></li>
 
-<li>Cranny is twice as big</li>
+<li><?php echo ANL_CRANNY_DOUBLE; ?></li>
 
 <li>Expensive siege weapons</li>
 
@@ -794,19 +794,19 @@ For beginners and those players who don't know exactly what they want to play, t
 
 
 
-<h2>The Teutons</h2>
+<h2><?php echo ANL_TEUTONS; ?></h2>
 
 <p>
 
-	<img align="left" src="img/un/h//germane.jpg" width="104" height="151" border="0" alt="Teuton">
+	<img align="left" src="img/un/h//germane.jpg" width="104" height="151" border="0" alt="<?php echo ANL_TEUTON_ALT; ?>">
 
-The Teutons are the most aggressive tribe. Their troops are notorious and feared for their rage and frenzy when they attack. They move around as a plundering horde, not even afraid of death. 
+<?php echo ANL_TEUTON_DESC_1; ?>
 
 <br><br>
 
-However, they lack the military discipline of the Gauls or Romans which causes them to be weak in speed and defence.<br><br><br>
+<?php echo ANL_TEUTON_DESC_2; ?><br><br><br>
 
-For aggressive and experienced players the Teutons are an excellent choice!</p>
+<?php echo ANL_TEUTON_DESC_3; ?></p>
 
 
 
@@ -818,7 +818,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	<td colspan="10">
 
-	    <h3>The Teutonic Troops</h3>
+	    <h3><?php echo ANL_TEUTONIC_TROOPS; ?></h3>
 
 	</td>
 
@@ -834,19 +834,19 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	<th>
 
-	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="Attack value" title="Attack value" />
+	    <img src="img/un/h/att_all.gif" width="16" height="16" border="0" alt="<?php echo ANL_ATTACK_VALUE; ?>" title="<?php echo ANL_ATTACK_VALUE; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="Defence value against infantry" title="Defence value against infantry" />
+	    <img src="img/un/h/def_i.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_INFANTRY; ?>" title="<?php echo ANL_DEF_INFANTRY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="Defence value against cavalry" title="Defence value against cavalry" />
+	    <img src="img/un/h/def_c.gif" width="16" height="16" border="0" alt="<?php echo ANL_DEF_CAVALRY; ?>" title="<?php echo ANL_DEF_CAVALRY; ?>" />
 
 	</th>
 
@@ -1170,28 +1170,28 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 
 
-<h3>The specialties</h3>
+<h3><?php echo ANL_SPECIALTIES; ?></h3>
 
 
 
 <ul class="characteristics">
 
-	<li>Plunder bonus: enemy crannies only hides 66% of the normal amount in Travian version 2.5 and 3, and 80% of the normal amount in Travian version 3.5.</li>
+	<li><?php echo ANL_TEUTON_PLUNDER_BONUS; ?></li>
 
-<li>The earth wall is almost indestructible but only gives a minimal defence bonus</li>
+<li><?php echo ANL_TEUTON_EARTH_WALL; ?></li>
 
-<li>Merchants can carry 1000 units of resources (speed: 12 fields/hour)</li>
+<li><?php echo ANL_TEUTON_MERCHANT; ?></li>
 
-<li>Cheap, fast troops which are excellent plunderers</li>
+<li><?php echo ANL_TEUTON_CHEAP_TROOPS; ?></li>
 
-<li>Weak defence</li></ul>
+<li><?php echo ANL_TEUTON_WEAK_DEFENCE; ?></li></ul>
 
 
 
-	</div> 
-	<div class="clear"></div> 
-</div> 
- 
+	</div>
+	<div class="clear"></div>
+</div>
+
 <div id="footer">
 
 	<div class="container">
@@ -1202,5 +1202,5 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</div>
 
-</div> 
-</div> 
+</div>
+</div>

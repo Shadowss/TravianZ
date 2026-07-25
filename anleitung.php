@@ -47,7 +47,7 @@ AccessLogger::logRequest();
 
 </div>
 <div id="header">
-	<h1>Welcome to <?php echo SERVER_NAME; ?></h1>
+	<h1><?php echo PUBLIC_WELCOME_TO; ?> <?php echo SERVER_NAME; ?></h1>
 </div>
 
 <div id="navigation">
@@ -58,19 +58,19 @@ AccessLogger::logRequest();
 
 	<tr>
 
-		<td><a href="tutorial.php"><span>Tutorial</span></a></td>
+		<td><a href="tutorial.php"><span><?php echo TUTORIAL; ?></span></a></td>
 
-		<td><a href="anleitung.php"><span>Manual</span></a></td>
+		<td><a href="anleitung.php"><span><?php echo PUBLIC_MANUAL; ?></span></a></td>
 
-		<td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span>Forum</span></a></td>
-
-
+		<td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span><?php echo FORUM; ?></span></a></td>
 
 
 
-		<td><a href="index.php?signup"><span>Register</span></a></td>
 
-		<td><a href="index.php?login"><span>Login</span></a></td>
+
+		<td><a href="index.php?signup"><span><?php echo PUBLIC_REGISTER; ?></span></a></td>
+
+		<td><a href="index.php?login"><span><?php echo LOGIN; ?></span></a></td>
 
 </tr>
 
@@ -88,17 +88,17 @@ AccessLogger::logRequest();
 	<div class="grit">
 
 
-<h1>Manual</h1>
+<h1><?php echo PUBLIC_MANUAL; ?></h1>
 
 
 
 <p class="submenu">
 
-<a href="anleitung.php">The tribes</a> |
+<a href="anleitung.php"><?php echo PUBLIC_TRIBES; ?></a> |
 
-<a href="anleitung.php?s=1">The buildings</a> |
+<a href="anleitung.php?s=1"><?php echo BUILDINGS; ?></a> |
 
-<a href="anleitung.php?s=3">FAQ</a>
+<a href="anleitung.php?s=3"><?php echo MANUAL_FAQ; ?></a>
 
 </p>
 
@@ -141,7 +141,7 @@ include("Templates/Anleitung/4.tpl"); }
 
 <div class="overlay_content">
 
-<a href="index.php" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
+<a href="index.php" class="closer"><img class="dynamic_img" alt="<?php echo PUBLIC_CLOSE; ?>" src="img/un/x.gif" /></a>
 
 <h2>Anleitung</h2>
 

@@ -1,15 +1,15 @@
 
 <p class=f9>
 
-    At the beginning you should try to get a good economic basis. In order to do so you have to extend the 18 resource fields (village overview). There are four different types of resource fields: Woodcutter, Clay pit, Iron mine and Cropland. If you click one of them, you will get more information and the option to extend it.
+    <?php echo ANL_BUILDINGS_INTRO_1; ?>
 
 <br><br>
 
-Later in the game the buildings in the village become important too. In order to construct a new building you have to click on one of the green ovals. A list with every building that is available will appear.
+<?php echo ANL_BUILDINGS_INTRO_2; ?>
 
 <br><br>
 
-Some buildings can only be built if you fulfil the prerequisites which are other buildings.</p>
+<?php echo ANL_BUILDINGS_INTRO_3; ?></p>
 
 <h2><?php echo MAINBUILDING; ?></h2>
 
@@ -21,13 +21,13 @@ Some buildings can only be built if you fulfil the prerequisites which are other
 
 <img src="img/un/h/gid15.gif" width=166 height=150 border=0 alt="<?php echo MAINBUILDING; ?>" title="<?php echo MAINBUILDING; ?>" align="left" />
 
-The village's master builders live in the main building. The higher its level the faster your master builders complete the construction of new buildings.
+<?php echo ANL_MAIN_BUILDING_DESC; ?>
 
 <br><br>
 
-<b>Tribe advantage:</b><br>
+<b><?php echo ANL_TRIBE_ADVANTAGE; ?></b><br>
 
-Romans: Can build/extend a resource field and a village building at the same time.    <br>
+<?php echo ANL_ROMAN_BUILD_ADVANTAGE; ?>    <br>
 
     <br>
 
@@ -69,7 +69,7 @@ Romans: Can build/extend a resource field and a village building at the same tim
 
 <img src="img/un/h/gid10.gif" width=166 height=150 border=0 alt="<?php echo WAREHOUSE; ?>" title="<?php echo WAREHOUSE; ?>" align="right" />
 
-The resources lumber, clay and iron are stored in your warehouse. By increasing its level you increase your warehouse's capacity.    <br>
+<?php echo ANL_WAREHOUSE_DESC; ?>    <br>
 
     <br>
 
@@ -99,7 +99,7 @@ The resources lumber, clay and iron are stored in your warehouse. By increasing 
 
     <br>
 
-    Main Building Level 1</p>
+    <?php echo ANL_REQ_MAIN_BUILDING_1; ?></p>
 
 <h2><?php echo GRANARY; ?></h2>
 
@@ -111,7 +111,7 @@ The resources lumber, clay and iron are stored in your warehouse. By increasing 
 
 <img src="img/un/h/gid11.gif" width=166 height=150 border=0 alt="<?php echo GRANARY; ?>" title="<?php echo GRANARY; ?>" align="right" />
 
-The crop produced by your farms is stored in the granary. By increasing its level you increase the granary?s capacity.    <br>
+<?php echo ANL_GRANARY_DESC; ?>    <br>
 
     <br>
 
@@ -141,7 +141,7 @@ The crop produced by your farms is stored in the granary. By increasing its leve
 
     <br>
 
-    Main Building Level 1</p>
+    <?php echo ANL_REQ_MAIN_BUILDING_1; ?></p>
 
 <h2><?php echo CRANNY; ?></h2>
 
@@ -153,15 +153,15 @@ The crop produced by your farms is stored in the granary. By increasing its leve
 
 <img src="img/un/h/gid23.gif" width=166 height=150 border=0 alt="<?php echo CRANNY; ?>" title="<?php echo CRANNY; ?>" align="left" />
 
-The cranny is used to hide some of your resources when the village is attacked. These resources cannot be stolen. At level 1 100 resources are hidden.
+<?php echo ANL_CRANNY_DESC; ?>
 
 <br><br>
 
-<b>Tribe advantage:</b><br>
+<b><?php echo ANL_TRIBE_ADVANTAGE; ?></b><br>
 
-Gauls: The cranny is twice as big.<br>
+<?php echo ANL_GAUL_CRANNY; ?><br>
 
-Teutons: Enemy crannies only hides 66% of the normal amount in Travian version 2.5 and 3, and 80% of the normal amount in Travian version 3.5.    <br>
+<?php echo ANL_TEUTON_CRANNY; ?>    <br>
 
     <br>
 
@@ -203,7 +203,7 @@ Teutons: Enemy crannies only hides 66% of the normal amount in Travian version 2
 
 <img src="img/un/h/gid18.gif" width=166 height=150 border=0 alt="<?php echo EMBASSY; ?>" title="<?php echo EMBASSY; ?>" align="right" />
 
-In order to join an alliance you need an embassy. With an embassy level 3 you can even found one yourself. With each higher level the maximum size of the alliance increases by 3.    <br>
+<?php echo ANL_EMBASSY_DESC; ?>    <br>
 
     <br>
 
@@ -233,7 +233,7 @@ In order to join an alliance you need an embassy. With an embassy level 3 you ca
 
     <br>
 
-    Main Building Level 1</p>
+    <?php echo ANL_REQ_MAIN_BUILDING_1; ?></p>
 
 <h2><?php echo RALLYPOINT; ?></h2>
 
@@ -245,7 +245,7 @@ In order to join an alliance you need an embassy. With an embassy level 3 you ca
 
 <img src="img/un/h/gid16.gif" width=166 height=150 border=0 alt="<?php echo RALLYPOINT; ?>" title="<?php echo RALLYPOINT; ?>" align="right" />
 
-At the rally point you can instruct your troops and can see the sender of oncoming troops. The rally point can only be build at the building site right of the village centre. The higher its level the more targets for the catapults become available.    <br>
+<?php echo ANL_RALLY_POINT_DESC; ?>    <br>
 
     <br>
 
@@ -287,21 +287,21 @@ At the rally point you can instruct your troops and can see the sender of oncomi
 
 <img src="img/un/h/gid17.gif" width=166 height=150 border=0 alt="<?php echo MARKETPLACE; ?>" title="<?php echo MARKETPLACE; ?>" align="left" />
 
-At the marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.
+<?php echo ANL_MARKETPLACE_DESC; ?>
 
 <br><br>
 
-<b>Tribe advantage:</b><br>
+<b><?php echo ANL_TRIBE_ADVANTAGE; ?></b><br>
 
-Romans: Each merchant can carry 500 resources.<br>
+<?php echo ANL_ROMAN_MERCHANT_500; ?><br>
 
 Velocity: 16 fields/hour.<br>
 
-Teutons: Each merchant can carry 1000 resources.<br>
+<?php echo ANL_TEUTON_MERCHANT_1000; ?><br>
 
 Velocity: 12 fields/hour.<br>
 
-Gauls: Each merchant can carry 750 resources.<br>
+<?php echo ANL_GAUL_MERCHANT_750; ?><br>
 
 Velocity: 24 fields/hour.    <br>
 
@@ -333,7 +333,7 @@ Velocity: 24 fields/hour.    <br>
 
     <br>
 
-    Main Building Level 3, Warehouse Level 1, Granary Level 1</p>
+    <?php echo ANL_REQ_MB3_WH1_GR1; ?></p>
 
 <h2><?php echo BARRACKS; ?></h2>
 
@@ -345,7 +345,7 @@ Velocity: 24 fields/hour.    <br>
 
 <img src="img/un/h/gid19.gif" width=166 height=150 border=0 alt="<?php echo BARRACKS; ?>" title="<?php echo BARRACKS; ?>" align="left" />
 
-Infantry can be trained in the barracks. The higher its level the faster the troops are trained.    <br>
+<?php echo ANL_BARRACKS_DESC; ?>    <br>
 
     <br>
 
@@ -375,7 +375,7 @@ Infantry can be trained in the barracks. The higher its level the faster the tro
 
     <br>
 
-    Rally Point Level 1, Main Building Level 3</p>
+    <?php echo ANL_REQ_RP1_MB3; ?></p>
 
 <h2><?php echo STABLE; ?></h2>
 
@@ -387,7 +387,7 @@ Infantry can be trained in the barracks. The higher its level the faster the tro
 
 <img src="img/un/h/gid20.gif" width=166 height=150 border=0 alt="<?php echo STABLE; ?>" title="<?php echo STABLE; ?>" align="left" />
 
-Cavalry is trained in the stable. The higher its level the faster the troops are trained.    <br>
+<?php echo ANL_STABLE_DESC; ?>    <br>
 
     <br>
 
@@ -417,7 +417,7 @@ Cavalry is trained in the stable. The higher its level the faster the troops are
 
     <br>
 
-    Blacksmith Level 3, Academy Level 5</p>
+    <?php echo ANL_REQ_BLACKSMITH3_ACADEMY5; ?></p>
 
 <h2><?php echo WORKSHOP; ?></h2>
 
@@ -429,7 +429,7 @@ Cavalry is trained in the stable. The higher its level the faster the troops are
 
 <img src="img/un/h/gid21.gif" width=166 height=150 border=0 alt="<?php echo WORKSHOP; ?>" title="<?php echo WORKSHOP; ?>" align="left" />
 
-Siege engines like catapults and rams can be built in the workshop. The higher its level the faster the units are produced.    <br>
+<?php echo ANL_WORKSHOP_DESC; ?>    <br>
 
     <br>
 
@@ -459,7 +459,7 @@ Siege engines like catapults and rams can be built in the workshop. The higher i
 
     <br>
 
-    Academy Level 10, Main Building Level 5</p>
+    <?php echo ANL_REQ_ACADEMY10_MB5; ?></p>
 
 <h2><?php echo ACADEMY; ?></h2>
 
@@ -471,7 +471,7 @@ Siege engines like catapults and rams can be built in the workshop. The higher i
 
 <img src="img/un/h/gid22.gif" width=166 height=150 border=0 alt="<?php echo ACADEMY; ?>" title="<?php echo ACADEMY; ?>" align="right" />
 
-New unit types can be developed in the academy. By increasing its level you can order the research of better units.    <br>
+<?php echo ANL_ACADEMY_DESC; ?>    <br>
 
     <br>
 
@@ -501,7 +501,7 @@ New unit types can be developed in the academy. By increasing its level you can 
 
     <br>
 
-    Barracks Level 3, Main Building Level 3</p>
+    <?php echo ANL_REQ_BARRACKS3_MB3; ?></p>
 
 <h2><?php echo BLACKSMITH; ?></h2>
 
@@ -513,7 +513,7 @@ New unit types can be developed in the academy. By increasing its level you can 
 
 <img src="img/un/h/gid12.gif" width=166 height=150 border=0 alt="<?php echo BLACKSMITH; ?>" title="<?php echo BLACKSMITH; ?>" align="left" />
 
-Your warriors' weapons are enhanced in the blacksmith?s melting furnaces. By increasing its level you can order the fabrication of even better weapons.    <br>
+<?php echo ANL_BLACKSMITH_DESC; ?>    <br>
 
     <br>
 
@@ -543,7 +543,7 @@ Your warriors' weapons are enhanced in the blacksmith?s melting furnaces. By inc
 
     <br>
 
-    Main Building Level 3, Academy Level 3</p>
+    <?php echo ANL_REQ_MB3_ACADEMY3; ?></p>
 
 <h2><?php echo ARMOURY; ?></h2>
 
@@ -555,7 +555,7 @@ Your warriors' weapons are enhanced in the blacksmith?s melting furnaces. By inc
 
 <img src="img/un/h/gid13.gif" width=166 height=150 border=0 alt="<?php echo ARMOURY; ?>" title="<?php echo ARMOURY; ?>" align="right" />
 
-Your warriors' armour is enhanced in the armoury's melting furnaces. By increasing its level you can order the fabrication of even better armour.    <br>
+<?php echo ANL_ARMOURY_DESC; ?>    <br>
 
     <br>
 
@@ -585,7 +585,7 @@ Your warriors' armour is enhanced in the armoury's melting furnaces. By increasi
 
     <br>
 
-    Main Building Level 3, Academy Level 1</p>
+    <?php echo ANL_REQ_MB3_ACADEMY1; ?></p>
 
 <h2><?php echo PALACE; ?></h2>
 
@@ -597,15 +597,15 @@ Your warriors' armour is enhanced in the armoury's melting furnaces. By increasi
 
 <img src="img/un/h/gid26.gif" width=166 height=150 border=0 alt="<?php echo PALACE; ?>" title="<?php echo PALACE; ?>" align="left" />
 
-The King or Queen of the empire lives in the palace. The palace can only be built in one village at a time and can be used to make a village the capital. Capitals cannot be conquered.
+<?php echo ANL_PALACE_DESC; ?>
 
 <br><br>
 
-At level 10, 15 and 20 three settlers or one administrator (Senator, Chief or Chieftain) can be trained.
+<?php echo ANL_PALACE_SETTLERS_ADMIN; ?>
 
 <br><br>
 
-The Capital is the only place a stonemason's lodge can be erected. Also the capital is the only village where resource fields can be extended beyond level 10.    <br>
+<?php echo ANL_CAPITAL_DESC; ?>    <br>
 
     <br>
 
@@ -635,7 +635,7 @@ The Capital is the only place a stonemason's lodge can be erected. Also the capi
 
     <br>
 
-    Embassy Level 1, Main Building Level 5, <strike><?php echo RESIDENCE; ?></strike></p>
+    <?php echo ANL_REQ_EMBASSY1_MB5; ?> <strike><?php echo RESIDENCE; ?></strike></p>
 
 <h2><?php echo RESIDENCE; ?></h2>
 
@@ -647,11 +647,11 @@ The Capital is the only place a stonemason's lodge can be erected. Also the capi
 
 <img src="img/un/h/gid25.gif" width=166 height=150 border=0 alt="<?php echo RESIDENCE; ?>" title="<?php echo RESIDENCE; ?>" align="left" />
 
-The residence is a small palace where the king or queen lives when he or she visits the village. The residence protects the village against enemies who want to conquer it as long as it is not destroyed. 
+<?php echo ANL_RESIDENCE_DESC; ?>
 
 <br><br>
 
-At level 10 and 20 three settlers or one administrator (Senator, Chief or Chieftain) can be trained.    <br>
+<?php echo ANL_RESIDENCE_SETTLERS_ADMIN; ?>    <br>
 
     <br>
 
@@ -681,7 +681,7 @@ At level 10 and 20 three settlers or one administrator (Senator, Chief or Chieft
 
     <br>
 
-    Main Building Level 5, <strike><?php echo PALACE; ?></strike></p>
+    <?php echo ANL_REQ_MB5; ?> <strike><?php echo PALACE; ?></strike></p>
 
 <h2><?php echo TRADEOFFICE; ?></h2>
 
@@ -693,17 +693,17 @@ At level 10 and 20 three settlers or one administrator (Senator, Chief or Chieft
 
 <img src="img/un/h/gid28.gif" width=166 height=150 border=0 alt="<?php echo TRADEOFFICE; ?>" title="<?php echo TRADEOFFICE; ?>" align="left" />
 
-In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.
+<?php echo ANL_TRADE_OFFICE_DESC; ?>
 
 <br><br>
 
-With each level the capacity increases by 10%. At level 20 your merchants can carry thrice as much as normal.
+<?php echo ANL_TRADE_OFFICE_CAPACITY; ?>
 
 <br><br>
 
-<b>Tribe advantage:</b><br>
+<b><?php echo ANL_TRIBE_ADVANTAGE; ?></b><br>
 
-Romans: In Travian version 3.5 the Roman trade office increases the capacity by 20% per level.    <br>
+<?php echo ANL_ROMAN_TRADE_OFFICE; ?>    <br>
 
     <br>
 
@@ -733,7 +733,7 @@ Romans: In Travian version 3.5 the Roman trade office increases the capacity by 
 
     <br>
 
-    Marketplace Level 20, Stable Level 10</p>
+    <?php echo ANL_REQ_MARKET20_STABLE10; ?></p>
 
 <h2><?php echo TOURNAMENTSQUARE; ?></h2>
 
@@ -745,7 +745,7 @@ Romans: In Travian version 3.5 the Roman trade office increases the capacity by 
 
 <img src="img/un/h/gid14.gif" width=166 height=150 border=0 alt="<?php echo TOURNAMENTSQUARE; ?>" title="<?php echo TOURNAMENTSQUARE; ?>" align="left" />
 
-Your troops can train to increase their stamina at the tournament square. The further the building is upgraded the faster your troops are beyond a minimum distance of 30 squares.    <br>
+<?php echo ANL_TOURNAMENT_SQUARE_DESC; ?>    <br>
 
     <br>
 
@@ -775,11 +775,11 @@ Your troops can train to increase their stamina at the tournament square. The fu
 
     <br>
 
-    Rally Point Level 15</p>
-	</div> 
-	<div class="clear"></div> 
-</div> 
- 
+    <?php echo ANL_REQ_RALLY_POINT_15; ?></p>
+	</div>
+	<div class="clear"></div>
+</div>
+
 <div id="footer">
 
 	<div class="container">
@@ -790,5 +790,5 @@ Your troops can train to increase their stamina at the tournament square. The fu
 
 	</div>
 
-</div> 
-</div> 
+</div>
+</div>
