@@ -41,10 +41,10 @@
 
   <table class="search-table">
 	<tr>
-		<td>ID</td>
-		<td>VILLAGE NAME</td>
-		<td>OWNER</td>
-		<td>POP</td>
+		<td><?php echo ADM_ID; ?></td>
+		<td><?php echo ADM_VILLAGE_NAME; ?></td>
+		<td><?php echo ADM_OWNER_2; ?></td>
+		<td><?php echo ADM_POP_2; ?></td>
 		<td style="width:30px"></td>
 	</tr>
 <?php if($result){

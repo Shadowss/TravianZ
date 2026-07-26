@@ -126,39 +126,39 @@ $historyCount = $banHistory ? mysqli_num_rows($banHistory) : 0;
 <div class="ban-wrap">
   <div class="ban-head">
     <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#c0392b"/><path d="M7 7l10 10M17 7L7 17" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-    <h2>Ban Management</h2>
+    <h2><?php echo ADM_BAN_MANAGEMENT; ?></h2>
   </div>
 
   <?php if($error){?><div class="alert error"><?php echo $error;?></div><?php }?>
   <?php if($success){?><div class="alert success"><?php echo $success;?></div><?php }?>
 
   <div class="ban-stats">
-    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6v1H4v-1z"/></svg></div><div><div class="lbl">Active User Bans</div><div class="val"><?php echo count($bannedUsers);?></div></div></div>
-    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg></div><div><div class="lbl">Active IP Bans</div><div class="val"><?php echo count($bannedIps);?></div></div></div>
-    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><div class="lbl">History (last 50)</div><div class="val"><?php echo $historyCount;?></div></div></div>
+    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6v1H4v-1z"/></svg></div><div><div class="lbl"><?php echo ADM_ACTIVE_USER_BANS; ?></div><div class="val"><?php echo count($bannedUsers);?></div></div></div>
+    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg></div><div><div class="lbl"><?php echo ADM_ACTIVE_IP_BANS; ?></div><div class="val"><?php echo count($bannedIps);?></div></div></div>
+    <div class="stat"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><div class="lbl"><?php echo ADM_HISTORY_50; ?></div><div class="val"><?php echo $historyCount;?></div></div></div>
   </div>
 
   <div class="ban-stack">
     <!-- 1. Add New Ban -->
     <div class="ban-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg> Add New Ban</h3>
+      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg><?php echo ADM_ADD_NEW_BAN; ?></h3>
       <form method="post" class="ban-form">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="addBan">
         <div class="row">
-          <input type="number" name="uid" placeholder="User ID" required>
+          <input type="number" name="uid" placeholder="<?php echo ADM_USER_ID; ?>" required>
           <select name="reason"><?php foreach(['Pushing','Cheat','Hack','Bug','Bad Name','Multi Account','Swearing'] as $r){ echo "<option>$r</option>"; }?></select>
         </div>
         <div class="row two">
-          <select name="time"><?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>"; foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?><option value="0">Forever</option></select>
-          <button type="submit">Ban User</button>
+          <select name="time"><?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>"; foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?><option value="0"><?php echo ADM_FOREVER; ?></option></select>
+          <button type="submit"><?php echo ADM_BAN_USER; ?></button>
         </div>
       </form>
     </div>
 
     <!-- 2. Active Bans -->
     <div class="ban-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg> Active Bans <span class="badge-count"><?php echo count($bannedUsers);?></span></h3>
+      <h3><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg><?php echo ADM_ACTIVE_BANS; ?><span class="badge-count"><?php echo count($bannedUsers);?></span></h3>
       <div class="ban-list">
         <?php if($bannedUsers){ foreach($bannedUsers as $b){ $name = $database->getUserField($b['uid'],'username',0) ?: $b['name']; $end = $b['end'] ? date("d.m H:i",$b['end']) : '∞'; ?>
           <div class="ban-item">
@@ -171,24 +171,24 @@ $historyCount = $banHistory ? mysqli_num_rows($banHistory) : 0;
 
     <!-- 3. Ban IP Address -->
     <div class="ban-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg> Ban IP Address</h3>
+      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg><?php echo ADM_BAN_IP_ADDRESS; ?></h3>
       <form method="post" class="ban-form">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="addIpBan">
         <div class="row">
-          <input type="text" name="ip" placeholder="IPv4 or IPv6" required>
+          <input type="text" name="ip" placeholder="<?php echo ADM_IPV4_OR_IPV6; ?>" required>
           <select name="reason"><?php foreach(['Pushing','Cheat','Hack','Bug','Bad Name','Multi Account','Swearing'] as $r){ echo "<option>$r</option>"; }?></select>
         </div>
         <div class="row two">
-          <select name="time"><?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>"; foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?><option value="0">Forever</option></select>
-          <button type="submit">Ban IP</button>
+          <select name="time"><?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>"; foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?><option value="0"><?php echo ADM_FOREVER; ?></option></select>
+          <button type="submit"><?php echo ADM_BAN_IP; ?></button>
         </div>
       </form>
     </div>
 
     <!-- 4. Active IP Bans -->
     <div class="ban-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg> Active IP Bans <span class="badge-count"><?php echo count($bannedIps);?></span></h3>
+      <h3><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg><?php echo ADM_ACTIVE_IP_BANS; ?><span class="badge-count"><?php echo count($bannedIps);?></span></h3>
       <div class="ban-list">
         <?php if($bannedIps){ foreach($bannedIps as $b){ $end = $b['end'] ? date("d.m H:i",$b['end']) : '∞'; ?>
           <div class="ban-item">
@@ -201,7 +201,7 @@ $historyCount = $banHistory ? mysqli_num_rows($banHistory) : 0;
 
     <!-- 5. Ban History -->
     <div class="ban-card">
-      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 5v7l4 2" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="2" fill="none"/></svg> Ban History</h3>
+      <h3><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 5v7l4 2" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="2" fill="none"/></svg><?php echo ADM_BAN_HISTORY; ?></h3>
       <div class="ban-list" style="max-height:300px">
         <?php if($banHistory && $historyCount>0){ while($h=mysqli_fetch_assoc($banHistory)){ $end = $h['end'] ? date("d.m H:i",$h['end']) : '∞'; ?>
           <div class="ban-item" style="opacity:.8">

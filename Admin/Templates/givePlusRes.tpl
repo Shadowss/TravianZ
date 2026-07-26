@@ -49,7 +49,7 @@ $id = $_SESSION['id'];
 <div class="resbonus-wrap">
   <div class="resbonus-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16v10H4z" fill="#27ae60"/><path d="M8 3v4M16 3v4" stroke="#16a085" stroke-width="2"/></svg>
-    <h2>Resource Bonus</h2>
+    <h2><?php echo ADM_RESOURCE_BONUS; ?></h2>
   </div>
 
   <div class="resbonus-card">
@@ -57,8 +57,8 @@ $id = $_SESSION['id'];
       <div class="icon-big">
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
-      <h3>Give Everyone Resource Bonus</h3>
-      <p>Activate a 25% bonus for all resources for ALL players.</p>
+      <h3><?php echo ADM_GIVE_EVERYONE_RESOURCE_BONUS; ?></h3>
+      <p><?php echo ADM_ACTIVATE_A_25_BONUS_FOR_ALL_RESOURCES_FOR_AL; ?></p>
     </div>
 
     <form action="../GameEngine/Admin/Mods/givePlusRes.php" method="POST" class="resbonus-form">
@@ -67,31 +67,29 @@ $id = $_SESSION['id'];
       
       <div class="res-grid">
         <div class="res-item">
-          <div class="left wood"><img src="../img/admin/r/1.gif" alt=""> Wood</div>
-          <div><input type="number" name="wood" value="1" min="0" max="365"> days</div>
+          <div class="left wood"><img src="../img/admin/r/1.gif" alt=""><?php echo ADM_WOOD; ?></div>
+          <div><input type="number" name="wood" value="1" min="0" max="365"><?php echo ADM_DAYS_2; ?></div>
         </div>
         <div class="res-item">
-          <div class="left clay"><img src="../img/admin/r/2.gif" alt=""> Clay</div>
-          <div><input type="number" name="clay" value="1" min="0" max="365"> days</div>
+          <div class="left clay"><img src="../img/admin/r/2.gif" alt=""><?php echo ADM_CLAY; ?></div>
+          <div><input type="number" name="clay" value="1" min="0" max="365"><?php echo ADM_DAYS_2; ?></div>
         </div>
         <div class="res-item">
-          <div class="left iron"><img src="../img/admin/r/3.gif" alt=""> Iron</div>
-          <div><input type="number" name="iron" value="1" min="0" max="365"> days</div>
+          <div class="left iron"><img src="../img/admin/r/3.gif" alt=""><?php echo ADM_IRON; ?></div>
+          <div><input type="number" name="iron" value="1" min="0" max="365"><?php echo ADM_DAYS_2; ?></div>
         </div>
         <div class="res-item">
-          <div class="left crop"><img src="../img/admin/r/4.gif" alt=""> Crop</div>
-          <div><input type="number" name="crop" value="1" min="0" max="365"> days</div>
+          <div class="left crop"><img src="../img/admin/r/4.gif" alt=""><?php echo ADM_CROP; ?></div>
+          <div><input type="number" name="crop" value="1" min="0" max="365"><?php echo ADM_DAYS_2; ?></div>
         </div>
       </div>
 
       <button type="submit">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        Give Resource Bonus
-      </button>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_GIVE_RESOURCE_BONUS; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resbonus-success">✓ Resource bonuses have been activated for all players!</div>
+    <div class="resbonus-success"><?php echo ADM_RESOURCE_BONUSES_HAVE_BEEN_ACTIVATED_FOR_ALL; ?></div>
   <?php } ?>
 </div>

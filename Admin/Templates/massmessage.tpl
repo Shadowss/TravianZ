@@ -53,7 +53,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 <div class="massmsg-wrap">
   <div class="massmsg-head">
     <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4c-1.1 0-2.9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#e67e22"/></svg>
-    <h2>Mass Message</h2>
+    <h2><?php echo ADMIN_MASS_MESSAGE; ?></h2>
   </div>
 
   <div class="massmsg-card">
@@ -62,27 +62,27 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2.9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
       </div>
       <div>
-        <h3>Send Message to All Players</h3>
+        <h3><?php echo ADM_SEND_MESSAGE_TO_ALL_PLAYERS; ?></h3>
         <p>In-game message for all users (ID > 5)</p>
       </div>
     </div>
 
 <?php if(isset($_GET['confirm'])):?>
     <div class="massmsg-confirm">
-      <b>Confirm:</b> Are you sure you want to send?<br>
-      <b>Subject:</b> <span style="color:<?=$_SESSION['mass_color']?>"><?=htmlspecialchars($_SESSION['mass_subject'])?></span>
+      <b><?php echo ADM_CONFIRM; ?></b><?php echo ADM_ARE_YOU_SURE_YOU_WANT_TO_SEND; ?><br>
+      <b><?php echo ADM_SUBJECT; ?></b> <span style="color:<?=$_SESSION['mass_color']?>"><?=htmlspecialchars($_SESSION['mass_subject'])?></span>
     </div>
     <form action="../GameEngine/Admin/Mods/massmessage.php" method="POST" class="massmsg-form">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?=$id?>">
       <input type="hidden" name="action" value="execute">
-      <button type="submit" name="confirm" value="Yes" style="background:#27ae60">✓ Yes, Send</button>
-      <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px">Cancel</button>
+      <button type="submit" name="confirm" value="Yes" style="background:#27ae60"><?php echo ADM_YES_SEND; ?></button>
+      <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px"><?php echo ADM_CANCEL; ?></button>
     </form>
 
 <?php elseif(isset($_GET['sending'])):?>
     <div style="text-align:center;padding:30px">
-      <div style="font-size:16px;margin-bottom:10px">Sending messages...</div>
+      <div style="font-size:16px;margin-bottom:10px"><?php echo ADM_SENDING_MESSAGES; ?></div>
       <div style="color:#666"><?=e($_GET['msg'] ?? '')?></div>
     </div>
 
@@ -93,29 +93,27 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
       <input type="hidden" name="action" value="prepare">
 
       <div class="field">
-        <label>Subject</label>
-        <input type="text" name="subject" placeholder="ex: Maintenance" required maxlength="100">
+        <label><?php echo ADM_SUBJECT_2; ?></label>
+        <input type="text" name="subject" placeholder="<?php echo ADM_EX_MAINTENANCE; ?>" required maxlength="100">
       </div>
 
       <div class="field">
-        <label>Message Color</label>
-        <input type="text" name="color" value="black" placeholder="black sau #e67e22">
+        <label><?php echo ADM_MESSAGE_COLOR; ?></label>
+        <input type="text" name="color" value="black" placeholder="<?php echo ADM_BLACK_SAU_E67E22; ?>">
       </div>
 
       <div class="field full">
-        <label>Message Content</label>
-        <textarea name="message" rows="12" placeholder="Write the message... you can use [url][img]" required></textarea>
+        <label><?php echo ADM_MESSAGE_CONTENT; ?></label>
+        <textarea name="message" rows="12" placeholder="<?php echo ADM_WRITE_THE_MESSAGE_YOU_CAN_USE_URL_IMG; ?>" required></textarea>
       </div>
 
       <button type="submit">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="#fff"/></svg>
-        Continua
-      </button>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="#fff"/></svg><?php echo ADM_CONTINUA; ?></button>
     </form>
 <?php endif;?>
   </div>
 
   <?php if(isset($_GET['done'])){?>
-    <div class="massmsg-success">✓ Mass message successfully sent to all players!</div>
+    <div class="massmsg-success"><?php echo ADM_MASS_MESSAGE_SUCCESSFULLY_SENT_TO_ALL_PLAYER; ?></div>
   <?php }?>
 </div>

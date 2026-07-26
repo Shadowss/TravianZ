@@ -63,7 +63,7 @@ function clearSitter(n){ document.getElementById('sit'+n).value = '0'; }
     <div class="sit-head">
         <div class="icon">👥</div>
         <div>
-            <h2>Edit Sitters: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+            <h2><?php echo ADM_EDIT_SITTERS; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
             <div class="sub">UID: <?php echo $uid; ?></div>
         </div>
     </div>
@@ -75,13 +75,13 @@ function clearSitter(n){ document.getElementById('sit'+n).value = '0'; }
         <input type="hidden" name="id" value="<?php echo $id; ?>">
 
         <div class="card">
-            <h3>⚙️ Sitter Settings</h3>
+            <h3><?php echo ADM_SITTER_SETTINGS; ?></h3>
             <div class="body">
-                <div class="info">💡 Use the player's UID. Enter <b>0</b> to delete the sitter. You can find the UID in Search.</div>
+                <div class="info"><?php echo ADM_USE_THE_PLAYER_S_UID_ENTER; ?><b>0</b><?php echo ADM_TO_DELETE_THE_SITTER_YOU_CAN_FIND_THE_UID_IN; ?></div>
                 
                 <div class="sitter-grid">
                     <div class="sitter-box">
-                        <h4>👤 Sitter 1</h4>
+                        <h4><?php echo ADM_SITTER_1; ?></h4>
                         <input type="number" id="sit1" name="sitter1" value="<?php echo (int)$user['sit1']; ?>" min="0">
                         <div class="sitter-current <?php echo $sitter1 ? '' : 'none'; ?>">
                             <?php if($sitter1){ echo '→ <a href="admin.php?p=player&uid='.$sitter1['id'].'">'.htmlspecialchars($sitter1['username']).'</a> (UID '.$sitter1['id'].')'; } else { echo 'No Sitter'; } ?>
@@ -90,7 +90,7 @@ function clearSitter(n){ document.getElementById('sit'+n).value = '0'; }
                     </div>
 
                     <div class="sitter-box">
-                        <h4>👤 Sitter 2</h4>
+                        <h4><?php echo ADM_SITTER_2; ?></h4>
                         <input type="number" id="sit2" name="sitter2" value="<?php echo (int)$user['sit2']; ?>" min="0">
                         <div class="sitter-current <?php echo $sitter2 ? '' : 'none'; ?>">
                             <?php if($sitter2){ echo '→ <a href="admin.php?p=player&uid='.$sitter2['id'].'">'.htmlspecialchars($sitter2['username']).'</a> (UID '.$sitter2['id'].')'; } else { echo 'No Sitter'; } ?>
@@ -102,8 +102,8 @@ function clearSitter(n){ document.getElementById('sit'+n).value = '0'; }
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">💾 Save Sitters</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_SAVE_SITTERS; ?></button>
         </div>
     </form>
 </div>

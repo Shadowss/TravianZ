@@ -59,12 +59,12 @@ $accessColors = [
 
 <div class="online-wrap">
   <div class="online-head">
-    <h1>🟢 Online Users</h1>
+    <h1><?php echo ADM_ONLINE_USERS_H; ?></h1>
     <div class="count"><?php echo $count;?> now</div>
   </div>
 
   <?php if(!$active){?>
-    <div class="empty-box">No online users in last 5 minutes</div>
+    <div class="empty-box"><?php echo ADM_NO_ONLINE_USERS; ?></div>
   <?php } else {?>
   <div class="online-grid">
     <?php foreach($active as $u){

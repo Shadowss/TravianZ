@@ -131,14 +131,14 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 <div class="map-wrap">
   <div class="map-header">
     <h2><?php echo SERVER_NAME;?> Map</h2>
-    <p>Interactive world map – search players, villages and artifacts</p>
+    <p><?php echo ADM_INTERACTIVE_WORLD_MAP_SEARCH_PLAYERS_VILLAGE; ?></p>
   </div>
 
   <form id="show" action="admin.php?p=map" method="POST" class="map-filters">
     <?php echo csrf_field(); ?>
     <div class="filter-group">
       <input id="show1" name="show1" type="checkbox" <?php echo $check1;?> value="1">
-      <label for="show1">Players</label>
+      <label for="show1"><?php echo ADM_PLAYERS; ?></label>
     </div>
     <div class="filter-group">
       <input id="show2" name="show2" type="checkbox" <?php echo $check2;?> value="2">
@@ -146,9 +146,9 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
     </div>
     <div class="filter-group">
       <input id="show3" name="show3" type="checkbox" <?php echo $check3;?> value="2">
-      <label for="show3">Artifacts</label>
+      <label for="show3"><?php echo ADM_ARTIFACTS; ?></label>
     </div>
-    <button type="submit" class="btn-show">Apply Filters</button>
+    <button type="submit" class="btn-show"><?php echo ADM_APPLY_FILTERS; ?></button>
   </form>
 
   <div class="map-layout">
@@ -157,7 +157,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
         <button type="button" id="zoomOut">−</button>
         <span id="zoomLabel">100%</span>
         <button type="button" id="zoomIn">+</button>
-        <button type="button" id="zoomReset">Reset</button>
+        <button type="button" id="zoomReset"><?php echo ADM_RESET; ?></button>
       </div>
       <div class="zoomlevels">
         <span id="zl">-<?php echo WORLD_MAX;?></span>
@@ -229,7 +229,7 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
     <!-- LEGENDE CENTRATE SUB HARTA - Tribes + Artifacts una langa alta -->
     <div class="legend-row">
       <div class="legend-card">
-        <div class="legend-head">Tribes</div>
+        <div class="legend-head"><?php echo ADM_TRIBES; ?></div>
         <div class="legend-body">
           <table>
             <tr><td><img src="../img/admin/map_1.gif"></td><td><?php echo TRIBE1;?></td></tr>
@@ -240,12 +240,12 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
             <?php if(defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS){ ?><tr><td><img src="../img/admin/map_7.gif"></td><td><?php echo TRIBE7;?></td></tr><?php } ?>
             <?php if(defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS){ ?><tr><td><img src="../img/admin/map_8.gif"></td><td><?php echo TRIBE8;?></td></tr><?php } ?>
             <?php if(defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS){ ?><tr><td><img src="../img/admin/map_9.gif"></td><td><?php echo TRIBE9;?></td></tr><?php } ?>
-            <tr><td><img src="../img/admin/map_0.gif"></td><td>Multihunters</td></tr>
+            <tr><td><img src="../img/admin/map_0.gif"></td><td><?php echo ADM_MULTIHUNTERS; ?></td></tr>
           </table>
         </div>
       </div>
       <div class="legend-card">
-        <div class="legend-head">Artifacts</div>
+        <div class="legend-head"><?php echo ADM_ARTIFACTS; ?></div>
         <div class="legend-body">
           <table>
             <tr><td><img src="../img/admin/map_11.gif"></td><td><?php echo VILLAGE_EFFECT;?></td></tr>

@@ -34,7 +34,7 @@
 			Additional Information 
 
 			<?php if($_SESSION['access'] == ADMIN) { ?>
-				<a href='admin.php?p=editAdditional&uid=<?php echo $id; ?>' class="edit-icon" title="Edit Player Additional Info">
+				<a href='admin.php?p=editAdditional&uid=<?php echo $id; ?>' class="edit-icon" title="<?php echo ADM_EDIT_PLAYER_ADDITIONAL_INFO; ?>">
 					<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
 				</a>
 			<?php } ?>
@@ -44,7 +44,7 @@
 </thead>
 	<tbody>
 		<tr>
-			<td>Access</td>
+			<td><?php echo ADM_ACCESS; ?></td>
 			<td>
 				<?php
 				if($user['access'] == 0) echo '<span class="badge badge-banned">Banned</span>';
@@ -55,23 +55,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Vacation Mode</td>
+			<td><?php echo ADM_VACATION_MODE; ?></td>
 			<td><?php echo $user['vac_mode'] ? '<span class="badge badge-on">Enabled</span>' : '<span class="badge badge-off">Disabled</span>'; ?></td>
 		</tr>
 		<tr>
-			<td>Gold</td>
+			<td><?php echo ADMIN_GOLD; ?></td>
 			<td><span class="gold-val"><img src="../img/admin/gold.gif"> <?php echo $user['gold']; ?></span></td>
 		</tr>
 		<tr>
-			<td>Sitter 1</td>
+			<td><?php echo ADM_SITTER_1_2; ?></td>
 			<td><?php echo $user['sit1'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit1'].'">'.htmlspecialchars($database->getUserField($user['sit1'],"username",0)).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
 		</tr>
 		<tr>
-			<td>Sitter 2</td>
+			<td><?php echo ADM_SITTER_2_2; ?></td>
 			<td><?php echo $user['sit2'] >= 1 ? '<a href="admin.php?p=player&uid='.$user['sit2'].'">'.htmlspecialchars($database->getUserField($user['sit2'],"username",0)).'</a>' : '<span style="color:#94a3b8">No Sitter</span>'; ?></td>
 		</tr>
 		<tr>
-			<td>Beginners Protection</td>
+			<td><?php echo ADM_BEGINNERS_PROTECTION; ?></td>
 			<td>
 				<?php
 				$datetime = $user['protect']; $now = time();
@@ -85,12 +85,12 @@
 				?>
 			</td>
 		</tr>
-		<tr><td>Culture Points</td><td><?php echo number_format($user['cp'],0,',','.');?></td></tr>
-		<tr><td>Last Activity</td><td><?php echo date('d.m.Y H:i',$user['timestamp']+3600*2);?></td></tr>
-		<tr><td>Attack Points (This Week)</td><td><?php echo $user['ap'];?></td></tr>
-		<tr><td>Defence Points (This Week)</td><td><?php echo $user['dp'];?></td></tr>
-		<tr><td>Resources Raided (This Week)</td><td><?php echo number_format($user['RR'],0,',','.');?></td></tr>
-		<tr><td>Total Attack Points</td><td><b><?php echo number_format($user['apall'],0,',','.');?></b></td></tr>
-		<tr><td>Total Defence Points</td><td><b><?php echo number_format($user['dpall'],0,',','.');?></b></td></tr>
+		<tr><td><?php echo ADM_CULTURE_POINTS_2; ?></td><td><?php echo number_format($user['cp'],0,',','.');?></td></tr>
+		<tr><td><?php echo ADM_LAST_ACTIVITY; ?></td><td><?php echo date('d.m.Y H:i',$user['timestamp']+3600*2);?></td></tr>
+		<tr><td><?php echo ADM_ATTACK_POINTS_THIS_WEEK; ?></td><td><?php echo $user['ap'];?></td></tr>
+		<tr><td><?php echo ADM_DEFENCE_POINTS_THIS_WEEK; ?></td><td><?php echo $user['dp'];?></td></tr>
+		<tr><td><?php echo ADM_RESOURCES_RAIDED_THIS_WEEK; ?></td><td><?php echo number_format($user['RR'],0,',','.');?></td></tr>
+		<tr><td><?php echo ADM_TOTAL_ATTACK_POINTS; ?></td><td><b><?php echo number_format($user['apall'],0,',','.');?></b></td></tr>
+		<tr><td><?php echo ADM_TOTAL_DEFENCE_POINTS; ?></td><td><b><?php echo number_format($user['dpall'],0,',','.');?></b></td></tr>
 	</tbody>
 </table>

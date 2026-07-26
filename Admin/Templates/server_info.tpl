@@ -75,17 +75,17 @@ $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
 
 <div class="sinfo-grid">
   <div class="scard">
-    <h3>🌍 World Information</h3>
-    <div class="row"><span>Registered players</span><span class="val"><?php echo number_format($users); ?></span></div>
-    <div class="row"><span>Active players</span><span class="val"><?php echo $active; ?></span></div>
-    <div class="row"><span>Players online</span><span class="val" style="color:#27ae60"><?php echo $online; ?></span></div>
-    <div class="row"><span>Players banned</span><span class="val" style="color:#c0392b"><?php echo $banned; ?></span></div>
-    <div class="row"><span>Villages settled</span><span class="val"><?php echo number_format($villages); ?></span></div>
-    <div class="row"><span>Total population</span><span class="val"><?php echo number_format($pop); ?></span></div>
+    <h3><?php echo ADM_WORLD_INFO; ?></h3>
+    <div class="row"><span><?php echo ADM_REGISTERED_PLAYERS; ?></span><span class="val"><?php echo number_format($users); ?></span></div>
+    <div class="row"><span><?php echo ADM_ACTIVE_PLAYERS; ?></span><span class="val"><?php echo $active; ?></span></div>
+    <div class="row"><span><?php echo ADM_PLAYERS_ONLINE; ?></span><span class="val" style="color:#27ae60"><?php echo $online; ?></span></div>
+    <div class="row"><span><?php echo ADM_PLAYERS_BANNED; ?></span><span class="val" style="color:#c0392b"><?php echo $banned; ?></span></div>
+    <div class="row"><span><?php echo ADM_VILLAGES_SETTLED; ?></span><span class="val"><?php echo number_format($villages); ?></span></div>
+    <div class="row"><span><?php echo ADM_TOTAL_POPULATION; ?></span><span class="val"><?php echo number_format($pop); ?></span></div>
   </div>
 
   <div class="scard">
-    <h3>👥 Player Distribution</h3>
+    <h3><?php echo ADM_PLAYER_DISTRIBUTION; ?></h3>
     <?php $names=[1=>'Romans',2=>'Teutons',3=>'Gauls',6=>'Huns',7=>'Egyptians',8=>'Spartans',9=>'Vikings']; $colors=[1=>'romans',2=>'teutons',3=>'gauls',6=>'huns',7=>'egyptians',8=>'spartans',9=>'vikings'];
     foreach($names as $id=>$name){
         $pct = $users ? round($tribes[$id]/$users*100,1) : 0;
@@ -95,16 +95,16 @@ $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
   </div>
 
   <div class="scard">
-    <h3>💰 Server Economy</h3>
-    <div class="row"><span><img src="../<?php echo GP_LOCATE; ?>img/a/gold.gif"> Total Gold</span><span class="val"><?php echo number_format($gold); ?></span></div>
-    <div class="row"><span>Avg Gold/player</span><span class="val"><?php echo $users ? number_format($gold/$users,0) : 0; ?></span></div>
-    <div class="row"><span>Server started</span><span class="val"><?php echo defined('START_DATE') ? date('d.m.Y', strtotime(START_DATE)) : '-'; ?></span></div>
-    <div class="row"><span>Uptime</span><span class="val"><?php echo defined('START_DATE') ? floor((time()-strtotime(START_DATE))/86400).' days' : '-'; ?></span></div>
+    <h3><?php echo ADM_SERVER_ECONOMY; ?></h3>
+    <div class="row"><span><img src="../<?php echo GP_LOCATE; ?>img/a/gold.gif"><?php echo ADM_TOTAL_GOLD; ?></span><span class="val"><?php echo number_format($gold); ?></span></div>
+    <div class="row"><span><?php echo ADM_AVG_GOLD; ?></span><span class="val"><?php echo $users ? number_format($gold/$users,0) : 0; ?></span></div>
+    <div class="row"><span><?php echo ADM_SERVER_STARTED; ?></span><span class="val"><?php echo defined('START_DATE') ? date('d.m.Y', strtotime(START_DATE)) : '-'; ?></span></div>
+    <div class="row"><span><?php echo ADM_UPTIME; ?></span><span class="val"><?php echo defined('START_DATE') ? floor((time()-strtotime(START_DATE))/86400).' days' : '-'; ?></span></div>
   </div>
 </div>
 
 <div class="troops-wrap">
-  <h3 style="margin:0 0 10px;font-size:14px">⚔️ Troops on Server (villages + reinforcements)</h3>
+  <h3 style="margin:0 0 10px;font-size:14px"><?php echo ADM_TROOPS_ON_SERVER; ?></h3>
   <div class="troops-grid">
     <?php
     $tribesUnits = [

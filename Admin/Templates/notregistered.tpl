@@ -51,8 +51,8 @@ if($_SESSION['access'] < ADMIN) die("Access Denied");
 
 <div class="notreg-wrap">
   <div class="notreg-head">
-    <h2>✉️ Players Not Activated</h2>
-    <div class="notreg-search"><input type="text" id="notregSearch" placeholder="Caută username sau email..."></div>
+    <h2><?php echo ADM_NOT_ACTIVATED_H; ?></h2>
+    <div class="notreg-search"><input type="text" id="notregSearch" placeholder="<?php echo ADM_SEARCH_USER_EMAIL; ?>"></div>
   </div>
 
   <div class="notreg-card">
@@ -60,13 +60,13 @@ if($_SESSION['access'] < ADMIN) die("Access Denied");
       <thead>
         <tr>
           <th width="30">#</th>
-          <th width="40">ID</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th width="70">Tribe</th>
-          <th>Activation Code</th>
-          <th width="60">Act2</th>
-          <th width="110">Time</th>
+          <th width="40"><?php echo ADM_ID; ?></th>
+          <th><?php echo ADM_USERNAME; ?></th>
+          <th><?php echo ADM_EMAIL; ?></th>
+          <th width="70"><?php echo ADM_TRIBE; ?></th>
+          <th><?php echo ADM_ACTIVATION_CODE; ?></th>
+          <th width="60"><?php echo ADM_ACT2; ?></th>
+          <th width="110"><?php echo ADM_TIME; ?></th>
         </tr>
       </thead>
       <tbody>

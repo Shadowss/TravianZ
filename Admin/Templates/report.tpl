@@ -54,9 +54,9 @@ if($bid > 0){
     #content.reports td { font-weight:600 !important; }
     </style>
     <div style="max-width:900px;margin:20px auto">
-      <a href="?p=report" style="font-size:12px">← Back to reports</a>
+      <a href="?p=report" style="font-size:12px"><?php echo ADM_BACK_TO_REPORTS; ?></a>
       <div id="content" class="reports" style="margin-top:10px">
-        <h1>Report</h1>
+        <h1><?php echo ADM_REPORT; ?></h1>
         <?php include("../Templates/Notice/".$message->getReportType($rep['ntype']).".tpl");?>
       </div>
     </div>
@@ -116,7 +116,7 @@ $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',
     <form class="search-box" method="get">
       <input type="hidden" name="p" value="report">
       <input type="hidden" name="f" value="<?php echo htmlspecialchars($filter);?>">
-      <input type="text" name="q" placeholder="Search..." value="<?php echo htmlspecialchars($search);?>">
+      <input type="text" name="q" placeholder="<?php echo ADM_SEARCH_PH; ?>" value="<?php echo htmlspecialchars($search);?>">
     </form>
   </div>
 
@@ -137,7 +137,7 @@ $typeNames = [1=>'reinforcement',2=>'attack',3=>'defence',4=>'scout',5=>'trade',
         <div class="rep-body"><?php echo htmlspecialchars($preview);?>...</div>
         <div class="rep-foot">
           <span class="badge <?php echo $type;?>"><?php echo $type;?></span>
-          <span style="color:#666">view →</span>
+          <span style="color:#666"><?php echo ADM_VIEW_ARROW; ?></span>
         </div>
       </div>
     </a>

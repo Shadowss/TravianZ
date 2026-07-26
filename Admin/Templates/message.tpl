@@ -45,31 +45,27 @@ $bid = $_GET['bid']?? '';
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4 6h16v10H7l-3 3V6z" fill="#555"/>
     </svg>
-    <h2>IGM / Reports Lookup</h2>
+    <h2><?php echo ADM_IGM_REPORTS_LOOKUP; ?></h2>
   </div>
 
   <div class="message-grid">
     <div class="msg-card igm">
       <h3>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H7l-3 3V5z" fill="#3498db"/></svg>
-        IGM by ID
-      </h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H7l-3 3V5z" fill="#3498db"/></svg><?php echo ADM_IGM_BY_ID; ?></h3>
       <form action="" method="get">
         <input type="hidden" name="p" value="message">
-        <input type="text" name="nid" placeholder="Enter message ID..." value="<?php echo htmlspecialchars($nid);?>" autofocus>
-        <button type="submit">Go</button>
+        <input type="text" name="nid" placeholder="<?php echo ADM_ENTER_MESSAGE_ID; ?>" value="<?php echo htmlspecialchars($nid);?>" autofocus>
+        <button type="submit"><?php echo ADM_GO; ?></button>
       </form>
     </div>
 
     <div class="msg-card report">
       <h3>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#e67e22"/><path d="M14 2v6h6" fill="#d35400"/></svg>
-        Report by ID
-      </h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#e67e22"/><path d="M14 2v6h6" fill="#d35400"/></svg><?php echo ADM_REPORT_BY_ID; ?></h3>
       <form action="" method="get">
         <input type="hidden" name="p" value="message">
-        <input type="text" name="bid" placeholder="Enter report ID..." value="<?php echo htmlspecialchars($bid);?>">
-        <button type="submit">Go</button>
+        <input type="text" name="bid" placeholder="<?php echo ADM_ENTER_REPORT_ID; ?>" value="<?php echo htmlspecialchars($bid);?>">
+        <button type="submit"><?php echo ADM_GO; ?></button>
       </form>
     </div>
   </div>

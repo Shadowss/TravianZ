@@ -68,24 +68,24 @@ code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px;word-br
 </style>
 
 <div class="config-wrap">
-    <div class="config-title">Cron &amp; Automation</div>
+    <div class="config-title"><?php echo ADM_CRON_AUTOMATION; ?></div>
 
     <form action="../GameEngine/Admin/Mods/editCronSet.php" method="POST">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="id" id="id" value="<?php echo $_SESSION['id']; ?>">
 
         <div class="config-card">
-            <div class="config-head"><span>Current status</span></div>
+            <div class="config-head"><span><?php echo ADM_CURRENT_STATUS; ?></span></div>
             <table class="config-table">
                 <tr>
-                    <td class="b">Automation source</td>
+                    <td class="b"><?php echo ADM_AUTOMATION_SOURCE; ?></td>
                     <td><?php echo $cronActive
                             ? "<span class='badge green'>Cron job</span>"
                             : "<span class='badge red'>Page loads (fallback)</span>"; ?>
-                        <span class="hint">When the cron job is not running, the game still works: players' page loads process the tick, exactly as before the cron was introduced.</span></td>
+                        <span class="hint"><?php echo ADM_WHEN_THE_CRON_JOB_IS_NOT_RUNNING_THE_GAME_ST; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">Last cron tick</td>
+                    <td class="b"><?php echo ADM_LAST_CRON_TICK; ?></td>
                     <td><?php
                         if ($cronLastRun > 0) {
                             echo date('d.m.Y H:i:s', $cronLastRun) . ' <span style="color:#777">(' . $cronAge . 's ago)</span>';
@@ -96,54 +96,51 @@ code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px;word-br
                 </tr>
                 <?php if ($cronCmd !== '') { ?>
                 <tr>
-                    <td class="b">Cron job command</td>
+                    <td class="b"><?php echo ADM_CRON_JOB_COMMAND; ?></td>
                     <td><code><?php echo htmlspecialchars($cronCmd, ENT_QUOTES, 'UTF-8'); ?></code>
-                        <span class="hint">Add this in cPanel &rarr; Cron Jobs. Writing to cron.log instead of /dev/null lets you see errors if it fails to start.</span></td>
+                        <span class="hint"><?php echo ADM_ADD_THIS_IN_CPANEL_CRON_JOBS_WRITING_TO_CRON; ?></span></td>
                 </tr>
                 <?php } ?>
             </table>
         </div>
 
         <div class="config-card">
-            <div class="config-head"><span>Settings</span></div>
+            <div class="config-head"><span><?php echo ADM_SETTINGS; ?></span></div>
             <table class="config-table">
                 <tr>
-                    <td class="b">Invocation length (seconds)
-                        <em class="tooltip">?<span>How long one cron.php invocation keeps working. Most shared hosts only allow a cron every 5 minutes, while Automation expects to run about every minute &mdash; so one invocation runs several ticks in a row. Use 300 for a "*/5" cron. Set 0 only if your host allows a cron every minute.</span></em>
+                    <td class="b"><?php echo ADM_INVOCATION_LENGTH_SECONDS; ?><em class="tooltip">?<span><?php echo ADM_HOW_LONG_ONE_CRON_PHP_INVOCATION_KEEPS_WORKI; ?></span></em>
                     </td>
                     <td><input class="fm" type="number" name="cron_loop" min="0" max="3300" value="<?php echo $cronLoop; ?>" style="width:120px">
-                        <span class="hint">0 = a single tick per invocation. Maximum 3300 (55 minutes).</span></td>
+                        <span class="hint"><?php echo ADM_0_A_SINGLE_TICK_PER_INVOCATION_MAXIMUM_3300; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">Tick interval (seconds)
-                        <em class="tooltip">?<span>How often Automation runs inside one invocation. Automation's own guard expects roughly 60 seconds; going lower mostly adds load without processing anything new.</span></em>
+                    <td class="b"><?php echo ADM_TICK_INTERVAL_SECONDS; ?><em class="tooltip">?<span><?php echo ADM_HOW_OFTEN_AUTOMATION_RUNS_INSIDE_ONE_INVOCAT; ?></span></em>
                     </td>
                     <td><input class="fm" type="number" name="cron_tick" min="15" max="900" value="<?php echo $cronTick; ?>" style="width:120px">
-                        <span class="hint">Recommended: 60. Allowed range 15&ndash;900.</span></td>
+                        <span class="hint"><?php echo ADM_RECOMMENDED_60_ALLOWED_RANGE_15_900; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">HTTP trigger key
-                        <em class="tooltip">?<span>Only needed when calling cron.php over HTTP (for example from an external cron service). The server's own cron job does not use it. Regenerating invalidates any URL you configured elsewhere.</span></em>
+                    <td class="b"><?php echo ADM_HTTP_TRIGGER_KEY; ?><em class="tooltip">?<span><?php echo ADM_ONLY_NEEDED_WHEN_CALLING_CRON_PHP_OVER_HTTP; ?></span></em>
                     </td>
                     <td>
                         <?php if ($cronKey === '') { ?>
-                            <span class="badge red">Not set</span> &ndash; one will be generated on save.
+                            <span class="badge red"><?php echo ADM_NOT_SET; ?></span> &ndash; one will be generated on save.
                         <?php } else { ?>
                             <span id="k1"><?php echo htmlspecialchars(substr($cronKey, 0, 6), ENT_QUOTES, 'UTF-8'); ?>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;<?php echo htmlspecialchars(substr($cronKey, -4), ENT_QUOTES, 'UTF-8'); ?></span>
                             <span id="k2" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronKey, ENT_QUOTES, 'UTF-8'); ?></span>
-                            <a href="#" style="margin-left:6px" onclick="var a=document.getElementById('k1'),b=document.getElementById('k2');var h=(b.style.display==='none');a.style.display=h?'none':'';b.style.display=h?'':'none';this.textContent=h?'hide':'show';return false;">show</a>
+                            <a href="#" style="margin-left:6px" onclick="var a=document.getElementById('k1'),b=document.getElementById('k2');var h=(b.style.display==='none');a.style.display=h?'none':'';b.style.display=h?'':'none';this.textContent=h?'hide':'show';return false;"><?php echo ADM_SHOW; ?></a>
                         <?php } ?>
-                        <span class="hint"><label><input type="checkbox" name="regenerate_key" value="1"> Generate a new key on save</label></span>
+                        <span class="hint"><label><input type="checkbox" name="regenerate_key" value="1"><?php echo ADM_GENERATE_A_NEW_KEY_ON_SAVE; ?></label></span>
                     </td>
                 </tr>
             </table>
         </div>
 
         <div class="config-card">
-            <div class="config-head"><span>Database cleanup</span></div>
+            <div class="config-head"><span><?php echo ADM_DATABASE_CLEANUP; ?></span></div>
             <table class="config-table">
                 <tr>
-                    <td class="b">Last cleanup run</td>
+                    <td class="b"><?php echo ADM_LAST_CLEANUP_RUN; ?></td>
                     <td><?php
                         if (is_array($cleanupInfo) && !empty($cleanupInfo['time'])) {
                             $r = isset($cleanupInfo['removed']) ? $cleanupInfo['removed'] : array();
@@ -156,28 +153,25 @@ code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px;word-br
                             echo "<span class='badge blue'>Not run yet</span>";
                         }
                         ?>
-                        <span class="hint">Runs from Automation once per hour. Rows are removed in batches, so the first run on an old server catches up over several passes.</span></td>
+                        <span class="hint"><?php echo ADM_RUNS_FROM_AUTOMATION_ONCE_PER_HOUR_ROWS_ARE; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">Battle reports (days)
-                        <em class="tooltip">?<span>Unarchived reports older than this are deleted. Reports a player archived are never touched. 0 disables the rule.</span></em>
+                    <td class="b"><?php echo ADM_BATTLE_REPORTS_DAYS; ?><em class="tooltip">?<span><?php echo ADM_UNARCHIVED_REPORTS_OLDER_THAN_THIS_ARE_DELET; ?></span></em>
                     </td>
                     <td><input class="fm" type="number" name="cleanup_reports" min="0" max="3650" value="<?php echo $cleanReports; ?>" style="width:100px">
-                        <span class="hint">0 = keep forever.</span></td>
+                        <span class="hint"><?php echo ADM_0_KEEP_FOREVER; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">Chat messages (days)
-                        <em class="tooltip">?<span>The chat window only ever shows the last 13 messages per alliance, so older history is not used anywhere in the game.</span></em>
+                    <td class="b"><?php echo ADM_CHAT_MESSAGES_DAYS; ?><em class="tooltip">?<span><?php echo ADM_THE_CHAT_WINDOW_ONLY_EVER_SHOWS_THE_LAST_13; ?></span></em>
                     </td>
                     <td><input class="fm" type="number" name="cleanup_chat" min="0" max="3650" value="<?php echo $cleanChat; ?>" style="width:100px">
-                        <span class="hint">0 = keep forever.</span></td>
+                        <span class="hint"><?php echo ADM_0_KEEP_FOREVER; ?></span></td>
                 </tr>
                 <tr>
-                    <td class="b">Deleted messages (days)
-                        <em class="tooltip">?<span>Only messages deleted by BOTH the sender and the recipient are removed &mdash; they are no longer visible to anyone in the game. Disabled by default.</span></em>
+                    <td class="b"><?php echo ADM_DELETED_MESSAGES_DAYS; ?><em class="tooltip">?<span><?php echo ADM_ONLY_MESSAGES_DELETED_BY_BOTH_THE_SENDER_AND; ?></span></em>
                     </td>
                     <td><input class="fm" type="number" name="cleanup_messages" min="0" max="3650" value="<?php echo $cleanMessages; ?>" style="width:100px">
-                        <span class="hint">0 = disabled (default).</span></td>
+                        <span class="hint"><?php echo ADM_0_DISABLED_DEFAULT; ?></span></td>
                 </tr>
             </table>
         </div>
@@ -188,9 +182,7 @@ code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px;word-br
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                     <polyline points="17 21 17 13 7 13 7 21"/>
-                </svg>
-                SAVE
-            </button>
+                </svg><?php echo ADM_SAVE; ?></button>
         </div>
     </form>
 </div>

@@ -49,8 +49,8 @@ $user = $database->getUserArray($id,1);
   
   <div class="msg-card">
     <div class="msg-head">
-      <h4>New Message</h4>
-      <div>to <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></div>
+      <h4><?php echo ADM_NEW_MESSAGE; ?></h4>
+      <div><?php echo ADM_TO; ?><a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></div>
     </div>
     
     <form method="post" action="../GameEngine/Admin/Mods/sendMessage.php" name="msg">
@@ -59,12 +59,12 @@ $user = $database->getUserArray($id,1);
         <input type="hidden" name="uid" value="<?php echo $id; ?>">
         
         <div class="msg-row">
-          <div class="msg-label">Recipient</div>
+          <div class="msg-label"><?php echo ADM_RECIPIENT; ?></div>
           <div><strong style="color:#0f172a"><?php echo htmlspecialchars($user['username']); ?></strong> (UID <?php echo $id; ?>)</div>
         </div>
         
         <div class="msg-row">
-          <div class="msg-label">Subject</div>
+          <div class="msg-label"><?php echo ADM_SUBJECT_2; ?></div>
           <input class="msg-input" type="text" name="topic" maxlength="35" value="Message From Admin" required>
         </div>
         
@@ -74,13 +74,13 @@ $user = $database->getUserArray($id,1);
         </div>
         
         <div class="msg-row" style="align-items:start">
-          <div class="msg-label" style="padding-top:8px">Message</div>
-          <textarea class="msg-text" name="message" required placeholder="Write your message here..."></textarea>
+          <div class="msg-label" style="padding-top:8px"><?php echo ADM_MESSAGE; ?></div>
+          <textarea class="msg-text" name="message" required placeholder="<?php echo ADM_WRITE_YOUR_MESSAGE_HERE; ?>"></textarea>
         </div>
         
         <div class="msg-actions">
-          <a href="javascript:history.go(-1)" class="btn-ghost">Cancel</a>
-          <button type="submit" name="s1" class="btn-primary">Send Message</button>
+          <a href="javascript:history.go(-1)" class="btn-ghost"><?php echo ADM_CANCEL; ?></a>
+          <button type="submit" name="s1" class="btn-primary"><?php echo ADM_SEND_MESSAGE; ?></button>
         </div>
       </div>
     </form>
@@ -88,7 +88,6 @@ $user = $database->getUserArray($id,1);
 </div>
 
 <?php } else { ?>
-<div style="font-family:system-ui;padding:30px;text-align:center;color:#64748b">
-  Player not found. <a href="javascript:history.go(-1)" style="color:#2563eb">Go Back</a>
+<div style="font-family:system-ui;padding:30px;text-align:center;color:#64748b"><?php echo ADM_PLAYER_NOT_FOUND; ?><a href="javascript:history.go(-1)" style="color:#2563eb"><?php echo ADM_GO_BACK; ?></a>
 </div>
 <?php } ?>

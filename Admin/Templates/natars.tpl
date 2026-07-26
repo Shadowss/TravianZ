@@ -49,22 +49,22 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 <div class="nat-wrap">
   <div class="nat-head">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="#7f8c8d"><path d="M12 2L2 7v10l10 5 10-5V7z"/></svg>
-    <h1>Natars Management</h1>
+    <h1><?php echo ADMIN_NATARS_MANAGEMENT; ?></h1>
   </div>
 
   <div class="nat-grid">
     <!-- WW Villages -->
     <div class="nat-card">
-      <h2>🏰 WW Villages</h2>
+      <h2><?php echo ADM_WW_VILLAGES; ?></h2>
       <div class="body">
         <form method="post" action="../Admin/admin.php?action=addWWVillages">
           <?php echo csrf_field(); ?>
           <table class="nat-table">
-            <tr><th>Number</th><th>Player ID</th><th></th></tr>
+            <tr><th><?php echo ADM_NUMBER; ?></th><th><?php echo ADM_PLAYER_ID; ?></th><th></th></tr>
             <tr>
               <td><input type="number" name="numberOfVillages" value="1" min="1" max="999" style="width:60px"></td>
               <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID;?>" style="width:80px"></td>
-              <td><button onclick="this.disabled=true;this.form.submit();">Add</button></td>
+              <td><button onclick="this.disabled=true;this.form.submit();"><?php echo ADM_ADD; ?></button></td>
             </tr>
           </table>
         </form>
@@ -73,12 +73,12 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 
     <!-- Artifacts -->
     <div class="nat-card">
-      <h2>✨ Add Artifacts</h2>
+      <h2><?php echo ADM_ADD_ARTIFACTS; ?></h2>
       <div class="body">
         <form method="post" action="../Admin/admin.php?action=addArtifacts">
           <?php echo csrf_field(); ?>
           <table class="nat-table">
-            <tr><th>Icon</th><th>Type</th><th>Qty</th><th>Player</th><th></th></tr>
+            <tr><th><?php echo ADM_ICON; ?></th><th><?php echo ADM_TYPE; ?></th><th><?php echo ADM_QTY_2; ?></th><th><?php echo ADM_PLAYER_2; ?></th><th></th></tr>
             <tr>
               <td class="icon"><img id="artifactImage" class="artefact_icon_1" src="../img/x.gif"></td>
               <td>
@@ -95,7 +95,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
               </td>
               <td><input type="number" name="artifactQuantity" value="1" min="1" max="999" style="width:50px"></td>
               <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID;?>" style="width:70px"></td>
-              <td><button onclick="this.disabled=true;this.form.submit();">Add</button></td>
+              <td><button onclick="this.disabled=true;this.form.submit();"><?php echo ADM_ADD; ?></button></td>
             </tr>
           </table>
         </form>
@@ -105,13 +105,13 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 
   <!-- Deleted Artifacts -->
   <div class="nat-card">
-    <h2>🗑️ Deleted Artifacts</h2>
+    <h2><?php echo ADM_DELETED_ARTIFACTS; ?></h2>
     <div class="body" style="padding:0">
       <table class="nat-table">
-        <tr><th></th><th></th><th>Name</th><th>Bonus</th><th>Effect</th><th>Time</th><th>Old Owner</th><th>Old Village</th></tr>
+        <tr><th></th><th></th><th><?php echo ADM_NAME; ?></th><th><?php echo ADM_BONUS; ?></th><th><?php echo ADM_EFFECT; ?></th><th><?php echo ADM_TIME; ?></th><th><?php echo ADM_OLD_OWNER; ?></th><th><?php echo ADM_OLD_VILLAGE; ?></th></tr>
         <?php if(empty($deletedArtifacts)){ echo '<tr><td colspan="8" class="none">No artifacts</td></tr>'; } else { foreach($deletedArtifacts as $artifact){ $info=Artifacts::getArtifactInfo($artifact);?>
         <tr>
-          <td><a href="?action=returnArtifact&artid=<?php echo $artifact['id'];?>&del=1"><img src="../../img/admin/acc.gif" title="Restore"></a></td>
+          <td><a href="?action=returnArtifact&artid=<?php echo $artifact['id'];?>&del=1"><img src="../../img/admin/acc.gif" title="<?php echo ADM_RESTORE; ?>"></a></td>
           <td class="icon"><img class="artefact_icon_<?php echo $artifact['type'];?>" src="../img/x.gif"></td>
           <td><?php echo $artifact['name'];?></td>
           <td><?php echo $info['bonus'];?></td>
@@ -127,10 +127,10 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 
   <!-- Overview -->
   <div class="nat-card" style="margin-top:14px">
-    <h2>📊 Artifacts Overview</h2>
+    <h2><?php echo ADM_ARTIFACTS_OVERVIEW; ?></h2>
     <div class="body" style="padding:0">
       <table class="nat-table">
-        <tr><th>Icon</th><th>Name</th><th>Effect</th><th>Player</th><th>Alliance</th></tr>
+        <tr><th><?php echo ADM_ICON; ?></th><th><?php echo ADM_NAME; ?></th><th><?php echo ADM_EFFECT; ?></th><th><?php echo ADM_PLAYER_2; ?></th><th><?php echo ADMIN_ALLIANCE; ?></th></tr>
         <?php
         $small=$database->getArtifactsBysize(1); $big=$database->getArtifactsBysize(2); $unique=$database->getArtifactsBysize(3);
         if(empty($small)&&empty($big)&&empty($unique)){ echo '<tr><td colspan="5" class="none">No artifacts found</td></tr>'; }

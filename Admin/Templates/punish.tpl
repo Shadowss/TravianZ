@@ -53,7 +53,7 @@ $active = $admin->getUserActive();
 </style>
 
 <table class="punish-box">
-	<thead><tr><th>Punish Player</th></tr></thead>
+	<thead><tr><th><?php echo ADM_PUNISH_PLAYER; ?></th></tr></thead>
 	<tbody>
 		<tr><td>
 			<form method="post" action="admin.php" style="margin:0">
@@ -74,7 +74,7 @@ $active = $admin->getUserActive();
 						<option value="90">90%</option>
 						<option value="100">100%</option>
 					</select>
-					<button type="submit" class="btn-ok">OK</button>
+					<button type="submit" class="btn-ok"><?php echo ADM_OK; ?></button>
 				</div>
 			</form>
 		</td></tr>
@@ -86,8 +86,8 @@ $active = $admin->getUserActive();
 				<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 				<div class="punish-row">
-					<label><input type="checkbox" name="del_troop" value="1"> <span style="text-decoration:line-through;color:#94a3b8">Delete Troops</span></label>
-					<button type="submit" class="btn-ok">OK</button>
+					<label><input type="checkbox" name="del_troop" value="1"> <span style="text-decoration:line-through;color:#94a3b8"><?php echo ADM_DELETE_TROOPS; ?></span></label>
+					<button type="submit" class="btn-ok"><?php echo ADM_OK; ?></button>
 				</div>
 			</form>
 		</td></tr>
@@ -99,8 +99,8 @@ $active = $admin->getUserActive();
 				<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 				<div class="punish-row">
-					<label><input type="checkbox" name="clean_ware" value="1"> Empty Warehouses</label>
-					<button type="submit" class="btn-ok">OK</button>
+					<label><input type="checkbox" name="clean_ware" value="1"><?php echo ADM_EMPTY_WAREHOUSES; ?></label>
+					<button type="submit" class="btn-ok"><?php echo ADM_OK; ?></button>
 				</div>
 			</form>
 		</td></tr>

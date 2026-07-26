@@ -132,7 +132,7 @@ function go_url(url){ location=url; return false; }
                     <span class="hero-name"><?php echo htmlspecialchars($hero['name']);?></span>
                     <span class="lvl">Level <?php echo $hero['level'];?></span>
                 </h2>
-                <div class="hero-meta">Player: <a href="admin.php?p=player&uid=<?php echo $id;?>"><?php echo htmlspecialchars($user['username']);?></a></div>
+                <div class="hero-meta"><?php echo ADM_PLAYER; ?><a href="admin.php?p=player&uid=<?php echo $id;?>"><?php echo htmlspecialchars($user['username']);?></a></div>
             </div>
         </div>
         <div><img class="unit u<?php echo $hero['unit'];?>" src="img/x.gif" alt=""></div>
@@ -146,10 +146,10 @@ function go_url(url){ location=url; return false; }
     <input name="hlvl" type="hidden" value="0">
 
     <div class="card">
-        <h3>📝 Basic Info</h3>
+        <h3><?php echo ADM_BASIC_INFO; ?></h3>
         <div class="body">
-            <div class="form-row"><label>Hero Name</label><div class="field"><input name="hname" type="text" value="<?php echo htmlspecialchars($hero['name']);?>"></div></div>
-            <div class="form-row"><label>Hero Unit</label><div class="field">
+            <div class="form-row"><label><?php echo ADM_HERO_NAME; ?></label><div class="field"><input name="hname" type="text" value="<?php echo htmlspecialchars($hero['name']);?>"></div></div>
+            <div class="form-row"><label><?php echo ADM_HERO_UNIT; ?></label><div class="field">
                 <div class="unit-preview"><span id="unt"><img class="unit u<?php echo $hero['unit'];?>" src="img/x.gif"></span>
                 <select name="hunit" onchange="check_unit(this)" style="flex:1;padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#0f172a;font-size:13px;">
                     <?php
@@ -185,13 +185,13 @@ function go_url(url){ location=url; return false; }
                     ?>
                 </select></div>
             </div></div>
-            <div class="form-row"><label>❤ Health</label><div class="field"><input name="hhealth" type="text" value="<?php echo round($hero['health']);?>" style="width:80px;"> %</div></div>
-            <div class="form-row"><label>✨ Experience</label><div class="field"><b><span id="exp1"><?php echo $expPct;?></span>%</b> <input id="exp" name="exp" type="hidden" value="<?php echo $expPct;?>"></div></div>
+            <div class="form-row"><label><?php echo ADM_HEALTH; ?></label><div class="field"><input name="hhealth" type="text" value="<?php echo round($hero['health']);?>" style="width:80px;"> %</div></div>
+            <div class="form-row"><label><?php echo ADM_EXPERIENCE; ?></label><div class="field"><b><span id="exp1"><?php echo $expPct;?></span>%</b> <input id="exp" name="exp" type="hidden" value="<?php echo $expPct;?>"></div></div>
         </div>
     </div>
 
     <div class="card">
-        <h3>📈 Current Stats</h3>
+        <h3><?php echo ADM_CURRENT_STATS; ?></h3>
         <div class="body" style="font-size:12px;line-height:1.8;">
             <?php
                 // punctele nefolosite, nu suma statisticilor calculate (era gresit)
@@ -201,13 +201,12 @@ function go_url(url){ location=url; return false; }
                 $eTotal     = 5 + ($hero['level'] * 5);
                 $eFree      = max(0, $eTotal - $eUsed);
             ?>
-            <div>Level: <b><?php echo $hero['level'];?></b> / <?php echo $eMaxLevel; ?>
-                 | Points used: <b><?php echo $eUsed; ?></b> of <b><?php echo $eTotal; ?></b>
-                 (free: <b><?php echo $eFree; ?></b>)</div>
-            <div>Offence: <b><?php echo $hero['atk'];?></b> (Lv <?php echo $hero['attack'];?>)</div>
-            <div>Defence: <b><?php echo $hero['di']."/".$hero['dc'];?></b> (Lv <?php echo $hero['defence'];?>)</div>
-            <div>Off-Bonus: <b><?php echo ($hero['ob']-1)*100;?>%</b> | Def-Bonus: <b><?php echo ($hero['db']-1)*100;?>%</b></div>
-            <div>Regen: <b><?php echo $hero['regeneration']*5*SPEED;?>/day</b></div>
+            <div><?php echo ADM_LEVEL; ?><b><?php echo $hero['level'];?></b> / <?php echo $eMaxLevel; ?>
+                 | Points used: <b><?php echo $eUsed; ?></b><?php echo ADM_OF; ?><b><?php echo $eTotal; ?></b><?php echo ADM_FREE; ?><b><?php echo $eFree; ?></b>)</div>
+            <div><?php echo ADM_OFFENCE; ?><b><?php echo $hero['atk'];?></b> (Lv <?php echo $hero['attack'];?>)</div>
+            <div><?php echo ADM_DEFENCE; ?><b><?php echo $hero['di']."/".$hero['dc'];?></b> (Lv <?php echo $hero['defence'];?>)</div>
+            <div><?php echo ADM_OFF_BONUS; ?><b><?php echo ($hero['ob']-1)*100;?>%</b><?php echo ADM_DEF_BONUS; ?><b><?php echo ($hero['db']-1)*100;?>%</b></div>
+            <div><?php echo ADM_REGEN; ?><b><?php echo $hero['regeneration']*5*SPEED;?>/day</b></div>
             <?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
                 $eResPts  = (int)($hero['resources'] ?? 0);
                 $eResType = (int)($hero['res_type'] ?? 0);
@@ -218,13 +217,13 @@ function go_url(url){ location=url; return false; }
                     ? (int) round($eResPts * $ePerOne * SPEED)
                     : (int) round($eResPts * $ePerAll * SPEED);
             ?>
-            <div>Resources: <b><?php echo $eAmount; ?>/h</b> (<?php echo $eNames[$eResType] ?? 'all resources'; ?>, Lv <?php echo $eResPts; ?>)</div>
+            <div><?php echo ADM_RESOURCES; ?><b><?php echo $eAmount; ?>/h</b> (<?php echo $eNames[$eResType] ?? 'all resources'; ?>, Lv <?php echo $eResPts; ?>)</div>
             <?php } ?>
         </div>
     </div>
 
     <div class="card">
-        <h3>⚔ Add Points</h3>
+        <h3><?php echo ADM_ADD_POINTS; ?></h3>
         <div class="body">
             <?php if($isMax):?>
             <div style="text-align:center;padding:8px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;color:#92400e;font-size:12px;margin-bottom:10px;">
@@ -232,7 +231,7 @@ function go_url(url){ location=url; return false; }
             </div>
             <?php endif;?>
             <table class="stat-table">
-                <thead><tr><th>Attribute</th><th style="width:80px;text-align:center;">Current</th><th style="width:120px;text-align:center;">Add</th><th style="width:60px;text-align:center;">New</th></tr></thead>
+                <thead><tr><th><?php echo ADM_ATTRIBUTE; ?></th><th style="width:80px;text-align:center;"><?php echo ADM_CURRENT; ?></th><th style="width:120px;text-align:center;"><?php echo ADM_ADD; ?></th><th style="width:60px;text-align:center;"><?php echo ADM_NEW; ?></th></tr></thead>
                 <tbody>
                 <?php
                 $attrs = [
@@ -256,7 +255,7 @@ function go_url(url){ location=url; return false; }
             </table>
             <?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) { ?>
             <div class="form-row" style="margin-top:10px;">
-                <label>Produced resource</label>
+                <label><?php echo ADM_PRODUCED_RESOURCE; ?></label>
                 <div class="field">
                     <select name="hrestype" style="padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#0f172a;font-size:13px;">
                         <?php
@@ -270,13 +269,13 @@ function go_url(url){ location=url; return false; }
                 </div>
             </div>
             <?php } ?>
-            <div style="text-align:center;margin-top:10px;font-size:12px;">Level nou: <b><span id="hlvl">0</span></b></div>
+            <div style="text-align:center;margin-top:10px;font-size:12px;"><?php echo ADM_LEVEL_NOU; ?><b><span id="hlvl">0</span></b></div>
         </div>
     </div>
 
     <div class="actions">
-        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn btn-back" onclick="return go_url(this.href)">← Back</a>
-        <button type="submit" class="btn btn-save">💾 Save Hero</button>
+        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn btn-back" onclick="return go_url(this.href)"><?php echo ADM_BACK; ?></a>
+        <button type="submit" class="btn btn-save"><?php echo ADM_SAVE_HERO; ?></button>
     </div>
 </form>
 </div>

@@ -44,29 +44,27 @@ $id = $_SESSION['id'];
 <div class="plus-wrap">
   <div class="plus-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l4 4-4 4-4-4 4-4zm0 8l4 4-4-4 4-4zm-8 4l4 4-4 4-4-4 4-4zm16 0l4 4-4 4-4-4 4-4z" fill="#8e44ad"/></svg>
-    <h2>Plus Management</h2>
+    <h2><?php echo ADM_PLUS_MANAGEMENT; ?></h2>
   </div>
 
   <div class="plus-card">
     <div class="icon-big">
       <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
-    <h3>Give Everyone Free Plus</h3>
-    <p>Activate Travian Plus for ALL players on the server.</p>
+    <h3><?php echo ADM_GIVE_EVERYONE_FREE_PLUS; ?></h3>
+    <p><?php echo ADM_ACTIVATE_TRAVIAN_PLUS_FOR_ALL_PLAYERS_ON_THE; ?></p>
 
     <form action="../GameEngine/Admin/Mods/givePlus.php" method="POST" class="plus-form">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       <input type="number" name="plus" value="1" min="1" max="365" required>
-      <span>Days</span>
+      <span><?php echo ADM_DAYS; ?></span>
       <button type="submit">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        Give Plus
-      </button>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_GIVE_PLUS; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="plus-success">✓ Plus has been successfully activated for all players!</div>
+    <div class="plus-success"><?php echo ADM_PLUS_HAS_BEEN_SUCCESSFULLY_ACTIVATED_FOR_ALL; ?></div>
   <?php } ?>
 </div>

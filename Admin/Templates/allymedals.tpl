@@ -42,12 +42,12 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
   <table class="medal-table">
     <thead>
       <tr>
-        <th>Category</th><th>Rank</th><th>Week</th><th>Points</th><th>Medal</th><th style="width:32px"></th>
+        <th><?php echo ADM_CATEGORY; ?></th><th><?php echo ADM_RANK; ?></th><th><?php echo ADM_WEEK; ?></th><th><?php echo ADM_POINTS_2; ?></th><th><?php echo ADM_MEDAL; ?></th><th style="width:32px"></th>
       </tr>
     </thead>
     <tbody>
     <?php if(sizeof($varmedal)==0){ ?>
-      <tr><td colspan="6" class="medal-empty">This alliance has no medals yet</td></tr>
+      <tr><td colspan="6" class="medal-empty"><?php echo ADM_THIS_ALLIANCE_HAS_NO_MEDALS_YET; ?></td></tr>
     <?php } else {
       $i=0;$averagerank=0;
       foreach($varmedal as $medal){
@@ -66,7 +66,7 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
             <?php echo csrf_field(); ?>
             <input type="hidden" name="aid" value="<?=(int)($_GET['aid'] ?? 0)?>">
             <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
-            <button type="submit" name="medalid" value="<?=$medal['id']?>" class="medal-del" title="Delete">
+            <button type="submit" name="medalid" value="<?=$medal['id']?>" class="medal-del" title="<?php echo ADM_DELETE; ?>">
               <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
             </button>
           </form>
@@ -76,16 +76,16 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
       $average = $i>0 ? round($averagerank/$i,2) : 0;
     ?>
       <tr class="medal-avg">
-        <td>Average Rank</td>
+        <td><?php echo ADM_AVERAGE_RANK; ?></td>
         <td><?=$average?></td>
         <td></td><td></td>
-        <td>Delete All</td>
+        <td><?php echo ADM_DELETE_ALL; ?></td>
         <td>
           <form action="../GameEngine/Admin/Mods/delallymedalbyaid.php" method="POST" style="margin:0">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
             <input type="hidden" name="aid" value="<?=(int)($_GET['aid'] ?? 0)?>">
-            <button type="submit" class="medal-del" title="Delete All">
+            <button type="submit" class="medal-del" title="<?php echo ADM_DELETE_ALL; ?>">
               <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
             </button>
           </form>

@@ -49,15 +49,13 @@
 <div class="reset-wrap">
   <div class="reset-card">
     <div class="reset-head">
-      <h2>⚠️ Server Resetting</h2>
+      <h2><?php echo ADM_SERVER_RESETTING; ?></h2>
     </div>
     
     <div class="reset-body" id="txtreset">
       <div class="reset-warning">
-        <strong>WARNING! Irreversible action</strong>
-        This operation will delete ALL data: players, watches, allies, reports. The server will be reset for a new game.
-      </div>
-      <p>This server will be reset to create new game server.<br>Click button <b>Reset</b> to proceed.</p>
+        <strong><?php echo ADM_WARNING_IRREVERSIBLE_ACTION; ?></strong><?php echo ADM_THIS_OPERATION_WILL_DELETE_ALL_DATA_PLAYERS; ?></div>
+      <p><?php echo ADM_THIS_SERVER_WILL_BE_RESET_TO_CREATE_NEW_GAME; ?><br><?php echo ADM_CLICK_BUTTON; ?><b><?php echo ADM_RESET; ?></b><?php echo ADM_TO_PROCEED; ?></p>
     </div>
 <!-- BIFA MUTATA AICI, IN AFARA reset-body -->
     <div class="reset-option">
@@ -69,12 +67,12 @@ Keep Admin accout (<?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin')
 </br></br>
     <div class="reset-loader" id="resetLoader">
       <div class="spinner"></div>
-      <div>Please wait... while the server is being reset</div>
+      <div><?php echo ADM_PLEASE_WAIT_WHILE_THE_SERVER_IS_BEING_RESET; ?></div>
     </div>
     
     <div class="reset-foot" id="hideobj">
-      <button type="button" class="btn btn-back" onclick="go_url('../Admin/admin.php')">« Back</button>
-      <button type="button" class="btn btn-reset" onclick="go_proceed()">Reset Server</button>
+      <button type="button" class="btn btn-back" onclick="go_url('../Admin/admin.php')"><?php echo ADM_BACK_2; ?></button>
+      <button type="button" class="btn btn-reset" onclick="go_proceed()"><?php echo ADM_RESET_SERVER; ?></button>
     </div>
   </div>
 </div>

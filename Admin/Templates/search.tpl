@@ -57,7 +57,7 @@ $search = stripslashes($_POST['s']?? '');
       <circle cx="11" cy="11" r="7" stroke="#555" stroke-width="2"/>
       <path d="M20 20l-3.5-3.5" stroke="#555" stroke-width="2" stroke-linecap="round"/>
     </svg>
-    <h2>Admin Search</h2>
+    <h2><?php echo ADM_ADMIN_SEARCH; ?></h2>
   </div>
 
   <div class="search-card">
@@ -68,8 +68,8 @@ $search = stripslashes($_POST['s']?? '');
           <option value="<?php echo $k;?>" <?php echo $current==$k?'selected':'';?>><?php echo $v[1].' '.$v[0];?></option>
         <?php }?>
       </select>
-      <input type="text" name="s" placeholder="Enter name, ID, email or IP..." value="<?php echo htmlspecialchars($search);?>" autofocus>
-      <input type="submit" value="Search">
+      <input type="text" name="s" placeholder="<?php echo ADM_SEARCH_HINT; ?>" value="<?php echo htmlspecialchars($search);?>" autofocus>
+      <input type="submit" value="<?php echo ADM_SEARCH_BTN; ?>">
     </form>
 
     <div class="quick-types">

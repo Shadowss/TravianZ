@@ -72,7 +72,7 @@ if(isset($id)){
       <div class="troop-name"><?=$unarray[$uid]?></div>
       <div class="troop-input">
         <input name="u<?=$uid?>" id="u<?=$uid?>" value="<?=$current?>" maxlength="10" type="number" min="0">
-        <div class="troop-current">Now: <b><?=number_format($current)?></b></div>
+        <div class="troop-current"><?php echo ADM_NOW; ?><b><?=number_format($current)?></b></div>
       </div>
     </div>
   <?php } ?>
@@ -80,11 +80,9 @@ if(isset($id)){
   
   <div class="addtroops-foot">
     <button type="button" class="btn btn-back" onclick="location.href='admin.php?p=village&did=<?=(int)($_GET['did'] ?? 0)?>'">
-      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back
-    </button>
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><?php echo ADM_BACK_3; ?></button>
     <button type="submit" name="save" class="btn btn-save">
-      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save
-    </button>
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><?php echo ADM_SAVE_3; ?></button>
   </div>
 </div>
 

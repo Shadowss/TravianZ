@@ -71,8 +71,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo EDIT_NEWSBOX1 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX1_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="box1">
-                            <option value="true" <?php if (NEWSBOX1==true) echo "selected";?>>Enable</option>
-                            <option value="false" <?php if (NEWSBOX1==false) echo "selected";?>>Disable</option>
+                            <option value="true" <?php if (NEWSBOX1==true) echo "selected";?>><?php echo ADM_ENABLE; ?></option>
+                            <option value="false" <?php if (NEWSBOX1==false) echo "selected";?>><?php echo ADM_DISABLE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -80,8 +80,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo EDIT_NEWSBOX2 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX2_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="box2">
-                            <option value="true" <?php if (NEWSBOX2==true) echo "selected";?>>Enable</option>
-                            <option value="false" <?php if (NEWSBOX2==false) echo "selected";?>>Disable</option>
+                            <option value="true" <?php if (NEWSBOX2==true) echo "selected";?>><?php echo ADM_ENABLE; ?></option>
+                            <option value="false" <?php if (NEWSBOX2==false) echo "selected";?>><?php echo ADM_DISABLE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -89,8 +89,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo EDIT_NEWSBOX3 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX3_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="box3">
-                            <option value="true" <?php if (NEWSBOX3==true) echo "selected";?>>Enable</option>
-                            <option value="false" <?php if (NEWSBOX3==false) echo "selected";?>>Disable</option>
+                            <option value="true" <?php if (NEWSBOX3==true) echo "selected";?>><?php echo ADM_ENABLE; ?></option>
+                            <option value="false" <?php if (NEWSBOX3==false) echo "selected";?>><?php echo ADM_DISABLE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -105,9 +105,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

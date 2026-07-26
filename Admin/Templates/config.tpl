@@ -92,22 +92,6 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
     <tr><td><?php echo CONF_SERV_PEACESYST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_PEACESYST_TOOLTIP ?></span></em></td><td><?php echo (["None", "Normal", "Christmas", "New Year", "Easter"])[PEACE]; ?></td></tr>
     <tr><td><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td><td><?php echo GP_ENABLE ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td><?php echo CONF_SERV_ERRORREPORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ERRORREPORT_TOOLTIP ?></span></em></td><td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td></tr>
-	    <tr>
-      <td>Hero base regeneration <em class="tooltip">?<span class="classic">Hit points the hero recovers per day, independent of the regeneration attribute and of equipped items. 0 disables it.</span></em></td>
-      <td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b> HP / day</td>
-    </tr>
-    <tr>
-      <td>Hero exchange rates <em class="tooltip">?<span class="classic">Rates of the exchange office in the auction house. The difference between the two directions is the house margin, so trading back and forth loses value instead of creating it.</span></em></td>
-      <td>1 gold &rarr; <b><?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?></b> silver
-          &nbsp;|&nbsp;
-          <b><?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?></b> silver &rarr; 1 gold</td>
-    </tr>
-    <tr>
-      <td>Hero resource production <em class="tooltip">?<span class="classic">Hourly resources produced by each point the hero invested in the Resources attribute, in the village where the hero is. Players choose freely between spreading it over all four resources or concentrating it on one.</span></em></td>
-      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b> of each
-          &nbsp;|&nbsp;
-          <b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b> of one type</td>
-    </tr>
   </table>
 </div>
 
@@ -144,19 +128,19 @@ $cronKeyMasked = ($cronKey === '')
     : (strlen($cronKey) > 12 ? substr($cronKey, 0, 6) . str_repeat('&bull;', 8) . substr($cronKey, -4) : str_repeat('&bull;', 8));
 ?>
 <div class="config-card">
-  <div class="config-head"><span>Cron &amp; Automation</span><a href="admin.php?p=editCronSet" title="Edit Cron &amp; Automation" class="edit-btn"><?php echo $editIcon; ?></a></div>
+  <div class="config-head"><span><?php echo ADM_CRON_AUTOMATION; ?></span><a href="admin.php?p=editCronSet" title="<?php echo ADM_EDIT_CRON_AUTOMATION; ?>" class="edit-btn"><?php echo $editIcon; ?></a></div>
   <table class="config-table">
     <tr><td class="b"><?php echo SERV_VARIABLE ?></td><td class="b"><?php echo SERV_VALUE ?></td></tr>
 
     <tr>
-      <td>Automation source <em class="tooltip">?<span class="classic">Where the game tick (battles, movements, training, construction) is processed from. When the cron job is running, players' page loads no longer carry the processing.</span></em></td>
+      <td><?php echo ADM_AUTOMATION_SOURCE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_WHERE_THE_GAME_TICK_BATTLES_MOVEMENTS_TRAINI; ?></span></em></td>
       <td><?php echo $cronActive
             ? "<span class='badge green'>Cron job</span>"
             : "<span class='badge red'>Page loads (fallback)</span>"; ?></td>
     </tr>
 
     <tr>
-      <td>Last cron tick <em class="tooltip">?<span class="classic">Written by cron.php on every tick into GameEngine/Prevention/cron_active.txt. Under 90 seconds means the cron is alive.</span></em></td>
+      <td><?php echo ADM_LAST_CRON_TICK; ?><em class="tooltip">?<span class="classic"><?php echo ADM_WRITTEN_BY_CRON_PHP_ON_EVERY_TICK_INTO_GAMEE; ?></span></em></td>
       <td><?php
             if ($cronLastRun > 0) {
                 echo date('d.m.Y H:i:s', $cronLastRun) . ' <span style="color:#777">(' . $cronAge . 's ago)</span>';
@@ -167,38 +151,38 @@ $cronKeyMasked = ($cronKey === '')
     </tr>
 
     <tr>
-      <td>Invocation length <em class="tooltip">?<span class="classic">CRON_LOOP_SECONDS - how long one cron.php invocation keeps running. Hosts that only allow a cron every 5 minutes still get a tick every minute this way. 0 = a single tick per invocation.</span></em></td>
+      <td><?php echo ADM_INVOCATION_LENGTH; ?><em class="tooltip">?<span class="classic"><?php echo ADM_CRON_LOOP_SECONDS_HOW_LONG_ONE_CRON_PHP_INVO; ?></span></em></td>
       <td><?php echo $cronLoop > 0
             ? $cronLoop . ' s <span style="color:#777">(' . (int) floor($cronLoop / max($cronTick, 1)) . ' ticks per invocation)</span>'
             : "<span class='badge blue'>Single tick</span>"; ?></td>
     </tr>
 
     <tr>
-      <td>Tick interval <em class="tooltip">?<span class="classic">CRON_TICK_SECONDS - how often Automation runs inside one invocation. Automation itself expects to run about every 60 seconds.</span></em></td>
+      <td><?php echo ADM_TICK_INTERVAL; ?><em class="tooltip">?<span class="classic"><?php echo ADM_CRON_TICK_SECONDS_HOW_OFTEN_AUTOMATION_RUNS; ?></span></em></td>
       <td><?php echo $cronTick; ?> s</td>
     </tr>
 
     <tr>
-      <td>HTTP trigger key <em class="tooltip">?<span class="classic">CRON_KEY - only needed to call cron.php over HTTP (external cron service). Running it from the server's own cron job does not use this key. Generated automatically at install.</span></em></td>
+      <td><?php echo ADM_HTTP_TRIGGER_KEY; ?><em class="tooltip">?<span class="classic"><?php echo ADM_CRON_KEY_ONLY_NEEDED_TO_CALL_CRON_PHP_OVER_H; ?></span></em></td>
       <td><?php if ($cronKey === '') { ?>
-            <span class='badge red'>Not set</span>
+            <span class='badge red'><?php echo ADM_NOT_SET; ?></span>
           <?php } else { ?>
             <span id="cronKeyMask"><?php echo $cronKeyMasked; ?></span>
             <span id="cronKeyFull" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronKey, ENT_QUOTES, 'UTF-8'); ?></span>
-            <a href="#" style="margin-left:6px" onclick="var m=document.getElementById('cronKeyMask'),f=document.getElementById('cronKeyFull'),u=document.getElementById('cronUrlFull');var hidden=(f.style.display==='none');m.style.display=hidden?'none':'';f.style.display=hidden?'':'none';if(u){u.style.display=hidden?'':'none';}this.textContent=hidden?'hide':'show';return false;">show</a>
+            <a href="#" style="margin-left:6px" onclick="var m=document.getElementById('cronKeyMask'),f=document.getElementById('cronKeyFull'),u=document.getElementById('cronUrlFull');var hidden=(f.style.display==='none');m.style.display=hidden?'none':'';f.style.display=hidden?'':'none';if(u){u.style.display=hidden?'':'none';}this.textContent=hidden?'hide':'show';return false;"><?php echo ADM_SHOW; ?></a>
           <?php } ?></td>
     </tr>
 
     <?php if ($cronUrl !== '') { ?>
     <tr>
-      <td>HTTP trigger URL <em class="tooltip">?<span class="classic">Optional. Use this with an external cron service if the host cannot run a local cron job. One HTTP call = one tick.</span></em></td>
-      <td><span style="color:#777">hidden &ndash; use "show" above</span>
+      <td><?php echo ADM_HTTP_TRIGGER_URL; ?><em class="tooltip">?<span class="classic"><?php echo ADM_OPTIONAL_USE_THIS_WITH_AN_EXTERNAL_CRON_SERV; ?></span></em></td>
+      <td><span style="color:#777"><?php echo ADM_HIDDEN_USE_SHOW_ABOVE; ?></span>
           <span id="cronUrlFull" style="display:none;word-break:break-all"><?php echo htmlspecialchars($cronUrl, ENT_QUOTES, 'UTF-8'); ?></span></td>
     </tr>
     <?php } ?>
 
     <tr>
-      <td>Database cleanup <em class="tooltip">?<span class="classic">Automation trims tables that would otherwise grow forever. Archived reports are never deleted. 0 disables a rule.</span></em></td>
+      <td><?php echo ADM_DATABASE_CLEANUP; ?><em class="tooltip">?<span class="classic"><?php echo ADM_AUTOMATION_TRIMS_TABLES_THAT_WOULD_OTHERWISE; ?></span></em></td>
       <td><?php
             $parts = array();
             $parts[] = 'reports: ' . ($cleanReports > 0 ? $cleanReports . 'd' : 'off');
@@ -209,7 +193,7 @@ $cronKeyMasked = ($cronKey === '')
     </tr>
 
     <tr>
-      <td>Last cleanup run <em class="tooltip">?<span class="classic">Cleanup runs once per hour from Automation and deletes in batches, so a first run on an old server catches up over several passes.</span></em></td>
+      <td><?php echo ADM_LAST_CLEANUP_RUN; ?><em class="tooltip">?<span class="classic"><?php echo ADM_CLEANUP_RUNS_ONCE_PER_HOUR_FROM_AUTOMATION_A; ?></span></em></td>
       <td><?php
             if (is_array($cleanupInfo) && !empty($cleanupInfo['time'])) {
                 $r = isset($cleanupInfo['removed']) ? $cleanupInfo['removed'] : array();
@@ -225,7 +209,7 @@ $cronKeyMasked = ($cronKey === '')
 
     <?php if ($cronCmd !== '') { ?>
     <tr>
-      <td>Cron job command <em class="tooltip">?<span class="classic">Add this in cPanel &rarr; Cron Jobs. The path is detected from this installation.</span></em></td>
+      <td><?php echo ADM_CRON_JOB_COMMAND; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ADD_THIS_IN_CPANEL_CRON_JOBS_THE_PATH_IS_DET; ?></span></em></td>
       <td style="word-break:break-all"><code><?php echo htmlspecialchars($cronCmd, ENT_QUOTES, 'UTF-8'); ?></code></td>
     </tr>
     <?php } ?>
@@ -234,34 +218,46 @@ $cronKeyMasked = ($cronKey === '')
 
 <!-- NEW FUNCTIONS -->
 <div class="config-card">
-  <div class="config-head"><span>New Mechanics and Functions</span><a href="admin.php?p=editNewFunctions" title="Edit New Mechanics and Functions" class="edit-btn"><?php echo $editIcon; ?></a></div>
+  <div class="config-head"><span><?php echo ADM_NEW_MECHANICS_AND_FUNCTIONS; ?></span><a href="admin.php?p=editNewFunctions" title="<?php echo ADM_EDIT_NEW_MECHANICS_AND_FUNCTIONS; ?>" class="edit-btn"><?php echo $editIcon; ?></a></div>
   <table class="config-table">
+    <tr>
+      <td><?php echo ADM_HERO_BASE_REGENERATION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HIT_POINTS_THE_HERO_RECOVERS_PER_DAY_INDEPEN; ?></span></em></td>
+      <td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b><?php echo ADM_HP_DAY; ?></td>
+    </tr>
+    <tr>
+      <td><?php echo ADM_HERO_EXCHANGE_RATES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_RATES_OF_THE_EXCHANGE_OFFICE_IN_THE_AUCTION; ?></span></em></td>
+      <td><?php echo ADM_1_GOLD; ?><b><?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?></b><?php echo ADM_SILVER_2; ?><b><?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?></b><?php echo ADM_SILVER_1_GOLD; ?></td>
+    </tr>
+    <tr>
+      <td><?php echo ADM_HERO_RESOURCE_PRODUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOURLY_RESOURCES_PRODUCED_BY_EACH_POINT_THE; ?></span></em></td>
+      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b><?php echo ADM_OF_EACH; ?><b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b><?php echo ADM_OF_ONE_TYPE; ?></td>
+    </tr>
     <tr><td class="b"><?php echo SERV_VARIABLE ?></td><td class="b"><?php echo SERV_VALUE ?></td></tr>
-    <tr><td>Display oasis in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of oases of each village in the player profile</span></em></td><td><?php echo NEW_FUNCTIONS_OASIS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Alliance invitation message <em class="tooltip">?<span class="classic">Enable (Disable) sending an in-game message to the player, if he was invited to the alliance</span></em></td><td><?php echo NEW_FUNCTIONS_ALLIANCE_INVITATION ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New Alliance & Embassy Mechanics <em class="tooltip">?<span class="classic">https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics</span></em></td><td><?php echo NEW_FUNCTIONS_EMBASSY_MECHANICS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New forum post message <em class="tooltip">?<span class="classic">Enable (Disable) forum subscription messages</span></em></td><td><?php echo NEW_FUNCTIONS_FORUM_POST_MESSAGE ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Tribes images in profile <em class="tooltip">?<span class="classic">Enable (Disable) displaying images of tribes</span></em></td><td><?php echo NEW_FUNCTIONS_TRIBE_IMAGES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New Tribe: Huns <em class="tooltip">?<span class="classic">Enable (Disable) the Huns tribe</span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New Tribe: Egyptians <em class="tooltip">?<span class="classic">Enable (Disable) the Egyptians tribe</span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New Tribe: Spartans <em class="tooltip">?<span class="classic">Enable (Disable) the Spartans tribe</span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>New Tribe: Vikings <em class="tooltip">?<span class="classic">Enable (Disable) the Vikings tribe</span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>MHs images in profile <em class="tooltip">?<span class="classic">Enable (Disable) displaying images of Multihunters</span></em></td><td><?php echo NEW_FUNCTIONS_MHS_IMAGES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Display artifact in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the artifact</span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Display WoW in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder</span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_WONDER ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Vacation Mode <em class="tooltip">?<span class="classic">Enable (Disable) vacation mode</span></em></td><td><?php echo NEW_FUNCTIONS_VACATION ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Catapult targets <em class="tooltip">?<span class="classic">Enable (Disable) the display of catapult targets</span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Manual on Nature and Natars <em class="tooltip">?<span class="classic">Enable (Disable) manual info</span></em></td><td><?php echo NEW_FUNCTIONS_MANUAL_NATURENATARS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Direct links placement <em class="tooltip">?<span class="classic">Left menu vs right menu</span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_LINKS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Medal Veteran Player <em class="tooltip">?<span class="classic">3 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_3YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">5 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-    <tr><td>Medal Veteran Player 10a <em class="tooltip">?<span class="classic">10 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>Special Medals<em class="tooltip">?<span class="classic">Special Medals</span></em></td><td><?php echo NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>Server Milestones<em class="tooltip">?<span class="classic">Server Milestones</span></em></td><td><?php echo NEW_FUNCTIONS_MILESTONES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>Server Medal Reset Timer<em class="tooltip">?<span class="classic">Server Medal Reset Timer</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_RESET ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>T4 Hero (items, adventures, auction)<em class="tooltip">?<span class="classic">T4 Hero (items, adventures, auction)</span></em></td><td><?php echo NEW_FUNCTIONS_HERO_T4 ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>Registration Bonus Gold<em class="tooltip">?<span class="classic">Give every newly registered player a one-time gold bonus at account creation</span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
-	<tr><td>Registration Bonus Gold &ndash; amount<em class="tooltip">?<span class="classic">How much gold each new player receives when the bonus is enabled</span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200); ?></td></tr>
+    <tr><td><?php echo ADM_DISPLAY_OASIS_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_DISPLAY_OF_OASES_OF_EACH; ?></span></em></td><td><?php echo NEW_FUNCTIONS_OASIS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_ALLIANCE_INVITATION_MESSAGE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_SENDING_AN_IN_GAME_MESSAGE_TO; ?></span></em></td><td><?php echo NEW_FUNCTIONS_ALLIANCE_INVITATION ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_ALLIANCE_EMBASSY_MECHANICS; ?><em class="tooltip">?<span class="classic">https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics</span></em></td><td><?php echo NEW_FUNCTIONS_EMBASSY_MECHANICS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_FORUM_POST_MESSAGE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_FORUM_SUBSCRIPTION_MESSAGES; ?></span></em></td><td><?php echo NEW_FUNCTIONS_FORUM_POST_MESSAGE ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_TRIBES_IMAGES_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_DISPLAYING_IMAGES_OF_TRIBES; ?></span></em></td><td><?php echo NEW_FUNCTIONS_TRIBE_IMAGES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_TRIBE_HUNS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_HUNS_TRIBE; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_HUNS') && NEW_FUNCTION_TRIBE_HUNS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_TRIBE_EGYPTIANS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_EGYPTIANS_TRIBE; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_EGIPTEANS') && NEW_FUNCTION_TRIBE_EGIPTEANS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_TRIBE_SPARTANS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_SPARTANS_TRIBE; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_SPARTANS') && NEW_FUNCTION_TRIBE_SPARTANS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_NEW_TRIBE_VIKINGS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_VIKINGS_TRIBE; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_TRIBE_VIKINGS') && NEW_FUNCTION_TRIBE_VIKINGS) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_MHS_IMAGES_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_DISPLAYING_IMAGES_OF_MULTIHUN; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MHS_IMAGES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_DISPLAY_ARTIFACT_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_DISPLAY_OF_THE_ARTIFACT; ?></span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_DISPLAY_WOW_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_DISPLAY_OF_THE_WONDER; ?></span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_WONDER ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_VACATION_MODE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_VACATION_MODE; ?></span></em></td><td><?php echo NEW_FUNCTIONS_VACATION ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_CATAPULT_TARGETS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_DISPLAY_OF_CATAPULT_TARGE; ?></span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_MANUAL_ON_NATURE_AND_NATARS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_MANUAL_INFO; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MANUAL_NATURENATARS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_DIRECT_LINKS_PLACEMENT; ?><em class="tooltip">?<span class="classic"><?php echo ADM_LEFT_MENU_VS_RIGHT_MENU; ?></span></em></td><td><?php echo NEW_FUNCTIONS_DISPLAY_LINKS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_MEDAL_VETERAN_PLAYER; ?><em class="tooltip">?<span class="classic"><?php echo ADM_3_YEARS; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_3YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_MEDAL_VETERAN_PLAYER_5A; ?><em class="tooltip">?<span class="classic"><?php echo ADM_5_YEARS; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+    <tr><td><?php echo ADM_MEDAL_VETERAN_PLAYER_10A; ?><em class="tooltip">?<span class="classic"><?php echo ADM_10_YEARS; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_SPECIAL_MEDALS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_SPECIAL_MEDALS; ?></span></em></td><td><?php echo NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_SERVER_MILESTONES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_SERVER_MILESTONES; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MILESTONES ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_SERVER_MEDAL_RESET_TIMER; ?><em class="tooltip">?<span class="classic"><?php echo ADM_SERVER_MEDAL_RESET_TIMER; ?></span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_RESET ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_T4_HERO_ITEMS_ADVENTURES_AUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_T4_HERO_ITEMS_ADVENTURES_AUCTION; ?></span></em></td><td><?php echo NEW_FUNCTIONS_HERO_T4 ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_REGISTRATION_BONUS_GOLD; ?><em class="tooltip">?<span class="classic"><?php echo ADM_GIVE_EVERY_NEWLY_REGISTERED_PLAYER_A_ONE_TIM; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_REGISTRATION_BONUS_GOLD_AMOUNT; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOW_MUCH_GOLD_EACH_NEW_PLAYER_RECEIVES_WHEN; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200); ?></td></tr>
   </table>
 </div>
 

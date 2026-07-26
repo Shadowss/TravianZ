@@ -96,12 +96,12 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
 </style>
 
 <div class="add-wrap">
-  <div class="add-head"><h2>👤 Create Users</h2></div>
+  <div class="add-head"><h2><?php echo ADM_CREATE_USERS; ?></h2></div>
   
   <div class="add-card">
     <div class="add-top">
-      <div class="warn-red">Submitting this form will create new Users and/or Villages on your server!</div>
-      <div class="warn-blue">Includes resources, main building, rally point, warehouse, granary, wall, market, residence, troops (for hero level-up), and one cranny.</div>
+      <div class="warn-red"><?php echo ADM_SUBMITTING_THIS_FORM_WILL_CREATE_NEW_USERS_A; ?></div>
+      <div class="warn-blue"><?php echo ADM_INCLUDES_RESOURCES_MAIN_BUILDING_RALLY_POINT; ?></div>
     </div>
 
     <form action="../GameEngine/Admin/Mods/addUsers.php" method="POST" class="add-form">
@@ -112,38 +112,37 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
       <?php if($successMsg){?><div class="alert alert-ok">✓ <?php echo $successMsg;?></div><?php }?>
 
       <div class="mode-box">
-        <label><input type="radio" name="mode" value="many_accounts" <?php echo $mode=='many_accounts'?'checked':'';?>><span>Many accounts (1 village)</span></label>
-        <label><input type="radio" name="mode" value="single_with_villages" <?php echo $mode=='single_with_villages'?'checked':'';?>><span>1 account (many villages)</span></label>
+        <label><input type="radio" name="mode" value="many_accounts" <?php echo $mode=='many_accounts'?'checked':'';?>><span><?php echo ADM_MANY_ACCOUNTS_1_VILLAGE; ?></span></label>
+        <label><input type="radio" name="mode" value="single_with_villages" <?php echo $mode=='single_with_villages'?'checked':'';?>><span><?php echo ADM_1_ACCOUNT_MANY_VILLAGES; ?></span></label>
       </div>
 
       <div class="examples">
-        <b>Base Name</b> 4-20 characters. Ex: Farm | 5 → Farm1..Farm5. Single ex: FarmLord | 5 villages.<br>
-        <b>Warning:</b> large values may freeze the server!
-      </div>
+        <b><?php echo ADM_BASE_NAME; ?></b><?php echo ADM_4_20_CHARACTERS_EX_FARM_5_FARM1_FARM5_SINGLE; ?><br>
+        <b><?php echo ADM_WARNING_2; ?></b><?php echo ADM_LARGE_VALUES_MAY_FREEZE_THE_SERVER; ?></div>
 
       <div class="row">
-        <label>Base Name</label>
+        <label><?php echo ADM_BASE_NAME; ?></label>
         <input type="text" name="users_base_name" value="<?php echo htmlspecialchars($baseName);?>" maxlength="20">
       </div>
 
       <div class="row" id="accRow">
-        <label>How many accounts</label>
+        <label><?php echo ADM_HOW_MANY_ACCOUNTS; ?></label>
         <input type="text" name="users_amount" value="<?php echo htmlspecialchars($amount);?>" maxlength="4">
       </div>
       <div class="hint">1 - 200</div>
 
       <div class="row" id="vilRow">
-        <label>How many villages</label>
+        <label><?php echo ADM_HOW_MANY_VILLAGES; ?></label>
         <input type="text" name="villages_amount" value="<?php echo htmlspecialchars($villages);?>" maxlength="4">
       </div>
-      <div class="hint">1 - 200 (single only)</div>
+      <div class="hint"><?php echo ADM_1_200_SINGLE_ONLY; ?></div>
 
       <div class="check">
-        <label><input type="checkbox" name="users_protection" checked> Enable beginner protection</label>
+        <label><input type="checkbox" name="users_protection" checked><?php echo ADM_ENABLE_BEGINNER_PROTECTION; ?></label>
       </div>
 
       <div class="tribe-wrap">
-        <div class="tribe-title">Tribe</div>
+        <div class="tribe-title"><?php echo ADM_TRIBE; ?></div>
         <div class="tribe-grid">
           <label><input type="radio" name="tribe" value="0" checked><span class="tribe-icon">🎲</span><span class="tribe-text"><?php echo RANDOM;?></span></label>
           <label><input type="radio" name="tribe" value="1"><span class="tribe-icon">🏛</span><span class="tribe-text"><?php echo TRIBE1;?></span></label>
@@ -156,7 +155,7 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
         </div>
       </div>
 
-      <div class="submit"><button type="submit">+ Create</button></div>
+      <div class="submit"><button type="submit"><?php echo ADM_CREATE_2; ?></button></div>
     </form>
   </div>
 </div>

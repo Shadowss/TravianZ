@@ -54,27 +54,27 @@ if($id){
       <table class="res-table">
         <thead>
           <tr>
-            <td style="width:140px">Resource</td>
-            <td>Amount</td>
-            <td style="width:160px">Maximum Capacity</td>
+            <td style="width:140px"><?php echo ADM_RESOURCE; ?></td>
+            <td><?php echo ADM_AMOUNT; ?></td>
+            <td style="width:160px"><?php echo ADM_MAXIMUM_CAPACITY; ?></td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><div class="res-name"><img src="../img/admin/r/1.gif"> Wood</div></td>
+            <td><div class="res-name"><img src="../img/admin/r/1.gif"><?php echo ADM_WOOD; ?></div></td>
             <td><input class="res-input" name="wood" value="<?php echo round($village['wood'],0); ?>"></td>
             <td rowspan="3"><input class="res-input" name="maxstore" value="<?php echo round($village['maxstore'],0); ?>"></td>
           </tr>
           <tr>
-            <td><div class="res-name"><img src="../img/admin/r/2.gif"> Clay</div></td>
+            <td><div class="res-name"><img src="../img/admin/r/2.gif"><?php echo ADM_CLAY; ?></div></td>
             <td><input class="res-input" name="clay" value="<?php echo round($village['clay'],0); ?>"></td>
           </tr>
           <tr>
-            <td><div class="res-name"><img src="../img/admin/r/3.gif"> Iron</div></td>
+            <td><div class="res-name"><img src="../img/admin/r/3.gif"><?php echo ADM_IRON; ?></div></td>
             <td><input class="res-input" name="iron" value="<?php echo round($village['iron'],0); ?>"></td>
           </tr>
           <tr>
-            <td><div class="res-name"><img src="../img/admin/r/4.gif"> Crop</div></td>
+            <td><div class="res-name"><img src="../img/admin/r/4.gif"><?php echo ADM_CROP; ?></div></td>
             <td><input class="res-input" name="crop" value="<?php echo round($village['crop'],0); ?>"></td>
             <td><input class="res-input" name="maxcrop" value="<?php echo round($village['maxcrop'],0); ?>"></td>
           </tr>
@@ -82,8 +82,8 @@ if($id){
       </table>
       
       <div class="res-actions">
-        <a href="../Admin/admin.php?p=village&did=<?php echo (int)($_GET['did'] ?? 0);?>" class="btn-back">← Back to village</a>
-        <button type="submit" class="btn-save">Save Changes</button>
+        <a href="../Admin/admin.php?p=village&did=<?php echo (int)($_GET['did'] ?? 0);?>" class="btn-back"><?php echo ADM_BACK_TO_VILLAGE_2; ?></a>
+        <button type="submit" class="btn-save"><?php echo ADM_SAVE_CHANGES; ?></button>
       </div>
     </div>
   </form>

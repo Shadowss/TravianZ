@@ -68,7 +68,7 @@ function setDays(d){ document.getElementById('protect').value = d; }
     <div class="prot-head">
         <div class="icon">🛡️</div>
         <div>
-            <h2>Protection: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+            <h2><?php echo ADM_PROTECTION; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
             <div class="sub">UID: <?php echo $uid; ?></div>
         </div>
     </div>
@@ -82,30 +82,30 @@ function setDays(d){ document.getElementById('protect').value = d; }
         <div class="card">
             <div class="body">
                 <div class="status-box <?php echo $isActive ? 'active' : 'expired'; ?>">
-                    <div class="label">Current Status</div>
+                    <div class="label"><?php echo ADM_CURRENT_STATUS_2; ?></div>
                     <div class="date"><?php echo $isActive ? 'ACTIVE' : 'EXPIRED'; ?></div>
                     <div class="left">Ends: <?php echo $ends; ?><?php if($isActive) echo " ($left days left)"; ?></div>
                 </div>
 
                 <div class="input-group">
                     <input type="number" id="protect" name="protect" value="0" min="0" max="365">
-                    <span>Days</span>
+                    <span><?php echo ADM_DAYS; ?></span>
                 </div>
 
                 <div class="quick-btns">
-                    <button type="button" onclick="setDays(1)">+1 day</button>
-                    <button type="button" onclick="setDays(3)">+3 days</button>
-                    <button type="button" onclick="setDays(7)">+7 days</button>
-                    <button type="button" onclick="setDays(0)">Remove</button>
+                    <button type="button" onclick="setDays(1)"><?php echo ADM_1_DAY_2; ?></button>
+                    <button type="button" onclick="setDays(3)"><?php echo ADM_3_DAYS_2; ?></button>
+                    <button type="button" onclick="setDays(7)"><?php echo ADM_7_DAYS_2; ?></button>
+                    <button type="button" onclick="setDays(0)"><?php echo ADM_REMOVE; ?></button>
                 </div>
 
-                <div class="info">💡 Set to 0 to remove protection. Protection is added from the time of saving.</div>
+                <div class="info"><?php echo ADM_SET_TO_0_TO_REMOVE_PROTECTION_PROTECTION_IS; ?></div>
             </div>
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">💾 Save Protection</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_SAVE_PROTECTION; ?></button>
         </div>
     </form>
 </div>

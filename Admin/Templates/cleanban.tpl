@@ -33,12 +33,11 @@
 <?php echo csrf_field(); ?>
 <input type="hidden" name="admid" value="<?=$_SESSION['id']?>">
 <div class="clean-card">
-  <div class="clean-head">Clear – Banlist - Data</div>
+  <div class="clean-head"><?php echo ADM_CLEAR_BANLIST_DATA; ?></div>
   <div class="clean-body">
-    <div class="clean-desc">Clean Banlist Data <strong>(TRUNCATE)</strong></div>
+    <div class="clean-desc"><?php echo ADMIN_CLEAN_BANLIST_DATA; ?><strong><?php echo ADM_TRUNCATE; ?></strong></div>
     <button type="submit" class="clean-btn">
-      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Clean
-    </button>
+      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><?php echo ADM_CLEAN; ?></button>
   </div>
 </div>
 </form>

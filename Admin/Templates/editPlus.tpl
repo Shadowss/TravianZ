@@ -61,7 +61,7 @@ if($id){
 
 <div class="plus-wrap">
     <div class="plus-head">
-        <h2>⭐ Plus & Bonuses: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+        <h2><?php echo ADM_PLUS_BONUSES; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
         <div>UID: <?php echo $uid;?></div>
     </div>
 
@@ -71,10 +71,10 @@ if($id){
         <input type="hidden" name="uid" value="<?php echo $uid;?>">
         <input type="hidden" name="id" value="<?php echo $id;?>">
 
-        <div class="info-box">ℹ️ The values ​​add up. Put 5 to add 5 days, -5 to remove 5 days.</div>
+        <div class="info-box"><?php echo ADM_THE_VALUES_ADD_UP_PUT_5_TO_ADD_5_DAYS_5_TO_R; ?></div>
 
         <div class="card">
-            <h3>📊 Current Active Bonuses</h3>
+            <h3><?php echo ADM_CURRENT_ACTIVE_BONUSES; ?></h3>
             <div class="body">
                 <div class="active-grid">
                 <?php
@@ -104,7 +104,7 @@ if($id){
         </div>
 
         <div class="card">
-            <h3>➕ Add / Remove Days</h3>
+            <h3><?php echo ADM_ADD_REMOVE_DAYS; ?></h3>
             <div class="body">
                 <div class="bonus-grid">
                     <?php $items=['plus'=>['⭐','Travian Plus'],'wood'=>['🌲','+25% Wood'],'clay'=>['🧱','+25% Clay'],'iron'=>['⛏️','+25% Iron'],'crop'=>['🌾','+25% Crop']];
@@ -114,8 +114,8 @@ if($id){
         </div>
 
                 <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">💾 Apply Bonuses</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_APPLY_BONUSES; ?></button>
         </div>
     </form>
 </div>

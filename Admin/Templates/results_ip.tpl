@@ -50,8 +50,8 @@ if($result){
 
   <table class="search-table">
 	<tr>
-		<td>IP</td>
-		<td>NAME</td>
+		<td><?php echo ADM_IP; ?></td>
+		<td><?php echo ADM_NAME_2; ?></td>
 	</tr>
 <?php if($rows){
 foreach($rows as $r){

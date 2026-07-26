@@ -45,16 +45,16 @@ if(isset($_GET['uid']))
 				<tr>
 					<td>
 						<center>
-							<b>Change Access</b>
+							<b><?php echo ADM_CHANGE_ACCESS; ?></b>
 						</center>
 					</td>
 					<td>
 						<center>
 							<select name="access" class="dropdown">
-								<option value="0" <?php if($curaccess == 0) { echo 'selected="selected"'; } else { echo ''; } ?>>Banned</option>
-								<option value="2" <?php if($curaccess == 2) { echo 'selected="selected"'; } else { echo ''; } ?>>Normal User</option>
-								<option value="8" <?php if($curaccess == 8) { echo 'selected="selected"'; } else { echo ''; } ?>>Multihunter</option>
-								<option value="9" <?php if($curaccess == 9) { echo 'selected="selected"'; } else { echo ''; } ?>>Admin</option>
+								<option value="0" <?php if($curaccess == 0) { echo 'selected="selected"'; } else { echo ''; } ?>><?php echo ADM_BANNED; ?></option>
+								<option value="2" <?php if($curaccess == 2) { echo 'selected="selected"'; } else { echo ''; } ?>><?php echo ADM_NORMAL_USER; ?></option>
+								<option value="8" <?php if($curaccess == 8) { echo 'selected="selected"'; } else { echo ''; } ?>><?php echo ADM_MULTIHUNTER; ?></option>
+								<option value="9" <?php if($curaccess == 9) { echo 'selected="selected"'; } else { echo ''; } ?>><?php echo ADMIN_ADMIN; ?></option>
 							</select>
 						</center>
 					</td>
@@ -62,7 +62,7 @@ if(isset($_GET['uid']))
 				<tr>
 					<td colspan="2">
 						<center>
-							<input type="image" src="../img/admin/b/ok1.gif" value="submit" title="Give Players Free Gold">
+							<input type="image" src="../img/admin/b/ok1.gif" value="submit" title="<?php echo ADM_GIVE_PLAYERS_FREE_GOLD; ?>">
 						</center>
 					</td>
 				</tr>

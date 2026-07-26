@@ -55,29 +55,17 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 </style>
 
 <div class="qe-wrap">
-    <h2>Quest <span>Editor</span></h2>
-    <p class="qe-intro">
-        Edit the reward each quest grants (wood / clay / iron / crop / gold / Plus days) and
-        the requirement level (e.g. main-building level for building quests). Values are
-        seeded from the shipped defaults, so nothing changes until you edit. The two quest
-        variants have different quests and rewards &mdash; pick the one your server uses
-        (players on <code>qtyp&nbsp;37</code> get <b>extended</b>, everyone else <b>standard</b>).
+    <h2><?php echo ADM_QUEST_2; ?><span><?php echo ADM_EDITOR; ?></span></h2>
+    <p class="qe-intro"><?php echo ADM_EDIT_THE_REWARD_EACH_QUEST_GRANTS_WOOD_CLAY; ?><code><?php echo ADM_QTYP_37; ?></code><?php echo ADM_GET; ?><b><?php echo ADM_EXTENDED; ?></b><?php echo ADM_EVERYONE_ELSE; ?><b><?php echo ADM_STANDARD; ?></b>).
     </p>
 
     <?php if ($msg !== ''): ?><div class="qe-msg"><?php echo e($msg); ?></div><?php endif; ?>
 
-    <div class="qe-warn">
-        Reward values are live via <code>QuestConfig::grantReward()</code> in the quest
-        templates. Quests marked <b>fixed</b> keep their original hardcoded logic
-        (conditional rewards, atomic milestone claims, special mechanics) and are not
-        affected by edits here. The reward numbers shown inside each quest's on-screen
-        text are separate template strings &mdash; edits here change what is actually
-        granted; update the quest language strings if you want the preview to match.
-    </div>
+    <div class="qe-warn"><?php echo ADM_REWARD_VALUES_ARE_LIVE_VIA; ?><code>QuestConfig::grantReward()</code><?php echo ADM_IN_THE_QUEST_TEMPLATES_QUESTS_MARKED; ?><b><?php echo ADM_FIXED; ?></b><?php echo ADM_KEEP_THEIR_ORIGINAL_HARDCODED_LOGIC_CONDITIO; ?></div>
 
     <div class="qe-tabs">
-        <a href="admin.php?p=questEditor&variant=standard" class="<?php echo $variant===QuestConfig::V_STANDARD?'active':''; ?>">Standard (quest_core25)</a>
-        <a href="admin.php?p=questEditor&variant=extended" class="<?php echo $variant===QuestConfig::V_EXTENDED?'active':''; ?>">Extended (quest_core)</a>
+        <a href="admin.php?p=questEditor&variant=standard" class="<?php echo $variant===QuestConfig::V_STANDARD?'active':''; ?>"><?php echo ADM_STANDARD_QUEST_CORE25; ?></a>
+        <a href="admin.php?p=questEditor&variant=extended" class="<?php echo $variant===QuestConfig::V_EXTENDED?'active':''; ?>"><?php echo ADM_EXTENDED_QUEST_CORE; ?></a>
     </div>
 
     <form method="post" action="../GameEngine/Admin/Mods/questSave.php">
@@ -89,17 +77,17 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
         <table class="qe-table">
             <thead>
                 <tr>
-                    <th style="width:44px;">Quest</th>
-                    <th style="width:44px;">On</th>
-                    <th>Wood</th><th>Clay</th><th>Iron</th><th>Crop</th>
-                    <th>Gold</th><th>Plus (days)</th><th>Req.&nbsp;level</th>
-                    <th>Quest (hover)</th>
+                    <th style="width:44px;"><?php echo ADM_QUEST_2; ?></th>
+                    <th style="width:44px;"><?php echo ADM_ON; ?></th>
+                    <th><?php echo ADM_WOOD; ?></th><th><?php echo ADM_CLAY; ?></th><th><?php echo ADM_IRON; ?></th><th><?php echo ADM_CROP; ?></th>
+                    <th><?php echo ADMIN_GOLD; ?></th><th><?php echo ADM_PLUS_DAYS; ?></th><th><?php echo ADM_REQ_LEVEL; ?></th>
+                    <th><?php echo ADM_QUEST_HOVER; ?></th>
                 </tr>
             </thead>
             <tbody>
             <?php foreach ($rows as $qid => $r): $isNative = in_array((int)$qid, $native, true); $dis = $isNative ? 'disabled' : ''; ?>
                 <tr<?php echo $isNative ? ' style="opacity:.55;"' : ''; ?>>
-                    <td class="qe-qid"><?php echo (int)$qid; ?><?php if ($isNative): ?><br><span style="font-size:9px;color:#f59e0b;font-family:Verdana;font-weight:normal;">fixed</span><?php endif; ?></td>
+                    <td class="qe-qid"><?php echo (int)$qid; ?><?php if ($isNative): ?><br><span style="font-size:9px;color:#f59e0b;font-family:Verdana;font-weight:normal;"><?php echo ADM_FIXED; ?></span><?php endif; ?></td>
                     <td><input type="checkbox" name="q[<?php echo (int)$qid; ?>][enabled]" value="1" <?php echo ((int)$r['enabled']===1)?'checked':''; ?> <?php echo $dis; ?>></td>
                     <td><input type="number" name="q[<?php echo (int)$qid; ?>][wood]" value="<?php echo (int)$r['wood']; ?>" <?php echo $dis; ?>></td>
                     <td><input type="number" name="q[<?php echo (int)$qid; ?>][clay]" value="<?php echo (int)$r['clay']; ?>" <?php echo $dis; ?>></td>
@@ -120,8 +108,8 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
         </div>
 
         <div class="qe-bar">
-            <button type="submit" class="qe-save">Save all changes</button>
-            <span class="qe-note">Saves every row for the <b><?php echo e($variant); ?></b> variant.</span>
+            <button type="submit" class="qe-save"><?php echo ADM_SAVE_ALL_CHANGES; ?></button>
+            <span class="qe-note"><?php echo ADM_SAVES_EVERY_ROW_FOR_THE; ?><b><?php echo e($variant); ?></b><?php echo ADM_VARIANT; ?></span>
         </div>
     </form>
 
@@ -129,6 +117,6 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
         <?php echo csrf_field(); ?>
         <input type="hidden" name="do" value="reset">
         <input type="hidden" name="variant" value="<?php echo e($variant); ?>">
-        <button type="submit" class="qe-reset">Reset this variant to defaults</button>
+        <button type="submit" class="qe-reset"><?php echo ADM_RESET_THIS_VARIANT_TO_DEFAULTS; ?></button>
     </form>
 </div>

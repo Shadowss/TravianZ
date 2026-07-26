@@ -60,7 +60,7 @@ if($id){
     <div class="week-head">
         <div class="icon">📅</div>
         <div>
-            <h2>Weekly Stats: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+            <h2><?php echo ADM_WEEKLY_STATS; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
             <div class="sub">UID: <?php echo $uid; ?> • Reset săptămânal</div>
         </div>
     </div>
@@ -73,26 +73,26 @@ if($id){
 
         <div class="card">
             <div class="body">
-                <div class="info">📊 Acestea sunt punctele <b>din săptămâna curentă</b> pentru top 10. Se resetează automat.</div>
+                <div class="info"><?php echo ADM_ACESTEA_SUNT_PUNCTELE; ?><b><?php echo ADM_DIN_S_PT_M_NA_CURENT; ?></b><?php echo ADM_PENTRU_TOP_10_SE_RESETEAZ_AUTOMAT; ?></div>
                 
                 <div class="stats-grid">
                     <div class="stat-box off">
                         <div class="icon">⚔️</div>
-                        <div class="label">Attack</div>
+                        <div class="label"><?php echo ADM_ATTACK; ?></div>
                         <div class="current">Now: <?php echo number_format($user['ap']); ?></div>
                         <input type="number" name="off" value="<?php echo (int)$user['ap']; ?>" min="0">
                     </div>
 
                     <div class="stat-box def">
                         <div class="icon">🛡️</div>
-                        <div class="label">Defence</div>
+                        <div class="label"><?php echo ADM_DEFENCE_2; ?></div>
                         <div class="current">Now: <?php echo number_format($user['dp']); ?></div>
                         <input type="number" name="def" value="<?php echo (int)$user['dp']; ?>" min="0">
                     </div>
 
                     <div class="stat-box raid">
                         <div class="icon">💰</div>
-                        <div class="label">Raid</div>
+                        <div class="label"><?php echo ADM_RAID; ?></div>
                         <div class="current">Now: <?php echo number_format($user['RR']); ?></div>
                         <input type="number" name="res" value="<?php echo (int)$user['RR']; ?>" min="0">
                     </div>
@@ -101,8 +101,8 @@ if($id){
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">💾 Save Week</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_SAVE_WEEK; ?></button>
         </div>
     </form>
 </div>

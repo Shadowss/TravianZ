@@ -40,31 +40,27 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 <div class="resetgold-wrap">
   <div class="resetgold-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v10l4-4" stroke="#e74c3c" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="5" fill="#c0392b"/></svg>
-    <h2>Reset Gold for all players</h2>
+    <h2><?php echo ADM_RESET_GOLD_FOR_ALL_PLAYERS; ?></h2>
   </div>
 
   <div class="resetgold-card">
     <div class="warn-icon">
       <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
     </div>
-    <h3>Reset All Players Gold</h3>
-    <p>This action will set the gold to <b>0</b> for ALL players from the server.</p>
+    <h3><?php echo ADM_RESET_ALL_PLAYERS_GOLD; ?></h3>
+    <p><?php echo ADM_THIS_ACTION_WILL_SET_THE_GOLD_TO; ?><b>0</b><?php echo ADM_FOR_ALL_PLAYERS_FROM_THE_SERVER; ?></p>
     
-    <div class="danger-box">
-      ⚠️ WARNING: The action is irreversible! Make sure you have backup first.
-    </div>
+    <div class="danger-box"><?php echo ADM_WARNING_THE_ACTION_IS_IRREVERSIBLE_MAKE_SURE; ?></div>
 
     <form action="../GameEngine/Admin/Mods/mainteneceResetGold.php" method="POST" class="resetgold-form" onsubmit="return confirm('Are you SURE you want to reset gold to ALL players?');">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        RESET GOLD NOW
-      </button>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_RESET_GOLD_NOW; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resetgold-success">✓ All players gold has been reset!</div>
+    <div class="resetgold-success"><?php echo ADM_ALL_PLAYERS_GOLD_HAS_BEEN_RESET; ?></div>
   <?php } ?>
 </div>

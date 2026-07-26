@@ -150,11 +150,11 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_LANG ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_LANG_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="lang">
-                            <option value="en" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="en") echo "selected";?>>English</option>
-                            <option value="fr" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="fr") echo "selected";?>>French</option>
-                            <option value="it" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>>Italian</option>
-                            <option value="ro" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="ro") echo "selected";?>>Romanian</option>
-                            <option value="zh" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="zh") echo "selected";?>>Chinese</option>
+                            <option value="en" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="en") echo "selected";?>><?php echo ADM_ENGLISH; ?></option>
+                            <option value="fr" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="fr") echo "selected";?>><?php echo ADM_FRENCH; ?></option>
+                            <option value="it" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>><?php echo ADM_ITALIAN; ?></option>
+                            <option value="ro" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="ro") echo "selected";?>><?php echo ADM_ROMANIAN; ?></option>
+                            <option value="zh" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="zh") echo "selected";?>><?php echo ADM_CHINESE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -210,8 +210,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_VILLEXPSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_VILLEXPSPEED_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="village_expand">
-                            <option value="1" <?php if (CP=="1") echo "selected";?>>Slow</option>
-                            <option value="0" <?php if (CP=="0") echo "selected";?>>Fast</option>
+                            <option value="1" <?php if (CP=="1") echo "selected";?>><?php echo ADM_SLOW; ?></option>
+                            <option value="0" <?php if (CP=="0") echo "selected";?>><?php echo ADM_FAST; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -219,16 +219,16 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_BEGINPROTECT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_BEGINPROTECT_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="beginner">
-                            <option value="7200" <?php if (PROTECTION=="7200") echo "selected";?>>2 hours</option>
-                            <option value="10800" <?php if (PROTECTION=="10800") echo "selected";?>>3 hours</option>
-                            <option value="18000" <?php if (PROTECTION=="18000") echo "selected";?>>5 hours</option>
-                            <option value="28800" <?php if (PROTECTION=="28800") echo "selected";?>>8 hours</option>
-                            <option value="36000" <?php if (PROTECTION=="36000") echo "selected";?>>10 hours</option>
-                            <option value="43200" <?php if (PROTECTION=="43200") echo "selected";?>>12 hours</option>
-                            <option value="86400" <?php if (PROTECTION=="86400") echo "selected";?>>24 hours (1 day)</option>
-                            <option value="172800" <?php if (PROTECTION=="172800") echo "selected";?>>48 hours (2 days)</option>
-                            <option value="259200" <?php if (PROTECTION=="259200") echo "selected";?>>72 hours (3 days)</option>
-                            <option value="432000" <?php if (PROTECTION=="432000") echo "selected";?>>120 hours (5 days)</option>
+                            <option value="7200" <?php if (PROTECTION=="7200") echo "selected";?>><?php echo ADM_2_HOURS; ?></option>
+                            <option value="10800" <?php if (PROTECTION=="10800") echo "selected";?>><?php echo ADM_3_HOURS; ?></option>
+                            <option value="18000" <?php if (PROTECTION=="18000") echo "selected";?>><?php echo ADM_5_HOURS; ?></option>
+                            <option value="28800" <?php if (PROTECTION=="28800") echo "selected";?>><?php echo ADM_8_HOURS; ?></option>
+                            <option value="36000" <?php if (PROTECTION=="36000") echo "selected";?>><?php echo ADM_10_HOURS; ?></option>
+                            <option value="43200" <?php if (PROTECTION=="43200") echo "selected";?>><?php echo ADM_12_HOURS; ?></option>
+                            <option value="86400" <?php if (PROTECTION=="86400") echo "selected";?>><?php echo ADM_24_HOURS_1_DAY; ?></option>
+                            <option value="172800" <?php if (PROTECTION=="172800") echo "selected";?>><?php echo ADM_48_HOURS_2_DAYS; ?></option>
+                            <option value="259200" <?php if (PROTECTION=="259200") echo "selected";?>><?php echo ADM_72_HOURS_3_DAYS; ?></option>
+                            <option value="432000" <?php if (PROTECTION=="432000") echo "selected";?>><?php echo ADM_120_HOURS_5_DAYS; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -236,8 +236,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_REGOPEN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_REGOPEN_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="reg_open">
-                            <option value="True" <?php if(REG_OPEN==true) echo "selected";?>>True</option>
-                            <option value="False" <?php if(REG_OPEN==false) echo "selected";?>>False</option>
+                            <option value="True" <?php if(REG_OPEN==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if(REG_OPEN==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -245,8 +245,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_ACTIVMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ACTIVMAIL_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="activate">
-                            <option value="true" <?php if (AUTH_EMAIL==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (AUTH_EMAIL==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (AUTH_EMAIL==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (AUTH_EMAIL==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -254,8 +254,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_QUEST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_QUEST_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="quest">
-                            <option value="true" <?php if(QUEST == true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if(QUEST == false) echo "selected";?>>No</option>
+                            <option value="true" <?php if(QUEST == true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if(QUEST == false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -263,8 +263,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_QTYPE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_QTYPE_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="qtype">
-                            <option value="25" <?php if(QTYPE == 25) echo "selected";?>>Travian Official</option>
-                            <option value="37" <?php if(QTYPE == 37) echo "selected";?>>TravianZ Extended</option>
+                            <option value="25" <?php if(QTYPE == 25) echo "selected";?>><?php echo ADM_TRAVIAN_OFFICIAL; ?></option>
+                            <option value="37" <?php if(QTYPE == 37) echo "selected";?>><?php echo ADM_TRAVIANZ_EXTENDED; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -273,7 +273,7 @@ function refresh(tz) {
                     <td>
                         <select name="demolish">
                             <option value="5" <?php if(DEMOLISH_LEVEL_REQ == "5") echo "selected";?>>5</option>
-                            <option value="10" <?php if(DEMOLISH_LEVEL_REQ == "10") echo "selected";?>>10 - Default</option>
+                            <option value="10" <?php if(DEMOLISH_LEVEL_REQ == "10") echo "selected";?>><?php echo ADM_10_DEFAULT; ?></option>
                             <option value="15" <?php if(DEMOLISH_LEVEL_REQ == "15") echo "selected";?>>15</option>
                             <option value="20" <?php if(DEMOLISH_LEVEL_REQ == "20") echo "selected";?>>20</option>
                         </select>
@@ -283,8 +283,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_WWSTATS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_WWSTATS_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="ww">
-                            <option value="True" <?php if(WW == true) echo "selected";?>>True</option>
-                            <option value="False" <?php if(WW == false) echo "selected";?>>False</option>
+                            <option value="True" <?php if(WW == true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if(WW == false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -292,15 +292,15 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_NTRTIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NTRTIME_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="nature_regtime">
-                            <option value="28800" <?php if(NATURE_REGTIME == 28800) echo "selected";?>>8 hours</option>
-                            <option value="36000" <?php if(NATURE_REGTIME == 36000) echo "selected";?>>10 hours</option>
-                            <option value="43200" <?php if(NATURE_REGTIME == 43200) echo "selected";?>>12 hours</option>
-                            <option value="57600" <?php if(NATURE_REGTIME == 57600) echo "selected";?>>16 hours</option>
-                            <option value="72000" <?php if(NATURE_REGTIME == 72000) echo "selected";?>>20 hours</option>
-                            <option value="86400" <?php if(NATURE_REGTIME == 86400) echo "selected";?>>24 hours (1 day)</option>
-                            <option value="172800" <?php if(NATURE_REGTIME == 172800) echo "selected";?>>48 hours (2 days)</option>
-                            <option value="259200" <?php if(NATURE_REGTIME == 259200) echo "selected";?>>72 hours (3 days)</option>
-                            <option value="432000" <?php if(NATURE_REGTIME == 432000) echo "selected";?>>120 hours (5 days)</option>
+                            <option value="28800" <?php if(NATURE_REGTIME == 28800) echo "selected";?>><?php echo ADM_8_HOURS; ?></option>
+                            <option value="36000" <?php if(NATURE_REGTIME == 36000) echo "selected";?>><?php echo ADM_10_HOURS; ?></option>
+                            <option value="43200" <?php if(NATURE_REGTIME == 43200) echo "selected";?>><?php echo ADM_12_HOURS; ?></option>
+                            <option value="57600" <?php if(NATURE_REGTIME == 57600) echo "selected";?>><?php echo ADM_16_HOURS; ?></option>
+                            <option value="72000" <?php if(NATURE_REGTIME == 72000) echo "selected";?>><?php echo ADM_20_HOURS; ?></option>
+                            <option value="86400" <?php if(NATURE_REGTIME == 86400) echo "selected";?>><?php echo ADM_24_HOURS_1_DAY; ?></option>
+                            <option value="172800" <?php if(NATURE_REGTIME == 172800) echo "selected";?>><?php echo ADM_48_HOURS_2_DAYS; ?></option>
+                            <option value="259200" <?php if(NATURE_REGTIME == 259200) echo "selected";?>><?php echo ADM_72_HOURS_3_DAYS; ?></option>
+                            <option value="432000" <?php if(NATURE_REGTIME == 432000) echo "selected";?>><?php echo ADM_120_HOURS_5_DAYS; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -324,14 +324,14 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_MEDALINTERVAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MEDALINTERVAL_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="medalinterval">
-                            <option value="0" <?php if(MEDALINTERVAL==0) echo "selected";?>>none</option>
-                            <option value="(3600*24)" <?php if(MEDALINTERVAL==86400) echo "selected";?>>1 day</option>
-                            <option value="(3600*24*2)" <?php if(MEDALINTERVAL==172800) echo "selected";?>>2 days</option>
-                            <option value="(3600*24*3)" <?php if(MEDALINTERVAL==259200) echo "selected";?>>3 days</option>
-                            <option value="(3600*24*4)" <?php if(MEDALINTERVAL==345600) echo "selected";?>>4 days</option>
-                            <option value="(3600*24*5)" <?php if(MEDALINTERVAL==432000) echo "selected";?>>5 days</option>
-                            <option value="(3600*24*6)" <?php if(MEDALINTERVAL==518400) echo "selected";?>>6 days</option>
-                            <option value="(3600*24*7)" <?php if(MEDALINTERVAL==604800) echo "selected";?>>7 days</option>
+                            <option value="0" <?php if(MEDALINTERVAL==0) echo "selected";?>><?php echo ADM_NONE; ?></option>
+                            <option value="(3600*24)" <?php if(MEDALINTERVAL==86400) echo "selected";?>><?php echo ADM_1_DAY; ?></option>
+                            <option value="(3600*24*2)" <?php if(MEDALINTERVAL==172800) echo "selected";?>><?php echo ADM_2_DAYS; ?></option>
+                            <option value="(3600*24*3)" <?php if(MEDALINTERVAL==259200) echo "selected";?>><?php echo ADM_3_DAYS; ?></option>
+                            <option value="(3600*24*4)" <?php if(MEDALINTERVAL==345600) echo "selected";?>><?php echo ADM_4_DAYS; ?></option>
+                            <option value="(3600*24*5)" <?php if(MEDALINTERVAL==432000) echo "selected";?>><?php echo ADM_5_DAYS; ?></option>
+                            <option value="(3600*24*6)" <?php if(MEDALINTERVAL==518400) echo "selected";?>><?php echo ADM_6_DAYS; ?></option>
+                            <option value="(3600*24*7)" <?php if(MEDALINTERVAL==604800) echo "selected";?>><?php echo ADM_7_DAYS; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -343,8 +343,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_GWORKSHOP ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GWORKSHOP_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="great_wks">
-                            <option value="True" <?php if(GREAT_WKS==true) echo "selected";?>>True</option>
-                            <option value="False" <?php if(GREAT_WKS==false) echo "selected";?>>False</option>
+                            <option value="True" <?php if(GREAT_WKS==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if(GREAT_WKS==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -352,8 +352,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_NATARSTAT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARSTAT_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="show_natars">
-                            <option value="True" <?php if(SHOW_NATARS==true) echo "selected";?>>True</option>
-                            <option value="False" <?php if(SHOW_NATARS==false) echo "selected";?>>False</option>
+                            <option value="True" <?php if(SHOW_NATARS==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if(SHOW_NATARS==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -361,11 +361,11 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_PEACESYST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_PEACESYST_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="peace">
-                            <option value="0" <?php if(PEACE==0) echo "selected";?>>None</option>
-                            <option value="1" <?php if(PEACE==1) echo "selected";?>>Normal</option>
-                            <option value="2" <?php if(PEACE==2) echo "selected";?>>Christmas</option>
-                            <option value="3" <?php if(PEACE==3) echo "selected";?>>New Year</option>
-                            <option value="4" <?php if(PEACE==4) echo "selected";?>>Easter</option>
+                            <option value="0" <?php if(PEACE==0) echo "selected";?>><?php echo ADM_NONE_2; ?></option>
+                            <option value="1" <?php if(PEACE==1) echo "selected";?>><?php echo ADM_NORMAL; ?></option>
+                            <option value="2" <?php if(PEACE==2) echo "selected";?>><?php echo ADM_CHRISTMAS; ?></option>
+                            <option value="3" <?php if(PEACE==3) echo "selected";?>><?php echo ADM_NEW_YEAR; ?></option>
+                            <option value="4" <?php if(PEACE==4) echo "selected";?>><?php echo ADM_EASTER; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -373,8 +373,8 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="gpack">
-                            <option value="true" <?php if(GP_ENABLE==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if(GP_ENABLE==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if(GP_ENABLE==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if(GP_ENABLE==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -382,38 +382,29 @@ function refresh(tz) {
                     <td class="b"><?php echo CONF_SERV_ERRORREPORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ERRORREPORT_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="error">
-                            <option value="error_reporting (E_ALL ^ E_NOTICE);" <?php if(ERROR_REPORT=="error_reporting (E_ALL ^ E_NOTICE);") echo "selected";?>>Yes</option>
-                            <option value="error_reporting (0);" <?php if(ERROR_REPORT=="error_reporting (0);") echo "selected";?>>No</option>
+                            <option value="error_reporting (E_ALL ^ E_NOTICE);" <?php if(ERROR_REPORT=="error_reporting (E_ALL ^ E_NOTICE);") echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="error_reporting (0);" <?php if(ERROR_REPORT=="error_reporting (0);") echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
                 <tr>
-                    <td class="b">Hero base regeneration <em class="tooltip">?<span class="classic">Hit points the hero recovers per day on top of the points invested in the regeneration attribute and any equipped items. Without it, a hero with no regeneration points would never heal and would eventually die on adventures. Scales with server speed. 0 disables it.</span></em></td>
+                    <td class="b"><?php echo ADM_HERO_BASE_REGENERATION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HIT_POINTS_THE_HERO_RECOVERS_PER_DAY_ON_TOP; ?></span></em></td>
                     <td>
                         <input type="number" name="hero_base_regen" min="0" max="100" style="width:90px"
-                               value="<?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?>"> HP / day
-                    </td>
+                               value="<?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?>"><?php echo ADM_HP_DAY; ?></td>
                 </tr>
                 <tr>
-                    <td class="b">Hero exchange rates <em class="tooltip">?<span class="classic">Exchange office in the auction house. Keep the second value higher than the first, otherwise players could trade back and forth to create gold out of nothing.</span></em></td>
-                    <td>
-                        1 gold &rarr;
-                        <input type="number" name="hero_silver_per_gold" min="1" max="10000" style="width:80px"
-                               value="<?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?>"> silver
-                        &nbsp;|&nbsp;
-                        <input type="number" name="hero_silver_to_gold" min="1" max="10000" style="width:80px"
-                               value="<?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?>"> silver &rarr; 1 gold
-                    </td>
+                    <td class="b"><?php echo ADM_HERO_EXCHANGE_RATES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_EXCHANGE_OFFICE_IN_THE_AUCTION_HOUSE_KEEP_TH; ?></span></em></td>
+                    <td><?php echo ADM_1_GOLD; ?><input type="number" name="hero_silver_per_gold" min="1" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?>"><?php echo ADM_SILVER_2; ?><input type="number" name="hero_silver_to_gold" min="1" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?>"><?php echo ADM_SILVER_1_GOLD; ?></td>
                 </tr>
                 <tr>
-                    <td class="b">Hero resource production <em class="tooltip">?<span class="classic">Hourly resources per point invested in the hero's Resources attribute. The first value applies when the player spreads the bonus over all four resources, the second when it is concentrated on a single one. Both scale with server speed.</span></em></td>
+                    <td class="b"><?php echo ADM_HERO_RESOURCE_PRODUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOURLY_RESOURCES_PER_POINT_INVESTED_IN_THE_H; ?></span></em></td>
                     <td>
                         <input type="number" name="hero_res_all" min="0" max="10000" style="width:80px"
-                               value="<?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?>"> of each
-                        &nbsp;|&nbsp;
-                        <input type="number" name="hero_res_one" min="0" max="10000" style="width:80px"
-                               value="<?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?>"> of one type
-                    </td>
+                               value="<?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?>"><?php echo ADM_OF_EACH; ?><input type="number" name="hero_res_one" min="0" max="10000" style="width:80px"
+                               value="<?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?>"><?php echo ADM_OF_ONE_TYPE; ?></td>
                 </tr>
                 </tbody>
             </table>
@@ -426,9 +417,7 @@ function refresh(tz) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

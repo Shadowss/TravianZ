@@ -62,12 +62,12 @@
 <input name="uid" type="hidden" value="<?php echo $user['id'];?>">
 <table class="punish-box">
   <thead>
-    <tr><th>Add Village</th></tr>
+    <tr><th><?php echo ADM_ADD_VILLAGE; ?></th></tr>
   </thead>
   <tbody>
     <tr>
       <td style="padding-bottom:4px;border-bottom:0">
-        <span class="addv-label">Coordinates (X|Y)</span>
+        <span class="addv-label"><?php echo ADM_COORDINATES_X_Y; ?></span>
       </td>
     </tr>
     <tr>
@@ -89,7 +89,7 @@
     <tr>
       <td style="padding-top:8px">
         <div class="punish-row" style="justify-content:center">
-          <button type="submit" class="btn-add" <?php if($_SESSION['access'] != ADMIN){ echo 'disabled'; } ?>>ADD VILLAGE</button>
+          <button type="submit" class="btn-add" <?php if($_SESSION['access'] != ADMIN){ echo 'disabled'; } ?>><?php echo ADM_ADD_VILLAGE_2; ?></button>
         </div>
       </td>
     </tr>

@@ -134,29 +134,29 @@ if($_GET['aid']) {
     <div class="ali-head">
         <h1><span class="tag"><?php echo htmlspecialchars($alidata['tag']); ?></span> <?php echo htmlspecialchars($alidata['name']); ?></h1>
         <div class="stats">
-            <div>👑 Founder: <b><a href="?p=player&uid=<?php echo $alidata['leader']; ?>"><?php echo htmlspecialchars($founder); ?></a></b></div>
-            <div>👥 Members: <b><?php echo count($aliusers); ?>/<?php echo $maxMembers; ?></b></div>
-            <div>🏆 Points: <b><?php echo number_format($totalpop); ?></b></div>
+            <div><?php echo ADM_FOUNDER; ?><b><a href="?p=player&uid=<?php echo $alidata['leader']; ?>"><?php echo htmlspecialchars($founder); ?></a></b></div>
+            <div><?php echo ADM_MEMBERS; ?><b><?php echo count($aliusers); ?>/<?php echo $maxMembers; ?></b></div>
+            <div><?php echo ADM_POINTS; ?><b><?php echo number_format($totalpop); ?></b></div>
         </div>
     </div>
 
 <!-- ALLIANCE DETAILS -->
 <div class="card">
-    <h3>📋 Alliance Details</h3>
+    <h3><?php echo ADM_ALLIANCE_DETAILS; ?></h3>
     <div class="body">
         <table class="info-list">
-            <tr><th>Tag</th><td><?php echo htmlspecialchars($alidata['tag']); ?></td></tr>
-            <tr><th>Name</th><td><?php echo htmlspecialchars($alidata['name']); ?></td></tr>
-            <tr><th>Rank</th><td><b>#<?php echo $allianceRank; ?></b></td></tr>
-            <tr><th>Points</th><td><?php echo number_format($totalpop); ?></td></tr>
-            <tr><th>Capacity</th><td>
+            <tr><th><?php echo ADM_TAG; ?></th><td><?php echo htmlspecialchars($alidata['tag']); ?></td></tr>
+            <tr><th><?php echo ADM_NAME; ?></th><td><?php echo htmlspecialchars($alidata['name']); ?></td></tr>
+            <tr><th><?php echo ADM_RANK; ?></th><td><b>#<?php echo $allianceRank; ?></b></td></tr>
+            <tr><th><?php echo ADM_POINTS_2; ?></th><td><?php echo number_format($totalpop); ?></td></tr>
+            <tr><th><?php echo ADM_CAPACITY; ?></th><td>
                 <?php $now=count($aliusers); $cls=$now>=$maxMembers?'full':'ok'; ?>
                 <span class="badge-cap <?php echo $cls; ?>"><?php echo "$now/$maxMembers"; ?></span>
             </td></tr>
         </table>
 
         <div style="margin-top:12px;">
-            <b style="font-size:12px;">🛡 Alliance Positions</b>
+            <b style="font-size:12px;"><?php echo ADM_ALLIANCE_POSITIONS; ?></b>
             <div class="positions">
             <?php
             $sql = "SELECT * FROM ".TB_PREFIX."ali_permission WHERE alliance = $aid";
@@ -175,21 +175,21 @@ if($_GET['aid']) {
         </div>
 
         <div class="btn-row">
-            <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>">✏ Edit Alliance</a>
-            <a class="btn del" href="?p=delAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')">🗑 Delete</a>
+            <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>"><?php echo ADM_EDIT_ALLIANCE; ?></a>
+            <a class="btn del" href="?p=delAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')"><?php echo ADM_DELETE_2; ?></a>
         </div>
     </div>
 </div>
 
 <!-- ALLIANCE DESCRIPTION - ACUM SUB DETAILS -->
 <div class="card">
-    <h3>📖 Alliance Description</h3>
+    <h3><?php echo ADM_ALLIANCE_DESCRIPTION; ?></h3>
     <div class="body"><div class="desc-box" style="min-height:120px;"><?php echo nl2br(htmlspecialchars($alidata['desc'])); ?></div></div>
 </div>
 
 <!-- ALLIANCE NOTICE - ACUM SUB DESCRIPTION -->
 <div class="card">
-    <h3>📢 Alliance Notice</h3>
+    <h3><?php echo ADM_ALLIANCE_NOTICE; ?></h3>
     <div class="body"><div class="desc-box"><?php echo nl2br(htmlspecialchars($alidata['notice'])); ?></div></div>
 </div>
 
@@ -198,7 +198,7 @@ if($_GET['aid']) {
         <h3>👥 Members (<?php echo count($aliusers); ?>)</h3>
         <div class="body" style="padding:0;">
             <table class="members-table">
-                <thead><tr><th>#</th><th>Player</th><th>Population</th><th>Villages</th><th></th></tr></thead>
+                <thead><tr><th>#</th><th><?php echo ADM_PLAYER_2; ?></th><th><?php echo ADM_POPULATION; ?></th><th><?php echo ADM_VILLAGES; ?></th><th></th></tr></thead>
                 <tbody>
                 <?php
                 $rank=0;
@@ -228,10 +228,10 @@ if($_GET['aid']) {
 
 <!-- NEWS - FULL WIDTH -->
 <div class="card">
-    <h3>📰 Alliance News</h3>
+    <h3><?php echo ADM_ALLIANCE_NEWS; ?></h3>
     <div class="body" style="padding:0;max-height:300px;overflow:auto;">
         <table class="mini-table">
-            <thead><tr><th>Event</th><th style="width:130px;">Time</th></tr></thead>
+            <thead><tr><th><?php echo ADM_EVENT; ?></th><th style="width:130px;"><?php echo ADM_TIME; ?></th></tr></thead>
             <tbody>
             <?php
             $sql = "SELECT * FROM ".TB_PREFIX."ali_log WHERE aid = $aid ORDER BY date DESC LIMIT 50";
@@ -250,10 +250,10 @@ if($_GET['aid']) {
 
 <!-- DIPLOMACY - FULL WIDTH -->
 <div class="card">
-    <h3>🤝 Diplomacy</h3>
+    <h3><?php echo ADM_DIPLOMACY; ?></h3>
     <div class="body" style="padding:0;">
         <table class="mini-table">
-            <thead><tr><th>Alliance</th><th>Type</th><th style="width:60px;">Status</th></tr></thead>
+            <thead><tr><th><?php echo ADMIN_ALLIANCE; ?></th><th><?php echo ADM_TYPE; ?></th><th style="width:60px;"><?php echo ADM_STATUS; ?></th></tr></thead>
             <tbody>
             <?php
             $sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = $aid OR alli2 = $aid ORDER BY accepted DESC";

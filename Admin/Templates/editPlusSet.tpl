@@ -144,14 +144,14 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_PLUS_ACCDURATION ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_ACCDURATION_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="plus_time">
-                            <option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>>12 hours</option>
-                            <option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>>1 day</option>
-                            <option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>>2 days</option>
-                            <option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>>3 days</option>
-                            <option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>>4 days</option>
-                            <option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>>5 days</option>
-                            <option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>>6 days</option>
-                            <option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>>7 days</option>
+                            <option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>><?php echo ADM_12_HOURS; ?></option>
+                            <option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>><?php echo ADM_1_DAY; ?></option>
+                            <option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>><?php echo ADM_2_DAYS; ?></option>
+                            <option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>><?php echo ADM_3_DAYS; ?></option>
+                            <option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>><?php echo ADM_4_DAYS; ?></option>
+                            <option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>><?php echo ADM_5_DAYS; ?></option>
+                            <option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>><?php echo ADM_6_DAYS; ?></option>
+                            <option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>><?php echo ADM_7_DAYS; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -159,14 +159,14 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_PLUS_PRODUCTDURATION ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PRODUCTDURATION_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="plus_production">
-                            <option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>>12 hours</option>
-                            <option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>>1 day</option>
-                            <option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>>2 days</option>
-                            <option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>>3 days</option>
-                            <option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>>4 days</option>
-                            <option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>>5 days</option>
-                            <option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>>6 days</option>
-                            <option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>>7 days</option>
+                            <option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>><?php echo ADM_12_HOURS; ?></option>
+                            <option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>><?php echo ADM_1_DAY; ?></option>
+                            <option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>><?php echo ADM_2_DAYS; ?></option>
+                            <option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>><?php echo ADM_3_DAYS; ?></option>
+                            <option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>><?php echo ADM_4_DAYS; ?></option>
+                            <option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>><?php echo ADM_5_DAYS; ?></option>
+                            <option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>><?php echo ADM_6_DAYS; ?></option>
+                            <option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>><?php echo ADM_7_DAYS; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -181,9 +181,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

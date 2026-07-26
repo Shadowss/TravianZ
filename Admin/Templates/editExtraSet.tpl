@@ -71,8 +71,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_EXTRA_LIMITMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_EXTRA_LIMITMAIL_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="limit_mailbox">
-                            <option value="true" <?php if (LIMIT_MAILBOX==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LIMIT_MAILBOX==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LIMIT_MAILBOX==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LIMIT_MAILBOX==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -91,9 +91,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

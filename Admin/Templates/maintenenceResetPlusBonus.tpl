@@ -45,38 +45,34 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 <div class="resetres-wrap">
   <div class="resetres-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16v10H4z" fill="#27ae60"/><path d="M8 3v4M16 3v4" stroke="#16a085" stroke-width="2"/></svg>
-    <h2>Reset All Resource Bonuses</h2>
+    <h2><?php echo ADM_RESET_ALL_RESOURCE_BONUSES; ?></h2>
   </div>
 
   <div class="resetres-card">
     <div class="warn-icon">
       <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
     </div>
-    <h3>Reset All Resource Bonuses</h3>
-    <p>This action will disable the 25% bonus for ALL resources at all players.</p>
+    <h3><?php echo ADM_RESET_ALL_RESOURCE_BONUSES; ?></h3>
+    <p><?php echo ADM_THIS_ACTION_WILL_DISABLE_THE_25_BONUS_FOR_AL; ?></p>
     
     <div class="res-icons">
-      <img src="../img/admin/r/1.gif" title="Wood">
-      <img src="../img/admin/r/2.gif" title="Clay">
-      <img src="../img/admin/r/3.gif" title="Iron">
-      <img src="../img/admin/r/4.gif" title="Crop">
+      <img src="../img/admin/r/1.gif" title="<?php echo ADM_WOOD; ?>">
+      <img src="../img/admin/r/2.gif" title="<?php echo ADM_CLAY; ?>">
+      <img src="../img/admin/r/3.gif" title="<?php echo ADM_IRON; ?>">
+      <img src="../img/admin/r/4.gif" title="<?php echo ADM_CROP; ?>">
     </div>
 
-    <div class="danger-box">
-      ⚠️ All resource bonuses will be set to 0 days.
-    </div>
+    <div class="danger-box"><?php echo ADM_ALL_RESOURCE_BONUSES_WILL_BE_SET_TO_0_DAYS; ?></div>
 
     <form action="../GameEngine/Admin/Mods/mainteneceResetPlusBonus.php" method="POST" class="resetres-form" onsubmit="return confirm('Are you SURE you want to reset resource bonuses?');">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        RESET RESOURCE BONUS
-      </button>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_RESET_RESOURCE_BONUS; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resetres-success">✓ Resource bonuses have been reset for all players!</div>
+    <div class="resetres-success"><?php echo ADM_RESOURCE_BONUSES_HAVE_BEEN_RESET_FOR_ALL_PLA; ?></div>
   <?php } ?>
 </div>

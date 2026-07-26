@@ -79,8 +79,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_ADMIN_SHOWSTATS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_SHOWSTATS_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="admin_rank">
-                            <option value="true" <?php if (INCLUDE_ADMIN==true) echo "selected";?>>True</option>
-                            <option value="false" <?php if (INCLUDE_ADMIN==false) echo "selected";?>>False</option>
+                            <option value="true" <?php if (INCLUDE_ADMIN==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="false" <?php if (INCLUDE_ADMIN==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -88,8 +88,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_ADMIN_SUPPMESS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_SUPPMESS_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="admin_support_msgs">
-                            <option value="True" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==true) echo "selected";?>>True</option>
-                            <option value="False" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==false) echo "selected";?>>False</option>
+                            <option value="True" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -97,8 +97,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_ADMIN_RAIDATT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_RAIDATT_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="admin_raidable">
-                            <option value="True" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==true) echo "selected";?>>True</option>
-                            <option value="False" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==false) echo "selected";?>>False</option>
+                            <option value="True" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==true) echo "selected";?>><?php echo ADM_TRUE; ?></option>
+                            <option value="False" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==false) echo "selected";?>><?php echo ADM_FALSE; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -113,9 +113,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

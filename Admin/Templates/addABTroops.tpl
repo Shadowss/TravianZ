@@ -62,7 +62,7 @@ if(isset($id)){
   
   <div class="ab-grid">
     <div class="ab-row header">
-      <div></div><div>Troop</div><div style="text-align:center">Armoury</div><div style="text-align:center">Blacksmith</div>
+      <div></div><div><?php echo ADM_TROOP; ?></div><div style="text-align:center"><?php echo ADM_ARMOURY; ?></div><div style="text-align:center"><?php echo ADM_BLACKSMITH; ?></div>
     </div>
     <?php for($i=1;$i<9;$i++){ ?>
     <div class="ab-row">
@@ -76,11 +76,9 @@ if(isset($id)){
   
   <div class="ab-foot">
     <button type="button" class="btn btn-back" onclick="location.href='admin.php?p=village&did=<?=(int)($_GET['did'] ?? 0)?>'">
-      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back
-    </button>
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><?php echo ADM_BACK_3; ?></button>
     <button type="submit" name="save" class="btn btn-save">
-      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save
-    </button>
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg><?php echo ADM_SAVE_3; ?></button>
   </div>
 </div>
 

@@ -55,7 +55,7 @@ textarea{width:100%;box-sizing:border-box;min-height:120px;padding:8px;border:1p
 
 <div class="editAli-wrap">
     <div class="editAli-head">
-        <h2>✏️ Edit Alliance: <span><?php echo htmlspecialchars($alidata['tag']); ?></span> - <?php echo htmlspecialchars($alidata['name']); ?></h2>
+        <h2><?php echo ADM_EDIT_ALLIANCE_2; ?><span><?php echo htmlspecialchars($alidata['tag']); ?></span> - <?php echo htmlspecialchars($alidata['name']); ?></h2>
     </div>
 
     <form action="../GameEngine/Admin/Mods/editAli.php" method="POST">
@@ -64,29 +64,29 @@ textarea{width:100%;box-sizing:border-box;min-height:120px;padding:8px;border:1p
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
         <div class="card">
-            <h3>⚙️ Basic Settings</h3>
+            <h3><?php echo ADM_BASIC_SETTINGS; ?></h3>
             <div class="body">
                 <div class="form-grid">
                     <div class="form-row">
-                        <label>Alliance Tag (max 8)</label>
+                        <label><?php echo ADM_ALLIANCE_TAG_MAX_8; ?></label>
                         <input type="text" name="tag" maxlength="8" value="<?php echo htmlspecialchars($alidata['tag']); ?>" required>
                     </div>
                     <div class="form-row">
-                        <label>Alliance Name</label>
+                        <label><?php echo ADM_ALLIANCE_NAME; ?></label>
                         <input type="text" name="name" maxlength="25" value="<?php echo htmlspecialchars($alidata['name']); ?>" required>
                     </div>
                     <div class="form-row">
-                        <label>👑 Leader (Founder)</label>
+                        <label><?php echo ADM_LEADER_FOUNDER; ?></label>
                         <select name="leader">
                             <?php foreach($members as $m){
                                 $sel = $m['id']==$alidata['leader'] ? 'selected' : '';
                                 echo '<option value="'.$m['id'].'" '.$sel.'>'.htmlspecialchars($m['username']).'</option>';
                             } ?>
                         </select>
-                        <div class="hint">Schimbă fondatorul alianței</div>
+                        <div class="hint"><?php echo ADM_SCHIMB_FONDATORUL_ALIAN_EI; ?></div>
                     </div>
                     <div class="form-row">
-                        <label>👥 Max Members</label>
+                        <label><?php echo ADM_MAX_MEMBERS; ?></label>
                         <input type="number" name="max" min="3" max="60" value="<?php echo (int)($alidata['max'] ? $alidata['max'] : $calcMax); ?>">
                         <div class="hint">Calculat automat: <?php echo $calcMax; ?> (Ambasada lvl <?php echo $embLevel; ?> × 3)</div>
                     </div>
@@ -95,22 +95,22 @@ textarea{width:100%;box-sizing:border-box;min-height:120px;padding:8px;border:1p
         </div>
 
         <div class="card">
-            <h3>📢 Alliance Notice (apare sus)</h3>
+            <h3><?php echo ADM_ALLIANCE_NOTICE_APARE_SUS; ?></h3>
             <div class="body">
-                <textarea name="notice" placeholder="Mesaj scurt pentru membri..."><?php echo htmlspecialchars($alidata['notice']); ?></textarea>
+                <textarea name="notice" placeholder="<?php echo ADM_MESAJ_SCURT_PENTRU_MEMBRI; ?>"><?php echo htmlspecialchars($alidata['notice']); ?></textarea>
             </div>
         </div>
 
         <div class="card">
-            <h3>📖 Alliance Description (pagina publică)</h3>
+            <h3><?php echo ADM_ALLIANCE_DESCRIPTION_PAGINA_PUBLIC; ?></h3>
             <div class="body">
-                <textarea name="desc" style="min-height:200px;" placeholder="Descriere lungă, BBCode permis..."><?php echo htmlspecialchars($alidata['desc']); ?></textarea>
+                <textarea name="desc" style="min-height:200px;" placeholder="<?php echo ADM_DESCRIERE_LUNG_BBCODE_PERMIS; ?>"><?php echo htmlspecialchars($alidata['desc']); ?></textarea>
             </div>
         </div>
 
         <div class="actions">
-            <button type="submit" class="btn-save">💾 Save Alliance</button>
-            <a href="admin.php?p=alliance&aid=<?php echo $aid; ?>" style="margin-left:12px;color:#555;text-decoration:none;">← Cancel</a>
+            <button type="submit" class="btn-save"><?php echo ADM_SAVE_ALLIANCE; ?></button>
+            <a href="admin.php?p=alliance&aid=<?php echo $aid; ?>" style="margin-left:12px;color:#555;text-decoration:none;"><?php echo ADM_CANCEL_2; ?></a>
         </div>
     </form>
 </div>

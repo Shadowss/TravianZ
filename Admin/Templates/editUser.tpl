@@ -71,14 +71,14 @@ select.dropdown { width:100%; }
 
 <div class="editUser-wrap">
     <div class="editUser-head">
-        <h2>✏️ Edit Player: <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></h2>
+        <h2><?php echo ADM_EDIT_PLAYER; ?><a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></h2>
         <div class="meta">ID: <?php echo $id; ?> | Villages: <?php echo count($varray); ?> | Gold: <?php echo $user['gold']; ?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div>
     </div>
 
     <div class="editUser-grid">
         <!-- LEFT: DETAILS -->
         <div class="card">
-            <h3>👤 Account Details</h3>
+            <h3><?php echo ADM_ACCOUNT_DETAILS; ?></h3>
             <div class="body">
                 
                 <!-- USERNAME EDIT - NOU -->
@@ -88,9 +88,9 @@ select.dropdown { width:100%; }
                         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
                         <input type="hidden" name="uid" value="<?php echo $uid; ?>">
                         <div class="form-row">
-                            <label>👤 Username</label>
+                            <label><?php echo ADM_USERNAME_2; ?></label>
                             <input class="fm" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" style="flex:1;">
-                            <button type="submit" class="btn-mini" title="Change Username">💾 Save</button>
+                            <button type="submit" class="btn-mini" title="<?php echo ADM_CHANGE_USERNAME; ?>"><?php echo ADM_SAVE_2; ?></button>
                         </div>
                     </form>
                 </div>
@@ -103,34 +103,34 @@ select.dropdown { width:100%; }
                     <input type="hidden" name="id" value="<?php echo $id; ?>" />
 
                     <div class="form-row">
-                        <label> ⚔️ Tribe</label>
+                        <label><?php echo ADM_TRIBE_2; ?></label>
                         <select name="tribe" class="dropdown">
-                            <option value="1" <?php if($user['tribe']==1)echo"selected"; ?>>1. Roman</option>
-                            <option value="2" <?php if($user['tribe']==2)echo"selected"; ?>>2. Teuton</option>
-                            <option value="3" <?php if($user['tribe']==3)echo"selected"; ?>>3. Gaul</option>
-							<option value="4" <?php if($user['tribe']==4)echo"selected"; ?>>4. Nature</option>
-							<option value="5" <?php if($user['tribe']==5)echo"selected"; ?>>5. Natars</option>
-							<option value="6" <?php if($user['tribe']==6)echo"selected"; ?>>6. Hun</option>
-							<option value="7" <?php if($user['tribe']==7)echo"selected"; ?>>7. Egyptian</option>
-							<option value="8" <?php if($user['tribe']==8)echo"selected"; ?>>8. Spartan</option>
-							<option value="9" <?php if($user['tribe']==9)echo"selected"; ?>>9. Viking</option>
+                            <option value="1" <?php if($user['tribe']==1)echo"selected"; ?>><?php echo ADM_1_ROMAN; ?></option>
+                            <option value="2" <?php if($user['tribe']==2)echo"selected"; ?>><?php echo ADM_2_TEUTON; ?></option>
+                            <option value="3" <?php if($user['tribe']==3)echo"selected"; ?>><?php echo ADM_3_GAUL; ?></option>
+							<option value="4" <?php if($user['tribe']==4)echo"selected"; ?>><?php echo ADM_4_NATURE; ?></option>
+							<option value="5" <?php if($user['tribe']==5)echo"selected"; ?>><?php echo ADM_5_NATARS; ?></option>
+							<option value="6" <?php if($user['tribe']==6)echo"selected"; ?>><?php echo ADM_6_HUN; ?></option>
+							<option value="7" <?php if($user['tribe']==7)echo"selected"; ?>><?php echo ADM_7_EGYPTIAN; ?></option>
+							<option value="8" <?php if($user['tribe']==8)echo"selected"; ?>><?php echo ADM_8_SPARTAN; ?></option>
+							<option value="9" <?php if($user['tribe']==9)echo"selected"; ?>><?php echo ADM_9_VIKING; ?></option>
                         </select>
                     </div>
                     <div class="form-row">
-                        <label>📍 Location</label>
+                        <label><?php echo ADM_LOCATION; ?></label>
                         <input class="fm" name="location" value="<?php echo htmlspecialchars($user['location']); ?>">
                     </div>
                     <div class="form-row">
-                        <label>✉️ E-mail</label>
+                        <label><?php echo ADM_E_MAIL; ?></label>
                         <input class="fm" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
                     </div>
                     <div class="form-row">
-                        <label>🎯 Quest</label>
+                        <label><?php echo ADM_QUEST; ?></label>
                         <input class="fm" name="quest" value="<?php echo (int)$user['quest']; ?>">
                     </div>
 
                     <div style="margin-top:14px; border-top:1px dashed #ddd; padding-top:10px;">
-                        <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:4px;">📝 Profile Description (left)</label>
+                        <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:4px;"><?php echo ADM_PROFILE_DESCRIPTION_LEFT; ?></label>
                         <div class="desc-box">
                             <textarea name="desc1" rows="10"><?php echo htmlspecialchars($user['desc1']); ?></textarea>
                         </div>
@@ -141,25 +141,25 @@ select.dropdown { width:100%; }
 
         <!-- RIGHT: DESCRIPTION -->
         <div class="card">
-            <h3>📄 Profile Description (right)</h3>
+            <h3><?php echo ADM_PROFILE_DESCRIPTION_RIGHT; ?></h3>
             <div class="body desc-box">
                 <textarea name="desc2" rows="22"><?php echo htmlspecialchars($user['desc2']); ?></textarea>
-                <div style="font-size:11px; color:#777; margin-top:4px;">Suport BBCode. Folosește Enter pentru linii noi.</div>
+                <div style="font-size:11px; color:#777; margin-top:4px;"><?php echo ADM_SUPORT_BBCODE_FOLOSE_TE_ENTER_PENTRU_LINII_N; ?></div>
             </div>
         </div>
     </div>
 
     <!-- MEDALS -->
     <div class="card" style="margin-top:12px;">
-        <h3>🏅 Medals</h3>
+        <h3><?php echo ADM_MEDALS; ?></h3>
         <div class="body" style="padding:0;">
             <table class="medals-table">
                 <thead>
                     <tr>
-                        <th style="width:35%;">Category</th>
-                        <th style="width:15%;">Rank</th>
-                        <th style="width:15%;">Week</th>
-                        <th>BB-Code</th>
+                        <th style="width:35%;"><?php echo ADM_CATEGORY; ?></th>
+                        <th style="width:15%;"><?php echo ADM_RANK; ?></th>
+                        <th style="width:15%;"><?php echo ADM_WEEK; ?></th>
+                        <th><?php echo ADM_BB_CODE; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -181,7 +181,7 @@ select.dropdown { width:100%; }
                 }
                 ?>
                 <tr>
-                    <td><span class="badge" style="background:#999;">🔰</span> Beginners Protection</td>
+                    <td><span class="badge" style="background:#999;">🔰</span><?php echo ADM_BEGINNERS_PROTECTION; ?></td>
                     <td>-</td><td>-</td><td><code>[#0]</code></td>
                 </tr>
                 </tbody>
@@ -191,8 +191,8 @@ select.dropdown { width:100%; }
 
     <div class="actions">
         </form> <!-- închidem form-ul principal aici -->
-        <button type="submit" form="dummy" onclick="document.querySelector('form[action*=\'editUser.php\']').submit()" class="btn-save">💾 Save Changes</button>
-        <span class="back-link"><a href="?p=player&uid=<?php echo $user['id']; ?>">« Go back to player</a></span>
+        <button type="submit" form="dummy" onclick="document.querySelector('form[action*=\'editUser.php\']').submit()" class="btn-save"><?php echo ADM_SAVE_CHANGES_2; ?></button>
+        <span class="back-link"><a href="?p=player&uid=<?php echo $user['id']; ?>"><?php echo ADM_GO_BACK_TO_PLAYER; ?></a></span>
     </div>
 </div>
 <?php

@@ -48,26 +48,26 @@ $logs = $database->query("SELECT * FROM ".TB_PREFIX."build_log WHERE wid = $id O
 </style>
 
 <div class="vlog-wrap">
-    <a href="admin.php?p=village&did=<?php echo $id; ?>" class="back-btn">← Back to Village</a>
+    <a href="admin.php?p=village&did=<?php echo $id; ?>" class="back-btn"><?php echo ADM_BACK_TO_VILLAGE; ?></a>
     
     <div class="vlog-head">
         <div class="icon">🏗️</div>
         <div>
-            <h2><?php echo htmlspecialchars($village['name']); ?> <span style="opacity:.7">— Build Log</span></h2>
-            <span>Latest 200 action</span>
+            <h2><?php echo htmlspecialchars($village['name']); ?> <span style="opacity:.7"><?php echo ADM_BUILD_LOG; ?></span></h2>
+            <span><?php echo ADM_LATEST_200_ACTION; ?></span>
         </div>
     </div>
     
     <div class="vlog-card">
         <?php if(mysqli_num_rows($logs) == 0): ?>
-            <div class="empty">No action recorded yet.</div>
+            <div class="empty"><?php echo ADM_NO_ACTION_RECORDED_YET; ?></div>
         <?php else: ?>
         <table class="vlog-table">
             <thead>
                 <tr>
                     <th class="vlog-num">#</th>
-                    <th>Event</th>
-                    <th class="vlog-date">Data</th>
+                    <th><?php echo ADM_EVENT; ?></th>
+                    <th class="vlog-date"><?php echo ADM_DATA; ?></th>
                 </tr>
             </thead>
             <tbody>

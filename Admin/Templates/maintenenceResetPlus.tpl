@@ -40,31 +40,27 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 <div class="resetplus-wrap">
   <div class="resetplus-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v10l4-4" stroke="#8e44ad" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="5" fill="#6c3483"/></svg>
-    <h2>Reset All Players Plus</h2>
+    <h2><?php echo ADM_RESET_ALL_PLAYERS_PLUS; ?></h2>
   </div>
 
   <div class="resetplus-card">
     <div class="warn-icon">
       <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
-    <h3>Reset All Players Plus</h3>
-    <p>This action will disable Travian Plus for ALL players.</p>
+    <h3><?php echo ADM_RESET_ALL_PLAYERS_PLUS; ?></h3>
+    <p><?php echo ADM_THIS_ACTION_WILL_DISABLE_TRAVIAN_PLUS_FOR_AL; ?></p>
     
-    <div class="danger-box">
-      ⚠️ Plus it will be set to 0 days for everyone.
-    </div>
+    <div class="danger-box"><?php echo ADM_PLUS_IT_WILL_BE_SET_TO_0_DAYS_FOR_EVERYONE; ?></div>
 
     <form action="../GameEngine/Admin/Mods/mainteneceResetPlus.php" method="POST" class="resetplus-form" onsubmit="return confirm('Are you SURE you want to reset the Plus to ALL players?');">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        RESET PLUS NOW
-      </button>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_RESET_PLUS_NOW; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resetplus-success">✓ Plus all the players have been reset!</div>
+    <div class="resetplus-success"><?php echo ADM_PLUS_ALL_THE_PLAYERS_HAVE_BEEN_RESET; ?></div>
   <?php } ?>
 </div>

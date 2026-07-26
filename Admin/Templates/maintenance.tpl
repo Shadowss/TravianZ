@@ -62,20 +62,20 @@ if($maint['started_by'] > 0){
 <form method="POST">
 <?php echo csrf_field(); ?>
 <div class="maint-card">
-  <div class="maint-head">Server Maintenance</div>
+  <div class="maint-head"><?php echo ADMIN_SERVER_MAINTENANCE; ?></div>
   <div class="maint-status <?= $maint['active'] ? 'on' : 'off' ?>">
     <?= $maint['active'] ? 'ACTIVE since '.($maint['started_at'] ? date('H:i d.m.Y',$maint['started_at']) : '-') : 'INACTIVE – server open' ?>
   </div>
   <?php if($maint['active']){ ?>
-    <div class="maint-info">Started by: <b><?= htmlspecialchars($starterName) ?></b> (UID: <?= (int)$maint['started_by'] ?>)</div>
+    <div class="maint-info"><?php echo ADM_STARTED_BY; ?><b><?= htmlspecialchars($starterName) ?></b> (UID: <?= (int)$maint['started_by'] ?>)</div>
   <?php } ?>
   <div class="maint-row">
-    <div>Enable maintenance</div>
-    <button type="submit" name="startMaint" class="maint-btn start">Start</button>
+    <div><?php echo ADM_ENABLE_MAINTENANCE; ?></div>
+    <button type="submit" name="startMaint" class="maint-btn start"><?php echo ADM_START; ?></button>
   </div>
   <div class="maint-row">
-    <div>Disable maintenance</div>
-    <button type="submit" name="removeMaint" class="maint-btn stop">Stop</button>
+    <div><?php echo ADM_DISABLE_MAINTENANCE; ?></div>
+    <button type="submit" name="removeMaint" class="maint-btn stop"><?php echo ADM_STOP; ?></button>
   </div>
 </div>
 </form>

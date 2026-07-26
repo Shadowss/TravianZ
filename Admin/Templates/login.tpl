@@ -125,31 +125,29 @@ body > img[src*="Travian"], img[src*="admin.gif"]{display:none !important}
     <div class="login-header">
       <div class="travian-logo">TRA<span>VIAN</span>Z</div>
       <div class="admin-badge">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10z"/></svg>
-        Admin Control
-      </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10z"/></svg><?php echo ADM_ADMIN_CONTROL; ?></div>
     </div>
 
     <div class="login-card">
       <div class="login-title">
-        <h2>Server Administration</h2>
-        <p>Secure access to TravianZ panel</p>
+        <h2><?php echo ADM_SERVER_ADMINISTRATION; ?></h2>
+        <p><?php echo ADM_SECURE_ACCESS_TO_TRAVIANZ_PANEL; ?></p>
       </div>
 
       <form method="post" action="admin.php">
         <input type="hidden" name="action" value="login">
         
         <div class="form-group">
-          <label>Username</label>
-          <input class="form-input" type="text" name="name" value="<?php echo (isset($_SESSION['admin_username']) ? $_SESSION['admin_username'] : '')?>" maxlength="20" placeholder="Enter admin username" autocomplete="username" required>
+          <label><?php echo ADM_USERNAME; ?></label>
+          <input class="form-input" type="text" name="name" value="<?php echo (isset($_SESSION['admin_username']) ? $_SESSION['admin_username'] : '')?>" maxlength="20" placeholder="<?php echo ADM_ENTER_ADMIN_USERNAME; ?>" autocomplete="username" required>
         </div>
         
         <div class="form-group">
-          <label>Password</label>
+          <label><?php echo ADM_PASSWORD; ?></label>
           <input class="form-input" type="password" name="pw" value="" maxlength="20" placeholder="••••••••" autocomplete="current-password" required>
         </div>
         
-        <button type="submit" class="login-btn">Access Panel</button>
+        <button type="submit" class="login-btn"><?php echo ADM_ACCESS_PANEL; ?></button>
       </form>
 
       <div class="login-footer">
@@ -158,9 +156,9 @@ body > img[src*="Travian"], img[src*="admin.gif"]{display:none !important}
     </div>
 
     <div class="tribes">
-      <div class="tribe-icon" title="Romans">⚔</div>
-      <div class="tribe-icon" title="Teutons">🪓</div>
-      <div class="tribe-icon" title="Gauls">🛡</div>
+      <div class="tribe-icon" title="<?php echo ADM_ROMANS; ?>">⚔</div>
+      <div class="tribe-icon" title="<?php echo ADM_TEUTONS; ?>">🪓</div>
+      <div class="tribe-icon" title="<?php echo ADM_GAULS; ?>">🛡</div>
     </div>
 
 	<div class="credits">

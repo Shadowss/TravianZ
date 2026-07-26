@@ -52,13 +52,13 @@ if($id){
 
 <div class="log-wrap">
     <div class="log-head">
-        <h2>🔐 Login Log: <a href="admin.php?p=player&uid=<?php echo $player['id'];?>"><?php echo htmlspecialchars($player['username']);?></a></h2>
+        <h2><?php echo ADM_LOGIN_LOG_2; ?><a href="admin.php?p=player&uid=<?php echo $player['id'];?>"><?php echo htmlspecialchars($player['username']);?></a></h2>
         <div class="uid">UID: <?php echo $id; ?></div>
     </div>
 
     <div class="card">
         <h3>
-            <span>Recent Login Attempts</span>
+            <span><?php echo ADM_RECENT_LOGIN_ATTEMPTS; ?></span>
             <?php
             $count = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT id FROM ".TB_PREFIX."login_log WHERE uid = $id"));
             echo '<span class="badge">'.$count.' total</span>';
@@ -73,9 +73,9 @@ if($id){
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Log ID</th>
-                    <th>IP Address</th>
-                    <th>Info</th>
+                    <th><?php echo ADM_LOG_ID; ?></th>
+                    <th><?php echo ADM_IP_ADDRESS; ?></th>
+                    <th><?php echo ADM_INFO; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -98,7 +98,7 @@ if($id){
     </div>
 
     <div class="actions">
-        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn-back">← Back to player</a>
+        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn-back"><?php echo ADM_BACK_TO_PLAYER; ?></a>
     </div>
 </div>
 <?php

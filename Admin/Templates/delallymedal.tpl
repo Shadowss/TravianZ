@@ -32,15 +32,15 @@ $nummedals = $sql['Total'];
 <table id="member">
 	<thead>
 		<tr>
-			<th>Medal Information</th>
+			<th><?php echo ADM_MEDAL_INFORMATION; ?></th>
 		</tr>
 	</thead>
 </table>
 <table id="profile">
 	<thead>
 		<tr>
-			<td>Week</td>
-			<td>Medals</td>
+			<td><?php echo ADM_WEEK; ?></td>
+			<td><?php echo ADM_MEDALS_2; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -68,15 +68,15 @@ $nummedals = $sql['Total'];
 <table id="member">
 	<thead>
 		<tr>
-			<th>Medal Week by Week</th>
+			<th><?php echo ADM_MEDAL_WEEK_BY_WEEK; ?></th>
 		</tr>
 	</thead>
 </table>
 <table id="profile">
 	<thead>
 		<tr>
-			<td>Week</td>
-			<td>Medals</td>
+			<td><?php echo ADM_WEEK; ?></td>
+			<td><?php echo ADM_MEDALS_2; ?></td>
 			<td></td>
 		</tr>
 	</thead>
@@ -109,13 +109,13 @@ $nummedals = $sql['Total'];
 <table id="profile">
 	<thead>
 		<tr>
-			<td>Medal</td>
-			<td>BB-Code</td>
-			<td>Type</td>
-			<td>Player</td>
-			<td>Rank</td>
-			<td>Week</td>
-			<td>Points</td>
+			<td><?php echo ADM_MEDAL; ?></td>
+			<td><?php echo ADM_BB_CODE; ?></td>
+			<td><?php echo ADM_TYPE; ?></td>
+			<td><?php echo ADM_PLAYER_2; ?></td>
+			<td><?php echo ADM_RANK; ?></td>
+			<td><?php echo ADM_WEEK; ?></td>
+			<td><?php echo ADM_POINTS_2; ?></td>
 		</tr>
 	</thead>
 	<tbody>

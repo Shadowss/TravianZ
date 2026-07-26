@@ -47,23 +47,23 @@ foreach($varray as $vil) $totalpop += $vil['pop'];
 	<table id="member" class="search-modern">
 		<thead>
 			<tr>
-				<th colspan="3">Search <font>("<?php echo htmlspecialchars($user['username']); ?>" = <?php echo $numsimplayers; ?> Similar)</font></th>
+				<th colspan="3"><?php echo ADMIN_SEARCH; ?><font>("<?php echo htmlspecialchars($user['username']); ?>" = <?php echo $numsimplayers; ?> Similar)</font></th>
 			</tr>
 		</thead>
 	</table>
 
 	<div class="s-info-wrap">
 		<div class="s-card">
-			<div class="s-card-title">Player</div>
+			<div class="s-card-title"><?php echo ADM_PLAYER_2; ?></div>
 			<div class="s-card-main"><a href="?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a> <span style="color:#94a3b8;font-weight:500">(uid: <?php echo $user['id'];?>)</span></div>
-			<div class="s-card-sub"><b>Tribe:</b> <?php echo $tribename; ?> • <b>Villages:</b> <?php echo count($varray);?> • <b>Pop:</b> <?php echo number_format($totalpop,0,',','.'); ?></div>
+			<div class="s-card-sub"><b><?php echo ADM_TRIBE_3; ?></b> <?php echo $tribename; ?> • <b><?php echo ADM_VILLAGES_3; ?></b> <?php echo count($varray);?> • <b><?php echo ADM_POP_3; ?></b> <?php echo number_format($totalpop,0,',','.'); ?></div>
 		</div>
 
 		<?php if(isset($_GET['did']) && isset($village)) { ?>
 		<div class="s-card">
-			<div class="s-card-title">Village</div>
+			<div class="s-card-title"><?php echo ADM_VILLAGE; ?></div>
 			<div class="s-card-main"><a href="?p=village&did=<?php echo $village['wref'];?>"><?php echo htmlspecialchars($village['name']);?></a> <span style="color:#94a3b8;font-weight:500">(did: <?php echo $village['wref'];?>)</span></div>
-			<div class="s-card-sub"><b>Coords:</b> (<?php echo $coor['x'];?>|<?php echo $coor['y'];?>) • <b>Pop:</b> <?php echo $village['pop'];?></div>
+			<div class="s-card-sub"><b><?php echo ADM_COORDS_2; ?></b> (<?php echo $coor['x'];?>|<?php echo $coor['y'];?>) • <b><?php echo ADM_POP_3; ?></b> <?php echo $village['pop'];?></div>
 		</div>
 		<?php } ?>
 	</div>

@@ -73,8 +73,8 @@ if(isset($_GET['uid']) && (int)$_GET['uid'] > 0) {
 <div class="del-wrap">
     <div class="del-head">
         <div class="icon">⚠️</div>
-        <h2>DELETE PLAYER PERMANENTLY</h2>
-        <div class="warn">This action cannot be undone!</div>
+        <h2><?php echo ADM_DELETE_PLAYER_PERMANENTLY; ?></h2>
+        <div class="warn"><?php echo ADM_THIS_ACTION_CANNOT_BE_UNDONE; ?></div>
     </div>
 
     <form action="../GameEngine/Admin/Mods/delUser.php" method="post" onsubmit="return confirm('ESTI SIGUR? Se va sterge tot: sate, trupe, rapoarte!')">
@@ -83,31 +83,31 @@ if(isset($_GET['uid']) && (int)$_GET['uid'] > 0) {
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
         <div class="card">
-            <h3>🗑️ Player to delete</h3>
+            <h3><?php echo ADM_PLAYER_TO_DELETE; ?></h3>
             
             <div class="player-info">
-                <div class="info-item"><b>Name</b><div class="val"><a href="?p=player&uid=<?php echo $target['id']; ?>"><?php echo htmlspecialchars($target['username']); ?></a></div></div>
-                <div class="info-item"><b>Gold</b><div class="val"><?php echo $target['gold']; ?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div></div>
-                <div class="info-item"><b>Rank</b><div class="val">#<?php echo $rank; ?></div></div>
-                <div class="info-item"><b>Population</b><div class="val"><?php echo number_format($totalpop); ?></div></div>
-                <div class="info-item"><b>Villages</b><div class="val"><?php echo $villages; ?></div></div>
-                <div class="info-item"><b>Plus ends</b><div class="val"><?php echo $target['plus'] > time() ? date('d.m.Y H:i',$target['plus']) : '-'; ?></div></div>
-                <div class="info-item" style="grid-column:1/-1;border-bottom:none;"><b>Alliance</b><div class="val"><?php echo $database->getAllianceName($target['alliance']) ?: '-'; ?></div></div>
+                <div class="info-item"><b><?php echo ADM_NAME; ?></b><div class="val"><a href="?p=player&uid=<?php echo $target['id']; ?>"><?php echo htmlspecialchars($target['username']); ?></a></div></div>
+                <div class="info-item"><b><?php echo ADMIN_GOLD; ?></b><div class="val"><?php echo $target['gold']; ?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div></div>
+                <div class="info-item"><b><?php echo ADM_RANK; ?></b><div class="val">#<?php echo $rank; ?></div></div>
+                <div class="info-item"><b><?php echo ADM_POPULATION; ?></b><div class="val"><?php echo number_format($totalpop); ?></div></div>
+                <div class="info-item"><b><?php echo ADM_VILLAGES; ?></b><div class="val"><?php echo $villages; ?></div></div>
+                <div class="info-item"><b><?php echo ADM_PLUS_ENDS; ?></b><div class="val"><?php echo $target['plus'] > time() ? date('d.m.Y H:i',$target['plus']) : '-'; ?></div></div>
+                <div class="info-item" style="grid-column:1/-1;border-bottom:none;"><b><?php echo ADMIN_ALLIANCE; ?></b><div class="val"><?php echo $database->getAllianceName($target['alliance']) ?: '-'; ?></div></div>
             </div>
 
             <div class="danger-box">
                 <div class="icon">🚨</div>
-                <div><b>WARNING:</b> All villages (<?php echo $villages; ?>), troops, buildings, reports, messages and player statistics will be <u>permanently</u> deleted. There is no recovery!</div>
+                <div><b><?php echo ADM_WARNING; ?></b> All villages (<?php echo $villages; ?>), troops, buildings, reports, messages and player statistics will be <u><?php echo ADM_PERMANENTLY; ?></u><?php echo ADM_DELETED_THERE_IS_NO_RECOVERY; ?></div>
             </div>
 
             <div class="confirm-area">
-                <label for="pass">Confirm with your admin password:</label>
+                <label for="pass"><?php echo ADM_CONFIRM_WITH_YOUR_ADMIN_PASSWORD; ?></label>
                 <input type="password" name="pass" id="pass" placeholder="••••••••" required autocomplete="current-password">
             </div>
 
             <div class="actions">
-                <a href="?p=player&uid=<?php echo $uid; ?>" class="btn-cancel">← Cancel</a>
-                <button type="submit" class="btn-delete">🗑️ DELETE PLAYER</button>
+                <a href="?p=player&uid=<?php echo $uid; ?>" class="btn-cancel"><?php echo ADM_CANCEL_2; ?></a>
+                <button type="submit" class="btn-delete"><?php echo ADM_DELETE_PLAYER; ?></button>
             </div>
         </div>
     </form>

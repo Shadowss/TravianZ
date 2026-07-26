@@ -73,31 +73,27 @@ $js = [
 </style>
 
 <div class="hm-wrap">
-    <h2>World Map <span>Heatmap</span></h2>
-    <p class="hm-intro">
-        Density overlays on the world grid to help with starting balance: where villages
-        cluster, which tribes dominate a region, where inactive players sit (dead zones /
-        good spawn spots), and where attacks are currently landing. North (+y) is up.
-    </p>
+    <h2><?php echo ADM_WORLD_MAP; ?><span><?php echo ADM_HEATMAP; ?></span></h2>
+    <p class="hm-intro"><?php echo ADM_DENSITY_OVERLAYS_ON_THE_WORLD_GRID_TO_HELP_W; ?></p>
 
     <form method="get" action="admin.php" class="hm-filter">
         <input type="hidden" name="p" value="heatmap">
         <div>
-            <label>Grid resolution</label>
+            <label><?php echo ADM_GRID_RESOLUTION; ?></label>
             <input type="number" name="res" min="<?php echo Heatmap::MIN_RES; ?>" max="<?php echo Heatmap::MAX_RES; ?>" value="<?php echo (int)$data['res']; ?>">
         </div>
         <div>
-            <label>Inactive after (days)</label>
+            <label><?php echo ADM_INACTIVE_AFTER_DAYS; ?></label>
             <input type="number" name="days" min="1" max="365" value="<?php echo (int)$data['inactive_days']; ?>">
         </div>
-        <button type="submit">Rebuild</button>
+        <button type="submit"><?php echo ADM_REBUILD; ?></button>
     </form>
 
     <div class="hm-layers">
-        <button data-layer="density" class="active">Village density</button>
-        <button data-layer="tribe">Tribe density</button>
-        <button data-layer="inactive">Inactivity</button>
-        <button data-layer="attacks">Attacks</button>
+        <button data-layer="density" class="active"><?php echo ADM_VILLAGE_DENSITY; ?></button>
+        <button data-layer="tribe"><?php echo ADM_TRIBE_DENSITY; ?></button>
+        <button data-layer="inactive"><?php echo ADM_INACTIVITY; ?></button>
+        <button data-layer="attacks"><?php echo ADM_ATTACKS; ?></button>
     </div>
 
     <div class="hm-stage">
@@ -108,21 +104,21 @@ $js = [
 
         <div class="hm-below">
             <div class="hm-card">
-                <h3>Summary</h3>
-                <div class="hm-stat"><span>Player villages</span><b><?php echo number_format($data['totals']['villages']); ?></b></div>
-                <div class="hm-stat"><span>Players</span><b><?php echo number_format($data['totals']['players']); ?></b></div>
-                <div class="hm-stat"><span>Inactive villages</span><b><?php echo number_format($data['totals']['inactive']); ?></b></div>
-                <div class="hm-stat"><span>Attacks in flight</span><b><?php echo number_format($data['totals']['attacks']); ?></b></div>
+                <h3><?php echo ADM_SUMMARY; ?></h3>
+                <div class="hm-stat"><span><?php echo ADM_PLAYER_VILLAGES; ?></span><b><?php echo number_format($data['totals']['villages']); ?></b></div>
+                <div class="hm-stat"><span><?php echo ADM_PLAYERS; ?></span><b><?php echo number_format($data['totals']['players']); ?></b></div>
+                <div class="hm-stat"><span><?php echo ADM_INACTIVE_VILLAGES; ?></span><b><?php echo number_format($data['totals']['inactive']); ?></b></div>
+                <div class="hm-stat"><span><?php echo ADM_ATTACKS_IN_FLIGHT; ?></span><b><?php echo number_format($data['totals']['attacks']); ?></b></div>
                 <div class="hm-note">Map <?php echo (int)$data['world_max']; ?>&times;<?php echo (int)$data['world_max']; ?> radius, <?php echo (int)$data['res']; ?>&times;<?php echo (int)$data['res']; ?> grid (&asymp;<?php echo (int)round($data['cell_span']); ?> tiles/cell).</div>
             </div>
 
             <div class="hm-card">
-                <h3 id="hm-legend-title">Legend</h3>
+                <h3 id="hm-legend-title"><?php echo ADM_LEGEND; ?></h3>
                 <div class="hm-legend" id="hm-legend"></div>
             </div>
 
             <div class="hm-card">
-                <h3>Tribe totals</h3>
+                <h3><?php echo ADM_TRIBE_TOTALS; ?></h3>
                 <?php
                 $tt = $data['tribe_totals'];
                 $sum = array_sum($tt);
@@ -138,7 +134,7 @@ $js = [
                         <div class="hm-stat"><span><span class="sw" style="background:<?php echo $tribeColors[$t]??'#64748b'; ?>;display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;"></span><?php echo e($tribeNames[$t]??('Tribe '.$t)); ?></span><b><?php echo number_format($n); ?></b></div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <div class="hm-note">No player villages found.</div>
+                    <div class="hm-note"><?php echo ADM_NO_PLAYER_VILLAGES_FOUND; ?></div>
                 <?php endif; ?>
             </div>
         </div>

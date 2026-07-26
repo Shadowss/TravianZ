@@ -48,11 +48,11 @@
 
     <thead>
         <tr>
-            <th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></th>
+            <th colspan="2"><?php echo ADM_PLAYER_2; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></th>
         </tr>
         <tr>
-            <td>Details</td>
-            <td>Description</td>
+            <td><?php echo ADM_DETAILS; ?></td>
+            <td><?php echo ADM_DESCRIPTION; ?></td>
         </tr>
     </thead>
     <tbody>
@@ -63,11 +63,11 @@
             <td class="details">
                 <table cellpadding="0" cellspacing="0">
                     <tr>
-                        <th>Rank</th>
+                        <th><?php echo ADM_RANK; ?></th>
                         <td><?php $ranking->procRankArray();echo $ranking->getUserRank($user['id']);?></td>
                     </tr>
                     <tr>
-                        <th>Tribe</th>
+                        <th><?php echo ADM_TRIBE; ?></th>
                         <td>
                             <?php
                                 if($user['tribe'] == 1) { echo '<span class="badge-tribe">Roman</span>'; }
@@ -83,7 +83,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Alliance</th>
+                        <th><?php echo ADMIN_ALLIANCE; ?></th>
                         <td>
                             <?php
                                 if($user['alliance'] == 0) { echo "-"; }
@@ -92,13 +92,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Villages</th>
+                        <th><?php echo ADM_VILLAGES; ?></th>
                         <td><?php echo count($varray);?></td>
                     </tr>
                     <tr>
-                        <th>Population</th>
+                        <th><?php echo ADM_POPULATION; ?></th>
                         <td><?php echo number_format($totalpop,0,',','.'); ?> 
-						<a href="?action=recountPopUsr&uid=<?php echo $user['id'];?>" title="Recount population" style="margin-left:6px;vertical-align:middle;display:inline-flex">
+						<a href="?action=recountPopUsr&uid=<?php echo $user['id'];?>" title="<?php echo ADM_RECOUNT_POPULATION; ?>" style="margin-left:6px;vertical-align:middle;display:inline-flex">
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M21 12a9 9 0 1 1-3-6.7"/>
 						<path d="M21 3v6h-6"/>
@@ -107,7 +107,7 @@
 					</td>
                     </tr>
                     <tr>
-                        <th>Age</th>
+                        <th><?php echo ADM_AGE; ?></th>
                         <td>
                             <?php
                                 if(isset($user['birthday']) && $user['birthday']!= 0) {
@@ -120,7 +120,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Gender</th>
+                        <th><?php echo ADM_GENDER; ?></th>
                         <td>
                             <?php
                                 if(isset($user['gender']) && $user['gender']!= 0) {
@@ -134,21 +134,21 @@
                     </tr>
 
 					<tr>
-						<th>Username</th>
+						<th><?php echo ADM_USERNAME; ?></th>
 						<td><?php echo htmlspecialchars($user['username']?? '');?></td>
 					</tr>
 
 					<tr>
-						<th>Location</th>
+						<th><?php echo ADM_LOCATION_2; ?></th>
 						<td><?php echo htmlspecialchars($user['location']?? '');?></td>
 					</tr>
 
 					<tr>
-						<th>Password</th>
+						<th><?php echo ADM_PASSWORD; ?></th>
 						<td>•••••••</td>
 					</tr>
 					<tr>
-						<th>Last IP</th>
+						<th><?php echo ADM_LAST_IP; ?></th>
 						<td>
 						<?php
 						$uid = (int)$user['id'];
@@ -164,7 +164,7 @@
 					</td>
 					</tr>
 					<tr>
-						<th>Language</th>
+						<th><?php echo ADM_LANGUAGE; ?></th>
 						<td>
 					<?php
 					// map language
@@ -184,12 +184,12 @@
 					<tr>
 						<?php include("playerplusbonus.tpl");?>
 					</tr>
-						<th>Email</th>
+						<th><?php echo ADM_EMAIL; ?></th>
 						<td><?php echo htmlspecialchars($user['email']?? '');?></td>
 					</tr>
 
                     <tr>
-                        <th>Quest</th>
+                        <th><?php echo ADM_QUEST_2; ?></th>
                         <td>
                             <?php
                                 $quest = $user['quest'];
@@ -243,18 +243,18 @@
                         }
                   ?>
 
-                    <tr><td colspan="2"><a href="?p=ban&uid=<?php echo $user['id'];?>">&raquo; Ban User</a></td></tr>
-					<tr><td colspan="2"><a href="?p=Newmessage&uid=<?php echo $user['id'];?>">&raquo; Send Message</a></td></tr>
+                    <tr><td colspan="2"><a href="?p=ban&uid=<?php echo $user['id'];?>"><?php echo ADM_BAN_USER_2; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=Newmessage&uid=<?php echo $user['id'];?>"><?php echo ADM_SEND_MESSAGE_2; ?></a></td></tr>
 					<?php if($_SESSION['access'] == ADMIN) { ?>
-					<tr><td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id'];?>">&raquo; Edit Plus & Res Bonus</a></td></tr>
-					<tr><td colspan="2"><a href="?p=editSitter&uid=<?php echo $user['id'];?>">&raquo; Edit Sitters</a></td></tr>
-					<tr><td colspan="2"><a href="?p=editProtection&uid=<?php echo $user['id'];?>">&raquo; Edit Protection</a></td></tr>
-					<tr><td colspan="2"><a href="?p=editPassword&uid=<?php echo $user['id'];?>">&raquo; Edit Password</a></td></tr>
-					<tr><td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id'];?>">&raquo; Edit Overall Off & Def</a></td></tr>
-					<tr><td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id'];?>">&raquo; Edit Weekly Off, Def, Raid</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_PLUS_RES_BONUS; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=editSitter&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_SITTERS_2; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=editProtection&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_PROTECTION; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=editPassword&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_PASSWORD; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_OVERALL_OFF_DEF; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id'];?>"><?php echo ADM_EDIT_WEEKLY_OFF_DEF_RAID; ?></a></td></tr>
 					<?php } ?>
-					<tr><td colspan="2"><a href="?p=userlogin&uid=<?php echo $user['id'];?>">&raquo; User Login Log</a></td></tr>
-					<tr><td colspan="2"><a href="?p=userillegallog&uid=<?php echo $user['id'];?>">&raquo; User Illegal Log</a></td></tr>
+					<tr><td colspan="2"><a href="?p=userlogin&uid=<?php echo $user['id'];?>"><?php echo ADM_USER_LOGIN_LOG; ?></a></td></tr>
+					<tr><td colspan="2"><a href="?p=userillegallog&uid=<?php echo $user['id'];?>"><?php echo ADM_USER_ILLEGAL_LOG; ?></a></td></tr>
                     <tr>
                         <td colspan="2" class="desc2">
                             <div class="desc2div">

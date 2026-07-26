@@ -37,9 +37,9 @@
 
   <table class="search-table">
 	<tr>
-		<td>UID</td>
-		<td>NAME</td>
-		<td>EMAIL</td>
+		<td><?php echo ADM_UID_2; ?></td>
+		<td><?php echo ADM_NAME_2; ?></td>
+		<td><?php echo ADM_EMAIL_2; ?></td>
 	</tr>
 <?php if($result){
 for ($i = 0; $i <= count($result)-1; $i++) {

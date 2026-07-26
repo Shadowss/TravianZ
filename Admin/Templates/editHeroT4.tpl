@@ -58,27 +58,27 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
 </style>
 
 <h2>T4 Hero controls — user #<?php echo $id; ?>
-    <small><a href="admin.php?p=editHero&uid=<?php echo $id; ?>">&laquo; classic hero editor</a></small>
+    <small><a href="admin.php?p=editHero&uid=<?php echo $id; ?>"><?php echo ADM_CLASSIC_HERO_EDITOR; ?></a></small>
 </h2>
 
-<?php if (isset($_GET['ok'])) { ?><div class="t4a-msg ok">Action completed.</div><?php } ?>
-<?php if (isset($_GET['e']))  { ?><div class="t4a-msg err">Action failed (check the values and try again).</div><?php } ?>
+<?php if (isset($_GET['ok'])) { ?><div class="t4a-msg ok"><?php echo ADM_ACTION_COMPLETED; ?></div><?php } ?>
+<?php if (isset($_GET['e']))  { ?><div class="t4a-msg err"><?php echo ADM_ACTION_FAILED_CHECK_THE_VALUES_AND_TRY_AGAIN; ?></div><?php } ?>
 
 <div class="t4a-card">
-    <h3>Silver</h3>
+    <h3><?php echo ADM_SILVER; ?></h3>
     <div class="body">
         <form action="../GameEngine/Admin/Mods/editHeroT4.php" method="POST" class="t4a-inline">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="t4admin" value="setsilver">
             <input type="hidden" name="uid" value="<?php echo $id; ?>">
             <input type="text" name="silver" value="<?php echo $t4Silver; ?>" size="10" style="text-align:right;">
-            <button type="submit" class="t4a-btn">Set balance</button>
+            <button type="submit" class="t4a-btn"><?php echo ADM_SET_BALANCE; ?></button>
         </form>
     </div>
 </div>
 
 <div class="t4a-card">
-    <h3>Grant item</h3>
+    <h3><?php echo ADM_GRANT_ITEM; ?></h3>
     <div class="body">
         <form action="../GameEngine/Admin/Mods/editHeroT4.php" method="POST" class="t4a-inline">
             <?php echo csrf_field(); ?>
@@ -88,9 +88,8 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
                 <?php foreach ($heroItemCatalog as $t4Iid => $t4Def) { ?>
                 <option value="<?php echo $t4Iid; ?>">#<?php echo $t4Iid; ?> — <?php echo $t4Def['name']; ?> (T<?php echo $t4Def['tier']; ?>, <?php echo $t4SlotNames[$t4Def['slot']]; ?>)</option>
                 <?php } ?>
-            </select>
-            Qty: <input type="text" name="qty" value="1" size="3" style="text-align:center;">
-            <button type="submit" class="t4a-btn">Grant</button>
+            </select><?php echo ADM_QTY; ?><input type="text" name="qty" value="1" size="3" style="text-align:center;">
+            <button type="submit" class="t4a-btn"><?php echo ADM_GRANT; ?></button>
         </form>
     </div>
 </div>
@@ -100,7 +99,7 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
     <div class="body">
     <?php if (count($t4Inventory)) { ?>
         <table class="t4a-table">
-            <tr><th>Row</th><th>Item</th><th>Slot</th><th>Qty</th><th>Equipped</th><th></th></tr>
+            <tr><th><?php echo ADM_ROW; ?></th><th><?php echo ADM_ITEM; ?></th><th><?php echo ADM_SLOT; ?></th><th><?php echo ADM_QTY_2; ?></th><th><?php echo ADM_EQUIPPED; ?></th><th></th></tr>
             <?php foreach ($t4Inventory as $t4Row) { ?>
             <tr>
                 <td>#<?php echo (int) $t4Row['id']; ?></td>
@@ -115,7 +114,7 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
                         <input type="hidden" name="t4admin" value="delitem">
                         <input type="hidden" name="uid" value="<?php echo $id; ?>">
                         <input type="hidden" name="rowid" value="<?php echo (int) $t4Row['id']; ?>">
-                        <button type="submit" class="t4a-btn danger">Delete</button>
+                        <button type="submit" class="t4a-btn danger"><?php echo ADM_DELETE; ?></button>
                     </form>
                 </td>
             </tr>
@@ -130,7 +129,7 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
     <div class="body">
     <?php if (count($t4Sales) || count($t4Bids)) { ?>
         <table class="t4a-table">
-            <tr><th>Auction</th><th>Role</th><th>Item</th><th>Price</th><th>Ends</th><th></th></tr>
+            <tr><th><?php echo ADM_AUCTION; ?></th><th><?php echo ADM_ROLE; ?></th><th><?php echo ADM_ITEM; ?></th><th><?php echo ADM_PRICE; ?></th><th><?php echo ADM_ENDS; ?></th><th></th></tr>
             <?php foreach ([['rows' => $t4Sales, 'role' => 'seller'], ['rows' => $t4Bids, 'role' => 'top bidder']] as $t4Group) { ?>
                 <?php foreach ($t4Group['rows'] as $t4A) { ?>
                 <tr>
@@ -146,7 +145,7 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
                             <input type="hidden" name="t4admin" value="cancelauction">
                             <input type="hidden" name="uid" value="<?php echo $id; ?>">
                             <input type="hidden" name="aucid" value="<?php echo (int) $t4A['id']; ?>">
-                            <button type="submit" class="t4a-btn danger">Cancel</button>
+                            <button type="submit" class="t4a-btn danger"><?php echo ADM_CANCEL; ?></button>
                         </form>
                     </td>
                 </tr>
@@ -158,16 +157,16 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
 </div>
 
 <div class="t4a-card">
-    <h3>Adventures</h3>
+    <h3><?php echo ADM_ADVENTURES; ?></h3>
     <div class="body">
         <?php if ($t4Running) { ?>
-            <p><b>Running:</b> adventure #<?php echo (int) $t4Running['id']; ?>,
+            <p><b><?php echo ADM_RUNNING; ?></b> adventure #<?php echo (int) $t4Running['id']; ?>,
                difficulty <?php echo (int) $t4Running['difficulty'] === 1 ? 'hard' : 'normal'; ?>,
                arrives <?php echo date('d.m H:i:s', (int) $t4Running['endtime']); ?> (do not delete running adventures).</p>
         <?php } ?>
         <?php if (count($t4Offers)) { ?>
         <table class="t4a-table">
-            <tr><th>Offer</th><th>Difficulty</th><th>Duration</th><th>Expires</th><th></th></tr>
+            <tr><th><?php echo ADM_OFFER; ?></th><th><?php echo ADM_DIFFICULTY; ?></th><th><?php echo ADM_DURATION; ?></th><th><?php echo ADM_EXPIRES; ?></th><th></th></tr>
             <?php foreach ($t4Offers as $t4O) { ?>
             <tr>
                 <td>#<?php echo (int) $t4O['id']; ?></td>
@@ -180,7 +179,7 @@ $t4SlotNames = [1=>'Helmet',2=>'Body',3=>'Right hand',4=>'Left hand',5=>'Shoes',
                         <input type="hidden" name="t4admin" value="deladventure">
                         <input type="hidden" name="uid" value="<?php echo $id; ?>">
                         <input type="hidden" name="advid" value="<?php echo (int) $t4O['id']; ?>">
-                        <button type="submit" class="t4a-btn danger">Remove</button>
+                        <button type="submit" class="t4a-btn danger"><?php echo ADM_REMOVE; ?></button>
                     </form>
                 </td>
             </tr>

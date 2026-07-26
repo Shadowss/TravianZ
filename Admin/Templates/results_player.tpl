@@ -37,10 +37,10 @@
 
   <table class="search-table">
 	<tr>
-		<td>UID</td>
-		<td>PLAYER</td>
-		<td>VILLAGES</td>
-		<td>POP</td>
+		<td><?php echo ADM_UID_2; ?></td>
+		<td><?php echo ADM_PLAYER_3; ?></td>
+		<td><?php echo ADM_VILLAGES_2; ?></td>
+		<td><?php echo ADM_POP_2; ?></td>
 	</tr>
 <?php
 if($result){

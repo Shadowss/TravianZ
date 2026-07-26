@@ -51,25 +51,20 @@ You have been banned due to a violation of the rules.
 Your banning reason is <?php echo htmlspecialchars($reason, ENT_QUOTES); ?>.
 <br>
 
-<br><br>
-To ensure that you won't get banned again in the future, you should read the rules carefully:
-<br><br>
+<br><br><?php echo ADM_TO_ENSURE_THAT_YOU_WON_T_GET_BANNED_AGAIN_IN; ?><br><br>
 
 <center>
-    <a class="rules" href="rules.php">» Game rules</a>
+    <a class="rules" href="rules.php"><?php echo ADM_GAME_RULES; ?></a>
 </center>
 
-<br><br><br>
-
-To continue playing contact the Multihunter and put things straight with him/her
-<br><br>
+<br><br><br><?php echo ADM_TO_CONTINUE_PLAYING_CONTACT_THE_MULTIHUNTER; ?><br><br>
 
 <center>
-    <a class="rules" href="nachrichten.php?t=1&id=5">» Write Message</a>
+    <a class="rules" href="nachrichten.php?t=1&id=5"><?php echo ADM_WRITE_MESSAGE; ?></a>
 </center> </br>
-</br> Heed the following advice when writing your message: </br></br> 
- </br> ● There is always a reason for a ban. <u>Try to think about possible reasons for this ban</u> and put things straight with the Multihunter. </br> 
- </br> ● Multihunters can review enormous amounts of information about accounts. <u>Stick to the truth</u> and do not make excuses to justify your violation of the rules. </br> 
- </br> ● Be cooperative and insightful, this might reduce the punishment. </br> 
- </br> ● If the Multihunter does not answer immediately, then he/she is probably not online. The issue will not be resolved any faster by sending multiple messages, especially if he/she did not even read the first one yet. </br> 
- </br> ● If you have really been banned unjustly, try to stay <u>calm and polite</u> while talking to the Multihunter and telling him/her about your point of view. </p>
+</br><?php echo ADM_HEED_THE_FOLLOWING_ADVICE_WHEN_WRITING_YOUR; ?></br></br> 
+ </br><?php echo ADM_THERE_IS_ALWAYS_A_REASON_FOR_A_BAN; ?><u><?php echo ADM_TRY_TO_THINK_ABOUT_POSSIBLE_REASONS_FOR_THIS; ?></u><?php echo ADM_AND_PUT_THINGS_STRAIGHT_WITH_THE_MULTIHUNTER; ?></br> 
+ </br><?php echo ADM_MULTIHUNTERS_CAN_REVIEW_ENORMOUS_AMOUNTS_OF; ?><u><?php echo ADM_STICK_TO_THE_TRUTH; ?></u><?php echo ADM_AND_DO_NOT_MAKE_EXCUSES_TO_JUSTIFY_YOUR_VIOL; ?></br> 
+ </br><?php echo ADM_BE_COOPERATIVE_AND_INSIGHTFUL_THIS_MIGHT_RED; ?></br> 
+ </br><?php echo ADM_IF_THE_MULTIHUNTER_DOES_NOT_ANSWER_IMMEDIATE; ?></br> 
+ </br><?php echo ADM_IF_YOU_HAVE_REALLY_BEEN_BANNED_UNJUSTLY_TRY; ?><u><?php echo ADM_CALM_AND_POLITE; ?></u><?php echo ADM_WHILE_TALKING_TO_THE_MULTIHUNTER_AND_TELLING; ?></p>

@@ -37,7 +37,7 @@ $img = $tribe==1 ? "" : $tribe-1;
 </style>
 
 <div class="upg-modern">
-  <div class="upg-head"><div>Armoury</div><div>Blacksmith</div></div>
+  <div class="upg-head"><div><?php echo ADM_ARMOURY; ?></div><div><?php echo ADM_BLACKSMITH; ?></div></div>
   <div class="upg-icons">
     <?php for($i=1;$i<9;$i++) echo '<img src="../img/un/u/'.$img.$i.'.gif">'; for($i=1;$i<9;$i++) echo '<img src="../img/un/u/'.$img.$i.'.gif">'; ?>
   </div>
@@ -58,7 +58,7 @@ $img = $tribe==1 ? "" : $tribe-1;
     <?php if($_SESSION['access']==ADMIN){ ?>
   <div class="upg-foot">
     <?php if($tribe==5){ echo '<span style="color:#94a3b8">Upgrades Troops</span>'; } else { echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a>'; } ?>
-    <a href="admin.php?p=techlog&did=<?=(int)($_GET['did'] ?? 0)?>" style="color:#64748b">Research Log</a>
+    <a href="admin.php?p=techlog&did=<?=(int)($_GET['did'] ?? 0)?>" style="color:#64748b"><?php echo ADMIN_RESEARCH_LOG; ?></a>
   </div>
   <?php if(isset($_GET['ab'])) echo '<div style="text-align:right;padding:0 8px 6px;color:#dc2626;font-weight:600;font-size:12px">AB Tech updated</div>'; ?>
     <?php } ?>

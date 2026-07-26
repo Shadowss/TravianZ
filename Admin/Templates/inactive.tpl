@@ -68,7 +68,7 @@ $tribeName = [1=>'Roman',2=>'Teuton',3=>'Gaul'];
 <div class="inactive-wrap">
   <div class="inactive-head">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><circle cx="12" cy="8" r="4" fill="#777"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6v1H4v-1z" fill="#777"/><circle cx="18" cy="18" r="4" fill="#e67e22"/><path d="M18 15v3l2 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-    <h2>Inactive Users</h2>
+    <h2><?php echo ADM_INACTIVE_USERS; ?></h2>
   </div>
   
   <div class="inactive-tabs">
@@ -103,7 +103,7 @@ $tribeName = [1=>'Roman',2=>'Teuton',3=>'Gaul'];
         </div>
         <div class="stats">
           <span class="badge gold">💰 <?php echo $u['gold']; ?></span>
-          <span><a href="?p=player&uid=<?php echo $uid; ?>&action=delete" onclick="return confirm('Delete?')" style="color:#c00;text-decoration:none">delete</a></span>
+          <span><a href="?p=player&uid=<?php echo $uid; ?>&action=delete" onclick="return confirm('Delete?')" style="color:#c00;text-decoration:none"><?php echo ADM_DELETE_L; ?></a></span>
         </div>
       </div>
       <?php } ?>

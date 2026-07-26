@@ -69,7 +69,7 @@ function genPw(){
     <div class="pw-head">
         <div class="icon">🔐</div>
         <div>
-            <h2>Change Password: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+            <h2><?php echo ADM_CHANGE_PASSWORD; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
             <div class="sub">UID: <?php echo $uid; ?> • <?php echo htmlspecialchars($user['email']); ?></div>
         </div>
     </div>
@@ -83,23 +83,23 @@ function genPw(){
             <div class="body">
                 <div class="warning">
                     <span>⚠️</span>
-                    <div><b>WARNING:</b> The password is changed instantly. The player will be logged out. No automatic email is sent.</div>
+                    <div><b><?php echo ADM_WARNING; ?></b><?php echo ADM_THE_PASSWORD_IS_CHANGED_INSTANTLY_THE_PLAYER; ?></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="newpw">New Password</label>
+                    <label for="newpw"><?php echo ADM_NEW_PASSWORD; ?></label>
                     <div class="input-wrap">
-                        <input type="text" id="newpw" name="newpw" value="" placeholder="Introdu parola nouă" autocomplete="new-password" required>
-                        <button type="button" class="toggle-eye" onclick="togglePw()" title="Show/Hide">👁️</button>
+                        <input type="text" id="newpw" name="newpw" value="" placeholder="<?php echo ADM_INTRODU_PAROLA_NOU; ?>" autocomplete="new-password" required>
+                        <button type="button" class="toggle-eye" onclick="togglePw()" title="<?php echo ADM_SHOW_HIDE; ?>">👁️</button>
                     </div>
-                    <button type="button" class="btn-gen" onclick="genPw()">🎲 Generate secure password</button>
+                    <button type="button" class="btn-gen" onclick="genPw()"><?php echo ADM_GENERATE_SECURE_PASSWORD; ?></button>
                 </div>
             </div>
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">🔐 Change Password</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_CHANGE_PASSWORD_2; ?></button>
         </div>
     </form>
 </div>

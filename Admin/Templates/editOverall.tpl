@@ -58,7 +58,7 @@ if($id){
     <div class="over-head">
         <div class="icon">⚔️</div>
         <div>
-            <h2>Overall Points: <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
+            <h2><?php echo ADM_OVERALL_POINTS; ?><a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></h2>
             <div class="sub">UID: <?php echo $uid; ?> • Rank: #<?php echo (int)$user['rank']; ?></div>
         </div>
     </div>
@@ -71,19 +71,19 @@ if($id){
 
         <div class="card">
             <div class="body">
-                <div class="info">🛡️ Acestea sunt punctele <b>totale</b> din statistici (nu cele săptămânale). Se adună din toate atacurile.</div>
+                <div class="info"><?php echo ADM_ACESTEA_SUNT_PUNCTELE_2; ?><b><?php echo ADM_TOTALE; ?></b><?php echo ADM_DIN_STATISTICI_NU_CELE_S_PT_M_NALE_SE_ADUN_D; ?></div>
                 
                 <div class="stats-grid">
                     <div class="stat-box off">
                         <div class="icon">⚔️</div>
-                        <div class="label">Attack Points</div>
+                        <div class="label"><?php echo ADM_ATTACK_POINTS; ?></div>
                         <div class="current">Current: <?php echo number_format($user['apall']); ?></div>
                         <input type="number" name="off" value="<?php echo (int)$user['apall']; ?>" min="0" step="1">
                     </div>
 
                     <div class="stat-box def">
                         <div class="icon">🛡️</div>
-                        <div class="label">Defence Points</div>
+                        <div class="label"><?php echo ADM_DEFENCE_POINTS; ?></div>
                         <div class="current">Current: <?php echo number_format($user['dpall']); ?></div>
                         <input type="number" name="def" value="<?php echo (int)$user['dpall']; ?>" min="0" step="1">
                     </div>
@@ -92,8 +92,8 @@ if($id){
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back">← Back</a>
-            <button type="submit" class="btn-save">💾 Save Points</button>
+            <a href="admin.php?p=player&uid=<?php echo $uid;?>" class="btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" class="btn-save"><?php echo ADM_SAVE_POINTS; ?></button>
         </div>
     </form>
 </div>

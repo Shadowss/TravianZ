@@ -53,13 +53,13 @@ if($id){
 
 <div class="illegal-wrap">
     <div class="illegal-head">
-        <h2>🚨 Illegals Log: <a href="admin.php?p=player&uid=<?php echo $player['id'];?>"><?php echo htmlspecialchars($player['username']);?></a></h2>
+        <h2><?php echo ADM_ILLEGALS_LOG; ?><a href="admin.php?p=player&uid=<?php echo $player['id'];?>"><?php echo htmlspecialchars($player['username']);?></a></h2>
         <div class="uid">UID: <?php echo $id; ?></div>
     </div>
 
     <div class="card">
         <h3>
-            <span>Detected Offences</span>
+            <span><?php echo ADM_DETECTED_OFFENCES; ?></span>
             <?php
             $count = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT id FROM ".TB_PREFIX."illegal_log WHERE user = $id"));
             echo '<span class="badge">'.$count.' records</span>';
@@ -74,8 +74,8 @@ if($id){
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>ID</th>
-                    <th>Description</th>
+                    <th><?php echo ADM_ID; ?></th>
+                    <th><?php echo ADM_DESCRIPTION; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -98,7 +98,7 @@ if($id){
     </div>
 
     <div class="actions">
-        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn-back">← Back to player</a>
+        <a href="admin.php?p=player&uid=<?php echo $id;?>" class="btn-back"><?php echo ADM_BACK_TO_PLAYER; ?></a>
     </div>
 </div>
 <?php

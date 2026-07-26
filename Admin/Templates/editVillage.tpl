@@ -51,13 +51,13 @@ if(isset($id)) { include("search2.tpl"); ?>
 
 <div class="vcard">
   <div class="vhead">Edit Village – <?php echo htmlspecialchars($village['name']); ?> (<?php echo $coor['x'].'|'.$coor['y']; ?>)
-    <a class="instr-link" onclick="document.getElementById('instr').style.display = document.getElementById('instr').style.display=='none'?'block':'none';return false">Show Instructions</a>
+    <a class="instr-link" onclick="document.getElementById('instr').style.display = document.getElementById('instr').style.display=='none'?'block':'none';return false"><?php echo ADM_SHOW_INSTRUCTIONS; ?></a>
   </div>
 <div id="instr" style="display:none;padding:12px;background:#fcfcfd;border-bottom:1px solid #e5e7eb">
   <div style="display:flex;flex-direction:column;gap:24px;align-items:center">
     
     <div style="text-align:center">
-      <h4 style="margin:0 8px;font-size:12px;color:#475569">Resource Fields (1-18)</h4>
+      <h4 style="margin:0 8px;font-size:12px;color:#475569"><?php echo ADM_RESOURCE_FIELDS_1_18; ?></h4>
       <div id="content" class="village1" style="min-height:auto">
         <div id="village_map" class="f<?php echo $type; ?>" style="margin:0 auto;float:none">
           <?php for($f=1;$f<19;$f++) echo '<img src="../img/x.gif" class="reslevel rf'.$f.' level'.$f.'">'; ?>
@@ -66,7 +66,7 @@ if(isset($id)) { include("search2.tpl"); ?>
     </div>
 
     <div style="text-align:center">
-      <h4 style="margin:0 0 8px;font-size:12px;color:#475569">Village Center (19-38)</h4>
+      <h4 style="margin:0 0 8px;font-size:12px;color:#475569"><?php echo ADM_VILLAGE_CENTER_19_38; ?></h4>
       <div id="content" class="village2" style="padding:0">
         <div id="village_map" class="d2_0" style="margin:0 auto;transform:scale(.85);transform-origin:top">
           <?php for($b=1;$b<21;$b++) echo '<img src="../img/x.gif" class="building d'.$b.' iso">'; ?>
@@ -79,7 +79,7 @@ if(isset($id)) { include("search2.tpl"); ?>
   <!-- tabelul cu GID rămâne sub ele -->
     <div style="margin-top:10px;max-height:180px;overflow:auto;border:1px solid #e5e7eb;border-radius:6px">
       <table class="vtable" style="font-size:11.5px">
-        <thead><tr><th style="width:50px">GID</th><th>Name</th></tr></thead>
+        <thead><tr><th style="width:50px"><?php echo ADM_GID; ?></th><th><?php echo ADM_NAME; ?></th></tr></thead>
         <tbody><?php for($i=1;$i<=50;$i++){ echo '<tr><td>'.$i.'</td><td>'.$funct->procResType($i).'</td></tr>'; } ?></tbody>
       </table>
     </div>
@@ -87,10 +87,10 @@ if(isset($id)) { include("search2.tpl"); ?>
 </div>
 
 <div class="vcard">
-  <div class="vhead">Modify Buildings</div>
+  <div class="vhead"><?php echo ADM_MODIFY_BUILDINGS; ?></div>
   <div style="overflow-x:auto">
     <table class="vtable">
-      <thead><tr><th style="width:50px">ID</th><th style="width:70px">GID</th><th>Name</th><th style="width:70px">Level</th></tr></thead>
+      <thead><tr><th style="width:50px"><?php echo ADM_ID; ?></th><th style="width:70px"><?php echo ADM_GID; ?></th><th><?php echo ADM_NAME; ?></th><th style="width:70px"><?php echo ADM_LEVEL_2; ?></th></tr></thead>
       <tbody>
       <?php
       for($i=1;$i<=41;$i++){
@@ -109,18 +109,18 @@ if(isset($id)) { include("search2.tpl"); ?>
     </table>
   </div>
   <div style="text-align:center;padding:12px;border-top:1px solid #f1f5f9">
-    <button type="submit" class="btn-save">Save Changes</button>
+    <button type="submit" class="btn-save"><?php echo ADM_SAVE_CHANGES; ?></button>
   </div>
 </div>
 </form>
 
 <div class="vcard">
-  <div class="vhead">Current Layout Preview</div>
+  <div class="vhead"><?php echo ADM_CURRENT_LAYOUT_PREVIEW; ?></div>
   <div style="padding:16px;display:flex;flex-direction:column;gap:28px;align-items:center">
     
     <!-- 1. Resource Fields -->
     <div style="text-align:center">
-      <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px">Resource Fields</div>
+      <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px"><?php echo ADM_RESOURCE_FIELDS; ?></div>
       <div id="content" class="village1" style="min-height:auto">
         <div id="village_map" class="f<?php echo $type; ?>" style="float:none;margin:0 auto">
           <?php for($f=1;$f<19;$f++){ $level=$fdata['f'.$f]; echo '<img src="../img/x.gif" class="reslevel rf'.$f.' level'.$level.'">'; } ?>
@@ -130,7 +130,7 @@ if(isset($id)) { include("search2.tpl"); ?>
 
     <!-- 2. Village Center -->
     <div style="text-align:center">
-      <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px">Village Center</div>
+      <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px"><?php echo ADM_VILLAGE_CENTER; ?></div>
       <?php $WW=$fdata['f99t']; $wall=$fdata['f40t']; $wallGfx=[1=>'d2_11',2=>'d2_12',3=>'d2_1',6=>'d2_16',7=>'d2_17',8=>'d2_18',9=>'d2_19']; /* 6-9: bg16-bg19.jpg */ $wallType=$wall==0?'d2_0':($wallGfx[$user['tribe']] ?? 'd2_11'); ?>
       <div id="content" class="village2" style="padding:0">
         <div id="village_map" class="<?php echo $wallType; ?>" style="margin:0 auto;transform:scale(.9);transform-origin:top">

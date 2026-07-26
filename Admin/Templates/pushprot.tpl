@@ -60,35 +60,28 @@ function pp_num($n) { return number_format((int)$n); }
 </style>
 
 <div class="pp-wrap">
-    <h2>Push Protection <span>Dashboard</span></h2>
-    <p class="pp-intro">
-        Per-player <b>7-day resource balance</b> (received from other players) versus an
-        automatic limit derived from the player's hourly production
-        (<span class="num"><?php echo (int)$data['hours_allowed']; ?>h</span> of production per window).
-        WW villages and artefact villages are flagged as supply exceptions. Set a manual
-        override to exempt a player (WW / trusted) or give a custom cap. Nothing is blocked
-        automatically &mdash; this is visibility &amp; control for a human moderator.
-    </p>
+    <h2><?php echo ADMIN_PUSH_PROTECTION; ?><span><?php echo ADM_DASHBOARD; ?></span></h2>
+    <p class="pp-intro"><?php echo ADM_PER_PLAYER; ?><b><?php echo ADM_7_DAY_RESOURCE_BALANCE; ?></b><?php echo ADM_RECEIVED_FROM_OTHER_PLAYERS_VERSUS_AN_AUTOMA; ?><span class="num"><?php echo (int)$data['hours_allowed']; ?>h</span><?php echo ADM_OF_PRODUCTION_PER_WINDOW_WW_VILLAGES_AND_ART; ?></p>
 
     <form method="get" action="admin.php" class="pp-filter">
         <input type="hidden" name="p" value="pushprot">
         <div>
-            <label>Window (days)</label>
+            <label><?php echo ADM_WINDOW_DAYS; ?></label>
             <input type="number" name="days" min="1" max="30" value="<?php echo (int)$days; ?>">
         </div>
         <div>
-            <label>Hours of prod. allowed</label>
+            <label><?php echo ADM_HOURS_OF_PROD_ALLOWED; ?></label>
             <input type="number" name="hours" min="1" max="168" value="<?php echo (int)$hours; ?>">
         </div>
         <div>
-            <label>Show</label>
+            <label><?php echo ADM_SHOW_2; ?></label>
             <select name="only">
-                <option value="all"     <?php echo $only==='all'?'selected':''; ?>>All with activity</option>
-                <option value="over"    <?php echo $only==='over'?'selected':''; ?>>Over limit only</option>
-                <option value="flagged" <?php echo $only==='flagged'?'selected':''; ?>>WW / artefact / overridden</option>
+                <option value="all"     <?php echo $only==='all'?'selected':''; ?>><?php echo ADM_ALL_WITH_ACTIVITY; ?></option>
+                <option value="over"    <?php echo $only==='over'?'selected':''; ?>><?php echo ADM_OVER_LIMIT_ONLY; ?></option>
+                <option value="flagged" <?php echo $only==='flagged'?'selected':''; ?>><?php echo ADM_WW_ARTEFACT_OVERRIDDEN; ?></option>
             </select>
         </div>
-        <button type="submit">Refresh</button>
+        <button type="submit"><?php echo ADM_REFRESH_2; ?></button>
     </form>
 
     <div class="pp-meta">
@@ -98,22 +91,18 @@ function pp_num($n) { return number_format((int)$n); }
     </div>
 
     <?php if (empty($rows)): ?>
-        <div class="pp-table"><div class="pp-empty">
-            No inter-player transfers recorded in this window yet.<br>
-            The 7-day balance fills in as merchant deliveries between different players
-            are processed after this feature is deployed.
-        </div></div>
+        <div class="pp-table"><div class="pp-empty"><?php echo ADM_NO_INTER_PLAYER_TRANSFERS_RECORDED_IN_THIS_W; ?><br><?php echo ADM_THE_7_DAY_BALANCE_FILLS_IN_AS_MERCHANT_DELIV; ?></div></div>
     <?php else: ?>
         <table class="pp-table">
             <thead>
                 <tr>
-                    <th>Player</th>
-                    <th>Villages / Pop</th>
-                    <th>Prod/h</th>
-                    <th>Received (7d)</th>
-                    <th>Limit</th>
-                    <th>Usage</th>
-                    <th style="width:26%;">Override</th>
+                    <th><?php echo ADM_PLAYER_2; ?></th>
+                    <th><?php echo ADM_VILLAGES_POP; ?></th>
+                    <th><?php echo ADM_PROD_H; ?></th>
+                    <th><?php echo ADM_RECEIVED_7D; ?></th>
+                    <th><?php echo ADM_LIMIT; ?></th>
+                    <th><?php echo ADM_USAGE; ?></th>
+                    <th style="width:26%;"><?php echo ADM_OVERRIDE; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -153,13 +142,13 @@ function pp_num($n) { return number_format((int)$n); }
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="uid" value="<?php echo (int)$r['uid']; ?>">
                             <select name="mode">
-                                <option value="0" <?php echo $r['ov_mode']==0?'selected':''; ?>>Auto</option>
+                                <option value="0" <?php echo $r['ov_mode']==0?'selected':''; ?>><?php echo ADM_AUTO; ?></option>
                                 <option value="1" <?php echo $r['ov_mode']==1?'selected':''; ?>>Exempt<?php echo $r['is_ww']?' (WW)':''; ?></option>
-                                <option value="3" <?php echo $r['ov_mode']==3?'selected':''; ?>>Custom cap</option>
+                                <option value="3" <?php echo $r['ov_mode']==3?'selected':''; ?>><?php echo ADM_CUSTOM_CAP; ?></option>
                             </select>
                             <input class="lim num" type="number" min="0" name="custom_limit" placeholder="cap" value="<?php echo $r['ov_mode']==3 && $r['eff_limit']>0 ? (int)$r['eff_limit'] : ''; ?>">
                             <input class="note" type="text" name="note" maxlength="255" placeholder="note" value="<?php echo e($r['ov_note']); ?>">
-                            <button type="submit">Save</button>
+                            <button type="submit"><?php echo ADM_SAVE_3; ?></button>
                         </form>
                     </td>
                 </tr>

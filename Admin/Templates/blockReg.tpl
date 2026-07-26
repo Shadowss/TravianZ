@@ -62,58 +62,50 @@ $typeLabel = [
 </style>
 
 <div class="rb-wrap">
-    <h2>Registration <span>Blocklist</span></h2>
-    <p class="rb-intro">
-        Block new registrations by a specific <b>username</b>, a specific <b>e-mail
-        address</b>, or a whole <b>e-mail domain</b> (e.g. an obscene username, or the
-        entire <span class="rb-val">yahoo.com</span> domain). Matching is exact and
-        case-insensitive. Existing accounts are not affected &mdash; only new sign-ups.
-    </p>
+    <h2><?php echo ADM_REGISTRATION; ?><span><?php echo ADM_BLOCKLIST; ?></span></h2>
+    <p class="rb-intro"><?php echo ADM_BLOCK_NEW_REGISTRATIONS_BY_A_SPECIFIC; ?><b><?php echo ADM_USERNAME_3; ?></b><?php echo ADM_A_SPECIFIC; ?><b><?php echo ADM_E_MAIL_ADDRESS_2; ?></b><?php echo ADM_OR_A_WHOLE; ?><b><?php echo ADM_E_MAIL_DOMAIN; ?></b><?php echo ADM_E_G_AN_OBSCENE_USERNAME_OR_THE_ENTIRE; ?><span class="rb-val">yahoo.com</span><?php echo ADM_DOMAIN_MATCHING_IS_EXACT_AND_CASE_INSENSITIV; ?></p>
 
     <?php if ($msg !== ''): ?>
         <div class="rb-msg"><?php echo e($msg); ?></div>
     <?php endif; ?>
 
     <div class="rb-card">
-        <h3>Add a block</h3>
+        <h3><?php echo ADM_ADD_A_BLOCK; ?></h3>
         <form method="post" action="../GameEngine/Admin/Mods/blockReg.php" class="rb-add">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="do" value="add">
             <div>
-                <label>Type</label>
+                <label><?php echo ADM_TYPE; ?></label>
                 <select name="type">
-                    <option value="<?php echo RegBlock::T_USERNAME; ?>">Username</option>
-                    <option value="<?php echo RegBlock::T_EMAIL; ?>">E-mail address</option>
-                    <option value="<?php echo RegBlock::T_DOMAIN; ?>">E-mail domain</option>
+                    <option value="<?php echo RegBlock::T_USERNAME; ?>"><?php echo ADM_USERNAME; ?></option>
+                    <option value="<?php echo RegBlock::T_EMAIL; ?>"><?php echo ADM_E_MAIL_ADDRESS; ?></option>
+                    <option value="<?php echo RegBlock::T_DOMAIN; ?>"><?php echo ADM_E_MAIL_DOMAIN_2; ?></option>
                 </select>
             </div>
             <div>
-                <label>Value</label>
+                <label><?php echo ADM_VALUE; ?></label>
                 <input class="val" type="text" name="value" maxlength="255" placeholder="e.g. BadName / spam@x.com / yahoo.com" required>
             </div>
             <div>
-                <label>Note (optional)</label>
-                <input class="note" type="text" name="note" maxlength="255" placeholder="reason">
+                <label><?php echo ADM_NOTE_OPTIONAL; ?></label>
+                <input class="note" type="text" name="note" maxlength="255" placeholder="<?php echo ADM_REASON_2; ?>">
             </div>
-            <button type="submit">Add block</button>
+            <button type="submit"><?php echo ADM_ADD_BLOCK; ?></button>
         </form>
-        <div class="rb-hint">
-            Domain: enter just the domain (<span class="rb-val">yahoo.com</span>), with or without the leading &ldquo;@&rdquo;.
-            E-mail: the full address. Username: the exact name.
-        </div>
+        <div class="rb-hint"><?php echo ADM_DOMAIN_ENTER_JUST_THE_DOMAIN; ?><span class="rb-val">yahoo.com</span><?php echo ADM_WITH_OR_WITHOUT_THE_LEADING_E_MAIL_THE_FULL; ?></div>
     </div>
 
     <div class="rb-card" style="padding:0;overflow:hidden;">
         <?php if (empty($blocks)): ?>
-            <div class="rb-empty">No registration blocks yet.</div>
+            <div class="rb-empty"><?php echo ADM_NO_REGISTRATION_BLOCKS_YET; ?></div>
         <?php else: ?>
             <table class="rb-table">
                 <thead>
                     <tr>
-                        <th style="width:130px;">Type</th>
-                        <th>Value</th>
-                        <th>Note</th>
-                        <th style="width:150px;">Added</th>
+                        <th style="width:130px;"><?php echo ADM_TYPE; ?></th>
+                        <th><?php echo ADM_VALUE; ?></th>
+                        <th><?php echo ADM_NOTE; ?></th>
+                        <th style="width:150px;"><?php echo ADM_ADDED; ?></th>
                         <th style="width:90px;"></th>
                     </tr>
                 </thead>
@@ -132,7 +124,7 @@ $typeLabel = [
                                 <?php echo csrf_field(); ?>
                                 <input type="hidden" name="do" value="remove">
                                 <input type="hidden" name="id" value="<?php echo (int)$b['id']; ?>">
-                                <button type="submit" class="rb-del">Remove</button>
+                                <button type="submit" class="rb-del"><?php echo ADM_REMOVE; ?></button>
                             </form>
                         </td>
                     </tr>

@@ -114,9 +114,9 @@ if(isset($id)){
 
 <!-- 1. VILLAGE INFORMATION - FULL WIDTH -->
 <div class="vcard">
-  <div class="vhead">Village Information</div>
+  <div class="vhead"><?php echo ADM_VILLAGE_INFORMATION; ?></div>
   <table class="vtable">
-    <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo htmlspecialchars($user['username']); ?></a></td>
+    <tr><td class="label"><?php echo ADM_OWNER; ?></td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo htmlspecialchars($user['username']); ?></a></td>
       <td style="text-align:right">
         <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
           <?php echo csrf_field(); ?>
@@ -124,26 +124,26 @@ if(isset($id)){
           <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
           <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
           <?php if($_SESSION['access'] == ADMIN) { ?>
-		  <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
+		  <button class="btn-icon" title="<?php echo ADM_CHANGE; ?>"><?php echo $svgEdit; ?></button>
 		  <?php } ?>
         </form>
       </td>
     </tr>
-        <tr><td class="label">Name</td><td colspan="2">
+        <tr><td class="label"><?php echo ADM_NAME; ?></td><td colspan="2">
           <form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" style="display:flex;gap:4px">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="did" value="<?php echo (int)($_GET['did'] ?? 0); ?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
             <input class="input-mini" type="text" name="villagename" value="<?php echo htmlspecialchars($village['name']); ?>" style="flex:1">
             <?php if($_SESSION['access'] == ADMIN) { ?>
-			<button class="btn-icon" title="Rename"><?php echo $svgEdit; ?></button>
+			<button class="btn-icon" title="<?php echo ADM_RENAME; ?>"><?php echo $svgEdit; ?></button>
 			<?php } ?>
           </form>
         </td></tr>
-        <tr><td class="label">Population</td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo (int)($_GET['did'] ?? 0); ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
-        <tr><td class="label">Coords</td><td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="_blank" style="color:#16a34a;font-weight:600">(<?php echo $coor['x']."|".$coor['y']; ?>)</a></td></tr>
-        <tr><td class="label">ID</td><td colspan="2"><?php echo $village['wref'];?></td></tr>
-        <tr><td class="label">Field</td><td colspan="2" class="badge-field"><?php for ($i = 0; $i <= 3; $i++){ $a = $i + 1; echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">'.($i!=3?' | ':''); } ?></td></tr>
+        <tr><td class="label"><?php echo ADM_POPULATION; ?></td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo (int)($_GET['did'] ?? 0); ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
+        <tr><td class="label"><?php echo ADM_COORDS; ?></td><td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="_blank" style="color:#16a34a;font-weight:600">(<?php echo $coor['x']."|".$coor['y']; ?>)</a></td></tr>
+        <tr><td class="label"><?php echo ADM_ID; ?></td><td colspan="2"><?php echo $village['wref'];?></td></tr>
+        <tr><td class="label"><?php echo ADM_FIELD; ?></td><td colspan="2" class="badge-field"><?php for ($i = 0; $i <= 3; $i++){ $a = $i + 1; echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">'.($i!=3?' | ':''); } ?></td></tr>
       </table>
     </div>
 <!-- 2. RESOURCES - FULL WIDTH -->
@@ -151,40 +151,40 @@ if(isset($id)){
   <div class="vhead">Resources<?php if($_SESSION['access'] == ADMIN) { ?><a href="admin.php?p=editResources&did=<?php echo (int)($_GET['did'] ?? 0); ?>"><?php echo $svgEdit; ?></a><?php } ?>
 	</div>
   <table class="vtable" style="text-align:center">
-    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
-    <tr><td style="text-align:left"><img src="../img/admin/r/1.gif"> Wood</td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
-    <tr><td style="text-align:left"><img src="../img/admin/r/2.gif"> Clay</td><td><?php echo floor($village['clay']); ?></td><td><?php echo $production['clay'];?></td></tr>
-    <tr><td style="text-align:left"><img src="../img/admin/r/3.gif"> Iron</td><td><?php echo floor($village['iron']); ?></td><td><?php echo $production['iron'];?></td></tr>
-    <tr><td style="text-align:left"><img src="../img/admin/r/4.gif"> Crop</td><td><?php echo floor($village['crop']); ?></td><td><?php echo $village['maxcrop'];?></td><td><?php echo $production['crop'];?></td></tr>
+    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left"><?php echo ADM_RES; ?></td><td><?php echo ADM_AMT; ?></td><td><?php echo ADM_CAP; ?></td><td><?php echo ADM_PROD; ?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/1.gif"><?php echo ADM_WOOD; ?></td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/2.gif"><?php echo ADM_CLAY; ?></td><td><?php echo floor($village['clay']); ?></td><td><?php echo $production['clay'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/3.gif"><?php echo ADM_IRON; ?></td><td><?php echo floor($village['iron']); ?></td><td><?php echo $production['iron'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/4.gif"><?php echo ADM_CROP; ?></td><td><?php echo floor($village['crop']); ?></td><td><?php echo $village['maxcrop'];?></td><td><?php echo $production['crop'];?></td></tr>
   </table>
 </div>
   </div>
   <div>
     <div class="vcard">
-      <div class="vhead">Expansion</div>
+      <div class="vhead"><?php echo ADM_EXPANSION; ?></div>
       <table class="vtable" style="text-align:center">
-        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>Village</td><td>Pop</td><td>CP</td></tr>
+        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td><?php echo ADM_VILLAGE; ?></td><td><?php echo ADM_POP; ?></td><td><?php echo ADM_CP; ?></td></tr>
         <?php for($e = 1; $e < 4; $e++){ $exp = $village['exp'.$e.'']; if($exp == 0){ echo '<tr><td>-</td><td>-</td><td>-</td></tr>'; }else{ $vill = $database->getVillage($exp); echo '<tr><td><a href="admin.php?p=village&did='.$vill['wref'].'" style="color:#2563eb">'.htmlspecialchars($vill['name']).'</a></td><td>'.$vill['pop'].'</td><td>'.$vill['cp'].'</td></tr>'; } } ?>
       </table>
     </div>
 
     <div class="vcard">
-      <div class="vhead">Oasis</div>
+      <div class="vhead"><?php echo ADM_OASIS; ?></div>
       <table class="vtable" style="text-align:center">
-        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="width:28px"></td><td>Name</td><td>Coords</td><td>Loy</td><td>Bonus</td></tr>
+        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="width:28px"></td><td><?php echo ADM_NAME; ?></td><td><?php echo ADM_COORDS; ?></td><td><?php echo ADM_LOY; ?></td><td><?php echo ADM_BONUS; ?></td></tr>
         <?php if(!empty($newResult)){ foreach($newResult as $row){ echo '<tr><td><a href="?action=delOas&oid='.$row['wref'].'&did='.$_GET['did'].'" onclick="return del(\'oas\','.$row['wref'].')" class="btn-icon danger">'.$svgDel.'</a></td><td>'.$row['name'].'</td><td><a href="../karte.php?d='.$row['wref'].'&c='.$generator->getMapCheck($row['wref']).'" target="_blank" style="color:#2563eb">('.$row['x'].'|'.$row['y'].')</a></td><td>'.round($row['loyalty']).'%</td><td>'.$row['type'].'</td></tr>'; } } else { echo '<tr><td colspan="5" style="color:#94a3b8;padding:10px">No oases</td></tr>'; } ?>
       </table>
     </div>
   </div>
 </div>
 
-<div class="vcard"><div class="vhead">Troops</div><div style="padding:4px"><?php include('troops.tpl'); ?></div></div>
-<div class="vcard"><div class="vhead">Upgrades</div><div style="padding:4px"><?php include('troopUpgrades.tpl'); ?></div></div>
-<div class="vcard"><div class="vhead">Artifact</div><div style="padding:4px"><?php include('artifact.tpl'); ?></div></div>
+<div class="vcard"><div class="vhead"><?php echo ADM_TROOPS; ?></div><div style="padding:4px"><?php include('troops.tpl'); ?></div></div>
+<div class="vcard"><div class="vhead"><?php echo ADM_UPGRADES; ?></div><div style="padding:4px"><?php include('troopUpgrades.tpl'); ?></div></div>
+<div class="vcard"><div class="vhead"><?php echo ADM_ARTIFACT; ?></div><div style="padding:4px"><?php include('artifact.tpl'); ?></div></div>
 
 <div class="vmap-wrap">
   <div class="map-card">
-    <h3>Resource Fields</h3>
+    <h3><?php echo ADM_RESOURCE_FIELDS; ?></h3>
     <a href="admin.php?p=editVillage&did=<?php echo (int)($_GET['did'] ?? 0); ?>">
       <div id="content" class="village1">
         <div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>">
@@ -219,14 +219,14 @@ if(isset($id)){
 </div>
 
 <div class="vcard" style="margin-top:8px">
-  <div class="vhead">Buildings</div>
+  <div class="vhead"><?php echo ADM_BUILDINGS; ?></div>
   <table class="vtable" style="text-align:center">
-    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>ID</td><td>GID</td><td style="text-align:left">Name</td><td>Lvl</td><td>Edit</td></tr>
+    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td><?php echo ADM_ID; ?></td><td><?php echo ADM_GID; ?></td><td style="text-align:left"><?php echo ADM_NAME; ?></td><td><?php echo ADM_LVL; ?></td><td><?php echo ADM_EDIT; ?></td></tr>
     <?php for ($i = 1; $i <= 41; $i++){ if($i == 41) $i = 99; if($fdata['f'.$i.'t'] == 0) $bu = "-"; else $bu = $funct->procResType($fdata['f'.$i.'t']); echo '<tr><td>'.$i.'</td><td>'.$fdata['f'.$i.'t'].'</td><td style="text-align:left">'.$bu.'</td><td>'.$fdata['f'.$i].'</td><td>'.($_SESSION['access'] == ADMIN ? '<a href="admin.php?p=editVillage&did='.$_GET['did'].'" class="btn-icon">'.$svgEdit.'</a>': '').'</td></tr>'; } ?>
   </table>
 </div>
 
-<div style="text-align:center;margin:12px 0"><a href="admin.php?p=villagelog&did=<?php echo (int)($_GET['did'] ?? 0); ?>" style="color:#2563eb;font-weight:500;font-size:13px">Village Build Log →</a></div>
+<div style="text-align:center;margin:12px 0"><a href="admin.php?p=villagelog&did=<?php echo (int)($_GET['did'] ?? 0); ?>" style="color:#2563eb;font-weight:500;font-size:13px"><?php echo ADM_VILLAGE_BUILD_LOG; ?></a></div>
 
 </div>
 <?php } else { include("404.tpl"); } } ?>

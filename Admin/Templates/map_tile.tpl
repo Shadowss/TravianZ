@@ -1,4 +1,4 @@
-<h1 class="left">Check & Edit Map Tile</h1>
+<h1 class="left"><?php echo ADM_CHECK_EDIT_MAP_TILE; ?></h1>
 
 <?php
 #################################################################################
@@ -168,7 +168,7 @@ elseif(isset($_GET['do_get']) && isset($_POST['x'])){
         <b>Y</b>
         <input class="text" name="y" value="<?=$coord_y?>" maxlength="4">
       </div>
-      <button class="btn-go" type="submit">Check Tile</button>
+      <button class="btn-go" type="submit"><?php echo ADM_CHECK_TILE; ?></button>
     </div>
   </form>
 

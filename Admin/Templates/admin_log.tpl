@@ -145,7 +145,7 @@ function logCategory($entry) {
 ?>
 <div class="log-wrap">
   <div class="log-head">
-    <h2>📋 Unified Admin Log – last 300 actions</h2>
+    <h2><?php echo ADM_UNIFIED_ADMIN_LOG_LAST_300_ACTIONS; ?></h2>
   </div>
 
   <div class="log-filters" id="logFilters">
@@ -170,11 +170,11 @@ function logCategory($entry) {
 <table class="logTable" id="logTable">
 <thead>
 <tr>
-  <th width="50">ID</th>
-  <th width="120">Admin</th>
-  <th width="100">Categorie</th>
-  <th>Detalii</th>
-  <th width="140">Data</th>
+  <th width="50"><?php echo ADM_ID; ?></th>
+  <th width="120"><?php echo ADMIN_ADMIN; ?></th>
+  <th width="100"><?php echo ADM_CATEGORIE; ?></th>
+  <th><?php echo ADM_DETALII; ?></th>
+  <th width="140"><?php echo ADM_DATA; ?></th>
 </tr>
 </thead>
 <tbody>
@@ -202,9 +202,9 @@ foreach($paged as $e) {
 </div>
 <?php $catQS = ($catFilter !== '' && $catFilter !== 'ALL') ? '&cat='.$catFilter : ''; ?>
 <div class="log-page" style="text-align:center;margin:10px 0;font-size:11px">
-<?php if($page>1){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page-1;?><?php echo $catQS;?>">« Prev</a><?php } ?>
+<?php if($page>1){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page-1;?><?php echo $catQS;?>"><?php echo ADM_PREV; ?></a><?php } ?>
 <span class="cur"><?php echo $page;?> / <?php echo max(1,$totalPages);?></span>
-<?php if($page<$totalPages){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page+1;?><?php echo $catQS;?>">Next »</a><?php } ?>
+<?php if($page<$totalPages){ ?><a href="admin.php?p=admin_log&pg=<?php echo $page+1;?><?php echo $catQS;?>"><?php echo ADM_NEXT; ?></a><?php } ?>
 </div>
 </div>
 </div>

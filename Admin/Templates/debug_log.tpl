@@ -75,18 +75,18 @@ $autoOff = (int)($cfg['auto_off_hours'] ?? 0);
 <div class="dbg-wrap">
 
   <div class="dbg-head">
-    <h2>🐞 Debug Error Log</h2>
+    <h2><?php echo ADM_DEBUG_ERROR_LOG; ?></h2>
     <span class="dbg-state <?php echo $isOn ? 'dbg-on' : 'dbg-off'; ?>">
       <?php echo $isOn ? 'CAPTURE ON' : 'CAPTURE OFF'; ?>
     </span>
   </div>
 
   <div class="dbg-card">
-    <h3>Status</h3>
+    <h3><?php echo ADM_STATUS; ?></h3>
     <div class="dbg-row">
-      <span>Capture is <b><?php echo $isOn ? 'ON' : 'OFF'; ?></b><?php echo $isOn ? ' since '.$since : ''; ?>.</span>
-      <span>Auto-off: <b><?php echo $autoOff > 0 ? $autoOff.' h' : 'never'; ?></b></span>
-      <span>Log size: <b><?php echo number_format($logSize / 1024, 1); ?> KB</b></span>
+      <span><?php echo ADM_CAPTURE_IS; ?><b><?php echo $isOn ? 'ON' : 'OFF'; ?></b><?php echo $isOn ? ' since '.$since : ''; ?>.</span>
+      <span><?php echo ADM_AUTO_OFF; ?><b><?php echo $autoOff > 0 ? $autoOff.' h' : 'never'; ?></b></span>
+      <span><?php echo ADM_LOG_SIZE; ?><b><?php echo number_format($logSize / 1024, 1); ?> KB</b></span>
     </div>
     <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST" style="display:inline">
       <?php echo csrf_field(); ?>
@@ -96,44 +96,42 @@ $autoOff = (int)($cfg['auto_off_hours'] ?? 0);
         <?php echo $isOn ? 'Turn capture OFF' : 'Turn capture ON'; ?>
       </button>
     </form>
-    <p class="dbg-note">Transparent to players: errors are only written to the log file, never shown in-game and gameplay is unaffected.</p>
+    <p class="dbg-note"><?php echo ADM_TRANSPARENT_TO_PLAYERS_ERRORS_ARE_ONLY_WRITT; ?></p>
   </div>
 
   <div class="dbg-card">
-    <h3>Capture settings</h3>
+    <h3><?php echo ADM_CAPTURE_SETTINGS; ?></h3>
     <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="do" value="save">
       <div class="dbg-row">
-        <label><input type="checkbox" name="lvl_warning"    <?php echo !empty($cfg['lvl_warning'])    ? 'checked' : ''; ?>> Warnings</label>
-        <label><input type="checkbox" name="lvl_notice"     <?php echo !empty($cfg['lvl_notice'])     ? 'checked' : ''; ?>> Notices</label>
-        <label><input type="checkbox" name="lvl_deprecated" <?php echo !empty($cfg['lvl_deprecated']) ? 'checked' : ''; ?>> Deprecated</label>
-        <label><input type="checkbox" name="lvl_fatal"      <?php echo !empty($cfg['lvl_fatal'])      ? 'checked' : ''; ?>> Fatal errors</label>
+        <label><input type="checkbox" name="lvl_warning"    <?php echo !empty($cfg['lvl_warning'])    ? 'checked' : ''; ?>><?php echo ADM_WARNINGS; ?></label>
+        <label><input type="checkbox" name="lvl_notice"     <?php echo !empty($cfg['lvl_notice'])     ? 'checked' : ''; ?>><?php echo ADM_NOTICES; ?></label>
+        <label><input type="checkbox" name="lvl_deprecated" <?php echo !empty($cfg['lvl_deprecated']) ? 'checked' : ''; ?>><?php echo ADM_DEPRECATED; ?></label>
+        <label><input type="checkbox" name="lvl_fatal"      <?php echo !empty($cfg['lvl_fatal'])      ? 'checked' : ''; ?>><?php echo ADM_FATAL_ERRORS; ?></label>
       </div>
       <div class="dbg-row">
-        <label>Max file size (MB):
-          <input type="number" name="max_size_mb" min="1" max="200" value="<?php echo (int)($cfg['max_size_mb'] ?? 5); ?>">
+        <label><?php echo ADM_MAX_FILE_SIZE_MB; ?><input type="number" name="max_size_mb" min="1" max="200" value="<?php echo (int)($cfg['max_size_mb'] ?? 5); ?>">
         </label>
-        <label>Auto-off after (hours, 0 = never):
-          <input type="number" name="auto_off_hours" min="0" max="168" value="<?php echo (int)($cfg['auto_off_hours'] ?? 6); ?>">
+        <label><?php echo ADM_AUTO_OFF_AFTER_HOURS_0_NEVER; ?><input type="number" name="auto_off_hours" min="0" max="168" value="<?php echo (int)($cfg['auto_off_hours'] ?? 6); ?>">
         </label>
-        <button type="submit" class="dbg-btn primary">Save settings</button>
+        <button type="submit" class="dbg-btn primary"><?php echo ADM_SAVE_SETTINGS; ?></button>
       </div>
-      <p class="dbg-note">Beyond the size cap the file is rotated to a single <code>.log.1</code> backup, so the total volume stays bounded.</p>
+      <p class="dbg-note"><?php echo ADM_BEYOND_THE_SIZE_CAP_THE_FILE_IS_ROTATED_TO_A; ?><code>.log.1</code><?php echo ADM_BACKUP_SO_THE_TOTAL_VOLUME_STAYS_BOUNDED; ?></p>
     </form>
   </div>
 
   <div class="dbg-card">
     <h3>Last <?php echo $maxLines; ?> lines</h3>
     <div class="dbg-actions">
-      <a class="dbg-btn" href="../GameEngine/Admin/Mods/debugLog.php?do=download">⬇ Download full log</a>
+      <a class="dbg-btn" href="../GameEngine/Admin/Mods/debugLog.php?do=download"><?php echo ADM_DOWNLOAD_FULL_LOG; ?></a>
       <form action="../GameEngine/Admin/Mods/debugLog.php" method="POST" style="display:inline"
             onsubmit="return confirm('Clear the debug log file?');">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="do" value="clear">
-        <button type="submit" class="dbg-btn red">🗑 Clear log</button>
+        <button type="submit" class="dbg-btn red"><?php echo ADM_CLEAR_LOG; ?></button>
       </form>
-      <a class="dbg-btn" href="?p=debug_log">↻ Refresh</a>
+      <a class="dbg-btn" href="?p=debug_log"><?php echo ADM_REFRESH; ?></a>
     </div>
     <div class="dbg-log" style="margin-top:8px"><?php
       if (empty($lines)) {

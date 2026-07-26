@@ -64,13 +64,12 @@ if ($hero !== false) {
 <div class="hero-wrap">
 <table class="hero-table">
 	<thead>
-	<tr><th colspan="3" class="hero-head">Player Heroes</th></tr>
+	<tr><th colspan="3" class="hero-head"><?php echo ADM_PLAYER_HEROES; ?></th></tr>
 	</thead>
 	
 	<?php if ($hero === false) {?>
 	<tr>
-		<td colspan="3" align="center" class="add-hero">
-			None &nbsp;&nbsp;<span style="color:#2563eb;font-weight:600">Add Hero</span>
+		<td colspan="3" align="center" class="add-hero"><?php echo ADM_NONE_3; ?><span style="color:#2563eb;font-weight:600"><?php echo ADM_ADD_HERO; ?></span>
 			<?php
 			$utribe=($user['tribe']-1)*10;
 			// Sloturile 1-6 care au erou definit in hero_full.php (generic pentru toate triburile)
@@ -87,37 +86,37 @@ if ($hero !== false) {
 	foreach ($hero as $h) { ?>
 	<tr><td colspan="3" class="hero-sub" style="text-align:center">Hero #<?php echo $x++; ?></td></tr>
 	<tr>
-		<td width="35%">Hero Name</td> 
+		<td width="35%"><?php echo ADM_HERO_NAME; ?></td> 
 		<td colspan="2" class="hero-name"><?php echo htmlspecialchars($h['name']); ?></td>
 	</tr>
 	<tr>
-		<td>Hero Level</td> 
+		<td><?php echo ADM_HERO_LEVEL; ?></td> 
 		<td colspan="2"><?php echo $h['level']; ?></td> 
 	</tr>
 	<tr>
-		<td>Hero Unit</td> 
+		<td><?php echo ADM_HERO_UNIT; ?></td> 
 		<td colspan="2" class="hero-unit"><?php echo "<img class=\"unit u".$h['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($h['unit'])."\" title=\"".$technology->getUnitName($h['unit'])."\" /> ".$technology->getUnitName($h['unit']); ?></td> 
 	</tr>
 	<tr> 
-		<td>Status</td> 
+		<td><?php echo ADM_STATUS; ?></td> 
 		<td colspan="2" class="hero-actions">
 		<?php if (!$h['dead']) { ?>
-			<span class="badge badge-alive">Alive</span>
-			<a class="hero-icon edit" href='admin.php?p=editHero&uid=<?php echo $id; ?>&amp;hid=<?php echo $h['heroid'] ?>' title="Edit">
+			<span class="badge badge-alive"><?php echo ADM_ALIVE; ?></span>
+			<a class="hero-icon edit" href='admin.php?p=editHero&uid=<?php echo $id; ?>&amp;hid=<?php echo $h['heroid'] ?>' title="<?php echo ADM_EDIT; ?>">
 				<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
 			</a>
 			<?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) { ?>
-			<a class="hero-icon edit" href='admin.php?p=editHeroT4&uid=<?php echo $id; ?>' title="T4 items / silver / auctions">
+			<a class="hero-icon edit" href='admin.php?p=editHeroT4&uid=<?php echo $id; ?>' title="<?php echo ADM_T4_ITEMS_SILVER_AUCTIONS; ?>">
 				<svg viewBox="0 0 24 24"><path d="M6 2l1.5 4h9L18 2"/><path d="M4 6h16l-2 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L4 6z"/></svg>
 			</a>
 			<?php } ?>
-			<a class="hero-icon kill" href='?action=killHero&uid=<?php echo $id; ?>' title="Kill">
+			<a class="hero-icon kill" href='?action=killHero&uid=<?php echo $id; ?>' title="<?php echo ADM_KILL; ?>">
 				<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"/></svg>
 			</a>
 		<?php } else { ?>
-			<span class="badge badge-dead">Dead</span>
+			<span class="badge badge-dead"><?php echo ADM_DEAD; ?></span>
 			<?php if ($heroAliveIndex === -1) { ?>
-				<a class="hero-icon revive" href="?action=reviveHero&uid=<?php echo $id;?>&amp;hid=<?php echo $h['heroid'] ?>" title="Revive">
+				<a class="hero-icon revive" href="?action=reviveHero&uid=<?php echo $id;?>&amp;hid=<?php echo $h['heroid'] ?>" title="<?php echo ADM_REVIVE; ?>">
 					<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
 				</a>
 			<?php } else { echo '<span style="color:#64748b;font-size:11px">(kill living hero first)</span>'; } ?>
@@ -126,12 +125,12 @@ if ($hero !== false) {
 	</tr>
 
 	<?php if (!$h['dead']) { ?>
-	<tr><th>Details</th><th>Point</th><th>Level</th></tr>
-	<tr><td>Offence</td><td><?php echo $h['atk']; ?></td><td><?php echo $h['attack']; ?></td></tr> 
-	<tr><td>Defence</td><td><?php echo $h['di']."/".$h['dc']; ?></td><td><?php echo $h['defence']; ?></td></tr> 
-	<tr><td>Off-Bonus</td><td><?php echo ($h['ob']-1)*100; ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
-	<tr><td>Def-Bonus</td><td><?php echo ($h['db']-1)*100; ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
-	<tr><td>Regeneration</td><td><?php echo min(100,$h['regeneration'])*5*SPEED; ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
+	<tr><th><?php echo ADM_DETAILS; ?></th><th><?php echo ADM_POINT; ?></th><th><?php echo ADM_LEVEL_2; ?></th></tr>
+	<tr><td><?php echo ADM_OFFENCE_2; ?></td><td><?php echo $h['atk']; ?></td><td><?php echo $h['attack']; ?></td></tr> 
+	<tr><td><?php echo ADM_DEFENCE_2; ?></td><td><?php echo $h['di']."/".$h['dc']; ?></td><td><?php echo $h['defence']; ?></td></tr> 
+	<tr><td><?php echo ADM_OFF_BONUS_2; ?></td><td><?php echo ($h['ob']-1)*100; ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
+	<tr><td><?php echo ADM_DEF_BONUS_2; ?></td><td><?php echo ($h['db']-1)*100; ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
+	<tr><td><?php echo ADM_REGENERATION; ?></td><td><?php echo min(100,$h['regeneration'])*5*SPEED; ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
 	<?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
 		$hResPoints = (int) ($h['resources'] ?? 0);
 		$hResType   = (int) ($h['res_type'] ?? 0);
@@ -142,7 +141,7 @@ if ($hero !== false) {
 			? (int) round($hResPoints * $hPerOne * SPEED)
 			: (int) round($hResPoints * $hPerAll * SPEED);
 	?>
-	<tr><td>Resources</td><td><?php echo $hResAmount; ?>/h (<?php echo $hResNames[$hResType] ?? 'all'; ?>)</td><td><?php echo $hResPoints; ?></td></tr>
+	<tr><td><?php echo ADM_RESOURCES_2; ?></td><td><?php echo $hResAmount; ?>/h (<?php echo $hResNames[$hResType] ?? 'all'; ?>)</td><td><?php echo $hResPoints; ?></td></tr>
 	<?php } ?>
 	<tr>
 		<?php 
@@ -173,7 +172,7 @@ if ($hero !== false) {
 		<td>Experience: <?php echo $expPct; ?>%</td> 
 		<td colspan="2"><?php echo $h['points']; ?><div class="hero-bar"><div class="hero-bar-fill" style="width:<?php echo $expPct; ?>%"></div></div></td> 
 	</tr>
-	<tr><td>Health</td><td colspan="2"><?php echo round($h['health']); ?>%<div class="hero-bar"><div class="hero-bar-fill" style="width:<?php echo round($h['health']); ?>%"></div></div></td></tr>
+	<tr><td><?php echo ADM_HEALTH_2; ?></td><td colspan="2"><?php echo round($h['health']); ?>%<div class="hero-bar"><div class="hero-bar-fill" style="width:<?php echo round($h['health']); ?>%"></div></div></td></tr>
 	<tr><td colspan="3" style="height:8px;background:#f8fafc"></td></tr>
 	<?php } else { ?>
 	<tr><td colspan="3" style="height:8px;background:#f8fafc"></td></tr>

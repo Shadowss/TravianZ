@@ -45,7 +45,7 @@ $id = $_SESSION['id'];
 <div class="usergold-wrap">
   <div class="usergold-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" fill="#3498db"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="#2c3e50"/></svg>
-    <h2>User Gold</h2>
+    <h2><?php echo ADM_USER_GOLD; ?></h2>
   </div>
 
   <div class="usergold-card">
@@ -54,8 +54,8 @@ $id = $_SESSION['id'];
         <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5.5 20l2-7L2 9h7z"/></svg>
       </div>
       <div>
-        <h3>Give Gold to Specific Player</h3>
-        <p>Add gold only for single account (after ID).</p>
+        <h3><?php echo ADM_GIVE_GOLD_TO_SPECIFIC_PLAYER; ?></h3>
+        <p><?php echo ADM_ADD_GOLD_ONLY_FOR_SINGLE_ACCOUNT_AFTER_ID; ?></p>
       </div>
     </div>
 
@@ -64,23 +64,21 @@ $id = $_SESSION['id'];
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
       
       <div class="field">
-        <label>User ID</label>
+        <label><?php echo ADM_USER_ID; ?></label>
         <input type="number" name="id" placeholder="ex: 123" required min="1">
       </div>
       
       <div class="field">
-        <label>Amount Gold</label>
+        <label><?php echo ADM_AMOUNT_GOLD; ?></label>
         <input type="number" name="gold" value="20" min="1" max="999999" required>
       </div>
       
       <button type="submit">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        Give Gold
-      </button>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><?php echo ADM_GIVE_GOLD; ?></button>
     </form>
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="usergold-success">✓ Gold successfully added for user!</div>
+    <div class="usergold-success"><?php echo ADM_GOLD_SUCCESSFULLY_ADDED_FOR_USER; ?></div>
   <?php } ?>
 </div>

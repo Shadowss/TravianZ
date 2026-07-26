@@ -49,11 +49,11 @@ $artifactInfo = $artifact ? Artifacts::getArtifactInfo($artifact) : null;
             <tr>
                 <th class="del"></th>
                 <th class="icon"></th>
-                <th>Name</th>
-                <th>Bonus</th>
-                <th>Area of effect</th>
-                <th>Time of conquer</th>
-                <th>Time of activation</th>
+                <th><?php echo ADM_NAME; ?></th>
+                <th><?php echo ADM_BONUS; ?></th>
+                <th><?php echo ADM_AREA_OF_EFFECT; ?></th>
+                <th><?php echo ADM_TIME_OF_CONQUER; ?></th>
+                <th><?php echo ADM_TIME_OF_ACTIVATION; ?></th>
                 <?php if($artifactOfTheFool) echo '<th>Next activation</th>'; ?>
             </tr>
         </thead>
@@ -74,7 +74,7 @@ $artifactInfo = $artifact ? Artifacts::getArtifactInfo($artifact) : null;
 
 <?php if($village['owner'] != 3 && !empty($artifact)): ?>
     <div class="artifact-foot">
-        <a href="admin.php?action=returnArtifact&artid=<?php echo $artifact['id']; ?>">Return to Natars</a>
+        <a href="admin.php?action=returnArtifact&artid=<?php echo $artifact['id']; ?>"><?php echo ADM_RETURN_TO_NATARS; ?></a>
     </div>
 <?php endif; ?>
 </div>

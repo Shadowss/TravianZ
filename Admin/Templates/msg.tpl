@@ -40,10 +40,10 @@ if($nid > 0){
     <link href="../<?php echo GP_LOCATE;?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
     <link href="../<?php echo GP_LOCATE;?>travian.css?e21d2" rel="stylesheet" type="text/css">
     <div style="max-width:900px;margin:20px auto">
-      <a href="?p=msg" style="font-size:12px">← Back to messages</a>
-      <div style="margin:8px 0;font-size:12px"><span class="b">Sent to</span>: <?php echo htmlspecialchars($database->getUserField($msg[0]['target'],'username',0));?></div>
+      <a href="?p=msg" style="font-size:12px"><?php echo ADM_BACK_TO_MESSAGES; ?></a>
+      <div style="margin:8px 0;font-size:12px"><span class="b"><?php echo ADM_SENT_TO; ?></span>: <?php echo htmlspecialchars($database->getUserField($msg[0]['target'],'username',0));?></div>
       <div id="content" class="messages">
-        <h1>Message</h1>
+        <h1><?php echo ADM_MESSAGE; ?></h1>
         <div id="read_head" class="msg_head"></div>
         <div id="read_content" class="msg_content">
           <img src="../img/x.gif" id="label" class="read" alt="">
@@ -129,7 +129,7 @@ $msgs = $database->query("SELECT * FROM ".TB_PREFIX."mdata WHERE $where ORDER BY
     <form class="search-box" method="get">
       <input type="hidden" name="p" value="msg">
       <input type="hidden" name="f" value="<?php echo htmlspecialchars($filter);?>">
-      <input type="text" name="q" placeholder="Search..." value="<?php echo htmlspecialchars($search);?>">
+      <input type="text" name="q" placeholder="<?php echo ADM_SEARCH_PH; ?>" value="<?php echo htmlspecialchars($search);?>">
     </form>
   </div>
 
@@ -152,7 +152,7 @@ $msgs = $database->query("SELECT * FROM ".TB_PREFIX."mdata WHERE $where ORDER BY
         <div class="msg-preview"><?php echo htmlspecialchars($preview);?>...</div>
         <div class="msg-foot">
           <span>#<?php echo $m['id'];?></span>
-          <span>view →</span>
+          <span><?php echo ADM_VIEW_ARROW; ?></span>
         </div>
       </div>
     </a>

@@ -71,8 +71,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_BUILD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_BUILD_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_build">
-                            <option value="true" <?php if (LOG_BUILD==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_BUILD==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_BUILD==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_BUILD==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -80,8 +80,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_TECHNOLOGY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_TECHNOLOGY_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_tech">
-                            <option value="true" <?php if (LOG_TECH==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_TECH==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_TECH==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_TECH==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -89,8 +89,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_LOGIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_LOGIN_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_login">
-                            <option value="true" <?php if (LOG_LOGIN==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_LOGIN==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_LOGIN==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_LOGIN==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -98,8 +98,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_GOLD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_GOLD_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_gold_fin">
-                            <option value="true" <?php if (LOG_GOLD_FIN==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_GOLD_FIN==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_GOLD_FIN==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_GOLD_FIN==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -107,8 +107,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_ADMIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ADMIN_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_admin">
-                            <option value="true" <?php if (LOG_ADMIN==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_ADMIN==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_ADMIN==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_ADMIN==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -116,8 +116,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_WAR ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_WAR_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_war">
-                            <option value="true" <?php if (LOG_WAR==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_WAR==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_WAR==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_WAR==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -125,8 +125,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_MARKET ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_MARKET_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_market">
-                            <option value="true" <?php if (LOG_MARKET==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_MARKET==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_MARKET==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_MARKET==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -134,8 +134,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     <td class="b"><?php echo CONF_LOG_ILLEGAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ILLEGAL_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="log_illegal">
-                            <option value="true" <?php if (LOG_ILLEGAL==true) echo "selected";?>>Yes</option>
-                            <option value="false" <?php if (LOG_ILLEGAL==false) echo "selected";?>>No</option>
+                            <option value="true" <?php if (LOG_ILLEGAL==true) echo "selected";?>><?php echo ADM_YES; ?></option>
+                            <option value="false" <?php if (LOG_ILLEGAL==false) echo "selected";?>><?php echo ADM_NO; ?></option>
                         </select>
                     </td>
                 </tr>
@@ -150,9 +150,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
             <polyline points="17 21 17 13 7 13 7 21"/>
-        </svg>
-        SAVE
-    </button>
+        </svg><?php echo ADM_SAVE; ?></button>
 </div>
     </form>
 </div>

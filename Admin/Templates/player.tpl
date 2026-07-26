@@ -121,10 +121,10 @@ if($deletion){
 					<th colspan="4">Ban History (<?php echo $numbans; ?>)</th>
 				</tr>
 				<tr>
-					<td class="hab"><b>Start</b></td>
-					<td class="hab"><b>End</b></td>
-					<td class="hab"><b>Duration</b></td>
-					<td class="on"><b>Reason</b></td>
+					<td class="hab"><b><?php echo ADM_START; ?></b></td>
+					<td class="hab"><b><?php echo ADM_END; ?></b></td>
+					<td class="hab"><b><?php echo ADM_DURATION; ?></b></td>
+					<td class="on"><b><?php echo ADM_REASON; ?></b></td>
 				</tr>
 			</thead>
 			<tbody>

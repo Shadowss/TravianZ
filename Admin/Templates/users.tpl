@@ -114,31 +114,31 @@ function shortEmail($e){if(!$e)return '-';if(strlen($e)>22)return substr($e,0,19
 
 <div class="users-wrap">
   <div class="users-head">
-    <h2>👥 Users</h2>
+    <h2><?php echo ADM_USERS_H; ?></h2>
     <div style="font-size:11px;color:#94a3b8"><?php echo number_format($totalUsers);?> found</div>
   </div>
 
 <div class="users-filters">
-  <a href="?p=users&filter=all" class="<?php echo $filter=='all'?'active':'';?>">All</a>
-  <a href="?p=users&filter=admins" class="<?php echo $filter=='admins'?'active':'';?>">Admins</a>
-  <a href="?p=users&filter=normal" class="<?php echo $filter=='normal'?'active':'';?>">Normal</a>
-  <a href="?p=users&filter=banned" class="<?php echo $filter=='banned'?'active':'';?>">Banned</a>
-  <a href="?p=users&filter=online" class="<?php echo $filter=='online'?'active':'';?>">Online</a>
+  <a href="?p=users&filter=all" class="<?php echo $filter=='all'?'active':'';?>"><?php echo ADM_ALL; ?></a>
+  <a href="?p=users&filter=admins" class="<?php echo $filter=='admins'?'active':'';?>"><?php echo ADM_ADMINS; ?></a>
+  <a href="?p=users&filter=normal" class="<?php echo $filter=='normal'?'active':'';?>"><?php echo ADM_NORMAL; ?></a>
+  <a href="?p=users&filter=banned" class="<?php echo $filter=='banned'?'active':'';?>"><?php echo ADM_BANNED; ?></a>
+  <a href="?p=users&filter=online" class="<?php echo $filter=='online'?'active':'';?>"><?php echo ADM_ONLINE; ?></a>
 </div>
 
-  <div class="search-box"><input type="text" id="userSearch" placeholder="Search..." onkeyup="filterUsers()"></div>
+  <div class="search-box"><input type="text" id="userSearch" placeholder="<?php echo ADM_SEARCH_PH; ?>" onkeyup="filterUsers()"></div>
 
   <div class="table-wrap">
     <table class="users-table" id="usersTable">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Access</th>
-          <th>Tribe</th>
-          <th>Gold</th>
-          <th>Last Activity</th>
+          <th><?php echo ADM_ID; ?></th>
+          <th><?php echo ADM_USERNAME; ?></th>
+          <th><?php echo ADM_EMAIL; ?></th>
+          <th><?php echo ADM_ACCESS; ?></th>
+          <th><?php echo ADM_TRIBE; ?></th>
+          <th><?php echo ADM_GOLD; ?></th>
+          <th><?php echo ADM_LAST_ACTIVITY; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -168,9 +168,9 @@ function shortEmail($e){if(!$e)return '-';if(strlen($e)>22)return substr($e,0,19
   </div>
 
   <div class="pagination">
-    <?php if($page>1){?><a href="?p=users&filter=<?php echo $filter;?>&upage=<?php echo $page-1;?>">« Prev</a><?php }?>
+    <?php if($page>1){?><a href="?p=users&filter=<?php echo $filter;?>&upage=<?php echo $page-1;?>"><?php echo ADM_PREV; ?></a><?php }?>
     <span class="current"><?php echo $page;?> / <?php echo $totalPages;?></span>
-    <?php if($page<$totalPages){?><a href="?p=users&filter=<?php echo $filter;?>&upage=<?php echo $page+1;?>">Next »</a><?php }?>
+    <?php if($page<$totalPages){?><a href="?p=users&filter=<?php echo $filter;?>&upage=<?php echo $page+1;?>"><?php echo ADM_NEXT; ?></a><?php }?>
   </div>
 </div>
 

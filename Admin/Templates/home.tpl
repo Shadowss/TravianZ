@@ -115,35 +115,35 @@ $role = $_SESSION['access'] == ADMIN ? 'Administrator' : 'MultiHunter';
 <div class="dashboard">
   <div class="dash-head">
     <h1>WELCOME TO <?php echo strtoupper($role); ?> CONTROL PANEL</h1>
-    <div class="sub">Hello <b><?php echo $_SESSION['admin_username']; ?></b> — <?php echo date('d.m.Y H:i'); ?> Server Time</div>
+    <div class="sub"><?php echo ADM_HELLO; ?><b><?php echo $_SESSION['admin_username']; ?></b> — <?php echo date('d.m.Y H:i'); ?> Server Time</div>
   </div>
   <!-- TOATE CARDURILE ORIGINALE -->
   <div class="cards">
-    <div class="card blue"><h3>Total Players</h3><div class="val"><?php echo number_format($totalUsers); ?></div><div class="subv">+ <?php echo $active24h; ?> active 24h</div></div>
-    <div class="card green"><h3>Online Now</h3><div class="val"><?php echo $onlineNow; ?></div><div class="subv">last 5 minutes</div></div>
-    <div class="card"><h3>Villages</h3><div class="val"><?php echo number_format($totalVillages); ?></div><div class="subv">avg <?php echo $totalUsers ? round($totalVillages/$totalUsers,1) : 0; ?> / player</div></div>
-    <div class="card orange"><h3>Gold in Game</h3><div class="val"><?php echo number_format($totalGold); ?></div><div class="subv"><?php echo $activePlus; ?> with Plus active</div></div>
-    <div class="card red"><h3>Active Bans</h3><div class="val"><?php echo $activeBans; ?></div><div class="subv"><a href="admin.php?p=ban">manage</a></div></div>
-    <div class="card"><h3>Last Registration</h3><div class="val" style="font-size:15px !important"><a href="admin.php?p=player&uid=<?php echo $lastReg['id']; ?>" style="color:#2563eb !important"><?php echo htmlspecialchars($lastReg['username']); ?></a></div><div class="subv">ID #<?php echo $lastReg['id']; ?></div></div>
+    <div class="card blue"><h3><?php echo ADM_TOTAL_PLAYERS; ?></h3><div class="val"><?php echo number_format($totalUsers); ?></div><div class="subv">+ <?php echo $active24h; ?> active 24h</div></div>
+    <div class="card green"><h3><?php echo ADM_ONLINE_NOW; ?></h3><div class="val"><?php echo $onlineNow; ?></div><div class="subv"><?php echo ADM_LAST_5_MIN; ?></div></div>
+    <div class="card"><h3><?php echo ADM_VILLAGES; ?></h3><div class="val"><?php echo number_format($totalVillages); ?></div><div class="subv">avg <?php echo $totalUsers ? round($totalVillages/$totalUsers,1) : 0; ?> / player</div></div>
+    <div class="card orange"><h3><?php echo ADM_GOLD_IN_GAME; ?></h3><div class="val"><?php echo number_format($totalGold); ?></div><div class="subv"><?php echo $activePlus; ?> with Plus active</div></div>
+    <div class="card red"><h3><?php echo ADM_ACTIVE_BANS; ?></h3><div class="val"><?php echo $activeBans; ?></div><div class="subv"><a href="admin.php?p=ban"><?php echo ADM_MANAGE; ?></a></div></div>
+    <div class="card"><h3><?php echo ADM_LAST_REGISTRATION; ?></h3><div class="val" style="font-size:15px !important"><a href="admin.php?p=player&uid=<?php echo $lastReg['id']; ?>" style="color:#2563eb !important"><?php echo htmlspecialchars($lastReg['username']); ?></a></div><div class="subv">ID #<?php echo $lastReg['id']; ?></div></div>
     <div class="card"><h3>PHP / MySQL</h3><div class="val" style="font-size:15px !important"><?php echo PHP_VERSION; ?></div><div class="subv"><?php echo $database->dblink->server_info; ?></div></div>
-    <div class="card"><h3>Server Clock</h3><div class="val" style="font-size:15px !important"><?php echo date('H:i:s'); ?></div><div class="subv">Uptime: <?php echo @exec('uptime -p') ?: 'n/a'; ?></div></div>
+    <div class="card"><h3><?php echo ADM_SERVER_CLOCK; ?></h3><div class="val" style="font-size:15px !important"><?php echo date('H:i:s'); ?></div><div class="subv">Uptime: <?php echo @exec('uptime -p') ?: 'n/a'; ?></div></div>
   </div>
   <!-- TIMELINE NOU - IN PLUS -->
   <div class="panel">
-    <h2>Server Timeline</h2>
+    <h2><?php echo ADM_SERVER_TIMELINE; ?></h2>
     <div class="timeline">
-      <div><b>Start Date:</b><br><?php echo $serverStart; ?></div>
-      <div><b>Natars:</b><br><?php echo $natarsStatus; ?></div>
-      <div><b>Artefacts:</b><br><?php echo $arteStatus; ?></div>
-      <div><b>WW Plans:</b><br><?php echo $plansStatus; ?></div>
-      <div><b>Server Age:</b><br><?php echo $startTime ? floor((time()-$startTime)/86400).' days' : '-'; ?></div>
-      <div><b>Next Event:</b><br>—</div>
+      <div><b><?php echo ADM_START_DATE; ?></b><br><?php echo $serverStart; ?></div>
+      <div><b><?php echo ADM_NATARS_C; ?></b><br><?php echo $natarsStatus; ?></div>
+      <div><b><?php echo ADM_ARTEFACTS_C; ?></b><br><?php echo $arteStatus; ?></div>
+      <div><b><?php echo ADM_WW_PLANS_C; ?></b><br><?php echo $plansStatus; ?></div>
+      <div><b><?php echo ADM_SERVER_AGE; ?></b><br><?php echo $startTime ? floor((time()-$startTime)/86400).' days' : '-'; ?></div>
+      <div><b><?php echo ADM_NEXT_EVENT; ?></b><br>—</div>
     </div>
   </div>
 
   <div class="grid2">
     <div class="panel">
-      <h2>Last 5 Admin Actions</h2>
+      <h2><?php echo ADM_LAST_5_ACTIONS; ?></h2>
       <div class="logmini">
       <?php
       $logs = $database->query("SELECT * FROM ".TB_PREFIX."admin_log ORDER BY id DESC LIMIT 5");
@@ -153,17 +153,17 @@ $role = $_SESSION['access'] == ADMIN ? 'Administrator' : 'MultiHunter';
       }
       ?>
       </div>
-      <div style="margin-top:10px"><a href="admin.php?p=admin_log" style="color:#2563eb !important;font-weight:600">view full log →</a></div>
+      <div style="margin-top:10px"><a href="admin.php?p=admin_log" style="color:#2563eb !important;font-weight:600"><?php echo ADM_VIEW_FULL_LOG; ?></a></div>
     </div>
 
     <div class="panel quick">
-      <h2>Quick Actions</h2>
-      <a href="admin.php?p=search">🔍 Search Player</a>
-      <a href="admin.php?p=ban">🔨 Ban Manager</a>
-      <a href="admin.php?p=map">🗺 Map</a>
-      <a href="admin.php?p=natars">🏰 Natars</a>
-      <a href="admin.php?p=addUser">👤 Add User</a>
-      <a href="admin.php?p=server_info">⚙ Server Info</a>
+      <h2><?php echo ADM_QUICK_ACTIONS; ?></h2>
+      <a href="admin.php?p=search"><?php echo ADM_QA_SEARCH; ?></a>
+      <a href="admin.php?p=ban"><?php echo ADM_QA_BAN; ?></a>
+      <a href="admin.php?p=map"><?php echo ADM_QA_MAP; ?></a>
+      <a href="admin.php?p=natars"><?php echo ADM_QA_NATARS; ?></a>
+      <a href="admin.php?p=addUser"><?php echo ADM_QA_ADD_USER; ?></a>
+      <a href="admin.php?p=server_info"><?php echo ADM_QA_SERVER_INFO; ?></a>
     </div>
   </div>
 

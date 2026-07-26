@@ -48,26 +48,26 @@ $logs = $database->query("SELECT * FROM ".TB_PREFIX."tech_log WHERE wid = $id OR
 </style>
 
 <div class="tlog-wrap">
-    <a href="admin.php?p=village&did=<?php echo $id; ?>" class="back-btn">← Back to Village</a>
+    <a href="admin.php?p=village&did=<?php echo $id; ?>" class="back-btn"><?php echo ADM_BACK_TO_VILLAGE; ?></a>
     
     <div class="tlog-head">
         <div class="icon">🔬</div>
         <div>
-            <h2><?php echo htmlspecialchars($village['name']); ?> <span style="opacity:.7">— Research Log</span></h2>
-            <span>Latest 200 searches</span>
+            <h2><?php echo htmlspecialchars($village['name']); ?> <span style="opacity:.7"><?php echo ADM_RESEARCH_LOG; ?></span></h2>
+            <span><?php echo ADM_LATEST_200_SEARCHES; ?></span>
         </div>
     </div>
     
     <div class="tlog-card">
         <?php if(mysqli_num_rows($logs) == 0): ?>
-            <div class="empty">No registered searches.</div>
+            <div class="empty"><?php echo ADM_NO_REGISTERED_SEARCHES; ?></div>
         <?php else: ?>
         <table class="tlog-table">
             <thead>
                 <tr>
                     <th class="tlog-num">#</th>
-                    <th>Event</th>
-                    <th class="tlog-date">Data</th>
+                    <th><?php echo ADM_EVENT; ?></th>
+                    <th class="tlog-date"><?php echo ADM_DATA; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -82,7 +82,7 @@ $logs = $database->query("SELECT * FROM ".TB_PREFIX."tech_log WHERE wid = $id OR
             ?>
                 <tr>
                     <td class="tlog-num"><?php echo $i--; ?></td>
-                    <td><span class="badge <?php echo $badge; ?>">TECH</span> <?php echo $log; ?></td>
+                    <td><span class="badge <?php echo $badge; ?>"><?php echo ADM_TECH; ?></span> <?php echo $log; ?></td>
                     <td class="tlog-date"><?php echo $date; ?></td>
                 </tr>
             <?php endwhile; ?>

@@ -41,10 +41,10 @@
   
   <table class="vil-table">
 	<tr>
-		<td>NAME</td>
-		<td>POPULATION</td>
-		<td>COORDINATES</td>
-		<td>TROOPS</td>
+		<td><?php echo ADM_NAME_2; ?></td>
+		<td><?php echo ADM_POPULATION_2; ?></td>
+		<td><?php echo ADM_COORDINATES; ?></td>
+		<td><?php echo ADM_TROOPS_2; ?></td>
 		<td style="width:32px"></td>
 	</tr>
 <?php

@@ -53,39 +53,31 @@ $pairs = $data['pairs'];
 </style>
 
 <div class="mad-wrap">
-    <h2>Multi-Account <span>Detection</span></h2>
-    <p class="mad-intro">
-        Heuristic correlation of account pairs by shared IP, subnet, device/browser
-        fingerprint (User-Agent), overlapping login times, and resource-transfer flow.
-        This is a <b>risk score, not proof</b> &mdash; use it to prioritise which
-        pairs a human should investigate. Nothing is banned automatically.
-    </p>
+    <h2><?php echo ADM_MULTI_ACCOUNT; ?><span><?php echo ADM_DETECTION; ?></span></h2>
+    <p class="mad-intro"><?php echo ADM_HEURISTIC_CORRELATION_OF_ACCOUNT_PAIRS_BY_SH; ?><b><?php echo ADM_RISK_SCORE_NOT_PROOF; ?></b><?php echo ADM_USE_IT_TO_PRIORITISE_WHICH_PAIRS_A_HUMAN_SHO; ?></p>
 
     <form method="get" action="admin.php" class="mad-filter">
         <input type="hidden" name="p" value="multiacc">
         <div>
-            <label>Window (days)</label>
+            <label><?php echo ADM_WINDOW_DAYS; ?></label>
             <input type="number" name="days" min="1" max="365" value="<?php echo (int)$days; ?>">
         </div>
         <div>
-            <label>Min score</label>
+            <label><?php echo ADM_MIN_SCORE; ?></label>
             <input type="number" name="min" min="0" max="100" value="<?php echo (int)$minScore; ?>">
         </div>
         <div>
-            <label>Focus on UID (optional)</label>
+            <label><?php echo ADM_FOCUS_ON_UID_OPTIONAL; ?></label>
             <input type="number" name="focus" min="0" value="<?php echo $focusUid ?: ''; ?>">
         </div>
-        <button type="submit">Analyse</button>
+        <button type="submit"><?php echo ADM_ANALYSE; ?></button>
         <?php if ($focusUid || $days != MultiAccount::WINDOW_DAYS || $minScore != MultiAccount::MIN_REPORT_SCORE): ?>
-            <a class="reset" href="admin.php?p=multiacc">reset</a>
+            <a class="reset" href="admin.php?p=multiacc"><?php echo ADM_RESET_2; ?></a>
         <?php endif; ?>
     </form>
 
     <?php if ($data['truncated']): ?>
-        <div class="mad-warn">
-            Row cap reached while scanning login history (window is large / very busy server).
-            Results still valid but may be incomplete &mdash; narrow the window for full coverage.
-        </div>
+        <div class="mad-warn"><?php echo ADM_ROW_CAP_REACHED_WHILE_SCANNING_LOGIN_HISTORY; ?></div>
     <?php endif; ?>
 
     <div class="mad-meta">
@@ -97,8 +89,7 @@ $pairs = $data['pairs'];
     </div>
 
     <?php if (empty($pairs)): ?>
-        <div class="mad-table"><div class="mad-empty">
-            No account pairs at or above the current score threshold.<br>
+        <div class="mad-table"><div class="mad-empty"><?php echo ADM_NO_ACCOUNT_PAIRS_AT_OR_ABOVE_THE_CURRENT_SCO; ?><br>
             <?php if ((int)$data['scanned']['mad_session'] === 0): ?>
                 Tip: the User-Agent signal starts filling in only after players log in
                 once with this feature deployed. IP &amp; login-time signals work on
@@ -111,10 +102,10 @@ $pairs = $data['pairs'];
         <table class="mad-table">
             <thead>
                 <tr>
-                    <th style="width:80px;">Risk</th>
-                    <th>Account A</th>
-                    <th>Account B</th>
-                    <th style="width:44%;">Why</th>
+                    <th style="width:80px;"><?php echo ADM_RISK; ?></th>
+                    <th><?php echo ADM_ACCOUNT_A; ?></th>
+                    <th><?php echo ADM_ACCOUNT_B; ?></th>
+                    <th style="width:44%;"><?php echo ADM_WHY; ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -132,16 +123,16 @@ $pairs = $data['pairs'];
                         <a href="admin.php?p=player&uid=<?php echo (int)$p['uid_a']; ?>"><?php echo e($p['name_a']); ?></a>
                         <span class="uid">#<?php echo (int)$p['uid_a']; ?></span>
                         <span class="sub">
-                            <a href="admin.php?p=userlogin&uid=<?php echo (int)$p['uid_a']; ?>">login log</a>
-                            <a href="admin.php?p=multiacc&focus=<?php echo (int)$p['uid_a']; ?>">focus</a>
+                            <a href="admin.php?p=userlogin&uid=<?php echo (int)$p['uid_a']; ?>"><?php echo ADM_LOGIN_LOG; ?></a>
+                            <a href="admin.php?p=multiacc&focus=<?php echo (int)$p['uid_a']; ?>"><?php echo ADM_FOCUS; ?></a>
                         </span>
                     </td>
                     <td class="mad-acc">
                         <a href="admin.php?p=player&uid=<?php echo (int)$p['uid_b']; ?>"><?php echo e($p['name_b']); ?></a>
                         <span class="uid">#<?php echo (int)$p['uid_b']; ?></span>
                         <span class="sub">
-                            <a href="admin.php?p=userlogin&uid=<?php echo (int)$p['uid_b']; ?>">login log</a>
-                            <a href="admin.php?p=multiacc&focus=<?php echo (int)$p['uid_b']; ?>">focus</a>
+                            <a href="admin.php?p=userlogin&uid=<?php echo (int)$p['uid_b']; ?>"><?php echo ADM_LOGIN_LOG; ?></a>
+                            <a href="admin.php?p=multiacc&focus=<?php echo (int)$p['uid_b']; ?>"><?php echo ADM_FOCUS; ?></a>
                         </span>
                     </td>
                     <td class="chips">

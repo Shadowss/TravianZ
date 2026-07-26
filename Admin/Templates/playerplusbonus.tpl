@@ -42,18 +42,18 @@ function fmt_bonus($ts){
     <td><?php echo fmt_bonus($user['plus']); ?></td>
 </tr>
 <tr>
-    <th><img src="../img/admin/r/1.gif"> Bonus</th>
+    <th><img src="../img/admin/r/1.gif"><?php echo ADM_BONUS; ?></th>
     <td><?php echo fmt_bonus($user['b1']); ?></td>
 </tr>
 <tr>
-    <th><img src="../img/admin/r/2.gif"> Bonus</th>
+    <th><img src="../img/admin/r/2.gif"><?php echo ADM_BONUS; ?></th>
     <td><?php echo fmt_bonus($user['b2']); ?></td>
 </tr>
 <tr>
-    <th><img src="../img/admin/r/3.gif"> Bonus</th>
+    <th><img src="../img/admin/r/3.gif"><?php echo ADM_BONUS; ?></th>
     <td><?php echo fmt_bonus($user['b3']); ?></td>
 </tr>
 <tr>
-    <th><img src="../img/admin/r/4.gif"> Bonus</th>
+    <th><img src="../img/admin/r/4.gif"><?php echo ADM_BONUS; ?></th>
     <td><?php echo fmt_bonus($user['b4']); ?></td>
 </tr>

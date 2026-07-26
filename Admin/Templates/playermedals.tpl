@@ -18,16 +18,16 @@
   <div class="medals-head">Player Medals (<?php echo sizeof($varmedal); ?>)</div>
   <table class="medals-table">
     <tr class="head">
-      <td>CATEGORY</td>
-      <td>RANK</td>
-      <td>WEEK</td>
-      <td>POINTS</td>
-      <td>MEDAL</td>
+      <td><?php echo ADM_CATEGORY_2; ?></td>
+      <td><?php echo ADM_RANK_2; ?></td>
+      <td><?php echo ADM_WEEK_2; ?></td>
+      <td><?php echo ADM_POINTS_4; ?></td>
+      <td><?php echo ADM_MEDAL_2; ?></td>
       <td style="width:30px"></td>
     </tr>
     <?php
     if(empty($varmedal)){ ?>
-      <tr><td colspan="6" class="no-medals">This player has no medals yet</td></tr>
+      <tr><td colspan="6" class="no-medals"><?php echo ADM_THIS_PLAYER_HAS_NO_MEDALS_YET; ?></td></tr>
     <?php } else {
       foreach($varmedal as $medal){
         $title = "Bonus";

@@ -67,68 +67,62 @@ $msg     = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 </style>
 
 <div class="gs-wrap">
-    <h2>Gold <span>Shop &amp; Promo Codes</span></h2>
-    <p class="gs-intro">
-        Create promo / voucher codes players redeem for gold on the Plus page. Set a fixed
-        gold amount, an optional total use-limit, whether each player may redeem it once,
-        and an optional expiry. For a one-off bug-hunter reward, create a code with
-        max-uses&nbsp;1 &mdash; or use
-        <a href="admin.php?p=usergold" style="color:#93c5fd;">Give Free Gold To Specific User</a> directly.
-    </p>
+    <h2><?php echo ADMIN_GOLD; ?><span><?php echo ADM_SHOP_PROMO_CODES; ?></span></h2>
+    <p class="gs-intro"><?php echo ADM_CREATE_PROMO_VOUCHER_CODES_PLAYERS_REDEEM_FO; ?><a href="admin.php?p=usergold" style="color:#93c5fd;"><?php echo ADMIN_GIVE_FREE_GOLD_TO_SPECIFIC_USER; ?></a><?php echo ADM_DIRECTLY; ?></p>
 
     <?php if ($msg !== ''): ?>
         <div class="gs-msg"><?php echo e($msg); ?></div>
     <?php endif; ?>
 
     <div class="gs-card">
-        <h3>Create a code</h3>
+        <h3><?php echo ADM_CREATE_A_CODE; ?></h3>
         <form method="post" action="../GameEngine/Admin/Mods/goldPromo.php" class="gs-add">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="do" value="create">
             <div>
-                <label>Code</label>
+                <label><?php echo ADM_CODE; ?></label>
                 <input class="code" type="text" name="code" maxlength="64" placeholder="BUGHUNT2026" required>
             </div>
             <div>
-                <label>Gold</label>
+                <label><?php echo ADMIN_GOLD; ?></label>
                 <input class="num" type="number" name="gold" min="1" value="100" required>
             </div>
             <div>
-                <label>Max uses (0 = &infin;)</label>
+                <label><?php echo ADM_MAX_USES_0; ?></label>
                 <input class="num" type="number" name="max_uses" min="0" value="0">
             </div>
             <div>
-                <label>Expires in (days, 0 = never)</label>
+                <label><?php echo ADM_EXPIRES_IN_DAYS_0_NEVER; ?></label>
                 <input class="num" type="number" name="expires_days" min="0" value="0">
             </div>
             <div class="chk">
                 <input type="checkbox" name="per_user" id="per_user" checked>
-                <label for="per_user" style="margin:0;text-transform:none;letter-spacing:0;">once per player</label>
+                <label for="per_user" style="margin:0;text-transform:none;letter-spacing:0;"><?php echo ADM_ONCE_PER_PLAYER; ?></label>
             </div>
             <div>
-                <label>Note (optional)</label>
-                <input class="note" type="text" name="note" maxlength="255" placeholder="reason / campaign">
+                <label><?php echo ADM_NOTE_OPTIONAL; ?></label>
+                <input class="note" type="text" name="note" maxlength="255" placeholder="<?php echo ADM_REASON_CAMPAIGN; ?>">
             </div>
-            <button type="submit">Create</button>
+            <button type="submit"><?php echo ADM_CREATE; ?></button>
         </form>
-        <div class="gs-hint">Codes are case-insensitive; allowed characters: A-Z 0-9 . _ &ndash;</div>
+        <div class="gs-hint"><?php echo ADM_CODES_ARE_CASE_INSENSITIVE_ALLOWED_CHARACTER; ?></div>
     </div>
 
     <div class="gs-card" style="padding:0;">
         <?php if (empty($codes)): ?>
-            <div class="gs-empty">No promo codes yet.</div>
+            <div class="gs-empty"><?php echo ADM_NO_PROMO_CODES_YET; ?></div>
         <?php else: ?>
             <div class="gs-scroll">
             <table class="gs-table">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Gold</th>
-                        <th>Uses</th>
-                        <th>Scope</th>
-                        <th>Expires</th>
-                        <th>Status</th>
-                        <th>Note</th>
+                        <th><?php echo ADM_CODE; ?></th>
+                        <th><?php echo ADMIN_GOLD; ?></th>
+                        <th><?php echo ADM_USES; ?></th>
+                        <th><?php echo ADM_SCOPE; ?></th>
+                        <th><?php echo ADM_EXPIRES; ?></th>
+                        <th><?php echo ADM_STATUS; ?></th>
+                        <th><?php echo ADM_NOTE; ?></th>
                         <th style="width:150px;"></th>
                     </tr>
                 </thead>
@@ -161,7 +155,7 @@ $msg     = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="do" value="delete">
                                     <input type="hidden" name="id" value="<?php echo (int)$cd['id']; ?>">
-                                    <button type="submit" class="b-del">Delete</button>
+                                    <button type="submit" class="b-del"><?php echo ADM_DELETE; ?></button>
                                 </form>
                             </div>
                         </td>
@@ -174,14 +168,14 @@ $msg     = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
     </div>
 
     <div class="gs-card">
-        <h3>Recent redemptions</h3>
+        <h3><?php echo ADM_RECENT_REDEMPTIONS; ?></h3>
         <?php if (empty($redeems)): ?>
-            <div class="gs-side-note">No redemptions yet.</div>
+            <div class="gs-side-note"><?php echo ADM_NO_REDEMPTIONS_YET; ?></div>
         <?php else: ?>
             <div class="gs-scroll">
             <table class="gs-table">
                 <thead>
-                    <tr><th>When</th><th>Player</th><th>Code</th><th>Gold</th></tr>
+                    <tr><th><?php echo ADM_WHEN; ?></th><th><?php echo ADM_PLAYER_2; ?></th><th><?php echo ADM_CODE; ?></th><th><?php echo ADMIN_GOLD; ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($redeems as $rd): ?>

@@ -67,7 +67,7 @@ if(isset($id)) {
 
 <div class="editAdd-wrap">
     <div class="editAdd-head">
-        <h2>⚙️ Edit Additional: <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></h2>
+        <h2><?php echo ADM_EDIT_ADDITIONAL; ?><a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></h2>
         <div class="uid">UID: <?php echo $id; ?> | Gold: <?php echo $user['gold']; ?> <img src="../img/admin/gold.gif" style="vertical-align:-2px;"></div>
     </div>
 
@@ -79,17 +79,17 @@ if(isset($id)) {
         <div class="grid-2">
             <!-- LEFT: ACCOUNT CONTROL -->
             <div class="card">
-                <h3>🔐 Account Control</h3>
+                <h3><?php echo ADM_ACCOUNT_CONTROL; ?></h3>
                 <div class="body">
                     <div class="form-row">
-                        <label>Access Level</label>
+                        <label><?php echo ADM_ACCESS_LEVEL; ?></label>
                         <div class="field">
                         <?php if($id != $_SESSION['id']) { ?>
                             <select name="access">
-                                <option value="0" <?php if($user['access']==0)echo'selected'; ?>>0 - Banned</option>
-                                <option value="2" <?php if($user['access']==2)echo'selected'; ?>>2 - Normal User</option>
-                                <option value="8" <?php if($user['access']==8)echo'selected'; ?>>8 - Multihunter</option>
-                                <option value="9" <?php if($user['access']==9)echo'selected'; ?>>9 - Admin</option>
+                                <option value="0" <?php if($user['access']==0)echo'selected'; ?>><?php echo ADM_0_BANNED; ?></option>
+                                <option value="2" <?php if($user['access']==2)echo'selected'; ?>><?php echo ADM_2_NORMAL_USER; ?></option>
+                                <option value="8" <?php if($user['access']==8)echo'selected'; ?>><?php echo ADM_8_MULTIHUNTER; ?></option>
+                                <option value="9" <?php if($user['access']==9)echo'selected'; ?>><?php echo ADM_9_ADMIN; ?></option>
                             </select>
                         <?php } else {
                             $names=[0=>'Banned',2=>'Normal',8=>'Multihunter',9=>'Admin'];
@@ -101,27 +101,27 @@ if(isset($id)) {
                     </div>
 	
 			<div class="form-row">
-				<label>🏖 Vacation Mode</label>
+				<label><?php echo ADM_VACATION_MODE_2; ?></label>
 				<div class="field">
 						<select name="vac_mode">
-							<option value="0" <?php if(!$user['vac_mode']) echo 'selected'; ?>>0 - Disabled</option>
-							<option value="1" <?php if($user['vac_mode']) echo 'selected'; ?>>1 - Enabled</option>
+							<option value="0" <?php if(!$user['vac_mode']) echo 'selected'; ?>><?php echo ADM_0_DISABLED; ?></option>
+							<option value="1" <?php if($user['vac_mode']) echo 'selected'; ?>><?php echo ADM_1_ENABLED; ?></option>
 						</select>
 					</div>
 			</div>
                     <div class="form-row">
-                        <label>💰 Gold</label>
+                        <label><?php echo ADM_GOLD; ?></label>
                         <div class="field input-icon">
                             <input type="number" name="gold" value="<?php echo (int)$user['gold']; ?>">
-                            <img src="../img/admin/gold.gif" alt="gold">
+                            <img src="../img/admin/gold.gif" alt="<?php echo ADM_GOLD_2; ?>">
                         </div>
                     </div>
 
                     <div class="form-row">
-                        <label>🛡️ Protection</label>
+                        <label><?php echo ADM_PROTECTION_2; ?></label>
                         <div class="field input-icon">
                             <input type="number" name="protect" value="<?php echo $protect; ?>" min="0" max="30">
-                            <span style="font-size:12px;color:#666;">zile</span>
+                            <span style="font-size:12px;color:#666;"><?php echo ADM_ZILE; ?></span>
                         </div>
                     </div>
                 </div>
@@ -129,17 +129,17 @@ if(isset($id)) {
 
             <!-- RIGHT: SITTERS -->
             <div class="card">
-                <h3>👥 Sitters</h3>
+                <h3><?php echo ADM_SITTERS; ?></h3>
                 <div class="body">
                     <div class="form-row">
-                        <label>Sitter 1 (UID)</label>
+                        <label><?php echo ADM_SITTER_1_UID; ?></label>
                         <div class="field">
                             <input type="number" name="sitter1" value="<?php echo (int)$user['sit1']; ?>">
                             <span class="sitter-link"><?php echo $sitter1 ? '→ <a href="admin.php?p=player&uid='.$sitter1['id'].'">'.htmlspecialchars($sitter1['username']).'</a>' : 'No Sitter'; ?></span>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label>Sitter 2 (UID)</label>
+                        <label><?php echo ADM_SITTER_2_UID; ?></label>
                         <div class="field">
                             <input type="number" name="sitter2" value="<?php echo (int)$user['sit2']; ?>">
                             <span class="sitter-link"><?php echo $sitter2 ? '→ <a href="admin.php?p=player&uid='.$sitter2['id'].'">'.htmlspecialchars($sitter2['username']).'</a>' : 'No Sitter'; ?></span>
@@ -151,22 +151,22 @@ if(isset($id)) {
 
         <!-- STATISTICS -->
         <div class="card">
-            <h3>📊 Statistics & Points</h3>
+            <h3><?php echo ADM_STATISTICS_POINTS; ?></h3>
             <div class="body">
                 <div class="grid-2">
-                    <div class="form-row"><label>🏛️ Culture Points</label><div class="field"><input type="number" name="cp" value="<?php echo round($user['cp']); ?>"></div></div>
-                    <div class="form-row"><label>⚔️ Attack Points</label><div class="field"><input type="number" name="off" value="<?php echo (int)$user['ap']; ?>"></div></div>
-                    <div class="form-row"><label>🛡️ Defence Points</label><div class="field"><input type="number" name="def" value="<?php echo (int)$user['dp']; ?>"></div></div>
-                    <div class="form-row"><label>💎 Resources Raided</label><div class="field"><input type="number" name="res" value="<?php echo (int)$user['RR']; ?>"></div></div>
-                    <div class="form-row"><label>⚔️ Total Attack</label><div class="field"><input type="number" name="ooff" value="<?php echo (int)$user['apall']; ?>"></div></div>
-                    <div class="form-row"><label>🛡️ Total Defence</label><div class="field"><input type="number" name="odef" value="<?php echo (int)$user['dpall']; ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_CULTURE_POINTS; ?></label><div class="field"><input type="number" name="cp" value="<?php echo round($user['cp']); ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_ATTACK_POINTS_2; ?></label><div class="field"><input type="number" name="off" value="<?php echo (int)$user['ap']; ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_DEFENCE_POINTS_2; ?></label><div class="field"><input type="number" name="def" value="<?php echo (int)$user['dp']; ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_RESOURCES_RAIDED; ?></label><div class="field"><input type="number" name="res" value="<?php echo (int)$user['RR']; ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_TOTAL_ATTACK; ?></label><div class="field"><input type="number" name="ooff" value="<?php echo (int)$user['apall']; ?>"></div></div>
+                    <div class="form-row"><label><?php echo ADM_TOTAL_DEFENCE; ?></label><div class="field"><input type="number" name="odef" value="<?php echo (int)$user['dpall']; ?>"></div></div>
                 </div>
             </div>
         </div>
 
         <div class="actions">
-            <a href="admin.php?p=player&uid=<?php echo $id; ?>" class="btn btn-back">← Back</a>
-            <button type="submit" name="save" class="btn btn-save">💾 Save Changes</button>
+            <a href="admin.php?p=player&uid=<?php echo $id; ?>" class="btn btn-back"><?php echo ADM_BACK; ?></a>
+            <button type="submit" name="save" class="btn btn-save"><?php echo ADM_SAVE_CHANGES_2; ?></button>
         </div>
     </form>
 </div>

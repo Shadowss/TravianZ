@@ -71,7 +71,7 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 
   <div class="sysmsg-head">
     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#8e44ad"/></svg>
-    <h2>System Message</h2>
+    <h2><?php echo ADMIN_SYSTEM_MESSAGE; ?></h2>
   </div>
 
   <div class="sysmsg-card">
@@ -79,8 +79,8 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 <?php if(isset($_GET['confirm'])): ?>
 
     <div class="sysmsg-confirm">
-        <b>Confirmare system message</b><br><br>
-        <b>Color:</b> <span style="color:<?=htmlspecialchars($_SESSION['sys_color'])?>">
+        <b><?php echo ADM_CONFIRMARE_SYSTEM_MESSAGE; ?></b><br><br>
+        <b><?php echo ADM_COLOR; ?></b> <span style="color:<?=htmlspecialchars($_SESSION['sys_color'])?>">
             <?=htmlspecialchars($_SESSION['sys_subject'])?>
         </span>
         <br><br>
@@ -92,14 +92,14 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
         <input type="hidden" name="admid" value="<?=$id?>">
         <input type="hidden" name="action" value="execute">
 
-        <button type="submit" name="confirm" value="Yes" style="background:#27ae60">✓ Send System Message</button>
-        <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px">Cancel</button>
+        <button type="submit" name="confirm" value="Yes" style="background:#27ae60"><?php echo ADM_SEND_SYSTEM_MESSAGE; ?></button>
+        <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px"><?php echo ADM_CANCEL; ?></button>
     </form>
 
 <?php elseif(isset($_GET['sending'])): ?>
 
     <div style="text-align:center;padding:30px">
-        <div style="font-size:16px;margin-bottom:10px">Sending system message...</div>
+        <div style="font-size:16px;margin-bottom:10px"><?php echo ADM_SENDING_SYSTEM_MESSAGE; ?></div>
     </div>
 
 <?php else: ?>
@@ -110,28 +110,28 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
         <input type="hidden" name="action" value="prepare">
 
         <div class="field">
-            <label>Subject</label>
+            <label><?php echo ADM_SUBJECT_2; ?></label>
             <input type="text" name="subject" required maxlength="100">
         </div>
 
         <div class="field">
-            <label>Color</label>
+            <label><?php echo ADM_COLOR_2; ?></label>
             <input type="text" name="color" value="black">
         </div>
 
         <div class="field full">
-            <label>Message</label>
+            <label><?php echo ADM_MESSAGE; ?></label>
             <textarea name="message" rows="12" required></textarea>
         </div>
 
-        <button type="submit">Continue</button>
+        <button type="submit"><?php echo ADM_CONTINUE; ?></button>
 
     </form>
 
 <?php endif; ?>
 
 <?php if(isset($_GET['done'])): ?>
-    <div class="sysmsg-success">✓ System message sent successfully</div>
+    <div class="sysmsg-success"><?php echo ADM_SYSTEM_MESSAGE_SENT_SUCCESSFULLY; ?></div>
 <?php endif; ?>
 
   </div>
