@@ -112,7 +112,7 @@ if(defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') && NEW_FUNCTIONS_SPECIAL_MEDAL
 
     $uid = (int)$displayarray['id'];
     $username = htmlspecialchars($displayarray['username'], ENT_QUOTES);
-    $tribeMap = [1=>'Romans',2=>'Teutons',3=>'Gauls'];
+    $tribeMap = [1=>'Romans',2=>'Teutons',3=>'Gauls',6=>'Huns',7=>'Egipteans',8=>'Spartans',9=>'Vikings'];
     $tribeName = $tribeMap[$displayarray['tribe']??0]?? 'Unknown';
 
     // luam WW real
