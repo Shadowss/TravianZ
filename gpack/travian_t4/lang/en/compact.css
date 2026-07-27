@@ -1,8 +1,17 @@
-body {
-    background-color: #FFFFFF;
-    direction: ltr;
-    margin: 0;
-    text-align: left;
+BODY
+{
+COLOR: #6495ED; /* 1 */
+font-size:10pt;
+font-weight:light; /*  2 */
+font-style:normal; /* 3 */
+background:#FFF;
+background:url(img/bg.gif); /* 4  */
+background-repeat:repeat; /* 5  */
+margin-top:0px;
+margin-bottom:0px;
+margin-left:0px;
+margin-right:0px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 img {
     border: 0 none;
@@ -15,7 +24,7 @@ h1 {
     margin-bottom: 8px;
 }
 p {
-    margin: 14px 0;
+    margin: 20px 0;
     padding: 0;
 }
 label {
@@ -46,6 +55,9 @@ div#content {
     min-height: 450px;
     overflow: hidden;
     position: relative;
+}
+div#content.reports, div#content.build {
+    overflow: auto;
 }
 div.universal {
     padding: 0 25px;
@@ -392,6 +404,28 @@ div#side_navi p.deltimer {
 div#side_navi p.deltimer a {
     padding: 0;
     text-align: center;
+}
+div#side_navi table {
+    background-color: #FFFFFF;
+    width: auto;
+    padding-left: 12px;
+}
+div#side_navi table td {
+    line-height: 18px;
+    padding: 0;
+    text-align: left;
+    white-space: nowrap;
+}
+div#side_navi table thead td {
+    background-color: #FFFFFF;
+    height: 22px;
+}
+div#side_navi td.dot {
+    padding: 0 6px;
+    width: 10px;
+}
+div#side_navi td.link {
+    padding-right: 10px;
 }
 div#side_info {
     float: left;
@@ -793,6 +827,11 @@ div.village2 div#village_map .d20 {
     top: 276px;
     z-index: 25;
 }
+div.village2 div#village_map .d40 {
+    left: 227px;
+    top: 180px;
+    z-index: 16;
+}
 div.village2 div#village_map .g40 {
     top: 138px;
 }
@@ -859,6 +898,10 @@ div.village2 div#village_map img.green {
 div.village2 div#village_map img.red {
     left: 328px;
     top: 210px;
+}
+div.village2 div#village_map img.dark {
+    left: 140px;
+    top: 75px;
 }
 div.village2 table#building_contract {
     margin: -40px 19px 0;
@@ -1011,6 +1054,14 @@ div#map div#map_coords span, div#map div#map_coords input {
     margin-right: 5px;
 }
 div#map div#map_coords input.text {
+    margin-right: 8px;
+    width: 28px;
+}
+div#qstd div#map_coords input.text {
+    margin-right: 8px;
+    width: 28px;
+}
+div#qstd input.text {
     margin-right: 8px;
     width: 28px;
 }
@@ -2487,9 +2538,17 @@ div.statistics div#submenu img {
     margin-left: 5px;
 }
 div.statistics div#submenu2 {
-    left: 29px;
-    position: absolute;
-    top: 107px;
+    position: static;
+    display: block;
+    margin: 6px 0 10px 29px;
+    padding: 0;
+    overflow: hidden;
+    line-height: 0;
+}
+div.statistics div#submenu2:after {
+    content: "";
+    display: block;
+    clear: both;
 }
 div.statistics div#submenu2 img {
     float: left;
@@ -3161,9 +3220,15 @@ td.cbg2 {
 .ddb {
     float: left;
 }
+.desc1div {
+    width: 236px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 .desc2div {
-    overflow: hidden;
     width: 235px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 div.activation_time {
     padding-left: 5px;
@@ -3435,13 +3500,13 @@ div.village1 table#movements td.empty {
 }
 div.village1 table#movements td.typ {
     vertical-align: top;
-    width: 32px;
+    width: 34px;
 }
 div.village1 table#movements td.typ img {
     float: left;
     margin: 0 1px 0 4px;
     position: relative;
-    top: 3px;
+    top: 1px;
 }
 div.village1 table#movements div.mov {
     float: left;
@@ -4914,6 +4979,17 @@ div#build.gid16 table.troop_details tbody.units td {
 div#build.gid16 table.troop_details tbody.infos th, div#build.gid16 table.troop_details tbody.infos td {
     background-color: #F3F3F3;
 }
+div#build.gid16 table.troop_details tbody.goods td {
+    padding: 2px;
+    width: 7.2%;
+}
+div#build.gid16 table.troop_details tbody.goods div.res {
+    text-align: left;
+    white-space: nowrap;
+}
+div#build.gid16 table.troop_details tbody.goods div.carry {
+    text-align: right;
+}
 div#build.gid16 table.troop_details div {
     float: left;
     text-align: center;
@@ -5888,6 +5964,16 @@ div#side_navi p.deltimer a {
 div#side_navi p.deltimer a span {
     color: #FF8000;
 }
+div#side_navi table thead td a {
+    color: black;
+    font-weight: bold;
+}
+div#side_navi table tbody td {
+    font-size: 11px;
+}
+div#side_navi td.link {
+    font-size: 13px;
+}
 div#side_info h6 {
     color: #FF8000;
     font-size: 13px;
@@ -6337,6 +6423,9 @@ div#build.gid16 table#raidList thead a {
     color: black;
     font-weight: normal;
 }
+div#build.gid16 table#raidList input.text{
+    width: 75px;
+}
 div.map table#raidFavs thead a {
     color: black;
     font-weight: normal;
@@ -6612,6 +6701,65 @@ img.r4 {
 img.r5 {
     background-position: -84px 0;
 }
+img.r100,
+img.r200,
+img.r300,
+img.r400,
+img.r500,
+img.r600,
+img.r700,
+img.r800,
+img.r900,
+img.r1000,
+img.r1100 {
+  height: 21px;
+  width: 25px;
+  background-image: url(../../img/a/resNew2.png);
+}
+
+img.r100 {
+  background-position: 0px 0px;
+}
+
+img.r200 {
+  background-position: 0px -21px;
+}
+
+img.r300 {
+  background-position: 0px -42px;
+}
+
+img.r400 {
+  background-position: 0px -63px;
+}
+
+img.r500 {
+  background-position: 0px -84px;
+}
+
+img.r600 {
+  background-position: 0px -105px;
+}
+
+img.r700 {
+  background-position: 0px -126px;
+}
+
+img.r800 {
+  background-position: 0px -147px;
+}
+
+img.r900 {
+  background-position: 0px -168px;
+}
+
+img.r1000 {
+  background-position: 0px -189px;
+}
+
+img.r1100 {
+  background-position: 0px -210px;
+}
 img.attack_symbol_grey, img.attack_symbol_green, img.attack_symbol_yellow, img.attack_symbol_red {
     background-image: url("../../img/a/mark_attack.gif");
     height: 12px;
@@ -6653,42 +6801,52 @@ img.u41, img.u42, img.u43, img.u44, img.u45, img.u46, img.u47, img.u48, img.u49,
     background-image: url("../../img/u/v5_natars2.gif");
 }
 img.u51, img.u52, img.u53, img.u54, img.u55, img.u56, img.u57, img.u58, img.u59, img.u60 {
-    background-image: url("../../img/u/v6_monsters2.gif");
+    background-image: url("../../img/u/v6_huns2.gif");
 }
+img.u61, img.u62, img.u63, img.u64, img.u65, img.u66, img.u67, img.u68, img.u69, img.u70 {
+    background-image: url("../../img/u/v7_egyptians2.gif");
+}
+img.u71, img.u72, img.u73, img.u74, img.u75, img.u76, img.u77, img.u78, img.u79, img.u80 {
+    background-image: url("../../img/u/v8_spartans2.gif");
+}
+img.u81, img.u82, img.u83, img.u84, img.u85, img.u86, img.u87, img.u88, img.u89, img.u90 {
+    background-image: url("../../img/u/v9_vikings2.gif");
+}
+
 img.uhab, img.ucata, img.ustock, img.uwall, img.ubarr, img.upal, img.ugeb, img.uhero, img.uunits, img.app {
     background-image: url("../../img/u/specials.gif");
 }
-img.u1, img.u11, img.u21, img.u31, img.u41, img.u51, img.uhab {
+img.u1, img.u11, img.u21, img.u31, img.u41, img.u51, img.u61, img.u71, img.u81, img.uhab {
     background-position: 0 0;
 }
-img.u2, img.u12, img.u22, img.u32, img.u42, img.u52, img.ucata {
+img.u2, img.u12, img.u22, img.u32, img.u42, img.u52, img.u62, img.u72, img.u82, img.ucata {
     background-position: -19px 0;
 }
-img.u3, img.u13, img.u23, img.u33, img.u43, img.u53, img.ustock {
+img.u3, img.u13, img.u23, img.u33, img.u43, img.u53, img.u63, img.u73, img.u83, img.ustock {
     background-position: -38px 0;
 }
-img.u4, img.u14, img.u24, img.u34, img.u44, img.u54, img.uwall {
+img.u4, img.u14, img.u24, img.u34, img.u44, img.u54, img.u64, img.u74, img.u84, img.uwall {
     background-position: -57px 0;
 }
-img.u5, img.u15, img.u25, img.u35, img.u45, img.u55, img.ubarr {
+img.u5, img.u15, img.u25, img.u35, img.u45, img.u55, img.u65, img.u75, img.u85, img.ubarr {
     background-position: -76px 0;
 }
-img.u6, img.u16, img.u26, img.u36, img.u46, img.u56, img.upal {
+img.u6, img.u16, img.u26, img.u36, img.u46, img.u56, img.u66, img.u76, img.u86, img.upal {
     background-position: -95px 0;
 }
-img.u7, img.u17, img.u27, img.u37, img.u47, img.u57, img.ugeb {
+img.u7, img.u17, img.u27, img.u37, img.u47, img.u57, img.u67, img.u77, img.u87, img.ugeb {
     background-position: -114px 0;
 }
-img.u8, img.u18, img.u28, img.u38, img.u48, img.u58, img.uhero {
+img.u8, img.u18, img.u28, img.u38, img.u48, img.u58, img.u68, img.u78, img.u88, img.uhero {
     background-position: -133px 0;
 }
-img.u9, img.u19, img.u29, img.u39, img.u49, img.u59, img.uunits {
+img.u9, img.u19, img.u29, img.u39, img.u49, img.u59, img.u69, img.u79, img.u89, img.uunits {
     background-position: -152px 0;
 }
 img.app {
     background-position: -170px 0;
 }
-img.u10, img.u20, img.u30, img.u40, img.u50, img.u60 {
+img.u10, img.u20, img.u30, img.u40, img.u50, img.u60, img.u70, img.u80, img.u90 {
     background-position: -171px 0;
 }
 img.u98 {
@@ -6711,6 +6869,18 @@ span.tribe2 {
 }
 span.tribe3 {
     background-image: url("../../img/u/29.gif");
+}
+span.tribe6 {
+    background-image: url("../../img/u/59.gif");
+}
+span.tribe7 {
+    background-image: url("../../img/u/69.gif");
+}
+span.tribe8 {
+    background-image: url("../../img/u/79.gif");
+}
+span.tribe9 {
+    background-image: url("../../img/u/89.gif");
 }
 img.att_all {
     background-image: url("../../img/a/att_all.gif");
@@ -6799,6 +6969,11 @@ div#map div#map_content div span.m6 {
 div#map div#map_content div span.m9 {
     background-image: url("../../img/m/mret.gif");
 }
+img.carry {
+    background: url("../../img/a/car.gif") no-repeat scroll 0 0 transparent;
+    height: 12px;
+    width: 18px;
+}
 img.iReport {
     background-image: url("../../img/a/report_icons.gif");
     height: 17px;
@@ -6872,6 +7047,7 @@ div#map a#map_makelarge img {
 }
 div#mbig a#map_popclose img {
     background-image: url("../../img/a/close.gif");
+    cursor: pointer;
     height: 22px;
     width: 22px;
 }
@@ -6894,6 +7070,30 @@ img.online4 {
 }
 img.online5 {
     background-position: -60px 0;
+}
+img.WWVillagesAnnouncement {
+    background-image: url("../../img/artefact/WWVillagesAnnouncement.gif");
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 196px;
+    height: 324px;
+}
+img.ArtefactsAnnouncement {
+    background-image: url("../../img/artefact/ArtifactsAnnouncement.gif");
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 378px;
+    height: 157px;
+}
+img.WWBuildingPlansAnnouncement{
+	background-image: url("../../img/artefact/type-1.gif");
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 551px;
+    height: 168px;
 }
 h1 img.point {
     background-image: url("../../img/u/point.gif");
@@ -7474,36 +7674,36 @@ div.forum table#topics td.last img.latest_reply {
     height: 9px;
     width: 18px;
 }
-div#build.gid27 table td.icon img {
+table td.icon img {
     background-image: url("../../img/misc/artefacts.gif");
     height: 16px;
     width: 16px;
 }
-div#build.gid27 table td.icon img.artefact_icon_ww {
+table td.icon img.artefact_icon_ww {
     background-position: 0 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_1 {
+table td.icon img.artefact_icon_1 {
     background-position: -16px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_2 {
+table td.icon img.artefact_icon_2 {
     background-position: -32px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_3 {
+table td.icon img.artefact_icon_3 {
     background-position: -48px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_4 {
+table td.icon img.artefact_icon_4 {
     background-position: -64px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_5 {
+table td.icon img.artefact_icon_5 {
     background-position: -80px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_6 {
+table td.icon img.artefact_icon_6 {
     background-position: -96px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_7 {
+table td.icon img.artefact_icon_7 {
     background-position: -112px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_8 {
+table td.icon img.artefact_icon_8 {
     background-position: -128px 0;
 }
 img.cropfinder_icon {
@@ -7514,42 +7714,34 @@ img.cropfinder_icon {
 div#build.gid27 div.artefact {
     background-position: center bottom;
     background-repeat: no-repeat;
+    padding-bottom: 170px;
 }
 div#build.gid27 div.artefact.image-1 {
     background-image: url("../../img/artefact/type-1.gif");
-    padding-bottom: 160px;
 }
 div#build.gid27 div.artefact.image-2 {
     background-image: url("../../img/artefact/type-2.gif");
-    padding-bottom: 223px;
 }
 div#build.gid27 div.artefact.image-4 {
     background-image: url("../../img/artefact/type-4.gif");
-    padding-bottom: 200px;
 }
 div#build.gid27 div.artefact.image-5 {
     background-image: url("../../img/artefact/type-5.gif");
-    padding-bottom: 157px;
 }
 div#build.gid27 div.artefact.image-6 {
     background-image: url("../../img/artefact/type-6.gif");
-    padding-bottom: 170px;
 }
 div#build.gid27 div.artefact.image-8 {
     background-image: url("../../img/artefact/type-8.gif");
-    padding-bottom: 160px;
 }
 div#build.gid27 div.artefact.image-9 {
     background-image: url("../../img/artefact/type-9.gif");
-    padding-bottom: 198px;
 }
 div#build.gid27 div.artefact.image-10 {
     background-image: url("../../img/artefact/type-10.gif");
-    padding-bottom: 161px;
 }
 div#build.gid27 div.artefact.image-fool {
     background-image: url("../../img/artefact/type-fool.gif");
-    padding-bottom: 252px;
 }
 div.forum table img.smiley, div.forum table#posts td.pcontent div.text img.smiley, div.messages img.smiley {
     background-image: url("../../img/f/smileys.gif");
@@ -7708,6 +7900,18 @@ div.statistics div#submenu2 img.btn_v2 {
 }
 div.statistics div#submenu2 img.btn_v3 {
     background-image: url("../../img/s/v3.gif");
+}
+div.statistics div#submenu2 img.btn_v6 {
+    background-image: url("../../img/s/v6.gif");
+}
+div.statistics div#submenu2 img.btn_v7 {
+    background-image: url("../../img/s/v7.gif");
+}
+div.statistics div#submenu2 img.btn_v8 {
+    background-image: url("../../img/s/v8.gif");
+}
+div.statistics div#submenu2 img.btn_v9 {
+    background-image: url("../../img/s/v9.gif");
 }
 div.forum img.switch_admin {
     background-image: url("../../img/f/switch_admin.gif");
@@ -8052,6 +8256,30 @@ div.quest div.wood {
     background-image: url("../../img/q/wood.jpg");
     height: 237px;
 }
+div.quest div.report {
+    background-image: url("../../img/q/report.jpg");
+    height: 179px;
+}
+div.quest div.gold {
+    background-image: url("../../img/q/gold.jpg");
+    height: 234px;
+}
+div.quest div.granary {
+    background-image: url("../../img/q/granary.jpg");
+    height: 179px;
+}
+div.quest div.embassy{
+    background-image: url("../../img/q/embassy.jpg");
+    height: 234px;
+}
+div.quest div.ally {
+    background-image: url("../../img/q/alliance.jpg");
+    height: 179px;
+}
+div.quest div.rally {
+    background-image: url("../../img/q/rally.jpg");
+    height: 242px;
+}
 a#n1 img, a#n2 img, a#n3 img, a#n4 img, div#n5 {
     background-position: 0 -21px;
     background-repeat: no-repeat;
@@ -8373,6 +8601,54 @@ img.g44 {
 img.g44b {
     background-image: url("../../img/g/g44b.gif");
 }
+img.g45 {
+    background-image: url("../../img/g/g45.gif");
+}
+img.g45b {
+    background-image: url("../../img/g/g45b.gif");
+}
+img.g46 {
+    background-image: url("../../img/g/g46.gif");
+}
+img.g46b {
+    background-image: url("../../img/g/g46b.gif");
+}
+img.g47 {
+    background-image: url("../../img/g/g47.gif");
+}
+img.g47b {
+    background-image: url("../../img/g/g47b.gif");
+}
+img.g48 {
+    background-image: url("../../img/g/g48.gif");
+}
+img.g48b {
+    background-image: url("../../img/g/g48b.gif");
+}
+img.g49 {
+    background-image: url("../../img/g/g49.gif");
+}
+img.g49b {
+    background-image: url("../../img/g/g49b.gif");
+}
+img.g50 {
+    background-image: url("../../img/g/g50.gif");
+}
+img.g50b {
+    background-image: url("../../img/g/g50b.gif");
+}
+img.g43 {
+    background-image: url("../../img/g/g43.gif");
+}
+img.g43b {
+    background-image: url("../../img/g/g43b.gif");
+}
+img.g44 {
+    background-image: url("../../img/g/g44.gif");
+}
+img.g44b {
+    background-image: url("../../img/g/g44b.gif");
+}
 div.village1 div.f1, div.map img.f1 {
     background-image: url("../../img/g/f1.jpg");
 }
@@ -8416,19 +8692,19 @@ div.village1 div#village_map img.level1, div.village1 div#village_map img.level2
     background-image: url("../../img/g/s/lvl1_10.gif");
 }
 div.village1 div#village_map img.level1_active,div.village1 div#village_map img.level2_active,div.village1 div#village_map img.level3_active,div.village1 div#village_map img.level4_active,div.village1 div#village_map img.level5_active,div.village1 div#village_map img.level6_active,div.village1 div#village_map img.level7_active,div.village1 div#village_map img.level8_active,div.village1 div#village_map img.level9_active,div.village1 div#village_map img.level10_active {
-    background-image: url("../../img/g/s/lvl1_10.gif");
+    background-image: url("../../img/g/s/lvl1_10_active.gif");
 }
 div.village1 div#village_map img.level11, div.village1 div#village_map img.level12, div.village1 div#village_map img.level13, div.village1 div#village_map img.level14, div.village1 div#village_map img.level15, div.village1 div#village_map img.level16, div.village1 div#village_map img.level17, div.village1 div#village_map img.level18, div.village1 div#village_map img.level19, div.village1 div#village_map img.level20 {
     background-image: url("../../img/g/s/lvl11_20.gif");
 }
 div.village1 div#village_map img.level11_active,div.village1 div#village_map img.level12_active,div.village1 div#village_map img.level13_active,div.village1 div#village_map img.level14_active,div.village1 div#village_map img.level15_active,div.village1 div#village_map img.level16_active,div.village1 div#village_map img.level17_active,div.village1 div#village_map img.level18_active,div.village1 div#village_map img.level19_active,div.village1 div#village_map img.level20_active {
-    background-image: url("../../img/g/s/lvl11_20.gif");
+    background-image: url("../../img/g/s/lvl11_20_active.gif");
 }
 div.village1 div#village_map img.level21, div.village1 div#village_map img.level22, div.village1 div#village_map img.level23, div.village1 div#village_map img.level24, div.village1 div#village_map img.level25 {
     background-image: url("../../img/g/s/lvl21_30.gif");
 }
 div.village1 div#village_map img.level21_active,div.village1 div#village_map img.level22_active,div.village1 div#village_map img.level23_active,div.village1 div#village_map img.level24_active,div.village1 div#village_map img.level25_active {
-    background-image: url("../../img/g/s/lvl21_30.gif");
+    background-image: url("../../img/g/s/lvl21_30_active.gif");
 }
 div.village1 div#village_map img.level1, div#village_map img.level1_active, div.village1 div#village_map img.level11, div.village1 div#village_map img.level11_active, div.village1 div#village_map img.level21, div.village1 div#village_map img.level21_active {
     background-position: 0 0;
@@ -8512,6 +8788,18 @@ div.village2 div.d2_11 {
 div.village2 div.d2_12 {
     background-image: url("../../img/g/bg12.jpg");
 }
+div.village2 div.d2_16 {
+    background-image: url("../../img/g/bg16.jpg");
+}
+div.village2 div.d2_17 {
+    background-image: url("../../img/g/bg17.jpg");
+}
+div.village2 div.d2_18 {
+    background-image: url("../../img/g/bg18.jpg");
+}
+div.village2 div.d2_19 {
+    background-image: url("../../img/g/bg19.jpg");
+}
 div.village2 div#village_map img.iso {
     background-image: url("../../img/g/iso.gif");
 }
@@ -8535,6 +8823,9 @@ div.village2 div#village_map img.green {
 }
 div.village2 div#village_map img.red {
     background-image: url("../../img/special/NewyearRocket_red_1a.gif");
+}
+div.village2 div#village_map img.dark {
+    background-image: url("../../img/special/NewyearRocket_dark_1a.gif");
 }
 div#map div#map_content div.b00 {
     background-image: url("../../img/m/d00.gif");
@@ -8871,6 +9162,126 @@ body.manual img.big_u29 {
 body.manual img.big_u30 {
     background-image: url("../../img/u2/u30.gif");
 }
+body.manual img.big_u51 {
+    background-image: url("../../img/u2/u51.gif");
+}
+body.manual img.big_u52 {
+    background-image: url("../../img/u2/u52.gif");
+}
+body.manual img.big_u53 {
+    background-image: url("../../img/u2/u53.gif");
+}
+body.manual img.big_u54 {
+    background-image: url("../../img/u2/u54.gif");
+}
+body.manual img.big_u55 {
+    background-image: url("../../img/u2/u55.gif");
+}
+body.manual img.big_u56 {
+    background-image: url("../../img/u2/u56.gif");
+}
+body.manual img.big_u57 {
+    background-image: url("../../img/u2/u57.gif");
+}
+body.manual img.big_u58 {
+    background-image: url("../../img/u2/u58.gif");
+}
+body.manual img.big_u59 {
+    background-image: url("../../img/u2/u59.gif");
+}
+body.manual img.big_u60 {
+    background-image: url("../../img/u2/u60.gif");
+}
+body.manual img.big_u61 {
+    background-image: url("../../img/u2/u61.gif");
+}
+body.manual img.big_u62 {
+    background-image: url("../../img/u2/u62.gif");
+}
+body.manual img.big_u63 {
+    background-image: url("../../img/u2/u63.gif");
+}
+body.manual img.big_u64 {
+    background-image: url("../../img/u2/u64.gif");
+}
+body.manual img.big_u65 {
+    background-image: url("../../img/u2/u65.gif");
+}
+body.manual img.big_u66 {
+    background-image: url("../../img/u2/u66.gif");
+}
+body.manual img.big_u67 {
+    background-image: url("../../img/u2/u67.gif");
+}
+body.manual img.big_u68 {
+    background-image: url("../../img/u2/u68.gif");
+}
+body.manual img.big_u69 {
+    background-image: url("../../img/u2/u69.gif");
+}
+body.manual img.big_u70 {
+    background-image: url("../../img/u2/u70.gif");
+}
+body.manual img.big_u71 {
+    background-image: url("../../img/u2/u71.gif");
+}
+body.manual img.big_u72 {
+    background-image: url("../../img/u2/u72.gif");
+}
+body.manual img.big_u73 {
+    background-image: url("../../img/u2/u73.gif");
+}
+body.manual img.big_u74 {
+    background-image: url("../../img/u2/u74.gif");
+}
+body.manual img.big_u75 {
+    background-image: url("../../img/u2/u75.gif");
+}
+body.manual img.big_u76 {
+    background-image: url("../../img/u2/u76.gif");
+}
+body.manual img.big_u77 {
+    background-image: url("../../img/u2/u77.gif");
+}
+body.manual img.big_u78 {
+    background-image: url("../../img/u2/u78.gif");
+}
+body.manual img.big_u79 {
+    background-image: url("../../img/u2/u79.gif");
+}
+body.manual img.big_u80 {
+    background-image: url("../../img/u2/u80.gif");
+}
+body.manual img.big_u81 {
+    background-image: url("../../img/u2/u81.gif");
+}
+body.manual img.big_u82 {
+    background-image: url("../../img/u2/u82.gif");
+}
+body.manual img.big_u83 {
+    background-image: url("../../img/u2/u83.gif");
+}
+body.manual img.big_u84 {
+    background-image: url("../../img/u2/u84.gif");
+}
+body.manual img.big_u85 {
+    background-image: url("../../img/u2/u85.gif");
+}
+body.manual img.big_u86 {
+    background-image: url("../../img/u2/u86.gif");
+}
+body.manual img.big_u87 {
+    background-image: url("../../img/u2/u87.gif");
+}
+body.manual img.big_u88 {
+    background-image: url("../../img/u2/u88.gif");
+}
+body.manual img.big_u89 {
+    background-image: url("../../img/u2/u89.gif");
+}
+body.manual img.big_u90 {
+    background-image: url("../../img/u2/u90.gif");
+}
 div.plus table#gold_features td.preview img {
     height: 150px;
     width: 150px;
@@ -9038,6 +9449,94 @@ input.cancel{width:12px;height:12px;background-image:url(../../img/a/del.gif);}
 input.accept{width:12px;height:12px;background-image:url(../../img/a/acc.gif);}
 
 #Frame {
-    top: 0;
+	top: 0;
     z-index: 1000;
+}
+
+.reports table {
+    width: auto;
+    min-width: 500px;
+}
+
+.vacationBox{
+    background:#f5f5f5;
+    border:1px solid #cfcfcf;
+    padding:20px;
+    border-radius:6px;
+}
+
+.vacationBox h2{
+    margin-top:0;
+    color:#333;
+}
+
+.vacationDesc{
+    background:#fff;
+    border:1px solid #ddd;
+    padding:12px;
+    margin-bottom:20px;
+    font-size:13px;
+}
+
+.vacationGrid{
+    display:flex;
+    gap:30px;
+    margin-bottom:20px;
+}
+
+.vacationColumn{
+    flex:1;
+}
+
+.vacationColumn h3{
+    margin-bottom:8px;
+    color:#444;
+}
+
+.vacList{
+    padding-left:18px;
+}
+
+.vacList li{
+    margin-bottom:5px;
+}
+
+.vacationActivate{
+    background:#fff;
+    border:1px solid #ddd;
+    padding:12px;
+    margin-top:10px;
+}
+
+.vacationActivate input[type=number]{
+    width:60px;
+    margin-left:10px;
+}
+
+.vacationButton{
+    text-align:center;
+    margin-top:15px;
+}
+/* Waterworks (Egipteni): bonusul efectiv al oazelor in 37_land */
+#oases td.res span.ww_base {
+    color: #999;
+    font-size: 10px;
+    text-decoration: line-through;
+}
+p.ww_summary {
+    margin: 6px 0 0 0;
+    padding: 5px 8px;
+    background: #f3f6ec;
+    border: 1px solid #d9e2c4;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #4a5a2a;
+}
+p.ww_summary img.building {
+    vertical-align: middle;
+    margin-right: 4px;
+}
+.error{
+    color:red;
+    margin-top:10px;
 }
