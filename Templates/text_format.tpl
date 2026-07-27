@@ -9,7 +9,7 @@
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##                                                                             ##
 ##  Incremental Refactor Notes:                                                ##
-##  - Preserved original placeholder logic (%TEKST%)                           ##
+##  - Preserved original placeholder logic (the message placeholder)          ##
 ##  - Improved BBCode parsing using str_replace                                ##
 ##  - Reduced repeated preg_replace calls                                      ##
 ##  - Added safety structure for PHP 7+                                        ##

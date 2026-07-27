@@ -266,7 +266,7 @@ $cronKeyMasked = ($cronKey === '')
 	<tr><td><?php echo ADM_T4_HERO_ITEMS_ADVENTURES_AUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_T4_HERO_ITEMS_ADVENTURES_AUCTION; ?></span></em></td><td><?php echo NEW_FUNCTIONS_HERO_T4 ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
 	<tr><td><?php echo ADM_REGISTRATION_BONUS_GOLD; ?><em class="tooltip">?<span class="classic"><?php echo ADM_GIVE_EVERY_NEWLY_REGISTERED_PLAYER_A_ONE_TIM; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
 	<tr><td><?php echo ADM_REGISTRATION_BONUS_GOLD_AMOUNT; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOW_MUCH_GOLD_EACH_NEW_PLAYER_RECEIVES_WHEN; ?></span></em></td><td><?php echo (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200); ?></td></tr>
-	<tr><td><?php echo ADM_ALLIANCE_BONUSES; ?> <em class="tooltip">?<span class="classic"><?php echo ADM_ALLIANCE_BONUSES_TIP; ?></span></em></td><td><b><?php echo (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></b></td></tr>
+	<tr><td><?php echo ADM_ALLIANCE_BONUSES; ?> <em class="tooltip">?<span class="classic"><?php echo ADM_ALLIANCE_BONUSES_TIP; ?></span></em></td><td><?php echo (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
   </table>
 </div>
 

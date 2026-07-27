@@ -245,7 +245,9 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
-                    <td class="b">Alliance bonuses (T4)</td>
+                    <td class="b"><?php echo ADM_ALLIANCE_BONUSES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ALLIANCE_BONUSES_TIP; ?></span></em>
+                    <?php if (!defined('NEW_FUNCTIONS_ALLIANCE_BONUSES')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;"><?php echo ADM_NOT_PRESENT_IN_CONFIG_PHP_YET_SAVING_THIS_FO; ?></span><?php endif; ?>
+                    </td>
                     <td>
                         <select name="alliance_bonuses">
                             <option value="true" <?php if (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) echo "selected"; ?>>True</option>

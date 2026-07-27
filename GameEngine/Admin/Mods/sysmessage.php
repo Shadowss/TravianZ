@@ -98,7 +98,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'execute') {
         die("Cannot read Templates/text_format.tpl");
     }
 
-    $out = str_replace('%TEKST%', $safe, $format);
+    // Inlocuim DOAR atribuirea reala, nu orice aparitie a marcajului.
+    //
+    // BUG REPARAT: text_format.tpl continea marcajul si intr-un comentariu din
+    // antetul de credite ("Preserved original placeholder logic (%TEKST%)").
+    // str_replace le lovea pe amandoua, deci mesajul ajungea si in mijlocul
+    // comentariului. Textul avea ghilimele si linii noi, care inchideau blocul
+    // de comentariu si rupeau fisierul - de aici "imi rupe jocul".
+    //
+    // Tiparul de mai jos prinde exact linia de atribuire, deci un marcaj ramas
+    // intr-un comentariu nu mai poate face rau.
+    $pattern = '/\$txt\s*=\s*"%TEKST%"\s*;/';
+    $out     = preg_replace($pattern, '$txt = "' . str_replace('$', '\\$', $safe) . '";', $format, 1, $count);
+
+    if ($out === null || $count !== 1) {
+        // Sablonul nu mai arata cum ne asteptam: mai bine oprim decat sa
+        // scriem un fisier stricat peste unul care functioneaza.
+        die("Cannot update Templates/text.tpl: the placeholder was not found exactly once in text_format.tpl");
+    }
 
     if (@file_put_contents($autoprefix . 'Templates/text.tpl', $out) === false) {
         die("Cannot write Templates/text.tpl (check permissions)");
