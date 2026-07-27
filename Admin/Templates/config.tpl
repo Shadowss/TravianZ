@@ -92,6 +92,26 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
     <tr><td><?php echo CONF_SERV_PEACESYST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_PEACESYST_TOOLTIP ?></span></em></td><td><?php echo (["None", "Normal", "Christmas", "New Year", "Easter"])[PEACE]; ?></td></tr>
     <tr><td><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td><td><?php echo GP_ENABLE ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td><?php echo CONF_SERV_ERRORREPORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ERRORREPORT_TOOLTIP ?></span></em></td><td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td></tr>
+	<tr>
+      <td>Server graphic pack <em class="tooltip">?<span class="classic">The graphic pack every player sees by default, read from the gpack/ folder.</span></em></td>
+      <td><b><?php echo defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/'; ?></b></td>
+    </tr>
+    <tr>
+      <td>Player graphic packs <em class="tooltip">?<span class="classic">When enabled, players can point their profile at their own graphic pack (Profile &rarr; Graphics). When disabled, everyone sees the server pack.</span></em></td>
+      <td><b><?php echo (defined('GP_ENABLE') && GP_ENABLE) ? 'Yes' : 'No'; ?></b></td>
+    </tr>
+    <tr>
+      <td><?php echo ADM_HERO_BASE_REGENERATION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HIT_POINTS_THE_HERO_RECOVERS_PER_DAY_INDEPEN; ?></span></em></td>
+      <td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b><?php echo ADM_HP_DAY; ?></td>
+    </tr>
+    <tr>
+      <td><?php echo ADM_HERO_EXCHANGE_RATES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_RATES_OF_THE_EXCHANGE_OFFICE_IN_THE_AUCTION; ?></span></em></td>
+      <td><?php echo ADM_1_GOLD; ?><b><?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?></b><?php echo ADM_SILVER_2; ?><b><?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?></b><?php echo ADM_SILVER_1_GOLD; ?></td>
+    </tr>
+    <tr>
+      <td><?php echo ADM_HERO_RESOURCE_PRODUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOURLY_RESOURCES_PRODUCED_BY_EACH_POINT_THE; ?></span></em></td>
+      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b> <?php echo ADM_OF_EACH; ?><b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b> <?php echo ADM_OF_ONE_TYPE; ?></td>
+    </tr>
   </table>
 </div>
 
@@ -220,18 +240,6 @@ $cronKeyMasked = ($cronKey === '')
 <div class="config-card">
   <div class="config-head"><span><?php echo ADM_NEW_MECHANICS_AND_FUNCTIONS; ?></span><a href="admin.php?p=editNewFunctions" title="<?php echo ADM_EDIT_NEW_MECHANICS_AND_FUNCTIONS; ?>" class="edit-btn"><?php echo $editIcon; ?></a></div>
   <table class="config-table">
-    <tr>
-      <td><?php echo ADM_HERO_BASE_REGENERATION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HIT_POINTS_THE_HERO_RECOVERS_PER_DAY_INDEPEN; ?></span></em></td>
-      <td><b><?php echo defined('HERO_BASE_REGEN') ? (int) HERO_BASE_REGEN : 10; ?></b><?php echo ADM_HP_DAY; ?></td>
-    </tr>
-    <tr>
-      <td><?php echo ADM_HERO_EXCHANGE_RATES; ?><em class="tooltip">?<span class="classic"><?php echo ADM_RATES_OF_THE_EXCHANGE_OFFICE_IN_THE_AUCTION; ?></span></em></td>
-      <td><?php echo ADM_1_GOLD; ?><b><?php echo defined('HERO_SILVER_PER_GOLD') ? (int) HERO_SILVER_PER_GOLD : 10; ?></b><?php echo ADM_SILVER_2; ?><b><?php echo defined('HERO_SILVER_TO_GOLD') ? (int) HERO_SILVER_TO_GOLD : 25; ?></b><?php echo ADM_SILVER_1_GOLD; ?></td>
-    </tr>
-    <tr>
-      <td><?php echo ADM_HERO_RESOURCE_PRODUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOURLY_RESOURCES_PRODUCED_BY_EACH_POINT_THE; ?></span></em></td>
-      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b><?php echo ADM_OF_EACH; ?><b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b><?php echo ADM_OF_ONE_TYPE; ?></td>
-    </tr>
     <tr><td class="b"><?php echo SERV_VARIABLE ?></td><td class="b"><?php echo SERV_VALUE ?></td></tr>
     <tr><td><?php echo ADM_DISPLAY_OASIS_IN_PROFILE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_THE_DISPLAY_OF_OASES_OF_EACH; ?></span></em></td><td><?php echo NEW_FUNCTIONS_OASIS ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td><?php echo ADM_ALLIANCE_INVITATION_MESSAGE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_SENDING_AN_IN_GAME_MESSAGE_TO; ?></span></em></td><td><?php echo NEW_FUNCTIONS_ALLIANCE_INVITATION ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>

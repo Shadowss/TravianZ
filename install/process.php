@@ -191,7 +191,17 @@ class Process {
 		$findReplace["%VILLAGE_EXPAND%"] = $_POST['village_expand'];
 		$findReplace["%ERRORREPORT%"] = $_POST['error'];
 		$findReplace["%ERROR%"] = $_POST['error'];
-		//$findReplace["%GP_LOCATE%"] = $_POST['gp_locate'];
+		// Pachetul grafic al serverului. Linia era comentata, deci %GP_LOCATE%
+		// ramanea neinlocuit in config.php. Validam ca directorul chiar exista si
+		// contine travian.css, altfel jocul ar porni fara stiluri.
+		$gpLocate = isset($_POST['gp_locate']) ? (string) $_POST['gp_locate'] : 'gpack/travian_default/';
+
+		if (!preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $gpLocate)
+			|| !is_file('../' . $gpLocate . 'travian.css')) {
+			$gpLocate = 'gpack/travian_default/';
+		}
+
+		$findReplace["%GP_LOCATE%"] = $gpLocate;
 		$findReplace["%PLUS_TIME%"] = $_POST['plus_time'];
 		$findReplace["%PLUS_PRODUCTION%"] = $_POST['plus_production'];
 		$findReplace["%PAYPAL_EMAIL%"] = $_POST['paypal-email'];

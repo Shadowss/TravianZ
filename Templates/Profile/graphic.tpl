@@ -200,35 +200,47 @@ if (isset($_GET["custom_url"])) {
 
     <tbody>
 
-        <tr>
-            <td class="nam"><?php echo TZ_TRAVIAN_DEFAULT; ?></td>
-            <td class="size">4</td>
-            <td class="act">
-                <a href="spieler.php?s=4&gp_type=custom&custom_url=gpack/travian_default/">
-                    Activate
-                </a>
-            </td>
-            <td class="down">
-                <a href="gpack/download/travian_default.zip" target="_blank">
-                    <?php echo TZ_DOWNLOAD; ?>
-                </a>
-            </td>
-        </tr>
+        <?php
+            // Lista pachetelor disponibile, citita din gpack/ - inainte erau doua
+            // intrari scrise de mana, deci orice pachet adaugat pe server nu
+            // aparea aici. Un director conteaza ca pachet daca are travian.css.
+            $gpHelper = __DIR__ . '/../../GameEngine/Admin/Mods/config_template.php';
 
+            if (!function_exists('tz_available_gpacks') && is_file($gpHelper)) {
+                include_once($gpHelper);
+            }
+
+            $gpPacks = function_exists('tz_available_gpacks')
+                ? tz_available_gpacks(__DIR__ . '/../../gpack')
+                : array('gpack/travian_default/' => 'Travian Default');
+
+            $gpActive = rtrim((string) $session->gpack, '/') . '/';
+
+            foreach ($gpPacks as $gpPath => $gpLabel) {
+                $gpIsActive = (rtrim($gpPath, '/') . '/') === $gpActive;
+                $gpZip      = 'gpack/download/' . basename(rtrim($gpPath, '/')) . '.zip';
+        ?>
         <tr>
-            <td class="nam"><?php echo TZ_TRAVIAN_T4_STYLE; ?></td>
+            <td class="nam"><?php echo htmlspecialchars($gpLabel, ENT_QUOTES, 'UTF-8'); ?></td>
             <td class="size">4</td>
             <td class="act">
-                <a href="spieler.php?s=4&gp_type=custom&custom_url=gpack/travian_t4/">
-                    Activate
-                </a>
+                <?php if ($gpIsActive) { ?>
+                    <b><?php echo defined('TZ_ACTIVE') ? TZ_ACTIVE : 'Active'; ?></b>
+                <?php } else { ?>
+                    <a href="spieler.php?s=4&amp;gp_type=custom&amp;custom_url=<?php echo urlencode($gpPath); ?>">
+                        <?php echo defined('ACTIVATE') ? ACTIVATE : 'Activate'; ?>
+                    </a>
+                <?php } ?>
             </td>
             <td class="down">
-                <a href="gpack/download/travian_default.zip" target="_blank">
-                    <?php echo TZ_DOWNLOAD; ?>
-                </a>
+                <?php if (is_file(__DIR__ . '/../../' . $gpZip)) { ?>
+                    <a href="<?php echo $gpZip; ?>" target="_blank"><?php echo TZ_DOWNLOAD; ?></a>
+                <?php } else { ?>
+                    &ndash;
+                <?php } ?>
             </td>
         </tr>
+        <?php } ?>
 
     </tbody>
 

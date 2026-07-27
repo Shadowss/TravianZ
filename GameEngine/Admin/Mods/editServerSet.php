@@ -98,16 +98,33 @@ if ($heroResAll > 10000) { $heroResAll = 10000; }
 if ($heroResOne < 0)     { $heroResOne = 0; }
 if ($heroResOne > 10000) { $heroResOne = 10000; }
 
+// Pachetul grafic al serverului. Acceptam doar un director care exista si
+// contine travian.css - altfel jocul ar ramane fara stiluri.
+$gpLocate = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
+
+if (isset($_POST['gp_locate'])) {
+    $gpAvailable = tz_available_gpacks();
+
+    if (isset($gpAvailable[$_POST['gp_locate']])) {
+        $gpLocate = $_POST['gp_locate'];
+    }
+}
+
+// Comutatorul "pachete grafice proprii" (campul 'gpack' din formular).
+$gpEnable = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
+
 $text = admin_config_template_contents(array(
+    '%GP%'                => $gpEnable,
+    '%GP_LOCATE%'         => $gpLocate,
     '%HEROBASEREGEN%'     => $heroBaseRegen,
     '%HEROSILVERPERGOLD%' => $silverPerGold,
     '%HEROSILVERTOGOLD%'  => $silverToGold,
     '%HERORESALL%'        => $heroResAll,
     '%HERORESONE%'        => $heroResOne,
 ));
-		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
-		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
-		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
+		tz_config_set($text, '%ERRORREPORT%', $_POST['error'] ?? '');
+		tz_config_set($text, '%ERROR%', $_POST['error'] ?? '', 'code');
+		tz_config_set($text, '%SERVERNAME%', $_POST['servername'] ?? '');
 		// Fusul orar se scrie intr-un fisier PHP (define("TIMEZONE","...")), deci
 		// valoarea NU are voie sa ajunga acolo nefiltrata: pana acum $_POST['tzone']
 		// era inserat ca atare, ceea ce permitea scrierea de cod in config.php.
@@ -124,9 +141,9 @@ $text = admin_config_template_contents(array(
 		}
 
 		$text = str_replace('%STIMEZONE%', $tzChosen, $text);
-		$text = preg_replace("'%STARTTIME%'", COMMENCE, $text);
-		$text = preg_replace("'%SSTARTDATE%'", START_DATE, $text);
-		$text = preg_replace("'%SSTARTTIME%'", START_TIME, $text);
+		tz_config_set($text, '%STARTTIME%', COMMENCE);
+		tz_config_set($text, '%SSTARTDATE%', START_DATE);
+		tz_config_set($text, '%SSTARTTIME%', START_TIME);
 		// FIX: limba selectata din formular era ignorata - se rescria mereu
 		// constanta deja incarcata, deci salvarea nu schimba nimic.
 		// Validam valoarea primita si verificam si ca fisierul de limba exista:
@@ -146,111 +163,109 @@ $text = admin_config_template_contents(array(
 
 		// str_replace, nu preg_replace: valoarea nu e o expresie regulata
 		$text = str_replace('%LANG%', $serverLang, $text);
-		$text = preg_replace("'%SPEED%'", $_POST['speed'], $text);
-		$text = preg_replace("'%MAX%'", WORLD_MAX, $text);
-		$text = preg_replace("'%GP%'", $_POST['gpack'], $text);
-		$text = preg_replace("'%GP_LOCATE%'", "gpack/travian_default/", $text);
-		$text = preg_replace("'%INCSPEED%'", $_POST['incspeed'], $text);
-		$text = preg_replace("'%EVASIONSPEED%'", $_POST['evasionspeed'], $text);
-		$text = preg_replace("'%TRADERCAP%'", $_POST['tradercap'], $text);
-		$text = preg_replace("'%CRANNYCAP%'", $_POST['crannycap'], $text);
-		$text = preg_replace("'%TRAPPERCAP%'", $_POST['trappercap'], $text);
-		$text = preg_replace("'%VILLAGE_EXPAND%'", $_POST['village_expand'], $text);
-		$text = preg_replace("'%DEMOLISH%'", $_POST['demolish'], $text);
-		$text = preg_replace("'%STORAGE_MULTIPLIER%'", $_POST['storage_multiplier'], $text);
-		$text = preg_replace("'%QUEST%'", $_POST['quest'], $text);
-		$text = preg_replace("'%QTYPE%'", $_POST['qtype'], $text);
-		$text = preg_replace("'%BEGINNER%'", $_POST['beginner'], $text);
-		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
-		$text = preg_replace("'%SHOW_NATARS%'", $_POST['show_natars'], $text);
-		$text = preg_replace("'%NATARS_UNITS%'", $_POST['natars_units'], $text);
-		$text = preg_replace("'%NATARS_SPAWN_TIME%'", $_POST['natars_spawn_time'], $text);
-		$text = preg_replace("'%NATARS_WW_SPAWN_TIME%'", $_POST['natars_ww_spawn_time'], $text);
-		$text = preg_replace("'%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%'", $_POST['natars_ww_building_plan_spawn_time'], $text);
-		$text = preg_replace("'%NATURE_REGTIME%'", $_POST['nature_regtime'], $text);
-		$text = preg_replace("'%OASIS_WOOD_MULTIPLIER%'", $_POST['oasis_wood_multiplier'], $text);
-		$text = preg_replace("'%OASIS_CLAY_MULTIPLIER%'", $_POST['oasis_clay_multiplier'], $text);
-		$text = preg_replace("'%OASIS_IRON_MULTIPLIER%'", $_POST['oasis_iron_multiplier'], $text);
-		$text = preg_replace("'%OASIS_CROP_MULTIPLIER%'", $_POST['oasis_crop_multiplier'], $text);
-		$text = preg_replace("'%T4_COMING%'", $T4, $text);
-		$text = preg_replace("'%ACTIVATE%'", $_POST['activate'], $text);
-		$text = preg_replace("'%MEDALINTERVAL%'", $_POST['medalinterval'], $text);
-		$text = preg_replace("'%GREAT_WKS%'", $_POST['great_wks'], $text);
-		$text = preg_replace("'%TS_THRESHOLD%'", $_POST['ts_threshold'], $text);
-		$text = preg_replace("'%REG_OPEN%'", $_POST['reg_open'], $text);
-		$text = preg_replace("'%PEACE%'", $_POST['peace'], $text);
-		$text = preg_replace("'%LOGBUILD%'", $LOG_BUILD, $text);
-		$text = preg_replace("'%LOGTECH%'", $LOG_TECH, $text);
-		$text = preg_replace("'%LOGLOGIN%'", $LOG_LOGIN, $text);
-		$text = preg_replace("'%LOGGOLDFIN%'", $LOG_GOLD_FIN, $text);
-		$text = preg_replace("'%LOGADMIN%'", $LOG_ADMIN, $text);
-		$text = preg_replace("'%LOGWAR%'", $LOG_WAR, $text);
-		$text = preg_replace("'%LOGMARKET%'", $LOG_MARKET, $text);
-		$text = preg_replace("'%LOGILLEGAL%'", $LOG_ILLEGAL, $text);
-		$text = preg_replace("'%BOX1%'", $NEWSBOX1, $text);
-		$text = preg_replace("'%BOX2%'", $NEWSBOX2, $text);
-		$text = preg_replace("'%BOX3%'", $NEWSBOX3, $text);
-		$text = preg_replace("'%SSERVER%'", SQL_SERVER, $text);
+		tz_config_set($text, '%SPEED%', $_POST['speed'] ?? '');
+		tz_config_set($text, '%MAX%', WORLD_MAX);
+		tz_config_set($text, '%INCSPEED%', $_POST['incspeed'] ?? '');
+		tz_config_set($text, '%EVASIONSPEED%', $_POST['evasionspeed'] ?? '');
+		tz_config_set($text, '%TRADERCAP%', $_POST['tradercap'] ?? '');
+		tz_config_set($text, '%CRANNYCAP%', $_POST['crannycap'] ?? '');
+		tz_config_set($text, '%TRAPPERCAP%', $_POST['trappercap'] ?? '');
+		tz_config_set($text, '%VILLAGE_EXPAND%', $_POST['village_expand'] ?? '');
+		tz_config_set($text, '%DEMOLISH%', $_POST['demolish'] ?? '');
+		tz_config_set($text, '%STORAGE_MULTIPLIER%', $_POST['storage_multiplier'] ?? '');
+		tz_config_set($text, '%QUEST%', $_POST['quest'] ?? '');
+		tz_config_set($text, '%QTYPE%', $_POST['qtype'] ?? '');
+		tz_config_set($text, '%BEGINNER%', $_POST['beginner'] ?? '');
+		tz_config_set($text, '%WW%', $_POST['ww'] ?? '');
+		tz_config_set($text, '%SHOW_NATARS%', $_POST['show_natars'] ?? '');
+		tz_config_set($text, '%NATARS_UNITS%', $_POST['natars_units'] ?? '');
+		tz_config_set($text, '%NATARS_SPAWN_TIME%', $_POST['natars_spawn_time'] ?? '');
+		tz_config_set($text, '%NATARS_WW_SPAWN_TIME%', $_POST['natars_ww_spawn_time'] ?? '');
+		tz_config_set($text, '%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%', $_POST['natars_ww_building_plan_spawn_time'] ?? '');
+		tz_config_set($text, '%NATURE_REGTIME%', $_POST['nature_regtime'] ?? '');
+		tz_config_set($text, '%OASIS_WOOD_MULTIPLIER%', $_POST['oasis_wood_multiplier'] ?? '');
+		tz_config_set($text, '%OASIS_CLAY_MULTIPLIER%', $_POST['oasis_clay_multiplier'] ?? '');
+		tz_config_set($text, '%OASIS_IRON_MULTIPLIER%', $_POST['oasis_iron_multiplier'] ?? '');
+		tz_config_set($text, '%OASIS_CROP_MULTIPLIER%', $_POST['oasis_crop_multiplier'] ?? '');
+		tz_config_set($text, '%T4_COMING%', $T4);
+		tz_config_set($text, '%ACTIVATE%', $_POST['activate'] ?? '');
+		tz_config_set($text, '%MEDALINTERVAL%', $_POST['medalinterval'] ?? '');
+		tz_config_set($text, '%GREAT_WKS%', $_POST['great_wks'] ?? '');
+		tz_config_set($text, '%TS_THRESHOLD%', $_POST['ts_threshold'] ?? '');
+		tz_config_set($text, '%REG_OPEN%', $_POST['reg_open'] ?? '');
+		tz_config_set($text, '%PEACE%', $_POST['peace'] ?? '');
+		tz_config_set($text, '%LOGBUILD%', $LOG_BUILD);
+		tz_config_set($text, '%LOGTECH%', $LOG_TECH);
+		tz_config_set($text, '%LOGLOGIN%', $LOG_LOGIN);
+		tz_config_set($text, '%LOGGOLDFIN%', $LOG_GOLD_FIN);
+		tz_config_set($text, '%LOGADMIN%', $LOG_ADMIN);
+		tz_config_set($text, '%LOGWAR%', $LOG_WAR);
+		tz_config_set($text, '%LOGMARKET%', $LOG_MARKET);
+		tz_config_set($text, '%LOGILLEGAL%', $LOG_ILLEGAL);
+		tz_config_set($text, '%BOX1%', $NEWSBOX1);
+		tz_config_set($text, '%BOX2%', $NEWSBOX2);
+		tz_config_set($text, '%BOX3%', $NEWSBOX3);
+		tz_config_set($text, '%SSERVER%', SQL_SERVER);
 		$text = str_replace("%SPORT%", SQL_PORT, $text);
-		$text = preg_replace("'%SUSER%'", SQL_USER, $text);
-		$text = preg_replace("'%SPASS%'", SQL_PASS, $text);
-		$text = preg_replace("'%SDB%'", SQL_DB, $text);
-		$text = preg_replace("'%PREFIX%'", TB_PREFIX, $text);
-		$text = preg_replace("'%CONNECTT%'", DB_TYPE, $text);
-		$text = preg_replace("'%LIMIT_MAILBOX%'", $LIMIT_MAILBOX, $text);
-		$text = preg_replace("'%MAX_MAILS%'", MAX_MAIL, $text);
-		$text = preg_replace("'%ARANK%'", $INCLUDE_ADMIN, $text);
-		$text = preg_replace("'%AEMAIL%'", ADMIN_EMAIL, $text);
-		$text = preg_replace("'%ASUPPMSGS%'", $SUPPORT_MSGS_IN_ADMIN, $text);
-		$text = preg_replace("'%ARAIDS%'", $ADMINS_RAIDABLE, $text);
-		$text = preg_replace("'%ANAME%'", ADMIN_NAME, $text);
-		$text = preg_replace("'%UTRACK%'", "", $text);
-		$text = preg_replace("'%UTOUT%'", "", $text);
-		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);
-		$text = preg_replace("'%HOMEPAGE%'", HOMEPAGE, $text);
-		$text = preg_replace("'%SERVER%'", SERVER, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_OASIS%'", $NEW_FUNCTIONS_OASIS, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_ALLIANCE_INVITATION%'", $NEW_FUNCTIONS_ALLIANCE_INVITATION, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_EMBASSY_MECHANICS%'", $NEW_FUNCTIONS_EMBASSY_MECHANICS, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_FORUM_POST_MESSAGE%'", $NEW_FUNCTIONS_FORUM_POST_MESSAGE, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_TRIBE_IMAGES%'", $NEW_FUNCTIONS_TRIBE_IMAGES, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MHS_IMAGES%'", $NEW_FUNCTIONS_MHS_IMAGES, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_ARTIFACT%'", $NEW_FUNCTIONS_DISPLAY_ARTIFACT, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_WONDER%'", $NEW_FUNCTIONS_DISPLAY_WONDER, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_VACATION%'", $NEW_FUNCTIONS_VACATION, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%'", $NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MANUAL_NATURENATARS%'", $NEW_FUNCTIONS_MANUAL_NATURENATARS, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_LINKS%'", $NEW_FUNCTIONS_DISPLAY_LINKS, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_3YEAR%'", $NEW_FUNCTIONS_MEDAL_3YEAR, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_5YEAR%'", $NEW_FUNCTIONS_MEDAL_5YEAR, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_10YEAR%'", $NEW_FUNCTIONS_MEDAL_10YEAR, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%'", $NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MILESTONES%'", $NEW_FUNCTIONS_MILESTONES, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_RESET%'", $NEW_FUNCTIONS_MEDAL_RESET, $text);
-		$text = preg_replace("'%NEW_FUNCTIONS_HERO_T4%'", $NEW_FUNCTIONS_HERO_T4, $text);
-		$text = preg_replace("'%NEW_FUNCTION_TRIBE_HUNS%'", $NEW_FUNCTION_TRIBE_HUNS, $text);
-		$text = preg_replace("'%NEW_FUNCTION_TRIBE_EGIPTEANS%'", $NEW_FUNCTION_TRIBE_EGIPTEANS, $text);
-		$text = preg_replace("'%NEW_FUNCTION_TRIBE_SPARTANS%'", $NEW_FUNCTION_TRIBE_SPARTANS, $text);
-		$text = preg_replace("'%NEW_FUNCTION_TRIBE_VIKINGS%'", $NEW_FUNCTION_TRIBE_VIKINGS, $text);
+		tz_config_set($text, '%SUSER%', SQL_USER);
+		tz_config_set($text, '%SPASS%', SQL_PASS);
+		tz_config_set($text, '%SDB%', SQL_DB);
+		tz_config_set($text, '%PREFIX%', TB_PREFIX);
+		tz_config_set($text, '%CONNECTT%', DB_TYPE);
+		tz_config_set($text, '%LIMIT_MAILBOX%', $LIMIT_MAILBOX);
+		tz_config_set($text, '%MAX_MAILS%', MAX_MAIL);
+		tz_config_set($text, '%ARANK%', $INCLUDE_ADMIN);
+		tz_config_set($text, '%AEMAIL%', ADMIN_EMAIL);
+		tz_config_set($text, '%ASUPPMSGS%', $SUPPORT_MSGS_IN_ADMIN);
+		tz_config_set($text, '%ARAIDS%', $ADMINS_RAIDABLE);
+		tz_config_set($text, '%ANAME%', ADMIN_NAME);
+		tz_config_set($text, '%UTRACK%', "");
+		tz_config_set($text, '%UTOUT%', "");
+		tz_config_set($text, '%DOMAIN%', DOMAIN);
+		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
+		tz_config_set($text, '%SERVER%', SERVER);
+		tz_config_set($text, '%NEW_FUNCTIONS_OASIS%', $NEW_FUNCTIONS_OASIS);
+		tz_config_set($text, '%NEW_FUNCTIONS_ALLIANCE_INVITATION%', $NEW_FUNCTIONS_ALLIANCE_INVITATION);
+		tz_config_set($text, '%NEW_FUNCTIONS_EMBASSY_MECHANICS%', $NEW_FUNCTIONS_EMBASSY_MECHANICS);
+		tz_config_set($text, '%NEW_FUNCTIONS_FORUM_POST_MESSAGE%', $NEW_FUNCTIONS_FORUM_POST_MESSAGE);
+		tz_config_set($text, '%NEW_FUNCTIONS_TRIBE_IMAGES%', $NEW_FUNCTIONS_TRIBE_IMAGES);
+		tz_config_set($text, '%NEW_FUNCTIONS_MHS_IMAGES%', $NEW_FUNCTIONS_MHS_IMAGES);
+		tz_config_set($text, '%NEW_FUNCTIONS_DISPLAY_ARTIFACT%', $NEW_FUNCTIONS_DISPLAY_ARTIFACT);
+		tz_config_set($text, '%NEW_FUNCTIONS_DISPLAY_WONDER%', $NEW_FUNCTIONS_DISPLAY_WONDER);
+		tz_config_set($text, '%NEW_FUNCTIONS_VACATION%', $NEW_FUNCTIONS_VACATION);
+		tz_config_set($text, '%NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%', $NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET);
+		tz_config_set($text, '%NEW_FUNCTIONS_MANUAL_NATURENATARS%', $NEW_FUNCTIONS_MANUAL_NATURENATARS);
+		tz_config_set($text, '%NEW_FUNCTIONS_DISPLAY_LINKS%', $NEW_FUNCTIONS_DISPLAY_LINKS);
+		tz_config_set($text, '%NEW_FUNCTIONS_MEDAL_3YEAR%', $NEW_FUNCTIONS_MEDAL_3YEAR);
+		tz_config_set($text, '%NEW_FUNCTIONS_MEDAL_5YEAR%', $NEW_FUNCTIONS_MEDAL_5YEAR);
+		tz_config_set($text, '%NEW_FUNCTIONS_MEDAL_10YEAR%', $NEW_FUNCTIONS_MEDAL_10YEAR);
+		tz_config_set($text, '%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%', $NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM);
+		tz_config_set($text, '%NEW_FUNCTIONS_MILESTONES%', $NEW_FUNCTIONS_MILESTONES);
+		tz_config_set($text, '%NEW_FUNCTIONS_MEDAL_RESET%', $NEW_FUNCTIONS_MEDAL_RESET);
+		tz_config_set($text, '%NEW_FUNCTIONS_HERO_T4%', $NEW_FUNCTIONS_HERO_T4);
+		tz_config_set($text, '%NEW_FUNCTION_TRIBE_HUNS%', $NEW_FUNCTION_TRIBE_HUNS);
+		tz_config_set($text, '%NEW_FUNCTION_TRIBE_EGIPTEANS%', $NEW_FUNCTION_TRIBE_EGIPTEANS);
+		tz_config_set($text, '%NEW_FUNCTION_TRIBE_SPARTANS%', $NEW_FUNCTION_TRIBE_SPARTANS);
+		tz_config_set($text, '%NEW_FUNCTION_TRIBE_VIKINGS%', $NEW_FUNCTION_TRIBE_VIKINGS);
 		// Preserve registration-bonus-gold settings (owned by editNewFunctions.php).
-		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD%'", (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD ? 'true' : 'false'), $text);
-		$text = preg_replace("'%NEW_FUNCTION_REGISTRATION_GOLD_VALUE%'", (string) (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200), $text);
+		tz_config_set($text, '%NEW_FUNCTION_REGISTRATION_GOLD%', (defined('NEW_FUNCTION_REGISTRATION_GOLD') && NEW_FUNCTION_REGISTRATION_GOLD ? 'true' : 'false'));
+		tz_config_set($text, '%NEW_FUNCTION_REGISTRATION_GOLD_VALUE%', (string) (defined('NEW_FUNCTION_REGISTRATION_GOLD_VALUE') ? (int) NEW_FUNCTION_REGISTRATION_GOLD_VALUE : 200));
 
 		// PLUS settings need to be kept intact
-		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);
-		$text = preg_replace("'%PLUS_PRODUCTION%'", PLUS_PRODUCTION, $text);
-		$text = preg_replace("'%PAYPAL_EMAIL%'", (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'), $text);
-		$text = preg_replace("'%PAYPAL_CURRENCY%'", (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_A_PRICE%'", (defined('PLUS_PACKAGE_A_PRICE') ? PLUS_PACKAGE_A_PRICE : '1,99'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_A_GOLD%'", (defined('PLUS_PACKAGE_A_GOLD') ? PLUS_PACKAGE_A_GOLD : '60'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_B_PRICE%'", (defined('PLUS_PACKAGE_B_PRICE') ? PLUS_PACKAGE_B_PRICE : '4,99'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_B_GOLD%'", (defined('PLUS_PACKAGE_B_GOLD') ? PLUS_PACKAGE_B_GOLD : '120'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_C_PRICE%'", (defined('PLUS_PACKAGE_C_PRICE') ? PLUS_PACKAGE_C_PRICE : '9,99'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_C_GOLD%'", (defined('PLUS_PACKAGE_C_GOLD') ? PLUS_PACKAGE_C_GOLD : '360'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_D_PRICE%'", (defined('PLUS_PACKAGE_D_PRICE') ? PLUS_PACKAGE_D_PRICE : '19,99'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_D_GOLD%'", (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : '1000'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_E_PRICE%'", (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99'), $text);
-		$text = preg_replace("'%PLUS_PACKAGE_E_GOLD%'", (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : '2000'), $text);
+		tz_config_set($text, '%PLUS_TIME%', PLUS_TIME);
+		tz_config_set($text, '%PLUS_PRODUCTION%', PLUS_PRODUCTION);
+		tz_config_set($text, '%PAYPAL_EMAIL%', (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'));
+		tz_config_set($text, '%PAYPAL_CURRENCY%', (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'));
+		tz_config_set($text, '%PLUS_PACKAGE_A_PRICE%', (defined('PLUS_PACKAGE_A_PRICE') ? PLUS_PACKAGE_A_PRICE : '1,99'));
+		tz_config_set($text, '%PLUS_PACKAGE_A_GOLD%', (defined('PLUS_PACKAGE_A_GOLD') ? PLUS_PACKAGE_A_GOLD : '60'));
+		tz_config_set($text, '%PLUS_PACKAGE_B_PRICE%', (defined('PLUS_PACKAGE_B_PRICE') ? PLUS_PACKAGE_B_PRICE : '4,99'));
+		tz_config_set($text, '%PLUS_PACKAGE_B_GOLD%', (defined('PLUS_PACKAGE_B_GOLD') ? PLUS_PACKAGE_B_GOLD : '120'));
+		tz_config_set($text, '%PLUS_PACKAGE_C_PRICE%', (defined('PLUS_PACKAGE_C_PRICE') ? PLUS_PACKAGE_C_PRICE : '9,99'));
+		tz_config_set($text, '%PLUS_PACKAGE_C_GOLD%', (defined('PLUS_PACKAGE_C_GOLD') ? PLUS_PACKAGE_C_GOLD : '360'));
+		tz_config_set($text, '%PLUS_PACKAGE_D_PRICE%', (defined('PLUS_PACKAGE_D_PRICE') ? PLUS_PACKAGE_D_PRICE : '19,99'));
+		tz_config_set($text, '%PLUS_PACKAGE_D_GOLD%', (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : '1000'));
+		tz_config_set($text, '%PLUS_PACKAGE_E_PRICE%', (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99'));
+		tz_config_set($text, '%PLUS_PACKAGE_E_GOLD%', (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : '2000'));
 
 		fwrite($fh, $text);
 		fclose($fh);

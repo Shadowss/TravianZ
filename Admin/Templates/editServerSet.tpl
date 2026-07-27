@@ -370,6 +370,33 @@ function refresh(tz) {
                     </td>
                 </tr>
                 <tr>
+                    <td class="b">Server graphic pack <em class="tooltip">?<span class="classic">The graphic pack every player sees by default. Packs are read from the gpack/ folder &mdash; a folder counts as a pack when it contains travian.css. Changing this switches the whole server's look.</span></em></td>
+                    <td>
+                        <select name="gp_locate">
+                        <?php
+                            $gpCurrent = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
+                            $gpList    = function_exists('tz_available_gpacks') ? tz_available_gpacks() : array();
+
+                            if (!$gpList) {
+                                $gpList = array($gpCurrent => $gpCurrent);
+                            }
+
+                            // pachetul din config poate lipsi de pe disc: il aratam oricum,
+                            // ca adminul sa vada ce e setat acum
+                            if (!isset($gpList[$gpCurrent])) {
+                                $gpList[$gpCurrent] = $gpCurrent . ' (?)';
+                            }
+
+                            foreach ($gpList as $gpPath => $gpLabel) {
+                                echo '<option value="' . htmlspecialchars($gpPath, ENT_QUOTES, 'UTF-8') . '"'
+                                   . ($gpCurrent === $gpPath ? ' selected' : '') . '>'
+                                   . htmlspecialchars($gpLabel, ENT_QUOTES, 'UTF-8') . '</option>';
+                            }
+                        ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="b"><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td>
                     <td>
                         <select name="gpack">

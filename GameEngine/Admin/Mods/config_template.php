@@ -1,4 +1,152 @@
 <?php
+
+/**
+ * Scrie in siguranta o valoare in sablonul de configuratie.
+ *
+ * DE CE EXISTA: pana acum fiecare modul facea direct
+ *     $text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
+ * adica lua valoarea din formular si o punea nefiltrata intr-un fisier PHP
+ * care se include la fiecare cerere. Consecinte reale:
+ *   - un nume de server cu ghilimele strica config.php (server oprit)
+ *   - o valoare potrivita executa cod PHP la fiecare pagina
+ *   - o constanta booleana pusa direct devenea sirul vid: define("X",);
+ *
+ * Aici valoarea e verificata dupa CONTEXTUL in care ajunge:
+ *   'bare'   - inlocuieste cod PHP nud: se accepta doar numere si true/false
+ *   'string' - ajunge intre ghilimele: se escapeaza si se taie randurile noi
+ *   'code'   - fragment de cod: doar dintr-o lista alba
+ *
+ * $type poate fi omis: se deduce din sablon (daca placeholderul e intre
+ * ghilimele => string, altfel => bare).
+ */
+if (!function_exists('tz_config_set')) {
+
+    function tz_config_detect_type($text, $placeholder)
+    {
+        $q = preg_quote($placeholder, '/');
+
+        // %X% intre ghilimele simple sau duble => context de sir
+        if (preg_match('/["\']\s*' . $q . '\s*["\']/', $text)) {
+            return 'string';
+        }
+
+        return 'bare';
+    }
+
+    function tz_config_sanitize($value, $type)
+    {
+        if ($type === 'bare') {
+            if (is_bool($value)) {
+                return $value ? 'true' : 'false';
+            }
+
+            $v = trim((string) $value);
+
+            // Booleeni. Formularele din panou trimit "True"/"False" cu majuscula
+            // (asa sunt scrise <option value="True">), iar instalarea trimite
+            // "true"/"false". Le acceptam pe toate si le normalizam la litere
+            // mici, care e forma canonica in PHP.
+            $lower = strtolower($v);
+
+            if ($lower === 'true' || $lower === 'false') {
+                return $lower;
+            }
+
+            // Numere simple.
+            if (preg_match('/^-?\d+(\.\d+)?$/', $v)) {
+                return $v;
+            }
+
+            // Expresii aritmetice din constante de timp, ca "(3600*24*7)" pentru
+            // intervalul de medalii. Le acceptam pentru ca sunt in config-ul
+            // livrat si sunt lizibile, dar STRICT: doar cifre, + - * / ( ) si
+            // spatii. Nimic care sa poata apela o functie sau citi o variabila.
+            if (preg_match('/^[0-9+\-*\/() ]+$/', $v) && preg_match('/[0-9]/', $v)) {
+                return $v;
+            }
+
+            // Orice altceva ar fi cod. Nu punem direct 0, fiindca o valoare ca
+            // SPEED=0 ar strica jocul; convertim la intreg, ceea ce pastreaza
+            // partea numerica de la inceput ("1); system(...)" -> 1) si e mereu
+            // un literal sigur.
+            return (string) (int) $v;
+        }
+
+        if ($type === 'code') {
+            $allowed = array(
+                'error_reporting (E_ALL ^ E_NOTICE);',
+                'error_reporting (E_ALL ^ E_NOTICE ^ E_DEPRECATED);',
+                'error_reporting (0);',
+            );
+
+            $v = trim((string) $value);
+
+            return in_array($v, $allowed, true) ? $v : 'error_reporting (0);';
+        }
+
+        // context de sir: scoatem randurile noi si caracterele de control, apoi
+        // escapam ce ar putea inchide sirul sau introduce interpolare
+        $v = (string) $value;
+        $v = preg_replace('/[\x00-\x1F\x7F]/', '', $v);
+
+        return addcslashes($v, "\\'\"$");
+    }
+
+    /**
+     * Inlocuieste un placeholder cu o valoare curatata.
+     * Se foloseste in locul apelurilor preg_replace directe din module.
+     */
+    function tz_config_set(&$text, $placeholder, $value, $type = null)
+    {
+        if (strpos($text, $placeholder) === false) {
+            return false;
+        }
+
+        if ($type === null) {
+            $type = tz_config_detect_type($text, $placeholder);
+        }
+
+        $text = str_replace($placeholder, tz_config_sanitize($value, $type), $text);
+
+        return true;
+    }
+}
+
+
+/**
+ * Pachetele grafice disponibile pe server.
+ *
+ * Un director din gpack/ conteaza ca pachet valid daca are travian.css - acelasi
+ * criteriu pe care il verifica si jocul cand incarca stilurile. Se intoarce o
+ * lista cale => nume afisabil, folosita atat de panoul de administrare, cat si de
+ * pagina de profil a jucatorului.
+ */
+if (!function_exists('tz_available_gpacks')) {
+    function tz_available_gpacks($root = null)
+    {
+        $root = $root ?: dirname(__DIR__, 3) . '/gpack';
+        $out  = array();
+
+        if (!is_dir($root)) {
+            return $out;
+        }
+
+        foreach (scandir($root) as $dir) {
+            if ($dir === '.' || $dir === '..' || $dir === 'download') {
+                continue;
+            }
+
+            if (!is_dir($root . '/' . $dir) || !is_file($root . '/' . $dir . '/travian.css')) {
+                continue;
+            }
+
+            $label = ucwords(str_replace('_', ' ', $dir));
+            $out['gpack/' . $dir . '/'] = $label;
+        }
+
+        return $out;
+    }
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -108,6 +256,32 @@ if (!function_exists('admin_config_template_path')) {
             if (strpos($text, $ovPlaceholder) !== false) {
                 $text = str_replace($ovPlaceholder, (string) $ovValue, $text);
             }
+        }
+
+        // Pachetul grafic si comutatorul de pachete proprii.
+        //
+        // ATENTIE LA ORDINE: acest bloc trebuie sa ruleze DUPA bucla de
+        // override-uri de mai sus. Rulat inainte, ar inlocui %GP% cu valoarea
+        // CURENTA din config, iar override-ul trimis de editServerSet (alegerea
+        // adminului) nu ar mai avea ce inlocui - deci comutatorul parea ca se
+        // intoarce singur pe Disabled la fiecare salvare.
+        //
+        // Rolul blocului e doar de REZERVA, pentru modulele care nu trimit
+        // aceste valori (editNewFunctions, editPlusSet etc.): ele trebuie sa
+        // pastreze setarea existenta, nu s-o piarda.
+        //
+        // Valoarea se scrie explicit ca 'true'/'false'. Inainte, trei module
+        // puneau direct constanta GP_ENABLE in preg_replace; cand era false,
+        // PHP o convertea la sirul vid si in config ajungea
+        // define("GP_ENABLE",); - eroare de parsare care dobora serverul.
+        if (strpos($text, '%GP%') !== false) {
+            $gpEnable = (defined('GP_ENABLE') && GP_ENABLE) ? 'true' : 'false';
+            $text = str_replace('%GP%', $gpEnable, $text);
+        }
+
+        if (strpos($text, '%GP_LOCATE%') !== false) {
+            $gpLocate = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
+            $text = str_replace('%GP_LOCATE%', $gpLocate, $text);
         }
 
         foreach ($cleanupDefaults as $placeholder => $info) {
