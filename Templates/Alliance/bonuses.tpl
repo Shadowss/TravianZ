@@ -11,6 +11,28 @@ if (!class_exists('AllianceBonus')) {
     include_once('GameEngine/AllianceBonus.php');
 }
 
+// -------------------------------------------------
+// ID-UL ALIANTEI SI DATELE EI
+// -------------------------------------------------
+// Fiecare pagina de alianta si le incarca singura (vezi chat.tpl, option.tpl),
+// pentru ca allianz.php nu le pune la dispozitie global.
+if (!isset($aid)) {
+    $aid = (int) $session->alliance;
+}
+
+$allianceinfo = $database->getAlliance($aid);
+
+// Titlul si bara de taburi, exact ca in celelalte pagini de alianta.
+// Fara ele, intrarea pe tabul de bonusuri facea sa dispara navigatia si nu
+// mai aveai cum sa te intorci la Overview.
+echo "<h1>"
+    . htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8')
+    . " - "
+    . htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8')
+    . "</h1>";
+
+include("alli_menu.tpl");
+
 $abEngine  = new AllianceBonus();
 $abMessage = '';
 $abError   = false;
@@ -67,7 +89,7 @@ if (isset($_POST['ab_donate'])) {
 }
 
 /* ------------------------------------------------------------------ stare */
-$abAid     = (int) $session->alliance;
+$abAid     = $aid;
 $abState   = $abEngine->getState($abAid);
 $abHighest = $abEngine->highestLevel($abAid);
 $abLimit   = AllianceBonus::dailyLimit($abHighest);
@@ -84,10 +106,12 @@ $abGpack   = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
 .ab-msg.err{border-color:#e0b4b4;background:#fdeaea;color:#a33}
 .ab-grid{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:10px}
 .ab-card{flex:1 1 250px;border:1px solid #c9c9c9;background:#f2f2f2;padding:8px}
-.ab-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ab-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
 .ab-head img{width:44px;height:44px}
 .ab-name{font-weight:bold;color:#333}
 .ab-lvl{color:#666;font-size:11px}
+/* descrierea sta in dreapta numelui si ocupa spatiul ramas */
+.ab-desc{flex:1;color:#666;font-size:11px;line-height:1.35;padding-left:4px}
 .ab-eff{color:#1f7a1f;font-weight:bold}
 .ab-bar{background:#fff;border:1px solid #c9c9c9;height:13px;overflow:hidden;margin:4px 0}
 .ab-bar i{display:block;height:100%;background:#7db72f}
@@ -135,6 +159,12 @@ $abGpack   = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
                     &nbsp;<span class="ab-eff">+<?php echo (int) AllianceBonus::percentFor($abT, $abLevel); ?>%</span>
                 </span>
             </span>
+            <span class="ab-desc"><?php
+                // descrierea bonusului, langa nume si nivel
+                $abDescKey = strtoupper($abInfo['key']) . '_DESC';
+                $abDescKey = 'ALLYBONUS_' . $abDescKey;
+                echo defined($abDescKey) ? constant($abDescKey) : '';
+            ?></span>
         </div>
 
         <?php if ($abLevel >= AllianceBonus::MAX_LEVEL) { ?>
