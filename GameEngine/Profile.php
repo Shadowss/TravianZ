@@ -269,10 +269,28 @@ class Profile {
 	private function gpack($post) {
 		global $database, $session;
 
+		$chosen = trim((string) $post['custom_url']);
+
+		// Acceptam doar pachete locale reale: "gpack/<nume>/" cu travian.css pe
+		// disc. Fara verificare, o cale gresita (sau trimisa manual) ar lasa
+		// jucatorul cu o pagina fara stiluri, din care nu mai poate reveni.
+		$isLocalPack = (bool) preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $chosen)
+			&& is_file(__DIR__ . '/../' . $chosen . 'travian.css');
+
+		// Sirul gol inseamna "inapoi la pachetul serverului" si e mereu permis.
+		if ($chosen !== '' && !$isLocalPack) {
+			header("Location: spieler.php?s=4");
+			exit;
+		}
+
 		$database->gpack(
 			$database->RemoveXSS($session->uid),
-			$database->RemoveXSS($post['custom_url'])
+			$database->RemoveXSS($chosen)
 		);
+
+		// Sesiunea trebuie sa reflecte imediat alegerea: config.php citeste de
+		// acolo, iar fara asta pachetul nou s-ar aplica abia dupa o relogare.
+		$_SESSION['gpack'] = $chosen;
 
 		// Invalidate the 30s session user-cache (see Session::PopulateVar) so the
 		// new graphics pack applies immediately, without a re-login.

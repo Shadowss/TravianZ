@@ -47,7 +47,8 @@ $CROP_TABLE = $TBP . 'croppers';
 $WDATA = $TBP . 'wdata';
 
 // Build an absolute-safe asset prefix for CSS/JS
-$assetBase = $session->gpack ?: GP_LOCATE;
+// GP_LOCATE contine deja pachetul efectiv (vezi config.php).
+$assetBase = GP_LOCATE;
 $assetBase = '/'.ltrim($assetBase, '/');
 
 // CSRF
@@ -180,15 +181,11 @@ $worldLabel = worldSizeLabel();
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
 	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<?php
-	if($session->gpack == null || GP_ENABLE == false) {
+	// GP_LOCATE contine deja pachetul efectiv: alegerea jucatorului cand
+	// e permisa si valida, altfel pachetul serverului (vezi config.php).
 	echo "
 	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
 	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	} else {
-	echo "
-	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	}
 	?>
 
 	<script language="javascript" type="text/javascript">
@@ -210,15 +207,10 @@ $worldLabel = worldSizeLabel();
 		window.addEvent('domready', start);
 	</script>
 		<?php
-	if($session->gpack == null || GP_ENABLE == false) {
+	// GP_LOCATE contine deja pachetul efectiv (vezi config.php).
 	echo "
 	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
 	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	} else {
-	echo "
-	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	}
 	?>
 	<script type="text/javascript">
 	window.addEvent('domready', start);

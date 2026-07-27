@@ -11,7 +11,7 @@ This repository currently targets modern local/server setups with PHP 8.x and Ma
 
 Project Status
 
-* Version: v10 Full Refactor
+* Version: v11 Full Refactor
 * PHP 8.3+ compatible
 * Actively maintained
 * Suitable for production servers

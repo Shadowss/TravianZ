@@ -40,6 +40,11 @@ include_once("../GameEngine/config.php");
 include_once("../GameEngine/Database.php");
 include_once("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
+
+// Helperul care descopera pachetele grafice din gpack/ (tz_available_gpacks).
+// Sabloanele panoului il folosesc pentru selectorul de pachet; fara acest
+// include, functia nu exista la randare si lista arata doar pachetul curent.
+include_once("../GameEngine/Admin/Mods/config_template.php");
 include_once("../GameEngine/Data/buidata.php");
 include_once("../GameEngine/Artifacts.php");
 include_once("../GameEngine/MultiAccount.php");

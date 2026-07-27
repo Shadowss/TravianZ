@@ -426,6 +426,13 @@ function __construct() {
         $this->uid = $_SESSION['id_user'] = $this->userarray['id'];
 
         $this->gpack = $this->userarray['gpack'];
+
+        // Pachetul grafic ales de jucator ajunge in sesiune, exact ca limba de
+        // mai sus: config.php se incarca INAINTE de a exista o conexiune la baza
+        // de date, deci singurul mod de a-i spune ce pachet vrea jucatorul este
+        // prin sesiune. Fara asta, GP_LOCATE ramanea mereu pachetul serverului,
+        // oricat de des si-l schimba jucatorul din profil.
+        $_SESSION['gpack'] = (string) $this->userarray['gpack'];
         $this->access = $this->userarray['access'];
         $this->plus = ($this->userarray['plus'] > $this->time);
         $this->goldclub = $this->userarray['goldclub'];

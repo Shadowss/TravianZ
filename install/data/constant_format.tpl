@@ -25,37 +25,29 @@ define('AUTOMATION_LOCK_FILE_NAME', 'automation.lck');
 //////////////////////////////////
 // *****  CRON / AUTOMATION *****//
 //////////////////////////////////
+// Automation ruleaza din cron.php (cron job pe server), nu din paginile
+// jucatorilor. Vezi comentariile din cron.php pentru instalarea cron job-ului.
 //
-// Automation runs from cron.php (a server cron job), not from player page
-// requests. See the comments in cron.php for cron job installation instructions.
-//
-// CRON_LOOP_SECONDS = how long a single cron.php invocation runs.
-//   Many hosting providers do not allow cron jobs to run more frequently than
-//   every 5 minutes, while Automation is designed to run approximately every
-//   60 seconds. For this reason, a single invocation executes multiple ticks
-//   in sequence.
-//   300 = suitable for a "*/5 * * * *" cron schedule.
-//   Set to 0 if your hosting provider allows a cron job every minute
-//   (in that case, each invocation executes only a single tick).
-//
-// CRON_TICK_SECONDS = the interval, in seconds, between each tick within a
-// single cron.php invocation.
+// CRON_LOOP_SECONDS = cat timp tine o invocare de cron.php.
+//   Multe hosturi nu permit cron mai des de 5 minute, iar Automation vrea sa
+//   ruleze la ~60s. De aceea o invocare ruleaza mai multe tick-uri la rand.
+//   300 = potrivit pentru un cron "*/5 * * * *". Pune 0 daca hostul tau permite
+//   cron la fiecare minut (atunci o invocare = un singur tick).
+// CRON_TICK_SECONDS = la cat timp se repeta un tick in interiorul invocarii.
 define('CRON_LOOP_SECONDS', %CRONLOOP%);
 define('CRON_TICK_SECONDS', %CRONTICK%);
 
-// Key used to access cron.php via HTTP (wget/curl or an external cron service).
-// Command-line execution (e.g. a cPanel cron job) does NOT require it.
-// Automatically generated during installation and preserved when saving configuration settings from the ACP.
+// Cheie pentru apelarea cron.php prin HTTP (wget/curl sau un serviciu extern de
+// cron). Rularea din linia de comanda (cron job cPanel) NU are nevoie de ea.
+// Generata automat la instalare; pastrata la salvarile de configuratie din ACP.
 define('CRON_KEY', '%CRONKEY%');
 
 //////////////////////////////////
 // *****  DATABASE CLEANUP  *****//
 //////////////////////////////////
-//
-// Tables that grow indefinitely (reports, chat, deleted messages) are cleaned
-// up periodically by Automation. Set each rule to 0 to disable it individually.
-//
-// Reports archived by players are never deleted.
+// Tabelele care cresc nelimitat (rapoarte, chat, mesaje sterse) sunt curatate
+// periodic de Automation. 0 = dezactivat pentru fiecare regula in parte.
+// Rapoartele ARHIVATE de jucator nu se sterg niciodata.
 define('CLEANUP_REPORTS_DAYS', %CLEANUPREPORTS%);
 define('CLEANUP_CHAT_DAYS', %CLEANUPCHAT%);
 define('CLEANUP_MESSAGES_DAYS', %CLEANUPMESSAGES%);
@@ -63,36 +55,26 @@ define('CLEANUP_INTERVAL', 3600);
 define('CLEANUP_BATCH', 5000);
 
 //////////////////////////////////
-// *****       HERO        *****//
+// *****       EROU        *****//
 //////////////////////////////////
-//
-// The hero's BASE health regeneration, in HP per day, independent of the
-// points invested in the Regeneration attribute (as in Travian T4).
-// Without this, a hero with 0 points in Regeneration would never recover
-// health and would eventually die after enough adventures.
-//
-// It scales with the server speed, just like regeneration from attributes.
-// Set to 0 to disable it (legacy behavior).
+// Regenerarea de BAZA a vietii eroului, in HP pe zi, independenta de punctele
+// puse in atributul de regenerare (ca in Travian T4). Fara ea, un erou cu 0
+// puncte in regenerare nu si-ar reface niciodata viata si ar muri inevitabil
+// dupa destule aventuri. Se scaleaza cu viteza serverului, ca si regenerarea
+// din atribute. 0 = dezactivata (comportamentul vechi).
 define('HERO_BASE_REGEN', %HEROBASEREGEN%);
 
-// Auction House exchange rates:
-//
-//   HERO_SILVER_PER_GOLD = how much silver you receive for 1 gold
-//   HERO_SILVER_TO_GOLD  = how much silver it costs to buy 1 gold
-//
-// The difference between the two rates is the Auction House margin
-// (just like in Travian: 1 gold → 10 silver, but 25 silver → 1 gold).
+// Ratele casei de schimb din casa de licitatii:
+//   HERO_SILVER_PER_GOLD = cat argint primesti pentru 1 aur
+//   HERO_SILVER_TO_GOLD  = cat argint costa 1 aur la schimbul invers
+// Diferenta dintre ele este marja casei (ca in Travian: 1 aur -> 10 argint,
+// dar 25 argint -> 1 aur).
 define('HERO_SILVER_PER_GOLD', %HEROSILVERPERGOLD%);
 define('HERO_SILVER_TO_GOLD', %HEROSILVERTOGOLD%);
 
-// Hero "Resources" attribute (T4): how many resources each attribute point
-// produces per hour.
-//
-//   ALL = when the bonus is distributed equally across all four resources
-//         (default: 3 of each resource)
-//
-//   ONE = when the bonus is concentrated on a single resource
-//         (default: 10)
+// Atributul de erou "Resources" (T4): cate resurse produce un punct pe ora.
+//   ALL = cand bonusul e raspandit egal pe toate patru (implicit 3 din fiecare)
+//   ONE = cand e concentrat pe o singura resursa (implicit 10)
 define('HERO_RES_PER_POINT_ALL', %HERORESALL%);
 define('HERO_RES_PER_POINT_ONE', %HERORESONE%);
 
@@ -145,11 +127,32 @@ define("SPEED", "%SPEED%");
 define("WORLD_MAX", "%MAX%");
 
 // ***** Graphic Pack
-// true = enabled, false = disabled
-//!!!!!!!!!!!! DO NOT ENABLE !!!!!!!!!!!!
+//
+// SERVER_GP is the pack every player sees by default (chosen at install or in
+// Admin -> Server Configuration). GP_ENABLE decides whether players may pick a
+// different pack for themselves in Profile -> Graphic Pack.
+//
+// GP_LOCATE is the pack ACTUALLY used for the current request. It follows the
+// same pattern as LANG above: the player's own choice wins when it is enabled
+// and points at a real pack on disk, otherwise the server pack is used. A pack
+// counts as real when the folder exists and contains travian.css, so a stale
+// value in the database can never leave the game without stylesheets.
 define("GP_ENABLE",%GP%);
-// Graphic pack location (default: gpack/travian_default/)
-define("GP_LOCATE", "%GP_LOCATE%");
+define("SERVER_GP", "%GP_LOCATE%");
+
+$__user_gp = '';
+
+if (GP_ENABLE && isset($_SESSION['gpack']) && is_string($_SESSION['gpack'])) {
+    $__candidate = trim((string) $_SESSION['gpack']);
+
+    // only local packs: "gpack/<name>/" with no traversal and no remote URL
+    if (preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $__candidate)
+        && is_file(__DIR__ . "/../" . $__candidate . "travian.css")) {
+        $__user_gp = $__candidate;
+    }
+}
+
+define("GP_LOCATE", $__user_gp !== '' ? $__user_gp : SERVER_GP);
 
 // ***** Troop Speed
 // Values: 1 (normal), 3 (3x speed) etc...

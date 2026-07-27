@@ -214,7 +214,12 @@ if (isset($_GET["custom_url"])) {
                 ? tz_available_gpacks(__DIR__ . '/../../gpack')
                 : array('gpack/travian_default/' => 'Travian Default');
 
-            $gpActive = rtrim((string) $session->gpack, '/') . '/';
+            // Pachetul marcat ca activ e cel EFECTIV folosit acum. Cand
+            // GP_ENABLE e false, alegerea din baza de date e ignorata de joc,
+            // deci ar fi inselator sa aratam altceva decat pachetul serverului.
+            $gpActive = (defined('GP_ENABLE') && GP_ENABLE && $session->gpack)
+                ? rtrim((string) $session->gpack, '/') . '/'
+                : (defined('SERVER_GP') ? SERVER_GP : GP_LOCATE);
 
             foreach ($gpPacks as $gpPath => $gpLabel) {
                 $gpIsActive = (rtrim($gpPath, '/') . '/') === $gpActive;

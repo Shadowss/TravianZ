@@ -312,6 +312,10 @@ foreach($mechs as $k => $l){
     <div><label>Hero base regeneration (HP/day)</label><input class="input" name="hero_base_regen" id="hero_base_regen" value="10"></div>
     <div><label>Silver received per 1 gold</label><input class="input" name="hero_silver_per_gold" id="hero_silver_per_gold" value="10"></div>
     <div><label>Silver needed for 1 gold</label><input class="input" name="hero_silver_to_gold" id="hero_silver_to_gold" value="25"></div>
+    <div><label>Allow player graphic packs</label><select class="input" name="gpack">
+        <option value="false" selected>No &ndash; everyone sees the server pack</option>
+        <option value="true">Yes &ndash; players may pick their own in Profile</option>
+    </select></div>
     <div><label>Graphic pack</label><select class="input" name="gp_locate">
         <option value="gpack/travian_default/" selected>Travian Default (classic T3.6 look)</option>
         <option value="gpack/travian_t4/">Travian T4 (T4-styled artwork)</option>

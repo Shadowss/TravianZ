@@ -14,9 +14,8 @@
 // -------------------------------------------------
 // GPACK (unchanged logic, cleaner)
 // -------------------------------------------------
-$gpack = ($session->gpack == null || GP_ENABLE == false)
-    ? GP_LOCATE
-    : $session->gpack;
+// GP_LOCATE contine deja pachetul efectiv (vezi config.php).
+$gpack = GP_LOCATE;
 
 // -------------------------------------------------
 // PROFILE SHORTCODES (UNCHANGED LOGIC)

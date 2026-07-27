@@ -110,7 +110,7 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
     </tr>
     <tr>
       <td><?php echo ADM_HERO_RESOURCE_PRODUCTION; ?><em class="tooltip">?<span class="classic"><?php echo ADM_HOURLY_RESOURCES_PRODUCED_BY_EACH_POINT_THE; ?></span></em></td>
-      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b> <?php echo ADM_OF_EACH; ?><b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b> <?php echo ADM_OF_ONE_TYPE; ?></td>
+      <td><b><?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?></b><?php echo ADM_OF_EACH; ?><b><?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?></b><?php echo ADM_OF_ONE_TYPE; ?></td>
     </tr>
   </table>
 </div>

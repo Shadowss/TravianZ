@@ -79,7 +79,9 @@ class Process {
 		//$findReplace["%AUTOD%"] = $_POST['autodel'];
 		//$findReplace["%AUTODT%"] = $_POST['autodeltime'];
 		$findReplace["%MAX%"] = $_POST['wmax'];
-		//$findReplace["%GP%"] = $_POST['gpack'];
+		// Comutatorul de pachete grafice proprii. Linia era comentata, deci %GP%
+		// ramanea neinlocuit in config.php si constanta nu se definea deloc.
+		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];
 		$findReplace["%SUSER%"] = $_POST['suser'];
