@@ -353,6 +353,33 @@ function __construct() {
             exit;
         }
 
+        // Constantele de miscare pentru aventuri sunt definite in
+        // Data/hero_items.php, care se incarca doar la nevoie (din HeroItems,
+        // HeroAdventure etc.). Sesiunea poate rula inaintea lor, asa ca luam
+        // valorile cu rezerva in loc sa presupunem ca exista.
+        $advOut  = defined('MOVEMENT_ADVENTURE_OUT')  ? (int) MOVEMENT_ADVENTURE_OUT  : 20;
+        $advBack = defined('MOVEMENT_ADVENTURE_BACK') ? (int) MOVEMENT_ADVENTURE_BACK : 21;
+
+        // Partea de aventuri se adauga DOAR cu functiile T4 pornite: pe un
+        // server care nu a rulat migrarea, tabela hero_adventure nu exista, iar
+        // o interogare esuata ar face herocount null - adica exact efectul pe
+        // care il reparam aici (eroul declarat disparut si ucis).
+        $adventureTerms = '';
+
+        if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
+            $adventureTerms = '
+                +
+                IFNULL((SELECT COUNT(*) FROM ' . TB_PREFIX . 'movement
+                    WHERE ' . TB_PREFIX . 'movement.proc = 0
+                    AND ((' . TB_PREFIX . 'movement.sort_type = ' . $advOut . '
+                          AND ' . TB_PREFIX . 'movement.`from` IN(' . $villageIDs . '))
+                      OR (' . TB_PREFIX . 'movement.sort_type = ' . $advBack . '
+                          AND ' . TB_PREFIX . 'movement.`to` IN(' . $villageIDs . ')))), 0)
+                +
+                IFNULL((SELECT COUNT(*) FROM ' . TB_PREFIX . 'hero_adventure
+                    WHERE uid = ' . (int) $this->uid . ' AND status = 1), 0)';
+        }
+
         $q = '
             SELECT
                 IFNULL((SELECT SUM(hero) FROM ' . TB_PREFIX . 'enforcement WHERE `from` IN(' . $villageIDs . ')), 0) +
@@ -367,7 +394,7 @@ function __construct() {
                     WHERE ' . TB_PREFIX . 'movement.`to` IN(' . $villageIDs . ')
                     AND ' . TB_PREFIX . 'movement.ref = ' . TB_PREFIX . 'attacks.id
                     AND ' . TB_PREFIX . 'movement.proc = 0
-                    AND ' . TB_PREFIX . 'movement.sort_type = 4), 0)
+                    AND ' . TB_PREFIX . 'movement.sort_type = 4), 0)' . $adventureTerms . '
                 AS herocount';
 
         $heroUnitRegisters = mysqli_fetch_array(
