@@ -4180,3 +4180,11 @@ tz_def('ADM_PLAYER_GRAPHIC_PACKS', 'Packs graphiques des joueurs');
 tz_def('ADM_PLAYER_GRAPHIC_PACKS_TIP', 'Si activé, les joueurs peuvent choisir leur propre pack graphique depuis leur profil (Profil &rarr; Graphismes). Si désactivé, tout le monde voit le pack du serveur.');
 tz_def('ADM_ALLIANCE_BONUSES', 'Bonus d\'alliance');
 tz_def('ADM_ALLIANCE_BONUSES_TIP', 'Bonus d\'alliance T4 : les membres donnent des ressources pour débloquer Recrutement, Philosophie, Métallurgie et Commerce.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - descrierile fiecarui bonus
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Accélère l\'entraînement des troupes dans tous les bâtiments qui en produisent. Se multiplie avec les casques du héros.');
+tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Augmente la production de points de culture des bâtiments et des casques du héros. Les fêtes de l\'hôtel de ville ne sont pas affectées.');
+tz_def('ALLYBONUS_METALLURGY_DESC', 'Augmente la force d\'attaque et de défense de vos troupes, en plus des améliorations de la forge.');
+tz_def('ALLYBONUS_COMMERCE_DESC', 'Augmente la capacité de charge de chaque marchand. Se multiplie avec le bureau de commerce.');

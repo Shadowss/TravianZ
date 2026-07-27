@@ -4237,3 +4237,11 @@ tz_def('ADM_PLAYER_GRAPHIC_PACKS', 'Player graphic packs');
 tz_def('ADM_PLAYER_GRAPHIC_PACKS_TIP', 'When enabled, players can point their profile at their own graphic pack (Profile &rarr; Graphics). When disabled, everyone sees the server pack.');
 tz_def('ADM_ALLIANCE_BONUSES', 'Alliance bonuses');
 tz_def('ADM_ALLIANCE_BONUSES_TIP', 'T4 alliance bonuses: members donate resources to unlock Recruitment, Philosophy, Metallurgy and Commerce.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - descrierile fiecarui bonus
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Speeds up troop training in every troop-producing building. Multiplies with hero helmets.');
+tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Increases culture point production from buildings and hero helmets. Town hall celebrations are not affected.');
+tz_def('ALLYBONUS_METALLURGY_DESC', 'Increases the offensive and defensive strength of your troops, on top of your smithy upgrades.');
+tz_def('ALLYBONUS_COMMERCE_DESC', 'Increases how much each merchant can carry. Multiplies with the trade office.');

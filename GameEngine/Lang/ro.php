@@ -3977,3 +3977,11 @@ tz_def('ADM_PLAYER_GRAPHIC_PACKS', 'Pachete grafice ale jucatorilor');
 tz_def('ADM_PLAYER_GRAPHIC_PACKS_TIP', 'Daca e activat, jucatorii isi pot alege propriul pachet grafic din profil (Profil &rarr; Grafica). Daca e dezactivat, toata lumea vede pachetul serverului.');
 tz_def('ADM_ALLIANCE_BONUSES', 'Bonusuri de alianta');
 tz_def('ADM_ALLIANCE_BONUSES_TIP', 'Bonusuri de alianta T4: membrii doneaza resurse ca sa deblocheze Recrutare, Filosofie, Metalurgie si Comert.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - descrierile fiecarui bonus
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Grabeste instruirea trupelor in toate cladirile care produc trupe. Se inmulteste cu coifurile eroului.');
+tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Creste productia de puncte de cultura de la cladiri si de la coifurile eroului. Serbarile din primarie nu sunt afectate.');
+tz_def('ALLYBONUS_METALLURGY_DESC', 'Creste forta de atac si de aparare a trupelor, peste imbunatatirile din fierarie.');
+tz_def('ALLYBONUS_COMMERCE_DESC', 'Creste cat poate cara fiecare negustor. Se inmulteste cu biroul comercial.');
