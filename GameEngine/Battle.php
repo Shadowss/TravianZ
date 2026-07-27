@@ -1097,6 +1097,33 @@ class Battle {
         }
     }
 
+    // Bonusul de alianta "Metallurgy": forta trupelor creste peste
+    // upgrade-urile de fierarie, care sunt deja aplicate mai sus pe fiecare
+    // unitate. Se inmulteste cu ele, nu se aduna - la fel ca in T4.
+    //
+    // Se aplica pe toate cele patru totaluri, ca sa acopere si atacul, si
+    // apararea: aceeasi functie calculeaza ambele parti, in functie de rolul
+    // jucatorului in lupta.
+    if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
+        $metalOwner = 0;
+
+        if (isset($Attacker) && (int) $Attacker > 0) {
+            global $database;
+            $metalOwner = (int) $database->getVillageField((int) $Attacker, 'owner');
+        }
+
+        if ($metalOwner > 0) {
+            $metalMult = AllianceBonus::multiplier($metalOwner, AllianceBonus::METALLURGY);
+
+            if ($metalMult > 1.0) {
+                $ap  *= $metalMult;
+                $cap *= $metalMult;
+                $dp  *= $metalMult;
+                $cdp *= $metalMult;
+            }
+        }
+    }
+
     return [
         'ap'        => $ap,
         'cap'       => $cap,

@@ -220,6 +220,15 @@ $userPermissions = $database->getAlliPermissions($session->uid, $session->allian
 				case 6:
 					include("Templates/Alliance/chat.tpl");
 					break;
+				case 7:
+					// Bonusuri de alianta (port T4). Cu functia oprita tabul nu apare
+					// in meniu, dar cineva ar putea ajunge aici direct pe URL.
+					if (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) {
+						include("Templates/Alliance/bonuses.tpl");
+					} else {
+						include("Templates/Alliance/overview.tpl");
+					}
+					break;
 				case 1:
 				default:
 					include("Templates/Alliance/overview.tpl");

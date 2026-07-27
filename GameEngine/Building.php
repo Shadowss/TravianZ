@@ -1644,6 +1644,18 @@ class Building {
         $cpTot += self::buildingCP($building, $lvl);
     }
 
+    // Bonusul de alianta "Philosophy": mai multe puncte de cultura.
+    // Se aplica peste CP-ul dat de cladiri (si, prin acesta, peste coifurile
+    // eroului, care se adauga separat). Serbarile din primarie NU sunt
+    // afectate - ele nu trec pe aici, se acorda direct la finalizare.
+    if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
+        $cpOwner = (int) $database->getVillageField($vid, 'owner');
+
+        if ($cpOwner > 0) {
+            $cpTot = (int) round($cpTot * AllianceBonus::multiplier($cpOwner, AllianceBonus::PHILOSOPHY));
+        }
+    }
+
     mysqli_query(
         $database->dblink,
         "

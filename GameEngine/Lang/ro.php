@@ -3940,3 +3940,40 @@ tz_def('ADM_THE_7_DAY_BALANCE_FILLS_IN_AS_MERCHANT_DELIV', 'Bilantul pe 7 zile s
 tz_def('ADM_EDIT_THE_REWARD_EACH_QUEST_GRANTS_WOOD_CLAY', 'Editeaza recompensa acordata de fiecare misiune (lemn / lut / fier / cereale / aur / zile de Plus) si nivelul necesar (de ex. nivelul cladirii principale pentru misiunile de constructie). Valorile pornesc de la cele implicite livrate, deci nu se schimba nimic pana nu editezi. Cele doua variante de misiuni au misiuni si recompense diferite &mdash; alege-o pe cea folosita de serverul tau (jucatorii pe');
 tz_def('ADM_IN_THE_QUEST_TEMPLATES_QUESTS_MARKED', 'in sabloanele de misiuni. Misiunile marcate');
 tz_def('ADM_KEEP_THEIR_ORIGINAL_HARDCODED_LOGIC_CONDITIO', 'isi pastreaza logica originala scrisa in cod (recompense conditionate, revendicari atomice de etape, mecanici speciale) si nu sunt afectate de modificarile de aici. Sumele afisate in textul fiecarei misiuni sunt siruri separate de sablon &mdash; modificarile de aici schimba ce se acorda efectiv; actualizeaza sirurile de limba daca vrei ca previzualizarea sa corespunda.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA (port T4)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_TAB', 'Bonusuri');
+tz_def('ALLYBONUS_RECRUITMENT', 'Recrutare');
+tz_def('ALLYBONUS_PHILOSOPHY', 'Filosofie');
+tz_def('ALLYBONUS_METALLURGY', 'Metalurgie');
+tz_def('ALLYBONUS_COMMERCE', 'Comert');
+tz_def('ALLYBONUS_LEVEL', 'Nivel');
+tz_def('ALLYBONUS_NEXT', 'urmator');
+tz_def('ALLYBONUS_MAXED', 'Deblocat complet');
+tz_def('ALLYBONUS_UNLOCKING', 'Se deblocheaza nivelul');
+tz_def('ALLYBONUS_DONATE', 'Doneaza');
+tz_def('ALLYBONUS_TRIPLE', 'Tripleaza aceasta donatie');
+tz_def('ALLYBONUS_DAILY_LEFT', 'Cat mai poti dona azi');
+tz_def('ALLYBONUS_CONTRIBUTORS', 'Contributii');
+tz_def('ALLYBONUS_MEMBER', 'Membru');
+tz_def('ALLYBONUS_TOTAL', 'Donat');
+tz_def('ALLYBONUS_MSG_OK', 'Resurse donate.');
+tz_def('ALLYBONUS_MSG_UPGRADING', 'Acest bonus se deblocheaza acum; donatiile sunt oprite.');
+tz_def('ALLYBONUS_MSG_LIMIT', 'Ai depasi plafonul zilnic de donatie.');
+tz_def('ALLYBONUS_MSG_RESOURCES', 'Nu ai destule resurse in acest sat.');
+tz_def('ALLYBONUS_MSG_NOGOLD', 'Nu ai destul aur ca sa triplezi donatia.');
+tz_def('ALLYBONUS_MSG_NOALLY', 'Nu esti intr-o alianta.');
+tz_def('ALLYBONUS_MSG_INVALID', 'Donatie invalida.');
+tz_def('ALLYBONUS_HINT', 'Tipul resursei nu conteaza, ci doar totalul. Cat timp un nivel se deblocheaza, bonusul acela nu mai primeste donatii.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// PANOU DE ADMINISTRARE - pachet grafic si bonusuri de alianta
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_SERVER_GRAPHIC_PACK', 'Pachetul grafic al serverului');
+tz_def('ADM_SERVER_GRAPHIC_PACK_TIP', 'Pachetul grafic pe care il vad implicit toti jucatorii, citit din folderul gpack/.');
+tz_def('ADM_PLAYER_GRAPHIC_PACKS', 'Pachete grafice ale jucatorilor');
+tz_def('ADM_PLAYER_GRAPHIC_PACKS_TIP', 'Daca e activat, jucatorii isi pot alege propriul pachet grafic din profil (Profil &rarr; Grafica). Daca e dezactivat, toata lumea vede pachetul serverului.');
+tz_def('ADM_ALLIANCE_BONUSES', 'Bonusuri de alianta');
+tz_def('ADM_ALLIANCE_BONUSES_TIP', 'Bonusuri de alianta T4: membrii doneaza resurse ca sa deblocheze Recrutare, Filosofie, Metalurgie si Comert.');

@@ -4200,3 +4200,40 @@ tz_def('ADM_THE_7_DAY_BALANCE_FILLS_IN_AS_MERCHANT_DELIV', 'The 7-day balance fi
 tz_def('ADM_EDIT_THE_REWARD_EACH_QUEST_GRANTS_WOOD_CLAY', 'Edit the reward each quest grants (wood / clay / iron / crop / gold / Plus days) and the requirement level (e.g. main-building level for building quests). Values are seeded from the shipped defaults, so nothing changes until you edit. The two quest variants have different quests and rewards &mdash; pick the one your server uses (players on');
 tz_def('ADM_IN_THE_QUEST_TEMPLATES_QUESTS_MARKED', 'in the quest templates. Quests marked');
 tz_def('ADM_KEEP_THEIR_ORIGINAL_HARDCODED_LOGIC_CONDITIO', 'keep their original hardcoded logic (conditional rewards, atomic milestone claims, special mechanics) and are not affected by edits here. The reward numbers shown inside each quest\'s on-screen text are separate template strings &mdash; edits here change what is actually granted; update the quest language strings if you want the preview to match.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA (port T4)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_TAB', 'Bonuses');
+tz_def('ALLYBONUS_RECRUITMENT', 'Recruitment');
+tz_def('ALLYBONUS_PHILOSOPHY', 'Philosophy');
+tz_def('ALLYBONUS_METALLURGY', 'Metallurgy');
+tz_def('ALLYBONUS_COMMERCE', 'Commerce');
+tz_def('ALLYBONUS_LEVEL', 'Level');
+tz_def('ALLYBONUS_NEXT', 'next');
+tz_def('ALLYBONUS_MAXED', 'Fully unlocked');
+tz_def('ALLYBONUS_UNLOCKING', 'Unlocking level');
+tz_def('ALLYBONUS_DONATE', 'Donate');
+tz_def('ALLYBONUS_TRIPLE', 'Triple this donation');
+tz_def('ALLYBONUS_DAILY_LEFT', 'Your donation allowance left today');
+tz_def('ALLYBONUS_CONTRIBUTORS', 'Contributions');
+tz_def('ALLYBONUS_MEMBER', 'Member');
+tz_def('ALLYBONUS_TOTAL', 'Donated');
+tz_def('ALLYBONUS_MSG_OK', 'Resources donated.');
+tz_def('ALLYBONUS_MSG_UPGRADING', 'This bonus is currently being unlocked; donations are paused.');
+tz_def('ALLYBONUS_MSG_LIMIT', 'That would exceed your daily donation limit.');
+tz_def('ALLYBONUS_MSG_RESOURCES', 'Not enough resources in this village.');
+tz_def('ALLYBONUS_MSG_NOGOLD', 'Not enough gold to triple this donation.');
+tz_def('ALLYBONUS_MSG_NOALLY', 'You are not in an alliance.');
+tz_def('ALLYBONUS_MSG_INVALID', 'Invalid donation.');
+tz_def('ALLYBONUS_HINT', 'The resource type does not matter, only the total amount. While a level is unlocking, that bonus cannot receive donations.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// PANOU DE ADMINISTRARE - pachet grafic si bonusuri de alianta
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_SERVER_GRAPHIC_PACK', 'Server graphic pack');
+tz_def('ADM_SERVER_GRAPHIC_PACK_TIP', 'The graphic pack every player sees by default, read from the gpack/ folder.');
+tz_def('ADM_PLAYER_GRAPHIC_PACKS', 'Player graphic packs');
+tz_def('ADM_PLAYER_GRAPHIC_PACKS_TIP', 'When enabled, players can point their profile at their own graphic pack (Profile &rarr; Graphics). When disabled, everyone sees the server pack.');
+tz_def('ADM_ALLIANCE_BONUSES', 'Alliance bonuses');
+tz_def('ADM_ALLIANCE_BONUSES_TIP', 'T4 alliance bonuses: members donate resources to unlock Recruitment, Philosophy, Metallurgy and Commerce.');

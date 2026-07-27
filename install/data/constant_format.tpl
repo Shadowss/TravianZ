@@ -143,6 +143,31 @@ define("SPEED", "%SPEED%");
 // Defines world size. NOTICE: DO NOT EDIT!!
 define("WORLD_MAX", "%MAX%");
 
+// ***** Alliance Bonuses (T4 Port)
+// Members donate resources, allowing the alliance to unlock four bonuses, each
+// with five levels. The costs, durations, and limits below are based on
+// Travian T4; upgrade times and donation limits are scaled by the server speed.
+define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+
+// Total resources required for each level (cumulative for that level).
+define("ALLIANCE_BONUS_COSTS", "1200000,5600000,17100000,51200000,153600000");
+
+// Upgrade duration in HOURS for each level (divided by the server speed).
+define("ALLIANCE_BONUS_HOURS", "24,48,72,96,120");
+
+// Daily donation limit per player, based on the highest bonus level unlocked
+// by the alliance (index 0 = no bonuses unlocked).
+define("ALLIANCE_BONUS_DAILY", "300000,300000,400000,550000,750000,1000000");
+
+// Percentage granted by each level. Two sets: "small" bonuses (2% per level:
+// Recruitment, Philosophy) and "large" bonuses (4% per level: Metallurgy,
+// Commerce), exactly as in T4.
+define("ALLIANCE_BONUS_PCT_SMALL", 2);
+define("ALLIANCE_BONUS_PCT_LARGE", 4);
+
+// Gold cost to triple a donation.
+define("ALLIANCE_BONUS_TRIPLE_GOLD", 3);
+
 // ***** Graphic Pack
 //
 // SERVER_GP is the pack every player sees by default (chosen at install or in

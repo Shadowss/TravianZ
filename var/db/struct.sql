@@ -343,6 +343,73 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%PREFIX%alliance_bonus` (T4 alliance bonuses)
+-- One row per (alliance, bonus type). btype: 1 = Recruitment,
+-- 2 = Philosophy, 3 = Metallurgy, 4 = Commerce.
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_bonus` (
+ `aid` int(11) NOT NULL,
+ `btype` tinyint(1) NOT NULL,
+ `level` tinyint(2) NOT NULL DEFAULT '0',
+ `pool` bigint(20) NOT NULL DEFAULT '0',
+ `upgrade_end` int(11) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`aid`, `btype`),
+ KEY `upgrade_end` (`upgrade_end`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%alliance_bonus`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%alliance_donation` (T4 alliance bonuses)
+-- Per-player daily donation total. `day` is floor(timestamp / 86400).
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_donation` (
+ `uid` int(11) NOT NULL,
+ `day` int(11) NOT NULL,
+ `amount` bigint(20) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`uid`, `day`),
+ KEY `day` (`day`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%alliance_donation`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%alliance_donation_log` (T4 alliance bonuses)
+-- Donation history, used for the per-member contribution list.
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_donation_log` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `aid` int(11) NOT NULL,
+ `uid` int(11) NOT NULL,
+ `btype` tinyint(1) NOT NULL,
+ `amount` bigint(20) NOT NULL,
+ `time` int(11) NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `aid_time` (`aid`, `time`),
+ KEY `aid_uid` (`aid`, `uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%alliance_donation_log`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%PREFIX%attacks`
 --
 
@@ -1917,6 +1984,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `sit1` int(11) DEFAULT '0',
   `sit2` int(11) DEFAULT '0',
   `alliance` int(11) DEFAULT '0',
+  `alliance_joined` int(11) NOT NULL DEFAULT '0',
   `sessid` varchar(100) DEFAULT NULL,
   `act` varchar(10) DEFAULT NULL,
   `timestamp` int(11) DEFAULT '0',

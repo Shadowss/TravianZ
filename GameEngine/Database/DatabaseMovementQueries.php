@@ -189,44 +189,59 @@ trait DatabaseMovementQueries {
 	}
 
 	function addMovement($type, $from, $to, $ref, $time, $endtime, $send = 1, $wood = 0, $clay = 0, $iron = 0, $crop = 0, $ref2 = 0) {
-        // always prepare for multiple inserts at once
-        if (!is_array($type)) {
-            $type = [$type];
-            $from = [$from];
-            $to = [$to];
-            $ref = [$ref];
-            $time = [$time];
-            $endtime = [$endtime];
-            $send = [$send];
-            $wood = [$wood];
-            $clay = [$clay];
-            $iron = [$iron];
-            $crop = [$crop];
-            $ref2 = [$ref2];
+    // Caz 1: apel simplu, un singur movement
+    if (!is_array($type)) {
+        $type = [$type];
+        $from = [$from];
+        $to = [$to];
+        $ref = [$ref];
+        $time = [$time];
+        $endtime = [$endtime];
+        $send = [$send];
+        $wood = [$wood];
+        $clay = [$clay];
+        $iron = [$iron];
+        $crop = [$crop];
+        $ref2 = [$ref2];
+    } else {
+        // Caz 2: apel multiplu - $type e array, dar restul pot fi int
+        // le transformam si pe ele in array de aceeasi lungime
+        $count = count($type);
+        if (!is_array($from)) $from = array_fill(0, $count, $from);
+        if (!is_array($to)) $to = array_fill(0, $count, $to);
+        if (!is_array($ref)) $ref = array_fill(0, $count, $ref);
+        if (!is_array($time)) $time = array_fill(0, $count, $time);
+        if (!is_array($endtime)) $endtime = array_fill(0, $count, $endtime);
+        if (!is_array($send)) $send = array_fill(0, $count, $send);
+        if (!is_array($wood)) $wood = array_fill(0, $count, $wood);
+        if (!is_array($clay)) $clay = array_fill(0, $count, $clay);
+        if (!is_array($iron)) $iron = array_fill(0, $count, $iron);
+        if (!is_array($crop)) $crop = array_fill(0, $count, $crop);
+        if (!is_array($ref2)) $ref2 = array_fill(0, $count, $ref2);
+    }
+
+    $counter = 0;
+    $pairs = [];
+
+    foreach ($type as $index => $typeValue) {
+        // ?? 0 ca safety, sa nu mai dea niciodata warning
+        $pairs[] = '(0, '.(int) $typeValue.', '.(int) ($from[$index] ?? 0).', '.(int) ($to[$index] ?? 0).', '.(int) ($ref[$index] ?? 0).', '.(int) ($ref2[$index] ?? 0).', '.(int) ($time[$index] ?? 0).', '.(int) ($endtime[$index] ?? 0).', 0, '.(int) ($send[$index] ?? 1).', '.(int) ($wood[$index] ?? 0).', '.(int) ($clay[$index] ?? 0).', '.(int) ($iron[$index] ?? 0).', '.(int) ($crop[$index] ?? 0).')';
+
+        if ($counter++ > 25) {
+            $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES ".implode(', ', $pairs);
+            mysqli_query($this->dblink,$q);
+            $pairs = [];
+            $counter = 0;
         }
+    }
 
-        $counter = 0;
-        $pairs = [];
-
-        foreach ($type as $index => $typeValue) {
-            $pairs[] = '(0, '.(int) $typeValue.', '.(int) $from[$index].', '.(int) $to[$index].', '.(int) $ref[$index].', '.(int) $ref2[$index].', '.(int) $time[$index].', '.(int) $endtime[$index].', 0, '.(int) $send[$index].', '.(int) $wood[$index].', '.(int) $clay[$index].', '.(int) $iron[$index].', '.(int) $crop[$index].')';
-
-            if ($counter++ > 25) {
-                $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES ".implode(', ', $pairs);
-                mysqli_query($this->dblink,$q);
-
-                $pairs = [];
-                $counter = 0;
-            }
-        }
-
-        if ($counter > 0) {
-            $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES " . implode( ', ', $pairs );
-            return mysqli_query( $this->dblink, $q );
-        } else {
-            return true;
-        }
-	}
+    if ($counter > 0) {
+        $q = "INSERT INTO " . TB_PREFIX . "movement (moveid, sort_type, `from`, `to`, ref, ref2, starttime, endtime, proc, send, wood, clay, iron, crop) VALUES " . implode( ', ', $pairs );
+        return mysqli_query( $this->dblink, $q );
+    } else {
+        return true;
+    }
+}
 
 	function addAttack($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1=0,$b2=0,$b3=0,$b4=0,$b5=0,$b6=0,$b7=0,$b8=0) {
 	    if (!is_array($vid)) {

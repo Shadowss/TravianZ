@@ -81,6 +81,9 @@ class Process {
 		$findReplace["%MAX%"] = $_POST['wmax'];
 		// Comutatorul de pachete grafice proprii. Linia era comentata, deci %GP%
 		// ramanea neinlocuit in config.php si constanta nu se definea deloc.
+		// Bonusuri de alianta (port T4)
+		$findReplace["%ALLIANCEBONUSES%"] = (isset($_POST['alliance_bonuses']) && $_POST['alliance_bonuses'] === 'true') ? 'true' : 'false';
+
 		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];

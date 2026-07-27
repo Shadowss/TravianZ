@@ -645,7 +645,12 @@ class Technology {
 		// fiindca ramura e aleasa dupa TIPUL unitatii, nu dupa cladire.
 		// Nu se aplica la atelier, unitati speciale sau capcane - la fel ca in T4.
 		$each = $this->applyHeroTrainingBonus($each, $unit, $footies, $calvary);
-		
+
+		// Bonusul de alianta "Recruitment": instruire mai rapida in toate
+		// cladirile de trupe. Se inmulteste cu bonusul eroului, ca in T4 (coiful
+		// mercenarului si bonusul de alianta se cumuleaza multiplicativ).
+		$each = $this->applyAllianceRecruitmentBonus($each);
+
 		return $each;
 	}
 
@@ -657,6 +662,38 @@ class Technology {
 	 * jucatorului. HeroBattleBonus::bonuses() are deja gard de feature flag si
 	 * cache per request, si intoarce null cand sistemul T4 e oprit.
 	 */
+	/**
+	 * Aplica bonusul de alianta "Recruitment" asupra timpului de instruire.
+	 *
+	 * Proprietarul se ia din satul in care se instruieste, nu din sesiune, ca sa
+	 * fie corect si cand codul ruleaza in alt context (cron, sitter).
+	 */
+	private function applyAllianceRecruitmentBonus($each) {
+		global $village, $database;
+
+		if (!class_exists('AllianceBonus') || !AllianceBonus::enabled()) {
+			return $each;
+		}
+
+		// acelasi mod de a afla proprietarul ca la bonusul de erou de mai jos
+		$owner = (isset($village->wid) && $database)
+			? (int) $database->getVillageField($village->wid, 'owner')
+			: 0;
+
+		if ($owner <= 0) {
+			return $each;
+		}
+
+		$mult = AllianceBonus::multiplier($owner, AllianceBonus::RECRUITMENT);
+
+		if ($mult <= 1.0) {
+			return $each;
+		}
+
+		// bonusul de X% inseamna productie mai rapida, deci timp impartit
+		return max(1, (int) round($each / $mult));
+	}
+
 	private function applyHeroTrainingBonus($each, $unit, array $footies, array $calvary) {
 		global $village, $database;
 

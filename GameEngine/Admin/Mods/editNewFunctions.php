@@ -112,6 +112,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
 		tz_config_set($text, '%SERVER%', SERVER);
 		tz_config_set($text, '%NEW_FUNCTIONS_OASIS%', $_POST['new_functions_oasis'] ?? '');
+		tz_config_set($text, '%ALLIANCEBONUSES%', $_POST['alliance_bonuses'] ?? 'false');
 		tz_config_set($text, '%NEW_FUNCTIONS_ALLIANCE_INVITATION%', $_POST['new_functions_alliance_invitation'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_EMBASSY_MECHANICS%', $_POST['new_functions_embassy_mechanics'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_FORUM_POST_MESSAGE%', $_POST['new_functions_forum_post_message'] ?? '');

@@ -352,6 +352,12 @@ class Alliance {
 					// Acceptăm invitația
                     $database->removeInvitation($inviteID);
                     $database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
+                    // Bonusurile de alianta devin disponibile treptat pentru
+                    // membrii noi, deci retinem cand a intrat. Fara asta,
+                    // cineva ar putea sari dintr-o alianta in alta doar ca sa
+                    // culeaga bonusuri de nivel mare.
+                    $database->updateUserField($invite['uid'], "alliance_joined", time(), 1);
+
                     $database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
                     // Invalidate the 30s session user-cache (see Session::PopulateVar) so the
                     // new alliance membership shows up immediately, without a re-login.
@@ -410,6 +416,12 @@ class Alliance {
         }
 		
         $database->updateUserField($session->uid, "alliance", $aid, 1);
+        // Bonusurile de alianta devin disponibile treptat pentru
+        // membrii noi, deci retinem cand a intrat. Fara asta,
+        // cineva ar putea sari dintr-o alianta in alta doar ca sa
+        // culeaga bonusuri de nivel mare.
+        $database->updateUserField($session->uid, "alliance_joined", time(), 1);
+
         $database->procAllyPop($aid);
         $database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
         // Invalidate the 30s session user-cache (see Session::PopulateVar) so the

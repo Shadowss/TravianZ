@@ -312,6 +312,10 @@ foreach($mechs as $k => $l){
     <div><label>Hero base regeneration (HP/day)</label><input class="input" name="hero_base_regen" id="hero_base_regen" value="10"></div>
     <div><label>Silver received per 1 gold</label><input class="input" name="hero_silver_per_gold" id="hero_silver_per_gold" value="10"></div>
     <div><label>Silver needed for 1 gold</label><input class="input" name="hero_silver_to_gold" id="hero_silver_to_gold" value="25"></div>
+    <div><label>Alliance bonuses (T4)</label><select class="input" name="alliance_bonuses">
+        <option value="false" selected>No</option>
+        <option value="true">Yes</option>
+    </select></div>
     <div><label>Allow player graphic packs</label><select class="input" name="gpack">
         <option value="false" selected>No &ndash; everyone sees the server pack</option>
         <option value="true">Yes &ndash; players may pick their own in Profile</option>

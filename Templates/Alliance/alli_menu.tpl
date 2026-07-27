@@ -51,6 +51,13 @@ if ($session->alliance == $aid && $session->alliance > 0) {
         News
     </a>
 
+<?php if (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) { ?>
+    | <!-- Bonuses -->
+    <a href="allianz.php?s=7" <?php if ($s === 7) { echo 'class="selected"'; } ?>>
+        <?php echo defined('ALLYBONUS_TAB') ? ALLYBONUS_TAB : 'Bonuses'; ?>
+    </a>
+<?php } ?>
+
 <?php
     // Dacă NU este sitter → are acces la Options
     if ($session->sit == 0) {

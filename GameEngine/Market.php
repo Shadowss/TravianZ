@@ -181,6 +181,14 @@ class Market
         if ($building->getTypeLevel(28) != 0) {
             $this->maxcarry *= $bid28[$building->getTypeLevel(28)]['attri'] / 100;
         }
+
+        // Bonusul de alianta "Commerce". Se inmulteste cu biroul comercial, ca
+        // in T4: 750 de baza x 2.2 (Commerce 4) x 5 (birou 20) = 8250.
+        if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
+            $this->maxcarry *= AllianceBonus::multiplier((int) $session->uid, AllianceBonus::COMMERCE);
+        }
+
+        $this->maxcarry = floor($this->maxcarry);
     }
 
     /**

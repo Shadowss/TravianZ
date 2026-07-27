@@ -52,6 +52,7 @@ include_once("Data/hero_full.php");
 include_once("Data/cp.php");
 include_once("Units.php");
 include_once("Battle.php");
+include_once("AllianceBonus.php");
 include_once("Technology.php");
 include_once("Ranking.php");
 include_once("Generator.php");
@@ -149,6 +150,12 @@ class Automation {
         $this->updateGeneralAttack();
         $this->checkInvitedPlayes();
         $this->updateStore();
+
+        // Finalizeaza upgrade-urile de bonus de alianta ajunse la termen.
+        if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
+            $allianceBonus = new AllianceBonus();
+            $allianceBonus->processUpgrades();
+        }
         $this->CheckBan();
         $this->regenerateOasisTroops();
         $this->medals();
