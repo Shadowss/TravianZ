@@ -34,7 +34,9 @@ if (!admin_config_template_available()) {
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
 
-        $text = admin_config_template_contents();
+        $text = admin_config_template_contents(array(
+            '%ALLIANCEBONUSES%' => (isset($_POST['alliance_bonuses']) && $_POST['alliance_bonuses'] === 'true') ? 'true' : 'false',
+        ));
 
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
@@ -112,7 +114,6 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
 		tz_config_set($text, '%SERVER%', SERVER);
 		tz_config_set($text, '%NEW_FUNCTIONS_OASIS%', $_POST['new_functions_oasis'] ?? '');
-		tz_config_set($text, '%ALLIANCEBONUSES%', $_POST['alliance_bonuses'] ?? 'false');
 		tz_config_set($text, '%NEW_FUNCTIONS_ALLIANCE_INVITATION%', $_POST['new_functions_alliance_invitation'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_EMBASSY_MECHANICS%', $_POST['new_functions_embassy_mechanics'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_FORUM_POST_MESSAGE%', $_POST['new_functions_forum_post_message'] ?? '');

@@ -258,6 +258,13 @@ if (!function_exists('admin_config_template_path')) {
             }
         }
 
+        if (strpos($text, '%ALLIANCEBONUSES%') !== false) {
+            $allianceBonuses = (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES)
+                ? 'true'
+                : 'false';
+            $text = str_replace('%ALLIANCEBONUSES%', $allianceBonuses, $text);
+        }
+
         // Pachetul grafic si comutatorul de pachete proprii.
         //
         // ATENTIE LA ORDINE: acest bloc trebuie sa ruleze DUPA bucla de
