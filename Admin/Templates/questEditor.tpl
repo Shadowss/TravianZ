@@ -55,13 +55,13 @@ $msg  = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 </style>
 
 <div class="qe-wrap">
-    <h2><?php echo ADM_QUEST_2; ?><span><?php echo ADM_EDITOR; ?></span></h2>
-    <p class="qe-intro"><?php echo ADM_EDIT_THE_REWARD_EACH_QUEST_GRANTS_WOOD_CLAY; ?><code><?php echo ADM_QTYP_37; ?></code><?php echo ADM_GET; ?><b><?php echo ADM_EXTENDED; ?></b><?php echo ADM_EVERYONE_ELSE; ?><b><?php echo ADM_STANDARD; ?></b>).
+    <h2><?php echo ADM_QUEST_2; ?> <span><?php echo ADM_EDITOR; ?></span></h2>
+    <p class="qe-intro"><?php echo ADM_EDIT_THE_REWARD_EACH_QUEST_GRANTS_WOOD_CLAY; ?> <code><?php echo ADM_QTYP_37; ?></code> <?php echo ADM_GET; ?> <b><?php echo ADM_EXTENDED; ?></b> <?php echo ADM_EVERYONE_ELSE; ?> <b><?php echo ADM_STANDARD; ?></b>).
     </p>
 
     <?php if ($msg !== ''): ?><div class="qe-msg"><?php echo e($msg); ?></div><?php endif; ?>
 
-    <div class="qe-warn"><?php echo ADM_REWARD_VALUES_ARE_LIVE_VIA; ?><code>QuestConfig::grantReward()</code><?php echo ADM_IN_THE_QUEST_TEMPLATES_QUESTS_MARKED; ?><b><?php echo ADM_FIXED; ?></b><?php echo ADM_KEEP_THEIR_ORIGINAL_HARDCODED_LOGIC_CONDITIO; ?></div>
+    <div class="qe-warn"><?php echo ADM_REWARD_VALUES_ARE_LIVE_VIA; ?> <code>QuestConfig::grantReward()</code> <?php echo ADM_IN_THE_QUEST_TEMPLATES_QUESTS_MARKED; ?> <b><?php echo ADM_FIXED; ?></b> <?php echo ADM_KEEP_THEIR_ORIGINAL_HARDCODED_LOGIC_CONDITIO; ?></div>
 
     <div class="qe-tabs">
         <a href="admin.php?p=questEditor&variant=standard" class="<?php echo $variant===QuestConfig::V_STANDARD?'active':''; ?>"><?php echo ADM_STANDARD_QUEST_CORE25; ?></a>

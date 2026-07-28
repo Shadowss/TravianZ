@@ -73,7 +73,7 @@ $js = [
 </style>
 
 <div class="hm-wrap">
-    <h2><?php echo ADM_WORLD_MAP; ?><span><?php echo ADM_HEATMAP; ?></span></h2>
+    <h2><?php echo ADM_WORLD_MAP; ?> <span><?php echo ADM_HEATMAP; ?></span></h2>
     <p class="hm-intro"><?php echo ADM_DENSITY_OVERLAYS_ON_THE_WORLD_GRID_TO_HELP_W; ?></p>
 
     <form method="get" action="admin.php" class="hm-filter">

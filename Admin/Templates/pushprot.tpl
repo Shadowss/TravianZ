@@ -60,8 +60,8 @@ function pp_num($n) { return number_format((int)$n); }
 </style>
 
 <div class="pp-wrap">
-    <h2><?php echo ADMIN_PUSH_PROTECTION; ?><span><?php echo ADM_DASHBOARD; ?></span></h2>
-    <p class="pp-intro"><?php echo ADM_PER_PLAYER; ?><b><?php echo ADM_7_DAY_RESOURCE_BALANCE; ?></b><?php echo ADM_RECEIVED_FROM_OTHER_PLAYERS_VERSUS_AN_AUTOMA; ?><span class="num"><?php echo (int)$data['hours_allowed']; ?>h</span><?php echo ADM_OF_PRODUCTION_PER_WINDOW_WW_VILLAGES_AND_ART; ?></p>
+    <h2><?php echo ADMIN_PUSH_PROTECTION; ?> <span><?php echo ADM_DASHBOARD; ?></span></h2>
+    <p class="pp-intro"><?php echo ADM_PER_PLAYER; ?> <b><?php echo ADM_7_DAY_RESOURCE_BALANCE; ?></b> <?php echo ADM_RECEIVED_FROM_OTHER_PLAYERS_VERSUS_AN_AUTOMA; ?><span class="num"><?php echo (int)$data['hours_allowed']; ?>h</span><?php echo ADM_OF_PRODUCTION_PER_WINDOW_WW_VILLAGES_AND_ART; ?></p>
 
     <form method="get" action="admin.php" class="pp-filter">
         <input type="hidden" name="p" value="pushprot">

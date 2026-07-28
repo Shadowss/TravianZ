@@ -53,8 +53,8 @@ $pairs = $data['pairs'];
 </style>
 
 <div class="mad-wrap">
-    <h2><?php echo ADM_MULTI_ACCOUNT; ?><span><?php echo ADM_DETECTION; ?></span></h2>
-    <p class="mad-intro"><?php echo ADM_HEURISTIC_CORRELATION_OF_ACCOUNT_PAIRS_BY_SH; ?><b><?php echo ADM_RISK_SCORE_NOT_PROOF; ?></b><?php echo ADM_USE_IT_TO_PRIORITISE_WHICH_PAIRS_A_HUMAN_SHO; ?></p>
+    <h2><?php echo ADM_MULTI_ACCOUNT; ?> <span><?php echo ADM_DETECTION; ?></span></h2>
+    <p class="mad-intro"><?php echo ADM_HEURISTIC_CORRELATION_OF_ACCOUNT_PAIRS_BY_SH; ?> <b><?php echo ADM_RISK_SCORE_NOT_PROOF; ?></b><?php echo ADM_USE_IT_TO_PRIORITISE_WHICH_PAIRS_A_HUMAN_SHO; ?></p>
 
     <form method="get" action="admin.php" class="mad-filter">
         <input type="hidden" name="p" value="multiacc">

@@ -62,8 +62,8 @@ $typeLabel = [
 </style>
 
 <div class="rb-wrap">
-    <h2><?php echo ADM_REGISTRATION; ?><span><?php echo ADM_BLOCKLIST; ?></span></h2>
-    <p class="rb-intro"><?php echo ADM_BLOCK_NEW_REGISTRATIONS_BY_A_SPECIFIC; ?><b><?php echo ADM_USERNAME_3; ?></b><?php echo ADM_A_SPECIFIC; ?><b><?php echo ADM_E_MAIL_ADDRESS_2; ?></b><?php echo ADM_OR_A_WHOLE; ?><b><?php echo ADM_E_MAIL_DOMAIN; ?></b><?php echo ADM_E_G_AN_OBSCENE_USERNAME_OR_THE_ENTIRE; ?><span class="rb-val">yahoo.com</span><?php echo ADM_DOMAIN_MATCHING_IS_EXACT_AND_CASE_INSENSITIV; ?></p>
+    <h2><?php echo ADM_REGISTRATION; ?> <span><?php echo ADM_BLOCKLIST; ?></span></h2>
+    <p class="rb-intro"><?php echo ADM_BLOCK_NEW_REGISTRATIONS_BY_A_SPECIFIC; ?> <b><?php echo ADM_USERNAME_3; ?></b><?php echo ADM_A_SPECIFIC; ?> <b><?php echo ADM_E_MAIL_ADDRESS_2; ?></b> <?php echo ADM_OR_A_WHOLE; ?> <b><?php echo ADM_E_MAIL_DOMAIN; ?></b> <?php echo ADM_E_G_AN_OBSCENE_USERNAME_OR_THE_ENTIRE; ?> <span class="rb-val">yahoo.com</span> <?php echo ADM_DOMAIN_MATCHING_IS_EXACT_AND_CASE_INSENSITIV; ?></p>
 
     <?php if ($msg !== ''): ?>
         <div class="rb-msg"><?php echo e($msg); ?></div>
