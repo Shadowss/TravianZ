@@ -9543,3 +9543,18 @@ p.ww_summary img.building {
     color:red;
     margin-top:10px;
 }
+
+/* Iconitele de trib din statistici, centrate (submenu2 centrat).
+   Regulile originale le pun cu float:left si un margin-left de 29px, deci
+   raman lipite in stanga. Aici anulam plutirea si le asezam pe mijloc.
+   Se aplica tuturor paginilor de clasament care au acest submeniu. */
+div.statistics div#submenu2 {
+    margin: 6px 0 10px 0;
+    text-align: center;
+}
+div.statistics div#submenu2 img {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 2px;
+}
