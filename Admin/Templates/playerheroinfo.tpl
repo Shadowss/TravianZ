@@ -150,7 +150,7 @@ if ($hero !== false) {
 		      + (int)$h['defencebonus'] + (int)$h['regeneration'] + (int)($h['resources'] ?? 0);
 
 		// totalul de puncte vine din tabelul de niveluri: 5 initiale + 5 per nivel
-		$hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
+		$hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 120;
 		$hMaxPoints = 5 + ($hMaxLevel * 5);
 		$count_level_exp = max(0, $hMaxPoints - $used);
 		if ($h['points'] > $count_level_exp) $h['points'] = $count_level_exp;

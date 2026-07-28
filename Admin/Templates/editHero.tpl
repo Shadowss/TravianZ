@@ -195,7 +195,7 @@ function go_url(url){ location=url; return false; }
         <div class="body" style="font-size:12px;line-height:1.8;">
             <?php
                 // punctele nefolosite, nu suma statisticilor calculate (era gresit)
-                $eMaxLevel  = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
+                $eMaxLevel  = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 120;
                 $eUsed      = (int)$hero['attack'] + (int)$hero['defence'] + (int)$hero['attackbonus']
                             + (int)$hero['defencebonus'] + (int)$hero['regeneration'] + (int)($hero['resources'] ?? 0);
                 $eTotal     = 5 + ($hero['level'] * 5);
@@ -227,7 +227,7 @@ function go_url(url){ location=url; return false; }
         <div class="body">
             <?php if($isMax):?>
             <div style="text-align:center;padding:8px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;color:#92400e;font-size:12px;margin-bottom:10px;">
-                ⚠ Hero is at the maximum level (<?php echo isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119; ?>) — no more points can be added.
+                ⚠ Hero is at the maximum level (<?php echo isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 120; ?>) — no more points can be added.
             </div>
             <?php endif;?>
             <table class="stat-table">
