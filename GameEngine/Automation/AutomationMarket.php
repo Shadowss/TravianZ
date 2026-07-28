@@ -159,6 +159,27 @@ trait AutomationMarket {
             if($this->getTypeLevel(28, $from) != 0) {
                 $maxcarry2 *= $bid28[$this->getTypeLevel(28, $from)]['attri'] / 100;
             }
+
+            // Bonusul de alianta "Commerce".
+            //
+            // BUG REPARAT: trimiterea repetata (2x / 3x) e executata de aici,
+            // nu de Market.php, iar aici bonusul lipsea. Prima livrare pleca cu
+            // capacitatea marita (calculata in Market.php), dar repetarea o
+            // recalcula fara bonus, cerea mai multi negustori decat exista si
+            // se oprea in tacere.
+            //
+            // Se ia dupa PROPRIETARUL satului, nu dupa sesiune: aici rulam din
+            // automatizare, unde nu exista un jucator conectat.
+            if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
+                $ownerFrom = (int) $database->getVillageField($from, 'owner');
+
+                if ($ownerFrom > 0) {
+                    $maxcarry2 *= AllianceBonus::multiplier($ownerFrom, AllianceBonus::COMMERCE);
+                }
+            }
+
+            $maxcarry2 = floor($maxcarry2);
+
             
             $resource = [$wtrans, $ctrans, $itrans, $crtrans];
             $reqMerc = ceil((array_sum($resource) - 0.1) / $maxcarry2);

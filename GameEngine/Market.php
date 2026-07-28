@@ -184,8 +184,17 @@ class Market
 
         // Bonusul de alianta "Commerce". Se inmulteste cu biroul comercial, ca
         // in T4: 750 de baza x 2.2 (Commerce 4) x 5 (birou 20) = 8250.
+        // Se ia dupa PROPRIETARUL satului, nu dupa sesiune, ca sa dea acelasi
+        // rezultat si cand codul ruleaza in alt context (sitter, automatizare).
+        // Calea de repetare din AutomationMarket foloseste aceeasi regula.
         if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
-            $this->maxcarry *= AllianceBonus::multiplier((int) $session->uid, AllianceBonus::COMMERCE);
+            $carryOwner = isset($village->wid)
+                ? (int) $database->getVillageField($village->wid, 'owner')
+                : (int) $session->uid;
+
+            if ($carryOwner > 0) {
+                $this->maxcarry *= AllianceBonus::multiplier($carryOwner, AllianceBonus::COMMERCE);
+            }
         }
 
         $this->maxcarry = floor($this->maxcarry);

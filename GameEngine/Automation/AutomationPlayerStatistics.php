@@ -48,7 +48,7 @@ trait AutomationPlayerStatistics
         $now      = time();
 
         $res  = mysqli_query($database->dblink,
-            "SELECT MAX(recorded_at) AS last FROM " . $table);
+            "SELECT MAX(recorded_at) AS `last` FROM " . $table);
         $row  = $res ? mysqli_fetch_assoc($res) : null;
         $last = $row ? (int) $row['last'] : 0;
 
@@ -78,7 +78,7 @@ trait AutomationPlayerStatistics
         // rang, populatie, sate si puncte de lupta, per jucator
         $q = "SELECT
                   u.id AS uid,
-                  u.oldrank AS rank,
+                  u.oldrank AS `rank`,
                   COALESCE(SUM(v.pop), 0) AS population,
                   COUNT(CASE WHEN v.type != 99 THEN v.wref END) AS villages,
                   u.apall AS attack_points,
@@ -91,6 +91,12 @@ trait AutomationPlayerStatistics
         $res = mysqli_query($database->dblink, $q);
 
         if (!$res) {
+            // Fara asta, o interogare esuata lasa tabela goala la nesfarsit
+            // fara niciun semn. Exact ce s-a intamplat cu aliasul `rank`, care
+            // e cuvant rezervat din MySQL 8.0 si trebuie protejat.
+            error_log('[TravianZ] player statistics snapshot failed: '
+                . mysqli_error($database->dblink));
+
             return;
         }
 
@@ -125,11 +131,18 @@ trait AutomationPlayerStatistics
         }
 
         foreach (array_chunk($values, 200) as $chunk) {
-            mysqli_query($database->dblink,
+            $ok = mysqli_query($database->dblink,
                 "INSERT IGNORE INTO " . $table . "
                     (uid, recorded_at, `rank`, population, villages,
                      troop_count, troop_upkeep, attack_points, defence_points)
                  VALUES " . implode(',', $chunk));
+
+            if (!$ok) {
+                error_log('[TravianZ] player statistics insert failed: '
+                    . mysqli_error($database->dblink));
+
+                return;
+            }
         }
     }
 
