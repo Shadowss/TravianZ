@@ -34,7 +34,28 @@ if (!admin_config_template_available()) {
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
 
-        $text = admin_config_template_contents();
+        // Aceste setari trebuie trimise prin $overrides, NU prin tz_config_set
+        // dupa ce functia a returnat: rezerva centrala din
+        // admin_config_template_contents() ar consuma placeholderele inainte,
+        // iar alegerea adminului s-ar pierde tacut la fiecare salvare.
+        $abChoice = (isset($_POST['alliance_bonuses']) && $_POST['alliance_bonuses'] === 'true')
+            ? 'true' : 'false';
+
+        $psChoice = (isset($_POST['plus_statistics']) && $_POST['plus_statistics'] === 'true')
+            ? 'true' : 'false';
+
+        $psHours = isset($_POST['plus_stats_hours']) ? (float) $_POST['plus_stats_hours'] : 6;
+        if ($psHours < 0.25 || $psHours > 168) { $psHours = 6; }
+
+        $psKeep = isset($_POST['plus_stats_keep']) ? (int) $_POST['plus_stats_keep'] : 0;
+        if ($psKeep < 0 || $psKeep > 3650) { $psKeep = 0; }
+
+        $text = admin_config_template_contents(array(
+            '%ALLIANCEBONUSES%' => $abChoice,
+            '%PLUSSTATS%'       => $psChoice,
+            '%PLUSSTATSHOURS%'  => $psHours,
+            '%PLUSSTATSKEEP%'   => $psKeep,
+        ));
 
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
@@ -112,17 +133,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
 		tz_config_set($text, '%SERVER%', SERVER);
 		tz_config_set($text, '%NEW_FUNCTIONS_OASIS%', $_POST['new_functions_oasis'] ?? '');
-		tz_config_set($text, '%ALLIANCEBONUSES%', $_POST['alliance_bonuses'] ?? 'false');
-		tz_config_set($text, '%PLUSSTATS%', $_POST['plus_statistics'] ?? 'false');
 
-		// intervalul si retentia: valori numerice, cu limite rezonabile
-		$psHours = isset($_POST['plus_stats_hours']) ? (float) $_POST['plus_stats_hours'] : 6;
-		if ($psHours < 0.25 || $psHours > 168) { $psHours = 6; }
-		tz_config_set($text, '%PLUSSTATSHOURS%', $psHours);
-
-		$psKeep = isset($_POST['plus_stats_keep']) ? (int) $_POST['plus_stats_keep'] : 0;
-		if ($psKeep < 0 || $psKeep > 3650) { $psKeep = 0; }
-		tz_config_set($text, '%PLUSSTATSKEEP%', $psKeep);
 		tz_config_set($text, '%NEW_FUNCTIONS_ALLIANCE_INVITATION%', $_POST['new_functions_alliance_invitation'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_EMBASSY_MECHANICS%', $_POST['new_functions_embassy_mechanics'] ?? '');
 		tz_config_set($text, '%NEW_FUNCTIONS_FORUM_POST_MESSAGE%', $_POST['new_functions_forum_post_message'] ?? '');

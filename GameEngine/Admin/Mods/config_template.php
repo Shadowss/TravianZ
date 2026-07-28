@@ -258,6 +258,52 @@ if (!function_exists('admin_config_template_path')) {
             }
         }
 
+        // Comutatoare adaugate dupa modelul lui %GP%: bonusurile de alianta si
+        // statisticile grafice Plus.
+        //
+        // BUG REPARAT: aceste placeholdere erau rezolvate DOAR de
+        // editNewFunctions. Orice alta pagina din panou (Server Configuration,
+        // Log Settings, PLUS Settings, NewsBox, Admin Info, Extra Settings)
+        // regenereaza si ea config.php din acelasi sablon, dar le lasa
+        // neinlocuite - deci in config ajungea
+        //     define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+        // adica eroare de parsare si server cazut cu 500 pana la reparare
+        // manuala a fisierului.
+        //
+        // Ca si la %GP%, blocul de aici e doar REZERVA: pastreaza valoarea
+        // curenta pentru modulele care nu trimit nimic. Modulul care chiar
+        // detine setarea o trimite prin $overrides, iar bucla de mai sus
+        // ruleaza INAINTE, deci alegerea adminului are intaietate.
+        $boolFallbacks = array(
+            '%ALLIANCEBONUSES%' => 'NEW_FUNCTIONS_ALLIANCE_BONUSES',
+            '%PLUSSTATS%'       => 'NEW_FUNCTIONS_PLUS_STATISTICS',
+        );
+
+        foreach ($boolFallbacks as $ovPlaceholder => $constant) {
+            if (strpos($text, $ovPlaceholder) === false) {
+                continue;
+            }
+
+            $value = (defined($constant) && constant($constant)) ? 'true' : 'false';
+            $text  = str_replace($ovPlaceholder, $value, $text);
+        }
+
+        // Setarile numerice ale statisticilor, tot ca rezerva.
+        $numFallbacks = array(
+            '%PLUSSTATSHOURS%' => array('PLUS_STATS_INTERVAL_HOURS', 6),
+            '%PLUSSTATSKEEP%'  => array('PLUS_STATS_KEEP_DAYS', 0),
+        );
+
+        foreach ($numFallbacks as $ovPlaceholder => $info) {
+            if (strpos($text, $ovPlaceholder) === false) {
+                continue;
+            }
+
+            list($constant, $default) = $info;
+            $value = defined($constant) ? constant($constant) : $default;
+            $text  = str_replace($ovPlaceholder, (string) $value, $text);
+        }
+
         // Pachetul grafic si comutatorul de pachete proprii.
         //
         // ATENTIE LA ORDINE: acest bloc trebuie sa ruleze DUPA bucla de
