@@ -1,13 +1,14 @@
 <?php
+
 #################################################################################
-##  Statistici grafice (Travian Plus)                                          ##
+##  Graph Statistics (Travian Plus)                                            ##
 ## --------------------------------------------------------------------------- ##
-##  Arata evolutia in timp a contului: rangul, populatia si armata.             ##
-##  Datele se strang pentru toti jucatorii, dar tabul se vede doar cu Plus.     ##
+##  Displays the account's progress over time: rank, population, and army.     ##
+##  Data is collected for all players, but the tab is only visible with Plus.  ##
 ##                                                                             ##
-##  Graficele sunt SVG generat aici, in PHP. Fara biblioteca externa si fara    ##
-##  CDN: serverul poate fi in spatele unui proxy sau fara acces la internet,    ##
-##  iar o pagina de statistici nu are ce cauta sa depinda de asa ceva.          ##
+##  The charts are generated as SVG directly in PHP. No external libraries or  ##
+##  CDNs are used: the server may be behind a proxy or have no Internet        ##
+##  access, and a statistics page should not depend on external resources.     ##
 #################################################################################
 
 // -------------------------------------------------
@@ -304,4 +305,6 @@ $psFields = array(
         : 'Army strength is measured by crop upkeep, which is the game\'s own weighting: it counts a strong unit for more than a weak one. Troops reinforcing other players still count as yours.'; ?>
 </div>
 
-</div>
+</table>
+</table>
+

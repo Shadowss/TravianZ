@@ -222,7 +222,7 @@ if($palace == 0 && $palace1 == 0 && !$building->isCastleBuilt() && $village->nat
 if($blacksmith == 0 && $blacksmith1 == 0 && $academy >= 3 && $mainbuilding >= 3 && $id != 39 && $id != 40) {
     include("avaliable/blacksmith.tpl");
 }
-if($stonemasonslodge == 0 && $stonemasonslodge1 == 0 && $palaceEquiv >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
+if($stonemasonslodge == 0 && $stonemasonslodge1 == 0 && $palaceEquiv >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $village->capital == 1) {
     include("avaliable/stonemason.tpl");
 }
 if($stable == 0 && $stable1 == 0 && $blacksmith >= 3 && $academy >= 5 && $id != 39 && $id != 40) {
