@@ -7881,6 +7881,9 @@ div.alliance div#submenu img.btn_def, div.statistics div#submenu img.btn_def {
 div.alliance div#submenu img.btn_off, div.statistics div#submenu img.btn_off {
     background-image: url("../../img/s/off.gif");
 }
+div.statistics div#submenu img.btn_stats {
+    background-image: url("../../img/s/stats.gif");
+}
 div.statistics div#submenu img.btn_top10 {
     background-image: url("../../img/s/top10.gif");
 }

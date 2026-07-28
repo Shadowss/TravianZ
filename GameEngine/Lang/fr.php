@@ -1996,6 +1996,11 @@ tz_def('TZ_ARRIVED', 'Arrivé :');
 tz_def('TZ_ASSIGN_TO_POSITION', 'Assigner à un poste');
 tz_def('TZ_AS_SOON_AS_A_PLAYER_YOU_INVITED_FO', 'Dès qu\'un joueur que vous avez invité fonde son');
 tz_def('TZ_ATTACKS', 'Attaques');
+tz_def('TZ_OVERVIEW', 'Vue d\'ensemble');
+tz_def('TZ_FORUM', 'Forum');
+tz_def('TZ_CHAT', 'Chat');
+tz_def('TZ_NEWS', 'Actualités');
+tz_def('TZ_OPTIONS', 'Options');
 tz_def('TZ_BOLD', 'gras');
 tz_def('TZ_BUILDING', 'Bâtiment');
 tz_def('TZ_CATAPULT_TARGET', 'cible de la catapulte');
@@ -4188,3 +4193,29 @@ tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Accélère l\'entraînement des troupes da
 tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Augmente la production de points de culture des bâtiments et des casques du héros. Les fêtes de l\'hôtel de ville ne sont pas affectées.');
 tz_def('ALLYBONUS_METALLURGY_DESC', 'Augmente la force d\'attaque et de défense de vos troupes, en plus des améliorations de la forge.');
 tz_def('ALLYBONUS_COMMERCE_DESC', 'Augmente la capacité de charge de chaque marchand. Se multiplie avec le bureau de commerce.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATISTICI GRAFICE (Travian Plus)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('PLUSSTATS_TITLE', 'Statistiques graphiques');
+tz_def('PLUSSTATS_INTRO', 'L\'évolution de votre compte au fil du temps.');
+tz_def('PLUSSTATS_RANK', 'Classement');
+tz_def('PLUSSTATS_POP', 'Population');
+tz_def('PLUSSTATS_ARMY', 'Puissance de l\'armée (consommation de céréales par heure)');
+tz_def('PLUSSTATS_VILLAGES', 'Villages');
+tz_def('PLUSSTATS_TROOPS', 'Troupes');
+tz_def('PLUSSTATS_UPKEEP', 'Consommation de céréales par heure');
+tz_def('PLUSSTATS_METRIC', 'Indicateur');
+tz_def('PLUSSTATS_NOW', 'Maintenant');
+tz_def('PLUSSTATS_CHANGE', 'Évolution');
+tz_def('PLUSSTATS_NODATA', 'Pas encore assez de données');
+tz_def('PLUSSTATS_WAIT', 'Votre compte est en cours d\'enregistrement. Les graphiques apparaîtront dès qu\'il y aura au moins deux relevés.');
+tz_def('PLUSSTATS_NEEDPLUS', 'Les statistiques graphiques sont une fonction Travian Plus. Activez Plus pour voir l\'évolution de votre compte.');
+tz_def('PLUSSTATS_DISABLED', 'Les statistiques graphiques ne sont pas activées sur ce serveur.');
+tz_def('PLUSSTATS_FOOT', 'La puissance de l\'armée se mesure à la consommation de céréales, la pondération propre au jeu : une unité forte compte plus qu\'une faible. Les troupes en renfort chez d\'autres joueurs restent les vôtres.');
+tz_def('ADM_PLUS_STATISTICS', 'Statistiques graphiques Plus');
+tz_def('ADM_PLUS_STATISTICS_TIP', 'Enregistre le classement, la population, les villages et l\'armée de chaque joueur, afin que les joueurs Plus puissent voir l\'évolution de leur compte. L\'onglet n\'est visible qu\'avec un compte Plus actif.');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Intervalle des relevés (heures)');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'Fréquence des relevés. Sur un serveur rapide, une journée représente beaucoup de jeu ; quelques heures donnent une courbe lisible.');
+tz_def('ADM_PLUS_STATISTICS_KEEP', 'Historique conservé (jours)');
+tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 conserve tout, afin que les joueurs voient l\'historique complet de leur compte depuis le début de l\'enregistrement.');

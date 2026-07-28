@@ -209,7 +209,13 @@ function cron_reset_db_caches()
                 continue;
             }
 
-            $prop->setAccessible(true);
+            // Din PHP 8.1 proprietatile private sunt accesibile prin reflectie
+            // fara acest apel, iar din 8.5 apelul e depreciat si umple
+            // error_log cu zeci de avertismente la fiecare tick de cron.
+            // Il pastram doar pentru versiunile vechi, unde chiar e necesar.
+            if (PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
 
             if (is_array($prop->getValue())) {
                 $prop->setValue(null, []);

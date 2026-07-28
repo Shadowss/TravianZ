@@ -28,17 +28,17 @@ if ($session->alliance == $aid && $session->alliance > 0) {
 
     <!-- Overview -->
     <a href="allianz.php" <?php if ($s === 0) { echo 'class="selected"'; } ?>>
-        Overview
+        <?php echo TZ_OVERVIEW; ?>
     </a>
 
     | <!-- Forum -->
     <a href="allianz.php?s=2" <?php if ($s === 2) { echo 'class="selected"'; } ?>>
-        Forum
+        <?php echo TZ_FORUM; ?>
     </a>
 
     | <!-- Chat -->
     <a href="allianz.php?s=6" <?php if ($s === 6) { echo 'class="selected"'; } ?>>
-        Chat
+        <?php echo TZ_CHAT; ?>
     </a>
 
     | <!-- Attacks -->
@@ -48,7 +48,7 @@ if ($session->alliance == $aid && $session->alliance > 0) {
 
     | <!-- News -->
     <a href="allianz.php?s=4" <?php if ($s === 4) { echo 'class="selected"'; } ?>>
-        News
+        <?php echo TZ_NEWS; ?>
     </a>
 
 <?php if (defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') && NEW_FUNCTIONS_ALLIANCE_BONUSES) { ?>
@@ -64,7 +64,7 @@ if ($session->alliance == $aid && $session->alliance > 0) {
 ?>
     | <!-- Options -->
     <a href="allianz.php?s=5" <?php if ($s === 5) { echo 'class="selected"'; } ?>>
-        Options
+        <?php echo TZ_OPTIONS; ?>
     </a>
 <?php
     } else {

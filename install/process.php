@@ -84,6 +84,17 @@ class Process {
 		// Bonusuri de alianta (port T4)
 		$findReplace["%ALLIANCEBONUSES%"] = (isset($_POST['alliance_bonuses']) && $_POST['alliance_bonuses'] === 'true') ? 'true' : 'false';
 
+		// Statistici grafice (Travian Plus)
+		$findReplace["%PLUSSTATS%"] = (isset($_POST['plus_statistics']) && $_POST['plus_statistics'] === 'false') ? 'false' : 'true';
+
+		$psHours = isset($_POST['plus_stats_hours']) ? (float) $_POST['plus_stats_hours'] : 6;
+		if ($psHours < 0.25 || $psHours > 168) { $psHours = 6; }
+		$findReplace["%PLUSSTATSHOURS%"] = $psHours;
+
+		$psKeep = isset($_POST['plus_stats_keep']) ? (int) $_POST['plus_stats_keep'] : 0;
+		if ($psKeep < 0 || $psKeep > 3650) { $psKeep = 0; }
+		$findReplace["%PLUSSTATSKEEP%"] = $psKeep;
+
 		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];

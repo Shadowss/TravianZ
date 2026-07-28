@@ -1990,6 +1990,11 @@ tz_def('TZ_ARRIVED', 'Arrived:');
 tz_def('TZ_ASSIGN_TO_POSITION', 'Assign to position');
 tz_def('TZ_AS_SOON_AS_A_PLAYER_YOU_INVITED_FO', 'As soon as a player you invited founds his');
 tz_def('TZ_ATTACKS', 'Attacks');
+tz_def('TZ_OVERVIEW', 'Overview');
+tz_def('TZ_FORUM', 'Forum');
+tz_def('TZ_CHAT', 'Chat');
+tz_def('TZ_NEWS', 'News');
+tz_def('TZ_OPTIONS', 'Options');
 tz_def('TZ_BOLD', 'bold');
 tz_def('TZ_BUILDING', 'Building');
 tz_def('TZ_CATAPULT_TARGET', 'catapult target');
@@ -4245,3 +4250,29 @@ tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Speeds up troop training in every troop-pr
 tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Increases culture point production from buildings and hero helmets. Town hall celebrations are not affected.');
 tz_def('ALLYBONUS_METALLURGY_DESC', 'Increases the offensive and defensive strength of your troops, on top of your smithy upgrades.');
 tz_def('ALLYBONUS_COMMERCE_DESC', 'Increases how much each merchant can carry. Multiplies with the trade office.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATISTICI GRAFICE (Travian Plus)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('PLUSSTATS_TITLE', 'Graphical statistics');
+tz_def('PLUSSTATS_INTRO', 'The development of your account over time.');
+tz_def('PLUSSTATS_RANK', 'Ranking');
+tz_def('PLUSSTATS_POP', 'Population');
+tz_def('PLUSSTATS_ARMY', 'Army strength (crop upkeep per hour)');
+tz_def('PLUSSTATS_VILLAGES', 'Villages');
+tz_def('PLUSSTATS_TROOPS', 'Troops');
+tz_def('PLUSSTATS_UPKEEP', 'Crop upkeep per hour');
+tz_def('PLUSSTATS_METRIC', 'Metric');
+tz_def('PLUSSTATS_NOW', 'Now');
+tz_def('PLUSSTATS_CHANGE', 'Change');
+tz_def('PLUSSTATS_NODATA', 'Not enough data yet');
+tz_def('PLUSSTATS_WAIT', 'Your account is being recorded. The graphs appear once at least two snapshots exist.');
+tz_def('PLUSSTATS_NEEDPLUS', 'Graphical statistics are a Travian Plus feature. Activate Plus to see the development of your account.');
+tz_def('PLUSSTATS_DISABLED', 'Graphical statistics are not enabled on this server.');
+tz_def('PLUSSTATS_FOOT', 'Army strength is measured by crop upkeep, which is the game\'s own weighting: it counts a strong unit for more than a weak one. Troops reinforcing other players still count as yours.');
+tz_def('ADM_PLUS_STATISTICS', 'Plus graphical statistics');
+tz_def('ADM_PLUS_STATISTICS_TIP', 'Records rank, population, villages and army for every player, so Plus players can see how their account developed. The tab is only visible with an active Plus account.');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Statistics snapshot interval (hours)');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'How often a snapshot is taken. On a fast server a day is a lot of play, so a few hours gives a readable curve.');
+tz_def('ADM_PLUS_STATISTICS_KEEP', 'Statistics history kept (days)');
+tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 keeps everything, so players see the full history of their account since recording began.');

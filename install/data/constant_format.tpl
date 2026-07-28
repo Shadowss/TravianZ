@@ -168,6 +168,26 @@ define("ALLIANCE_BONUS_PCT_LARGE", 4);
 // Gold cost to triple a donation.
 define("ALLIANCE_BONUS_TRIPLE_GOLD", 3);
 
+// ***** Graphical statistics (Travian Plus)
+// The game periodically records each player's rank, population, villages, and
+// army from the moment this feature is enabled. These snapshots are then used
+// to generate the account progression graphs.
+//
+// Data is collected for ALL players, but the Statistics tab is visible ONLY to
+// users with an active Plus account. Otherwise, players who purchase Plus would
+// open the page and see an empty graph immediately after paying.
+define("NEW_FUNCTIONS_PLUS_STATISTICS", %PLUSSTATS%);
+
+// Number of hours between snapshots. On a fast server, a single day represents
+// a significant amount of gameplay, so taking a snapshot every 6 hours provides
+// a smooth graph without filling the database table too quickly.
+define("PLUS_STATS_INTERVAL_HOURS", %PLUSSTATSHOURS%);
+
+// Number of days to retain historical data. Set to 0 to keep all snapshots,
+// allowing the complete account progression to be displayed. Even over the
+// lifetime of an entire server, this only amounts to a few tens of thousands of records.
+define("PLUS_STATS_KEEP_DAYS", %PLUSSTATSKEEP%);
+
 // ***** Graphic Pack
 //
 // SERVER_GP is the pack every player sees by default (chosen at install or in

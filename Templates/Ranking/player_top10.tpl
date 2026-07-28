@@ -47,7 +47,31 @@
 	<table cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th><?php echo TZ_TOP_10_PLAYERS; ?><div id="submenu"><a title="<?php echo TZ_TOP_10; ?>" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="<?php echo TZ_TOP_10; ?>"></a><a title="<?php echo DEFENDER; ?>" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="<?php echo DEFENDER; ?>"></a><a title="<?php echo ATTACKER; ?>" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a></div><div id="submenu2"></div></th>
+			<th><?php echo TZ_TOP_10_PLAYERS; ?>
+			<div id="submenu">
+										    <?php
+                        // Tabul de statistici grafice: apare doar cand functia e
+                        // pornita SI jucatorul are Plus activ.
+                        //
+                        // Iconita foloseste acelasi tipar ca vecinele ei: un
+                        // img gol (img/x.gif) cu imaginea pusa din CSS prin
+                        // clasa. Sprite-ul e la gpack/<pachet>/img/s/stats.gif,
+                        // 30x63, cu starea normala sus si cea activa jos.
+                        if (defined('NEW_FUNCTIONS_PLUS_STATISTICS') && NEW_FUNCTIONS_PLUS_STATISTICS
+                            && isset($session->plus) && (int) $session->plus == 1) {
+                            $psLabel = defined('PLUSSTATS_TITLE') ? PLUSSTATS_TITLE : 'Graphical statistics';
+                            $psLabel = htmlspecialchars($psLabel, ENT_QUOTES, 'UTF-8');
+                            echo '<a title="' . $psLabel . '" href="statistiken.php?id=50">'
+                               . '<img class="btn_stats" src="img/x.gif" alt="' . $psLabel . '" />'
+                               . '</a>';
+                        }
+                    ?>
+			<a title="<?php echo TZ_TOP_10; ?>" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="<?php echo TZ_TOP_10; ?>"></a>
+			<a title="<?php echo DEFENDER; ?>" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="<?php echo DEFENDER; ?>"></a>
+			<a title="<?php echo ATTACKER; ?>" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a>
+			</div><div id="submenu2">
+			</div>
+			</th>
 		</tr>
 	</thead>
 </table>

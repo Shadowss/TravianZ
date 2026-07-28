@@ -1957,6 +1957,11 @@ tz_def('TZ_ARRIVED', 'Sosit:');
 tz_def('TZ_ASSIGN_TO_POSITION', 'Atribuie la poziție');
 tz_def('TZ_AS_SOON_AS_A_PLAYER_YOU_INVITED_FO', 'De îndată ce un jucător invitat de tine își întemeiază');
 tz_def('TZ_ATTACKS', 'Atacuri');
+tz_def('TZ_OVERVIEW', 'Prezentare');
+tz_def('TZ_FORUM', 'Forum');
+tz_def('TZ_CHAT', 'Chat');
+tz_def('TZ_NEWS', 'Noutăți');
+tz_def('TZ_OPTIONS', 'Opțiuni');
 tz_def('TZ_BOLD', 'îngroșat');
 tz_def('TZ_BUILDING', 'Clădire');
 tz_def('TZ_CATAPULT_TARGET', 'ținta catapultei');
@@ -3985,3 +3990,29 @@ tz_def('ALLYBONUS_RECRUITMENT_DESC', 'Grabeste instruirea trupelor in toate clad
 tz_def('ALLYBONUS_PHILOSOPHY_DESC', 'Creste productia de puncte de cultura de la cladiri si de la coifurile eroului. Serbarile din primarie nu sunt afectate.');
 tz_def('ALLYBONUS_METALLURGY_DESC', 'Creste forta de atac si de aparare a trupelor, peste imbunatatirile din fierarie.');
 tz_def('ALLYBONUS_COMMERCE_DESC', 'Creste cat poate cara fiecare negustor. Se inmulteste cu biroul comercial.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATISTICI GRAFICE (Travian Plus)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('PLUSSTATS_TITLE', 'Statistici grafice');
+tz_def('PLUSSTATS_INTRO', 'Evolutia contului tau in timp.');
+tz_def('PLUSSTATS_RANK', 'Clasament');
+tz_def('PLUSSTATS_POP', 'Populatie');
+tz_def('PLUSSTATS_ARMY', 'Puterea armatei (cereale consumate pe ora)');
+tz_def('PLUSSTATS_VILLAGES', 'Sate');
+tz_def('PLUSSTATS_TROOPS', 'Trupe');
+tz_def('PLUSSTATS_UPKEEP', 'Cereale consumate pe ora');
+tz_def('PLUSSTATS_METRIC', 'Indicator');
+tz_def('PLUSSTATS_NOW', 'Acum');
+tz_def('PLUSSTATS_CHANGE', 'Evolutie');
+tz_def('PLUSSTATS_NODATA', 'Inca nu sunt destule date');
+tz_def('PLUSSTATS_WAIT', 'Contul tau se inregistreaza. Graficele apar dupa ce exista cel putin doua masuratori.');
+tz_def('PLUSSTATS_NEEDPLUS', 'Statisticile grafice sunt o functie Travian Plus. Activeaza Plus ca sa vezi evolutia contului.');
+tz_def('PLUSSTATS_DISABLED', 'Statisticile grafice nu sunt activate pe acest server.');
+tz_def('PLUSSTATS_FOOT', 'Puterea armatei se masoara prin cerealele consumate, cantarul propriu al jocului: o unitate puternica valoreaza mai mult decat una slaba. Trupele trimise ca intarire la alti jucatori raman ale tale.');
+tz_def('ADM_PLUS_STATISTICS', 'Statistici grafice Plus');
+tz_def('ADM_PLUS_STATISTICS_TIP', 'Inregistreaza rangul, populatia, satele si armata fiecarui jucator, ca jucatorii cu Plus sa vada cum a evoluat contul. Tabul se vede doar cu Plus activ.');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Intervalul intre masuratori (ore)');
+tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'Cat de des se ia o masuratoare. Pe un server rapid o zi inseamna mult joc, asa ca cateva ore dau o curba lizibila.');
+tz_def('ADM_PLUS_STATISTICS_KEEP', 'Istoric pastrat (zile)');
+tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 pastreaza tot, ca jucatorii sa vada istoricul complet al contului de la inceputul inregistrarii.');

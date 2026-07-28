@@ -256,6 +256,31 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
+                    <td class="b"><?php echo ADM_PLUS_STATISTICS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_PLUS_STATISTICS_TIP; ?></span></em>
+                    <?php if (!defined('NEW_FUNCTIONS_PLUS_STATISTICS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;"><?php echo ADM_NOT_PRESENT_IN_CONFIG_PHP_YET_SAVING_THIS_FO; ?></span><?php endif; ?>
+                    </td>
+                    <td>
+                        <select name="plus_statistics">
+                            <option value="true" <?php if (defined('NEW_FUNCTIONS_PLUS_STATISTICS') && NEW_FUNCTIONS_PLUS_STATISTICS) echo "selected"; ?>>True</option>
+                            <option value="false" <?php if (!defined('NEW_FUNCTIONS_PLUS_STATISTICS') || !NEW_FUNCTIONS_PLUS_STATISTICS) echo "selected"; ?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="b"><?php echo ADM_PLUS_STATISTICS_INTERVAL; ?><em class="tooltip">?<span class="classic"><?php echo ADM_PLUS_STATISTICS_INTERVAL_TIP; ?></span></em></td>
+                    <td>
+                        <input type="text" name="plus_stats_hours" size="6"
+                               value="<?php echo defined('PLUS_STATS_INTERVAL_HOURS') ? PLUS_STATS_INTERVAL_HOURS : 6; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="b"><?php echo ADM_PLUS_STATISTICS_KEEP; ?><em class="tooltip">?<span class="classic"><?php echo ADM_PLUS_STATISTICS_KEEP_TIP; ?></span></em></td>
+                    <td>
+                        <input type="text" name="plus_stats_keep" size="6"
+                               value="<?php echo defined('PLUS_STATS_KEEP_DAYS') ? PLUS_STATS_KEEP_DAYS : 0; ?>">
+                    </td>
+                </tr>
+                <tr>
                     <td class="b"><?php echo ADM_NEW_TRIBE_HUNS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_ENABLE_DISABLE_TRIBE_HUNS; ?></span></em>
                     <?php if (!defined('NEW_FUNCTION_TRIBE_HUNS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;"><?php echo ADM_NOT_PRESENT_IN_CONFIG_PHP_YET_SAVING_THIS_FO; ?></span><?php endif; ?>
                     </td>

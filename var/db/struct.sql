@@ -410,6 +410,35 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_donation_log` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%PREFIX%player_statistics_history`
+-- Periodic snapshots used by the Travian Plus graphical statistics page.
+-- Recorded for every player; only Plus accounts may view the graphs.
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%player_statistics_history` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `uid` int(11) NOT NULL,
+ `recorded_at` int(11) NOT NULL,
+ `rank` int(11) NOT NULL DEFAULT '0',
+ `population` int(11) NOT NULL DEFAULT '0',
+ `villages` smallint(6) NOT NULL DEFAULT '0',
+ `troop_count` int(11) NOT NULL DEFAULT '0',
+ `troop_upkeep` int(11) NOT NULL DEFAULT '0',
+ `attack_points` bigint(20) NOT NULL DEFAULT '0',
+ `defence_points` bigint(20) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`id`),
+ UNIQUE KEY `uid_time` (`uid`, `recorded_at`),
+ KEY `recorded_at` (`recorded_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%player_statistics_history`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%PREFIX%attacks`
 --
 

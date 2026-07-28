@@ -312,6 +312,12 @@ foreach($mechs as $k => $l){
     <div><label>Hero base regeneration (HP/day)</label><input class="input" name="hero_base_regen" id="hero_base_regen" value="10"></div>
     <div><label>Silver received per 1 gold</label><input class="input" name="hero_silver_per_gold" id="hero_silver_per_gold" value="10"></div>
     <div><label>Silver needed for 1 gold</label><input class="input" name="hero_silver_to_gold" id="hero_silver_to_gold" value="25"></div>
+    <div><label>Plus graphical statistics</label><select class="input" name="plus_statistics">
+        <option value="true" selected>Yes &ndash; record account history, graphs for Plus players</option>
+        <option value="false">No</option>
+    </select></div>
+    <div><label>Statistics snapshot interval (hours)</label><input class="input" type="text" name="plus_stats_hours" value="6"></div>
+    <div><label>Statistics history kept (days, 0 = forever)</label><input class="input" type="text" name="plus_stats_keep" value="0"></div>
     <div><label>Alliance bonuses (T4)</label><select class="input" name="alliance_bonuses">
         <option value="false" selected>No</option>
         <option value="true">Yes</option>

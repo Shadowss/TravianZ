@@ -55,6 +55,9 @@ if (!empty($_GET['id'])) {
         case '8':
             echo HEROES;
             break;
+        case '50':
+            echo defined('PLUSSTATS_TITLE') ? PLUSSTATS_TITLE : 'Graphical statistics';
+            break;
         case '0':
             echo GENERAL;
             break;
@@ -193,6 +196,11 @@ if(isset($_GET['id'])) {
 			break;
 		case 43:
 			include("Templates/Ranking/ally_top10.tpl");
+			break;
+		case 50:
+			// Statistici grafice (Travian Plus). Sablonul isi verifica singur si
+			// flagul, si contul Plus, deci intrarea directa pe URL nu ocoleste nimic.
+			include("Templates/Ranking/statistics.tpl");
 			break;
 		case 0:
 			include("Templates/Ranking/general.tpl");
