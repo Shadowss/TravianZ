@@ -67,14 +67,31 @@ Travian 4-style hero system ported into the T3.6 engine, in phases:
 * Items backend (HeroItems.php) with equippable hero items and data layer.
 * Adventures backend (HeroAdventure.php) with adventure generation and rewards.
 * Auction house (HeroAuction.php) for player-to-player item trading.
+* A new ability : resources production added.
 * Battle and speed integration (HeroBattleBonus.php + Battle.php hooks): item fighting strength, per-unit weapon bonuses, armor damage reduction, hunting horn and speed effects, artwork culture-point item.
+
+⸻
+
+Alliance Bonus System
+
+Travian 4-style alliance system ported into the T3.6 engine, in phases:
+
+* Added Metalurgy Bonus - Speeds up troop training in every troop-producing building. Multiplies with hero helmets.
+* Added Philosophy Bonus - Increases culture point production from buildings and hero helmets. Town hall celebrations are not affected.
+* Added Metallurgy Bonus - Increases the offensive and defensive strength of your troops, on top of your smithy upgrades.
+* Added Commerce Bonus - Increases how much each merchant can carry. Multiplies with the trade office.
 
 ⸻
 
 Admin Panel
 
 * Complete frontend and backend redesign.
+* Multi-Account Detection
+* Push Protection Dashboard
+* Registration Blocklist
+* Quest Editor Page
 * New Admin Panel design.
+* World Map Heatmap
 * New homepage with server statistics.
 * New Server Info page.
 * New Natars Management format.
@@ -107,6 +124,10 @@ Admin Panel
 Gameplay Improvements
 
 * Vacation Mode added (requires 9 conditions).
+* Added Graphical Statistics
+* Added Server Milestones
+* Activated gpack for each player
+* NEW gpack travian_t4 style buildings
 * Alliance rank and privilege management added.
 * Main Building instant demolition with 10 gold.
 * Account Statement added in Travian Plus section (received/spent gold history).

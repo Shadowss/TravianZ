@@ -655,19 +655,12 @@ class Technology {
 	}
 
 	/**
-	 * Reduce timpul de instruire cu procentul dat de coiful echipat al eroului.
-	 *
-	 * Proprietarul e luat din satul in care se face instruirea (nu din sesiune),
-	 * ca sa fie corect si cand codul ruleaza in alt context decat o pagina a
-	 * jucatorului. HeroBattleBonus::bonuses() are deja gard de feature flag si
-	 * cache per request, si intoarce null cand sistemul T4 e oprit.
-	 */
-	/**
-	 * Aplica bonusul de alianta "Recruitment" asupra timpului de instruire.
-	 *
-	 * Proprietarul se ia din satul in care se instruieste, nu din sesiune, ca sa
-	 * fie corect si cand codul ruleaza in alt context (cron, sitter).
-	 */
+	* Aplica bonusul de alianta "Recruitment" asupra timpului de instruire.
+	*
+	* Proprietarul se ia din satul in care se instruieste, nu din sesiune, ca sa
+	* fie corect si cand codul ruleaza in alt context (cron, sitter).
+	*/
+	
 	private function applyAllianceRecruitmentBonus($each) {
 		global $village, $database;
 
@@ -693,6 +686,15 @@ class Technology {
 		// bonusul de X% inseamna productie mai rapida, deci timp impartit
 		return max(1, (int) round($each / $mult));
 	}
+	
+	/**
+	* Reduce timpul de instruire cu procentul dat de coiful echipat al eroului.
+	*
+	* Proprietarul e luat din satul in care se face instruirea (nu din sesiune),
+	* ca sa fie corect si cand codul ruleaza in alt context decat o pagina a
+	* jucatorului. HeroBattleBonus::bonuses() are deja gard de feature flag si
+	* cache per request, si intoarce null cand sistemul T4 e oprit.
+	*/
 
 	private function applyHeroTrainingBonus($each, $unit, array $footies, array $calvary) {
 		global $village, $database;

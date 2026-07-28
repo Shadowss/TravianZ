@@ -416,11 +416,15 @@ class Alliance {
         }
 		
         $database->updateUserField($session->uid, "alliance", $aid, 1);
-        // Bonusurile de alianta devin disponibile treptat pentru
-        // membrii noi, deci retinem cand a intrat. Fara asta,
-        // cineva ar putea sari dintr-o alianta in alta doar ca sa
-        // culeaga bonusuri de nivel mare.
-        $database->updateUserField($session->uid, "alliance_joined", time(), 1);
+
+        // FONDATORUL nu e "membru nou": alianta nu exista inaintea lui, deci nu
+        // are de unde sa "sara" ca sa culeaga bonusuri deja deblocate. Lasam
+        // alliance_joined pe 0, adica acces complet.
+        //
+        // Intarzierea de disponibilitate exista ca sa nu poti trece dintr-o
+        // alianta in alta doar ca sa profiti de nivelurile ei mari - lucru
+        // imposibil intr-o alianta pe care tocmai ai infiintat-o.
+        $database->updateUserField($session->uid, "alliance_joined", 0, 1);
 
         $database->procAllyPop($aid);
         $database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');

@@ -4016,3 +4016,10 @@ tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Intervalul intre masuratori (ore)');
 tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'Cat de des se ia o masuratoare. Pe un server rapid o zi inseamna mult joc, asa ca cateva ore dau o curba lizibila.');
 tz_def('ADM_PLUS_STATISTICS_KEEP', 'Istoric pastrat (zile)');
 tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 pastreaza tot, ca jucatorii sa vada istoricul complet al contului de la inceputul inregistrarii.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - disponibilitate pentru membrii noi
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_YOURLEVEL', 'Nivelul tau');
+tz_def('ALLYBONUS_UNLOCKS_IN', 'urmatorul in');
+tz_def('ALLYBONUS_NEWMEMBER', 'Membrii noi capata acces treptat la nivelurile mari: nivelul 2 dupa 24 de ore in alianta, nivelul 3 dupa 48 de ore si asa mai departe.');

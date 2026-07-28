@@ -4276,3 +4276,10 @@ tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Statistics snapshot interval (hours)');
 tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'How often a snapshot is taken. On a fast server a day is a lot of play, so a few hours gives a readable curve.');
 tz_def('ADM_PLUS_STATISTICS_KEEP', 'Statistics history kept (days)');
 tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 keeps everything, so players see the full history of their account since recording began.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - disponibilitate pentru membrii noi
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_YOURLEVEL', 'Your level');
+tz_def('ALLYBONUS_UNLOCKS_IN', 'next unlocks in');
+tz_def('ALLYBONUS_NEWMEMBER', 'New members gain access to higher levels gradually: level 2 after 24 hours in the alliance, level 3 after 48 hours, and so on.');

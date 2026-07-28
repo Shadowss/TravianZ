@@ -113,6 +113,7 @@ $abGpack   = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
 /* descrierea sta in dreapta numelui si ocupa spatiul ramas */
 .ab-desc{flex:1;color:#666;font-size:11px;line-height:1.35;padding-left:4px}
 .ab-eff{color:#1f7a1f;font-weight:bold}
+.ab-wait{color:#a60;font-size:10px}
 .ab-bar{background:#fff;border:1px solid #c9c9c9;height:13px;overflow:hidden;margin:4px 0}
 .ab-bar i{display:block;height:100%;background:#7db72f}
 .ab-num{font-size:11px;color:#555}
@@ -156,7 +157,24 @@ $abGpack   = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
                 <span class="ab-lvl">
                     <?php echo defined('ALLYBONUS_LEVEL') ? ALLYBONUS_LEVEL : 'Level'; ?>
                     <?php echo $abLevel; ?> / <?php echo AllianceBonus::MAX_LEVEL; ?>
-                    &nbsp;<span class="ab-eff">+<?php echo (int) AllianceBonus::percentFor($abT, $abLevel); ?>%</span>
+                    <?php
+                        // Nivelul de care beneficiezi TU poate fi mai mic decat cel
+                        // al aliantei: membrii noi capata acces treptat. Aratam
+                        // amandoua valorile, altfel bonusul pare ca nu se aplica.
+                        $abMine = $abEngine->effectiveLevel($session->uid, $abT);
+                        $abWait = $abEngine->waitingFor($session->uid, $abT);
+                    ?>
+                    &nbsp;<span class="ab-eff">+<?php echo (int) AllianceBonus::percentFor($abT, $abMine); ?>%</span>
+                    <?php if ($abMine < $abLevel) { ?>
+                        <br><span class="ab-wait">
+                            <?php echo defined('ALLYBONUS_YOURLEVEL') ? ALLYBONUS_YOURLEVEL : 'Your level'; ?>:
+                            <b><?php echo $abMine; ?></b>
+                            <?php if ($abWait > 0) { ?>
+                                &ndash; <?php echo defined('ALLYBONUS_UNLOCKS_IN') ? ALLYBONUS_UNLOCKS_IN : 'next in'; ?>
+                                <?php echo $generator->getTimeFormat($abWait); ?>
+                            <?php } ?>
+                        </span>
+                    <?php } ?>
                 </span>
             </span>
             <span class="ab-desc"><?php
@@ -202,6 +220,11 @@ $abGpack   = defined('GP_LOCATE') ? GP_LOCATE : 'gpack/travian_default/';
         <?php } ?>
     </div>
 <?php } ?>
+</div>
+
+<div class="ab-note">
+    <?php echo defined('ALLYBONUS_NEWMEMBER') ? ALLYBONUS_NEWMEMBER
+        : 'New members gain access to higher levels gradually: level 2 after 24 hours in the alliance, level 3 after 48 hours, and so on.'; ?>
 </div>
 
 <div class="ab-note">

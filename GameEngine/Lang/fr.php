@@ -4219,3 +4219,10 @@ tz_def('ADM_PLUS_STATISTICS_INTERVAL', 'Intervalle des relevés (heures)');
 tz_def('ADM_PLUS_STATISTICS_INTERVAL_TIP', 'Fréquence des relevés. Sur un serveur rapide, une journée représente beaucoup de jeu ; quelques heures donnent une courbe lisible.');
 tz_def('ADM_PLUS_STATISTICS_KEEP', 'Historique conservé (jours)');
 tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 conserve tout, afin que les joueurs voient l\'historique complet de leur compte depuis le début de l\'enregistrement.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// BONUSURI DE ALIANTA - disponibilitate pentru membrii noi
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ALLYBONUS_YOURLEVEL', 'Votre niveau');
+tz_def('ALLYBONUS_UNLOCKS_IN', 'prochain dans');
+tz_def('ALLYBONUS_NEWMEMBER', 'Les nouveaux membres accèdent progressivement aux niveaux supérieurs : niveau 2 après 24 heures dans l\'alliance, niveau 3 après 48 heures, etc.');

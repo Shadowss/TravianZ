@@ -304,6 +304,52 @@ class AllianceBonus
         return max(0, min($level, $allowed));
     }
 
+    /**
+     * Cat mai are de asteptat un jucator pana i se deschide nivelul urmator.
+     *
+     * Intoarce numarul de secunde, sau 0 daca deja beneficiaza de tot ce a
+     * deblocat alianta. Se foloseste in pagina de bonusuri: fara asta, un
+     * membru nou vede "nivel 2" dar simte efectul nivelului 1 si nu are cum
+     * sa-si dea seama de ce.
+     */
+    public function waitingFor($uid, $btype)
+    {
+        if (!self::enabled()) {
+            return 0;
+        }
+
+        $uid = (int) $uid;
+        $res = mysqli_query($this->db,
+            "SELECT alliance, alliance_joined FROM " . TB_PREFIX . "users WHERE id = " . $uid . " LIMIT 1");
+        $row = $res ? mysqli_fetch_assoc($res) : null;
+
+        if (!$row || (int) $row['alliance'] <= 0) {
+            return 0;
+        }
+
+        $levels    = $this->getLevels((int) $row['alliance']);
+        $unlocked  = isset($levels[(int) $btype]) ? (int) $levels[(int) $btype] : 0;
+        $effective = $this->effectiveLevel($uid, $btype);
+
+        if ($effective >= $unlocked) {
+            return 0;       // beneficiaza deja de tot
+        }
+
+        $joined = (int) $row['alliance_joined'];
+
+        if ($joined <= 1) {
+            return 0;
+        }
+
+        $speed = (defined('SPEED') && SPEED > 0) ? (float) SPEED : 1.0;
+        $step  = max(60, (int) (86400 / $speed));
+
+        // nivelul (effective + 1) devine disponibil dupa effective * step
+        $ready = $joined + ($effective * $step);
+
+        return max(0, $ready - time());
+    }
+
     /* ------------------------------------------------------------------ */
     /* Donatii                                                             */
     /* ------------------------------------------------------------------ */
