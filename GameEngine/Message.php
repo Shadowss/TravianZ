@@ -151,6 +151,34 @@ class Message
             if (!is_array($type)) {
                 $type = [$type];
             }
+
+            /**
+             * Filtru suplimentar dupa REZULTAT, pentru rapoartele de lupta.
+             *
+             * Rapoartele de alianta au deja acest filtru (sabii verzi/galbene);
+             * cele personale nu il aveau, desi informatia exista deja in ntype:
+             *
+             *   1 / 4  castigat fara pierderi (atacator / aparator)
+             *   2 / 5  castigat cu pierderi
+             *   3 / 6 / 7  pierdut
+             *
+             * Nu e nevoie de nicio schimbare in baza de date.
+             */
+            if ((int) $get['t'] === 3 && isset($get['f'])) {
+                $results = array(
+                    1 => array(1, 4),        // victorie fara pierderi
+                    2 => array(2, 5),        // victorie cu pierderi
+                    3 => array(3, 6, 7),     // infrangere
+                );
+
+                $f = (int) $get['f'];
+
+                if (isset($results[$f])) {
+                    // pastram doar tipurile care sunt SI in categorie, SI in rezultat
+                    $type = array_values(array_intersect($type, $results[$f]));
+                }
+            }
+
             $this->noticearray = $this->filter_by_value(
                 $database->getNotice($session->uid),
                 "ntype",

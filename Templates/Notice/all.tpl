@@ -58,7 +58,14 @@ $t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
 $o = isset($_GET['o']) ? (int)$_GET['o'] : 0;
 
 // ======================== URL BUILD HELP ========================
-$queryBase = (!empty($_GET['t'])) ? 't='.$_GET['t'].'&amp;' : '';
+// Baza pentru linkurile de paginare. Pastreaza si filtrul de rezultat (f),
+// altfel trecerea la pagina urmatoare l-ar pierde si ai vedea din nou toate
+// rapoartele de lupta.
+$queryBase = (!empty($_GET['t'])) ? 't='.(int)$_GET['t'].'&amp;' : '';
+
+if (!empty($_GET['t']) && (int)$_GET['t'] === 3 && !empty($_GET['f'])) {
+    $queryBase .= 'f='.(int)$_GET['f'].'&amp;';
+}
 
 ?>
 
@@ -70,7 +77,12 @@ $queryBase = (!empty($_GET['t'])) ? 't='.$_GET['t'].'&amp;' : '';
 <tr>
     <th colspan="2"><?php echo SUBJECT; ?>:</th>
     <th class="sent">
-        <a href="berichte.php?o=1<?php echo (!empty($_GET['t']) ? '&amp;t='.$_GET['t'] : ''); ?>"><?php echo SENT; ?></a>
+        <a href="berichte.php?o=1<?php
+            echo (!empty($_GET['t']) ? '&amp;t='.(int)$_GET['t'] : '');
+            // pastram si filtrul de rezultat la sortare
+            echo (!empty($_GET['t']) && (int)$_GET['t'] === 3 && !empty($_GET['f']))
+                ? '&amp;f='.(int)$_GET['f'] : '';
+        ?>"><?php echo SENT; ?></a>
     </th>
 </tr>
 </thead>

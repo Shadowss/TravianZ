@@ -4226,3 +4226,11 @@ tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 conserve tout, afin que les joueurs vo
 tz_def('ALLYBONUS_YOURLEVEL', 'Votre niveau');
 tz_def('ALLYBONUS_UNLOCKS_IN', 'prochain dans');
 tz_def('ALLYBONUS_NEWMEMBER', 'Les nouveaux membres accèdent progressivement aux niveaux supérieurs : niveau 2 après 24 heures dans l\'alliance, niveau 3 après 48 heures, etc.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// RAPOARTE - filtru dupa rezultatul luptei
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_RPT_ALL_RESULTS', 'Tous les résultats');
+tz_def('TZ_RPT_F_WON_NOLOSS', 'Gagné sans pertes');
+tz_def('TZ_RPT_F_WON_LOSS', 'Gagné avec pertes');
+tz_def('TZ_RPT_F_LOST', 'Perdu');

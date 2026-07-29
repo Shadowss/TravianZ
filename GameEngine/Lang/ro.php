@@ -4023,3 +4023,11 @@ tz_def('ADM_PLUS_STATISTICS_KEEP_TIP', '0 pastreaza tot, ca jucatorii sa vada is
 tz_def('ALLYBONUS_YOURLEVEL', 'Nivelul tau');
 tz_def('ALLYBONUS_UNLOCKS_IN', 'urmatorul in');
 tz_def('ALLYBONUS_NEWMEMBER', 'Membrii noi capata acces treptat la nivelurile mari: nivelul 2 dupa 24 de ore in alianta, nivelul 3 dupa 48 de ore si asa mai departe.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// RAPOARTE - filtru dupa rezultatul luptei
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_RPT_ALL_RESULTS', 'Toate rezultatele');
+tz_def('TZ_RPT_F_WON_NOLOSS', 'Castigat fara pierderi');
+tz_def('TZ_RPT_F_WON_LOSS', 'Castigat cu pierderi');
+tz_def('TZ_RPT_F_LOST', 'Pierdut');

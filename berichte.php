@@ -98,6 +98,43 @@ if(isset($_GET['newdid'])) {
  }
  ?>
 </div>
+
+<?php
+/**
+ * Filtru dupa rezultat, doar in categoria de atacuri.
+ *
+ * Rapoartele de alianta aveau deja acest filtru; cele personale nu. Informatia
+ * exista deja in ntype, deci nu e nevoie de nicio schimbare in baza de date
+ * (vezi Message::noticeType).
+ */
+if (isset($_GET['t']) && (int) $_GET['t'] === 3) {
+
+    $rptFilters = array(
+        0 => defined('TZ_RPT_ALL_RESULTS') ? TZ_RPT_ALL_RESULTS : 'All',
+        1 => defined('TZ_RPT_F_WON_NOLOSS') ? TZ_RPT_F_WON_NOLOSS : 'Won without losses',
+        2 => defined('TZ_RPT_F_WON_LOSS') ? TZ_RPT_F_WON_LOSS : 'Won with losses',
+        3 => defined('TZ_RPT_F_LOST') ? TZ_RPT_F_LOST : 'Lost',
+    );
+
+    $rptCurrent = isset($_GET['f']) ? (int) $_GET['f'] : 0;
+
+    echo '<div id="textmenu" class="rpt-result-filter">';
+
+    foreach ($rptFilters as $rptVal => $rptLabel) {
+        if ($rptVal > 0) {
+            echo ' | ';
+        }
+
+        $rptHref = 'berichte.php?t=3' . ($rptVal > 0 ? '&amp;f=' . $rptVal : '');
+
+        echo '<a href="' . $rptHref . '"'
+           . ($rptCurrent === $rptVal ? ' class="selected "' : '')
+           . '>' . htmlspecialchars($rptLabel, ENT_QUOTES, 'UTF-8') . '</a>';
+    }
+
+    echo '</div>';
+}
+?>
 <?php
 if (isset($_GET['id'])) 
 {
