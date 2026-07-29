@@ -132,6 +132,7 @@ Gameplay Improvements
 * Main Building instant demolition with 10 gold.
 * Account Statement added in Travian Plus section (received/spent gold history).
 * Winner registration check added.
+* Added Reports filter on Attacks
 * Medal onclick support.
 * Complete Preferences system (frontend & backend):
     * Language
