@@ -689,25 +689,62 @@ class HeroItems
             return self::USE_OK;
         }
 
-        /* ---- Bucket of Water: instant free revive of the dead hero ---- */
-        if (isset($bonus[HB_BUCKET])) {
-            $stmt = $this->db->prepare(
-                "UPDATE " . TB_PREFIX . "hero
-                    SET dead = 0, health = 100, inrevive = 0, lastupdate = ?
-                  WHERE uid = ? AND dead = 1 LIMIT 1"
-            );
-            $now = time();
-            $stmt->bind_param('ii', $now, $uid);
-            $stmt->execute();
-            $revived = $stmt->affected_rows > 0;
-            $stmt->close();
+		/* ---- Bucket of Water: instant free revive of the dead hero ---- */
+		if (isset($bonus[HB_BUCKET])) {
+			// Luăm rândul eroului mort (avem nevoie de heroid + wref)
+			$stmt = $this->db->prepare(
+			"SELECT heroid, wref FROM " . TB_PREFIX . "hero
+			WHERE uid = ? AND dead = 1 LIMIT 1"
+			);
+			$stmt->bind_param('i', $uid);
+			$stmt->execute();
+			$stmt->bind_result($heroid, $wref);
+			$found = $stmt->fetch();
+			$stmt->close();
 
-            if (!$revived) {
-                return self::USE_INVALID; // no dead hero to revive
-            }
-            $this->removeItem($uid, $rowId, 1); // one bucket per revive
-            return self::USE_OK;
+		if (!$found) {
+			return self::USE_INVALID; // no dead hero to revive
+		}
+
+		$heroid = (int) $heroid;
+		$wref   = (int) $wref;
+		$now    = time();
+
+		$this->db->begin_transaction();
+		try {
+        // 1. Marchează eroul ca viu
+        $stmt = $this->db->prepare(
+            "UPDATE " . TB_PREFIX . "hero
+                SET dead = 0, health = 100, inrevive = 0, lastupdate = ?
+              WHERE heroid = ? AND dead = 1 LIMIT 1"
+        );
+        $stmt->bind_param('ii', $now, $heroid);
+        $stmt->execute();
+        $revived = $stmt->affected_rows > 0;
+        $stmt->close();
+
+        if (!$revived) {
+            $this->db->rollback();
+            return self::USE_INVALID;
         }
+
+        // 2. Pune eroul înapoi în sat (units.hero = 1)
+        $stmt = $this->db->prepare(
+            "UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ? LIMIT 1"
+        );
+        $stmt->bind_param('i', $wref);
+        $stmt->execute();
+        $stmt->close();
+
+        $this->db->commit();
+		} catch (Throwable $e) {
+        $this->db->rollback();
+        return self::USE_INVALID;
+		}
+
+		$this->removeItem($uid, $rowId, 1); // one bucket per revive
+		return self::USE_OK;
+		}
 
         /* ---- Book of Wisdom: reset attribute points ---- */
         if (isset($bonus[HB_RESET])) {
