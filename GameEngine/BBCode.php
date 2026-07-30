@@ -21,7 +21,8 @@
 #################################################################################
 
 include_once("config.php");
-include_once("Lang/" . LANG . ".php");
+require_once __DIR__ . "/Lang/loader.php";
+tz_load_language(LANG);
 
 /**
  * Ensure input exists (avoid undefined variable issues)

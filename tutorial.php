@@ -24,7 +24,8 @@ use App\Utils\AccessLogger;
 
 include_once("GameEngine/config.php");
 include_once("GameEngine/Database.php");
-include_once("GameEngine/Lang/".LANG.".php");
+require_once __DIR__ . "/GameEngine/Lang/loader.php";
+tz_load_language(LANG);
 AccessLogger::logRequest();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

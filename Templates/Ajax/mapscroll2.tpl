@@ -25,7 +25,8 @@
 ========================= */
 session_start();
 include_once('GameEngine/config.php');
-include_once("GameEngine/Lang/". LANG. ".php");
+require_once dirname(__DIR__, 2) . "/GameEngine/Lang/loader.php";
+tz_load_language(LANG);
 include_once("GameEngine/Generator.php");
 include_once("GameEngine/Database.php");
 

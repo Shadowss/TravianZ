@@ -38,7 +38,8 @@ include_once("../GameEngine/Admin/csrf.php");
 // ─── CORE INCLUDES ───────────────────────────────────────────────────────────
 include_once("../GameEngine/config.php");
 include_once("../GameEngine/Database.php");
-include_once("../GameEngine/Lang/" . LANG . ".php");
+require_once __DIR__ . "/../GameEngine/Lang/loader.php";
+tz_load_language(LANG);
 include_once("../GameEngine/Admin/database.php");
 
 // Helperul care descopera pachetele grafice din gpack/ (tz_available_gpacks).

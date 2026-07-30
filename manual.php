@@ -22,14 +22,8 @@
 #################################################################################
 
 include_once("GameEngine/config.php");
-// Load the interface language for the manual templates. Since #186 these
-// templates use translation constants (OVERVIEW, TRIBE1, ...) instead of
-// hardcoded English; without a language file every constant would be
-// undefined and PHP 8.3 would fatal, leaving the in-game help iframe blank.
-// en.php is loaded last as an idempotent fallback (tz_def) to fill any key
-// missing from the active language.
-include_once("GameEngine/Lang/" . LANG . ".php");
-include_once("GameEngine/Lang/en.php");
+require_once __DIR__ . "/GameEngine/Lang/loader.php";
+tz_load_language(LANG);
 ?>
 
 <html>
