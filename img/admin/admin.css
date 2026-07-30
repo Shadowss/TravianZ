@@ -28,7 +28,7 @@ body {
 #ltop4 {width:911px;}
 
 /* Div enclosing the entire middle section */
-#lmidall {background-image: none; float: none; height: auto; margin: 0 auto; width: 1350px;}
+#lmidall {background-image: none; float: none; height: auto; margin: 0 auto; width: 980px;}
 
 /* Div enclosing the entire middle section */
 #lmidlc {position:relative; min-width:682px; float:left;}
@@ -48,7 +48,7 @@ body {
 #lmid2,
 #lmid3 {
     position: relative;
-    width: 1000px;
+    width: 500px;
     padding-bottom: 10px;
     padding-left: 26px;
     padding-right: 26px;

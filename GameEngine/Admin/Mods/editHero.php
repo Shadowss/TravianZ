@@ -56,7 +56,7 @@ if (isset($_POST['id'], $_POST['hid'])) {
     $hunit   = (int)($_POST['hunit'] ?? 0);
     // plafonul vine din tabelul de niveluri (ultimul index e santinela), ca sa
     // urmeze automat extinderea facuta pentru al 6-lea atribut
-    $hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 120;
+    $hMaxLevel = isset($hero_levels) ? max(array_keys($hero_levels)) - 1 : 119;
     $hlvl    = max(0, min($hMaxLevel, (int)($_POST['hlvl'] ?? 0)));
     $exp     = (int)($_POST['exp'] ?? 0);
     $hhealth = (float)($_POST['hhealth'] ?? 100);
