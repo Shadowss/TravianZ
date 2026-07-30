@@ -11,7 +11,8 @@ services:
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - travianz-network
     restart: unless-stopped
@@ -26,13 +27,18 @@ services:
       MARIADB_PASSWORD: ${MARIADB_PASSWORD:-${MYSQL_PASSWORD:-travianzpass}}
     volumes:
       - db-data:/var/lib/mysql
-      - ./var/db:/docker-entrypoint-initdb.d:ro
     ports:
       - "3306:3306"
     networks:
       - travianz-network
     restart: unless-stopped
     command: --sql_mode=""
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -45,7 +51,8 @@ services:
     ports:
       - "8081:80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - travianz-network
     restart: unless-stopped
