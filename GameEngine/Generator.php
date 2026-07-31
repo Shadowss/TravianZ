@@ -124,24 +124,12 @@ class MyGenerator
 	 */
 	public function getTimeFormat($time)
 	{
-     $time = (int) $time;
-		$min = 0;
-		$hr = 0;
+		$time = max(0, (int) $time);
+		$hr = intdiv($time, 3600);
+		$min = intdiv($time % 3600, 60);
+		$seconds = $time % 60;
 
-		while ($time >= 60) {
-			$time -= 60;
-			$min++;
-		}
-
-		while ($min >= 60) {
-			$min -= 60;
-			$hr++;
-		}
-
-		if ($min < 10) $min = "0" . $min;
-		if ($time < 10) $time = "0" . $time;
-
-		return $hr . ":" . $min . ":" . $time;
+		return sprintf('%d:%02d:%02d', $hr, $min, $seconds);
 	}
 
 	/**
