@@ -422,8 +422,17 @@ docker compose up -d
 # Logs
 docker compose logs -f web
 
-# Validate PHP files
-find . -name '*.php' -not -path './var/*' -print0 | xargs -0 -n1 php -l
+# Run every local quality check
+./scripts/check.sh
+
+# Run only PHP syntax checks and regression tests
+./scripts/check.sh php
+
+# Run all zero-dependency regression and contract tests
+./scripts/check.sh test
+
+# Validate Docker Compose
+./scripts/check.sh compose
 ```
 
 Repository references:
