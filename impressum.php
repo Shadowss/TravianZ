@@ -13,7 +13,8 @@ use App\Utils\AccessLogger;
 
 include_once("GameEngine/config.php");
 include_once("GameEngine/Database.php");
-include_once("GameEngine/Lang/".LANG.".php");
+require_once __DIR__ . "/GameEngine/Lang/loader.php";
+tz_load_language(LANG);
 
 AccessLogger::logRequest();
 ?>

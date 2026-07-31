@@ -17,8 +17,9 @@
 #################################################################################
 
 include("../GameEngine/config.php");
-include("../GameEngine/Lang/".LANG.".php");
-include("lang/".LANG.".php");
+require_once dirname(__DIR__) . "/GameEngine/Lang/loader.php";
+tz_load_language(LANG);
+include(__DIR__ . "/lang/".LANG.".php");
 if(T4_COMING==true){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -35,7 +35,8 @@
 		include_once($configFile);
 		include_once("../../GameEngine/Database.php");
 		include_once("../../GameEngine/Admin/database.php");
-		include_once("../../GameEngine/Lang/" . LANG . ".php");
+		require_once dirname(__DIR__, 2) . "/GameEngine/Lang/loader.php";
+		tz_load_language(LANG);
 
 		// update Admin details first
 		$gameConfig = file_get_contents($configFile);
