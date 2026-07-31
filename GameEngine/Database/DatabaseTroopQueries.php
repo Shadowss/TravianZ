@@ -354,8 +354,8 @@ trait DatabaseTroopQueries {
 
 		$q = "SELECT * FROM " . TB_PREFIX . "research where vref = $vid ORDER BY timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
-        $researchingCache[$vid] = $this->mysqli_fetch_all($result);
-        return $researchingCache[$vid];
+        self::$researchingCache[$vid] = $this->mysqli_fetch_all($result);
+        return self::$researchingCache[$vid];
 	}
 
 	function checkIfResearched($vref, $unit, $use_cache = true) {
