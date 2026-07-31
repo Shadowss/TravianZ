@@ -43,9 +43,13 @@ docker compose up -d
 
 This command will:
 - Build the TravianZ web application container
-- Start a MariaDB (latest) database container
-- Start a phpMyAdmin container for database management
+- Start a MariaDB (latest) database container and wait for it to become ready
+- Start the web application and phpMyAdmin after MariaDB is healthy
 - Set up a network for all containers to communicate
+
+The installation wizard creates the TravianZ schema. SQL files in `var/db`
+are templates whose placeholders are resolved by the installer; MariaDB does
+not execute them directly during container initialization.
 
 ### 4. Access the Installation Wizard
 
