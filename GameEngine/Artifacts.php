@@ -152,6 +152,37 @@ class Artifacts
         "f2" => 6, "f8" => 6, "f9" => 6, "f12" => 6, "f13" => 6, "f15" => 6],
     
     /**
+     * @var array Cladirile capitalei Natarilor
+     *
+     * Capitala e satul Minunii Lumii al Natarilor: are Minunea de la bun inceput
+     * (nivel 0, se construieste ulterior - vezi AutomationNatarsWW), plus
+     * infrastructura care ii permite sa o ridice.
+     *
+     * Sloturile f19-f38 sunt cele 20 de locuri de cladiri; f39 e punctul de
+     * adunare, f40 zidul, f99 Minunea. Un slot merge la Primarie, restul de 19
+     * sunt umplute cu Depozite Mari si Hambare Mari la nivel 20, fiindca
+     * fiecare nivel de Minune cere sute de mii de resurse.
+     *
+     * NOTA: in Travian T4, cele 13 sate de Minune NU au zid sau resedinta, ca
+     * sa poata fi cucerite fara berbeci. Capitala Natarilor e insa a lor si nu
+     * se cucereste, deci zidul are sens aici.
+     */
+
+    NATARS_CAPITAL_BUILDINGS = [
+        //Minunea Lumii (nivel 0, se construieste ulterior)
+        "f99t" => 40, "f99" => 0,
+        //Primarie 20, punct de adunare 20, zid 20 (Natarii folosesc zidul de oras)
+        "f19t" => 24, "f19" => 20, "f39t" => 16, "f39" => 1, "f40t" => 31, "f40" => 20,
+        //Restul sloturilor: 10 Depozite Mari si 9 Hambare Mari, toate la nivel 20
+        "f20t" => 38, "f20" => 20, "f22t" => 38, "f22" => 20, "f24t" => 38, "f24" => 20,
+        "f26t" => 38, "f26" => 20, "f28t" => 38, "f28" => 20, "f30t" => 38, "f30" => 20,
+        "f32t" => 38, "f32" => 20, "f34t" => 38, "f34" => 20, "f36t" => 38, "f36" => 20,
+        "f38t" => 38, "f38" => 20,
+        "f21t" => 39, "f21" => 20, "f23t" => 39, "f23" => 20, "f25t" => 39, "f25" => 20,
+        "f27t" => 39, "f27" => 20, "f29t" => 39, "f29" => 20, "f31t" => 39, "f31" => 20,
+        "f33t" => 39, "f33" => 20, "f35t" => 39, "f35" => 20, "f37t" => 39, "f37" => 20],
+
+    /**
      * @var int The base amount of Natars' spying units, used when Natars account is created
      */
      
@@ -226,7 +257,21 @@ class Artifacts
         $wid = $database->getFreeVillage($possibleWids);
 
         //Generate the Natars' capital
-        $wid = $database->generateVillages([['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 834, 'name' => null, 'natar' => 0]], self::NATARS_UID, TRIBE5);
+        //
+        // Capitala primeste de la bun inceput Minunea Lumii si infrastructura
+        // din NATARS_CAPITAL_BUILDINGS. Lista se transmite in acelasi format ca
+        // la satele de Minune: [0] = numele coloanelor, [1][] = valorile.
+        $capitalBuildings = [];
+        $capitalBuildings[0]   = array_keys(self::NATARS_CAPITAL_BUILDINGS);
+        $capitalBuildings[1][] = array_values(self::NATARS_CAPITAL_BUILDINGS);
+
+        $wid = $database->generateVillages(
+            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 834, 'name' => null, 'natar' => 0]],
+            self::NATARS_UID,
+            TRIBE5,
+            null,
+            $capitalBuildings
+        );
 
         //Scouts all players
         $this->scoutAllPlayers($wid);

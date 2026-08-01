@@ -275,7 +275,15 @@ define("NATARS_UNITS",%NATARS_UNITS%);
 // ***** Natars Spawn Time
 define("NATARS_SPAWN_TIME",%NATARS_SPAWN_TIME%); 
 define("NATARS_WW_SPAWN_TIME",%NATARS_WW_SPAWN_TIME%); 
-define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME",%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%); 
+define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME",%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%);
+
+// ***** Natars' World Wonder
+// Dupa cate ZILE de la aparitia planurilor de constructie incep Natarii sa-si
+// ridice propria Minune a Lumii. In Travian, cand ajung la nivelul 100 se
+// incheie serverul; la nivelul 75 isi recheama toate trupele ca s-o apere.
+//
+// 0 = Natarii nu construiesc deloc.
+define("NATARS_WW_START_DELAY", %NATARS_WW_START_DELAY%); 
 
 // ***** Nature troops regeneration time
 define("NATURE_REGTIME",%NATURE_REGTIME%); 

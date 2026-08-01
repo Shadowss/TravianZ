@@ -56,6 +56,13 @@ if (WW == true) {
 
     $result = mysqli_query($database->dblink, $sql);
 ?>
+<style>
+/* Minunea Natarilor, evidentiata fata de cele ale jucatorilor */
+tr.ww-natars td{background:#fdf1e0 !important;font-weight:bold}
+tr.ww-natars td:first-child{border-left:3px solid #c0392b}
+.ww-natars-tag{display:inline-block;margin-left:6px;padding:0 5px;border-radius:3px;
+    background:#c0392b;color:#fff;font-size:10px;font-weight:bold;vertical-align:middle}
+</style>
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">
     <thead>
         <tr>
@@ -82,14 +89,23 @@ if ($result && mysqli_num_rows($result) > 0) {
         $count++;
 
         $check = $generator->getMapCheck($row['wref']);
+
+        // Minunea Natarilor se evidentiaza: nu e a unui jucator, iar cand ajunge
+        // la nivelul 100 serverul se incheie - merita sa sara in ochi.
+        $isNatarWW = (defined('NATARS_UID') && (int) $row['id'] === (int) NATARS_UID);
 ?>
-        <tr>
+        <tr<?php echo $isNatarWW ? ' class="ww-natars"' : ''; ?>>
             <td><?php echo $count; ?>.</td>
 
             <td>
                 <a href="karte.php?d=<?php echo $row['wref']; ?>&amp;c=<?php echo $check; ?>">
                     <?php echo htmlspecialchars($row['username']); ?>
                 </a>
+                <?php if ($isNatarWW) { ?>
+                    <span class="ww-natars-tag"><?php
+                        echo defined('TZ_WW_NATARS') ? TZ_WW_NATARS : 'Natars';
+                    ?></span>
+                <?php } ?>
             </td>
 
             <td><?php echo htmlspecialchars($row['wwname']); ?></td>

@@ -4234,3 +4234,10 @@ tz_def('TZ_RPT_ALL_RESULTS', 'Tous les résultats');
 tz_def('TZ_RPT_F_WON_NOLOSS', 'Gagné sans pertes');
 tz_def('TZ_RPT_F_WON_LOSS', 'Gagné avec pertes');
 tz_def('TZ_RPT_F_LOST', 'Perdu');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII A NATARILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NATARS', 'Natars');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Debut de la Merveille des Natars');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'Combien de jours apres l\'apparition des plans de construction les Natars commencent leur propre Merveille du Monde. Ajuste selon la vitesse du serveur. 0 desactive.');

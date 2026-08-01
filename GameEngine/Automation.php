@@ -72,6 +72,7 @@ include_once __DIR__ . '/Automation/AutomationTraining.php';
 include_once __DIR__ . '/Automation/AutomationHero.php';
 include_once __DIR__ . '/Automation/AutomationStarvation.php';
 include_once __DIR__ . '/Automation/AutomationNatarsWW.php';
+include_once __DIR__ . '/Automation/AutomationNatarsWWBuild.php';
 include_once __DIR__ . '/Automation/AutomationMedals.php';
 include_once __DIR__ . '/Automation/AutomationCleanup.php';
 include_once __DIR__ . '/Automation/AutomationPlayerStatistics.php';
@@ -88,6 +89,7 @@ class Automation {
     use AutomationHero;
     use AutomationStarvation;
     use AutomationNatarsWW;
+    use AutomationNatarsWWBuild;
     use AutomationMedals;
 
 
@@ -138,7 +140,8 @@ class Automation {
         				  "heroAdventureComplete",
         				  // P3: curatenie periodica (are interval propriu, nu ruleaza la fiecare tick)
         				  "cleanupOldData",
-        				  "recordPlayerStatistics"];
+        				  "recordPlayerStatistics",
+					  "buildNatarsWonder"];
         
         foreach($methodsArrays as $method){
         	$file = fopen($autoprefix."GameEngine/Prevention/".$method.".txt", "w");

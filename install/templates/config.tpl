@@ -141,6 +141,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
       <div><label>Natars Spawn (days)</label><input class="input" name="natars_spawn_time" id="natars_spawn_time" value="260"></div>
       <div><label>WW Spawn (days)</label><input class="input" name="natars_ww_spawn_time" id="natars_ww_spawn_time" value="260"></div>
       <div><label>WW BP Spawn (days)</label><input class="input" name="natars_ww_building_plan_spawn_time" id="natars_ww_building_plan_spawn_time" value="260"></div>
+      <div><label>WW BP Spawn (days)</label><input class="input" name="natars_ww_start_delay" id="natars_ww_start_delay" value="10"></div>
       <div><label>Nature regen</label><select class="input" name="nature_regtime"><option value="28800">8 hours</option><option value="36000">10 hours</option><option value="43200" selected>12 hours</option><option value="57600">16 hours</option><option value="72000">20 hours</option><option value="86400">24 hours</option></select></div>
     </div>
   </div>

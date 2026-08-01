@@ -203,6 +203,10 @@ function refresh(tz) {
                     <td><input class="fm" name="natars_ww_building_plan_spawn_time" value="<?php echo NATARS_WW_BUILDING_PLAN_SPAWN_TIME;?>" style="width: 20%;"></td>
                 </tr>
                 <tr>
+                    <td class="b"><?php echo CONF_SERV_NATARS_WW_START_DELAY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP ?></span></em></td>
+                    <td><input class="fm" name="natars_ww_start_delay" value="<?php echo NATARS_WW_START_DELAY;?>" style="width: 20%;"></td>
+                </tr>
+                <tr>
                     <td class="b"><?php echo CONF_SERV_MAPSIZE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MAPSIZE_TOOLTIP ?></span></em></td>
                     <td><?php echo WORLD_MAX;?>x<?php echo WORLD_MAX;?></td>
                 </tr>

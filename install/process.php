@@ -241,6 +241,11 @@ class Process {
 		$findReplace["%NATARS_SPAWN_TIME%"] = $_POST['natars_spawn_time'];
 		$findReplace["%NATARS_WW_SPAWN_TIME%"] = $_POST['natars_ww_spawn_time'];
 		$findReplace["%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%"] = $_POST['natars_ww_building_plan_spawn_time'];
+
+		// Dupa cate zile de la aparitia planurilor incep Natarii Minunea lor.
+		$natarsWwDelay = isset($_POST['natars_ww_start_delay']) ? (int) $_POST['natars_ww_start_delay'] : 10;
+		if ($natarsWwDelay < 0 || $natarsWwDelay > 3650) { $natarsWwDelay = 10; }
+		$findReplace["%NATARS_WW_START_DELAY%"] = $natarsWwDelay;
 		$findReplace["%NATURE_REGTIME%"] = $_POST['nature_regtime'];
 		$findReplace["%OASIS_WOOD_MULTIPLIER%"] = $_POST['oasis_wood_multiplier'];
 		$findReplace["%OASIS_CLAY_MULTIPLIER%"] = $_POST['oasis_clay_multiplier'];

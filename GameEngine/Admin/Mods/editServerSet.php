@@ -182,6 +182,11 @@ $text = admin_config_template_contents(array(
 		tz_config_set($text, '%NATARS_SPAWN_TIME%', $_POST['natars_spawn_time'] ?? '');
 		tz_config_set($text, '%NATARS_WW_SPAWN_TIME%', $_POST['natars_ww_spawn_time'] ?? '');
 		tz_config_set($text, '%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%', $_POST['natars_ww_building_plan_spawn_time'] ?? '');
+
+		// Intarzierea dupa care Natarii isi incep Minunea (zile de la planuri).
+		$natarsWwDelay = isset($_POST['natars_ww_start_delay']) ? (int) $_POST['natars_ww_start_delay'] : 10;
+		if ($natarsWwDelay < 0 || $natarsWwDelay > 3650) { $natarsWwDelay = 10; }
+		tz_config_set($text, '%NATARS_WW_START_DELAY%', $natarsWwDelay);
 		tz_config_set($text, '%NATURE_REGTIME%', $_POST['nature_regtime'] ?? '');
 		tz_config_set($text, '%OASIS_WOOD_MULTIPLIER%', $_POST['oasis_wood_multiplier'] ?? '');
 		tz_config_set($text, '%OASIS_CLAY_MULTIPLIER%', $_POST['oasis_clay_multiplier'] ?? '');

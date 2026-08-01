@@ -4031,3 +4031,10 @@ tz_def('TZ_RPT_ALL_RESULTS', 'Toate rezultatele');
 tz_def('TZ_RPT_F_WON_NOLOSS', 'Castigat fara pierderi');
 tz_def('TZ_RPT_F_WON_LOSS', 'Castigat cu pierderi');
 tz_def('TZ_RPT_F_LOST', 'Pierdut');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII A NATARILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NATARS', 'Natari');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Pornirea Minunii Natarilor');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'Dupa cate zile de la aparitia planurilor incep Natarii propria Minune a Lumii. Se scaleaza cu viteza serverului. 0 dezactiveaza.');
