@@ -8520,6 +8520,18 @@ img.g29 {
 img.g29b {
     background-image: url("../../img/g/g29b.gif");
 }
+/* Zidurile triburilor vechi: regulile lipseau, desi imaginile exista in
+   img/g/. De aceea in pagina de constructie se vedea zidul la triburile noi
+   (Huni, Egipteni, Spartani, Vikingi) dar nu si la Romani, Teutoni si Gali. */
+img.g31 {
+    background-image: url("../../img/g/g31.gif");
+}
+img.g32 {
+    background-image: url("../../img/g/g32.gif");
+}
+img.g33 {
+    background-image: url("../../img/g/g33.gif");
+}
 img.g30 {
     background-image: url("../../img/g/g30.gif");
 }

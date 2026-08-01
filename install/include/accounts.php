@@ -79,7 +79,11 @@
     		    if($status == 0) {
     		        $database->setFieldTaken($wid);
     		        $database->addVillage($wid, $uid, $_POST['aname'], 1);
-    		        $database->addResourceFields($wid, $database->getVillageType($wid, false));
+
+    		        // Satul adminului primeste mereu configuratia 4-4-4-6 (tipul 3),
+    		        // nu una aleatoare: e satul de la centrul hartii si trebuie sa fie
+    		        // echilibrat, indiferent ce tip are casuta pe harta.
+    		        $database->addResourceFields($wid, 3);
                     $addUnitsWrefs[] = $wid;
                     $addTechWrefs[] = $wid;
                     $addABTechWrefs[] = $wid;
@@ -110,6 +114,46 @@
 		// set up Support
 	    $password = $_POST['spw'];
 	    mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET password = '" . password_hash($password, PASSWORD_BCRYPT,['cost' => 12]) . "' WHERE username = 'Support'");
+
+	    /**
+	     * Satul contului Support.
+	     *
+	     * BUG REPARAT: Support primea doar parola, fara sat. La prima autentificare,
+	     * Village.php nu gasea niciun sat, iar lantul se termina cu o eroare fatala
+	     * in getUnit() (interogare SQL construita din valori goale) - adica 500 pe
+	     * toata interfata, fara nicio cale de iesire.
+	     *
+	     * Ii dam un sat langa Multihunter, cu aceeasi configuratie 4-4-4-6.
+	     */
+	    $supportRow = mysqli_fetch_assoc(mysqli_query($database->dblink,
+	        "SELECT id FROM " . TB_PREFIX . "users WHERE username = 'Support' LIMIT 1"));
+
+	    if ($supportRow) {
+	        $supportUid = (int) $supportRow['id'];
+	        $supportHas = mysqli_fetch_assoc(mysqli_query($database->dblink,
+	            "SELECT COUNT(*) AS total FROM " . TB_PREFIX . "vdata WHERE owner = " . $supportUid));
+
+	        if (!$supportHas || (int) $supportHas['total'] === 0) {
+	            // pornim de langa Multihunter (0,0) si mergem pana gasim liber
+	            $supportX = 1;
+
+	            while ($supportX < 20) {
+	                $supportWid = $admin->getWref($supportX, 0);
+
+	                if ($database->getVillageState($supportWid) == 0) {
+	                    $database->setFieldTaken($supportWid);
+	                    $database->addVillage($supportWid, $supportUid, 'Support', 1);
+	                    $database->addResourceFields($supportWid, 3);
+	                    $database->addUnits($supportWid);
+	                    $database->addTech($supportWid);
+	                    $database->addABTech($supportWid);
+	                    break;
+	                }
+
+	                $supportX++;
+	            }
+	        }
+	    }
 
         $gameinstall = 0;
 		header("Location: ../index.php?s=5");

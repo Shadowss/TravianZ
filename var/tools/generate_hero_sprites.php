@@ -1,11 +1,11 @@
 <?php
 #################################################################################
-#  Regenerates css/hero_items.css from GameEngine/Data/hero_items.php so the   #
-#  sprite grid can never drift from the catalog. Run from the repo root:       #
-#      php var/tools/generate_hero_sprites.php                                  #
-#  Grid contract: img/hero/items.png is a 16-column sheet of 32x32 cells in    #
-#  CATALOG ORDER. Replace the PNG with real art on the same grid and rerun     #
-#  nothing - only rerun this script when the CATALOG changes.                  #
+##  Regenerates css/hero_items.css from GameEngine/Data/hero_items.php so the  ##
+##  sprite grid can never drift from the catalog. Run from the repo root:      ##
+##      php var/tools/generate_hero_sprites.php                                ##
+##  Grid contract: img/hero/items.png is a 16-column sheet of 32x32 cells in   ##
+##  CATALOG ORDER. Replace the PNG with real art on the same grid and rerun    ##
+##  nothing - only rerun this script when the CATALOG changes.                 ##
 #################################################################################
 define('TB_PREFIX', 'x');
 include __DIR__ . '/../../GameEngine/Data/hero_items.php';

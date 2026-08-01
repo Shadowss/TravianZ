@@ -38,13 +38,13 @@ if (!defined('NTYPE_ADVENTURE_REPORT'))  define('NTYPE_ADVENTURE_REPORT',  26);
 if (!defined('NTYPE_AUCTION_REPORT'))    define('NTYPE_AUCTION_REPORT',    27);
 
 /* Equipment slots */
-if (!defined('HSLOT_HELMET')) define('HSLOT_HELMET', 1);
-if (!defined('HSLOT_BODY'))   define('HSLOT_BODY',   2);
-if (!defined('HSLOT_RIGHT'))  define('HSLOT_RIGHT',  3); // weapon
-if (!defined('HSLOT_LEFT'))   define('HSLOT_LEFT',   4); // shield/horn/sack/map/pennant/standard
-if (!defined('HSLOT_SHOES'))  define('HSLOT_SHOES',  5); // boots + spurs
-if (!defined('HSLOT_HORSE'))  define('HSLOT_HORSE',  6);
-if (!defined('HSLOT_BAG'))    define('HSLOT_BAG',    7); // stackable consumables
+if (!defined('HSLOT_HELMET')) define('HSLOT_HELMET', 1); //HELMET
+if (!defined('HSLOT_BODY'))   define('HSLOT_BODY',   2); //ARMOUR
+if (!defined('HSLOT_RIGHT'))  define('HSLOT_RIGHT',  3); //WEAPONS RIGHT
+if (!defined('HSLOT_LEFT'))   define('HSLOT_LEFT',   4); //WEAPONS LEFT shield/horn/sack/map/pennant/standard
+if (!defined('HSLOT_SHOES'))  define('HSLOT_SHOES',  5); //SHOES&BOOTS
+if (!defined('HSLOT_HORSE'))  define('HSLOT_HORSE',  6); //HORSE
+if (!defined('HSLOT_BAG'))    define('HSLOT_BAG',    7); //Stackable consumables
 
 /* ============================================================================
  *  BONUS TYPES (keys inside $item['bonus'])
@@ -146,7 +146,7 @@ $heroItemCatalog = array(
     56 => array('name' => 'Standard',       'slot' => HSLOT_LEFT, 'tier' => 2, 'bonus' => array(HB_SPEED_ALLY => 20)),
     57 => array('name' => 'Great Standard', 'slot' => HSLOT_LEFT, 'tier' => 3, 'bonus' => array(HB_SPEED_ALLY => 25)),
 
-    /* ---------------- SHOES (sheet: Incaltaminte_Cai - boots + spurs) ---------------- */
+    /* ---------------- SHOES (sheet: Incaltaminte - boots + spurs) ---------------- */
     60 => array('name' => 'Boots of Regeneration', 'slot' => HSLOT_SHOES, 'tier' => 1, 'bonus' => array(HB_REGEN_HP => 10)),
     61 => array('name' => 'Boots of Recovery',     'slot' => HSLOT_SHOES, 'tier' => 2, 'bonus' => array(HB_REGEN_HP => 15)),
     62 => array('name' => 'Boots of Healing',      'slot' => HSLOT_SHOES, 'tier' => 3, 'bonus' => array(HB_REGEN_HP => 20)),

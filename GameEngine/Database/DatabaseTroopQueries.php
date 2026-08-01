@@ -176,6 +176,20 @@ trait DatabaseTroopQueries {
             }
         }
 
+		// Pastram doar identificatorii utilizabili.
+		//
+		// BUG REPARAT: un cont fara niciun sat ajungea aici cu [null]. Garda de mai
+		// sus verifica doar count(), care e 1, deci trecea - iar implode producea
+		// "vref IN()", eroare de sintaxa MariaDB si 500 pe toata interfata, fara
+		// cale de iesire. Asa patise contul Support, creat fara sat la instalare.
+		$vid = array_values(array_filter(array_map('intval', $vid), function ($v) {
+			return $v > 0;
+		}));
+
+		if (!$vid) {
+			return $returnArray;
+		}
+
 		$q = "SELECT * from " . TB_PREFIX . "units where vref IN(".implode(', ', $vid).")";
 		$result = mysqli_query($this->dblink,$q);
 		$resCount = 0;
