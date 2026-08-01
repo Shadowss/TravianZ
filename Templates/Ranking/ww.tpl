@@ -92,7 +92,9 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         // Minunea Natarilor se evidentiaza: nu e a unui jucator, iar cand ajunge
         // la nivelul 100 serverul se incheie - merita sa sara in ochi.
-        $isNatarWW = (defined('NATARS_UID') && (int) $row['id'] === (int) NATARS_UID);
+        // NATARS_UID e constanta de clasa, nu globala - vezi Artifacts.
+        $psNatarUid = class_exists('Artifacts') ? (int) Artifacts::NATARS_UID : 3;
+        $isNatarWW  = ((int) $row['id'] === $psNatarUid);
 ?>
         <tr<?php echo $isNatarWW ? ' class="ww-natars"' : ''; ?>>
             <td><?php echo $count; ?>.</td>

@@ -79,6 +79,12 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
 .t4h-panel{background:#f2f2f2;border:1px solid #c9c9c9;padding:6px 8px;margin-bottom:8px}
 .t4h-head{display:flex;justify-content:space-between;align-items:center;font-weight:bold;color:#333;margin-bottom:5px}
 .t4h-tbl{width:100%;border-collapse:collapse}
+/* forta adusa de echipament, langa valoarea de baza */
+.t4h-item{color:#c87f0a;font-weight:bold;font-size:11px}
+/* regenerarea totala: discreta, dar vizibila */
+.t4h-regen{margin:4px 0 8px 0;padding:4px 8px;border-left:3px solid #7db72f;
+    background:#f4faec;font-size:12px}
+.t4h-regen-detail{color:#777;font-size:11px}
 .t4h-tbl td{padding:3px 5px;vertical-align:middle;background:none;border:1px solid #dcdcdc}
 .t4h-name{width:112px;color:#333}
 .t4h-val{width:78px;color:#000}
@@ -125,11 +131,30 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
         <span><?php echo defined('TZ_POINTS') ? TZ_POINTS : 'Points'; ?></span>
     </div>
 
+    <?php
+        /**
+         * Forta de lupta data de itemele echipate (fight_strength).
+         *
+         * Fiecare arma si scut adauga o valoare fixa la puterea eroului in
+         * lupta - de exemplu 1500 pentru Elite Heavy Blade. Bonusul intra deja
+         * in calculul luptei (Battle.php, prin HeroBattleBonus::statBonus), dar
+         * nu se vedea nicaieri in pagina, asa ca jucatorul nu avea cum sa stie
+         * cat ii aduce echipamentul.
+         */
+        $t4ItemStrength = 0;
+
+        if (class_exists('HeroBattleBonus') && HeroBattleBonus::enabled()) {
+            $t4ItemStrength = (int) HeroBattleBonus::statBonus($session->uid);
+        }
+    ?>
+
     <table class="t4h-tbl">
     <?php
         // nume afisat, valoarea, punctele investite si cheia pentru (+)
         $t4Rows = array(
-            array(OFFENCE,      $hero_info['atk'],                                 (int) $hero_info['attack'],       'off'),
+            array(OFFENCE,      $t4ItemStrength > 0
+                                    ? $hero_info['atk'] . ' <span class="t4h-item">+' . number_format($t4ItemStrength) . '</span>'
+                                    : $hero_info['atk'],                           (int) $hero_info['attack'],       'off'),
             array(DEFENCE,      $hero_info['dc'] . '/' . $hero_info['di'],         (int) $hero_info['defence'],      'deff'),
             array(OFF_BONUS,    $hero_info['ob'] . '%',                            (int) $hero_info['attackbonus'],  'obonus'),
             array(DEF_BONUS,    $hero_info['db'] . '%',                            (int) $hero_info['defencebonus'], 'dbonus'),
@@ -355,7 +380,43 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
     <?php } ?> 
      
 <p><?php echo YOUR_HERO_HAS; ?> <b><?php echo floor($hero_info['health']); ?></b>% <?php echo OF_HIT_POINTS; ?>.<br/>  
-    <?php echo YOUR_HERO_HAS; ?> <?php echo CONQUERED; ?> <b><?php echo $database->VillageOasisCount($village->wid); ?></b> <a href="build.php?id=<?php echo $id; ?>&land"><?php echo OASES; ?></a>.</p> 
+    <?php echo YOUR_HERO_HAS; ?> <?php echo CONQUERED; ?> <b><?php echo $database->VillageOasisCount($village->wid); ?></b> <a href="build.php?id=<?php echo $id; ?>&land"><?php echo OASES; ?></a>.</p>
+
+<?php
+    /**
+     * Regenerarea totala pe zi: cea data de puncte plus cea din iteme.
+     *
+     * Cizmele de Regenerare / Refacere / Vindecare adauga puncte de viata pe zi
+     * (regen_hp), aplicate in AutomationHero. Pana acum efectul lor nu aparea
+     * nicaieri, deci nu se vedea daca itemul face ceva.
+     */
+    $t4BaseRegen = (int) $hero_info['regeneration'] * 5 * SPEED;
+    $t4ItemRegen = 0;
+
+    // HeroItems nu are enabled(); flagul se verifica prin HeroBattleBonus,
+    // care il expune si e deja incarcat pe aceasta pagina.
+    if (class_exists('HeroItems') && class_exists('HeroBattleBonus')
+        && HeroBattleBonus::enabled() && defined('HB_REGEN_HP')) {
+
+        $t4Items = new HeroItems();
+        $t4Bon   = $t4Items->getBonuses($session->uid);
+
+        if ($t4Bon && !empty($t4Bon[HB_REGEN_HP])) {
+            $t4ItemRegen = (int) $t4Bon[HB_REGEN_HP];
+        }
+    }
+
+    if ($t4ItemRegen > 0) {
+?>
+<p class="t4h-regen">
+    <?php echo defined('TZ_HERO_REGEN_TOTAL') ? TZ_HERO_REGEN_TOTAL : 'Health regeneration'; ?>:
+    <b><?php echo number_format($t4BaseRegen + $t4ItemRegen); ?></b>/<?php echo DAY; ?>
+    <span class="t4h-regen-detail">(<?php echo number_format($t4BaseRegen); ?>
+        <?php echo defined('TZ_HERO_REGEN_BASE') ? TZ_HERO_REGEN_BASE : 'base'; ?>
+        + <?php echo number_format($t4ItemRegen); ?>
+        <?php echo defined('TZ_HERO_REGEN_ITEMS') ? TZ_HERO_REGEN_ITEMS : 'from items'; ?>)</span>
+</p>
+<?php } ?> 
 	 
 <?php
 // NOTE: the actions below are triggered by GET (?add=...) and modify

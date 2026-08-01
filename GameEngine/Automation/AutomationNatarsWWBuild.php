@@ -4,8 +4,10 @@
 ## --------------------------------------------------------------------------- ##
 ##  Natarii isi ridica singuri Minunea Lumii din capitala lor.                  ##
 ##                                                                             ##
-##  Pornesc dupa un numar configurabil de zile de la aparitia planurilor de     ##
-##  constructie (NATARS_WW_START_DELAY) si urca nivel cu nivel, folosind        ##
+##  Pornesc dupa un numar configurabil de zile de la DATA planurilor de         ##
+##  constructie (NATARS_WW_START_DELAY) - dar nu au nevoie de planuri ca sa     ##
+##  construiasca; acelea sunt o conditie doar pentru jucatori. Urca nivel cu    ##
+##  nivel, folosind                                                            ##
 ##  timpii REALI din datele de joc (bid40), scalati cu viteza serverului.       ##
 ##                                                                             ##
 ##  Ca in Travian: la nivelul 100 Minunea e gata (si serverul se incheie), iar  ##
@@ -31,12 +33,17 @@ trait AutomationNatarsWWBuild
             return false;
         }
 
-        // Planurile trebuie sa fi aparut deja: pana atunci nici jucatorii nu pot
-        // construi, deci nu are sens ca Natarii s-o ia inainte.
-        if (!method_exists($database, 'areArtifactsSpawned') || !$database->areArtifactsSpawned(true)) {
-            return false;
-        }
-
+        // NATARII NU AU NEVOIE DE PLANURI.
+        //
+        // Planurile de constructie sunt o conditie doar pentru JUCATORI - vezi
+        // Building::allowWwUpgrade(), care verifica ce detine jucatorul sau
+        // alianta lui. Natarii isi ridica Minunea neconditionat, exact ca in
+        // Travian.
+        //
+        // Data aparitiei planurilor ramane totusi reperul de la care se
+        // masoara intarzierea, dar o calculam din configuratie, nu din baza de
+        // date: asa Natarii pornesc la timp chiar daca planurile intarzie sau
+        // artefactele sunt oprite pe server.
         $planTime = strtotime(START_DATE)
             + ((defined('NATARS_WW_BUILDING_PLAN_SPAWN_TIME') ? (int) NATARS_WW_BUILDING_PLAN_SPAWN_TIME : 0) * 86400);
 
@@ -47,7 +54,11 @@ trait AutomationNatarsWWBuild
             return false;
         }
 
-        $natarUid = defined('NATARS_UID') ? (int) NATARS_UID : 2;
+        // ATENTIE: NATARS_UID e constanta de CLASA (Artifacts::NATARS_UID), nu
+        // una globala. defined('NATARS_UID') intoarce mereu false, deci o
+        // verificare cu defined() ar folosi tacut o valoare gresita si Natarii
+        // n-ar mai fi gasiti niciodata.
+        $natarUid = class_exists('Artifacts') ? (int) Artifacts::NATARS_UID : 3;
 
         // capitala Natarilor: satul lor care are slotul de Minune
         $res = mysqli_query($database->dblink,

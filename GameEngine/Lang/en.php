@@ -4293,8 +4293,8 @@ tz_def('TZ_RPT_F_WON_LOSS', 'Won with losses');
 tz_def('TZ_RPT_F_LOST', 'Lost');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// MINUNEA LUMII A NATARILOR
+// EROU - regenerarea totala (baza + iteme)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('TZ_WW_NATARS', 'Natars');
-tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Natars\' World Wonder start');
-tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'How many days after the construction plans appear the Natars start building their own World Wonder. Scaled by server speed. 0 disables it.');
+tz_def('TZ_HERO_REGEN_TOTAL', 'Health regeneration');
+tz_def('TZ_HERO_REGEN_BASE', 'base');
+tz_def('TZ_HERO_REGEN_ITEMS', 'from items');
