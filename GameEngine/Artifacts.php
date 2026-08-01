@@ -172,7 +172,7 @@ class Artifacts
         //Minunea Lumii (nivel 0, se construieste ulterior)
         "f99t" => 40, "f99" => 0,
         //Primarie 20, punct de adunare 20, zid 20 (Natarii folosesc zidul de oras)
-        "f19t" => 24, "f19" => 20, "f39t" => 16, "f39" => 1, "f40t" => 31, "f40" => 20,
+        "f19t" => 24, "f19" => 20, "f39t" => 16, "f39" => 20, "f40t" => 31, "f40" => 20,
         //Restul sloturilor: 10 Depozite Mari si 9 Hambare Mari, toate la nivel 20
         "f20t" => 38, "f20" => 20, "f22t" => 38, "f22" => 20, "f24t" => 38, "f24" => 20,
         "f26t" => 38, "f26" => 20, "f28t" => 38, "f28" => 20, "f30t" => 38, "f30" => 20,
