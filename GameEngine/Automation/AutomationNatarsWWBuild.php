@@ -4,10 +4,10 @@
 ## --------------------------------------------------------------------------- ##
 ##  Natarii isi ridica singuri Minunea Lumii din capitala lor.                  ##
 ##                                                                             ##
-##  Pornesc dupa un numar configurabil de zile de la DATA planurilor de         ##
-##  constructie (NATARS_WW_START_DELAY) - dar nu au nevoie de planuri ca sa     ##
-##  construiasca; acelea sunt o conditie doar pentru jucatori. Urca nivel cu    ##
-##  nivel, folosind                                                            ##
+##  Pornesc dupa ce planurile de constructie au aparut pe server, plus un       ##
+##  numar configurabil de zile (NATARS_WW_START_DELAY). Nu au nevoie sa DETINA  ##
+##  vreun plan - aceea e o conditie doar pentru jucatori. Urca nivel cu nivel,  ##
+##  folosind                                                                    ##
 ##  timpii REALI din datele de joc (bid40), scalati cu viteza serverului.       ##
 ##                                                                             ##
 ##  Ca in Travian: la nivelul 100 Minunea e gata (si serverul se incheie), iar  ##
@@ -33,17 +33,22 @@ trait AutomationNatarsWWBuild
             return false;
         }
 
-        // NATARII NU AU NEVOIE DE PLANURI.
+        // PLANURILE TREBUIE SA FI APARUT DEJA pe server - dar Natarii nu au
+        // nevoie sa DETINA vreunul ca sa construiasca.
         //
-        // Planurile de constructie sunt o conditie doar pentru JUCATORI - vezi
-        // Building::allowWwUpgrade(), care verifica ce detine jucatorul sau
-        // alianta lui. Natarii isi ridica Minunea neconditionat, exact ca in
-        // Travian.
-        //
-        // Data aparitiei planurilor ramane totusi reperul de la care se
-        // masoara intarzierea, dar o calculam din configuratie, nu din baza de
-        // date: asa Natarii pornesc la timp chiar daca planurile intarzie sau
-        // artefactele sunt oprite pe server.
+        // Sunt doua lucruri diferite:
+        //   - aparitia planurilor deschide etapa finala a serverului; pana
+        //     atunci nu are sens ca Natarii sa-si inceapa Minunea;
+        //   - DETINEREA unui plan e o conditie doar pentru JUCATORI, verificata
+        //     in Building::allowWwUpgrade() pentru jucator si alianta lui.
+        //     Natarii nu trec pe acolo si nu au nevoie de niciun plan.
+        if (!method_exists($database, 'areArtifactsSpawned') || !$database->areArtifactsSpawned(true)) {
+            return false;
+        }
+
+        // Reperul de timp e data programata a planurilor. Tabela de artefacte nu
+        // pastreaza momentul aparitiei, dar spawnarea se face chiar la data asta,
+        // deci cele doua coincid.
         $planTime = strtotime(START_DATE)
             + ((defined('NATARS_WW_BUILDING_PLAN_SPAWN_TIME') ? (int) NATARS_WW_BUILDING_PLAN_SPAWN_TIME : 0) * 86400);
 
