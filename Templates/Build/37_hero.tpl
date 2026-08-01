@@ -464,7 +464,43 @@ if (isset($_GET['add'])) {
 
 	if ($action == "reset") {
 		if ($hero_info['level'] <= 3) {
-			mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "hero SET `points` = (`level` * 5) + 5, `attack` = 0, `defence` = 0, `attackbonus` = 0, `defencebonus` = 0, `regeneration` = 0 WHERE `heroid` = " . $hero_info['heroid'] . " AND `level` <= 3 AND (`attack` != 0 OR `defence` != 0 OR `attackbonus` != 0 OR `defencebonus` != 0 OR `regeneration` != 0)");
+
+			/**
+			 * Resetarea atributelor.
+			 *
+			 * BUG REPARAT: interogarea enumera coloanele scrise de mana si nu
+			 * includea "resources" (atributul T4). Doua consecinte:
+			 *
+			 *   - punctele puse in Resurse NU se stergeau, dar erau rambursate
+			 *     oricum, deci eroul se alegea cu puncte in plus la fiecare reset;
+			 *   - daca TOATE punctele erau in Resurse, conditia din WHERE era
+			 *     falsa si resetarea nu facea absolut nimic.
+			 *
+			 * Acum coloanele se iau din $heroStatColumns, care contine "resources"
+			 * doar cand functiile T4 sunt pornite. Asa lista nu mai poate ramane
+			 * in urma daca se adauga un atribut nou.
+			 */
+			$resetCols  = array_values($heroStatColumns);
+			$resetSet   = array();
+			$resetWhere = array();
+
+			foreach ($resetCols as $resetCol) {
+				$resetSet[]   = "`" . $resetCol . "` = 0";
+				$resetWhere[] = "`" . $resetCol . "` != 0";
+			}
+
+			// tipul de resursa produsa revine si el la valoarea implicita
+			if (isset($heroStatColumns['res'])) {
+				$resetSet[] = "`res_type` = 0";
+			}
+
+			mysqli_query($database->dblink,
+				"UPDATE " . TB_PREFIX . "hero
+				    SET `points` = (`level` * 5) + 5, " . implode(', ', $resetSet) . "
+				  WHERE `heroid` = " . (int) $hero_info['heroid'] . "
+				    AND `level` <= 3
+				    AND (" . implode(' OR ', $resetWhere) . ")");
+
 			header("Location: build.php?id=" . $id . "");
 			exit;
 		}
