@@ -4038,3 +4038,18 @@ tz_def('TZ_RPT_F_LOST', 'Pierdut');
 tz_def('TZ_HERO_REGEN_TOTAL', 'Regenerarea vietii');
 tz_def('TZ_HERO_REGEN_BASE', 'de baza');
 tz_def('TZ_HERO_REGEN_ITEMS', 'din iteme');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII A NATARILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NATARS', 'Natari');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Pornirea Minunii Natarilor');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'Dupa cate zile de la aparitia planurilor incep Natarii propria Minune a Lumii. Se scaleaza cu viteza serverului. 0 dezactiveaza.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// SIMULATOR - bonusuri proprii incluse automat
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WS_APPLIED', 'Incluse automat in aceasta simulare:');
+tz_def('TZ_WS_ITEM_STRENGTH', 'Forta echipamentului');
+tz_def('TZ_WS_ITEM_UNIT', 'Bonus de arma');
+tz_def('TZ_WS_VS_NATARS', 'Contra Natarilor');

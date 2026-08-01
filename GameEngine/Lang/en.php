@@ -4298,3 +4298,18 @@ tz_def('TZ_RPT_F_LOST', 'Lost');
 tz_def('TZ_HERO_REGEN_TOTAL', 'Health regeneration');
 tz_def('TZ_HERO_REGEN_BASE', 'base');
 tz_def('TZ_HERO_REGEN_ITEMS', 'from items');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII A NATARILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NATARS', 'Natars');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Natars\' World Wonder start');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'How many days after the construction plans appear the Natars start building their own World Wonder. Scaled by server speed. 0 disables it.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// SIMULATOR - bonusuri proprii incluse automat
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WS_APPLIED', 'Automatically included in this simulation:');
+tz_def('TZ_WS_ITEM_STRENGTH', 'Equipment strength');
+tz_def('TZ_WS_ITEM_UNIT', 'Weapon bonus');
+tz_def('TZ_WS_VS_NATARS', 'Against Natars');

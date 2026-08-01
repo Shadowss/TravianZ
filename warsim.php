@@ -141,6 +141,73 @@ if(count($target) > 0) {
 	include("Templates/Simulator/def_end.tpl");
 	echo "<div class=\"clear\"></div>";
 }
+
+/**
+ * Ce bonusuri PROPRII a folosit simularea.
+ *
+ * Simulatorul preia automat itemele echipate ale eroului si bonusurile
+ * aliantei. Fara acest panou le-ar aplica in tacere, iar jucatorul n-ar avea
+ * cum sa stie daca rezultatul le include sau nu.
+ */
+$wsLines = array();
+
+if (class_exists('HeroBattleBonus') && HeroBattleBonus::enabled() && !empty($session->uid)) {
+
+    $wsStrength = (int) HeroBattleBonus::statBonus($session->uid);
+
+    if ($wsStrength > 0) {
+        $wsLines[] = (defined('TZ_WS_ITEM_STRENGTH') ? TZ_WS_ITEM_STRENGTH : 'Equipment strength')
+            . ': <b>+' . number_format($wsStrength) . '</b>';
+    }
+
+    $wsMap = HeroBattleBonus::unitBonusMap($session->uid);
+
+    if (!empty($wsMap)) {
+        foreach ($wsMap as $wsUnit => $wsPer) {
+            // Numele unitatilor sunt constante de limba (U1..U90), nu campuri
+            // in unitdata.php - acolo sunt doar valorile de lupta.
+            $wsConst = 'U' . (int) $wsUnit;
+            $wsName  = defined($wsConst) ? constant($wsConst) : $wsConst;
+
+            $wsLines[] = (defined('TZ_WS_ITEM_UNIT') ? TZ_WS_ITEM_UNIT : 'Weapon bonus')
+                . ': <b>+' . (int) $wsPer . '</b> / ' . htmlspecialchars($wsName, ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    $wsBon = HeroBattleBonus::bonuses($session->uid);
+
+    if ($wsBon && defined('HB_VS_NATARS') && !empty($wsBon[HB_VS_NATARS])) {
+        $wsLines[] = (defined('TZ_WS_VS_NATARS') ? TZ_WS_VS_NATARS : 'Against Natars')
+            . ': <b>+' . (int) $wsBon[HB_VS_NATARS] . '%</b>';
+    }
+}
+
+if (class_exists('AllianceBonus') && AllianceBonus::enabled() && !empty($session->uid)) {
+    $wsMetal = AllianceBonus::multiplier($session->uid, AllianceBonus::METALLURGY);
+
+    if ($wsMetal > 1.0) {
+        $wsLines[] = (defined('ALLYBONUS_METALLURGY') ? ALLYBONUS_METALLURGY : 'Metallurgy')
+            . ': <b>+' . round(($wsMetal - 1) * 100) . '%</b>';
+    }
+}
+
+if ($wsLines) {
+?>
+<style>
+#ws_own{margin:6px 0 10px 0;padding:5px 9px;border-left:3px solid #7db72f;
+    background:#f4faec;font-size:11px;color:#444;max-width:600px}
+#ws_own .ws_t{font-weight:bold;color:#333;margin-right:4px}
+#ws_own span.ws_i{display:inline-block;margin-right:12px;white-space:nowrap}
+</style>
+<div id="ws_own">
+    <span class="ws_t"><?php echo defined('TZ_WS_APPLIED') ? TZ_WS_APPLIED
+        : 'Automatically included in this simulation:'; ?></span>
+    <?php foreach ($wsLines as $wsLine) { ?>
+        <span class="ws_i"><?php echo $wsLine; ?></span>
+    <?php } ?>
+</div>
+<?php
+}
 ?>
 <table id="select" cellpadding="1" cellspacing="1">
 <thead><tr>

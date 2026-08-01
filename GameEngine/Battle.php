@@ -575,7 +575,8 @@ class Battle {
         $offhero, $hero_strenght, $deffhero,
         $DefenderID,
         $calvaryLookup, $catapultLookup, $ramsLookup,
-        $dp, $cdp
+        $dp, $cdp,
+        $AttackerID
     );
 
     $ap   = $attForces['ap'];
@@ -949,7 +950,8 @@ class Battle {
     $offhero, $hero_strenght, $deffhero,
     $DefenderID,
     $calvaryLookup, $catapultLookup, $ramsLookup,
-    $dp, $cdp
+    $dp, $cdp,
+    $AttackerID = 0
 ) {
 
     global $unitsbytype;
@@ -1086,6 +1088,39 @@ class Battle {
             $cap *= $simHero['ob'];
 
             $ap += $hero_strenght;
+
+            /**
+             * SIMULATOR: aplicam si efectele echipamentului eroului.
+             *
+             * Ramura reala de mai sus foloseste eroul din baza de date; aici
+             * eroul e sintetic, construit din procentele introduse manual, deci
+             * itemele lipseau complet si simularea dadea alt rezultat decat
+             * lupta adevarata.
+             *
+             * Le luam de la jucatorul care ruleaza simularea: forta din arme si
+             * scuturi (fight_strength), bonusul pe tipul de unitate al armei si
+             * cornul de vanatoare contra Natarilor.
+             */
+            if (class_exists('HeroBattleBonus') && HeroBattleBonus::enabled()) {
+                global $session;
+
+                $simUid = isset($session->uid) ? (int) $session->uid : 0;
+
+                if ($simUid > 0) {
+                    $ap += (int) HeroBattleBonus::statBonus($simUid);
+
+                    list($simAp, $simCap) = HeroBattleBonus::unitOffense($simUid, $Attacker, $calvaryLookup);
+                    $ap  += $simAp;
+                    $cap += $simCap;
+
+                    $simNatar = HeroBattleBonus::natarMultiplier($simUid, $DefenderID);
+
+                    if ($simNatar > 1.0) {
+                        $ap  *= $simNatar;
+                        $cap *= $simNatar;
+                    }
+                }
+            }
         }
 
         if ($deffhero > 0) {
@@ -1094,6 +1129,19 @@ class Battle {
 
             $dp  *= $dfdhero['ob'];
             $cdp *= $dfdhero['ob'];
+
+            // Aceleasi iteme conteaza si cand simulezi apararea.
+            if (class_exists('HeroBattleBonus') && HeroBattleBonus::enabled()) {
+                global $session;
+
+                $simUid = isset($session->uid) ? (int) $session->uid : 0;
+
+                if ($simUid > 0) {
+                    $simDef = (int) HeroBattleBonus::unitDefense($simUid, $Attacker);
+                    $dp  += $simDef;
+                    $cdp += $simDef;
+                }
+            }
         }
     }
 
@@ -1105,11 +1153,30 @@ class Battle {
     // apararea: aceeasi functie calculeaza ambele parti, in functie de rolul
     // jucatorului in lupta.
     if (class_exists('AllianceBonus') && AllianceBonus::enabled()) {
-        $metalOwner = 0;
 
-        if (isset($Attacker) && (int) $Attacker > 0) {
-            global $database;
-            $metalOwner = (int) $database->getVillageField((int) $Attacker, 'owner');
+        // BUG REPARAT: aici se folosea (int) $Attacker, dar $Attacker e ARRAYUL
+        // de unitati, nu un id de sat. In PHP, (int) pe un array da 1, deci se
+        // citea proprietarul satului 1 - un jucator la intamplare sau nimeni.
+        // Bonusul de Metalurgie nu ajungea niciodata la cine trebuie.
+        //
+        // Atacatorul vine acum ca parametru ($AttackerID). Daca lipseste (de
+        // exemplu in simulator), cadem pe eroul atacator, care poarta si el uid-ul.
+        $metalOwner = (int) $AttackerID;
+
+        if ($metalOwner <= 0 && !empty($atkhero['uid'])) {
+            $metalOwner = (int) $atkhero['uid'];
+        }
+
+        // SIMULATOR: nu exista nici sat atacator, nici erou din baza de date,
+        // asa ca luam bonusurile aliantei jucatorului care ruleaza simularea.
+        // Intr-o lupta reala $AttackerID e mereu setat, deci ramura asta nu se
+        // atinge acolo.
+        if ($metalOwner <= 0 && ($offhero > 0 || $deffhero > 0 || $hero_strenght > 0)) {
+            global $session;
+
+            if (isset($session->uid)) {
+                $metalOwner = (int) $session->uid;
+            }
         }
 
         if ($metalOwner > 0) {
