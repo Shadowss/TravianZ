@@ -214,14 +214,14 @@ if(defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') && NEW_FUNCTIONS_SPECIAL_MEDAL
     $profiel = str_replace("[#HERO100]", "", $profiel);
 	}
 	
-	// [#WALLMASTER] - 3 sate cu zid (31/32/33) nivel 20 in slotul 40
+	// [#WALLMASTER] - 3 sate cu zid (31/32/33/42/43/47/50) nivel 20 in slotul 40
 	$wallCount = 0;
 	$q = $database->query("SELECT f.f40, f.f40t FROM ".TB_PREFIX."fdata f 
                        JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref 
                        WHERE v.owner=$uid");
 	if($q){
     while($r = $q->fetch_assoc()){
-        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33])){
+        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33,42,43,47,50])){
             $wallCount++;
         }
     }
@@ -387,4 +387,3 @@ $profiel = preg_replace("/\[#".$medal['id']."]/is",'<img src="'.$gpack.'img/t/'.
 
 
 ?>
-
