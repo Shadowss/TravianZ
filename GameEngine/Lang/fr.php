@@ -4256,3 +4256,8 @@ tz_def('TZ_WS_APPLIED', 'Inclus automatiquement dans cette simulation :');
 tz_def('TZ_WS_ITEM_STRENGTH', 'Force de l\'equipement');
 tz_def('TZ_WS_ITEM_UNIT', 'Bonus d\'arme');
 tz_def('TZ_WS_VS_NATARS', 'Contre les Natars');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MESAJ DE SISTEM - previzualizare
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_PREVIEW', 'Aperçu');

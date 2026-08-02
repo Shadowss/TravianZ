@@ -43,6 +43,19 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 .sysmsg-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 .sysmsg-form .field{display:flex;flex-direction:column;gap:4px}
 .sysmsg-form label{font-size:11px;color:#555;font-weight:bold}
+/* Previzualizare: fundal alb si text inchis, ca mesajul sa fie lizibil
+   indiferent ce culoare a ales adminul pentru titlu. */
+.sysmsg-preview{border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-bottom:15px;background:#fff}
+.sysmsg-preview-head{background:#f4f4f6;border-bottom:1px solid #e2e2e6;padding:7px 12px;
+    font-size:11px;font-weight:bold;color:#666;text-transform:uppercase;letter-spacing:.5px}
+.sysmsg-preview-body{padding:16px 18px}
+.sysmsg-preview-text{color:#2b2b2b;font-size:13px;line-height:1.55;word-wrap:break-word}
+/* bara de formatare */
+.bbbar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.bbbar button{background:#f2f2f4;border:1px solid #d8d8dc;color:#333;border-radius:5px;
+    padding:4px 10px;font-size:12px;cursor:pointer;line-height:1.2}
+.bbbar button:hover{background:#e6e6ea}
+.bbbar .sw{width:22px;height:22px;padding:0;border-radius:50%;border:1px solid rgba(0,0,0,.25)}
 .sysmsg-form input,.sysmsg-form textarea{
     padding:9px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;font-family:Verdana
 }
@@ -58,7 +71,7 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 .sysmsg-form button:hover{background:#6c3483}
 
 .sysmsg-confirm{
-    background:#fff3cd;border:1px solid #ffeaa7;padding:15px;border-radius:8px;margin-bottom:15px
+    background:#fff3cd;border:1px solid #ffeaa7;padding:12px;border-radius:8px;margin-bottom:12px;color:#6b5900
 }
 
 .sysmsg-success{
@@ -79,12 +92,46 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 <?php if(isset($_GET['confirm'])): ?>
 
     <div class="sysmsg-confirm">
-        <b><?php echo ADM_CONFIRMARE_SYSTEM_MESSAGE; ?></b><br><br>
-        <b><?php echo ADM_COLOR; ?></b> <span style="color:<?=htmlspecialchars($_SESSION['sys_color'])?>">
-            <?=htmlspecialchars($_SESSION['sys_subject'])?>
-        </span>
-        <br><br>
-        <div><?=nl2br(htmlspecialchars($_SESSION['sys_message']))?></div>
+        <b><?php echo ADM_CONFIRMARE_SYSTEM_MESSAGE; ?></b>
+    </div>
+
+    <?php
+        /**
+         * Previzualizare REALA a mesajului.
+         *
+         * Inainte, textul se afisa cu htmlspecialchars pe fundal galben: BBCode-ul
+         * aparea brut ([b]...[/b]), iar un subiect intr-o culoare deschisa devenea
+         * invizibil. Acum randam aceleasi coduri ca text_format.tpl, pe fundal alb,
+         * deci vezi exact ce vor vedea jucatorii.
+         */
+        $prevText = htmlspecialchars($_SESSION['sys_message'], ENT_QUOTES, 'UTF-8');
+
+        $prevText = str_replace(
+            array('[b]','[/b]','[i]','[/i]','[u]','[/u]'),
+            array('<b>','</b>','<i>','</i>','<u>','</u>'),
+            $prevText
+        );
+
+        // doar cod hexazecimal, ca in text_format.tpl
+        $prevText = preg_replace('/\[color=(#[0-9a-fA-F]{3,6})\]/', '<span style="color:$1">', $prevText);
+        // Inchidem doar atatea etichete cate s-au deschis, ca sa nu ramana
+        // un </span> orfan cand codul de culoare a fost invalid.
+        $prevOpen = substr_count($prevText, '<span style="color:');
+        $prevText = preg_replace('/\[\/color\]/', '</span>', $prevText, $prevOpen);
+        $prevText = str_replace('[/color]', '', $prevText);
+
+        $prevColor = preg_match('/^#[0-9a-fA-F]{3,6}$/', (string) $_SESSION['sys_color'])
+            ? $_SESSION['sys_color'] : '#333333';
+    ?>
+
+    <div class="sysmsg-preview">
+        <div class="sysmsg-preview-head"><?php echo ADM_PREVIEW ?? 'Preview'; ?></div>
+        <div class="sysmsg-preview-body">
+            <h2 style="color:<?=htmlspecialchars($prevColor)?>;margin:0 0 10px 0;font-size:16px">
+                <?=htmlspecialchars($_SESSION['sys_subject'], ENT_QUOTES, 'UTF-8')?>
+            </h2>
+            <div class="sysmsg-preview-text"><?=nl2br($prevText)?></div>
+        </div>
     </div>
 
     <form action="../GameEngine/Admin/Mods/sysmessage.php" method="POST" class="sysmsg-form">
@@ -121,7 +168,42 @@ $_SESSION['sys_color']   = $_SESSION['sys_color'] ?? 'black';
 
         <div class="field full">
             <label><?php echo ADM_MESSAGE; ?></label>
-            <textarea name="message" rows="12" required></textarea>
+            <div class="bbbar">
+                <button type="button" onclick="bbWrap('[b]','[/b]')"><b>B</b></button>
+                <button type="button" onclick="bbWrap('[i]','[/i]')"><i>I</i></button>
+                <button type="button" onclick="bbWrap('[u]','[/u]')"><u>U</u></button>
+                <?php
+                    // culori uzuale; se pot schimba fara sa atingi restul
+                    $bbColors = array('#c0392b', '#d35400', '#27ae60', '#2980b9', '#8e44ad', '#2b2b2b');
+                    foreach ($bbColors as $bbc) {
+                        echo '<button type="button" class="sw" style="background:' . $bbc . '"'
+                           . ' title="' . $bbc . '"'
+                           . " onclick=\"bbWrap('[color=" . $bbc . "]','[/color]')\"></button>";
+                    }
+                ?>
+            </div>
+            <textarea name="message" id="sysmsg_text" rows="12" required></textarea>
+
+<script>
+/**
+ * Insereaza coduri BBCode in jurul selectiei din caseta de mesaj.
+ * Daca nu e nimic selectat, pune codurile la pozitia cursorului si lasa
+ * cursorul intre ele, ca sa poti scrie direct.
+ */
+function bbWrap(open, close) {
+    var t = document.getElementById('sysmsg_text');
+    if (!t) { return; }
+
+    var a = t.selectionStart, b = t.selectionEnd;
+    var sel = t.value.substring(a, b);
+
+    t.value = t.value.substring(0, a) + open + sel + close + t.value.substring(b);
+
+    var pos = a + open.length + sel.length;
+    t.focus();
+    t.setSelectionRange(pos, pos);
+}
+</script>
         </div>
 
         <button type="submit"><?php echo ADM_CONTINUE; ?></button>

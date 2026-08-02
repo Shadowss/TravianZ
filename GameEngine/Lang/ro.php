@@ -4053,3 +4053,8 @@ tz_def('TZ_WS_APPLIED', 'Incluse automat in aceasta simulare:');
 tz_def('TZ_WS_ITEM_STRENGTH', 'Forta echipamentului');
 tz_def('TZ_WS_ITEM_UNIT', 'Bonus de arma');
 tz_def('TZ_WS_VS_NATARS', 'Contra Natarilor');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MESAJ DE SISTEM - previzualizare
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_PREVIEW', 'Previzualizare');

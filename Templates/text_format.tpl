@@ -45,6 +45,25 @@ $txt = str_replace(array_keys($bbMap), array_values($bbMap), $txt);
 
 /**
  * ---------------------------------------------------------
+ * Culoare: [color=#rrggbb]...[/color]
+ *
+ * Se accepta DOAR cod hexazecimal, verificat cu expresie regulata. Fara asta,
+ * un mesaj de sistem ar putea strecura CSS arbitrar in pagina fiecarui jucator.
+ * ---------------------------------------------------------
+ */
+$txt = preg_replace(
+    '/\[color=(#[0-9a-fA-F]{3,6})\]/',
+    '<span style="color:$1">',
+    $txt
+);
+// Inchidem doar atatea etichete cate s-au deschis: un cod de culoare invalid
+// nu trebuie sa lase un </span> orfan in pagina jucatorului.
+$colorOpen = substr_count($txt, '<span style="color:');
+$txt = preg_replace('/\[\/color\]/', '</span>', $txt, $colorOpen);
+$txt = str_replace('[/color]', '', $txt);
+
+/**
+ * ---------------------------------------------------------
  * Preserve line breaks as in original implementation
  * ---------------------------------------------------------
  */

@@ -47,7 +47,20 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 .massmsg-form button:hover{background:#d35400}
 
 .massmsg-success{margin-top:16px;padding:10px;background:#fef5e7;border:1px solid #e67e22;color:#a04000;border-radius:6px;text-align:center;font-weight:bold}
-.massmsg-confirm{background:#fff3cd;border:1px solid #ffeaa7;padding:15px;border-radius:8px;margin-bottom:15px}
+.massmsg-confirm{background:#fff3cd;border:1px solid #ffeaa7;padding:12px;border-radius:8px;margin-bottom:12px;color:#6b5900}
+/* Previzualizare: fundal alb si text inchis, ca mesajul sa fie lizibil
+   indiferent ce culoare a fost aleasa pentru titlu. */
+.massmsg-preview{border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-bottom:15px;background:#fff}
+.massmsg-preview-head{background:#f4f4f6;border-bottom:1px solid #e2e2e6;padding:7px 12px;
+    font-size:11px;font-weight:bold;color:#666;text-transform:uppercase;letter-spacing:.5px}
+.massmsg-preview-body{padding:16px 18px}
+.massmsg-preview-text{color:#2b2b2b;font-size:13px;line-height:1.55;word-wrap:break-word}
+.massmsg-preview-text a{color:#2980b9}
+/* bara de formatare */
+.bbbar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.bbbar button{background:#f2f2f4;border:1px solid #d8d8dc;color:#333;border-radius:5px;
+    padding:4px 10px;font-size:12px;cursor:pointer;line-height:1.2}
+.bbbar button:hover{background:#e6e6ea}
 </style>
 
 <div class="massmsg-wrap">
@@ -69,8 +82,56 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 
 <?php if(isset($_GET['confirm'])):?>
     <div class="massmsg-confirm">
-      <b><?php echo ADM_CONFIRM; ?></b><?php echo ADM_ARE_YOU_SURE_YOU_WANT_TO_SEND; ?><br>
-      <b><?php echo ADM_SUBJECT; ?></b> <span style="color:<?=$_SESSION['mass_color']?>"><?=htmlspecialchars($_SESSION['mass_subject'])?></span>
+      <b><?php echo ADM_CONFIRM; ?></b><?php echo ADM_ARE_YOU_SURE_YOU_WANT_TO_SEND; ?>
+    </div>
+
+    <?php
+        /**
+         * Previzualizare REALA a mesajului.
+         *
+         * Inainte se vedea doar subiectul, pe fundalul galben de avertizare -
+         * iar daca alegeai o culoare deschisa, devenea invizibil. Corpul
+         * mesajului nu se afisa deloc.
+         *
+         * Randam aceleasi coduri ca la trimitere: [b] [i] [u] din BBCode.php,
+         * plus [url] si [img], care sunt convertite de massmessage.php.
+         */
+        $mmText = htmlspecialchars($_SESSION['mass_message'] ?? '', ENT_QUOTES, 'UTF-8');
+
+        $mmText = str_replace(
+            array('[b]','[/b]','[i]','[/i]','[u]','[/u]'),
+            array('<b>','</b>','<i>','</i>','<u>','</u>'),
+            $mmText
+        );
+
+        // Doar adrese http(s), ca in massmessage.php. Textul e deja escapat,
+        // deci ghilimelele nu pot iesi din atribut.
+        $mmText = preg_replace_callback('/\[img\](.*?)\[\/img\]/is', function ($m) {
+            $u = trim($m[1]);
+            return preg_match('#^https?://#i', $u)
+                ? '<img src="' . $u . '" alt="" style="max-width:100%">'
+                : $u;
+        }, $mmText);
+
+        $mmText = preg_replace_callback('/\[url\](.*?)\[\/url\]/is', function ($m) {
+            $u = trim($m[1]);
+            return preg_match('#^https?://#i', $u)
+                ? '<a href="' . $u . '" target="_blank" rel="noopener">' . $u . '</a>'
+                : $u;
+        }, $mmText);
+
+        $mmColor = preg_match('/^(#[0-9a-fA-F]{3,6}|[a-zA-Z]{3,20})$/', (string) ($_SESSION['mass_color'] ?? ''))
+            ? $_SESSION['mass_color'] : '#333333';
+    ?>
+
+    <div class="massmsg-preview">
+        <div class="massmsg-preview-head"><?php echo ADM_PREVIEW ?? 'Preview'; ?></div>
+        <div class="massmsg-preview-body">
+            <h2 style="color:<?=htmlspecialchars($mmColor)?>;margin:0 0 10px 0;font-size:16px">
+                <?=htmlspecialchars($_SESSION['mass_subject'], ENT_QUOTES, 'UTF-8')?>
+            </h2>
+            <div class="massmsg-preview-text"><?=nl2br($mmText)?></div>
+        </div>
     </div>
     <form action="../GameEngine/Admin/Mods/massmessage.php" method="POST" class="massmsg-form">
       <?php echo csrf_field(); ?>
@@ -104,7 +165,39 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 
       <div class="field full">
         <label><?php echo ADM_MESSAGE_CONTENT; ?></label>
-        <textarea name="message" rows="12" placeholder="<?php echo ADM_WRITE_THE_MESSAGE_YOU_CAN_USE_URL_IMG; ?>" required></textarea>
+        <div class="bbbar">
+            <button type="button" onclick="bbWrap('[b]','[/b]')"><b>B</b></button>
+            <button type="button" onclick="bbWrap('[i]','[/i]')"><i>I</i></button>
+            <button type="button" onclick="bbWrap('[u]','[/u]')"><u>U</u></button>
+            <button type="button" onclick="bbWrap('[url]','[/url]')">URL</button>
+            <button type="button" onclick="bbWrap('[img]','[/img]')">IMG</button>
+        </div>
+        <textarea name="message" id="massmsg_text" rows="12" placeholder="<?php echo ADM_WRITE_THE_MESSAGE_YOU_CAN_USE_URL_IMG; ?>" required></textarea>
+
+<script>
+/**
+ * Insereaza coduri BBCode in jurul selectiei.
+ * Fara selectie, le pune la cursor si lasa cursorul intre ele.
+ *
+ * Codurile disponibile sunt cele pe care le randeaza jocul: [b] [i] [u] din
+ * BBCode.php, plus [url] si [img], convertite de massmessage.php la trimitere.
+ * Culoarea NU apare aici - la mesajele catre jucatori ea se aplica doar
+ * titlului, prin campul separat de mai sus.
+ */
+function bbWrap(open, close) {
+    var t = document.getElementById('massmsg_text');
+    if (!t) { return; }
+
+    var a = t.selectionStart, b = t.selectionEnd;
+    var sel = t.value.substring(a, b);
+
+    t.value = t.value.substring(0, a) + open + sel + close + t.value.substring(b);
+
+    var pos = a + open.length + sel.length;
+    t.focus();
+    t.setSelectionRange(pos, pos);
+}
+</script>
       </div>
 
       <button type="submit">
