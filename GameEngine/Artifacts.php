@@ -154,33 +154,60 @@ class Artifacts
     /**
      * @var array Cladirile capitalei Natarilor
      *
-     * Capitala e satul Minunii Lumii al Natarilor: are Minunea de la bun inceput
-     * (nivel 0, se construieste ulterior - vezi AutomationNatarsWW), plus
-     * infrastructura care ii permite sa o ridice.
+     * Capitala e satul Minunii Lumii al Natarilor. Primeste Minunea de la bun
+     * inceput (nivel 0 - o urca singuri, vezi AutomationNatarsWWBuild), plus
+     * infrastructura care ii permite s-o ridice.
      *
-     * Sloturile f19-f38 sunt cele 20 de locuri de cladiri; f39 e punctul de
-     * adunare, f40 zidul, f99 Minunea. Un slot merge la Primarie, restul de 19
-     * sunt umplute cu Depozite Mari si Hambare Mari la nivel 20, fiindca
-     * fiecare nivel de Minune cere sute de mii de resurse.
+     * Campurile de resurse sunt toate la 20, iar depozitele si hambarele sunt
+     * mari si pline, fiindca fiecare nivel de Minune cere sute de mii de
+     * resurse.
      *
-     * NOTA: in Travian T4, cele 13 sate de Minune NU au zid sau resedinta, ca
-     * sa poata fi cucerite fara berbeci. Capitala Natarilor e insa a lor si nu
-     * se cucereste, deci zidul are sens aici.
+     * Sloturile 25, 26, 29, 30 si 33 raman LIBERE - sunt rezervate cladirilor
+     * legate de Minune.
      */
 
+    /**
+     * @var array Armata capitalei Natarilor
+     *
+     * Unitatile Natarilor sunt u41-u50. Clasificarea e cea din $unitsbytype
+     * (GameEngine/Data/unitdata.php), nu ghicita dupa nume:
+     *
+     *   u41 Pikeman, u42 Thorned Warrior, u43 Guardsman,
+     *   u44 Birds Of Prey (cercetas), u45 Axerider, u46 Natarian Knight
+     *        -> armata propriu-zisa, cate 9.000.000
+     *
+     *   u47 War Elephant (berbec), u48 Ballista (catapulta),
+     *   u49 Natarian Emperor (capetenie), u50 Natarian Settler (colonist)
+     *        -> cate 999
+     *
+     * Natarii sunt scutiti de infometare (vezi getProfileVillages, mod 2, care
+     * exclude owner 3), deci consumul urias de cereale nu-i omoara.
+     */
+
+    NATARS_CAPITAL_UNITS = [
+        41 => 9000000, 42 => 9000000, 43 => 9000000,
+        44 => 9000000, 45 => 9000000, 46 => 9000000,
+        47 => 999, 48 => 999, 49 => 999, 50 => 999
+    ],
+
     NATARS_CAPITAL_BUILDINGS = [
-        //Minunea Lumii (nivel 0, se construieste ulterior)
-        "f99t" => 40, "f99" => 0,
-        //Primarie 20, punct de adunare 20, zid 20 (Natarii folosesc zidul de oras)
-        "f19t" => 24, "f19" => 20, "f39t" => 16, "f39" => 20, "f40t" => 31, "f40" => 20,
-        //Restul sloturilor: 10 Depozite Mari si 9 Hambare Mari, toate la nivel 20
-        "f20t" => 38, "f20" => 20, "f22t" => 38, "f22" => 20, "f24t" => 38, "f24" => 20,
-        "f26t" => 38, "f26" => 20, "f28t" => 38, "f28" => 20, "f30t" => 38, "f30" => 20,
-        "f32t" => 38, "f32" => 20, "f34t" => 38, "f34" => 20, "f36t" => 38, "f36" => 20,
-        "f38t" => 38, "f38" => 20,
-        "f21t" => 39, "f21" => 20, "f23t" => 39, "f23" => 20, "f25t" => 39, "f25" => 20,
-        "f27t" => 39, "f27" => 20, "f29t" => 39, "f29" => 20, "f31t" => 39, "f31" => 20,
-        "f33t" => 39, "f33" => 20, "f35t" => 39, "f35" => 20, "f37t" => 39, "f37" => 20],
+        //Campuri de resurse: configuratia 4-4-4-6 (tipul 3), toate la nivel 20
+        "f1t" => 1, "f1" => 20, "f2t" => 4, "f2" => 20, "f3t" => 1, "f3" => 20,
+        "f4t" => 3, "f4" => 20, "f5t" => 2, "f5" => 20, "f6t" => 2, "f6" => 20,
+        "f7t" => 3, "f7" => 20, "f8t" => 4, "f8" => 20, "f9t" => 4, "f9" => 20,
+        "f10t" => 3, "f10" => 20, "f11t" => 3, "f11" => 20, "f12t" => 4, "f12" => 20,
+        "f13t" => 4, "f13" => 20, "f14t" => 1, "f14" => 20, "f15t" => 4, "f15" => 20,
+        "f16t" => 2, "f16" => 20, "f17t" => 1, "f17" => 20, "f18t" => 2, "f18" => 20,
+        //Primaria, plus Depozite Mari (38) si Hambare Mari (39), toate nivel 20.
+        //Sloturile 25, 26, 29, 30 si 33 raman LIBERE: acolo se construiesc
+        //cladirile legate de Minunea Lumii.
+        "f19t" => 24, "f19" => 20, "f20t" => 38, "f20" => 20, "f21t" => 39, "f21" => 20,
+        "f22t" => 38, "f22" => 20, "f23t" => 39, "f23" => 20, "f24t" => 38, "f24" => 20,
+        "f27t" => 39, "f27" => 20, "f28t" => 38, "f28" => 20, "f31t" => 39, "f31" => 20,
+        "f32t" => 38, "f32" => 20, "f34t" => 38, "f34" => 20, "f35t" => 39, "f35" => 20,
+        "f36t" => 38, "f36" => 20, "f37t" => 39, "f37" => 20, "f38t" => 38, "f38" => 20,
+        //Punct de adunare, Zid de oras, Minunea Lumii (nivel 0)
+        "f39t" => 16, "f39" => 20, "f40t" => 31, "f40" => 20, "f99t" => 40, "f99" => 0],
 
     /**
      * @var int The base amount of Natars' spying units, used when Natars account is created
@@ -265,11 +292,17 @@ class Artifacts
         $capitalBuildings[0]   = array_keys(self::NATARS_CAPITAL_BUILDINGS);
         $capitalBuildings[1][] = array_values(self::NATARS_CAPITAL_BUILDINGS);
 
+        // Armata capitalei, in acelasi format ca la satele de Minune:
+        // [0] = numele coloanelor, [1][] = valorile.
+        $capitalUnits = [];
+        $capitalUnits[0]   = array_keys(self::NATARS_CAPITAL_UNITS);
+        $capitalUnits[1][] = array_values(self::NATARS_CAPITAL_UNITS);
+
         $wid = $database->generateVillages(
-            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 834, 'name' => null, 'natar' => 0]],
+            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 1184, 'name' => null, 'natar' => 0]],
             self::NATARS_UID,
             TRIBE5,
-            null,
+            $capitalUnits,
             $capitalBuildings
         );
 

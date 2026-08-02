@@ -131,7 +131,16 @@ trait AutomationBuildQueue {
     private function completeWorldWonder($indi) {
         global $database;
 
-        if (($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
+        // Natarii NU se pot ataca pe ei insisi.
+        //
+        // De cand capitala Natarilor are propria Minune, acest bloc s-ar
+        // declansa si pentru ea: la fiecare 5 niveluri ar porni valuri de atac
+        // avand ca sursa capitala si ca tinta tot capitala.
+        $wwOwner = (int) $database->getVillageField((int) $indi['wid'], 'owner');
+        $natarUid = class_exists('Artifacts') ? (int) Artifacts::NATARS_UID : 3;
+
+        if ($wwOwner !== $natarUid
+            && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
             $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
         }
 
