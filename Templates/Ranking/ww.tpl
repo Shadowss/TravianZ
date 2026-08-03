@@ -104,9 +104,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                     <?php echo htmlspecialchars($row['username']); ?>
                 </a>
                 <?php if ($isNatarWW) { ?>
-                    <span class="ww-natars-tag"><?php
-                        echo defined('TZ_WW_NATARS') ? TZ_WW_NATARS : 'Natars';
-                    ?></span>
+					<span class="ww-natars-tag"><?php echo defined('TZ_WW_NATARS') ? TZ_WW_NATARS : 'Natars'; ?></span>
                 <?php } ?>
             </td>
 

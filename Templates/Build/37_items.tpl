@@ -83,17 +83,43 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
     <p class="message" style="font-weight:bold;"><?php echo $t4Msg; ?></p>
 <?php } ?>
 
-<table id="distribution" cellpadding="1" cellspacing="1">
+<style>
+/* Cap de tabel pentru coloane: fara el nu se intelegea ce e fiecare valoare. */
+table.t4items tr.t4cols th{background:#e8e8ea;color:#444;font-size:11px;
+    font-weight:bold;text-align:center;padding:3px 5px;border-bottom:1px solid #d0d0d4}
+/* Imaginea are coloana proprie, centrata. */
+table.t4items td.t4img{text-align:center;vertical-align:middle;width:46px}
+table.t4items td.t4tier{text-align:center;white-space:normal}
+/* Bonusul, discret, langa tier. */
+table.t4items .t4bonus{display:block;color:#777;font-size:10px;line-height:1.3;font-weight:normal}
+</style>
+<table id="distribution" class="t4items" cellpadding="1" cellspacing="1">
     <thead>
-        <tr><th colspan="4"><?php echo HERO_ITEMS_EQUIPPED; ?></th></tr>
+        <tr><th colspan="5"><?php echo HERO_ITEMS_EQUIPPED; ?></th></tr>
+        <tr class="t4cols">
+            <th style="width:110px;"><?php echo HERO_COL_TYPE; ?></th>
+            <th style="width:46px;"><?php echo HERO_COL_IMAGE; ?></th>
+            <th><?php echo HERO_COL_NAME; ?></th>
+            <th style="width:230px;"><?php echo HERO_COL_TIER; ?></th>
+            <th style="width:110px;"><?php echo HERO_COL_ACTION; ?></th>
+        </tr>
     </thead>
     <tbody>
     <?php for ($t4Slot = 1; $t4Slot <= 6; $t4Slot++) { ?>
         <tr>
             <td style="width:110px;"><b><?php echo constant('HERO_SLOT_' . $t4Slot); ?></b></td>
-            <?php if (isset($t4Equipped[$t4Slot])) { $t4Row = $t4Equipped[$t4Slot]; ?>
-            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
-            <td style="width:60px;text-align:center;"><?php echo 'T' . (int) $t4Row['def']['tier']; ?></td>
+            <?php if (isset($t4Equipped[$t4Slot])) {
+                $t4Row   = $t4Equipped[$t4Slot];
+                $t4Bonus = heroItemBonusText((int) $t4Row['itemid']);
+            ?>
+            <td class="t4img"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span></td>
+            <td><?php echo $t4Row['name']; ?></td>
+            <td class="t4tier">
+                T<?php echo (int) $t4Row['def']['tier']; ?>
+                <?php if ($t4Bonus !== '') { ?>
+                    <span class="t4bonus">(<?php echo htmlspecialchars($t4Bonus, ENT_QUOTES, 'UTF-8'); ?>)</span>
+                <?php } ?>
+            </td>
             <td style="width:110px;text-align:center;">
                 <?php if ($t4AwayReason === '') { ?>
                 <form action="" method="POST" style="margin:0;">
@@ -106,16 +132,23 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
                 <?php } ?>
             </td>
             <?php } else { ?>
-            <td colspan="3" style="color:#888;">-</td>
+            <td colspan="4" style="color:#888;">-</td>
             <?php } ?>
         </tr>
     <?php } ?>
     </tbody>
 </table>
 
-<table id="distribution" cellpadding="1" cellspacing="1" style="margin-top:10px;">
+<table id="distribution" class="t4items" cellpadding="1" cellspacing="1" style="margin-top:10px;">
     <thead>
-        <tr><th colspan="4"><?php echo HERO_ITEMS_BAG; ?></th></tr>
+        <tr><th colspan="5"><?php echo HERO_ITEMS_BAG; ?></th></tr>
+        <tr class="t4cols">
+            <th style="width:110px;"><?php echo HERO_COL_TYPE; ?></th>
+            <th style="width:46px;"><?php echo HERO_COL_IMAGE; ?></th>
+            <th><?php echo HERO_COL_NAME; ?></th>
+            <th style="width:230px;"><?php echo HERO_COL_TIER; ?></th>
+            <th style="width:170px;"><?php echo HERO_COL_ACTION; ?></th>
+        </tr>
     </thead>
     <tbody>
     <?php
@@ -127,12 +160,22 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
         $t4HasUnequipped = true;
         $t4IsBag = ((int) $t4Row['def']['slot'] === HSLOT_BAG);
     ?>
+        <?php $t4Bonus = heroItemBonusText((int) $t4Row['itemid']); ?>
         <tr>
-            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span> <?php echo $t4Row['name']; ?></td>
-            <td style="width:80px;text-align:center;">
-                <?php echo $t4IsBag ? (int) $t4Row['quantity'] . 'x' : 'T' . (int) $t4Row['def']['tier']; ?>
+            <td style="width:110px;"><b><?php echo constant('HERO_SLOT_' . (int) $t4Row['def']['slot']); ?></b></td>
+            <td class="t4img"><span class="heroT4Item item<?php echo (int) $t4Row['itemid']; ?>"></span></td>
+            <td><?php echo $t4Row['name']; ?></td>
+            <td class="t4tier">
+                <?php
+                    // consumabilele n-au tier: afisam cate bucati sunt
+                    echo $t4IsBag
+                        ? (int) $t4Row['quantity'] . 'x'
+                        : 'T' . (int) $t4Row['def']['tier'];
+                ?>
+                <?php if ($t4Bonus !== '') { ?>
+                    <span class="t4bonus">(<?php echo htmlspecialchars($t4Bonus, ENT_QUOTES, 'UTF-8'); ?>)</span>
+                <?php } ?>
             </td>
-            <td style="width:110px;text-align:center;"><?php echo constant('HERO_SLOT_' . (int) $t4Row['def']['slot']); ?></td>
             <td style="width:170px;text-align:center;">
                 <form action="" method="POST" style="margin:0;">
                     <input type="hidden" name="rowid" value="<?php echo (int) $t4Row['id']; ?>">
@@ -151,7 +194,7 @@ $t4Equipped  = $t4HeroItems->getEquipped($session->uid);
         </tr>
     <?php } ?>
     <?php if (!$t4HasUnequipped) { ?>
-        <tr><td colspan="4"><?php echo HERO_ITEMS_EMPTY; ?></td></tr>
+        <tr><td colspan="5"><?php echo HERO_ITEMS_EMPTY; ?></td></tr>
     <?php } ?>
     </tbody>
 </table>
