@@ -65,7 +65,7 @@ $email_raw = trim($_POST['email'] ?? '');
 $email     = filter_var($email_raw, FILTER_VALIDATE_EMAIL) ? $email_raw : '';
 $email     = $database->escape($email);
 
-$tribe    = max(1, min(5, (int)($_POST['tribe'] ?? 1)));
+$tribe    = max(1, min(9, (int)($_POST['tribe'] ?? 1)));
 
 // BUG-3: store location/descriptions raw. escape() keeps the interpolated UPDATE
 // SQL-safe and strip_tags() drops markup; every display site (player.tpl,
