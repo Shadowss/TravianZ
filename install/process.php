@@ -74,10 +74,6 @@ class Process {
 		$findReplace["%CRANNYCAP%"] = $_POST['crannycap'];
 		$findReplace["%TRAPPERCAP%"] = $_POST['trappercap'];
 		$findReplace["%STORAGE_MULTIPLIER%"] = $_POST['storage_multiplier'];
-		//$findReplace["%UTRACK%"] = $_POST['trackusers'];
-		//$findReplace["%UTOUT%"] = $_POST['timeout'];
-		//$findReplace["%AUTOD%"] = $_POST['autodel'];
-		//$findReplace["%AUTODT%"] = $_POST['autodeltime'];
 		$findReplace["%MAX%"] = $_POST['wmax'];
 		// Comutatorul de pachete grafice proprii. Linia era comentata, deci %GP%
 		// ramanea neinlocuit in config.php si constanta nu se definea deloc.
@@ -95,6 +91,21 @@ class Process {
 		if ($psKeep < 0 || $psKeep > 3650) { $psKeep = 0; }
 		$findReplace["%PLUSSTATSKEEP%"] = $psKeep;
 
+		// Regulile de inregistrare
+		$findReplace["%USRNMSPECIAL%"] = (isset($_POST['usrnm_special']) && $_POST['usrnm_special'] === 'false') ? 'false' : 'true';
+
+		$uMin = isset($_POST['usrnm_min']) ? (int) $_POST['usrnm_min'] : 3;
+		if ($uMin < 1 || $uMin > 50) { $uMin = 3; }
+		$findReplace["%USRNMMIN%"] = $uMin;
+
+		$uMax = isset($_POST['usrnm_max']) ? (int) $_POST['usrnm_max'] : 15;
+		if ($uMax < $uMin || $uMax > 100) { $uMax = max(15, $uMin); }
+		$findReplace["%USRNMMAX%"] = $uMax;
+
+		$pMin = isset($_POST['pw_min']) ? (int) $_POST['pw_min'] : 4;
+		if ($pMin < 1 || $pMin > 100) { $pMin = 4; }
+		$findReplace["%PWMIN%"] = $pMin;
+
 		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];
@@ -105,7 +116,6 @@ class Process {
 		$findReplace["%CONNECTT%"] = $_POST['connectt'];
 		$findReplace["%ASUPPMSGS%"] = 'true';
 		$findReplace["%ARAIDS%"] = 'false';
-		//$findReplace["%SUBDOM%"] = $_POST['subdom'];
 		$findReplace["%LOGBUILD%"] = $_POST['log_build'];
 		$findReplace["%LOGTECH%"] = $_POST['log_tech'];
 		$findReplace["%LOGLOGIN%"] = $_POST['log_login'];
@@ -114,9 +124,6 @@ class Process {
 		$findReplace["%LOGWAR%"] = $_POST['log_war'];
 		$findReplace["%LOGMARKET%"] = $_POST['log_market'];
 		$findReplace["%LOGILLEGAL%"] = $_POST['log_illegal'];
-		//$findReplace["%MINUSERLENGTH%"] = $_POST['userlength'];
-		//$findReplace["%MINPASSLENGTH%"] = $_POST['passlength'];
-		//$findReplace["%SPECIALCHARS%"] = $_POST['specialchars'];
 		$findReplace["%ACTIVATE%"] = $_POST['activate'];
 		$findReplace["%ARANK%"] = 'false';
 		$findReplace["%QUEST%"] = $_POST['quest'];

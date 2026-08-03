@@ -92,15 +92,7 @@ trait AutomationAccountMaintenance {
         }
     }
 
-    private function ClearInactive() {
-        global $database;
-        
-        if(TRACK_USR) {
-            $timeout = time()-USER_TIMEOUT * 60;
-            $q = "DELETE FROM ".TB_PREFIX."active WHERE timestamp < $timeout";
-            $database->query($q);
-        }
-    }
+
 
     private function checkInvitedPlayes() {
         global $database;

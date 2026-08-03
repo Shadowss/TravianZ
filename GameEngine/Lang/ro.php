@@ -4058,3 +4058,13 @@ tz_def('TZ_WS_VS_NATARS', 'Contra Natarilor');
 // MESAJ DE SISTEM - previzualizare
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_PREVIEW', 'Previzualizare');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// REGULI DE INREGISTRARE (Server Configuration)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('CONF_SERV_USRNM_MIN', 'Lungimea minima a numelui');
+tz_def('CONF_SERV_USRNM_MAX', 'Lungimea maxima a numelui');
+tz_def('CONF_SERV_PW_MIN', 'Lungimea minima a parolei');
+tz_def('CONF_SERV_USRNM_SPECIAL', 'Permite . - _ in nume');
+tz_def('CONF_SERV_USRNM_SPECIAL_TOOLTIP', 'Cu True, numele pot contine punct, liniuta sau underscore, si spatii simple intre cuvinte. Cu False, se accepta doar litere si cifre.');
+tz_def('CONF_SERV_REGRULES_TOOLTIP', 'Reguli verificate la inregistrare. Schimbarea lor nu afecteaza conturile existente.');

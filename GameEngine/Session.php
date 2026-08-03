@@ -106,7 +106,11 @@ function __construct() {
 
     $this->logged_in = $this->checkLogin();
 
-    if ($this->logged_in && TRACK_USR) {
+    // users.timestamp nu mai e optional: din el se scot lista de jucatori
+    // online, harta de caldura si stergerea conturilor inactive. Inainte era
+    // in spatele lui TRACK_USR - cu flagul stins, stergerea automata ar fi
+    // considerat TOTI jucatorii inactivi.
+    if ($this->logged_in) {
         $database->updateActiveUser($this->username, $this->time);
     }
 

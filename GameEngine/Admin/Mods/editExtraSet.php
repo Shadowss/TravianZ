@@ -143,8 +143,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%ANAME%', ADMIN_NAME);
 		tz_config_set($text, '%ASUPPMSGS%', $SUPPORT_MSGS_IN_ADMIN);
 		tz_config_set($text, '%ARAIDS%', $ADMINS_RAIDABLE);
-		tz_config_set($text, '%UTRACK%', "TRACK_USR"); // not in use, text only in a comment
-		tz_config_set($text, '%UTOUT%', "USER_TIMEOUT"); // not in use, text only in a comment
+
 		tz_config_set($text, '%DOMAIN%', DOMAIN);
 		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
 		tz_config_set($text, '%SERVER%', SERVER);

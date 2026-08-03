@@ -323,6 +323,13 @@ foreach($mechs as $k => $l){
         <option value="false" selected>No</option>
         <option value="true">Yes</option>
     </select></div>
+    <div><label>Minimum username length</label><input class="input" type="text" name="usrnm_min" value="3"></div>
+    <div><label>Maximum username length</label><input class="input" type="text" name="usrnm_max" value="15"></div>
+    <div><label>Minimum password length</label><input class="input" type="text" name="pw_min" value="4"></div>
+    <div><label>Allow . - _ in usernames</label><select class="input" name="usrnm_special">
+        <option value="true" selected>Yes</option>
+        <option value="false">No &ndash; letters and digits only</option>
+    </select></div>
     <div><label>Allow player graphic packs</label><select class="input" name="gpack">
         <option value="false" selected>No &ndash; everyone sees the server pack</option>
         <option value="true">Yes &ndash; players may pick their own in Profile</option>

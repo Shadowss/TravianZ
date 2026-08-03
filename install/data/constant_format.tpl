@@ -188,6 +188,16 @@ define("PLUS_STATS_INTERVAL_HOURS", %PLUSSTATSHOURS%);
 // lifetime of an entire server, this only amounts to a few tens of thousands of records.
 define("PLUS_STATS_KEEP_DAYS", %PLUSSTATSKEEP%);
 
+// ***** Registration rules
+// Regulile verificate la inregistrare (vezi Account.php).
+//
+// USRNM_SPECIAL: cu true se accepta punct, liniuta si underscore in nume, si
+// spatii simple intre cuvinte; cu false doar litere si cifre.
+define("USRNM_SPECIAL", %USRNMSPECIAL%);
+define("USRNM_MIN_LENGTH", %USRNMMIN%);
+define("USRNM_MAX_LENGTH", %USRNMMAX%);
+define("PW_MIN_LENGTH", %PWMIN%);
+
 // ***** Graphic Pack
 //
 // SERVER_GP is the pack every player sees by default (chosen at install or in
@@ -495,10 +505,6 @@ define("NEW_FUNCTION_REGISTRATION_GOLD_VALUE", %NEW_FUNCTION_REGISTRATION_GOLD_V
 //////////////////////////////////////////
 define("AUTO_DEL_INACTIVE",false); // auto-delete inactive players; default = false
 define("UN_ACT_TIME", 3628800); // 6 weeks to consider a player inactive
-//define("TRACK_USR","%UTRACK%");
-//define("USER_TIMEOUT","%UTOUT%");
-define("TRACK_USR",true); // track users' being active or not
-define("USER_TIMEOUT",3600); // 1 hour of no activity counts as inactivity
 define("ALLOW_BURST",false);
 define("BASIC_MAX",1);
 define("INNER_MAX",1);
@@ -506,10 +512,6 @@ define("PLUS_MAX",1);
 define("ALLOW_ALL_TRIBE",false);
 define("CFM_ADMIN_ACT",true);
 define("SERVER_WEB_ROOT",false);
-define("USRNM_SPECIAL",true);
-define("USRNM_MIN_LENGTH",3);
-define("USRNM_MAX_LENGTH",15);
-define("PW_MIN_LENGTH",4);
 
 // === IP ban (issue #185) ===
 // Master switch for IP-ban enforcement.

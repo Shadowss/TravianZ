@@ -124,22 +124,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `%PREFIX%active`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
- `username` varchar(100) NOT NULL,
- `timestamp` int(11) NULL,
- PRIMARY KEY (`username`),
- KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `%PREFIX%active`
---
-
-
 -- --------------------------------------------------------
 
 --

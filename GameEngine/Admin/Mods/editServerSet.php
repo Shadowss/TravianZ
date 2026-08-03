@@ -124,6 +124,22 @@ $text = admin_config_template_contents(array(
 ));
 		tz_config_set($text, '%ERRORREPORT%', $_POST['error'] ?? '');
 		tz_config_set($text, '%ERROR%', $_POST['error'] ?? '', 'code');
+		// Regulile de inregistrare
+		tz_config_set($text, '%USRNMSPECIAL%',
+			(isset($_POST['usrnm_special']) && $_POST['usrnm_special'] === 'false') ? 'false' : 'true');
+
+		$uMin = isset($_POST['usrnm_min']) ? (int) $_POST['usrnm_min'] : 3;
+		if ($uMin < 1 || $uMin > 50) { $uMin = 3; }
+		tz_config_set($text, '%USRNMMIN%', $uMin);
+
+		$uMax = isset($_POST['usrnm_max']) ? (int) $_POST['usrnm_max'] : 15;
+		if ($uMax < $uMin || $uMax > 100) { $uMax = max(15, $uMin); }
+		tz_config_set($text, '%USRNMMAX%', $uMax);
+
+		$pMin = isset($_POST['pw_min']) ? (int) $_POST['pw_min'] : 4;
+		if ($pMin < 1 || $pMin > 100) { $pMin = 4; }
+		tz_config_set($text, '%PWMIN%', $pMin);
+
 		tz_config_set($text, '%SERVERNAME%', $_POST['servername'] ?? '');
 		// Fusul orar se scrie intr-un fisier PHP (define("TIMEZONE","...")), deci
 		// valoarea NU are voie sa ajunga acolo nefiltrata: pana acum $_POST['tzone']
@@ -224,8 +240,7 @@ $text = admin_config_template_contents(array(
 		tz_config_set($text, '%ASUPPMSGS%', $SUPPORT_MSGS_IN_ADMIN);
 		tz_config_set($text, '%ARAIDS%', $ADMINS_RAIDABLE);
 		tz_config_set($text, '%ANAME%', ADMIN_NAME);
-		tz_config_set($text, '%UTRACK%', "");
-		tz_config_set($text, '%UTOUT%', "");
+
 		tz_config_set($text, '%DOMAIN%', DOMAIN);
 		tz_config_set($text, '%HOMEPAGE%', HOMEPAGE);
 		tz_config_set($text, '%SERVER%', SERVER);

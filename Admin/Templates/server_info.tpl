@@ -32,7 +32,10 @@ function q1($sql){ global $database; $r=$database->query($sql); return $r ? $r->
 
 // ---- DATE ----
 $users = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE tribe IN (1,2,3,6,7,8,9)")['c'] ?? 0);
-$active = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."active")['c'] ?? 0);
+// Jucatori online: se numara din users.timestamp, ca in home.tpl si in pagina
+// Online Players - aceeasi fereastra de 5 minute, aceeasi sursa.
+// Tabela separata "active" a fost eliminata: dubla exact aceasta informatie.
+$active = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-300)." AND id > 5")['c'] ?? 0);
 $online = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-300)." AND tribe>0")['c'] ?? 0);
 $banned = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE access=0")['c'] ?? 0);
 $villages = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."vdata")['c'] ?? 0);

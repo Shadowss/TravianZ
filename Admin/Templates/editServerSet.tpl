@@ -199,6 +199,27 @@ function refresh(tz) {
                     <td><input class="fm" name="natars_ww_spawn_time" value="<?php echo NATARS_WW_SPAWN_TIME;?>" style="width: 20%;"></td>
                 </tr>
                 <tr>
+                    <td class="b"><?php echo CONF_SERV_USRNM_MIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_REGRULES_TOOLTIP ?></span></em></td>
+                    <td><input class="fm" name="usrnm_min" value="<?php echo defined('USRNM_MIN_LENGTH') ? USRNM_MIN_LENGTH : 3;?>" style="width: 20%;"></td>
+                </tr>
+                <tr>
+                    <td class="b"><?php echo CONF_SERV_USRNM_MAX ?></td>
+                    <td><input class="fm" name="usrnm_max" value="<?php echo defined('USRNM_MAX_LENGTH') ? USRNM_MAX_LENGTH : 15;?>" style="width: 20%;"></td>
+                </tr>
+                <tr>
+                    <td class="b"><?php echo CONF_SERV_PW_MIN ?></td>
+                    <td><input class="fm" name="pw_min" value="<?php echo defined('PW_MIN_LENGTH') ? PW_MIN_LENGTH : 4;?>" style="width: 20%;"></td>
+                </tr>
+                <tr>
+                    <td class="b"><?php echo CONF_SERV_USRNM_SPECIAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_USRNM_SPECIAL_TOOLTIP ?></span></em></td>
+                    <td>
+                        <select name="usrnm_special">
+                            <option value="true" <?php if (!defined('USRNM_SPECIAL') || USRNM_SPECIAL) echo "selected"; ?>>True</option>
+                            <option value="false" <?php if (defined('USRNM_SPECIAL') && !USRNM_SPECIAL) echo "selected"; ?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="b"><?php echo CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME_TOOLTIP ?></span></em></td>
                     <td><input class="fm" name="natars_ww_building_plan_spawn_time" value="<?php echo NATARS_WW_BUILDING_PLAN_SPAWN_TIME;?>" style="width: 20%;"></td>
                 </tr>

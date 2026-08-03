@@ -462,17 +462,6 @@ trait DatabaseUserQueries {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function addActiveUser($username, $time) {
-        list($username, $time) = $this->escape_input($username, $time);
-
-		$q = "REPLACE into " . TB_PREFIX . "active values ('$username',$time)";
-		if(mysqli_query($this->dblink,$q)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	function updateActiveUser($username, $time) {
 	    static $updated = false;
 
@@ -482,15 +471,20 @@ trait DatabaseUserQueries {
 
         list($username, $time) = $this->escape_input($username, $time);
 
-        $res1 = $this->addActiveUser($username, $time);
+        // Marcam ultima activitate DOAR in users.timestamp.
+        //
+        // Exista si o tabela separata "active" care tinea aceeasi informatie,
+        // dar era citita de o singura pagina din panou, iar users.timestamp e
+        // oricum sursa pentru lista de jucatori online, harta de caldura si
+        // stergerea conturilor inactive. Tabela a fost eliminata.
         $q = "UPDATE " . TB_PREFIX . "users set timestamp = $time where username = '$username'";
-		$res2 = mysqli_query($this->dblink,$q);
-		if($res1 && $res2) {
+
+		if (mysqli_query($this->dblink, $q)) {
             $updated = true;
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	function submitProfile($uid, $gender, $location, $birthday, $desc1, $desc2) {
