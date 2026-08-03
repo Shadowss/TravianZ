@@ -259,6 +259,80 @@ echo '<div class="ps-chart">'
    . '</div>';
 
 // -------------------------------------------------
+// ALIANTA: aceleasi instantanee, adunate pe membri
+// -------------------------------------------------
+//
+// Nu e nevoie de date noi: totalurile aliantei se obtin adunand instantaneele
+// membrilor ei, pe aceleasi momente.
+//
+// ATENTIE: gruparea se face dupa alianta CURENTA a fiecarui jucator, fiindca
+// instantaneele nu retin alianta de la momentul respectiv. Daca cineva schimba
+// alianta, istoricul lui pleaca odata cu el. Pentru graficul de evolutie al
+// unei aliante stabile diferenta e neglijabila.
+$psAlliance = (int) ($session->alliance ?? 0);
+$psAllySeries = array('population' => array(), 'villages' => array(), 'troop_upkeep' => array());
+$psAllyName = '';
+
+if ($psAlliance > 0) {
+
+    $psAq = @mysqli_query($database->dblink,
+        "SELECT h.recorded_at,
+                SUM(h.population)   AS population,
+                SUM(h.villages)     AS villages,
+                SUM(h.troop_upkeep) AS troop_upkeep,
+                COUNT(*)            AS members
+           FROM " . TB_PREFIX . "player_statistics_history h
+           JOIN " . TB_PREFIX . "users u ON u.id = h.uid
+          WHERE u.alliance = " . $psAlliance . "
+          GROUP BY h.recorded_at
+          ORDER BY h.recorded_at ASC
+          LIMIT 400");
+
+    while ($psAq && ($psAr = mysqli_fetch_assoc($psAq))) {
+        $t = (int) $psAr['recorded_at'];
+        $psAllySeries['population'][]   = array($t, (int) $psAr['population']);
+        $psAllySeries['villages'][]     = array($t, (int) $psAr['villages']);
+        $psAllySeries['troop_upkeep'][] = array($t, (int) $psAr['troop_upkeep']);
+    }
+
+    $psAn = @mysqli_query($database->dblink,
+        "SELECT tag, name FROM " . TB_PREFIX . "alidata WHERE id = " . $psAlliance . " LIMIT 1");
+    $psAnr = $psAn ? mysqli_fetch_assoc($psAn) : null;
+
+    if ($psAnr) {
+        $psAllyName = $psAnr['tag'] . ' - ' . $psAnr['name'];
+    }
+}
+
+if (count($psAllySeries['population']) >= 2) {
+?>
+    <h4 class="ps-ally-head">
+        <?php echo defined('PLUSSTATS_ALLIANCE') ? PLUSSTATS_ALLIANCE : 'Your alliance'; ?>
+        <?php if ($psAllyName !== '') { ?>
+            <span class="ps-ally-name"><?php echo htmlspecialchars($psAllyName, ENT_QUOTES, 'UTF-8'); ?></span>
+        <?php } ?>
+    </h4>
+<?php
+    echo '<div class="ps-chart">'
+       . ps_line_chart($psAllySeries['population'],
+            defined('PLUSSTATS_POP') ? PLUSSTATS_POP : 'Population',
+            '#7db72f')
+       . '</div>';
+
+    echo '<div class="ps-chart">'
+       . ps_line_chart($psAllySeries['villages'],
+            defined('PLUSSTATS_VILLAGES') ? PLUSSTATS_VILLAGES : 'Villages',
+            '#8e6fc4')
+       . '</div>';
+
+    echo '<div class="ps-chart">'
+       . ps_line_chart($psAllySeries['troop_upkeep'],
+            defined('PLUSSTATS_ARMY') ? PLUSSTATS_ARMY : 'Army strength',
+            '#d9822b')
+       . '</div>';
+}
+
+// -------------------------------------------------
 // REZUMAT: acum fata de primul instantaneu
 // -------------------------------------------------
 $psFirst = $psRows[0];

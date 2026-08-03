@@ -4271,3 +4271,8 @@ tz_def('CONF_SERV_PW_MIN', 'Longueur minimale du mot de passe');
 tz_def('CONF_SERV_USRNM_SPECIAL', 'Autoriser . - _ dans les noms');
 tz_def('CONF_SERV_USRNM_SPECIAL_TOOLTIP', 'Avec True, les noms peuvent contenir un point, un tiret ou un underscore, et des espaces simples entre les mots. Avec False, seules les lettres et les chiffres sont acceptes.');
 tz_def('CONF_SERV_REGRULES_TOOLTIP', 'Regles verifiees lors de l\'inscription. Les modifier n\'affecte pas les comptes existants.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATISTICI - sectiunea de alianta
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('PLUSSTATS_ALLIANCE', 'Votre alliance');

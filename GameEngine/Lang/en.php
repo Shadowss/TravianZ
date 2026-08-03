@@ -4317,7 +4317,7 @@ tz_def('TZ_WS_VS_NATARS', 'Against Natars');
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // MESAJ DE SISTEM - previzualizare
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('ADM_PREVIEW', 'Preview');
+tz_def('ADM_PREVIEW', 'Previzualizare');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // REGULI DE INREGISTRARE (Server Configuration)
@@ -4328,3 +4328,8 @@ tz_def('CONF_SERV_PW_MIN', 'Minimum password length');
 tz_def('CONF_SERV_USRNM_SPECIAL', 'Allow . - _ in usernames');
 tz_def('CONF_SERV_USRNM_SPECIAL_TOOLTIP', 'With True, usernames may contain a dot, hyphen or underscore, and single spaces between words. With False, only letters and digits are accepted.');
 tz_def('CONF_SERV_REGRULES_TOOLTIP', 'Rules checked when a player registers. Changing them does not affect existing accounts.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATISTICI - sectiunea de alianta
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('PLUSSTATS_ALLIANCE', 'Your alliance');

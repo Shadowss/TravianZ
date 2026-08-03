@@ -340,6 +340,63 @@ if (!function_exists('admin_config_template_path')) {
             $text  = str_replace($placeholder, (string) $value, $text);
         }
 
+        /**
+         * PLASA DE SIGURANTA: orice placeholder ramas se rezolva din constanta
+         * pe care o defineste chiar linia lui.
+         *
+         * De ce e nevoie: fiecare pagina din panou regenereaza INTREG config.php
+         * din acelasi sablon, dar rezolva doar setarile ei. O setare noua,
+         * tratata de un singur modul, ramanea literala cand salvai din alta
+         * pagina:
+         *     define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+         * adica eroare de parsare si 500 pe tot serverul, pana la reparare
+         * manuala a fisierului. Ni s-a intamplat de trei ori: %GP%,
+         * %ALLIANCEBONUSES% si %NATARS_WW_START_DELAY%.
+         *
+         * Listele de mai sus raman - sunt explicite si mai lizibile. Blocul asta
+         * prinde ce scapa, ca urmatoarea setare adaugata sa nu mai poata sparge
+         * serverul. Ruleaza ULTIMUL, deci nu suprascrie nimic rezolvat inainte.
+         */
+        if (preg_match_all('/^\s*define\(\s*["\']([A-Z0-9_]+)["\']\s*,\s*(.*?%[A-Z0-9_]+%.*?)\s*\)\s*;/m',
+                $text, $leftovers, PREG_SET_ORDER)) {
+
+            foreach ($leftovers as $row) {
+                $constant = $row[1];
+
+                if (!preg_match('/%[A-Z0-9_]+%/', $row[2], $ph)) {
+                    continue;
+                }
+
+                if (!defined($constant)) {
+                    // Constanta nu exista inca (prima instalare, sau setare noua
+                    // adaugata in sablon dar nu si in config-ul curent). Punem o
+                    // valoare neutra, ca fisierul sa ramana PHP valid.
+                    $value = 'false';
+                } else {
+                    $current = constant($constant);
+
+                    if (is_bool($current)) {
+                        $value = $current ? 'true' : 'false';
+                    } elseif (is_int($current) || is_float($current)) {
+                        $value = (string) $current;
+                    } else {
+                        // Sir: pastram ghilimelele din sablon daca exista deja,
+                        // altfel le adaugam noi.
+                        $quoted = (strpos($row[2], '"' . $ph[0] . '"') !== false)
+                               || (strpos($row[2], "'" . $ph[0] . "'") !== false);
+
+                        $safe  = addcslashes((string) $current, "\"\\\$");
+                        $value = $quoted ? $safe : '"' . $safe . '"';
+                    }
+                }
+
+                $text = str_replace($ph[0], $value, $text);
+
+                error_log('[TravianZ] config: placeholder ' . $ph[0]
+                    . ' nerezolvat de niciun modul, completat din ' . $constant);
+            }
+        }
+
         return $text;
     }
 }

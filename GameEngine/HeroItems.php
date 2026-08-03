@@ -670,6 +670,107 @@ class HeroItems
             return self::USE_OK;
         }
 
+        /* ---- Bandaje: readuc in viata o parte din trupele ranite ---- */
+        if (isset($bonus[HB_HEAL_TROOP])) {
+
+            /**
+             * Bandajele scot trupe din spital si le pun inapoi in sat.
+             *
+             * Un bandaj vindeca un procent din raniti (25% cel mic, 33% cel
+             * mare). Se aplica pe satul in care e folosit itemul, deci
+             * jucatorul alege unde conteaza.
+             *
+             * Se consuma DOAR daca a avut ce vindeca - altfel itemul s-ar
+             * pierde degeaba.
+             */
+            global $database;
+
+            $vid = (int) $vid;
+
+            if ($vid <= 0) {
+                return self::USE_INVALID;
+            }
+
+            // satul trebuie sa fie al jucatorului
+            $owner = (int) $database->getVillageField($vid, 'owner');
+
+            if ($owner !== (int) $uid) {
+                return self::USE_INVALID;
+            }
+
+            $wounded = $database->getWounded($vid);
+
+            if (!$wounded) {
+                return self::USE_INVALID;
+            }
+
+            $pct   = max(1, min(100, (int) $bonus[HB_HEAL_TROOP]));
+            $units = array();
+            $heals = array();
+            $total = 0;
+
+            for ($i = 1; $i <= 90; $i++) {
+                $have = isset($wounded['u' . $i]) ? (int) $wounded['u' . $i] : 0;
+
+                if ($have <= 0) {
+                    continue;
+                }
+
+                // cel putin unul, daca exista raniti de tipul asta
+                $heal = max(1, (int) floor($have * $pct / 100));
+                $heal = min($heal, $have);
+
+                $units[] = $i;
+                $heals[] = $heal;
+                $total  += $heal;
+            }
+
+            if ($total <= 0) {
+                return self::USE_INVALID;
+            }
+
+            // scoatem din spital si punem in sat, intr-o tranzactie
+            mysqli_query($this->db, "START TRANSACTION");
+
+            $ok = true;
+
+            foreach ($units as $k => $u) {
+                $q = "UPDATE " . TB_PREFIX . "hospital
+                         SET u" . (int) $u . " = GREATEST(0, u" . (int) $u . " - " . (int) $heals[$k] . ")
+                       WHERE vref = " . $vid . " LIMIT 1";
+
+                if (!mysqli_query($this->db, $q)) {
+                    $ok = false;
+                    break;
+                }
+
+                $q2 = "UPDATE " . TB_PREFIX . "units
+                          SET u" . (int) $u . " = u" . (int) $u . " + " . (int) $heals[$k] . "
+                        WHERE vref = " . $vid . " LIMIT 1";
+
+                if (!mysqli_query($this->db, $q2)) {
+                    $ok = false;
+                    break;
+                }
+            }
+
+            if (!$ok) {
+                mysqli_query($this->db, "ROLLBACK");
+
+                error_log('[TravianZ] bandaj: vindecarea a esuat: '
+                    . mysqli_error($this->db));
+
+                return self::USE_INVALID;
+            }
+
+            mysqli_query($this->db, "COMMIT");
+
+            // un bandaj per folosire: procentul se aplica o singura data
+            $this->removeItem($uid, $rowId, 1);
+
+            return self::USE_OK;
+        }
+
         /* ---- Scroll: +10 XP each ---- */
         if (isset($bonus[HB_SCROLL])) {
             $hero = $this->getLivingHeroRow($uid);
