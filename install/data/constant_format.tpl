@@ -8,7 +8,8 @@
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
 ##  Modified by:   Shadow and ronix                                            ##
-##                                                                             ##
+##  Refactored by: Shadow                                                      ##
+##  				                                                           ##
 ##  URLs:          https://travianz.org                                        ##
 ##                 https://github.com/Shadowss/TravianZ                        ##
 #################################################################################
@@ -189,10 +190,11 @@ define("PLUS_STATS_INTERVAL_HOURS", %PLUSSTATSHOURS%);
 define("PLUS_STATS_KEEP_DAYS", %PLUSSTATSKEEP%);
 
 // ***** Registration rules
-// Regulile verificate la inregistrare (vezi Account.php).
+// Validation rules applied during registration (see Account.php).
 //
-// USRNM_SPECIAL: cu true se accepta punct, liniuta si underscore in nume, si
-// spatii simple intre cuvinte; cu false doar litere si cifre.
+// USRNM_SPECIAL: when set to true, usernames may contain dots, hyphens,
+// underscores, and single spaces between words. When set to false,
+// only letters and numbers are allowed.
 define("USRNM_SPECIAL", %USRNMSPECIAL%);
 define("USRNM_MIN_LENGTH", %USRNMMIN%);
 define("USRNM_MAX_LENGTH", %USRNMMAX%);
@@ -288,11 +290,12 @@ define("NATARS_WW_SPAWN_TIME",%NATARS_WW_SPAWN_TIME%);
 define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME",%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%);
 
 // ***** Natars' World Wonder
-// Dupa cate ZILE de la aparitia planurilor de constructie incep Natarii sa-si
-// ridice propria Minune a Lumii. In Travian, cand ajung la nivelul 100 se
-// incheie serverul; la nivelul 75 isi recheama toate trupele ca s-o apere.
+// Number of DAYS after the Building Plans appear before the Natars begin
+// constructing their own World Wonder. In Travian, the server ends when
+// the World Wonder reaches level 100. At level 75, the Natars recall all
+// of their troops to defend it.
 //
-// 0 = Natarii nu construiesc deloc.
+// 0 = The Natars do not build a World Wonder.
 define("NATARS_WW_START_DELAY", %NATARS_WW_START_DELAY%); 
 
 // ***** Nature troops regeneration time
@@ -513,7 +516,7 @@ define("ALLOW_ALL_TRIBE",false);
 define("CFM_ADMIN_ACT",true);
 define("SERVER_WEB_ROOT",false);
 
-// === IP ban (issue #185) ===
+// === IP ban ===
 // Master switch for IP-ban enforcement.
 define("BAN_IP_ENABLED",true);
 // Comma-separated list of trusted proxy IPs/CIDRs allowed to set the forwarded
@@ -552,8 +555,12 @@ $requse = 0;
 ##  Version        10.0 Full Refactor & Security                               ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
+##  Modified by:   Shadow and ronix                                            ##
+##  Refactored by: Shadow                                                      ##
 ##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 #################################################################################
 
 ?>
