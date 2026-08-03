@@ -368,10 +368,38 @@ if (!function_exists('admin_config_template_path')) {
                 }
 
                 if (!defined($constant)) {
-                    // Constanta nu exista inca (prima instalare, sau setare noua
-                    // adaugata in sablon dar nu si in config-ul curent). Punem o
-                    // valoare neutra, ca fisierul sa ramana PHP valid.
-                    $value = 'false';
+                    /**
+                     * Constanta nu exista inca: config.php a fost generat
+                     * inaintea acestei setari.
+                     *
+                     * ATENTIE: aici NU se poate pune "false" la nimereala.
+                     * Fisierul ar ramane PHP valid, dar setarea ar deveni
+                     * inutilizabila fara niciun semn - Natarii n-ar mai
+                     * construi, lungimea minima a numelui ar deveni 0 si asa
+                     * mai departe. Folosim valoarea implicita reala a fiecarei
+                     * setari, aceeasi ca la instalare.
+                     */
+                    $defaults = array(
+                        'NATARS_WW_START_DELAY' => 10,
+                        'USRNM_MIN_LENGTH'      => 3,
+                        'USRNM_MAX_LENGTH'      => 15,
+                        'PW_MIN_LENGTH'         => 4,
+                        'USRNM_SPECIAL'         => true,
+                        'PLUS_STATS_INTERVAL_HOURS' => 6,
+                        'PLUS_STATS_KEEP_DAYS'      => 0,
+                    );
+
+                    if (isset($defaults[$constant])) {
+                        $d = $defaults[$constant];
+                        $value = is_bool($d) ? ($d ? 'true' : 'false') : (string) $d;
+                    } else {
+                        // Setare necunoscuta: alegem dupa context, ca fisierul
+                        // sa ramana valid. Ghilimele in sablon => sir gol,
+                        // altfel 0 (acceptabil si ca numar, si ca boolean).
+                        $quoted = (strpos($row[2], '"' . $ph[0] . '"') !== false)
+                               || (strpos($row[2], "'" . $ph[0] . "'") !== false);
+                        $value  = $quoted ? '' : '0';
+                    }
                 } else {
                     $current = constant($constant);
 
