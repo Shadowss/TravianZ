@@ -124,7 +124,6 @@ class Automation {
     	
         $this->procNewClimbers();
         $this->ClearUser();
-        $this->ClearInactive();
         $this->pruneResource();
         $this->pruneOResource();
         $this->checkWWAttacks();
@@ -138,7 +137,6 @@ class Automation {
         				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
         				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts",
         				  "heroAdventureComplete",
-        				  // P3: curatenie periodica (are interval propriu, nu ruleaza la fiecare tick)
         				  "cleanupOldData",
         				  "recordPlayerStatistics",
 					  "buildNatarsWonder"];
