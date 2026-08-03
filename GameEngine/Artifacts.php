@@ -150,63 +150,65 @@ class Artifacts
         "f4" => 5, "f7" => 5, "f10" => 5, "f11" => 5,
         //All Cropland of the 6th level
         "f2" => 6, "f8" => 6, "f9" => 6, "f12" => 6, "f13" => 6, "f15" => 6],
-    
-    /**
-     * @var array Cladirile capitalei Natarilor
-     *
-     * Capitala e satul Minunii Lumii al Natarilor. Primeste Minunea de la bun
-     * inceput (nivel 0 - o urca singuri, vezi AutomationNatarsWWBuild), plus
-     * infrastructura care ii permite s-o ridice.
-     *
-     * Campurile de resurse sunt toate la 20, iar depozitele si hambarele sunt
-     * mari si pline, fiindca fiecare nivel de Minune cere sute de mii de
-     * resurse.
-     *
-     * Sloturile 25, 26, 29, 30 si 33 raman LIBERE - sunt rezervate cladirilor
-     * legate de Minune.
-     */
 
-    /**
-     * @var array Armata capitalei Natarilor
-     *
-     * Unitatile Natarilor sunt u41-u50. Clasificarea e cea din $unitsbytype
-     * (GameEngine/Data/unitdata.php), nu ghicita dupa nume:
-     *
-     *   u41 Pikeman, u42 Thorned Warrior, u43 Guardsman,
-     *   u44 Birds Of Prey (cercetas), u45 Axerider, u46 Natarian Knight
-     *        -> armata propriu-zisa, cate 9.000.000
-     *
-     *   u47 War Elephant (berbec), u48 Ballista (catapulta),
-     *   u49 Natarian Emperor (capetenie), u50 Natarian Settler (colonist)
-     *        -> cate 999
-     *
-     * Natarii sunt scutiti de infometare (vezi getProfileVillages, mod 2, care
-     * exclude owner 3), deci consumul urias de cereale nu-i omoara.
-     */
+	/**
+	 * @var array Natar Capital Army
+	 *
+	 * The Natar unit IDs are u41–u50. The classification follows the
+	 * $unitsbytype array (GameEngine/Data/unitdata.php), not the unit names:
+	 *
+	 *   u41 Pikeman, u42 Thorned Warrior, u43 Guardsman,
+	 *   u44 Birds of Prey (Scout), u45 Axerider, u46 Natarian Knight
+	 *        -> Main army, 9,000,000 units each
+	 *
+	 *   u47 War Elephant (Ram), u48 Ballista (Catapult),
+	 *   u49 Natarian Emperor (Chief), u50 Natarian Settler (Settler)
+	 *        -> 999 units each
+	 *
+	 * The Natars are exempt from starvation (see getProfileVillages, mode 2,
+	 * which excludes owner 3), so their enormous crop consumption does not
+	 * affect them.
+	 */
 
     NATARS_CAPITAL_UNITS = [
         41 => 9000000, 42 => 9000000, 43 => 9000000,
         44 => 9000000, 45 => 9000000, 46 => 9000000,
         47 => 999, 48 => 999, 49 => 999, 50 => 999
     ],
+	
+	/**
+	 * @var array Natar Capital Buildings
+	 *
+	 * The capital is the Natar World Wonder village. It starts with the World
+	 * Wonder already present (level 0 – the Natars upgrade it themselves, see
+	 * AutomationNatarsWWBuild), along with the infrastructure required to support
+	 * its construction.
+	 *
+	 * All resource fields are level 20, while the Great Warehouses and Great
+	 * Granaries are fully built and filled, since each World Wonder level requires
+	 * hundreds of thousands of resources.
+	 *
+	 * Building slots 25, 26, 29, 30, and 33 remain EMPTY, as they are reserved for
+	 * World Wonder–related buildings.
+	 */
 
     NATARS_CAPITAL_BUILDINGS = [
-        //Campuri de resurse: configuratia 4-4-4-6 (tipul 3), toate la nivel 20
+		// Resource fields: 4-4-4-6 layout (type 3), all at level 20.
         "f1t" => 1, "f1" => 20, "f2t" => 4, "f2" => 20, "f3t" => 1, "f3" => 20,
         "f4t" => 3, "f4" => 20, "f5t" => 2, "f5" => 20, "f6t" => 2, "f6" => 20,
         "f7t" => 3, "f7" => 20, "f8t" => 4, "f8" => 20, "f9t" => 4, "f9" => 20,
         "f10t" => 3, "f10" => 20, "f11t" => 3, "f11" => 20, "f12t" => 4, "f12" => 20,
         "f13t" => 4, "f13" => 20, "f14t" => 1, "f14" => 20, "f15t" => 4, "f15" => 20,
         "f16t" => 2, "f16" => 20, "f17t" => 1, "f17" => 20, "f18t" => 2, "f18" => 20,
-        //Primaria, plus Depozite Mari (38) si Hambare Mari (39), toate nivel 20.
-        //Sloturile 25, 26, 29, 30 si 33 raman LIBERE: acolo se construiesc
-        //cladirile legate de Minunea Lumii.
+		// Town Hall, Great Warehouses (38), and Great Granaries (39), all at level 20.
+		// Building slots 25, 26, 29, 30, and 33 remain EMPTY, as they are reserved
+		// for World Wonder–related buildings.
         "f19t" => 24, "f19" => 20, "f20t" => 38, "f20" => 20, "f21t" => 39, "f21" => 20,
         "f22t" => 38, "f22" => 20, "f23t" => 39, "f23" => 20, "f24t" => 38, "f24" => 20,
         "f27t" => 39, "f27" => 20, "f28t" => 38, "f28" => 20, "f31t" => 39, "f31" => 20,
         "f32t" => 38, "f32" => 20, "f34t" => 38, "f34" => 20, "f35t" => 39, "f35" => 20,
         "f36t" => 38, "f36" => 20, "f37t" => 39, "f37" => 20, "f38t" => 38, "f38" => 20,
-        //Punct de adunare, Zid de oras, Minunea Lumii (nivel 0)
+		// Rally Point, City Wall, World Wonder (level 0)
         "f39t" => 16, "f39" => 20, "f40t" => 31, "f40" => 20, "f99t" => 40, "f99" => 0],
 
     /**
@@ -285,15 +287,15 @@ class Artifacts
 
         //Generate the Natars' capital
         //
-        // Capitala primeste de la bun inceput Minunea Lumii si infrastructura
-        // din NATARS_CAPITAL_BUILDINGS. Lista se transmite in acelasi format ca
-        // la satele de Minune: [0] = numele coloanelor, [1][] = valorile.
+		// The capital starts with the World Wonder and the infrastructure defined
+		// in NATARS_CAPITAL_BUILDINGS. The data is passed in the same format used
+		// for World Wonder villages: [0] = column names, [1][] = values.
         $capitalBuildings = [];
         $capitalBuildings[0]   = array_keys(self::NATARS_CAPITAL_BUILDINGS);
         $capitalBuildings[1][] = array_values(self::NATARS_CAPITAL_BUILDINGS);
 
-        // Armata capitalei, in acelasi format ca la satele de Minune:
-        // [0] = numele coloanelor, [1][] = valorile.
+		// The capital army, using the same format as World Wonder villages:
+		// [0] = column names, [1][] = values.
         $capitalUnits = [];
         $capitalUnits[0]   = array_keys(self::NATARS_CAPITAL_UNITS);
         $capitalUnits[1][] = array_values(self::NATARS_CAPITAL_UNITS);
@@ -579,7 +581,6 @@ class Artifacts
             $nextEffect = date("d.m.Y H:i:s", $artifact['lastupdate'] + (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
           }
 
-          //// Added by brainiac - thank you
           if ($artifact['type'] == 8)
           {
             $kind = $artifact['kind'];
