@@ -175,6 +175,11 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%PLUS_PACKAGE_E_GOLD%', $_POST['plus-e-gold'] ?? '');
 		tz_config_set($text, '%PLUS_PACKAGE_E_PRICE%', $_POST['plus-e-price'] ?? '');
 
+		// Ultima verificare: rezolva orice placeholder pe care acest modul
+		// nu il trateaza. TREBUIE apelata dupa toate tz_config_set() si
+		// inainte de scriere - altfel setarile modulului ar fi ignorate.
+		$text = tz_config_finalize($text);
+
 		fwrite($fh, $text);
 		fclose($fh);
 

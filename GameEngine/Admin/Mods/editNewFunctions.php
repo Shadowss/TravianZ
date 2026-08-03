@@ -178,6 +178,11 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		tz_config_set($text, '%PLUS_PACKAGE_E_PRICE%', (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99'));
 		tz_config_set($text, '%PLUS_PACKAGE_E_GOLD%', (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : '2000'));
 
+		// Ultima verificare: rezolva orice placeholder pe care acest modul
+		// nu il trateaza. TREBUIE apelata dupa toate tz_config_set() si
+		// inainte de scriere - altfel setarile modulului ar fi ignorate.
+		$text = tz_config_finalize($text);
+
 		fwrite($fh, $text);
 		fclose($fh);
 

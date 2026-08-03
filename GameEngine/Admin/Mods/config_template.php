@@ -340,89 +340,82 @@ if (!function_exists('admin_config_template_path')) {
             $text  = str_replace($placeholder, (string) $value, $text);
         }
 
-        /**
-         * PLASA DE SIGURANTA: orice placeholder ramas se rezolva din constanta
-         * pe care o defineste chiar linia lui.
-         *
-         * De ce e nevoie: fiecare pagina din panou regenereaza INTREG config.php
-         * din acelasi sablon, dar rezolva doar setarile ei. O setare noua,
-         * tratata de un singur modul, ramanea literala cand salvai din alta
-         * pagina:
-         *     define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
-         * adica eroare de parsare si 500 pe tot serverul, pana la reparare
-         * manuala a fisierului. Ni s-a intamplat de trei ori: %GP%,
-         * %ALLIANCEBONUSES% si %NATARS_WW_START_DELAY%.
-         *
-         * Listele de mai sus raman - sunt explicite si mai lizibile. Blocul asta
-         * prinde ce scapa, ca urmatoarea setare adaugata sa nu mai poata sparge
-         * serverul. Ruleaza ULTIMUL, deci nu suprascrie nimic rezolvat inainte.
-         */
-        if (preg_match_all('/^\s*define\(\s*["\']([A-Z0-9_]+)["\']\s*,\s*(.*?%[A-Z0-9_]+%.*?)\s*\)\s*;/m',
+
+        return $text;
+    }
+}
+
+if (!function_exists('tz_config_finalize')) {
+
+    /**
+     * Ultima verificare inainte de a scrie config.php.
+     *
+     * TREBUIE apelata DUPA toate apelurile de tz_config_set() si INAINTE de
+     * fwrite(). Rezolva orice placeholder ramas, din constanta pe care o
+     * defineste chiar linia lui.
+     *
+     * DE CE AICI si nu in admin_config_template_contents():
+     * acea functie ruleaza la INCEPUT, inainte ca modulul sa-si scrie valorile.
+     * Daca plasa ar rula acolo, ar consuma placeholderele din valorile CURENTE,
+     * iar tz_config_set() n-ar mai avea ce inlocui - adica orice modificare
+     * facuta de admin ar fi ignorata in tacere. Exact asta s-a intamplat.
+     *
+     * De ce e nevoie de ea: fiecare pagina din panou regenereaza INTREG
+     * config.php din acelasi sablon, dar rezolva doar setarile ei. O setare
+     * tratata de un singur modul ramanea literala cand salvai din alta pagina:
+     *     define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+     * adica eroare de parsare si 500 pe tot serverul.
+     */
+    function tz_config_finalize($text)
+    {
+        if (!preg_match_all('/^\s*define\(\s*["\']([A-Z0-9_]+)["\']\s*,\s*(.*?%[A-Z0-9_]+%.*?)\s*\)\s*;/m',
                 $text, $leftovers, PREG_SET_ORDER)) {
+            return $text;
+        }
 
-            foreach ($leftovers as $row) {
-                $constant = $row[1];
+        $defaults = array(
+            'NATARS_WW_START_DELAY'     => 10,
+            'USRNM_MIN_LENGTH'          => 3,
+            'USRNM_MAX_LENGTH'          => 15,
+            'PW_MIN_LENGTH'             => 4,
+            'USRNM_SPECIAL'             => true,
+            'PLUS_STATS_INTERVAL_HOURS' => 6,
+            'PLUS_STATS_KEEP_DAYS'      => 0,
+        );
 
-                if (!preg_match('/%[A-Z0-9_]+%/', $row[2], $ph)) {
-                    continue;
-                }
+        foreach ($leftovers as $row) {
+            $constant = $row[1];
 
-                if (!defined($constant)) {
-                    /**
-                     * Constanta nu exista inca: config.php a fost generat
-                     * inaintea acestei setari.
-                     *
-                     * ATENTIE: aici NU se poate pune "false" la nimereala.
-                     * Fisierul ar ramane PHP valid, dar setarea ar deveni
-                     * inutilizabila fara niciun semn - Natarii n-ar mai
-                     * construi, lungimea minima a numelui ar deveni 0 si asa
-                     * mai departe. Folosim valoarea implicita reala a fiecarei
-                     * setari, aceeasi ca la instalare.
-                     */
-                    $defaults = array(
-                        'NATARS_WW_START_DELAY' => 10,
-                        'USRNM_MIN_LENGTH'      => 3,
-                        'USRNM_MAX_LENGTH'      => 15,
-                        'PW_MIN_LENGTH'         => 4,
-                        'USRNM_SPECIAL'         => true,
-                        'PLUS_STATS_INTERVAL_HOURS' => 6,
-                        'PLUS_STATS_KEEP_DAYS'      => 0,
-                    );
-
-                    if (isset($defaults[$constant])) {
-                        $d = $defaults[$constant];
-                        $value = is_bool($d) ? ($d ? 'true' : 'false') : (string) $d;
-                    } else {
-                        // Setare necunoscuta: alegem dupa context, ca fisierul
-                        // sa ramana valid. Ghilimele in sablon => sir gol,
-                        // altfel 0 (acceptabil si ca numar, si ca boolean).
-                        $quoted = (strpos($row[2], '"' . $ph[0] . '"') !== false)
-                               || (strpos($row[2], "'" . $ph[0] . "'") !== false);
-                        $value  = $quoted ? '' : '0';
-                    }
-                } else {
-                    $current = constant($constant);
-
-                    if (is_bool($current)) {
-                        $value = $current ? 'true' : 'false';
-                    } elseif (is_int($current) || is_float($current)) {
-                        $value = (string) $current;
-                    } else {
-                        // Sir: pastram ghilimelele din sablon daca exista deja,
-                        // altfel le adaugam noi.
-                        $quoted = (strpos($row[2], '"' . $ph[0] . '"') !== false)
-                               || (strpos($row[2], "'" . $ph[0] . "'") !== false);
-
-                        $safe  = addcslashes((string) $current, "\"\\\$");
-                        $value = $quoted ? $safe : '"' . $safe . '"';
-                    }
-                }
-
-                $text = str_replace($ph[0], $value, $text);
-
-                error_log('[TravianZ] config: placeholder ' . $ph[0]
-                    . ' nerezolvat de niciun modul, completat din ' . $constant);
+            if (!preg_match('/%[A-Z0-9_]+%/', $row[2], $ph)) {
+                continue;
             }
+
+            $quoted = (strpos($row[2], '"' . $ph[0] . '"') !== false)
+                   || (strpos($row[2], "'" . $ph[0] . "'") !== false);
+
+            if (defined($constant)) {
+                $current = constant($constant);
+
+                if (is_bool($current)) {
+                    $value = $current ? 'true' : 'false';
+                } elseif (is_int($current) || is_float($current)) {
+                    $value = (string) $current;
+                } else {
+                    $safe  = addcslashes((string) $current, "\"\\\$");
+                    $value = $quoted ? $safe : '"' . $safe . '"';
+                }
+            } elseif (isset($defaults[$constant])) {
+                $d = $defaults[$constant];
+                $value = is_bool($d) ? ($d ? 'true' : 'false') : (string) $d;
+            } else {
+                // setare necunoscuta: alegem dupa context, ca fisierul sa ramana valid
+                $value = $quoted ? '' : '0';
+            }
+
+            $text = str_replace($ph[0], $value, $text);
+
+            error_log('[TravianZ] config: placeholder ' . $ph[0]
+                . ' nerezolvat de niciun modul, completat din ' . $constant);
         }
 
         return $text;
