@@ -24,7 +24,19 @@ if(time() - (!empty($_SESSION['time_p']) ? $_SESSION['time_p'] : 0) > 5){
 	$_SESSION['error_p'] = '';
 }
 // --- CHANGE CAPITAL LOGIC ---
-if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
+/**
+ * Satul Minunii Lumii NU poate deveni capitala.
+ *
+ * Capitala are reguli proprii - campurile de resurse urca peste 10, primeste
+ * Atelierul Pietrarului, iar cladirile capital-only se sterg la mutare. Un sat
+ * de Minune cucerit de la Natari nu suporta asta.
+ *
+ * Blocam si actiunea, nu doar butonul: altfel cererea putea fi trimisa direct.
+ */
+$isWonderVillage = isset($village->resarray['f99t'])
+    && (int) $village->resarray['f99t'] == 40;
+
+if($_POST && $_GET['action'] == 'change_capital' && !$village->capital && !$isWonderVillage){
 	$pass = $_POST['pass'];
 	$query = mysqli_query($database->dblink, 'SELECT password FROM `'.TB_PREFIX.'users` WHERE `id` = '.(int)$session->uid);
 	$data = mysqli_fetch_assoc($query);
@@ -98,6 +110,12 @@ else echo '<div class="c">'.PALACE_TRAIN_DESC.'</div>';
 if($village->capital == 1) {
 ?>
 <p class="none"><?php echo CAPITAL; ?></p>
+<?php
+} elseif ($isWonderVillage) {
+    // satul Minunii nu poate fi capitala
+?>
+<p class="none"><?php echo defined('TZ_WW_NO_CAPITAL') ? TZ_WW_NO_CAPITAL
+    : 'The World Wonder village cannot become your capital.'; ?></p>
 <?php
 } else {
   if(empty($_GET['confirm'])) {

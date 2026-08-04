@@ -4293,3 +4293,8 @@ tz_def('HERO_COL_ACTION', 'Action');
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_WW_IMAGE', 'Merveille par tribu');
 tz_def('ADM_WW_IMAGE_TIP', 'Chaque tribu voit sa propre Merveille du Monde, sur la carte du village et sur la page de construction. Les tribus sans images gardent l\'image d\'origine, quel que soit ce reglage.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII - satul nu poate fi capitala
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NO_CAPITAL', 'Le village de la Merveille du Monde ne peut pas devenir votre capitale.');

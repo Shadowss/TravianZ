@@ -87,12 +87,28 @@ trait AutomationVillageUpkeep {
         $array = $database->getProfileVillages(0, 6);
         if(!empty($array)) {
             foreach($array as $loyalty) {
-                if (($t25_level = $this->getTypeLevel(25, $loyalty['wref'])) >= 1) {
-                    $value = $t25_level;
-                }elseif(($t26_level = $this->getTypeLevel(26, $loyalty['wref'])) >= 1){
-                    $value = $t26_level;
+                /**
+                 * Cladirile care regenereaza loialitatea.
+                 *
+                 * BUG REPARAT: se verificau doar Resedinta (25) si Palatul (26).
+                 * Hunii nu au niciuna din ele - au Centrul de Comanda (44), care
+                 * le tine locul. Satele lor nu-si mai regenerau loialitatea
+                 * niciodata, deci ramaneau vesnic vulnerabile la cucerire.
+                 *
+                 * Restul jocului trateaza deja gid 44 ca resedinta - vezi
+                 * AutomationBattleResolution, unde se calculeaza sloturile de
+                 * expansiune - doar aici lipsea.
+                 */
+                $value = 0;
+
+                foreach (array(25, 26, 44) as $loyaltyBuilding) {
+                    $lvl = $this->getTypeLevel($loyaltyBuilding, $loyalty['wref']);
+
+                    if ($lvl >= 1) {
+                        $value = $lvl;
+                        break;
+                    }
                 }
-                else $value = 0;
                 
                 if($value > 0){
                     $newloyalty = min(100, $loyalty['loyalty'] + $value * (time() - $loyalty['lastupdate2']) / 3600);

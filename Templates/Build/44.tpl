@@ -26,7 +26,22 @@ if(time() - (!empty($_SESSION['time_p']) ? $_SESSION['time_p'] : 0) > 5){
 	$_SESSION['error_p'] = '';
 }
 // --- CHANGE CAPITAL LOGIC (Command Center = echivalentul Palatului la Huni) ---
-if($_POST && isset($_GET['action']) && $_GET['action'] == 'change_capital' && !$village->capital){
+    /**
+     * Satul Minunii Lumii NU poate deveni capitala.
+     *
+     * Capitala are reguli proprii - campurile de resurse urca peste 10, primeste
+     * Atelierul Pietrarului, iar cladirile capital-only se sterg la mutare. Un
+     * sat de Minune cucerit de la Natari nu suporta asta: si-ar pierde cladiri
+     * si ar intra intr-o stare imposibila.
+     *
+     * In Travian, satul Minunii nu e niciodata capitala. Ascundem butonul si,
+     * mai important, blocam si actiunea - altfel cineva ar putea trimite cererea
+     * direct, fara sa treaca prin buton.
+     */
+    $isWonderVillage = isset($village->resarray['f99t'])
+        && (int) $village->resarray['f99t'] == 40;
+
+if($_POST && isset($_GET['action']) && $_GET['action'] == 'change_capital' && !$village->capital && !$isWonderVillage){
 	$pass = $_POST['pass'];
 	$query = mysqli_query($database->dblink, 'SELECT password FROM `'.TB_PREFIX.'users` WHERE `id` = '.(int)$session->uid);
 	$data = mysqli_fetch_assoc($query);
@@ -107,6 +122,12 @@ $level = (int)$village->resarray['f'.$id];
     // --- CAPITALA: afisare stare / schimbare (identic cu Palatul) ---
     if($village->capital == 1) {
         echo '<p class="none">'.CAPITAL.'</p>';
+    } elseif ($isWonderVillage) {
+        // satul Minunii nu poate fi capitala
+        echo '<p class="none">'
+           . (defined('TZ_WW_NO_CAPITAL') ? TZ_WW_NO_CAPITAL
+              : 'The World Wonder village cannot become your capital.')
+           . '</p>';
     } else {
         if(empty($_GET['confirm'])) {
             print '<p><a href="?id='.$building->getTypeField(44).'&confirm=yes">&raquo; '.CHANGE_CAPITAL.'</a></p>';

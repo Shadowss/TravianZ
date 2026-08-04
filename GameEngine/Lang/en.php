@@ -4350,3 +4350,8 @@ tz_def('HERO_COL_ACTION', 'Action');
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_WW_IMAGE', 'Per-tribe World Wonder');
 tz_def('ADM_WW_IMAGE_TIP', 'Each tribe sees its own World Wonder artwork, both on the village map and on the construction page. Tribes without artwork on disk keep the original image regardless of this setting.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII - satul nu poate fi capitala
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TZ_WW_NO_CAPITAL', 'The World Wonder village cannot become your capital.');
