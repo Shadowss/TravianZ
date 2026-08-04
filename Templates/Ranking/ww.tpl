@@ -32,6 +32,7 @@ if (WW == true) {
             f.wwname,
             f.f99,
             v.wref,
+            v.capital,
             a.tag AS alliance_tag,
             a.id AS alliance_id,
             wa.attack_time
@@ -94,7 +95,12 @@ if ($result && mysqli_num_rows($result) > 0) {
         // la nivelul 100 serverul se incheie - merita sa sara in ochi.
         // NATARS_UID e constanta de clasa, nu globala - vezi Artifacts.
         $psNatarUid = class_exists('Artifacts') ? (int) Artifacts::NATARS_UID : 3;
-        $isNatarWW  = ((int) $row['id'] === $psNatarUid);
+        // Se evidentiaza DOAR capitala Natarilor, nu si satele lor de Minune.
+        // Acelea sunt facute ca jucatorii sa le cucereasca, deci nu au de ce
+        // sa iasa in evidenta; Minunea Natarilor e insa cea care incheie
+        // serverul daca ajunge la nivelul 100.
+        $isNatarWW  = ((int) $row['id'] === $psNatarUid)
+                   && ((int) $row['capital'] === 1);
 ?>
         <tr<?php echo $isNatarWW ? ' class="ww-natars"' : ''; ?>>
             <td><?php echo $count; ?>.</td>
@@ -104,7 +110,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                     <?php echo htmlspecialchars($row['username']); ?>
                 </a>
                 <?php if ($isNatarWW) { ?>
-					<span class="ww-natars-tag"><?php echo defined('TZ_WW_NATARS') ? TZ_WW_NATARS : 'Natars'; ?></span>
+				<span class="ww-natars-tag"><?php echo defined('TZ_WW_NATARS') ? TZ_WW_NATARS : 'Natars'; ?></span>
                 <?php } ?>
             </td>
 
