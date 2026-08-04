@@ -2258,3 +2258,4 @@ tz_def('MANUAL_FAQ', 'FAQ Travian');
 tz_def('MANUAL_FAQ_DESC', "Questo aiuto di gioco fornisce solo brevi informazioni. Maggiori informazioni sono disponibili sul");
 
 ?>
+tz_def('ADM_SPANISH', 'Spagnolo');

@@ -3424,6 +3424,7 @@ tz_def('ADM_ENGLISH', 'Anglais');
 tz_def('ADM_FRENCH', 'Français');
 tz_def('ADM_ITALIAN', 'Italien');
 tz_def('ADM_ROMANIAN', 'Roumain');
+tz_def('ADM_SPANISH', 'Espagnol');
 tz_def('ADM_CHINESE', 'Chinois');
 tz_def('ADM_SLOW', 'Lent');
 tz_def('ADM_FAST', 'Rapide');

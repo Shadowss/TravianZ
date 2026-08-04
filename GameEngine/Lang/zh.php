@@ -2352,3 +2352,4 @@ tz_def('MANUAL_INTRO', '此游戏内帮助让你随时查阅重要信息。');
 tz_def('MANUAL_NEW_FEATURES_DESC', '这些是你在原版 Travian T3.6 游戏中找不到的新功能。你可以在此详细了解所有新功能。');
 tz_def('MANUAL_FAQ', 'Travian 常见问题');
 tz_def('MANUAL_FAQ_DESC', '此游戏内帮助仅提供简要信息。更多信息请访问');
+tz_def('ADM_SPANISH', '西班牙语');

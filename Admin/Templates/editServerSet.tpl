@@ -153,6 +153,7 @@ function refresh(tz) {
                             <option value="en" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="en") echo "selected";?>><?php echo ADM_ENGLISH; ?></option>
                             <option value="fr" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="fr") echo "selected";?>><?php echo ADM_FRENCH; ?></option>
                             <option value="it" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>><?php echo ADM_ITALIAN; ?></option>
+                            <option value="es" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="es") echo "selected";?>><?php echo ADM_SPANISH; ?></option>
                             <option value="ro" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="ro") echo "selected";?>><?php echo ADM_ROMANIAN; ?></option>
                             <option value="zh" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="zh") echo "selected";?>><?php echo ADM_CHINESE; ?></option>
                         </select>
