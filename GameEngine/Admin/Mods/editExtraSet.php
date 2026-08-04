@@ -32,7 +32,6 @@ if (!admin_config_template_available()) {
 }
 
 $myFile = "../../config.php";
-$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
 
 		$ERRORREPORT=ERROR_REPORT;
 		$T4=(T4_COMING==false)? "false":"true";
@@ -195,8 +194,32 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		// inainte de scriere - altfel setarile modulului ar fi ignorate.
 		$text = tz_config_finalize($text);
 
-		fwrite($fh, $text);
+		// SCRIERE IN SIGURANTA.
+		//
+		// Inainte, fisierul se deschidea cu 'w' la INCEPUTUL scriptului, adica se
+		// golea imediat. Orice eroare aparuta pana la fwrite lasa config.php GOL
+		// si serverul mort. Acum scriem intai intr-un fisier temporar si abia la
+		// final il punem in locul celui vechi, printr-o redenumire atomica.
+		$tmpFile = $myFile . '.tmp';
+		$fh = fopen($tmpFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\\config.php");
+
+		if (fwrite($fh, $text) === false) {
+		    fclose($fh);
+		    @unlink($tmpFile);
+		    die("<br/><br/><br/>Can't write file: GameEngine\\config.php");
+		}
+
 		fclose($fh);
+
+		// pastram o copie a variantei anterioare, pentru orice eventualitate
+		if (is_file($myFile)) {
+		    @copy($myFile, $myFile . '.bak');
+		}
+
+		if (!rename($tmpFile, $myFile)) {
+		    @unlink($tmpFile);
+		    die("<br/><br/><br/>Can't replace file: GameEngine\\config.php");
+		}
 
 $database->query("Insert into ".TB_PREFIX."admin_log values (0,".$id.",'Changed Extra server settings',".time().")");
 
