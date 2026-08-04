@@ -71,6 +71,16 @@ if (isset($_POST['ab_donate'])) {
                 : 'Not enough resources in this village.';
             $abError = true;
             break;
+        case AllianceBonus::DONATE_OVER_MAX:
+            // La ultimul nivel surplusul ar ramane blocat, deci spunem exact
+            // cat se mai poate dona.
+            $abMessage = sprintf(
+                defined('ALLYBONUS_MSG_OVERMAX') ? ALLYBONUS_MSG_OVERMAX
+                    : 'This is the final level: you can donate at most %s more resources.',
+                number_format(AllianceBonus::$overMaxAllowed)
+            );
+            $abError = true;
+            break;
         case AllianceBonus::DONATE_NO_GOLD:
             $abMessage = defined('ALLYBONUS_MSG_NOGOLD') ? ALLYBONUS_MSG_NOGOLD
                 : 'Not enough gold to triple this donation.';

@@ -49,6 +49,11 @@ class AllianceBonus
     const DONATE_RESOURCES   = 5;
     const DONATE_INVALID     = 6;
     const DONATE_NO_GOLD     = 7;
+    /** Ultimul nivel: s-a donat mai mult decat mai era nevoie. */
+    const DONATE_OVER_MAX    = 8;
+
+    /** Cat se putea dona de fapt; citit de interfata cand primeste DONATE_OVER_MAX. */
+    public static $overMaxAllowed = 0;
 
     private $db;
 
@@ -442,8 +447,36 @@ class AllianceBonus
             return self::DONATE_INVALID;
         }
 
-        // valoarea contorizata (triplata sau nu) si plafonul zilnic
+        // valoarea contorizata (triplata sau nu)
         $counted = $triple ? $total * 3 : $total;
+
+        /**
+         * ULTIMUL NIVEL: nu se accepta mai mult decat mai e nevoie.
+         *
+         * La nivelurile intermediare surplusul e util - ramane in fond si
+         * finanteaza nivelul urmator. Dar la trecerea spre nivelul MAXIM nu mai
+         * exista nivel urmator: ce depaseste costul ar ramane blocat in fond
+         * pentru totdeauna, fara sa mai poata fi folosit sau recuperat.
+         *
+         * Asa ca aici oprim donatia si spunem exact cat se poate dona. Nu
+         * plafonam automat: jucatorul ar plati fara sa stie cat, iar cu triplare
+         * diferenta ar fi si mai greu de urmarit.
+         */
+        if ($state[$btype]['level'] === self::MAX_LEVEL - 1) {
+
+            $needed = self::costFor($state[$btype]['level']) - (float) $state[$btype]['pool'];
+            $needed = max(0, $needed);
+
+            if ($counted > $needed) {
+                // cat trebuie sa introduca in casute (inainte de triplare)
+                self::$overMaxAllowed = $triple
+                    ? (float) floor($needed / 3)
+                    : $needed;
+
+                return self::DONATE_OVER_MAX;
+            }
+        }
+
         $limit   = self::dailyLimit($this->highestLevel($aid));
         $already = $this->donatedToday($uid);
 
