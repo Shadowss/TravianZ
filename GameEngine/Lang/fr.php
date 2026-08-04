@@ -2218,6 +2218,7 @@ tz_def('TZ_IN_THE_VILLAGE_YOU_CAN_BUILD_BUILD', 'Dans le village vous pouvez con
 tz_def('TZ_IRON_25_5_GOLD', 'Fer +25% (5 or)');
 tz_def('TZ_ISO_YY_MM_DD_24H', 'ISO (aa/mm/jj 24h)');
 tz_def('TZ_ITALIAN', 'Italien');
+tz_def('TZ_SPANISH', 'Espagnol');
 tz_def('TZ_I_ACTIVATED_PLUS_BUT_PRODUCTION_DI', 'J\'ai activé Plus, mais la production n\'a pas augmenté.');
 tz_def('TZ_JOIN_AN_ALLIANCE', 'Rejoindre une alliance');
 tz_def('TZ_JOIN_AN_ALLIANCE_OR_FOUND_ONE_ON_Y', 'Rejoignez une alliance ou fondez la vôtre.');

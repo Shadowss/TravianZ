@@ -532,7 +532,7 @@ if(isset($_POST['lang']))
             </option>
             <option value="it" <?php if($session->userinfo['lang']=="it") echo 'selected'; ?>>
                 <?php echo TZ_ITALIAN; ?>
-			</option>
+            </option>
             <option value="es" <?php if($session->userinfo['lang']=="es") echo 'selected'; ?>>
                 <?php echo TZ_SPANISH; ?>
             </option>

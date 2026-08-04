@@ -97,10 +97,20 @@ class Profile {
 		unset($_SESSION[$cacheKeyUser]);
 
 		// Game language.
-		$allowed = ['en', 'fr', 'it', 'ro', 'zh'];
+		//
+		// Lista NU mai e scrisa de mana: se accepta orice limba care are fisier
+		// in GameEngine/Lang/. Inainte, adaugarea unei limbi noi cerea si o
+		// modificare aici, altfel alegerea jucatorului era respinsa in tacere -
+		// exact ce s-a intamplat cu spaniola.
+		//
+		// Tiparul e acelasi cu cel din panou (editServerSet): doua litere mici
+		// si fisierul sa existe. Verificarea pe nume opreste orice incercare de
+		// a iesi din folder.
 		if (!empty($post['lang'])) {
 			$lang = strtolower(trim($post['lang']));
-			if (in_array($lang, $allowed, true)) {
+
+			if (preg_match('/^[a-z]{2}$/', $lang)
+				&& is_file(__DIR__ . '/Lang/' . $lang . '.php')) {
 				$database->updateUserField($session->uid, "lang", $lang, 1);
 				$_SESSION['lang'] = $lang;
 				$session->userinfo['lang'] = $lang;

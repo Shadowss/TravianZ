@@ -2178,6 +2178,7 @@ tz_def('TZ_IN_THE_VILLAGE_YOU_CAN_BUILD_BUILD', 'În sat poți construi clădiri
 tz_def('TZ_IRON_25_5_GOLD', 'Fier +25% (5 aur)');
 tz_def('TZ_ISO_YY_MM_DD_24H', 'ISO (aa/ll/zz 24h)');
 tz_def('TZ_ITALIAN', 'Italiană');
+tz_def('TZ_SPANISH', 'Spaniola');
 tz_def('TZ_I_ACTIVATED_PLUS_BUT_PRODUCTION_DI', 'Am activat Plus, dar producția nu a crescut.');
 tz_def('TZ_JOIN_AN_ALLIANCE', 'Alătură-te unei alianțe');
 tz_def('TZ_JOIN_AN_ALLIANCE_OR_FOUND_ONE_ON_Y', 'Alătură-te unei alianțe sau întemeiază una proprie.');

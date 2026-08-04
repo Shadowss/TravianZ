@@ -1874,6 +1874,7 @@ tz_def('TZ_IN_THE_VILLAGE_YOU_CAN_BUILD_BUILD', 'Nel villaggio puoi costruire ed
 tz_def('TZ_IRON_25_5_GOLD', 'Ferro +25% (5 oro)');
 tz_def('TZ_ISO_YY_MM_DD_24H', 'ISO (aa/mm/gg 24h)');
 tz_def('TZ_ITALIAN', 'Italiano');
+tz_def('TZ_SPANISH', 'Spagnolo');
 tz_def('TZ_I_ACTIVATED_PLUS_BUT_PRODUCTION_DI', 'Ho attivato Plus, ma la produzione non è aumentata.');
 tz_def('TZ_JOIN_AN_ALLIANCE', 'Unisciti a un\'alleanza');
 tz_def('TZ_JOIN_AN_ALLIANCE_OR_FOUND_ONE_ON_Y', 'Unisciti a un\'alleanza o fondane una tua.');
