@@ -256,6 +256,15 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                     </td>
                 </tr>
                 <tr>
+                    <td class="b"><?php echo ADM_WW_IMAGE; ?><em class="tooltip">?<span class="classic"><?php echo ADM_WW_IMAGE_TIP; ?></span></em></td>
+                    <td>
+                        <select name="ww_image">
+                            <option value="true" <?php if (!defined('NEW_FUNCTION_WW_IMAGE') || NEW_FUNCTION_WW_IMAGE) echo "selected"; ?>>True</option>
+                            <option value="false" <?php if (defined('NEW_FUNCTION_WW_IMAGE') && !NEW_FUNCTION_WW_IMAGE) echo "selected"; ?>>False</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="b"><?php echo ADM_PLUS_STATISTICS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_PLUS_STATISTICS_TIP; ?></span></em>
                     <?php if (!defined('NEW_FUNCTIONS_PLUS_STATISTICS')): ?><br><span style="color:#c0392b;font-size:11px;font-weight:normal;text-transform:none;"><?php echo ADM_NOT_PRESENT_IN_CONFIG_PHP_YET_SAVING_THIS_FO; ?></span><?php endif; ?>
                     </td>

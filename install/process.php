@@ -106,6 +106,9 @@ class Process {
 		if ($pMin < 1 || $pMin > 100) { $pMin = 4; }
 		$findReplace["%PWMIN%"] = $pMin;
 
+		// Minunea Lumii cu stil pe trib
+		$findReplace["%WWIMAGE%"] = (isset($_POST['ww_image']) && $_POST['ww_image'] === 'false') ? 'false' : 'true';
+
 		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];

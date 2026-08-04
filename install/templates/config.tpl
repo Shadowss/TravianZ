@@ -330,6 +330,10 @@ foreach($mechs as $k => $l){
         <option value="true" selected>Yes</option>
         <option value="false">No &ndash; letters and digits only</option>
     </select></div>
+    <div><label>Per-tribe World Wonder image</label><select class="input" name="ww_image">
+        <option value="true" selected>Yes</option>
+        <option value="false">No &ndash; same image for everyone</option>
+    </select></div>
     <div><label>Allow player graphic packs</label><select class="input" name="gpack">
         <option value="false" selected>No &ndash; everyone sees the server pack</option>
         <option value="true">Yes &ndash; players may pick their own in Profile</option>

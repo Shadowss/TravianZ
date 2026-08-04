@@ -200,6 +200,12 @@ define("USRNM_MIN_LENGTH", %USRNMMIN%);
 define("USRNM_MAX_LENGTH", %USRNMMAX%);
 define("PW_MIN_LENGTH", %PWMIN%);
 
+// ***** Minunea Lumii cu stil pe trib
+// Cu true, fiecare trib isi vede propria Minune a Lumii, atat pe harta satului
+// cat si in pagina de constructie. Triburile fara imagini pe disc raman pe
+// imaginea originala, indiferent de setare.
+define("NEW_FUNCTION_WW_IMAGE", %WWIMAGE%);
+
 // ***** Graphic Pack
 //
 // SERVER_GP is the pack every player sees by default (chosen at install or in

@@ -50,7 +50,12 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
         $psKeep = isset($_POST['plus_stats_keep']) ? (int) $_POST['plus_stats_keep'] : 0;
         if ($psKeep < 0 || $psKeep > 3650) { $psKeep = 0; }
 
+        // Minunea Lumii cu stil pe trib
+        $wwImgChoice = (isset($_POST['ww_image']) && $_POST['ww_image'] === 'false')
+            ? 'false' : 'true';
+
         $text = admin_config_template_contents(array(
+            '%WWIMAGE%'         => $wwImgChoice,
             '%ALLIANCEBONUSES%' => $abChoice,
             '%PLUSSTATS%'       => $psChoice,
             '%PLUSSTATSHOURS%'  => $psHours,

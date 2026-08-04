@@ -4285,3 +4285,9 @@ tz_def('HERO_COL_IMAGE', 'Image');
 tz_def('HERO_COL_NAME', 'Nom de l\'objet');
 tz_def('HERO_COL_TIER', 'Niveau (bonus)');
 tz_def('HERO_COL_ACTION', 'Action');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII - stil pe trib
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_WW_IMAGE', 'Merveille par tribu');
+tz_def('ADM_WW_IMAGE_TIP', 'Chaque tribu voit sa propre Merveille du Monde, sur la carte du village et sur la page de construction. Les tribus sans images gardent l\'image d\'origine, quel que soit ce reglage.');

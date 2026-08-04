@@ -9570,3 +9570,122 @@ div.statistics div#submenu2 img {
     vertical-align: middle;
     margin: 0 2px;
 }
+/* ==========================================================================
+   Minunea Lumii, cate un stil pentru fiecare trib.
+
+   Clasa de trib (.wwt1 ... .wwt9) se pune peste cea de nivel (.g40_x).
+   Triburile fara imagini pe disc nu primesc clasa, deci raman pe regulile
+   originale (fallback automat).
+
+   IMPORTANT - de ce sunt doua sectiuni:
+   imaginea se aplica peste tot (harta satului SI logo-ul din pagina de
+   constructie), dar inaltimea si pozitia DOAR pe harta. Pe pagina de
+   constructie logo-ul are 100px si trebuie sa ramana asa; o regula de
+   inaltime globala l-ar umfla si ar strica asezarea.
+
+   INCADRARE: minunea creste in sus dintr-o baza fixa, la 267px.
+   Schimba BASE in genereaza-ww.py si regenereaza. Mai mic = mai sus.
+   (Jocul original folosea 292px.)
+   ========================================================================== */
+
+/* --- 1. IMAGINEA: se aplica oriunde apare minunea --- */
+/* trib 1 */
+img.wwt1.g40 { background-image: url("../../img/g/ww/t1/g40_0.png"); }
+img.wwt1.g40_1 { background-image: url("../../img/g/ww/t1/g40_1.png"); }
+img.wwt1.g40_2 { background-image: url("../../img/g/ww/t1/g40_2.png"); }
+img.wwt1.g40_3 { background-image: url("../../img/g/ww/t1/g40_3.png"); }
+img.wwt1.g40_4 { background-image: url("../../img/g/ww/t1/g40_4.png"); }
+img.wwt1.g40_5 { background-image: url("../../img/g/ww/t1/g40_5.png"); }
+/* trib 2 */
+img.wwt2.g40 { background-image: url("../../img/g/ww/t2/g40_0.png"); }
+img.wwt2.g40_1 { background-image: url("../../img/g/ww/t2/g40_1.png"); }
+img.wwt2.g40_2 { background-image: url("../../img/g/ww/t2/g40_2.png"); }
+img.wwt2.g40_3 { background-image: url("../../img/g/ww/t2/g40_3.png"); }
+img.wwt2.g40_4 { background-image: url("../../img/g/ww/t2/g40_4.png"); }
+img.wwt2.g40_5 { background-image: url("../../img/g/ww/t2/g40_5.png"); }
+/* trib 3 */
+img.wwt3.g40 { background-image: url("../../img/g/ww/t3/g40_0.png"); }
+img.wwt3.g40_1 { background-image: url("../../img/g/ww/t3/g40_1.png"); }
+img.wwt3.g40_2 { background-image: url("../../img/g/ww/t3/g40_2.png"); }
+img.wwt3.g40_3 { background-image: url("../../img/g/ww/t3/g40_3.png"); }
+img.wwt3.g40_4 { background-image: url("../../img/g/ww/t3/g40_4.png"); }
+img.wwt3.g40_5 { background-image: url("../../img/g/ww/t3/g40_5.png"); }
+/* trib 6 */
+img.wwt6.g40 { background-image: url("../../img/g/ww/t6/g40_0.png"); }
+img.wwt6.g40_1 { background-image: url("../../img/g/ww/t6/g40_1.png"); }
+img.wwt6.g40_2 { background-image: url("../../img/g/ww/t6/g40_2.png"); }
+img.wwt6.g40_3 { background-image: url("../../img/g/ww/t6/g40_3.png"); }
+img.wwt6.g40_4 { background-image: url("../../img/g/ww/t6/g40_4.png"); }
+img.wwt6.g40_5 { background-image: url("../../img/g/ww/t6/g40_5.png"); }
+/* trib 7 */
+img.wwt7.g40 { background-image: url("../../img/g/ww/t7/g40_0.png"); }
+img.wwt7.g40_1 { background-image: url("../../img/g/ww/t7/g40_1.png"); }
+img.wwt7.g40_2 { background-image: url("../../img/g/ww/t7/g40_2.png"); }
+img.wwt7.g40_3 { background-image: url("../../img/g/ww/t7/g40_3.png"); }
+img.wwt7.g40_4 { background-image: url("../../img/g/ww/t7/g40_4.png"); }
+img.wwt7.g40_5 { background-image: url("../../img/g/ww/t7/g40_5.png"); }
+/* trib 8 (provizoriu: imagini de la romani) */
+img.wwt8.g40 { background-image: url("../../img/g/ww/t8/g40_0.png"); }
+img.wwt8.g40_1 { background-image: url("../../img/g/ww/t8/g40_1.png"); }
+img.wwt8.g40_2 { background-image: url("../../img/g/ww/t8/g40_2.png"); }
+img.wwt8.g40_3 { background-image: url("../../img/g/ww/t8/g40_3.png"); }
+img.wwt8.g40_4 { background-image: url("../../img/g/ww/t8/g40_4.png"); }
+img.wwt8.g40_5 { background-image: url("../../img/g/ww/t8/g40_5.png"); }
+/* trib 9 (provizoriu: imagini de la romani) */
+img.wwt9.g40 { background-image: url("../../img/g/ww/t9/g40_0.png"); }
+img.wwt9.g40_1 { background-image: url("../../img/g/ww/t9/g40_1.png"); }
+img.wwt9.g40_2 { background-image: url("../../img/g/ww/t9/g40_2.png"); }
+img.wwt9.g40_3 { background-image: url("../../img/g/ww/t9/g40_3.png"); }
+img.wwt9.g40_4 { background-image: url("../../img/g/ww/t9/g40_4.png"); }
+img.wwt9.g40_5 { background-image: url("../../img/g/ww/t9/g40_5.png"); }
+
+/* --- 2. INALTIMEA SI POZITIA: doar pe harta satului --- */
+/* trib 1 */
+div.village2 div#village_map img.wwt1.g40 { height: 174px; top: 93px; }
+div.village2 div#village_map img.wwt1.g40_1 { height: 173px; top: 94px; }
+div.village2 div#village_map img.wwt1.g40_2 { height: 180px; top: 87px; }
+div.village2 div#village_map img.wwt1.g40_3 { height: 217px; top: 50px; }
+div.village2 div#village_map img.wwt1.g40_4 { height: 302px; top: -35px; }
+div.village2 div#village_map img.wwt1.g40_5 { height: 302px; top: -35px; }
+/* trib 2 */
+div.village2 div#village_map img.wwt2.g40 { height: 146px; top: 121px; }
+div.village2 div#village_map img.wwt2.g40_1 { height: 244px; top: 23px; }
+div.village2 div#village_map img.wwt2.g40_2 { height: 231px; top: 36px; }
+div.village2 div#village_map img.wwt2.g40_3 { height: 285px; top: -18px; }
+div.village2 div#village_map img.wwt2.g40_4 { height: 285px; top: -18px; }
+div.village2 div#village_map img.wwt2.g40_5 { height: 302px; top: -35px; }
+/* trib 3 */
+div.village2 div#village_map img.wwt3.g40 { height: 259px; top: 8px; }
+div.village2 div#village_map img.wwt3.g40_1 { height: 258px; top: 9px; }
+div.village2 div#village_map img.wwt3.g40_2 { height: 259px; top: 8px; }
+div.village2 div#village_map img.wwt3.g40_3 { height: 256px; top: 11px; }
+div.village2 div#village_map img.wwt3.g40_4 { height: 262px; top: 5px; }
+div.village2 div#village_map img.wwt3.g40_5 { height: 261px; top: 6px; }
+/* trib 6 */
+div.village2 div#village_map img.wwt6.g40 { height: 97px; top: 170px; }
+div.village2 div#village_map img.wwt6.g40_1 { height: 140px; top: 127px; }
+div.village2 div#village_map img.wwt6.g40_2 { height: 210px; top: 57px; }
+div.village2 div#village_map img.wwt6.g40_3 { height: 300px; top: -33px; }
+div.village2 div#village_map img.wwt6.g40_4 { height: 300px; top: -33px; }
+div.village2 div#village_map img.wwt6.g40_5 { height: 302px; top: -35px; }
+/* trib 7 */
+div.village2 div#village_map img.wwt7.g40 { height: 133px; top: 134px; }
+div.village2 div#village_map img.wwt7.g40_1 { height: 155px; top: 112px; }
+div.village2 div#village_map img.wwt7.g40_2 { height: 183px; top: 84px; }
+div.village2 div#village_map img.wwt7.g40_3 { height: 270px; top: -3px; }
+div.village2 div#village_map img.wwt7.g40_4 { height: 295px; top: -28px; }
+div.village2 div#village_map img.wwt7.g40_5 { height: 302px; top: -35px; }
+/* trib 8 */
+div.village2 div#village_map img.wwt8.g40 { height: 174px; top: 93px; }
+div.village2 div#village_map img.wwt8.g40_1 { height: 173px; top: 94px; }
+div.village2 div#village_map img.wwt8.g40_2 { height: 180px; top: 87px; }
+div.village2 div#village_map img.wwt8.g40_3 { height: 217px; top: 50px; }
+div.village2 div#village_map img.wwt8.g40_4 { height: 302px; top: -35px; }
+div.village2 div#village_map img.wwt8.g40_5 { height: 302px; top: -35px; }
+/* trib 9 */
+div.village2 div#village_map img.wwt9.g40 { height: 174px; top: 93px; }
+div.village2 div#village_map img.wwt9.g40_1 { height: 173px; top: 94px; }
+div.village2 div#village_map img.wwt9.g40_2 { height: 180px; top: 87px; }
+div.village2 div#village_map img.wwt9.g40_3 { height: 217px; top: 50px; }
+div.village2 div#village_map img.wwt9.g40_4 { height: 302px; top: -35px; }
+div.village2 div#village_map img.wwt9.g40_5 { height: 302px; top: -35px; }

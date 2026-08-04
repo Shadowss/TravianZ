@@ -4082,3 +4082,9 @@ tz_def('HERO_COL_IMAGE', 'Imagine');
 tz_def('HERO_COL_NAME', 'Numele itemului');
 tz_def('HERO_COL_TIER', 'Nivel (bonus)');
 tz_def('HERO_COL_ACTION', 'Actiune');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// MINUNEA LUMII - stil pe trib
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_WW_IMAGE', 'Minune pe trib');
+tz_def('ADM_WW_IMAGE_TIP', 'Fiecare trib isi vede propria Minune a Lumii, atat pe harta satului cat si in pagina de constructie. Triburile fara imagini pe disc raman pe imaginea originala, indiferent de setare.');

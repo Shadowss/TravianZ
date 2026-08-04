@@ -30,7 +30,14 @@ $level = (int)$village->resarray['f'.$id];
 ?>
 <div id="build" class="gid40">
     <a href="#" onClick="return Popup(40,4);" class="build_logo">
-        <img class="building g40" src="img/x.gif" alt="<?php echo WORLD_WONDER; ?>" title="<?php echo WORLD_WONDER;?>" />
+        <?php
+            // Logo-ul preia stilul tribului, ca sa nu vezi altceva aici decat
+            // in sat. Regulile CSS de trib dau DOAR imaginea, nu si inaltimea,
+            // deci logo-ul isi pastreaza cei 100px.
+            include_once('GameEngine/Data/ww_tribe.php');
+            $wwLogoClass = tz_ww_tribe_class($session->tribe ?? 0);
+        ?>
+        <img class="building g40<?php echo $wwLogoClass; ?>" src="img/x.gif" alt="<?php echo WORLD_WONDER; ?>" title="<?php echo WORLD_WONDER;?>" />
     </a>
     <h1><?php echo WONDER;?><br /><span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo WONDER_DESC;?></p>

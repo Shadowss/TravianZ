@@ -364,28 +364,43 @@ if (
 
     $wwLevel = (int)$village->resarray['f99'];
 
+    /**
+     * Stil de Minune propriu fiecarui trib.
+     *
+     * Adaugam o clasa suplimentara (.wwt1 ... .wwt9) peste cea de nivel. In CSS
+     * combinatia are prioritate mai mare, deci suprascrie imaginea, inaltimea si
+     * pozitia.
+     *
+     * FALLBACK: clasa se pune DOAR daca tribul chiar are imaginile pe disc.
+     * Pentru triburile fara arta proprie nu se adauga nimic, iar minunea ramane
+     * cea originala. Cand adaugi imagini pentru un trib nou, e de ajuns sa pui
+     * fisierele in gpack/<pachet>/img/g/ww/t<trib>/ si regulile in CSS.
+     */
+    include_once('GameEngine/Data/ww_tribe.php');
+    $wwClass = tz_ww_tribe_class($village->owner_tribe ?? $session->tribe ?? 0);
+
     if ($wwLevel >= 0 && $wwLevel <= 19) {
-        echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 
     if ($wwLevel >= 20 && $wwLevel <= 39) {
-        echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40_1' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 
     if ($wwLevel >= 40 && $wwLevel <= 59) {
-        echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40_2' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 
     if ($wwLevel >= 60 && $wwLevel <= 79) {
-        echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40_3' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 
     if ($wwLevel >= 80 && $wwLevel <= 99) {
-        echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40_4' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 
     if ($wwLevel == 100) {
-        echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">';
+        echo '<img class="ww g40_5' . $wwClass . '" src="img/x.gif" alt="Worldwonder">';
     }
 }
 ?>
