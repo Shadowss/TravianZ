@@ -1988,7 +1988,54 @@ trait DatabaseVillageQueries {
 		mysqli_query($this->dblink, $q);
 	}
 
-	function getVillageByName($name, $use_cache = true) {
+	function getVillageByName($name, $use_cache = true, $uid = 0) {
+
+        /**
+         * BUG REPARAT: numele de sate NU sunt unice.
+         *
+         * Cele 13 sate de Minune ale Natarilor se numesc toate "WW village".
+         * Cand un jucator cucerea unul si il pastra cu acelasi nume, apoi scria
+         * "WW village" ca destinatie, interogarea "WHERE name = ... LIMIT 1"
+         * returna primul rand gasit - de obicei un sat al Natarilor, nu al lui.
+         * Resursele plecau in alta parte, fara niciun avertisment.
+         *
+         * Acum cautam in ordinea in care se gandeste jucatorul:
+         *   1. satele LUI
+         *   2. satele colegilor de alianta
+         *   3. orice alt sat cu numele acela
+         *
+         * Fara $uid, comportamentul ramane cel vechi, deci apelantii care nu
+         * stiu de jucator nu se strica.
+         */
+        $uid = (int) $uid;
+
+        if ($uid > 0) {
+            $safeName = $this->escape($name);
+
+            // 1. satele proprii
+            $q = "SELECT wref FROM " . TB_PREFIX . "vdata
+                   WHERE `name` = '" . $safeName . "' AND owner = " . $uid . " LIMIT 1";
+            $r = mysqli_query($this->dblink, $q);
+
+            if ($r && ($row = mysqli_fetch_assoc($r))) {
+                return $row['wref'];
+            }
+
+            // 2. satele aliantei
+            $q = "SELECT v.wref FROM " . TB_PREFIX . "vdata v
+                    JOIN " . TB_PREFIX . "users u ON u.id = v.owner
+                    JOIN " . TB_PREFIX . "users me ON me.id = " . $uid . "
+                   WHERE v.`name` = '" . $safeName . "'
+                     AND me.alliance > 0 AND u.alliance = me.alliance
+                   LIMIT 1";
+            $r = mysqli_query($this->dblink, $q);
+
+            if ($r && ($row = mysqli_fetch_assoc($r))) {
+                return $row['wref'];
+            }
+        }
+
+        // 3. cautarea initiala, ca rezerva
         return $this->getVillage($name, 1, $use_cache)['wref'];
 	}
 

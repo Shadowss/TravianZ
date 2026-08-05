@@ -46,7 +46,8 @@ if ($x!== '' && $y!== '' && is_numeric($x) && is_numeric($y)) {
     $getwref = (int)$database->getVilWref((int)$x, (int)$y);
     $checkexist = $database->checkVilExist($getwref);
 } elseif ($dname!== '') {
-    $getwref = (int)$database->getVillageByName($dname);
+    // Preferam satele jucatorului: numele NU sunt unice (vezi getVillageByName).
+    $getwref = (int) $database->getVillageByName($dname, true, (int) ($session->uid ?? 0));
     $checkexist = $database->checkVilExist($getwref);
 }
 
