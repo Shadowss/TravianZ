@@ -1988,6 +1988,39 @@ trait DatabaseVillageQueries {
 		mysqli_query($this->dblink, $q);
 	}
 
+	/**
+	 * Rezolva ce a scris jucatorul in casuta de destinatie.
+	 *
+	 * Accepta atat "Numele satului", cat si formatul dat de autocomplete pentru
+	 * numele ambigue: "Numele satului (x|y)". Cand vin coordonate, ele decid -
+	 * sunt neambigue prin definitie.
+	 *
+	 * @param  string $input  textul din formular
+	 * @param  int    $uid    jucatorul, pentru preferinta pe satele proprii
+	 * @return int            wref, sau 0 daca nu s-a gasit
+	 */
+	function resolveVillageInput($input, $uid = 0) {
+		$input = trim((string) $input);
+
+		if ($input === '') {
+			return 0;
+		}
+
+		// "Nume (x|y)" -> coordonatele au ultimul cuvant
+		if (preg_match('/^(.*)\\s*\\((-?\\d+)\\|(-?\\d+)\\)$/', $input, $m)) {
+			$wref = (int) $this->getVilWref((int) $m[2], (int) $m[3]);
+
+			if ($wref > 0) {
+				return $wref;
+			}
+
+			// coordonate invalide: incercam macar numele
+			$input = trim($m[1]);
+		}
+
+		return (int) $this->getVillageByName($input, true, $uid);
+	}
+
 	function getVillageByName($name, $use_cache = true, $uid = 0) {
 
         /**
@@ -2067,7 +2100,10 @@ trait DatabaseVillageQueries {
 		$radius   = (int) $radius;
 		$limit    = (int) $limit;
 
-		$joins = "JOIN " . TB_PREFIX . "users u ON u.id = v.owner ";
+		// wdata se alatura MEREU: avem nevoie de coordonate la fiecare sugestie,
+		// nu doar cand se filtreaza dupa raza.
+		$joins = "JOIN " . TB_PREFIX . "users u ON u.id = v.owner "
+		       . "JOIN " . TB_PREFIX . "wdata w ON w.id = v.wref ";
 		$conds = [];
 
 		if ($v1) {
@@ -2077,7 +2113,6 @@ trait DatabaseVillageQueries {
 			$conds[] = "u.alliance = $alliance";
 		}
 		if ($v2) {
-			$joins  .= "JOIN " . TB_PREFIX . "wdata w ON w.id = v.wref ";
 			$conds[] = "(ABS(w.x - $x) <= $radius AND ABS(w.y - $y) <= $radius)";
 		}
 
@@ -2085,7 +2120,17 @@ trait DatabaseVillageQueries {
 			return [];
 		}
 
-		$q = "SELECT DISTINCT v.name FROM " . TB_PREFIX . "vdata v " .
+		/**
+		 * Aducem si coordonatele, nu doar numele.
+		 *
+		 * Numele de sate NU sunt unice: cele 13 sate de Minune ale Natarilor se
+		 * cheama toate "WW village". Cand jucatorul alegea o sugestie, in formular
+		 * ajungea doar numele, iar cautarea putea nimeri alt sat.
+		 *
+		 * Cu coordonatele la indemana, sablonul poate adauga "(x|y)" DOAR la
+		 * numele care apar de mai multe ori - restul raman curate.
+		 */
+		$q = "SELECT v.name, w.x, w.y FROM " . TB_PREFIX . "vdata v " .
 			$joins .
 			"WHERE u.id > 5 AND (" . implode(' OR ', $conds) . ") " .
 			"ORDER BY v.name LIMIT $limit";
@@ -2094,7 +2139,11 @@ trait DatabaseVillageQueries {
 		$names  = [];
 		if ($result) {
 			while ($row = mysqli_fetch_assoc($result)) {
-				$names[] = $row['name'];
+				$names[] = array(
+					'name' => $row['name'],
+					'x'    => (int) $row['x'],
+					'y'    => (int) $row['y'],
+				);
 			}
 		}
 		return $names;

@@ -95,8 +95,8 @@ class Units {
         if(!empty($post['dname']) && $post['x'] != "" && $post['y'] != "") return "Insert name or coordinates";
 
         if(isset($post['dname']) && !empty($post['dname'])) {
-            $id = $database->getVillageByName(stripslashes($post['dname']), true,
-                (int) ($session->uid ?? 0));   // preferam satele jucatorului
+            $id = $database->resolveVillageInput(stripslashes($post['dname']),
+                (int) ($session->uid ?? 0));   // accepta si "Nume (x|y)"
 
             if (!isset($id)) return "Village doesn't exist";
             else $coor = $database->getCoor($id);
@@ -165,8 +165,8 @@ class Units {
             $vid = $database->getVilWref($post['x'], $post['y']);
             unset($post['dname']);
         }
-        else if(isset($post['dname']) && !empty($post['dname'])) $vid = $database->getVillageByName(stripslashes($post['dname']), true,
-                (int) ($session->uid ?? 0));   // preferam satele jucatorului
+        else if(isset($post['dname']) && !empty($post['dname'])) $vid = $database->resolveVillageInput(stripslashes($post['dname']),
+                (int) ($session->uid ?? 0));   // accepta si "Nume (x|y)"
 
         if (!empty($vid)) {
             if($isOasis = $database->isVillageOases($vid)){

@@ -23,10 +23,34 @@ if ($acV1 || $acV2 || $acV3) {
         $acV3
     );
 
-    echo '<datalist id="dnameSuggest">';
-    foreach ($acNames as $acName) {
-        echo '<option value="' . htmlspecialchars($acName, ENT_QUOTES) . '">';
+    /**
+     * Numele de sate NU sunt unice - cele 13 sate de Minune ale Natarilor se
+     * cheama toate "WW village". Daca sugestia trimite doar numele, cautarea
+     * poate nimeri alt sat, iar resursele pleaca aiurea.
+     *
+     * Asa ca adaugam coordonatele DOAR la numele care apar de mai multe ori.
+     * Numele unice raman curate, deci pentru majoritatea jucatorilor nu se
+     * schimba nimic.
+     */
+    $acCount = array();
+
+    foreach ($acNames as $acRow) {
+        $acKey = $acRow['name'];
+        $acCount[$acKey] = isset($acCount[$acKey]) ? $acCount[$acKey] + 1 : 1;
     }
+
+    echo '<datalist id="dnameSuggest">';
+
+    foreach ($acNames as $acRow) {
+        $acValue = $acRow['name'];
+
+        if ($acCount[$acRow['name']] > 1) {
+            $acValue .= ' (' . (int) $acRow['x'] . '|' . (int) $acRow['y'] . ')';
+        }
+
+        echo '<option value="' . htmlspecialchars($acValue, ENT_QUOTES) . '">';
+    }
+
     echo '</datalist>';
 }
 ?>
