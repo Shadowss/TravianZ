@@ -152,11 +152,22 @@ if($id == 11){
 if($id == 12){
 	include ("Templates/Plus/12.tpl");
 }
-if($id == 13){
-	include ("Templates/Plus/13.tpl");
-}
-if($id == 14){
-	include ("Templates/Plus/14.tpl");
+/**
+ * BUG REPARAT: id-urile 13 si 14 includeau Templates/Plus/13.tpl si 14.tpl,
+ * fisiere care NU EXISTA in proiect. Orice acces la plus.php?id=13 dadea
+ * eroare fatala si pagina alba.
+ *
+ * Verificam existenta inainte de includere; daca lipsesc, aratam pagina
+ * obisnuita de functii Plus, ca jucatorul sa aiba unde merge.
+ */
+if($id == 13 || $id == 14){
+	$plusExtraTpl = "Templates/Plus/" . (int) $id . ".tpl";
+
+	if (is_file($plusExtraTpl)) {
+		include ($plusExtraTpl);
+	} else {
+		include ("Templates/Plus/3.tpl");
+	}
 }
 if($id == 15){
 	include ("Templates/Plus/15.tpl");

@@ -1,15 +1,21 @@
 <?php
 
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        8.tpl                                                  		   ##
-## Description: Wood Plus 			                                           ##
-## Made by:     alq0rsan													   ##
-## Improved by: evader														   ##
-## Refactor by: Shadow 														   ##
-## 				                                                               ##
+##  Filename       : 9.tpl                                                     ##
+##  Type           : Plus - Activate Lumber Bonus                              ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : alq0rsan & evader & Shadow                                ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 if($session->sit == 0) {
