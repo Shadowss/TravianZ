@@ -450,16 +450,33 @@ trait DatabaseUserQueries {
         return self::$fieldsCache[$ref.$mode];
 	}
 
+	/**
+	 * Marcheaza intrarea/iesirea unui jucator.
+	 *
+	 * Tabela separata "active" a fost eliminata: dubla informatia din
+	 * users.timestamp, care e oricum sursa pentru lista de jucatori online,
+	 * harta de caldura si stergerea conturilor inactive.
+	 *
+	 * Metoda ramane, cu apelantii ei neschimbati, dar acum lucreaza pe
+	 * users.timestamp. La delogare (mode = 1) punem timestamp-ul in trecut, ca
+	 * jucatorul sa dispara imediat din lista de online, fara sa mai astepte
+	 * fereastra de 5 minute.
+	 *
+	 * @param string $username
+	 * @param int    $mode  0 = intra in joc, 1 = iese
+	 */
 	function activeModify($username, $mode) {
-        list($username, $mode) = $this->escape_input($username, $mode);
+        list($username) = $this->escape_input($username);
 
-		$time = time();
-		if(!$mode) {
-			$q = "INSERT into " . TB_PREFIX . "active VALUES ('$username',$time)";
-		} else {
-			$q = "DELETE FROM " . TB_PREFIX . "active where username = '$username'";
-		}
-		return mysqli_query($this->dblink,$q);
+		$mode = (int) $mode;
+
+		// la iesire il scoatem din fereastra de 5 minute a listei de online
+		$stamp = $mode ? (time() - 600) : time();
+
+		$q = "UPDATE " . TB_PREFIX . "users SET timestamp = " . $stamp
+		   . " WHERE username = '" . $username . "' LIMIT 1";
+
+		return mysqli_query($this->dblink, $q);
 	}
 
 	function updateActiveUser($username, $time) {

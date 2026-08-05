@@ -116,7 +116,8 @@ $database->query("DELETE FROM " . TB_PREFIX . "ndata WHERE uid = $uid");
 $database->query("DELETE FROM " . TB_PREFIX . "medal WHERE userid = $uid");
 $database->query("DELETE FROM " . TB_PREFIX . "gold_fin_log WHERE uid = $uid");
 $database->query("DELETE FROM " . TB_PREFIX . "links WHERE userid = $uid");
-$database->query("DELETE FROM " . TB_PREFIX . "active WHERE username = '$username'");
+// Tabela "active" a fost eliminata; ultima activitate sta in users.timestamp,
+// iar randul utilizatorului se sterge oricum mai jos.
 $database->query("DELETE FROM " . TB_PREFIX . "online WHERE uid = $uid");
 $database->query("DELETE FROM " . TB_PREFIX . "chat WHERE id_user = $uid");
 $database->query("DELETE FROM " . TB_PREFIX . "login_log WHERE uid = $uid");
