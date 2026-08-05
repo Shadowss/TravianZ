@@ -387,7 +387,7 @@ if(defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') && NEW_FUNCTIONS_SPECIAL_MEDAL
                         WHERE v.owner=$uid");
 	if($qw){
     while($r = $qw->fetch_assoc()){
-        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33])){
+        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33,42,43,47,50])){
             $wallCount++;
         }
     }
