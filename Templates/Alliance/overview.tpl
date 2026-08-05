@@ -80,11 +80,31 @@ echo "<h1>" . htmlspecialchars($allianceinfo['tag']) . " - " . htmlspecialchars(
 /* =========================
    PROFILE + MEDALS
 ========================= */
-$profiel = $allianceinfo['notice'] . md5('skJkev3') . $allianceinfo['desc'];
+/**
+ * FIX SECURITATE (XSS stocat): descrierea aliantei e text liber, scris de
+ * conducerea aliantei, si se afisa oricui viziteaza pagina - fara escapare.
+ * Un <script> introdus acolo se executa in browserul fiecarui vizitator.
+ *
+ * Aceeasi problema a fost reparata la profilul de JUCATOR (vezi
+ * Templates/Profile/overview.tpl), dar varianta de alianta a fost uitata.
+ *
+ * Escapam INAINTE de procesarea medaliilor, exact ca acolo: separatorul md5 si
+ * marcajele [#..] nu contin caractere speciale HTML, deci trec neatinse prin
+ * htmlspecialchars() si medal.php le gaseste asa cum le asteapta.
+ */
+$profileSeparator = md5('skJkev3');
+
+$profiel = htmlspecialchars($allianceinfo['notice'] ?? '', ENT_QUOTES, 'UTF-8')
+         . $profileSeparator
+         . htmlspecialchars($allianceinfo['desc'] ?? '', ENT_QUOTES, 'UTF-8');
 
 require("medal.php");
 
-$profiel = explode(md5('skJkev3'), $profiel);
+$profiel = explode($profileSeparator, $profiel);
+
+// plasa de siguranta, ca la profilul de jucator
+if (!isset($profiel[0])) { $profiel[0] = ''; }
+if (!isset($profiel[1])) { $profiel[1] = ''; }
 
 include("alli_menu.tpl");
 ?>
