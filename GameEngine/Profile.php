@@ -469,7 +469,7 @@ class Profile {
 			exit;
 		}
 
-		if ($get['a'] == $session->checker) {
+		if (hash_equals((string) $session->checker, (string) ($get['a'] ?? ''))) {
 
 			if ($session->userinfo['sit' . $type] == $get['id']) {
 				$database->updateUserField($session->uid, "sit" . $type, 0, 1);
@@ -503,7 +503,7 @@ class Profile {
 	private function removeMeSit($get) {
 		global $database, $session;
 
-		if ($get['a'] == $session->checker) {
+		if (hash_equals((string) $session->checker, (string) ($get['a'] ?? ''))) {
 			$database->removeMeSit($get['id'], $session->uid);
 			$session->changeChecker();
 		}

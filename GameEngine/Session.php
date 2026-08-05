@@ -101,6 +101,25 @@ function __construct() {
     $this->time = time();
 
     if (!isset($_SESSION)) {
+        /**
+         * FIX SECURITATE (CSRF): cookie-ul de sesiune nu avea SameSite, deci
+         * era trimis si la cereri pornite de pe alte site-uri. Panoul de admin
+         * avea deja 'Strict' (vezi Admin/admin.php); jocul, nu.
+         *
+         * Folosim 'Lax', nu 'Strict': cu Strict, un jucator care intra pe link
+         * din forum sau dintr-un e-mail ar aparea delogat. Lax pastreaza
+         * navigarea normala si opreste cererile POST venite din alta parte.
+         */
+        if (PHP_VERSION_ID >= 70300) {
+            session_set_cookie_params(array(
+                'lifetime' => 0,
+                'path'     => '/',
+                'secure'   => !empty($_SERVER['HTTPS']),
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ));
+        }
+
         session_start();
     }
 
@@ -170,8 +189,18 @@ function __construct() {
 
         $user_sanitized = $database->escape($user);
 
-        $_SESSION['checker'] = $generator->generateRandStr(3);
-        $_SESSION['mchecker'] = $generator->generateRandStr(5);
+        /**
+         * FIX SECURITATE (CSRF): token-urile aveau 3 si 5 caractere.
+         *
+         * 3 caractere = 62^3 = 238.328 combinatii, adica se pot incerca toate
+         * in sub o ora, fara nicio limitare de rata. Cu 32 de caractere ajung
+         * la 62^32 - imposibil de ghicit.
+         *
+         * Generatorul folosea deja random_int(), care e sigur criptografic;
+         * problema era doar lungimea.
+         */
+        $_SESSION['checker'] = $generator->generateRandStr(32);
+        $_SESSION['mchecker'] = $generator->generateRandStr(32);
 
         $userFields = $database->getUserFields($user_sanitized, "quest, id", 1, true);
         $_SESSION['qst'] = $userFields["quest"];
@@ -244,8 +273,9 @@ function __construct() {
     public function changeChecker() {
         global $generator;
 
-        $this->checker = $_SESSION['checker'] = $generator->generateRandStr(3);
-        $this->mchecker = $_SESSION['mchecker'] = $generator->generateRandStr(5);
+        // 32 de caractere: vezi explicatia de la generarea initiala.
+        $this->checker = $_SESSION['checker'] = $generator->generateRandStr(32);
+        $this->mchecker = $_SESSION['mchecker'] = $generator->generateRandStr(32);
     }
 
     /**

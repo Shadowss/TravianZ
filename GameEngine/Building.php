@@ -294,7 +294,7 @@ class Building {
 
     $validChecker = (
         isset($get['c']) &&
-        $get['c'] == $this->sess->checker
+        hash_equals((string) $this->sess->checker, (string) ($get['c'] ?? ''))
     );
 
     // REMOVE / UPGRADE EXISTING

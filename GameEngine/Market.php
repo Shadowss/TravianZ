@@ -98,7 +98,7 @@ class Market
         if (
             isset($get['t'], $get['a']) &&
             $get['t'] == 1 &&
-            $get['a'] == $session->mchecker &&
+            hash_equals((string) $session->mchecker, (string) ($get['a'] ?? '')) &&
             !isset($get['del'])
         ) {
             $session->changeChecker();

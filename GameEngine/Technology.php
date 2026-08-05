@@ -901,7 +901,7 @@ class Technology {
 		if (!$database->getResearchLock($village->wid)) return;
 		try {
 			$village->researching = $database->getResearching($village->wid, false);
-			if($this->meetRRequirement($get['a']) && $get['c'] == $session->mchecker) {
+			if($this->meetRRequirement($get['a']) && hash_equals((string) $session->mchecker, (string) ($get['c'] ?? ''))) {
 				$data = ${'r'.$get['a']};
 				$time = time() + round(($data['time'] * ($bid22[$building->getTypeLevel(22)]['attri'] / 100))/SPEED);
 				$database->modifyResource($village->wid,$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
@@ -939,7 +939,7 @@ class Technology {
 
 			$CurrentTech = $ABTech[$type.$get['a']]+$ups;
 			$unit = ($session->tribe-1)*10+intval($get['a']);
-			if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel($buildingType)) && $get['c'] == $session->mchecker) {
+			if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel($buildingType)) && hash_equals((string) $session->mchecker, (string) ($get['c'] ?? ''))) {
 				global ${'ab'.strval($unit)};
 				$data = ${'ab'.strval($unit)};
 				$time = time() + round(($data[$CurrentTech+1]['time'] * ($bidBuilding[$building->getTypeLevel($buildingType)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
