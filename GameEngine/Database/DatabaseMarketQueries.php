@@ -207,6 +207,12 @@ trait DatabaseMarketQueries {
 	***************************/
 
 	function getMarketField($vref, $id, $field, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele, iar
+		// mysqli_real_escape_string nu protejeaza contextul numeric:
+		// "5 OR 1=1" ar trece neschimbat. Conversia la intreg il opreste.
+		$vref = (int) $vref;
+		$id = (int) $id;
+
 	    list($vref, $id, $field) = $this->escape_input($vref, $id, $field);
 
         // first of all, check if we should be using cache and whether the field

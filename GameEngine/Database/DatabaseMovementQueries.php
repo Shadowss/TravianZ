@@ -24,6 +24,20 @@ trait DatabaseMovementQueries {
 
 
 	function setMovementProc($moveid) {
+		// $moveid poate fi UN identificator sau o LISTA separata prin virgula
+		// (vezi DatabaseVillageQueries, care trimite implode(', ', $moveIDs)),
+		// asa ca o simpla conversie la intreg ar rupe cazul cu lista.
+		//
+		// Filtram fiecare element in parte: raman doar numere, restul dispare.
+		// Asa "5 OR 1=1" nu mai poate ajunge in SQL.
+		$moveIds = array_filter(array_map('intval', explode(',', (string) $moveid)));
+
+		if (!$moveIds) {
+			return false;
+		}
+
+		$moveid = implode(', ', $moveIds);
+
         if (!Math::isInt($moveid)) {
             list($moveid) = $this->escape_input($moveid);
         }

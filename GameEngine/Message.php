@@ -372,45 +372,45 @@ class Message
 
     private function archiveMessage($post)
     {
-        global $database;
+        global $database, $session;
         $archIDs = $this->collectSelectedIds($post);
-        $database->setArchived($archIDs);
+        $database->setArchived($archIDs, (int) $session->uid);
         header("Location: nachrichten.php");
         exit;
     }
 
     private function unarchiveMessage($post)
     {
-        global $database;
+        global $database, $session;
         $normIDs = $this->collectSelectedIds($post);
-        $database->setNorm($normIDs);
+        $database->setNorm($normIDs, (int) $session->uid);
         header("Location: nachrichten.php");
         exit;
     }
 
     private function removeNotice($post)
     {
-        global $database;
+        global $database, $session;
         $removeIDs = $this->collectSelectedIds($post);
-        $database->removeNotice($removeIDs);
+        $database->removeNotice($removeIDs, (int) $session->uid);
         header("Location: berichte.php");
         exit;
     }
 
     private function archiveNotice($post)
     {
-        global $database;
+        global $database, $session;
         $archiveIDs = $this->collectSelectedIds($post);
-        $database->archiveNotice($archiveIDs);
+        $database->archiveNotice($archiveIDs, (int) $session->uid);
         header("Location: berichte.php");
         exit;
     }
 
     private function unarchiveNotice($post)
     {
-        global $database;
+        global $database, $session;
         $unarchIDs = $this->collectSelectedIds($post);
-        $database->unarchiveNotice($unarchIDs);
+        $database->unarchiveNotice($unarchIDs, (int) $session->uid);
         header("Location: berichte.php");
         exit;
     }

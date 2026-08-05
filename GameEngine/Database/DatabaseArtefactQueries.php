@@ -439,6 +439,11 @@ trait DatabaseArtefactQueries {
 	 */
 	
 	function getInactiveArtifacts($time){
+		// Identificatorii intra in SQL fara ghilimele, iar
+		// mysqli_real_escape_string nu protejeaza contextul numeric:
+		// "5 OR 1=1" ar trece neschimbat. Conversia la intreg il opreste.
+		$time = (int) $time;
+
 	    list($time) = $this->escape_input($time);
 	    
 	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered <= $time AND del = 0 ORDER BY conquered ASC, size ASC";

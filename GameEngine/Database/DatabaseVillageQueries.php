@@ -2208,6 +2208,11 @@ trait DatabaseVillageQueries {
 	}
 
 	function getCropProdstarv($wref, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele, iar
+		// mysqli_real_escape_string nu protejeaza contextul numeric:
+		// "5 OR 1=1" ar trece neschimbat. Conversia la intreg il opreste.
+		$wref = (int) $wref;
+
 	    global $bid4, $bid8, $bid9, $technology;
 
         // first of all, check if we should be using cache and whether the field

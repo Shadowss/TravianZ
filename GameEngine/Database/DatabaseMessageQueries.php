@@ -76,29 +76,75 @@ trait DatabaseMessageQueries {
         }
     }
 
-    function setArchived($id) {
-        if (!is_array($id)) {
-            $id = [$id];
+    function setArchived($id, $uid) {
+        /**
+         * FIX SECURITATE (IDOR): identificatorii vin din formular, deci pot fi
+         * ai altui jucator. Fara conditia de proprietar, oricine putea sterge
+         * sau arhiva rapoartele si mesajele oricui, doar ghicind ID-uri - ele
+         * sunt secventiale si usor de enumerat.
+         *
+         * Acelasi tipar exista deja in removeMessage() si getReadNotice();
+         * aceste cinci actiuni fusesera uitate.
+         *
+         * Conditia sta in SQL, nu in apelant: asa protejeaza ORICE apelant.
+         */
+        $uid = (int) $uid;
 
-            foreach ($id as $index => $idValue) {
-                $id[$index] = (int) $idValue;
-            }
+        if ($uid <= 0) {
+            return false;
         }
 
-        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id IN(".implode(', ', $id).")";
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+
+        // Conversia se aplica acum si array-urilor. Inainte statea in ramura
+        // "nu e array", deci pe cazul obisnuit nu rula niciodata.
+        $id = array_values(array_filter(array_map('intval', $id), function ($v) {
+            return $v > 0;
+        }));
+
+        if (!$id) {
+            return false;
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 WHERE id IN(" . implode(',', $id) . ") AND (target = $uid OR owner = $uid)";
         return mysqli_query($this->dblink,$q);
     }
 
-    function setNorm($id) {
-        if (!is_array($id)) {
-            $id = [$id];
+    function setNorm($id, $uid) {
+        /**
+         * FIX SECURITATE (IDOR): identificatorii vin din formular, deci pot fi
+         * ai altui jucator. Fara conditia de proprietar, oricine putea sterge
+         * sau arhiva rapoartele si mesajele oricui, doar ghicind ID-uri - ele
+         * sunt secventiale si usor de enumerat.
+         *
+         * Acelasi tipar exista deja in removeMessage() si getReadNotice();
+         * aceste cinci actiuni fusesera uitate.
+         *
+         * Conditia sta in SQL, nu in apelant: asa protejeaza ORICE apelant.
+         */
+        $uid = (int) $uid;
 
-            foreach ($id as $index => $idValue) {
-                $id[$index] = (int) $idValue;
-            }
+        if ($uid <= 0) {
+            return false;
         }
 
-        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id IN(".implode(',', $id).")";
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+
+        // Conversia se aplica acum si array-urilor. Inainte statea in ramura
+        // "nu e array", deci pe cazul obisnuit nu rula niciodata.
+        $id = array_values(array_filter(array_map('intval', $id), function ($v) {
+            return $v > 0;
+        }));
+
+        if (!$id) {
+            return false;
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 WHERE id IN(" . implode(',', $id) . ") AND (target = $uid OR owner = $uid)";
         return mysqli_query($this->dblink,$q);
     }
 
@@ -198,42 +244,111 @@ References: User ID/Message ID, Mode
 		else return mysqli_query($this->dblink,$q);
 	}
 
-	function unarchiveNotice($id) {
-        if (!is_array($id)) {
-            $id = [$id];
+	function unarchiveNotice($id, $uid) {
+        /**
+         * FIX SECURITATE (IDOR): identificatorii vin din formular, deci pot fi
+         * ai altui jucator. Fara conditia de proprietar, oricine putea sterge
+         * sau arhiva rapoartele si mesajele oricui, doar ghicind ID-uri - ele
+         * sunt secventiale si usor de enumerat.
+         *
+         * Acelasi tipar exista deja in removeMessage() si getReadNotice();
+         * aceste cinci actiuni fusesera uitate.
+         *
+         * Conditia sta in SQL, nu in apelant: asa protejeaza ORICE apelant.
+         */
+        $uid = (int) $uid;
 
-            foreach ($id as $index => $idValue) {
-                $id[$index] = (int) $idValue;
-            }
+        if ($uid <= 0) {
+            return false;
         }
 
-		$q = "UPDATE " . TB_PREFIX . "ndata set ntype = archive, archive = 0 where id IN(".implode(',', $id).")";
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+
+        // Conversia se aplica acum si array-urilor. Inainte statea in ramura
+        // "nu e array", deci pe cazul obisnuit nu rula niciodata.
+        $id = array_values(array_filter(array_map('intval', $id), function ($v) {
+            return $v > 0;
+        }));
+
+        if (!$id) {
+            return false;
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "ndata set ntype = archive, archive = 0 WHERE id IN(" . implode(',', $id) . ") AND uid = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function archiveNotice($id) {
-        if (!is_array($id)) {
-            $id = [$id];
+	function archiveNotice($id, $uid) {
+        /**
+         * FIX SECURITATE (IDOR): identificatorii vin din formular, deci pot fi
+         * ai altui jucator. Fara conditia de proprietar, oricine putea sterge
+         * sau arhiva rapoartele si mesajele oricui, doar ghicind ID-uri - ele
+         * sunt secventiale si usor de enumerat.
+         *
+         * Acelasi tipar exista deja in removeMessage() si getReadNotice();
+         * aceste cinci actiuni fusesera uitate.
+         *
+         * Conditia sta in SQL, nu in apelant: asa protejeaza ORICE apelant.
+         */
+        $uid = (int) $uid;
 
-            foreach ($id as $index => $idValue) {
-                $id[$index] = (int) $idValue;
-            }
+        if ($uid <= 0) {
+            return false;
         }
 
-		$q = "update " . TB_PREFIX . "ndata set archive = ntype, ntype = 9 where id IN(".implode(',', $id).")";
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+
+        // Conversia se aplica acum si array-urilor. Inainte statea in ramura
+        // "nu e array", deci pe cazul obisnuit nu rula niciodata.
+        $id = array_values(array_filter(array_map('intval', $id), function ($v) {
+            return $v > 0;
+        }));
+
+        if (!$id) {
+            return false;
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "ndata set archive = ntype, ntype = 9 WHERE id IN(" . implode(',', $id) . ") AND uid = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function removeNotice($id) {
-        if (!is_array($id)) {
-            $id = [$id];
+	function removeNotice($id, $uid) {
+        /**
+         * FIX SECURITATE (IDOR): identificatorii vin din formular, deci pot fi
+         * ai altui jucator. Fara conditia de proprietar, oricine putea sterge
+         * sau arhiva rapoartele si mesajele oricui, doar ghicind ID-uri - ele
+         * sunt secventiale si usor de enumerat.
+         *
+         * Acelasi tipar exista deja in removeMessage() si getReadNotice();
+         * aceste cinci actiuni fusesera uitate.
+         *
+         * Conditia sta in SQL, nu in apelant: asa protejeaza ORICE apelant.
+         */
+        $uid = (int) $uid;
 
-            foreach ($id as $index => $idValue) {
-                $id[$index] = (int) $idValue;
-            }
+        if ($uid <= 0) {
+            return false;
         }
 
-		$q = "UPDATE " . TB_PREFIX . "ndata set del = 1,viewed = 1 where id IN(".implode(',', $id).")";
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+
+        // Conversia se aplica acum si array-urilor. Inainte statea in ramura
+        // "nu e array", deci pe cazul obisnuit nu rula niciodata.
+        $id = array_values(array_filter(array_map('intval', $id), function ($v) {
+            return $v > 0;
+        }));
+
+        if (!$id) {
+            return false;
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "ndata set del = 1, viewed = 1 WHERE id IN(" . implode(',', $id) . ") AND uid = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
