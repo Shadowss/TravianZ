@@ -111,7 +111,11 @@ if($_GET['aid']) {
 
 .members-table,.mini-table{width:100%;border-collapse:collapse;font-size:12px;}
 .members-table th,.mini-table th{background:#f0f0f0;padding:7px;border:1px solid #ddd;text-align:left;font-weight:bold;color:#333;}
-.members-table td,.mini-table td{padding:6px;border:1px solid #eee;}
+/* Culoarea era mostenita din tema intunecata a panoului - gri deschis pe
+   fundalul alb al cardului, practic ilizibil. O fixam explicit. */
+.members-table td,.mini-table td{padding:6px;border:1px solid #eee;color:#2b2b2b;}
+.mini-table td a{color:#1f6fb2;}
+.mini-table tr:hover td{background:#f7f9fc;}
 .members-table tr:hover{background:#f9fff0;}
 .members-table td.ra{width:30px;text-align:center;color:#888;}
 .members-table td.on{width:24px;text-align:center;}
@@ -237,7 +241,24 @@ if($_GET['aid']) {
             $sql = "SELECT * FROM ".TB_PREFIX."ali_log WHERE aid = $aid ORDER BY date DESC LIMIT 50";
             $result = mysqli_query($GLOBALS["link"], $sql);
             while($row = mysqli_fetch_assoc($result)){
+                /**
+                 * Noutatile se pastreaza in baza de date ca simboluri, nu ca text:
+                 *     {{MSG_NEWS_JOINED|%3Ca%20href%3D...}}
+                 * ca sa poata fi afisate in limba fiecarui cititor.
+                 *
+                 * BUG REPARAT: aici lipsea extinderea, deci se afisa simbolul brut.
+                 * Iar rescrierea linkurilor se facea INAINTE de extindere, cand ele
+                 * erau inca ascunse (codificate URL) in argumentele simbolului -
+                 * deci nu prindea nimic.
+                 *
+                 * Ordinea corecta: intai extindem, apoi rescriem linkurile.
+                 */
                 $comment = html_entity_decode($row['comment']);
+
+                if (function_exists('tz_expand_report')) {
+                    $comment = tz_expand_report($comment);
+                }
+
                 $comment = preg_replace('/<a href="spieler\.php\?uid=(\d+)">([^<]+)<\/a>/i', '<a href="admin.php?p=player&uid=$1">$2</a>', $comment);
                 $comment = strip_tags($comment, '<a>');
                 echo '<tr><td>'.$comment.'</td><td>'.date('d.m.Y H:i', $row['date']).'</td></tr>';

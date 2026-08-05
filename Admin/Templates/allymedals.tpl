@@ -23,18 +23,20 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
 
 ?>
 <style>
-.medal-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui;margin-bottom:12px}
-.medal-head{background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;color:#fff !important;padding:6px 10px !important;font-size:13px}
-.medal-table{width:100%;border-collapse:collapse}
-.medal-table th{background:#f8fafc;padding:7px 6px;font-size:11px;color:#64748b;text-transform:uppercase;font-weight:600;border-bottom:1px solid #e5e7eb;text-align:center}
-.medal-table td{padding:8px 6px;font-size:12.5px;text-align:center;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-.medal-table tr:last-child td{border-bottom:0}
-.medal-table img{width:28px;height:36px;display:block;margin:0 auto;border-radius:3px}
-.medal-del{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:#fef2f2;border-radius:5px;color:#dc2626;border:0;cursor:pointer}
-.medal-del:hover{background:#fee2e2}
-.medal-del svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
-.medal-empty{padding:20px;text-align:center;color:#94a3b8;font-size:13px}
-.medal-avg{background:#f8fafc;font-weight:600;color:#0f172a}
+.medal-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui;margin-bottom:12px;}
+.medal-head{background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;color:#fff !important;padding:6px 10px !important;font-size:13px;}
+.medal-table{width:100%;border-collapse:collapse;}
+.medal-table th{background:#f8fafc;padding:7px 6px;font-size:11px;color:#000 !important;text-transform:uppercase;font-weight:600;border-bottom:1px solid #e5e7eb;text-align:center;}
+.medal-table td{padding:8px 6px;font-size:12.5px;text-align:center;border-bottom:1px solid #f1f5f9;vertical-align:middle;color:#000 !important;}
+.medal-table td a{color:#000 !important;}
+.medal-table tr:last-child td{border-bottom:0;}
+.medal-table img{width:28px;height:36px;display:block;margin:0 auto;border-radius:3px;}
+.medal-del{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:#fef2f2;border-radius:5px;color:#dc2626;border:0;cursor:pointer;}
+.medal-del:hover{background:#fee2e2;}
+.medal-del svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+.medal-empty{padding:20px;text-align:center;color:#000 !important;font-size:13px;}
+.medal-avg{background:#f8fafc;font-weight:600;color:#000 !important;}
+.medal-avg td{color:#000 !important;}
 </style>
 
 <div class="medal-card">
