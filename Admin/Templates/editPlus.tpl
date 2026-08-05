@@ -26,17 +26,19 @@ if($id){
 <style>
 .plus-wrap{max-width:900px;margin:0 auto;font-family:Verdana,Arial;}
 .plus-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
-.plus-head h2{margin:0;font-size:20px;}.plus-head h2 a{color:#fff;}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.card h3{margin:0;padding:10px 14px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;text-transform:uppercase;color:#374151;}
+.plus-head h2{margin:0;font-size:20px;}
+.plus-head h2 a{color:#fff;}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);color:#000;}
+.card *{color:#000 !important;}
+.card h3{margin:0;padding:10px 14px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;text-transform:uppercase;}
 .card.body{padding:14px;}
-.info-box{background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:10px;font-size:12px;color:#92400e;margin-bottom:12px;}
-
+.info-box{background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:10px;font-size:12px;color:#000 !important;margin-bottom:12px;}
 /* NOU: grid frumos pentru bonusuri active */
 .active-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;}
 .active-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px;text-align:center;}
-.active-item.name{font-size:12px;font-weight:600;color:#334155;margin-bottom:4px;}
-.active-item.time{font-size:13px;font-weight:bold;color:#0f172a;}
+.active-item *{color:#000 !important;}
+.active-item.name{font-size:12px;font-weight:600;margin-bottom:4px;}
+.active-item.time{font-size:13px;font-weight:bold;}
 .active-item.icon{font-size:20px;margin-bottom:4px;}
 .active-item.plus{border-color:#fbbf24;background:#fffbeb;}
 .active-item.wood{border-color:#16a34a;background:#f0fdf4;}
@@ -44,18 +46,17 @@ if($id){
 .active-item.iron{border-color:#64748b;background:#f8fafc;}
 .active-item.crop{border-color:#eab308;background:#fefce8;}
 .active-item.none{opacity:.5;}
-
 .bonus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
-.bonus-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center;transition:.2s;}
+.bonus-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center;transition:.2s;color:#000;}
+.bonus-item *{color:#000 !important;}
 .bonus-item.icon{font-size:26px;}
-.bonus-item input{width:70px;text-align:center;padding:5px;margin-top:6px;border:1px solid #cbd5e1;border-radius:4px;font-weight:bold;}
+.bonus-item input{width:70px;text-align:center;padding:5px;margin-top:6px;border:1px solid #cbd5e1;border-radius:4px;font-weight:bold;color:#000 !important;}
 .bonus-item input:focus{border-color:#f59e0b;outline:none;box-shadow:0 0 0 2px rgba(245,158,11,.2);}
-
 /* BUTOANE CA LA HERO */
 .actions{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb;}
-.btn-back{background:#f3f4f6;border:1px solid #d1d5db;color:#16a34a;padding:9px 18px;border-radius:5px;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.btn-back{background:#f3f4f6;border:1px solid #d1d5db;color:#16a34a !important;padding:9px 18px;border-radius:5px;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
 .btn-back:hover{background:#e5e7eb;}
-.btn-save{background:linear-gradient(#22c55e,#16a34a);border:1px solid #15803d;color:#fff;padding:9px 20px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 1px 2px rgba(0,0,0,.1);}
+.btn-save{background:linear-gradient(#22c55e,#16a34a);border:1px solid #15803d;color:#fff !important;padding:9px 20px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 1px 2px rgba(0,0,0,.1);}
 .btn-save:hover{filter:brightness(1.05);}
 </style>
 
