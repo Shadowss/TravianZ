@@ -1,11 +1,21 @@
 <?php
+
 #################################################################################
-#  Refactor incremental SAFE - Report Loader (9.tpl)
-#  - Added basic input validation
-#  - Prevents undefined index warnings
-#  - PHP 5.6+ / 7+ compatible
-#  - Logic preserved 100%
-#  - Minimal safe hardening (no behavior change)
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 9.tpl                                                     ##
+##  Type           : Report Loader - Archived Report Dispatcher                ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // ======================== SAFE INPUT ========================

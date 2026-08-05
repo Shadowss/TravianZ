@@ -1,10 +1,21 @@
 <?php
+
 #################################################################################
-#  Refactor incremental SAFE - Report View (3.tpl)
-#  - Performance optimization (DB call caching)
-#  - PHP 5.6+ / 7+ compatible
-#  - Logic unchanged (100% safe)
-#  - Reduced redundant queries
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 3.tpl                                                     ##
+##  Type           : Battle Report - No Troops Returned                        ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));

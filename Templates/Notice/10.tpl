@@ -1,10 +1,21 @@
 <?php
+
 #################################################################################
-#  Refactor incremental SAFE - Report View (10.tpl)
-#  - Eliminates redundant DB calls (cached)
-#  - PHP 5.6+ / 7+ compatible
-#  - Logic unchanged (100% safe)
-#  - Improved readability + minor performance gain
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 10.tpl                                                    ##
+##  Type           : Trade Report - Merchant Delivery                          ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));

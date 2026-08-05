@@ -1,9 +1,21 @@
 <?php
+
 #################################################################################
-#  Settler reports (24.tpl) - issue #178
-#  Handles ntype 24 (new village founded) and ntype 25 (valley occupied).
-#  Title is stored in English and localized at display via tz_loc_topic().
-#  Body is built from localized constants + coordinates stored in `data`.
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 24.tpl                                                    ##
+##  Type           : Settler Report - New Village / Oasis                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $ntype  = (int)($message->readingNotice['ntype'] ?? 24);

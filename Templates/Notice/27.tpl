@@ -1,11 +1,21 @@
 <?php
+
 #################################################################################
-#  Hero auction report (27.tpl) - T4 hero port, Phase 4                         #
-#  Handles ntype 27. Payload (ndata.data, query-string):                        #
-#     role=winner&itemid=71&qty=1&price=120&refund=30                           #
-#     role=seller&itemid=71&qty=1&price=120&fee=12                              #
-#     role=seller&expired=1&itemid=71&qty=1                                     #
-#  Same defensive-lang conventions as 26.tpl.                                   #
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 27.tpl                                                    ##
+##  Type           : Hero Report - Auction Result                              ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 if (!function_exists('tz_hero_auc')) {

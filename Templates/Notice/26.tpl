@@ -1,15 +1,21 @@
 <?php
+
 #################################################################################
-#  Hero adventure report (26.tpl) - T4 hero port, Phase 1                       #
-#  Handles ntype 26. The reward payload is stored in ndata.data as a            #
-#  query-string, e.g.:                                                          #
-#     difficulty=1&exp=22&silver=80&wood=300&clay=0&iron=450&crop=120&hp=18     #
-#     &item=HERO_ITEM_OINTMENT&itemqty=2                                        #
-#  Any missing key simply renders as 0 / hidden, so partial payloads are safe.  #
-#                                                                               #
-#  Lang constants (HERO_ADV_*, HERO_ITEM_*) arrive in the Phase 6 lang pass;    #
-#  the tz() helper below falls back to a readable literal until then so this    #
-#  template never emits "Undefined constant" before the rest of the port lands. #
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 26.tpl                                                    ##
+##  Type           : Hero Report - Adventure Result                            ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // Tiny local fallback so this file is self-contained in Phase 1.

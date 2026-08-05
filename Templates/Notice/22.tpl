@@ -1,10 +1,21 @@
 <?php
+
 #################################################################################
-#  Refactor incremental SAFE - Report View (22.tpl)
-#  - Cached DB calls (performance improvement)
-#  - PHP 5.6+ / 7+ compatible
-#  - Logic preserved 100%
-#  - Safer handling for event type + arrays
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : 22.tpl                                                    ##
+##  Type           : Festive Report - Holiday / Visit Greeting                 ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 $dataarray = array_map('tz_expand_report', explode(",", $message->readingNotice['data']));
@@ -19,10 +30,12 @@ $targetId   = $dataarray[2];
 $type       = isset($dataarray[15]) ? (int)$dataarray[15] : 0;
 
 // CACHE DB CALLS (reduce repeated queries)
-$attackerName = $database->getUserField($attackerId, "username", 0);
+$attackerName = htmlspecialchars(
+    (string) $database->getUserField($attackerId, "username", 0), ENT_QUOTES, 'UTF-8');
 $attackerUid  = $database->getUserField($attackerId, "id", 0);
 
-$targetName = $database->getUserField($targetId, "username", 0);
+$targetName = htmlspecialchars(
+    (string) $database->getUserField($targetId, "username", 0), ENT_QUOTES, 'UTF-8');
 
 // ======================== MESSAGE BUILD ========================
 if ($type == 1) {
@@ -72,7 +85,14 @@ if ($type == 1) {
         <?php echo FROM_THE_VILL; ?>
 
         <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>">
-            <?php echo $database->getVillageField($dataarray[1], "name"); ?>
+            <?php
+                // Escapam si aici, nu doar la intrare: numele salvate INAINTE de
+                // validare pot contine deja HTML.
+                echo htmlspecialchars(
+                    (string) $database->getVillageField($dataarray[1], "name"),
+                    ENT_QUOTES, 'UTF-8'
+                );
+            ?>
         </a>
 
     </td>

@@ -262,6 +262,28 @@ class Profile {
         if (!isset($post['dname' . $i])) continue;
         $newName = trim($post['dname' . $i]);
         if ($newName === '') continue;
+
+        /**
+         * FIX SECURITATE (XSS stocat): numele satului nu era validat deloc.
+         * Un jucator putea sa-si numeasca satul "<script>...</script>", iar
+         * numele se afiseaza in rapoarte de lupta, pe harta si in listele de
+         * sate - deci codul se executa in browserul altor jucatori.
+         *
+         * Aceleasi reguli ca la numele de cont: litere, cifre, punct, liniuta,
+         * underscore si spatii simple. Fara caractere cu inteles in HTML.
+         */
+        if (function_exists('mb_strlen')) {
+            if (mb_strlen($newName, 'UTF-8') > 25) {
+                $newName = mb_substr($newName, 0, 25, 'UTF-8');
+            }
+        } elseif (strlen($newName) > 25) {
+            $newName = substr($newName, 0, 25);
+        }
+
+        if (!preg_match('/^[\p{L}\p{N}._-]+(?: [\p{L}\p{N}._-]+)*$/u', $newName)) {
+            continue;   // nume respins, satul isi pastreaza numele vechi
+        }
+
         $database->setVillageName($varray[$i]['wref'], $newName);
     }
 
