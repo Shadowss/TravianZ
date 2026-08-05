@@ -1,15 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        assignpost.tpl                                                 ##
-## Description: Assign alliance positions                                      ##
-## Improvements:                                                               ##
-##  - Safer output (XSS protection)                                            ##
-##  - Cleaner structure                                                       ##
-##  - Reduced inline logic clutter                                             ##
-##  - Consistent casting                                                       ##
+##  Filename       : assignpos.tpl                                             ##
+##  Type           : Alliance Assign Member Position                           ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // fallback alliance id

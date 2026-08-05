@@ -1,16 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        chgdiplo.tpl                                                   ##
-## Description: Alliance diplomacy system                                      ##
-## Improvements:                                                               ##
-##  - Cleaner structure                                                       ##
-##  - Reduced duplication                                                     ##
-##  - Fixed HTML form nesting issues                                          ##
-##  - Safer output (XSS protection)                                            ##
-##  - More stable loops                                                       ##
+##  Filename       : chgdiplo.tpl                                              ##
+##  Type           : Alliance Diplomacy Management                             ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // fallback alliance id

@@ -1,15 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        alli_menu.tpl                                                  ##
-## Description: Alliance menu navigation                                       ##
-## Improvements:                                                               ##
-##  - Reduced duplication                                                      ##
-##  - Safer input handling                                                     ##
-##  - Cleaner structure                                                        ##
-##  - Added comments                                                           ##
+##  Filename       : alli_menu.tpl                                             ##
+##  Type           : Alliance Navigation Menu                                  ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // Verifică dacă jucătorul este în alianța curentă

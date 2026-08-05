@@ -29,7 +29,13 @@ trait DatabaseForumQueries {
 	 * @return array Returns all user's shared forums
 	 */
 	
-	function getSharedForums($uid, $alliance){
+	function getSharedForums($uid, $alliance) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$uid = (int) $uid;
+		$alliance = (int) $alliance;
+
 		list($uid, $alliance) = $this->escape_input((int) $uid, (int) $alliance);
 		
 		$allianceForums = $confForums = $closedForums = [];
@@ -108,7 +114,13 @@ trait DatabaseForumQueries {
 	 * @return int Returns the total amount of the wanted forum
 	 */
 	
-	function countForums($forumArea, $ally){
+	function countForums($forumArea, $ally) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$forumArea = (int) $forumArea;
+		$ally = (int) $ally;
+
 		list($forumArea, $ally) = $this->escape_input((int) $forumArea, (int) $ally);
 		
 		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE ".($ally != -1 ? "alliance = $ally AND" : "")." forum_area = $forumArea";
@@ -118,6 +130,11 @@ trait DatabaseForumQueries {
 	
     // no need to refactor this method
 	function CheckForum($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_cat where alliance = $id";
@@ -127,6 +144,11 @@ trait DatabaseForumQueries {
 
     // no need to refactor this method
 	function CountCat($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT count(id) FROM " . TB_PREFIX . "forum_topic where cat = '$id'";
@@ -137,6 +159,11 @@ trait DatabaseForumQueries {
 
     // no need to refactor this method
 	function LastTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' order by post_date";
@@ -145,6 +172,11 @@ trait DatabaseForumQueries {
 	}
 
 	function CheckLastTopic($id, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
         // first of all, check if we should be using cache and whether the field
@@ -165,6 +197,11 @@ trait DatabaseForumQueries {
 	}
 
 	function CheckLastPost($id, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
         // first of all, check if we should be using cache and whether the field
@@ -185,6 +222,11 @@ trait DatabaseForumQueries {
 	}
 
 	function LastPost($id, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
         // first of all, check if we should be using cache and whether the field
@@ -201,6 +243,11 @@ trait DatabaseForumQueries {
 	}
 
 	function CountTopic($id, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
         // first of all, check if we should be using cache and whether the field
@@ -223,6 +270,11 @@ trait DatabaseForumQueries {
 
 	// no need to cache this method
 	function CountPost($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT count(id) FROM " . TB_PREFIX . "forum_post where topic = '$id'";
@@ -233,6 +285,12 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCat($id, $mode = 0) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+		$mode = (int) $mode;
+
         list($id, $mode) = $this->escape_input($id, $mode);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ".(!$mode ? "OR forum_area = 1" : "")." ORDER BY sorting DESC, id";
@@ -242,6 +300,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCatEdit($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_cat where id = '$id'";
@@ -251,6 +314,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCatAlliance($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id LIMIT 1";
@@ -261,6 +329,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCatName($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id LIMIT 1";
@@ -271,6 +344,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function CheckCatTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_topic where cat = $id";
@@ -280,6 +358,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function CheckResultEdit($alli) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$alli = (int) $alli;
+
         list($alli) = $this->escape_input($alli);
 
 		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_edit where alliance = $alli";
@@ -289,6 +372,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function CheckCloseTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT close from " . TB_PREFIX . "forum_topic where id = '$id' LIMIT 1";
@@ -298,6 +386,11 @@ trait DatabaseForumQueries {
 	}
 
 	function CheckEditRes($alli, $use_cache = true) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$alli = (int) $alli;
+
         list($alli) = $this->escape_input($alli);
 
         // first of all, check if we should be using cache and whether the field
@@ -315,6 +408,12 @@ trait DatabaseForumQueries {
 	}
 
 	function CreatResultEdit($alli, $result) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$alli = (int) $alli;
+		$result = (int) $result;
+
         list($alli, $result) = $this->escape_input($alli, $result);
 
 		$q = "INSERT into " . TB_PREFIX . "forum_edit values (0,'$alli','$result')";
@@ -323,6 +422,12 @@ trait DatabaseForumQueries {
 	}
 
 	function UpdateResultEdit($alli, $result) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$alli = (int) $alli;
+		$result = (int) $result;
+
         list($alli, $result) = $this->escape_input($alli, $result);
 
 		$date = time();
@@ -330,7 +435,15 @@ trait DatabaseForumQueries {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function MoveForum($id, $area, $ally, $mode){
+	function MoveForum($id, $area, $ally, $mode) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+		$area = (int) $area;
+		$ally = (int) $ally;
+		$mode = (int) $mode;
+
 		list($id, $area, $ally, $mode) = $this->escape_input((int) $id, (int) $area, (int) $ally, $mode);
 		
 		$q = "UPDATE
@@ -343,6 +456,12 @@ trait DatabaseForumQueries {
 	}
 	
 	function UpdateEditTopic($id, $title, $cat) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+		$cat = (int) $cat;
+
 	    list($id, $title, $cat) = $this->escape_input((int) $id, $title, $cat);
 
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set title = '$title', cat = '$cat' where id = $id";
@@ -350,6 +469,11 @@ trait DatabaseForumQueries {
 	}
 
 	function UpdateEditForum($id, $name, $des, $alliances, $users) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 		list($id, $name, $des, $alliances, $users) = $this->escape_input((int) $id, $name, $des, $alliances, $users);
 
 		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des', display_to_alliances = '$alliances', display_to_users = '$users' WHERE id = $id";
@@ -357,6 +481,12 @@ trait DatabaseForumQueries {
 	}
 
 	function StickTopic($id, $mode) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+		$mode = (int) $mode;
+
 	    list($id, $mode) = $this->escape_input((int) $id, (int) $mode);
 
 		$q = "UPDATE " . TB_PREFIX . "forum_topic SET stick = $mode WHERE id = $id";
@@ -365,6 +495,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCatTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' AND stick = '' ORDER BY post_date desc";
@@ -374,6 +509,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ForumCatTopicStick($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' AND stick = '1' ORDER BY post_date desc";
@@ -383,6 +523,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ShowTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where id = $id";
@@ -392,6 +537,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ShowPost($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where topic = '$id' ORDER BY id ASC";
@@ -401,6 +551,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
 	function ShowPostEdit($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where id = $id";
@@ -409,6 +564,13 @@ trait DatabaseForumQueries {
 	}
 
 	function CreatForum($owner, $alli, $name, $des, $area, $alliances, $users) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$owner = (int) $owner;
+		$alli = (int) $alli;
+		$area = (int) $area;
+
 		list($owner, $alli, $name, $des, $area, $alliances, $users) = $this->escape_input($owner, $alli, $name, $des, $area, $alliances, $users);
 
 		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0, 0,'$owner','$alli','$name','$des','$area','$alliances','$users')";
@@ -417,6 +579,14 @@ trait DatabaseForumQueries {
 	}
 
     function CreatTopic($title, $post, $cat, $owner, $alli, $ends) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$cat = (int) $cat;
+		$owner = (int) $owner;
+		$alli = (int) $alli;
+		$ends = (int) $ends;
+
         list($title, $post, $cat, $owner, $alli, $ends) = $this->escape_input($title, $post, (int) $cat, (int) $owner, (int) $alli, (int) $ends);
 
         $date = time();
@@ -430,6 +600,12 @@ trait DatabaseForumQueries {
 	*************************/
 
   function createSurvey($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+		$ends = (int) $ends;
+
         list($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends) = $this->escape_input($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends);
 
         $q = "INSERT into " . TB_PREFIX . "forum_survey (topic,title,option1,option2,option3,option4,option5,option6,option7,option8,ends) values ('$topic','$title','$option1','$option2','$option3','$option4','$option5','$option6','$option7','$option8','$ends')";
@@ -438,6 +614,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
   function getSurvey($topic) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+
       list($topic) = $this->escape_input((int) $topic);
 
     $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
@@ -447,6 +628,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
   function checkSurvey($topic) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+
       list($topic) = $this->escape_input((int) $topic);
 
       $q      = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_survey where topic = $topic";
@@ -460,6 +646,12 @@ trait DatabaseForumQueries {
   }
 
   function Vote($topic, $num, $text) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+		$num = (int) $num;
+
       list($topic, $num, $text) = $this->escape_input((int) $topic, (int) $num, $text);
 
       $q = "UPDATE " . TB_PREFIX . "forum_survey set vote".$num." = vote".$num." + 1, voted = '$text' where topic = ".$topic."";
@@ -468,6 +660,12 @@ trait DatabaseForumQueries {
 
   // no need to cache this method
   function checkVote($topic, $uid) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+		$uid = (int) $uid;
+
       list( $topic, $uid ) = $this->escape_input( (int) $topic, $uid );
 
       $q      = "SELECT voted FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
@@ -484,6 +682,11 @@ trait DatabaseForumQueries {
 
     // no need to cache this method
   function getVoteSum($topic) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$topic = (int) $topic;
+
       list( $topic ) = $this->escape_input( (int) $topic );
 
       $q      = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
@@ -504,6 +707,13 @@ trait DatabaseForumQueries {
 	*************************/
 
     function CreatPost($post, $tids, $owner, $fid2 = 0) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$tids = (int) $tids;
+		$owner = (int) $owner;
+		$fid2 = (int) $fid2;
+
         global $message, $session;
         list($post, $tids, $owner, $fid2) = $this->escape_input($post, (int) $tids, $owner, (int) $fid2);
 
@@ -546,6 +756,11 @@ trait DatabaseForumQueries {
     }
 
 	function UpdatePostDate($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
 	    list($id) = $this->escape_input((int) $id);
 
 		$date = time();
@@ -554,6 +769,11 @@ trait DatabaseForumQueries {
 	}
 
     function EditUpdateTopic($id, $post) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id, $post) = $this->escape_input((int) $id, $post);
 
         $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post' where id = $id";
@@ -562,6 +782,11 @@ trait DatabaseForumQueries {
     }
 
     function EditUpdatePost($id, $post) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id, $post) = $this->escape_input((int) $id, $post);
 
        	$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post' where id = $id";
@@ -569,6 +794,12 @@ trait DatabaseForumQueries {
     }
 
 	function LockTopic($id, $mode) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+		$mode = (int) $mode;
+
 	    list($id, $mode) = $this->escape_input((int) $id, $mode);
 
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set close = '$mode' where id = $id";
@@ -576,6 +807,11 @@ trait DatabaseForumQueries {
 	}
 
     function DeleteCat($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
         $qs = "DELETE from " . TB_PREFIX . "forum_cat where id = '$id'";
@@ -595,6 +831,11 @@ trait DatabaseForumQueries {
     }
 
 	function DeleteSurvey($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         if (!is_array($id)) {
             $id = [$id];
         }
@@ -608,6 +849,11 @@ trait DatabaseForumQueries {
     }
 
 	function DeleteTopic($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$qs = "DELETE from " . TB_PREFIX . "forum_topic where id = '$id'";
@@ -615,6 +861,11 @@ trait DatabaseForumQueries {
 	}
 
 	function DeletePost($id) {
+		// Identificatorii intra in SQL fara ghilimele ("where id = $id"),
+		// iar mysqli_real_escape_string nu protejeaza contextul numeric.
+		// Conversia la intreg e singura care opreste "5 OR 1=1".
+		$id = (int) $id;
+
         list($id) = $this->escape_input($id);
 
 		$q = "DELETE from " . TB_PREFIX . "forum_post where id = '$id'";

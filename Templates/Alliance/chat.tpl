@@ -1,16 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Incremental Refactor SAFE)                           ##
-## File:        chat.tpl                                                       ##
-## Description: Alliance chat (AJAX)                            			   ##
-## Improvements:                                                               ##
-##  - Input validation                                                         ##
-##  - XSS protection                                                           ##
-##  - Fixed invalid HTML structure                                             ##
-##  - Safer JavaScript (no string eval)                                        ##
-##  - Prevent empty / spam messages                                            ##
+##  Filename       : chat.tpl                                                  ##
+##  Type           : Alliance Internal Chat                                    ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // -------------------------------------------------

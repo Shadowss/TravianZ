@@ -1,15 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        allidesc.tpl                                                   ##
-## Description: Alliance description + medals + edit form                      ##
-## Improvements:                                                               ##
-##  - Reduced unnecessary loops                                               ##
-##  - Safer output (XSS protection)                                            ##
-##  - Cleaner structure                                                       ##
-##  - Medals switch simplified                                                ##
+##  Filename       : allidesc.tpl                                              ##
+##  Type           : Alliance Description Editor                               ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // fallback alliance id

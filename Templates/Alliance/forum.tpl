@@ -1,4 +1,23 @@
 <?php
+
+#################################################################################
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : forum.tpl                                                 ##
+##  Type           : Alliance Forum Board View                                 ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 // ###########################################################
 // # TRAVIANZ FORUM MODULE                                   #
 // # ------------------------------------------------------- #
@@ -15,9 +34,9 @@
  * ========================================================= */
 if (!isset($aid)) {
 	if (isset($_GET['fid']) && !empty($_GET['fid'])) {
-		$aid = $database->ForumCatAlliance($_GET['fid']);
+		$aid = $database->ForumCatAlliance((int) $_GET['fid']);
 	} else if (isset($_GET['fid2']) && !empty($_GET['fid2'])) {
-		$aid = $database->ForumCatAlliance($_GET['fid2']);
+		$aid = $database->ForumCatAlliance((int) $_GET['fid2']);
 	} else {
 		$aid = $session->alliance;
 	}
@@ -98,11 +117,11 @@ if (
 	isset($_POST['thema']) && !empty($_POST['thema']) &&
 	Alliance::canAct([
 		'aid' => $aid,
-		'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'],
+		'alliance' => ($topic = reset($database->ShowTopic((int) $_POST['tid'])))['alliance'],
 		'forum_perm' => $opt['opt5'],
 		'admin' => $_GET['admin'],
 		'owner' => $topic['owner'],
-		'forum_owner' => ($forumData = reset($database->ForumCatEdit($_POST['fid'])))['owner']
+		'forum_owner' => ($forumData = reset($database->ForumCatEdit((int) $_POST['fid'])))['owner']
 	], 1) &&
 	(
 		($forumData['forum_area'] != 1 &&
@@ -130,14 +149,14 @@ if (
 	isset($_POST['u1']) && !empty($_POST['u1']) &&
 	isset($_POST['u2']) && !empty($_POST['u2']) &&
 	(
-		($database->ForumCatAlliance($_POST['fid']) == $session->alliance && $opt['opt5'] == 1)
+		($database->ForumCatAlliance((int) $_POST['fid']) == $session->alliance && $opt['opt5'] == 1)
 		|| $session->access == ADMIN
 	)
 ) {
 
 	$forumViewable['alliances'] = $forumViewable['users'] = "";
 
-	$forumData = reset($database->ForumCatEdit($_POST['fid']));
+	$forumData = reset($database->ForumCatEdit((int) $_POST['fid']));
 
 	// visibility logic unchanged
 	if ($forumData['forum_area'] != 1) {
@@ -172,7 +191,7 @@ if (
 	!empty($_POST['thema']) && !empty($_POST['text']) && !empty($_POST['fid']) &&
 	(
 		(
-			($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance ||
+			($forumData = reset($database->ForumCatEdit((int) $_POST['fid'])))['alliance'] == $session->alliance ||
 			$forumData['forum_area'] == 1 ||
 			$alliance->isForumAccessible($_POST['fid'])
 		) &&
@@ -240,12 +259,12 @@ if (
 	!empty($_POST['text']) && !empty($_POST['tid']) && !empty($_POST['fid2']) &&
 	(
 		(
-			($forumData = reset($database->ForumCatEdit($_POST['fid2'])))['alliance'] == $session->alliance ||
+			($forumData = reset($database->ForumCatEdit((int) $_POST['fid2'])))['alliance'] == $session->alliance ||
 			$forumData['forum_area'] == 1 ||
 			$alliance->isForumAccessible($_POST['fid2'])
 		) &&
 		(
-			($forumData['forum_area'] != 3 && !reset($database->ShowTopic($_POST['tid']))['close'])
+			($forumData['forum_area'] != 3 && !reset($database->ShowTopic((int) $_POST['tid']))['close'])
 			|| ($forumData['forum_area'] == 3 && $opt['opt5'] == 1)
 		)
 	)
@@ -274,7 +293,7 @@ if (
 	isset($_POST['tid']) && !empty($_POST['tid']) &&
 	Alliance::canAct([
 		'aid' => $aid,
-		'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'],
+		'alliance' => ($topic = reset($database->ShowTopic((int) $_POST['tid'])))['alliance'],
 		'forum_perm' => $opt['opt5'],
 		'admin' => (!empty($_GET['admin']) ? $_GET['admin'] : ''),
 		'owner' => $topic['owner'],
@@ -303,7 +322,7 @@ if (
 	Alliance::canAct([
 		'aid' => $aid,
 		'alliance' => ($topic = reset($database->ShowTopic(
-			($post = reset($database->ShowPostEdit($_POST['pod'])))['topic']
+			($post = reset($database->ShowPostEdit((int) $_POST['pod'])))['topic']
 		)))['alliance'],
 		'forum_perm' => $opt['opt5'],
 		'owner' => $post['owner'],
@@ -343,13 +362,13 @@ if (
 	$_GET['admin'] == "pos" &&
 	isset($_GET['res'], $_GET['fid']) && !empty($_GET['fid']) &&
 	(
-		($database->ForumCatAlliance($_GET['fid']) == $session->alliance && $opt['opt5'] == 1) ||
-		($forumData = reset($database->ForumCatEdit($_GET['fid'])))['owner'] == $session->uid
+		($database->ForumCatAlliance((int) $_GET['fid']) == $session->alliance && $opt['opt5'] == 1) ||
+		($forumData = reset($database->ForumCatEdit((int) $_GET['fid'])))['owner'] == $session->uid
 		&& $session->access == ADMIN
 	)
 ) {
 
-	$database->moveForum($_GET['fid'], $forumData['forum_area'], $session->alliance, $_GET['res']);
+	$database->moveForum((int) $_GET['fid'], $forumData['forum_area'], $session->alliance, $_GET['res']);
 	$alliance->redirect($_GET);
 }
 
@@ -421,14 +440,14 @@ elseif (
 	isset($_GET['idf']) && !empty($_GET['idf']) &&
 	(
 		(
-			($database->ForumCatAlliance($_GET['idf']) == $session->alliance && $opt['opt5'] == 1) ||
-			($forumData = reset($database->ForumCatEdit($_GET['idf'])))['owner'] == $session->uid
+			($database->ForumCatAlliance((int) $_GET['idf']) == $session->alliance && $opt['opt5'] == 1) ||
+			($forumData = reset($database->ForumCatEdit((int) $_GET['idf'])))['owner'] == $session->uid
 		) ||
 		($forumData['alliance'] == 0 && $session->access == ADMIN)
 	)
 ) {
 
-	$database->DeleteCat($_GET['idf']);
+	$database->DeleteCat((int) $_GET['idf']);
 	$alliance->redirect($_GET);
 }
 
@@ -442,15 +461,15 @@ elseif (
 	!empty($_GET['pod']) && !empty($_GET['tid']) && !empty($_GET['fid2']) &&
 	Alliance::canAct([
 		'aid' => $aid,
-		'alliance' => reset($database->ShowTopic($_GET['tid']))['alliance'],
+		'alliance' => reset($database->ShowTopic((int) $_GET['tid']))['alliance'],
 		'forum_perm' => $opt['opt5'],
-		'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'],
+		'owner' => reset($database->ShowPostEdit((int) $_GET['pod']))['owner'],
 		'admin' => $_GET['admin'],
-		'forum_owner' => reset($database->ForumCatEdit($_GET['fid2']))['owner']
+		'forum_owner' => reset($database->ForumCatEdit((int) $_GET['fid2']))['owner']
 	], 1)
 ) {
 
-	$database->DeletePost($_GET['pod']);
+	$database->DeletePost((int) $_GET['pod']);
 
 	header("Location: allianz.php?s=2&fid2=".$_GET['fid2']."&tid=".$_GET['tid']);
 	exit;
@@ -467,11 +486,11 @@ elseif ($_GET['admin'] == "editpost" &&
 	!empty($_GET['pod']) && !empty($_GET['tid']) && !empty($_GET['fid']) &&
 	Alliance::canAct([
 		'aid' => $aid,
-		'alliance' => reset($database->ShowTopic($_GET['tid']))['alliance'],
+		'alliance' => reset($database->ShowTopic((int) $_GET['tid']))['alliance'],
 		'forum_perm' => $opt['opt5'],
-		'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'],
+		'owner' => reset($database->ShowPostEdit((int) $_GET['pod']))['owner'],
 		'admin' => $_GET['admin'],
-		'forum_owner' => reset($database->ForumCatEdit($_GET['fid']))['owner']
+		'forum_owner' => reset($database->ForumCatEdit((int) $_GET['fid']))['owner']
 	], 1)
 ) include("Forum/forum_10.tpl");
 

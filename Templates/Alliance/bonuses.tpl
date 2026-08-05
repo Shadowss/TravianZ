@@ -1,10 +1,21 @@
 <?php
+
 #################################################################################
-##  Bonusuri de alianta (port T4)                                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-##  Membrii doneaza resurse, alianta deblocheaza patru bonusuri de cate cinci   ##
-##  niveluri. Toata logica sta in GameEngine/AllianceBonus.php; aici doar       ##
-##  afisam starea si preluam formularul de donatie.                            ##
+##  Filename       : bonuses.tpl                                               ##
+##  Type           : Alliance Bonuses and Donations                            ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 if (!class_exists('AllianceBonus')) {

@@ -1,17 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        changepos.tpl                                                  ##
-## Description: Alliance member permissions                                    ##
-## Improvements:                                                               ##
-##  - Fixed PHP 5.3 compatibility (no [] arrays)                               ##
-##  - Removed invalid array syntax                                             ##
-##  - Input validation & casting                                               ##
-##  - XSS protection                                                           ##
-##  - Cleaner checkbox rendering                                               ##
-## - Allow leader to edit own rank only 									   ##
+##  Filename       : changepos.tpl                                             ##
+##  Type           : Alliance Edit Member Position                             ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // secure input

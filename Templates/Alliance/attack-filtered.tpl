@@ -1,16 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        attack-filtered.tpl                                            ##
-## Description: Attack / report filtering                                      ##
-## Improvements:                                                               ##
-##  - Secure GET handling                                                      ##
-##  - Safer SQL parameters (cast only)                                         ##
-##  - Reduced duplicated conditions                                            ##
-##  - Cleaner rendering                                                        ##
-##  - XSS protection                                                           ##
+##  Filename       : attack-filtered.tpl                                       ##
+##  Type           : Alliance Incoming Attacks (filtered)                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // filter type (secure cast)

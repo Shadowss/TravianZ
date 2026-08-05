@@ -1,14 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Incremental Refactor SAFE)                           ##
-## File:        medal.php                                                      ##
-## Fixes:                                                                       ##
-##  - FIX broken tooltip (escaping JS/HTML)                                    ##
-##  - Removed newline issues                                                   ##
-##  - Safer string handling                                                    ##
-##  - Reduced duplication (safe)                                               ##
+##  Filename       : medal.php                                                 ##
+##  Type           : Alliance Medals Display                                   ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // -------------------------------------------------

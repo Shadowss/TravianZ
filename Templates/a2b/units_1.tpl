@@ -1,104 +1,29 @@
-<h1><?php echo SEND_TROOPS; ?></h1>
+<?php
 
-<form method="POST" name="snd" action="a2b.php"><input name="timestamp" value="1278280730" type="hidden"> <input name="timestamp_checksum" value="597fa8" type="hidden"> <input name="b" value="1" type="hidden">
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : units_1.tpl                                			   ##
+##  Type           : Rally Point Troop Selection (Romans)                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
 
+/**
+ * Trupele tribului 1 (Romans): u1..u10.
+ *
+ * Formularul e identic pentru toate triburile, difera doar blocul de unitati,
+ * asa ca traieste intr-un singur loc. Fisierul acesta ramane doar ca a2b.php
+ * sa poata include in continuare "units_" . $session->tribe . ".tpl".
+ */
 
-		<table id="troops" cellpadding="1" cellspacing="1">
-	<tbody><tr>
-		<td class="line-first column-first large"><img class="unit u1" src="img/x.gif" title="<?php echo U1; ?>" onclick="document.snd.t1.value=''; return false;" alt="<?php echo U1; ?>"> <input class="text" <?php if ($village->unitarray['u1']<=0) {echo ' disabled="disabled"';}?> name="t1" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u1']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t1.value=".$village->unitarray['u1']."; return false;\">(".$village->unitarray['u1'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-		
-        <td class="line-first large"><img class="unit u4" src="img/x.gif" title="<?php echo U4; ?>" alt="<?php echo U4; ?>"> <input class="text" <?php if ($village->unitarray['u4']<=0) {echo ' disabled="disabled"';}?> name="t4" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u4']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t4.value=".$village->unitarray['u4']."; return false;\">(".$village->unitarray['u4'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-        <td class="line-first regular"><img class="unit u7" src="img/x.gif" title="<?php echo U7; ?>" alt="<?php echo U7; ?>"> <input class="text" <?php if ($village->unitarray['u7']<=0) {echo ' disabled="disabled"';}?> name="t7" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u7']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t7.value=".$village->unitarray['u7']."; return false;\">(".$village->unitarray['u7'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-
-		
-        <td class="line-first column-last small"><img class="unit u9" src="img/x.gif" title="<?php echo U9; ?>" alt="<?php echo U9; ?>"> <input class="text" <?php if ($village->unitarray['u9']<=0) {echo ' disabled="disabled"';}?> name="t9" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u9']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t9.value=".$village->unitarray['u9']."; return false;\">(".$village->unitarray['u9'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-	</tr>
-	<tr>
-		<td class="column-first large"><img class="unit u2" src="img/x.gif" title="<?php echo U2; ?>" alt="<?php echo U2; ?>"> <input class="text" <?php if ($village->unitarray['u2']<=0) {echo ' disabled="disabled"';}?> name="t2" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u2']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t2.value=".$village->unitarray['u2']."; return false;\">(".$village->unitarray['u2'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-
-		<td class="large"><img class="unit u5" src="img/x.gif" title="<?php echo U5; ?>" alt="<?php echo U5; ?>"> <input class="text" <?php if ($village->unitarray['u5']<=0) {echo ' disabled="disabled"';}?> name="t5" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u5']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t5.value=".$village->unitarray['u5']."; return false;\">(".$village->unitarray['u5'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-		<td class="regular"><img class="unit u8" src="img/x.gif" title="<?php echo U8; ?>" alt="<?php echo U8; ?>"> <input class="text" <?php if ($village->unitarray['u8']<=0) {echo ' disabled="disabled"';}?> name="t8" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u8']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t8.value=".$village->unitarray['u8']."; return false;\">(".$village->unitarray['u8'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-		<td class="column-last small"><img class="unit u10" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>"> <input class="text" <?php if ($village->unitarray['u10']<=0) {echo ' disabled="disabled"';}?> name="t10" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u10']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t10.value=".$village->unitarray['u10']."; return false;\">(".$village->unitarray['u10'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-	</tr>
-	<tr>
-		<td class="line-last column-first large"><img class="unit u3" src="img/x.gif" title="<?php echo U3; ?>" alt="<?php echo U3; ?>"> <input class="text" <?php if ($village->unitarray['u3']<=0) {echo ' disabled="disabled"';}?> name="t3" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u3']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t3.value=".$village->unitarray['u3']."; return false;\">(".$village->unitarray['u3'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-		<td class="line-last large"><img class="unit u6" src="img/x.gif" title="<?php echo U6; ?>" alt="<?php echo U6; ?>"> <input class="text" <?php if ($village->unitarray['u6']<=0) {echo ' disabled="disabled"';}?> name="t6" value="" maxlength="6" type="text">
-		<?php 
-        if ($village->unitarray['u6']>0){
-        	echo "<a href=\"#\" onclick=\"document.snd.t6.value=".$village->unitarray['u6']."; return false;\">(".$village->unitarray['u6'].")</a></td>";
-        }else{ 
-       		echo  "<span class=\"none\">(0)</span></td>";
-		}
-        ?>
-		<td class="line-last regular"><?php 
-        if ($village->unitarray['hero']>0){
-        echo "<img class=\"unit uhero\" src=\"img/x.gif\" title=\"Hero\" alt=\"Hero\"> <input class=\"text\" name=\"t11\" value=\"\" maxlength=\"6\" type=\"text\">   ";
-            echo "<a href=\"#\" onclick=\"document.snd.t11.value=".$village->unitarray['hero']."; return false;\">(".$village->unitarray['hero'].")</a></td>";
-        }
-        ?></td>
-			<td class="line-last column-last"></td>		</tr>
-</tbody></table>
-
+include("Templates/a2b/units_common.tpl");

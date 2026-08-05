@@ -1,16 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        attacks.tpl                                                    ##
-## Description: Alliance military events                                       ##
-## Improvements:                                                               ##
-##  - Secure GET handling                                                      ##
-##  - Reduced duplicated logic                                                 ##
-##  - Cleaner SQL usage                                                        ##
-##  - Safer output (XSS protection)                                            ##
-##  - Simplified condition branches                                             ##
+##  Filename       : attacks.tpl                                               ##
+##  Type           : Alliance Incoming Attacks Overview                        ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // fallback alliance id

@@ -1,16 +1,21 @@
 <?php
+
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+##                -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-               ##
 ## --------------------------------------------------------------------------- ##
-## Project:     TravianZ (Refactor incremental)                                ##
-## File:        alliance.tpl                                                   ##
-## Description: Alliance ranking table                                         ##
-## Improvements:                                                               ##
-##  - Safer input handling                                                     ##
-##  - Removed duplicate function calls                                         ##
-##  - Fixed variable overwrite ($ranking)                                      ##
-##  - Cleaner pagination logic                                                 ##
-##  - Added comments                                                           ##
+##  Filename       : alliance.tpl                                              ##
+##  Type           : Alliance Ranking List                                     ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // Validare search (poziția din ranking)
