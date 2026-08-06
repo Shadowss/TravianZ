@@ -6101,6 +6101,9 @@ div.village1 table#movements .a2, div.village1 table#movements .d2 {
 div.village1 table#movements .a3, div.village1 table#movements .d3 {
     color: #B500A3;
 }
+div.village1 table#movements .adv {
+    color: #0000FF;
+}
 div.village2 div#village_map div#levels div {
     font-family: Arial,Helvetica;
     font-size: 9px;
