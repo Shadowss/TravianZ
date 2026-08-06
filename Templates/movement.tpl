@@ -311,7 +311,7 @@ foreach ($movement20_0 as $receive) {
 }
 renderMovementRow(
     'adv_out',
-    'a2',
+    'adv',
     defined('HERO_ADV_MOV_OUT') ? HERO_ADV_MOV_OUT : 'Hero on an adventure',
     defined('HERO_ADV_MOV_SHORT') ? HERO_ADV_MOV_SHORT : 'Adventure',
     count($movement20_0),
