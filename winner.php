@@ -238,7 +238,7 @@ if ($winner) {
 					Best Regards,
 					<?php echo SERVER_NAME; ?> Team<br />
 					 <p style="text-align:center;font-size:12px;color:#777;">
-					(By: TravianZ team v8.3.5)</p>
+					(By: TravianZ team v11)</p>
 					</p>
 					<br /><br />
 					<div style="text-align: center"><a href="dorf1.php">&raquo; Continue</a></div>
