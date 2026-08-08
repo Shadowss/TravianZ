@@ -420,6 +420,30 @@ class HeroAdventure
                 $stmt->execute();
                 $stmt->close();
 
+                /**
+                 * Eroul trebuie scos si din units.hero, nu doar marcat mort in
+                 * tabela "hero". Altfel ramane vizibil in sat si in punctul de
+                 * adunare, desi Conacul il arata mort.
+                 *
+                 * Aceeasi scapare exista in KillMyHero(), reassignHero() si in
+                 * Battle::applyHeroBattleDamage() - toate reparate.
+                 */
+                $heroOwner = (int) $uid;
+
+                if ($heroOwner > 0) {
+                    mysqli_query($this->db,
+                        "UPDATE " . TB_PREFIX . "units u
+                           JOIN " . TB_PREFIX . "vdata v ON v.wref = u.vref
+                            SET u.hero = 0
+                          WHERE v.owner = " . $heroOwner . " AND u.hero > 0");
+
+                    mysqli_query($this->db,
+                        "UPDATE " . TB_PREFIX . "enforcement e
+                           JOIN " . TB_PREFIX . "vdata v ON v.wref = e.`from`
+                            SET e.hero = 0
+                          WHERE v.owner = " . $heroOwner . " AND e.hero > 0");
+                }
+
                 $payload = 'difficulty=' . (int) $data['difficulty'] . '&died=1&hp=' . $hpLoss;
                 $database->addNotice($uid, (int) $data['from'], 0, NTYPE_ADVENTURE_REPORT,
                     'Hero fell on an adventure', $payload, $now);
