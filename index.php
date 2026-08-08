@@ -132,7 +132,7 @@ AccessLogger::logRequest();
 
 									<td><?php
 
-											$return = mysqli_query($link, "SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe IN(1, 2, 3)");
+											$return = mysqli_query($link, "SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe IN(1, 2, 3, 6, 7, 8, 9)");
 											echo ($users = !empty($return) ? mysqli_fetch_assoc($return)['Total'] : 0);
 									?></td>
 								</tr>
@@ -146,7 +146,7 @@ AccessLogger::logRequest();
 
 									<td><?php
 
-									       $return = mysqli_query($link,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (3600*24))." AND tribe IN(1, 2, 3)");
+									       $return = mysqli_query($link,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (3600*24))." AND tribe IN(1, 2, 3, 6, 7, 8, 9)");
 									       echo !empty($return) ? mysqli_fetch_assoc($return)['Total'] : 0;
 
 									?></td>
@@ -161,7 +161,7 @@ AccessLogger::logRequest();
 
 									<td><?php
 
-										   $return = mysqli_query($link,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (60*10))." AND tribe IN(1, 2, 3)");
+										   $return = mysqli_query($link,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (60*10))." AND tribe IN(1, 2, 3, 6, 7, 8, 9)");
 										   echo ($online = !empty($return) ? mysqli_fetch_assoc($return)['Total'] : 0);
 
 									?></td>

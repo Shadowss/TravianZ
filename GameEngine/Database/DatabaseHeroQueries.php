@@ -135,11 +135,37 @@ trait DatabaseHeroQueries {
 	Function to Kill hero if not found
 	Made by: Shadow and brainiacX
 	***************************/
+    /**
+     * Marcheaza eroul ca mort.
+     *
+     * BUG REPARAT: se scria doar in tabela "hero". Coloana units.hero ramanea
+     * 1, deci eroul continua sa apara in sat, in dorf1 si in punctul de
+     * adunare, desi jocul il considera mort. Trebuie sters din AMBELE locuri.
+     *
+     * Stergem din units DOAR pentru satele jucatorului respectiv, ca sa nu
+     * atingem eroii altora aflati acolo ca intariri.
+     */
     function KillMyHero($id) {
         list( $id ) = $this->escape_input( (int) $id );
 
         $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0, health = 0 where uid = " . $id . " AND dead = 0";
-        return mysqli_query( $this->dblink, $q );
+        $ok = mysqli_query( $this->dblink, $q );
+
+        // scoatem eroul din satele jucatorului
+        $q2 = "UPDATE " . TB_PREFIX . "units u
+                 JOIN " . TB_PREFIX . "vdata v ON v.wref = u.vref
+                  SET u.hero = 0
+                WHERE v.owner = " . $id . " AND u.hero > 0";
+        mysqli_query( $this->dblink, $q2 );
+
+        // si din intaririle trimise altora
+        $q3 = "UPDATE " . TB_PREFIX . "enforcement e
+                 JOIN " . TB_PREFIX . "vdata v ON v.wref = e.`from`
+                  SET e.hero = 0
+                WHERE v.owner = " . $id . " AND e.hero > 0";
+        mysqli_query( $this->dblink, $q3 );
+
+        return $ok;
     }
 
 	/***************************
@@ -256,6 +282,13 @@ trait DatabaseHeroQueries {
 					hero.dead = 1, hero.health = 0, hero.wref = vdata.wref
 		      WHERE 
 					hero.wref = $wref";
-    	return mysqli_query($this->dblink, $q);
+    	$ok = mysqli_query($this->dblink, $q);
+
+		// Aceeasi problema ca la KillMyHero: fara asta, eroul ramanea vizibil in
+		// sat desi era marcat mort.
+		mysqli_query($this->dblink,
+			"UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = " . (int) $wref . " AND hero > 0");
+
+		return $ok;
     }
 }

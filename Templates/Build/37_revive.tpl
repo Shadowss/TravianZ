@@ -185,14 +185,20 @@ foreach ($heroes as $hero_datarow) {
     </table>
 		<?php
 	} elseif (!$reviving) {
-		if (in_array($hero_datarow['unit'], [1, 11, 21, 51, 61, 71, 81])) {
-			// basic unit of the tribe - available without research
-			echo $renderReviveRow($hero_datarow, $name, $wood, $clay, $iron, $crop, $training_time, $id);
-		} else {
-			if ($database->checkIfResearched($village->wid, 't' . $hero_datarow['unit']) != 0) {
-				echo $renderReviveRow($hero_datarow, $name, $wood, $clay, $iron, $crop, $training_time, $id);
-			}
-		}
+		/**
+		 * BUG REPARAT: invierea cerea ca unitatea EROULUI sa fie cercetata in
+		 * satul CURENT.
+		 *
+		 * Eroul e insa antrenat o singura data, in satul lui de origine, si se
+		 * poate muta oriunde. Daca murea intr-un sat care nu avea cercetata
+		 * acea unitate, butonul de inviere pur si simplu nu aparea - eroul
+		 * ramanea mort pentru totdeauna, desi satul avea Conacul.
+		 *
+		 * Cercetarea conteaza la ANTRENAREA unui erou nou, nu la invierea unuia
+		 * existent: acela a fost deja platit si antrenat. Singura conditie e
+		 * Conacul din satul unde se afla acum.
+		 */
+		echo $renderReviveRow($hero_datarow, $name, $wood, $clay, $iron, $crop, $training_time, $id);
 	}
 
 	if (isset($_GET['revive']) && $_GET['revive'] == 1 && isset($_GET['hid']) && $_GET['hid'] == $hero_datarow['heroid'] && $hero_datarow['inrevive'] == 0 && $hero_datarow['intraining'] == 0 && $hero_datarow['dead'] == 1) {
