@@ -1654,7 +1654,21 @@ class Battle {
         $damage_health = HeroBattleBonus::reduceDamage($reduceForUid, $damage_health);
     }
 
-    if ($hero_health <= $damage_health || $damage_health > 90) {
+    /**
+     * ARMATA NIMICITA -> EROUL MOARE.
+     *
+     * BUG REPARAT: armurile scad daunele cu o valoare fixa
+     * (HeroBattleBonus::reduceDamage), asa ca la o infrangere totala eroul
+     * putea coborî sub prag si supravietuia - se intorcea singur in sat, desi
+     * toata armata murise.
+     *
+     * Reducerea din armuri ramane valabila pentru lupte partiale, dar cand
+     * pierzi TOT (lossRatio = 1) eroul cade odata cu armata, indiferent de
+     * echipament.
+     */
+    $wipedOut = ((float) $lossRatio >= 1.0);
+
+    if ($wipedOut || $hero_health <= $damage_health || $damage_health > 90) {
 
         mysqli_query(
             $database->dblink,
@@ -1663,6 +1677,34 @@ class Battle {
              WHERE heroid = " . $hero_id . "
              LIMIT 1"
         );
+
+        /**
+         * BUG REPARAT: se scria doar in tabela "hero". Coloana units.hero
+         * ramanea 1, deci eroul aparea in continuare in sat si in punctul de
+         * adunare, desi Conacul il arata mort.
+         *
+         * Il scoatem din toate satele proprietarului si din intaririle lui.
+         */
+        $ownerRow = mysqli_fetch_assoc(mysqli_query(
+            $database->dblink,
+            "SELECT uid FROM " . TB_PREFIX . "hero WHERE heroid = " . $hero_id . " LIMIT 1"
+        ));
+
+        if ($ownerRow && (int) $ownerRow['uid'] > 0) {
+            $heroOwner = (int) $ownerRow['uid'];
+
+            mysqli_query($database->dblink,
+                "UPDATE " . TB_PREFIX . "units u
+                   JOIN " . TB_PREFIX . "vdata v ON v.wref = u.vref
+                    SET u.hero = 0
+                  WHERE v.owner = " . $heroOwner . " AND u.hero > 0");
+
+            mysqli_query($database->dblink,
+                "UPDATE " . TB_PREFIX . "enforcement e
+                   JOIN " . TB_PREFIX . "vdata v ON v.wref = e.`from`
+                    SET e.hero = 0
+                  WHERE v.owner = " . $heroOwner . " AND e.hero > 0");
+        }
 
         return 1;
     }
