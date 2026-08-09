@@ -701,9 +701,43 @@ class Battle {
     );
 
     /******************************************************************
+     * HERO DAMAGE — carry over on a recalculation
+     *
+     * applyHeroBattleDamage() WRITES to the hero table, so it must run
+     * exactly once per battle. When rams change the wall level, the caller
+     * replays the whole battle (AutomationBattleResolution::applyRamDamage()).
+     * On that second pass the "WHERE dead = 0" lookup no longer finds a hero
+     * who just died on the first pass: applyHeroBattleDamage() returns null
+     * and the hero casualty silently disappears from the result. The hero was
+     * then dead in the hero table but reported alive, t11 was never
+     * decremented and returnunitsComplete() put him back in the village
+     * (issue #372). Defender heroes were also charged their health damage
+     * twice.
+     *
+     * The caller passes the first pass result in $previousHeroOutcome so the
+     * verdict is carried over instead of being recomputed.
+     ******************************************************************/
+    $heroDamageAlreadyApplied = ($previousHeroOutcome !== null);
+
+    if ($heroDamageAlreadyApplied) {
+
+        if (isset($previousHeroOutcome['casualties_attacker'][11])) {
+            $result['casualties_attacker'][11] = $previousHeroOutcome['casualties_attacker'][11];
+        }
+
+        if (isset($previousHeroOutcome['deadherodef'])) {
+            $result['deadherodef'] = $previousHeroOutcome['deadherodef'];
+        }
+
+        if (isset($previousHeroOutcome['deadheroref'])) {
+            $result['deadheroref'] = $previousHeroOutcome['deadheroref'];
+        }
+    }
+
+    /******************************************************************
      * HERO DAMAGE (ATTACKER)
      ******************************************************************/
-    if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
+    if (!$heroDamageAlreadyApplied && !empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
 
         /**
          * A fost armata NIMICITA?
