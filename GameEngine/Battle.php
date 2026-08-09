@@ -484,6 +484,13 @@ class Battle {
 	Function to process Calculate Battle
 	(Phase 2: orchestrator — fiecare sectiune
 	a devenit un helper privat, mai jos)
+
+	$previousHeroOutcome: result of an earlier
+	pass over the SAME battle (rams changed the
+	wall level, so it is replayed). When set,
+	the hero damage is not applied a second
+	time — the first verdict is reused instead
+	(issue #372).
 	*****************************************/
 
 	function calculateBattle(
@@ -498,8 +505,9 @@ class Battle {
 		$AttackerID, $DefenderID,
 		$AttackerWref, $DefenderWref,
 		$conqureby,
-		$defReinforcements = null) {
-			
+		$defReinforcements = null,
+		$previousHeroOutcome = null) {
+
     global $database, $unitsbytype;
 
     /******************************************************************
@@ -693,27 +701,43 @@ class Battle {
     );
 
     /******************************************************************
-     * HERO DAMAGE (ATTACKER)
-     ******************************************************************/
-    /**
-     * URMARIRE TEMPORARA - se poate sterge dupa ce gasim cauza.
+     * HERO DAMAGE — carry over on a recalculation
      *
-     * Scrie in error_log de ce (nu) moare eroul. Doar cand atacatorul chiar a
-     * trimis un erou, ca sa nu umple logul.
-     */
-    if (!empty($Attacker['uhero'])) {
-        error_log(sprintf(
-            '[TravianZ][EROU] uid=%s heroid=%s health=%s | attUnits[hero]=%s | intra_in_bloc=%s | lossRatio=%s',
-            isset($AttackerID) ? $AttackerID : '?',
-            isset($atkhero['heroid']) ? $atkhero['heroid'] : 'NULL',
-            isset($atkhero['health']) ? $atkhero['health'] : 'NULL',
-            isset($units['Att_unit']['hero']) ? $units['Att_unit']['hero'] : 'NESETAT',
-            (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) ? 'DA' : 'NU',
-            isset($result[1]) ? $result[1] : '?'
-        ));
+     * applyHeroBattleDamage() WRITES to the hero table, so it must run
+     * exactly once per battle. When rams change the wall level, the caller
+     * replays the whole battle (AutomationBattleResolution::applyRamDamage()).
+     * On that second pass the "WHERE dead = 0" lookup no longer finds a hero
+     * who just died on the first pass: applyHeroBattleDamage() returns null
+     * and the hero casualty silently disappears from the result. The hero was
+     * then dead in the hero table but reported alive, t11 was never
+     * decremented and returnunitsComplete() put him back in the village
+     * (issue #372). Defender heroes were also charged their health damage
+     * twice.
+     *
+     * The caller passes the first pass result in $previousHeroOutcome so the
+     * verdict is carried over instead of being recomputed.
+     ******************************************************************/
+    $heroDamageAlreadyApplied = ($previousHeroOutcome !== null);
+
+    if ($heroDamageAlreadyApplied) {
+
+        if (isset($previousHeroOutcome['casualties_attacker'][11])) {
+            $result['casualties_attacker'][11] = $previousHeroOutcome['casualties_attacker'][11];
+        }
+
+        if (isset($previousHeroOutcome['deadherodef'])) {
+            $result['deadherodef'] = $previousHeroOutcome['deadherodef'];
+        }
+
+        if (isset($previousHeroOutcome['deadheroref'])) {
+            $result['deadheroref'] = $previousHeroOutcome['deadheroref'];
+        }
     }
 
-    if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
+    /******************************************************************
+     * HERO DAMAGE (ATTACKER)
+     ******************************************************************/
+    if (!$heroDamageAlreadyApplied && !empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
 
         /**
          * A fost armata NIMICITA?
@@ -752,11 +776,6 @@ class Battle {
             $armyWipedOut
         );
 
-        error_log(sprintf(
-            '[TravianZ][EROU] trimise=%d pierdute=%d armata_nimicita=%s | applyHeroBattleDamage=%s',
-            $sentTotal, $deadTotal, $armyWipedOut ? 'DA' : 'nu', var_export($dead, true)
-        ));
-
         if ($dead === 1) {
             $result['casualties_attacker'][11] = 1;
         }
@@ -765,7 +784,7 @@ class Battle {
     /******************************************************************
      * HERO DAMAGE (DEFENDER)
      ******************************************************************/
-    if (!empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
+    if (!$heroDamageAlreadyApplied && !empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
 
         $dead = $this->applyHeroBattleDamage($defenderhero['heroid'], $result[2]);
 
@@ -777,7 +796,7 @@ class Battle {
     /******************************************************************
      * HERO DAMAGE (DEFENDER + REINFORCEMENTS)
      ******************************************************************/
-    if (!empty($DefendersAll)) {
+    if (!$heroDamageAlreadyApplied && !empty($DefendersAll)) {
 
         $battleHeroesCache = [];
         $villageOwnerCache = [];
