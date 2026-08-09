@@ -85,7 +85,15 @@ trait DatabaseStatisticsQueries {
 
     // no need to cache this method
 	function getVRanking() {
-	    $q = "SELECT v.wref,v.name,v.owner,v.pop FROM " . TB_PREFIX . "vdata AS v," . TB_PREFIX . "users AS u WHERE v.owner=u.id AND u.tribe IN(1,2,3".(SHOW_NATARS ? ',5' : '').") AND v.wref != '' AND u.access<" . (INCLUDE_ADMIN ? "10" : "8");
+	    /**
+	     * BUG REPARAT: lista de triburi era 1,2,3 (+5 pentru Natari), adica
+	     * dinainte de adaugarea triburilor noi. Satele hunilor, egiptenilor,
+	     * spartanilor si vikingilor (6-9) NU apareau deloc in clasament -
+	     * jucatorii acelor triburi nu-si vedeau niciodata satele acolo.
+	     *
+	     * Aceeasi lista completa e folosita deja in winner.php.
+	     */
+	    $q = "SELECT v.wref,v.name,v.owner,v.pop FROM " . TB_PREFIX . "vdata AS v," . TB_PREFIX . "users AS u WHERE v.owner=u.id AND u.tribe IN(1,2,3,6,7,8,9".(SHOW_NATARS ? ',5' : '').") AND v.wref != '' AND u.access<" . (INCLUDE_ADMIN ? "10" : "8");
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}

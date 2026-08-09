@@ -87,7 +87,10 @@ trait AutomationAccountMaintenance {
         if(AUTO_DEL_INACTIVE) {
             $time = time() - UN_ACT_TIME;
 
-            $q = "INSERT INTO ".TB_PREFIX."deleting SELECT id, UNIX_TIMESTAMP() FROM ".TB_PREFIX."users WHERE timestamp < $time AND tribe IN(1, 2, 3)";
+            // BUG REPARAT: lista era 1,2,3 - conturile inactive ale triburilor noi
+            // (huni, egipteni, spartani, vikingi) nu se stergeau niciodata si
+            // ramaneau pe harta la nesfarsit.
+            $q = "INSERT INTO ".TB_PREFIX."deleting SELECT id, UNIX_TIMESTAMP() FROM ".TB_PREFIX."users WHERE timestamp < $time AND tribe IN(1, 2, 3, 6, 7, 8, 9)";
             $database->query($q);
         }
     }

@@ -430,7 +430,17 @@
 					$value['user'] = $GLOBALS['db']->getUserField($value['owner'], "username", 0);
 					$holder[] = $value;
 				}
-				$holder = $multisort->sorte($holder, "x", true, 2, "y", true, 2, "pop", false, 2);
+				/**
+				 * Clasamentul satelor se face dupa POPULATIE, nu dupa coordonate.
+				 *
+				 * Inainte se sorta "x" crescator, apoi "y", si abia la egalitate dupa
+				 * populatie - adica practic dupa pozitia pe harta. Toate celelalte
+				 * clasamente (jucatori, aliante, atac, aparare) sorteaza dupa valoare.
+				 *
+				 * Coordonatele raman ca departajare, ca ordinea sa fie stabila cand
+				 * doua sate au aceeasi populatie.
+				 */
+				$holder = $multisort->sorte($holder, "pop", false, 2, "x", true, 2, "y", true, 2);
 				$this->finalizeRankArray($holder);
 			}
 			

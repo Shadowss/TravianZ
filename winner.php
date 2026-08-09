@@ -160,16 +160,39 @@ if ($winner) {
     $row = mysqli_fetch_assoc($result);
 
     if ($row) {
+        /**
+         * BUG REPARAT: castigatorul se pastra in $username si $owner, dar mai
+         * jos se include Templates/menu.tpl, care face:
+         *     $username = $session->username;
+         * Adica numele castigatorului era inlocuit cu al jucatorului CONECTAT.
+         * De aceea fiecare vedea propriul nume ca "Winner of this era".
+         *
+         * Folosim nume proprii, pe care nicio alta bucata de sablon nu le
+         * atinge. Alianta se afisa corect fiindca $winningalliancetag nu se
+         * ciocnea cu nimic.
+         */
         $vref = $row['vref'];
         $winningvillagename = $row['village_name'];
-        $owner = $row['owner_id'];
+        $wwWinnerUid = (int) $row['owner_id'];
+        $wwWinnerName = $row['username'];
+        $owner = $wwWinnerUid;
         $username = $row['username'];
         $allianceid = $row['alliance_id'];
         $winningalliance = $row['alliance_name'];
         $winningalliancetag = $row['alliance_tag'];
         $finishconstruction = $row['ww_lastupdate'];
     } else {
-        $vref = 0;
+        // fara castigator: golim tot, ca sa nu se afiseze valori ramase din alt context
+        $vref                = 0;
+        $winningvillagename  = '';
+        $wwWinnerUid         = 0;
+        $wwWinnerName        = '';
+        $owner               = 0;
+        $username            = '';
+        $allianceid          = 0;
+        $winningalliance     = '';
+        $winningalliancetag  = '';
+        $finishconstruction  = 0;
     }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -224,8 +247,8 @@ if ($winner) {
 					laboured on throught the wintery eve, every wary of the countless armies marching to destroy their work, knowing that they raced against time and the greatest
 					threat that had ever faced the free people. Their tireless struggles were rewarded at <b><?php echo date('H:i:s', $finishconstruction); ?></b> on <b><?php echo date('d. M. Y', $finishconstruction); ?></b> after a
 					nameless worker laid the dinal stone in what will forever known as the greatest and most magnificent creation in all of history since the fall of the Natars<br />
-					Together with the alliance "<?php echo "<a href=\"allianz.php?aid=$allianceid\">$winningalliancetag</a>"; ?>", "<?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?>"
-					was the first to finish the Wonder of the World, using millions of resources whilst also protecting it with hundereds of thousands of brave defenders. It is therefore <b><?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?></b>
+					Together with the alliance "<?php echo "<a href=\"allianz.php?aid=$allianceid\">$winningalliancetag</a>"; ?>", "<?php echo "<a href=\"spieler.php?uid=$wwWinnerUid\">$wwWinnerName</a>"; ?>"
+					was the first to finish the Wonder of the World, using millions of resources whilst also protecting it with hundereds of thousands of brave defenders. It is therefore <b><?php echo "<a href=\"spieler.php?uid=$wwWinnerUid\">$wwWinnerName</a>"; ?></b>
 					who recieves the title "Winner of this era"!<br />
 					<center><h3 style="color:#f39c12;">👑 Top Players</h3></center>
 					"<a href="spieler.php?uid=<?php echo $datas[0]['userid']; ?>" title="Total Villages: <?php echo $datas[0]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[0]['totalpop']; ?>"><?php echo $datas[0]['username']; ?></a>" was the ruler over the largest personal empire, followed closely by "<a href="spieler.php?uid=<?php echo $datas[1]['userid']; ?>" title="Total Villages: <?php echo $datas[1]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[1]['totalpop']; ?>"><?php echo $datas[1]['username']; ?></a>" and "<a href="spieler.php?uid=<?php echo $datas[2]['userid']; ?>" title="Total Villages: <?php echo $datas[2]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[2]['totalpop']; ?>"><?php echo $datas[2]['username']; ?></a>".<br />
