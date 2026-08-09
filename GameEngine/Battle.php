@@ -697,12 +697,41 @@ class Battle {
      ******************************************************************/
     if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
 
+        /**
+         * A fost armata NIMICITA?
+         *
+         * Ne uitam la pierderile REALE, nu la $result[1]. Acela e un raport de
+         * PUTERE, si pe ramura in care atacatorul e considerat castigator poate
+         * iesi 0.9997 chiar daca toate unitatile au murit - pierderile se
+         * rotunjesc la intreg, raportul nu.
+         *
+         * Din cauza asta o verificare de tipul "$result[1] >= 1" nu se
+         * declansa niciodata in luptele reale.
+         */
+        $sentTotal = 0;
+        $deadTotal = 0;
+
+        for ($ci = $start; $ci <= $end; $ci++) {
+            // ATENTIE la indexare: unitatile trimise sunt cheiate dupa ID-ul
+            // real (ex. 61..70 la egipteni), dar computeCasualties() intoarce
+            // pierderile cheiate 1..10. Fara conversie, cele doua sume nu se
+            // refera la aceleasi unitati.
+            $slot = $ci - $start + 1;
+
+            $sentTotal += isset($units['Att_unit'][$ci]) ? (int) $units['Att_unit'][$ci] : 0;
+            $deadTotal += isset($result['casualties_attacker'][$slot])
+                ? (int) $result['casualties_attacker'][$slot] : 0;
+        }
+
+        $armyWipedOut = ($sentTotal > 0 && $deadTotal >= $sentTotal);
+
         $dead = $this->applyHeroBattleDamage(
             $atkhero['heroid'],
             $result[1],
             // T4 hero port (Phase 5): doar eroul ATACATOR beneficiaza de
             // reducerea de daune din armuri (comportament original pastrat)
-            $atkhero['uid'] ?? 0
+            $atkhero['uid'] ?? 0,
+            $armyWipedOut
         );
 
         if ($dead === 1) {
@@ -1623,7 +1652,7 @@ class Battle {
 	scazut cu daunele)
 	*****************************************/
 
-	private function applyHeroBattleDamage($hero_id, $lossRatio, $reduceForUid = null) {
+	private function applyHeroBattleDamage($hero_id, $lossRatio, $reduceForUid = null, $armyWipedOut = false) {
 
     global $database;
 
@@ -1663,12 +1692,10 @@ class Battle {
      * toata armata murise.
      *
      * Reducerea din armuri ramane valabila pentru lupte partiale, dar cand
-     * pierzi TOT (lossRatio = 1) eroul cade odata cu armata, indiferent de
-     * echipament.
+     * pierzi TOATE unitatile trimise eroul cade odata cu ele, indiferent de
+     * echipament. Decizia vine din pierderile reale, calculate de apelant.
      */
-    $wipedOut = ((float) $lossRatio >= 1.0);
-
-    if ($wipedOut || $hero_health <= $damage_health || $damage_health > 90) {
+    if ($armyWipedOut || $hero_health <= $damage_health || $damage_health > 90) {
 
         mysqli_query(
             $database->dblink,
