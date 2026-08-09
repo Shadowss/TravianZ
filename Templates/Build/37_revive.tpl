@@ -184,8 +184,13 @@ foreach ($heroes as $hero_datarow) {
             </tr>
     </table>
 		<?php
-	} elseif (!$reviving) {
+	} elseif (!$reviving && $hero_datarow['dead'] == 1) {
 		/**
+		 * Only a DEAD hero gets a revive row: $heroes holds every hero row of
+		 * the player, so without this guard a hero who is merely in training
+		 * was offered for revival as well (the action below is already gated
+		 * on dead == 1, so the button did nothing).
+		 *
 		 * BUG REPARAT: invierea cerea ca unitatea EROULUI sa fie cercetata in
 		 * satul CURENT.
 		 *

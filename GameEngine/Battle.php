@@ -484,6 +484,13 @@ class Battle {
 	Function to process Calculate Battle
 	(Phase 2: orchestrator — fiecare sectiune
 	a devenit un helper privat, mai jos)
+
+	$previousHeroOutcome: result of an earlier
+	pass over the SAME battle (rams changed the
+	wall level, so it is replayed). When set,
+	the hero damage is not applied a second
+	time — the first verdict is reused instead
+	(issue #372).
 	*****************************************/
 
 	function calculateBattle(
@@ -498,8 +505,9 @@ class Battle {
 		$AttackerID, $DefenderID,
 		$AttackerWref, $DefenderWref,
 		$conqureby,
-		$defReinforcements = null) {
-			
+		$defReinforcements = null,
+		$previousHeroOutcome = null) {
+
     global $database, $unitsbytype;
 
     /******************************************************************
@@ -742,7 +750,7 @@ class Battle {
     /******************************************************************
      * HERO DAMAGE (DEFENDER)
      ******************************************************************/
-    if (!empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
+    if (!$heroDamageAlreadyApplied && !empty($units['Def_unit']['hero']) && !empty($defenderhero['heroid'])) {
 
         $dead = $this->applyHeroBattleDamage($defenderhero['heroid'], $result[2]);
 
@@ -754,7 +762,7 @@ class Battle {
     /******************************************************************
      * HERO DAMAGE (DEFENDER + REINFORCEMENTS)
      ******************************************************************/
-    if (!empty($DefendersAll)) {
+    if (!$heroDamageAlreadyApplied && !empty($DefendersAll)) {
 
         $battleHeroesCache = [];
         $villageOwnerCache = [];

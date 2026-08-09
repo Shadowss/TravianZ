@@ -1477,7 +1477,8 @@ trait AutomationBattleResolution {
      * @param int    $walllevel  Current wall level.
      * @param int    $wallid     Wall building field id (40).
      * @param int    $ram_pic    Ram unit id (for the report fragment).
-     * @param array  $battlepart Battle result (provides the ram damage factors).
+     * @param array  $battlepart Battle result (provides the ram damage factors,
+     *                           and the hero verdict carried over to the recalculation).
      * @param array  $ctx        Battle context for the post-damage recalculation
      *                           (Attacker, Defender, tribes, populations, AB tech, ...).
      * @return array { battlepart: array (possibly recalculated), info_ram: string }
@@ -1510,7 +1511,12 @@ trait AutomationBattleResolution {
             //If the wall got damaged/destroyed during the attack
             //we need to recalculate the whole battle
             if($newLevel != $walllevel){
-                $battlepart = $battle->calculateBattle($ctx['Attacker'], $ctx['Defender'], $newLevel, $ctx['att_tribe'], $ctx['def_tribe'], $ctx['residence'], $ctx['attpop'], $ctx['defpop'], $ctx['type'], $ctx['def_ab'], $ctx['att_ab1'], $ctx['att_ab2'], $ctx['att_ab3'], $ctx['att_ab4'], $ctx['att_ab5'], $ctx['att_ab6'], $ctx['att_ab7'], $ctx['att_ab8'], $ctx['tblevel'], $ctx['stonemason'], $newLevel, 0, 0, 0, $ctx['AttackerID'], $ctx['DefenderID'], $ctx['AttackerWref'], $ctx['DefenderWref'], $ctx['conqureby'], $ctx['enforcementarray']);
+                // The heroes already took their damage during the first pass and
+                // it was written to the hero table, so the recalculation must not
+                // apply it again: it would look up living heroes only, miss the
+                // one who just died and drop him from the report (issue #372).
+                // The first verdict is handed over instead.
+                $battlepart = $battle->calculateBattle($ctx['Attacker'], $ctx['Defender'], $newLevel, $ctx['att_tribe'], $ctx['def_tribe'], $ctx['residence'], $ctx['attpop'], $ctx['defpop'], $ctx['type'], $ctx['def_ab'], $ctx['att_ab1'], $ctx['att_ab2'], $ctx['att_ab3'], $ctx['att_ab4'], $ctx['att_ab5'], $ctx['att_ab6'], $ctx['att_ab7'], $ctx['att_ab8'], $ctx['tblevel'], $ctx['stonemason'], $newLevel, 0, 0, 0, $ctx['AttackerID'], $ctx['DefenderID'], $ctx['AttackerWref'], $ctx['DefenderWref'], $ctx['conqureby'], $ctx['enforcementarray'], $battlepart);
             }
         }
 
