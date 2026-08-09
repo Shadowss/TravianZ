@@ -180,11 +180,24 @@ class Building {
 
     $wwBuildingProgress = $this->db->getBuildingByType($wid, 99);
 
-    if (!empty($wwBuildingProgress[0]['level'])) {
-        $queuedLevel = (int) $wwBuildingProgress[0]['level'];
+    /**
+     * BUG REPARAT: se citea doar PRIMUL job din coada ([0]).
+     *
+     * Maestrul constructor poate pune mai multe nivele deodata. Daca Minunea
+     * era la 48 si se comandau nivelele 49, 50 si 51, verificarea vedea doar
+     * primul job si credea ca nivelul cel mai mare e 49 - sub pragul de 50,
+     * deci accepta cu un singur plan. Nivelul 51 se construia fara al doilea
+     * plan al aliantei.
+     *
+     * Acum luam nivelul MAXIM din toata coada.
+     */
+    if (!empty($wwBuildingProgress)) {
+        foreach ($wwBuildingProgress as $wwJob) {
+            $queuedLevel = isset($wwJob['level']) ? (int) $wwJob['level'] : 0;
 
-        if ($queuedLevel > $wwHighestLevelFound) {
-            $wwHighestLevelFound = $queuedLevel;
+            if ($queuedLevel > $wwHighestLevelFound) {
+                $wwHighestLevelFound = $queuedLevel;
+            }
         }
     }
 
@@ -212,6 +225,9 @@ class Building {
 	$gid = tipul cladirii (bid), $fieldId = slotul (f1..f40, f99)
 	*****************************************/
 
+	/** Sloturi rezervate in satul Minunii (vezi si Templates/dorf2.tpl). */
+	const NATAR_RESERVED_SLOTS = array(25, 26, 29, 30, 33);
+
 	public function canProcess($gid, $fieldId) {
 
     // WW restriction early exit
@@ -233,6 +249,19 @@ class Building {
             ($fieldId >= 1 && $fieldId <= 18 && $gid >= 1 && $gid <= 4) ||
             ($fieldId >= 19 && $gid > 4)
         );
+
+    /**
+     * BUG REPARAT: satul Minunii are sloturi rezervate, pe care dorf2.tpl le
+     * ascunde. Ascunderea e insa doar vizuala: mergand pe un astfel de slot in
+     * alt sat si comutand apoi pe satul Minunii, cererea trecea si se putea
+     * construi acolo.
+     *
+     * Aceeasi lista ca in Templates/dorf2.tpl, verificata acum si pe server.
+     */
+    if ((int) $this->vil->natar === 1
+        && in_array((int) $fieldId, self::NATAR_RESERVED_SLOTS, true)) {
+        $isValidSlot = false;
+    }
 
     // Validare building existent
     $isValidFieldType =
