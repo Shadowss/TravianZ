@@ -148,7 +148,19 @@ $completed = isset($_GET['c']);
                             $orig = floor($resData[$i][1]);
                        ?>
                         <td class="sel">
-                            <input class="text" onkeyup="calculateRest();" name="m2[]" size="5" maxlength="7" value="<?php echo $val;?>" />
+                            <input class="text" onkeyup="calculateRest();" name="m2[]" size="5" maxlength="<?php
+                                /**
+                                 * BUG REPARAT: maxlength era fix 7, deci nu se putea
+                                 * scrie o suma de 8 cifre sau mai mult. Pe serverele
+                                 * rapide, depozitele trec usor de 10.000.000, asa ca
+                                 * schimbul devenea imposibil peste acel prag.
+                                 *
+                                 * Serverul limiteaza oricum la capacitatea depozitului
+                                 * (vezi Market::tradeResource), deci lungimea aici doar
+                                 * trebuie sa fie suficienta.
+                                 */
+                                echo max(7, strlen((string) (int) max($maxstore, $maxcrop)));
+                            ?>" value="<?php echo $val;?>" />
                             <input type="hidden" name="m1[]" value="<?php echo $orig;?>" />
                         </td>
                         <?php endfor;?>

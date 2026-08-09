@@ -695,24 +695,6 @@ class Battle {
     /******************************************************************
      * HERO DAMAGE (ATTACKER)
      ******************************************************************/
-    /**
-     * URMARIRE TEMPORARA - se poate sterge dupa ce gasim cauza.
-     *
-     * Scrie in error_log de ce (nu) moare eroul. Doar cand atacatorul chiar a
-     * trimis un erou, ca sa nu umple logul.
-     */
-    if (!empty($Attacker['uhero'])) {
-        error_log(sprintf(
-            '[TravianZ][EROU] uid=%s heroid=%s health=%s | attUnits[hero]=%s | intra_in_bloc=%s | lossRatio=%s',
-            isset($AttackerID) ? $AttackerID : '?',
-            isset($atkhero['heroid']) ? $atkhero['heroid'] : 'NULL',
-            isset($atkhero['health']) ? $atkhero['health'] : 'NULL',
-            isset($units['Att_unit']['hero']) ? $units['Att_unit']['hero'] : 'NESETAT',
-            (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) ? 'DA' : 'NU',
-            isset($result[1]) ? $result[1] : '?'
-        ));
-    }
-
     if (!empty($units['Att_unit']['hero']) && !empty($atkhero['heroid'])) {
 
         /**
@@ -751,11 +733,6 @@ class Battle {
             $atkhero['uid'] ?? 0,
             $armyWipedOut
         );
-
-        error_log(sprintf(
-            '[TravianZ][EROU] trimise=%d pierdute=%d armata_nimicita=%s | applyHeroBattleDamage=%s',
-            $sentTotal, $deadTotal, $armyWipedOut ? 'DA' : 'nu', var_export($dead, true)
-        ));
 
         if ($dead === 1) {
             $result['casualties_attacker'][11] = 1;
