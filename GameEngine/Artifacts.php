@@ -193,13 +193,6 @@ class Artifacts
 	 */
 
     NATARS_CAPITAL_BUILDINGS = [
-		// Resource fields: 4-4-4-6 layout (type 3), all at level 20.
-        "f1t" => 1, "f1" => 20, "f2t" => 4, "f2" => 20, "f3t" => 1, "f3" => 20,
-        "f4t" => 3, "f4" => 20, "f5t" => 2, "f5" => 20, "f6t" => 2, "f6" => 20,
-        "f7t" => 3, "f7" => 20, "f8t" => 4, "f8" => 20, "f9t" => 4, "f9" => 20,
-        "f10t" => 3, "f10" => 20, "f11t" => 3, "f11" => 20, "f12t" => 4, "f12" => 20,
-        "f13t" => 4, "f13" => 20, "f14t" => 1, "f14" => 20, "f15t" => 4, "f15" => 20,
-        "f16t" => 2, "f16" => 20, "f17t" => 1, "f17" => 20, "f18t" => 2, "f18" => 20,
 		// Town Hall, Great Warehouses (38), and Great Granaries (39), all at level 20.
 		// Building slots 25, 26, 29, 30, and 33 remain EMPTY, as they are reserved
 		// for World Wonder–related buildings.
