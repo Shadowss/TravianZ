@@ -170,7 +170,31 @@ if ($hour > 1759 || $hour < 500) {
 
         </div>
 
-        <!-- ===================== GOLD (MUTAT DIN RES.TPL - CERCUL VERDE) ===================== -->
+        <!-- ===================== HERO (CERCUL ROSU) ===================== -->
+        <?php
+        /**
+         * Componenta Hero: casa/craniu + inelul Health/Experience + aventuri
+         * + argint. Traieste in Templates/hero_header.tpl si se pozitioneaza
+         * absolut in interiorul lui #mtop (vezi css/hero_header.css).
+         *
+         * Cautam fisierul si relativ la Templates/, ca sa mearga si daca
+         * header.tpl ajunge sa fie inclus din alt director.
+         */
+        $tzHeroTplPath = '';
+
+        if (file_exists('Templates/hero_header.tpl')) {
+            $tzHeroTplPath = 'Templates/hero_header.tpl';
+        } elseif (file_exists(dirname(__FILE__) . '/hero_header.tpl')) {
+            $tzHeroTplPath = dirname(__FILE__) . '/hero_header.tpl';
+        }
+
+        if ($tzHeroTplPath !== '') {
+            include($tzHeroTplPath);
+        }
+        ?>
+        <!-- ===================== END HERO ===================== -->
+
+        <!-- ===================== GOLD (MUTAT IN DREPTUNGHIUL ALBASTRU) ===================== -->
         <?php
         /**
          * Gold display - mutat din res.tpl
@@ -298,10 +322,13 @@ if ($hour > 1759 || $hour < 500) {
 			display: inline-block;
 	}
 
-        /* GOLD IN CERCUL VERDE */
+        /* GOLD IN DREPTUNGHIUL ALBASTRU (RELOCARE_GOLD_LOCATIE_EROU.png)
+           Vechea pozitie era left:370px, adica exact cercul rosu - acolo sta
+           acum componenta Hero (#tzHeroBox), asa ca aurul s-a mutat la dreapta,
+           dupa butonul Plus si iconita day/night. */
         #goldHeader {
             position: absolute;
-            left: 370px; /* << AICI ESTE CERCUL VERDE - muta 370-400 daca e nevoie */
+            left: 630px; /* << DREPTUNGHIUL ALBASTRU - muta 620-680 daca e nevoie */
             /* Centrare pe verticala in bara gri: ancoram la mijloc si compensam
                inaltimea proprie. Asa ramane centrat si acum, cand sunt doua
                randuri (aur + argint), nu impins spre partea de jos. */

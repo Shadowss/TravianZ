@@ -29,7 +29,35 @@ AccessLogger::logRequest();
 
 if(isset($_GET['newdid'])){
     $_SESSION['wid'] = $_GET['newdid'];
-    header("Location: " . $_SERVER['PHP_SELF'].(isset($_GET['id']) ? '?id='.$_GET['id'] : (isset($_GET['gid']) ? '?gid='.$_GET['gid'] : '')));
+
+    /**
+     * Redirectul pastra doar id/gid, deci un link de forma
+     * "build.php?newdid=X&gid=37&t4tab=adventures" (folosit de componenta
+     * Hero din bara de sus, cand eroul e in alt sat decat cel privit)
+     * ajungea pe tab-ul implicit al Resedintei Eroului, nu pe Aventuri.
+     * Pastram acum si t4tab (lista alba) si parametrul "land" al oazelor.
+     *
+     * Bonus: id/gid trec prin acelasi filtru ca mai jos inainte sa intre in
+     * antetul Location - inainte se concatena valoarea bruta din $_GET.
+     */
+    $tzRedirect = '';
+
+    if (isset($_GET['id'])) {
+        $tzRedirect = '?id=' . preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['id']);
+    } else if (isset($_GET['gid'])) {
+        $tzRedirect = '?gid=' . preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['gid']);
+    }
+
+    if ($tzRedirect !== '') {
+
+        if (isset($_GET['t4tab']) && in_array($_GET['t4tab'], ['items', 'adventures', 'auction'], true)) {
+            $tzRedirect .= '&t4tab=' . $_GET['t4tab'];
+        } else if (isset($_GET['land'])) {
+            $tzRedirect .= '&land';
+        }
+    }
+
+    header("Location: " . $_SERVER['PHP_SELF'] . $tzRedirect);
     exit;
 }
 if(isset($_GET['id']) && ($_GET['id'] < 1 || $_GET['id'] > 40 && ($_GET['id'] == 99 && $village->natar == 0 || $_GET['id'] != 99))){

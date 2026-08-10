@@ -4309,3 +4309,12 @@ tz_def('ALLYBONUS_MSG_OVERMAX', 'Ceci est le dernier niveau : vous pouvez donner
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_PROTECTED_PLAYERS', 'Joueurs proteges');
 tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Noms de joueurs separes par des virgules qui ne peuvent etre ni attaques ni pilles. Les renforts restent autorises. Laisser vide pour desactiver.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// COMPONENTA HERO DIN BARA DE SUS
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('HERO_HEADER_AT_HOME',  'Le heros est chez lui');
+tz_def('HERO_HEADER_DEAD',     'Le heros est mort');
+tz_def('HERO_HEADER_TRAINING', 'Heros en formation');
+tz_def('HERO_HEADER_NOHERO',   'Pas encore de heros');
+tz_def('TZ_HEALTH',            'Sante');

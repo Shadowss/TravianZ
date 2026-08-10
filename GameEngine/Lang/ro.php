@@ -4106,3 +4106,12 @@ tz_def('ALLYBONUS_MSG_OVERMAX', 'Acesta e ultimul nivel: poti dona cel mult %s r
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_PROTECTED_PLAYERS', 'Jucatori protejati');
 tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Nume de jucatori separate prin virgula, care nu pot fi atacati sau jefuiti de nimeni. Intaririle raman permise. Lasa gol ca sa dezactivezi.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// COMPONENTA HERO DIN BARA DE SUS
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('HERO_HEADER_AT_HOME',  'Eroul este acasa');
+tz_def('HERO_HEADER_DEAD',     'Eroul este mort');
+tz_def('HERO_HEADER_TRAINING', 'Eroul este in antrenament');
+tz_def('HERO_HEADER_NOHERO',   'Inca nu ai erou');
+tz_def('TZ_HEALTH',            'Sanatate');

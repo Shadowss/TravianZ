@@ -515,6 +515,95 @@ class HeroItems
         return self::$awayCache[$uid] = $reason;
     }
 
+    /** @var array cache per request: uid => detaliile deplasarii */
+    private static $locationCache = array();
+
+    /**
+     * Acelasi motiv ca heroAwayReason(), plus DESTINATIA si TIMPUL RAMAS.
+     *
+     * Intoarce mereu un array:
+     *   'reason'  => '' | 'nohero' | 'adventure' | 'attack' | 'reinforcement'
+     *   'target'  => wref-ul catre care se indreapta (0 daca nu se stie)
+     *   'endtime' => timestamp-ul sosirii (0 = nu e in miscare, ex. intarire
+     *                deja ajunsa, care sta pe loc pana e retrasa)
+     *   'sort'    => sort_type-ul miscarii (3 = dus, 4 = intoarcere), 0 daca nu e cazul
+     *
+     * Costul: query-ul de detalii se face DOAR daca eroul chiar e plecat, deci
+     * cazul obisnuit (erou acasa) ramane exact cat era inainte - un query.
+     */
+    public function heroLocation($uid)
+    {
+        $uid = (int) $uid;
+
+        if (isset(self::$locationCache[$uid])) {
+            return self::$locationCache[$uid];
+        }
+
+        $info = array('reason' => $this->heroAwayReason($uid), 'target' => 0, 'endtime' => 0, 'sort' => 0);
+
+        if ($info['reason'] === '' || $info['reason'] === 'nohero') {
+            return self::$locationCache[$uid] = $info;
+        }
+
+        $p = TB_PREFIX;
+        $q = '';
+
+        if ($info['reason'] === 'adventure') {
+
+            // LEFT JOIN, nu INNER: daca randul de miscare a fost deja procesat,
+            // vrem macar destinatia, nu sa pierdem tot randul.
+            $q = "SELECT a.wref AS target, IFNULL(m.endtime, 0) AS endtime, IFNULL(m.sort_type, 0) AS sort_type
+                    FROM {$p}hero_adventure a
+                    LEFT JOIN {$p}movement m ON m.moveid = a.moveid
+                   WHERE a.uid = ? AND a.status = 1
+                   LIMIT 1";
+
+        } elseif ($info['reason'] === 'attack') {
+
+            // La dus (sort_type 3) satul jucatorului e `from`, la intoarcere
+            // (4) e `to`; IF() alege coloana corecta pentru verificarea
+            // proprietarului. Destinatia afisata e mereu `to`.
+            $q = "SELECT m.`to` AS target, m.endtime, m.sort_type
+                    FROM {$p}movement m
+                    INNER JOIN {$p}attacks a ON a.id = m.ref
+                    INNER JOIN {$p}vdata v ON v.wref = IF(m.sort_type = 4, m.`to`, m.`from`)
+                   WHERE v.owner = ? AND m.proc = 0 AND m.sort_type IN (3, 4) AND a.t11 > 0
+                   ORDER BY m.endtime ASC
+                   LIMIT 1";
+
+        } else {
+
+            // Intarirea a ajuns deja: nu exista miscare, deci nici timp ramas.
+            $q = "SELECT e.vref AS target, 0 AS endtime, 0 AS sort_type
+                    FROM {$p}enforcement e
+                    INNER JOIN {$p}vdata v ON v.wref = e.`from`
+                   WHERE v.owner = ? AND e.hero > 0
+                   LIMIT 1";
+        }
+
+        $stmt = $this->db->prepare($q);
+
+        if (!$stmt) {
+            // instalarile vechi pot sa nu aiba toate tabelele - motivul ramane
+            // valid, doar detaliile lipsesc
+            return self::$locationCache[$uid] = $info;
+        }
+
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+        $stmt->bind_result($target, $endtime, $sortType);
+
+        if ($stmt->fetch()) {
+            $info['target']  = (int) $target;
+            $info['endtime'] = (int) $endtime;
+            $info['sort']    = (int) $sortType;
+        }
+
+        $stmt->close();
+
+        return self::$locationCache[$uid] = $info;
+    }
+
     public function equipItem($uid, $rowId)
     {
         global $database;

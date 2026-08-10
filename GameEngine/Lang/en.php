@@ -4366,3 +4366,12 @@ tz_def('ALLYBONUS_MSG_OVERMAX', 'This is the final level: you can donate at most
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_PROTECTED_PLAYERS', 'Protected players');
 tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Comma-separated player names that cannot be attacked or raided by anyone. Reinforcements are still allowed. Leave empty to disable.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// COMPONENTA HERO DIN BARA DE SUS
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('HERO_HEADER_AT_HOME',  'Hero at home');
+tz_def('HERO_HEADER_DEAD',     'Hero is dead');
+tz_def('HERO_HEADER_TRAINING', 'Hero in training');
+tz_def('HERO_HEADER_NOHERO',   'No hero yet');
+tz_def('TZ_HEALTH',            'Health');

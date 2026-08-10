@@ -1,0 +1,273 @@
+/*
+ * ###########################################################################
+ *  hero_header.css - componenta Hero din bara de sus (TravianZ)
+ *  Proiect : TravianZ  -  https://github.com/Shadowss/TravianZ
+ *  Copyright: TravianZ (c) 2010-2026. All rights reserved.
+ * ###########################################################################
+ *
+ *  Elementele sunt piese UI separate (casa, inel, badge aventuri, argint),
+ *  asamblate cu pozitionare absoluta in interiorul lui #tzHeroBox - NU o
+ *  imagine mare unica.
+ *
+ *  REGLAJ POZITIE: singurul lucru de atins cand vrei sa muti componenta e
+ *  "left" din #tzHeroBox (coordonate relative la #mtop, care e position:relative).
+ */
+
+/* =========================================================================
+   Ordinea de desenare a barii de sus
+   =========================================================================
+   #mtop are z-index:2 in graphic pack si creeaza un CONTEXT DE STIVUIRE,
+   deci z-index-ul tooltip-urilor nu poate depasi bara insasi. Randul de
+   resurse (div#res) e tot pe z-index 2/3 SI e inclus la finalul paginii
+   (dupa footer), asa ca la valoare egala castiga ordinea din DOM si trecea
+   peste tooltip-uri.
+   Ridicam bara la 4: bate #res, dar ramane mult sub popup-uri (50+),
+   harta (20+), chat (999) si ferestrele de ghid (9999). */
+
+div#mtop {
+    z-index: 4;
+}
+
+/* =========================================================================
+   Cadrul componentei
+   ========================================================================= */
+
+#tzHeroBox {
+    position: absolute;
+    left: 344px;          /* << ZONA INCERCUITA CU ROSU. Muta 330-370 daca e nevoie */
+    top: 50%;
+    margin-top: -36px;    /* jumatate din inaltime = centrare pe verticala */
+    width: 124px;
+    height: 72px;
+    z-index: 60;
+    font-size: 11px;
+    line-height: normal;
+}
+
+#tzHeroBox a,
+#tzHeroBox a:hover {
+    text-decoration: none;
+    border: 0;
+    outline: 0;
+}
+
+.tzHeroSlot {
+    position: absolute;
+    display: block;
+}
+
+/* =========================================================================
+   Centru: inelul Health / Experience + portretul
+   ========================================================================= */
+
+/* Diametrul inelului = 64px, cat iconitele de navigatie din stanga barii */
+.tzHeroCenter {
+    left: 30px;
+    top: 4px;
+    width: 64px;
+    height: 64px;
+}
+
+.tzHeroRing {
+    display: block;
+    width: 64px;
+    height: 64px;
+}
+
+.tzHeroRingBg {
+    fill: #f2f1ee;
+    stroke: #c6c4bf;
+    stroke-width: 1;
+}
+
+.tzHeroTrack {
+    fill: none;
+    stroke: #dedcd7;
+    stroke-width: 4;
+}
+
+/* ROSU = procentul de Health al eroului */
+.tzHeroArcHealth {
+    fill: none;
+    stroke: #c0392b;
+    stroke-width: 4;
+    stroke-linecap: butt;
+}
+
+/* ALBASTRU = progresul Experience catre nivelul urmator */
+.tzHeroArcExp {
+    fill: none;
+    stroke: #2f6fb0;
+    stroke-width: 4;
+    stroke-linecap: butt;
+}
+
+.tzHeroInner {
+    fill: #ffffff;
+    stroke: #d6d4cf;
+    stroke-width: 1;
+}
+
+/* ATENTIE: portretul e copil al lui .tzHeroCenter, care e position:absolute,
+   deci coordonatele sunt relative la INEL (64x64), nu la #tzHeroBox.
+   Centrare = (64 - 32) / 2 pe ambele axe. */
+.tzHeroPortrait {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.tzHeroPortraitEmpty {
+    fill: #b9b7b2;
+}
+
+/* Eroul mort: portretul se decoloreaza, dar linkul ramane activ */
+#tzHeroBox.tzHeroDeadState .tzHeroPortrait {
+    filter: grayscale(100%);
+    opacity: .45;
+}
+
+/* =========================================================================
+   Stanga sus: casa (Hero at home) / craniu (Hero is dead)
+   ========================================================================= */
+
+.tzHeroHome {
+    left: 10px;
+    top: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.tzHeroIco {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.tzHeroIcoBg {
+    fill: #f6f5f2;
+    stroke: #b8b6b1;
+    stroke-width: 1;
+}
+
+.tzHeroRoof  { fill: #b8452f; }
+.tzHeroWall  { fill: #f0e6cf; }
+.tzHeroDoor  { fill: #8a6a3f; }
+
+.tzHeroSkull    { fill: #e9e7e2; stroke: #7d7b76; stroke-width: .8; }
+.tzHeroSkullEye { fill: #3a3835; }
+
+/* Starile "plecat": aventura (cizma), atac (sabii), intarire (scut) */
+.tzHeroBoot     { fill: #8a6a3f; stroke: #5f482a; stroke-width: .8; }
+.tzHeroBootSole { fill: #4a3a24; }
+.tzHeroBootCuff { fill: #b08a52; }
+
+.tzHeroBlade  { fill: none; stroke: #9a9894; stroke-width: 2.2; stroke-linecap: round; }
+.tzHeroHilt   { fill: none; stroke: #8a6a3f; stroke-width: 2.2; stroke-linecap: round; }
+
+.tzHeroShield     { fill: #c9d4e2; stroke: #5d7391; stroke-width: .9; }
+.tzHeroShieldDark { fill: #9fb2c9; stroke: none; }
+
+/* Teancul de monede din iconita de argint */
+.tzHeroCoin    { fill: #d3d2ce; stroke: #8f8d88; stroke-width: .8; }
+.tzHeroCoinTop { fill: #efeeeb; stroke: none; }
+
+/* =========================================================================
+   Dreapta sus: numarul de aventuri
+   ========================================================================= */
+
+.tzHeroAdv {
+    left: 90px;
+    top: 0;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    text-align: center;
+    border: 1px solid #8d8b86;
+    box-sizing: border-box;
+}
+
+.tzHeroAdvOn  { background: #5aa02c; border-color: #3f7a17; }
+.tzHeroAdvOff { background: #e6e4df; border-color: #b3b1ac; }
+
+.tzHeroAdvNum {
+    display: block;
+    line-height: 21px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.tzHeroAdvOn  .tzHeroAdvNum { color: #ffffff; }
+.tzHeroAdvOff .tzHeroAdvNum { color: #6b6964; }
+
+/* =========================================================================
+   Dreapta jos: argintul / casa de licitatii
+   ========================================================================= */
+
+.tzHeroSilver {
+    left: 90px;
+    top: 45px;
+    width: 24px;
+    height: 24px;
+}
+
+/* =========================================================================
+   Tooltip-uri (numai la mouseover, fara JS)
+   ========================================================================= */
+
+.tzHeroTip {
+    display: none;
+    position: absolute;
+    z-index: 500;
+    padding: 5px 9px;
+    background-color: #3f3d39;
+    background-image: none;
+    color: #ffffff;
+    border: 1px solid #23211f;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .45);
+    opacity: 1;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: normal;
+    text-align: left;
+    line-height: 15px;
+}
+
+.tzHeroSlot:hover .tzHeroTip {
+    display: block;
+}
+
+.tzHeroTip b {
+    display: block;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.tzHeroTip i {
+    display: block;
+    color: #d9d7d2;
+    font-style: normal;
+}
+
+.tzHeroTip .tzHeroTipWarn {
+    color: #f0a49a;
+}
+
+.tzHeroTip .tzHeroTipTime {
+    color: #ffffff;
+}
+
+/* latime fixa pe cifre: ceasul nu mai tresare la fiecare secunda */
+.tzHeroTimer {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Pozitiile din imaginile de referinta */
+.tzHeroTipHome   { left: 28px; top: 4px; }
+.tzHeroTipCenter { left: 58px; top: 44px; }
+.tzHeroTipAdv    { left: 29px; top: 4px; }
+.tzHeroTipSilver { left: 29px; top: 2px; }

@@ -135,7 +135,51 @@ $t4RateS2G  = HeroItems::silverForOneGold();
                 </p>
             </td>
             <td style="text-align:center;vertical-align:middle;">
-                <img src="img/hero/merchant.png" alt="" style="max-width:280px;">
+                <?php
+                /**
+                 * Negustorul casei de licitatii, pe trib.
+                 *
+                 * Inainte era o singura imagine (img/hero/merchant.png) pentru
+                 * toata lumea. Acum fiecare trib isi vede propriul personaj.
+                 * Triburile 4 (Natura) si 5 (Natari) nu sunt jucabile, deci nu
+                 * au imagine proprie - la fel si orice valoare neasteptata din
+                 * baza de date: toate cad pe imaginea veche, care ramane in
+                 * repo tocmai ca rezerva.
+                 *
+                 * Numele fisierelor sunt cele urcate in img/hero/, exact asa
+                 * cum sunt scrise mai jos (atentie: "egiptean", nu "egyptian",
+                 * si "vikings"/"huns" la plural).
+                 */
+                $t4MerchantByTribe = [
+                    1 => 'roman.png',     // Romani
+                    2 => 'teuton.png',    // Teutoni
+                    3 => 'gaul.png',      // Gali
+                    6 => 'huns.png',      // Huni
+                    7 => 'egiptean.png',  // Egipteni
+                    8 => 'spartan.png',   // Spartani
+                    9 => 'vikings.png',   // Vikingi
+                ];
+
+                $t4Tribe = 0;
+
+                if (isset($session->tribe)) {
+                    $t4Tribe = (int) $session->tribe;
+                } elseif (isset($session->userinfo['tribe'])) {
+                    $t4Tribe = (int) $session->userinfo['tribe'];
+                }
+
+                $t4MerchantFile = isset($t4MerchantByTribe[$t4Tribe])
+                    ? $t4MerchantByTribe[$t4Tribe]
+                    : 'merchant.png';
+
+                // Daca fisierul tribului inca n-a fost urcat pe server, nu
+                // lasam un patrat gol - revenim la negustorul generic.
+                if (!@file_exists('img/hero/' . $t4MerchantFile)) {
+                    $t4MerchantFile = 'merchant.png';
+                }
+                ?>
+                <img src="img/hero/<?php echo $t4MerchantFile; ?>" alt=""
+                     style="max-width:280px;max-height:300px;">
             </td>
         </tr>
     </tbody>
