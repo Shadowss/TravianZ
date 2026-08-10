@@ -340,7 +340,11 @@ trait DatabaseMovementQueries {
         list($id) = $this->escape_input($id);
 
 		$vinfo = $this->getVillage($id);
-		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
+
+		// Satul poate lipsi (sters intre timp). Fara proprietar nu avem ce trib
+		// sa citim, deci nu are rost sa continuam cu null.
+		$vOwner = is_array($vinfo) && isset($vinfo['owner']) ? (int) $vinfo['owner'] : 0;
+		$vtribe = $vOwner > 0 ? $this->getUserField($vOwner, "tribe", 0) : 0;
         $movingunits = [];
         
 		$outgoingarray = $this->getMovement(3, $id, 0);

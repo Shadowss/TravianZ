@@ -316,7 +316,11 @@ trait DatabaseUserQueries {
 		}
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return $dbarray[$field];
+
+		// Cont inexistent: intoarcem null in loc sa citim dintr-un rand gol.
+		return (is_array($dbarray) && array_key_exists($field, $dbarray))
+			? $dbarray[$field]
+			: null;
 	}
 
 	function login($username, $password) {
@@ -340,6 +344,18 @@ trait DatabaseUserQueries {
 		}
 
 		$dbarray = mysqli_fetch_array($result);
+
+		/**
+		 * Utilizator inexistent: iesim imediat, cu acelasi rezultat ca o parola
+		 * gresita (functia intoarce false si mai jos).
+		 *
+		 * Inainte se continua si se citeau $dbarray['password'], ['is_bcrypt'],
+		 * ['id'] si ['sessid'] dintr-un rand gol - de aici sirul de avertismente
+		 * la fiecare incercare de autentificare cu un nume care nu exista.
+		 */
+		if (!is_array($dbarray)) {
+			return false;
+		}
 
 		// even if we didn't do a DB conversion for bcrypt passwords,
 		// we still need to check if this password wasn't encrypted via password_hash,
@@ -539,7 +555,9 @@ trait DatabaseUserQueries {
 		$q = "SELECT sit FROM " . TB_PREFIX . "online WHERE uid = $uid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return $dbarray['sit'];
+
+		// Utilizatorul poate lipsi (cont sters). Fara sitter, intoarcem 0.
+		return (is_array($dbarray) && isset($dbarray['sit'])) ? $dbarray['sit'] : 0;
 	}
 
 	function UpdateOnline($mode, $name = "", $time = "", $uid = 0) {

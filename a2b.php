@@ -47,7 +47,7 @@ if(isset($_GET['newdid'])){
 	}else if(isset($_GET['z'])){
 		header("Location: ".$_SERVER['PHP_SELF']."?z=".$_GET['z']);
 		exit();
-	}else if($_GET['id'] > 0){
+	}else if(isset($_GET['id']) && $_GET['id'] > 0){
 		header("Location: ".$_SERVER['PHP_SELF']);
 		exit();
 	}

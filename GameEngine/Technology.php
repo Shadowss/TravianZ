@@ -306,8 +306,14 @@ class Technology {
         global $database;
 		
         $ownunit = $database->getUnit($base, $useCache);
-		$ownunit['u99'] -= $ownunit['u99'];
-		$ownunit['u99o'] -= $ownunit['u99o'];
+		// getUnit() poate intoarce null (sat fara rand in units) sau un rand
+		// fara coloanele de prizonieri. Le tratam ca zero.
+		if (!is_array($ownunit)) {
+			$ownunit = array();
+		}
+
+		$ownunit['u99']  = 0;
+		$ownunit['u99o'] = 0;
 		$enforcementarray = $database->getEnforceVillage($base, 0, $useCache);
 		$this->addUnits($ownunit, $enforcementarray);
 		if($mode == 0){
@@ -529,7 +535,12 @@ class Technology {
 
             // Horse Drinking Trough lets a number of cavalry units drink for free (1 crop less each).
             $freeDrinker = $horsedrinking > 0 && (($i == 4 && $horsedrinking >= 10) || ($i == 5 && $horsedrinking >= 15) || ($i == 6 && $horsedrinking == 20));
-            $upkeep += ($dataarray['pop'] - ($freeDrinker ? 1 : 0)) * $array[$index];
+            // Bucla trece prin toate cele 90 de unitati, dar tabloul primit are
+            // doar unitatile care exista efectiv. O cheie lipsa inseamna zero
+            // unitati din tipul acela.
+            $unitCount = isset($array[$index]) ? $array[$index] : 0;
+
+            $upkeep += ($dataarray['pop'] - ($freeDrinker ? 1 : 0)) * $unitCount;
         }
 
         $index = $prisoners > 0 ? 't11' : 'hero';

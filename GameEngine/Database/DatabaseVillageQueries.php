@@ -104,7 +104,13 @@ trait DatabaseVillageQueries {
 	}
 
 	function getVrefField($ref, $field, $use_cache = true) {
-        return $this->getVillage($ref, 0, $use_cache)[$field];
+        // getVillage() intoarce null pentru un sat inexistent (sters, cucerit
+        // sau id gresit). Fara verificare, apelantul primea un avertisment.
+        $village = $this->getVillage($ref, 0, $use_cache);
+
+        return (is_array($village) && array_key_exists($field, $village))
+            ? $village[$field]
+            : null;
 	}
 
     // no need to cache this method
@@ -254,7 +260,18 @@ trait DatabaseVillageQueries {
 	    
 	    //Count each kid in its own array, to check how many villages must be created
 	    foreach($villageArrays as $village){
-	        if($village['wid'] == 0) $countedWids[$village['mode']][$village['kid']]++;
+	        if($village['wid'] == 0) {
+	            // prima aparitie a perechii mode/kid: pornim de la zero, altfel
+	            // incrementam o cheie inexistenta
+	            $vMode = $village['mode'];
+	            $vKid  = $village['kid'];
+
+	            if (!isset($countedWids[$vMode][$vKid])) {
+	                $countedWids[$vMode][$vKid] = 0;
+	            }
+
+	            $countedWids[$vMode][$vKid]++;
+	        }
 	    }
 	    
 	    //Generate the number of desired village for each kid
@@ -2347,7 +2364,13 @@ trait DatabaseVillageQueries {
 		}
 		
         for($i = 0; $i <= count($cropholder) - 1; $i++){
-			$basecrop += $bid4[$buildarray[$cropholder[$i]]]['prod'];
+			// Un slot fara cladire nu are nivel in $buildarray, iar bid4 nu are
+			// intrare pentru el. Sarim peste, in loc sa adunam null.
+			$cropLevel = isset($buildarray[$cropholder[$i]]) ? $buildarray[$cropholder[$i]] : null;
+
+			if ($cropLevel !== null && isset($bid4[$cropLevel]['prod'])) {
+				$basecrop += $bid4[$cropLevel]['prod'];
+			}
 		}
 		
 		$crop = $basecrop + $basecrop * 0.25 * $cropo;

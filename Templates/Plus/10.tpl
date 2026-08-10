@@ -36,7 +36,11 @@ if($session->sit == 0) {
         // update sesiune
         $session->gold -= $cost;
         $_SESSION['gold'] = $session->gold;
-        $session->b2 = ($session->b2 > $now ? $session->b2 : $now) + PLUS_PRODUCTION;
+        // Session nu are proprietatea ->b2; valoarea sta in userarray, de unde
+        // o citeste si PopulateVar(). Scrierea directa crea o proprietate
+        // dinamica (depreciata in PHP 8.2) si nu se vedea nicaieri.
+        $currentB2 = isset($session->userarray['b2']) ? (int) $session->userarray['b2'] : 0;
+        $session->userarray['b2'] = ($currentB2 > $now ? $currentB2 : $now) + PLUS_PRODUCTION;
 
         // LOG pentru a2b2.php
         mysqli_query($database->dblink,

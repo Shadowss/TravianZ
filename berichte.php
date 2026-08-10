@@ -37,7 +37,7 @@ if(isset($_GET['newdid'])) {
     } else if ( isset( $_GET['vill'] ) && isset( $_GET['id'] ) ) {
         header( "Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id'] . "&vill=" . $_GET['vill'] . "" );
         exit;
-    } else if ( $_GET['id'] != 0 ) {
+    } else if ( isset($_GET['id']) && $_GET['id'] != 0 ) {
         header( "Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id'] );
         exit;
     } else {

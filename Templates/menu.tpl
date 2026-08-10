@@ -145,6 +145,13 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
             <?php echo FORUM; ?>
         </a>
     </p>
+	
+	<!-- Discord -->
+	<p>
+		<a href="https://discord.gg/HzU2HfqaG" target="_blank" rel="noopener noreferrer" style="color: #d32f2f; font-weight: bold;">
+			Discord
+		</a>
+	</p>
 
     <!-- Plus / Support / Custom links -->
     <p>

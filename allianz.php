@@ -102,7 +102,14 @@ if(isset($_GET['aid']) || isset($_GET['fid']) || isset($_GET['fid2']) ||
 				break;
 		}
 	}
-	else echo $alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'];
+	else {
+		// Jucator fara alianta: allianceArray e gol, deci nu avem ce afisa.
+		echo isset($alliance->allianceArray['tag'], $alliance->allianceArray['name'])
+			? htmlspecialchars($alliance->allianceArray['tag'], ENT_QUOTES, 'UTF-8')
+			  . ' - '
+			  . htmlspecialchars($alliance->allianceArray['name'], ENT_QUOTES, 'UTF-8')
+			: '';
+	}
 
 ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>

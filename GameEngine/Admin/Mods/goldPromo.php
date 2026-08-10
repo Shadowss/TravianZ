@@ -11,7 +11,7 @@
 
 require_once(__DIR__ . '/../csrf.php');
 if (!isset($_SESSION)) session_start();
-if ($_SESSION['access'] < ADMIN) {
+if ($_SESSION['access'] < 9) {
     admin_deny('You must be signed in as an administrator to do this. '
         . 'Your session may have expired — please return to the admin panel and sign in again.');
 }
@@ -33,7 +33,7 @@ $admid = (int)($_SESSION['id'] ?? 0);
 $check = mysqli_query($GLOBALS['link'],
     "SELECT access FROM " . TB_PREFIX . "users WHERE id = " . $admid);
 $acc = $check ? mysqli_fetch_assoc($check) : null;
-if (!$acc || (int)$acc['access'] < ADMIN) {
+if (!$acc || (int)$acc['access'] < 9) {
     admin_deny('Your session may have expired — please sign in again.');
 }
 
