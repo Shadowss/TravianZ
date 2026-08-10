@@ -117,6 +117,7 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
 	<tr><td><?php echo CONF_SERV_USRNM_MAX; ?></td><td><b><?php echo defined('USRNM_MAX_LENGTH') ? (int) USRNM_MAX_LENGTH : 15; ?></b></td></tr>
 	<tr><td><?php echo CONF_SERV_PW_MIN; ?></td><td><b><?php echo defined('PW_MIN_LENGTH') ? (int) PW_MIN_LENGTH : 4; ?></b></td></tr>
 	<tr><td><?php echo CONF_SERV_USRNM_SPECIAL; ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_USRNM_SPECIAL_TOOLTIP; ?></span></em></td><td><?php echo (!defined('USRNM_SPECIAL') || USRNM_SPECIAL) ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td><?php echo ADM_PROTECTED_PLAYERS; ?> <em class="tooltip">?<span class="classic"><?php echo ADM_PROTECTED_PLAYERS_TIP; ?></span></em></td><td><?php echo (defined('PROTECTED_PLAYERS') && trim(PROTECTED_PLAYERS) !== '') ? htmlspecialchars(PROTECTED_PLAYERS, ENT_QUOTES, 'UTF-8') : "<span class='badge red'>None</span>"; ?></td></tr>
   </table>
 </div>
 

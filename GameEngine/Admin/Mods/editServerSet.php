@@ -140,6 +140,10 @@ $text = admin_config_template_contents(array(
 		tz_config_set($text, '%PWMIN%', $pMin);
 
 		tz_config_set($text, '%SERVERNAME%', $_POST['servername'] ?? '');
+		// Jucatori protejati impotriva atacurilor. Scoatem ghilimelele, ca sirul
+		// intra intre ghilimele in config.php.
+		tz_config_set($text, '%PROTECTEDPLAYERS%',
+			trim(str_replace('"', '', $_POST['protected_players'] ?? '')));
 		// Fusul orar se scrie intr-un fisier PHP (define("TIMEZONE","...")), deci
 		// valoarea NU are voie sa ajunga acolo nefiltrata: pana acum $_POST['tzone']
 		// era inserat ca atare, ceea ce permitea scrierea de cod in config.php.

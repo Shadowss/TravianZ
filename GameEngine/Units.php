@@ -230,6 +230,52 @@ class Units {
      * @param array $villageInfo  Out: the resolved village/oasis row
      * @return string An error message, or "" if the target can be attacked
      */
+    /**
+     * Jucatori protejati impotriva atacurilor.
+     *
+     * Lista vine din PROTECTED_PLAYERS (config.php), separata prin virgula:
+     *     define("PROTECTED_PLAYERS", "Shadow,Multihunter");
+     *
+     * Verificarea sta AICI fiindca e punctul unic prin care trec toate
+     * trimiterile de trupe ale jucatorilor - din a2b.php, din harta sau de
+     * oriunde altundeva. Nu e nevoie sa modificam fiecare pagina.
+     *
+     * Se blocheaza doar ATACUL si RAIDUL (c = 3 si 4). Intaririle (c = 2) trec,
+     * ca jucatorul protejat sa poata primi ajutor.
+     *
+     * @param  int    $ownerId  proprietarul satului tinta
+     * @param  mixed  $missionType  tipul misiunii din formular
+     * @return bool
+     */
+    private function isProtectedTarget($ownerId, $missionType) {
+        global $database;
+
+        if (!defined('PROTECTED_PLAYERS') || trim(PROTECTED_PLAYERS) === '') {
+            return false;
+        }
+
+        // intaririle raman permise
+        if ((int) $missionType !== 3 && (int) $missionType !== 4) {
+            return false;
+        }
+
+        $targetName = (string) $database->getUserField((int) $ownerId, 'username', 0);
+
+        if ($targetName === '') {
+            return false;
+        }
+
+        foreach (explode(',', PROTECTED_PLAYERS) as $protectedName) {
+            $protectedName = trim($protectedName);
+
+            if ($protectedName !== '' && strcasecmp($protectedName, $targetName) === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function validateTargetPlayer($id, $isOasis, &$villageInfo) {
         global $database, $village;
 
@@ -250,6 +296,10 @@ class Units {
 
         //check if the user' is on the vacation mode:
         if($database->getvacmodexy($id)) return "User is on vacation mode";
+        // jucator protejat prin PROTECTED_PLAYERS
+        if($this->isProtectedTarget($villageOwner, isset($_POST['c']) ? $_POST['c'] : 0)) {
+            return "This player is protected from attacks.";
+        }
 
         //check if attacking same village that units are in
         if($id == $village->wid) return "You cant attack same village you are sending from.";

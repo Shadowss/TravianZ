@@ -109,6 +109,10 @@ class Process {
 		// Minunea Lumii cu stil pe trib
 		$findReplace["%WWIMAGE%"] = (isset($_POST['ww_image']) && $_POST['ww_image'] === 'false') ? 'false' : 'true';
 
+		// Jucatori protejati impotriva atacurilor
+		$findReplace["%PROTECTEDPLAYERS%"] = isset($_POST['protected_players'])
+			? trim(str_replace('"', '', $_POST['protected_players'])) : '';
+
 		$findReplace["%GP%"] = (isset($_POST['gpack']) && $_POST['gpack'] === 'true') ? 'true' : 'false';
 		$findReplace["%SSERVER%"] = $_POST['sserver'];
 		$findReplace["%SPORT%"] = $_POST['sport'];

@@ -459,6 +459,10 @@ function refresh(tz) {
                                value="<?php echo defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3; ?>"><?php echo ADM_OF_EACH; ?><input type="number" name="hero_res_one" min="0" max="10000" style="width:80px"
                                value="<?php echo defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10; ?>"><?php echo ADM_OF_ONE_TYPE; ?></td>
                 </tr>
+				<tr>
+                    <td class="b"><?php echo ADM_PROTECTED_PLAYERS; ?><em class="tooltip">?<span class="classic"><?php echo ADM_PROTECTED_PLAYERS_TIP; ?></span></em></td>
+                    <td><input class="fm" name="protected_players" value="<?php echo defined('PROTECTED_PLAYERS') ? htmlspecialchars(PROTECTED_PLAYERS, ENT_QUOTES, 'UTF-8') : ''; ?>" style="width: 70%;" placeholder="Shadow,Multihunter"></td>
+                </tr>
                 </tbody>
             </table>
         </div>

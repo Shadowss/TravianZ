@@ -352,6 +352,7 @@ if (!function_exists('tz_config_finalize')) {
         }
 
         $defaults = array(
+            'PROTECTED_PLAYERS'         => '',
             'NATARS_WW_START_DELAY'     => 10,
             'USRNM_MIN_LENGTH'          => 3,
             'USRNM_MAX_LENGTH'          => 15,

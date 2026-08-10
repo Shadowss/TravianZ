@@ -334,6 +334,7 @@ foreach($mechs as $k => $l){
         <option value="true" selected>Yes</option>
         <option value="false">No &ndash; same image for everyone</option>
     </select></div>
+    <div><label>Protected players (no attacks)</label><input class="input" type="text" name="protected_players" value="" placeholder="e.g. Shadow,Multihunter"></div>
     <div><label>Allow player graphic packs</label><select class="input" name="gpack">
         <option value="false" selected>No &ndash; everyone sees the server pack</option>
         <option value="true">Yes &ndash; players may pick their own in Profile</option>

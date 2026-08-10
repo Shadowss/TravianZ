@@ -3,7 +3,7 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       config.php                                                  ##
-##  Version        10.0 Full Refactor & Security                               ##
+##  Version        11.0 Full Refactor & Security                               ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
@@ -144,31 +144,6 @@ define("SPEED", "%SPEED%");
 // Defines world size. NOTICE: DO NOT EDIT!!
 define("WORLD_MAX", "%MAX%");
 
-// ***** Alliance Bonuses (T4 Port)
-// Members donate resources, allowing the alliance to unlock four bonuses, each
-// with five levels. The costs, durations, and limits below are based on
-// Travian T4; upgrade times and donation limits are scaled by the server speed.
-define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
-
-// Total resources required for each level (cumulative for that level).
-define("ALLIANCE_BONUS_COSTS", "1200000,5600000,17100000,51200000,153600000");
-
-// Upgrade duration in HOURS for each level (divided by the server speed).
-define("ALLIANCE_BONUS_HOURS", "24,48,72,96,120");
-
-// Daily donation limit per player, based on the highest bonus level unlocked
-// by the alliance (index 0 = no bonuses unlocked).
-define("ALLIANCE_BONUS_DAILY", "300000,300000,400000,550000,750000,1000000");
-
-// Percentage granted by each level. Two sets: "small" bonuses (2% per level:
-// Recruitment, Philosophy) and "large" bonuses (4% per level: Metallurgy,
-// Commerce), exactly as in T4.
-define("ALLIANCE_BONUS_PCT_SMALL", 2);
-define("ALLIANCE_BONUS_PCT_LARGE", 4);
-
-// Gold cost to triple a donation.
-define("ALLIANCE_BONUS_TRIPLE_GOLD", 3);
-
 // ***** Graphical statistics (Travian Plus)
 // The game periodically records each player's rank, population, villages, and
 // army from the moment this feature is enabled. These snapshots are then used
@@ -200,39 +175,11 @@ define("USRNM_MIN_LENGTH", %USRNMMIN%);
 define("USRNM_MAX_LENGTH", %USRNMMAX%);
 define("PW_MIN_LENGTH", %PWMIN%);
 
-// ***** Tribe-specific World Wonder style
-// When set to true, each tribe sees its own World Wonder, both on the village
-// map and on the building page. Tribes without dedicated images on disk will
-// continue to use the original image, regardless of this setting.
-define("NEW_FUNCTION_WW_IMAGE", %WWIMAGE%);
-
-// ***** Graphic Pack
-//
-// SERVER_GP is the pack every player sees by default (chosen at install or in
-// Admin -> Server Configuration). GP_ENABLE decides whether players may pick a
-// different pack for themselves in Profile -> Graphic Pack.
-//
-// GP_LOCATE is the pack ACTUALLY used for the current request. It follows the
-// same pattern as LANG above: the player's own choice wins when it is enabled
-// and points at a real pack on disk, otherwise the server pack is used. A pack
-// counts as real when the folder exists and contains travian.css, so a stale
-// value in the database can never leave the game without stylesheets.
-define("GP_ENABLE",%GP%);
-define("SERVER_GP", "%GP_LOCATE%");
-
-$__user_gp = '';
-
-if (GP_ENABLE && isset($_SESSION['gpack']) && is_string($_SESSION['gpack'])) {
-    $__candidate = trim((string) $_SESSION['gpack']);
-
-    // only local packs: "gpack/<name>/" with no traversal and no remote URL
-    if (preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $__candidate)
-        && is_file(__DIR__ . "/../" . $__candidate . "travian.css")) {
-        $__user_gp = $__candidate;
-    }
-}
-
-define("GP_LOCATE", $__user_gp !== '' ? $__user_gp : SERVER_GP);
+// ***** Activation Mail
+// true = activation mail will be sent, users will have to finish registration
+//        by clicking on link recieved in mail.
+// false =  users can register with any mail. Not needed to be real one.
+define("AUTH_EMAIL",%ACTIVATE%);
 
 // ***** Troop Speed
 // Values: 1 (normal), 3 (3x speed) etc...
@@ -317,16 +264,102 @@ define("OASIS_CLAY_PRODUCTION",OASIS_CLAY_MULTIPLIER*SPEED);
 define("OASIS_IRON_PRODUCTION",OASIS_IRON_MULTIPLIER*SPEED);
 define("OASIS_CROP_PRODUCTION",OASIS_CROP_MULTIPLIER*SPEED); 
 
+// ***** Medal Interval check
+define("MEDALINTERVAL",%MEDALINTERVAL%);
+// ***** Great Workshop
+define("GREAT_WKS",%GREAT_WKS%);
+// ***** Tourn threshold
+define("TS_THRESHOLD",%TS_THRESHOLD%);  
+
+// ***** Register open/close
+define("REG_OPEN",%REG_OPEN%);
+
+// ***** Peace system
+// 0 = None
+// 1 = Normal
+// 2 = Christmas
+// 3 = New Year
+// 4 = Easter
+define("PEACE",%PEACE%);
+
+// ***** Players protected from attacks
+// Comma-separated list of names. Players listed here cannot be attacked or
+// raided by anyone; reinforcements are still allowed. Leave empty to disable.
+// Example: define("PROTECTED_PLAYERS", "Shadow,Multihunter");
+define("PROTECTED_PLAYERS", "%PROTECTEDPLAYERS%");
+
+//////////////////////////////////
+// *****  Alliance Bonuses *****//
+//////////////////////////////////
+
+// Members donate resources, allowing the alliance to unlock four bonuses, each
+// with five levels. The costs, durations, and limits below are based on
+// Travian T4; upgrade times and donation limits are scaled by the server speed.
+define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+
+// Total resources required for each level (cumulative for that level).
+define("ALLIANCE_BONUS_COSTS", "1200000,5600000,17100000,51200000,153600000");
+
+// Upgrade duration in HOURS for each level (divided by the server speed).
+define("ALLIANCE_BONUS_HOURS", "24,48,72,96,120");
+
+// Daily donation limit per player, based on the highest bonus level unlocked
+// by the alliance (index 0 = no bonuses unlocked).
+define("ALLIANCE_BONUS_DAILY", "300000,300000,400000,550000,750000,1000000");
+
+// Percentage granted by each level. Two sets: "small" bonuses (2% per level:
+// Recruitment, Philosophy) and "large" bonuses (4% per level: Metallurgy,
+// Commerce), exactly as in T4.
+define("ALLIANCE_BONUS_PCT_SMALL", 2);
+define("ALLIANCE_BONUS_PCT_LARGE", 4);
+
+// Gold cost to triple a donation.
+define("ALLIANCE_BONUS_TRIPLE_GOLD", 3);
+
+
+//////////////////////////////////
+// *****  Graphic Pack     *****//
+//////////////////////////////////
+//
+// SERVER_GP is the pack every player sees by default (chosen at install or in
+// Admin -> Server Configuration). GP_ENABLE decides whether players may pick a
+// different pack for themselves in Profile -> Graphic Pack.
+//
+// GP_LOCATE is the pack ACTUALLY used for the current request. It follows the
+// same pattern as LANG above: the player's own choice wins when it is enabled
+// and points at a real pack on disk, otherwise the server pack is used. A pack
+// counts as real when the folder exists and contains travian.css, so a stale
+// value in the database can never leave the game without stylesheets.
+define("GP_ENABLE",%GP%);
+define("SERVER_GP", "%GP_LOCATE%");
+
+$__user_gp = '';
+
+if (GP_ENABLE && isset($_SESSION['gpack']) && is_string($_SESSION['gpack'])) {
+    $__candidate = trim((string) $_SESSION['gpack']);
+
+    // only local packs: "gpack/<name>/" with no traversal and no remote URL
+    if (preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $__candidate)
+        && is_file(__DIR__ . "/../" . $__candidate . "travian.css")) {
+        $__user_gp = $__candidate;
+    }
+}
+
+define("GP_LOCATE", $__user_gp !== '' ? $__user_gp : SERVER_GP);
+
+// ***** Tribe-specific World Wonder style
+// When set to true, each tribe sees its own World Wonder, both on the village
+// map and on the building page. Tribes without dedicated images on disk will
+// continue to use the original image, regardless of this setting.
+define("NEW_FUNCTION_WW_IMAGE", %WWIMAGE%);
+
 // ***** Enable T4 is Coming screen
 define("T4_COMING",%T4_COMING%);
 
-// ***** Activation Mail
-// true = activation mail will be sent, users will have to finish registration
-//        by clicking on link recieved in mail.
-// false =  users can register with any mail. Not needed to be real one.
-define("AUTH_EMAIL",%ACTIVATE%);
+//////////////////////////////////
+// *****      PLUS         *****//
+//////////////////////////////////
 
-// ***** PLUS
 //Plus PayPal e-mail address
 define("PAYPAL_EMAIL","%PAYPAL_EMAIL%");
 //Plus PayPal currency
@@ -355,27 +388,11 @@ define("PLUS_PACKAGE_E_GOLD","%PLUS_PACKAGE_E_GOLD%");
 define("PLUS_TIME",%PLUS_TIME%);
 //+25% production lenght
 define("PLUS_PRODUCTION",%PLUS_PRODUCTION%);
-// ***** Medal Interval check
-define("MEDALINTERVAL",%MEDALINTERVAL%);
-// ***** Great Workshop
-define("GREAT_WKS",%GREAT_WKS%);
-// ***** Tourn threshold
-define("TS_THRESHOLD",%TS_THRESHOLD%);  
-
-// ***** Register open/close
-define("REG_OPEN",%REG_OPEN%);
-
-// ***** Peace system
-// 0 = None
-// 1 = Normal
-// 2 = Christmas
-// 3 = New Year
-// 4 = Easter
-define("PEACE",%PEACE%);
 
 //////////////////////////////////
 //    **** LOG SETTINGS  ****   //
 //////////////////////////////////
+//
 // LOG BUILDING/UPGRADING
 define("LOG_BUILD",%LOGBUILD%);
 // LOG RESEARCHES
@@ -393,8 +410,6 @@ define("LOG_MARKET",%LOGMARKET%);
 // LOG ILLEGAL ACTIONS
 define("LOG_ILLEGAL",%LOGILLEGAL%);
 
-
-
 //////////////////////////////////
 // ****  NEWSBOX SETTINGS  **** //
 //////////////////////////////////
@@ -403,8 +418,6 @@ define("LOG_ILLEGAL",%LOGILLEGAL%);
 define("NEWSBOX1",%BOX1%);
 define("NEWSBOX2",%BOX2%);
 define("NEWSBOX3",%BOX3%);
-
-
 
 //////////////////////////////////
 //   ****  SQL SETTINGS  ****   //
@@ -438,8 +451,6 @@ define("TB_PREFIX", "%PREFIX%");
 // default: 1
 define("DB_TYPE", %CONNECTT%);
 
-
-
 ////////////////////////////////////
 //   ****  EXTRA SETTINGS  ****   //
 ////////////////////////////////////
@@ -461,8 +472,6 @@ define("MAX_MAIL","%MAX_MAILS%");
 // ***** Include administrator in statistics/rank
 define("INCLUDE_ADMIN", %ARANK%);
 
-
-
 ////////////////////////////////////
 //   ****  ADMIN SETTINGS  ****   //
 ////////////////////////////////////
@@ -479,10 +488,10 @@ define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
 // ***** Allow Admin accounts to be raided and attacked
 define("ADMIN_ALLOW_INCOMING_RAIDS", %ARAIDS%);
 
-
 /////////////////////////////////////////////////
 //   ****  NEW MECHANICS AND FUNCTIONS  ****   //
 /////////////////////////////////////////////////
+
 define("NEW_FUNCTIONS_OASIS", %NEW_FUNCTIONS_OASIS%);
 define("NEW_FUNCTIONS_ALLIANCE_INVITATION", %NEW_FUNCTIONS_ALLIANCE_INVITATION%);
 define("NEW_FUNCTIONS_EMBASSY_MECHANICS", %NEW_FUNCTIONS_EMBASSY_MECHANICS%);
@@ -512,6 +521,7 @@ define("NEW_FUNCTION_REGISTRATION_GOLD_VALUE", %NEW_FUNCTION_REGISTRATION_GOLD_V
 //////////////////////////////////////////
 //   ****  DO NOT EDIT SETTINGS  ****   //
 //////////////////////////////////////////
+
 define("AUTO_DEL_INACTIVE",false); // auto-delete inactive players; default = false
 define("UN_ACT_TIME", 3628800); // 6 weeks to consider a player inactive
 define("ALLOW_BURST",false);
@@ -522,7 +532,10 @@ define("ALLOW_ALL_TRIBE",false);
 define("CFM_ADMIN_ACT",true);
 define("SERVER_WEB_ROOT",false);
 
-// === IP ban ===
+////////////////////////////
+//   ****  IP BAN  ****   //
+////////////////////////////
+
 // Master switch for IP-ban enforcement.
 define("BAN_IP_ENABLED",true);
 // Comma-separated list of trusted proxy IPs/CIDRs allowed to set the forwarded
@@ -558,7 +571,7 @@ $requse = 0;
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       config.php                                                  ##
-##  Version        10.0 Full Refactor & Security                               ##
+##  Version        11.0 Full Refactor & Security                               ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##

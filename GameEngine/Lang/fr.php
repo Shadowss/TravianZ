@@ -4303,3 +4303,9 @@ tz_def('TZ_WW_NO_CAPITAL', 'Le village de la Merveille du Monde ne peut pas deve
 // BONUSURI DE ALIANTA - donatie peste necesarul ultimului nivel
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ALLYBONUS_MSG_OVERMAX', 'Ceci est le dernier niveau : vous pouvez donner au maximum %s ressources supplementaires.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// JUCATORI PROTEJATI IMPOTRIVA ATACURILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_PROTECTED_PLAYERS', 'Joueurs proteges');
+tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Noms de joueurs separes par des virgules qui ne peuvent etre ni attaques ni pilles. Les renforts restent autorises. Laisser vide pour desactiver.');

@@ -55,6 +55,10 @@ if(isset($_GET['err']) && $_GET['err'] == 2) {
           <option value="1" selected>Romans</option>
           <option value="2">Teutons</option>
           <option value="3">Gauls</option>
+		  <option value="6">Huns</option>
+		  <option value="7">Egyptians</option>
+		  <option value="8">Spartans</option>
+		  <option value="9">Vikings</option>
         </select>
       </div>
       <div><label>Show in stats</label>

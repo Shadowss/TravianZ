@@ -4100,3 +4100,9 @@ tz_def('TZ_WW_NO_CAPITAL', 'Satul Minunii Lumii nu poate deveni capitala.');
 // BONUSURI DE ALIANTA - donatie peste necesarul ultimului nivel
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ALLYBONUS_MSG_OVERMAX', 'Acesta e ultimul nivel: poti dona cel mult %s resurse.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// JUCATORI PROTEJATI IMPOTRIVA ATACURILOR
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADM_PROTECTED_PLAYERS', 'Jucatori protejati');
+tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Nume de jucatori separate prin virgula, care nu pot fi atacati sau jefuiti de nimeni. Intaririle raman permise. Lasa gol ca sa dezactivezi.');
