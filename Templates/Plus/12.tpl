@@ -34,11 +34,14 @@ if($session->sit == 0) {
     if(mysqli_affected_rows($database->dblink) == 1) {
         $session->gold -= $cost;
         $_SESSION['gold'] = $session->gold;
-        // Session nu are proprietatea ->b4; valoarea sta in userarray, de unde
-        // o citeste si PopulateVar(). Scrierea directa crea o proprietate
-        // dinamica (depreciata in PHP 8.2) si nu se vedea nicaieri.
-        $currentB4 = isset($session->userarray['b4']) ? (int) $session->userarray['b4'] : 0;
-        $session->userarray['b4'] = ($currentB4 > $now ? $currentB4 : $now) + PLUS_PRODUCTION;
+        // Interogarea de mai sus a prelungit deja b4 in baza de date, atomic.
+        // Aici doar marcam bonusul ca activ in sesiune, ca pagina sa arate
+        // corect imediat, fara sa mai citim o data din baza.
+        //
+        // Session NU are proprietatea ->b4 (momentul expirarii sta in
+        // userarray, care e privat). Are insa ->bonus4, indicatorul public
+        // 0/1 pe care il foloseste restul interfetei.
+        $session->bonus4 = 1;
 
         // LOG pentru a2b2
         mysqli_query($database->dblink,

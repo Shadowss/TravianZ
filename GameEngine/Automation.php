@@ -45,6 +45,23 @@ if ( !defined('AUTOMATION_MANUAL_RUN') ) {
     }
 }
 
+/**
+ * Automation.php presupunea ca apelantul a inclus deja config.php. Cand nu era
+ * asa (de exemplu inclus din alt context), Database.php dadea eroare fatala:
+ *   Undefined constant "SQL_SERVER"
+ *
+ * Il incarcam noi daca lipseste. include_once nu-l aduce de doua ori.
+ */
+if (!defined('SQL_SERVER')) {
+    $automationConfig = __DIR__ . '/config.php';
+
+    if (is_file($automationConfig)) {
+        include_once($automationConfig);
+    } elseif (is_file(__DIR__ . '/../config.php')) {
+        include_once(__DIR__ . '/../config.php');
+    }
+}
+
 include_once("Database.php");
 include_once("Data/buidata.php");
 include_once("Data/unitdata.php");

@@ -13,7 +13,11 @@
 
 // #299: load CSRF helpers + admin_deny() before the access check below.
 require_once(__DIR__ . '/../csrf.php');
-session_start();
+
+// csrf.php porneste deja sesiunea; un al doilea apel doar genereaza un Notice.
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 include_once("../../config.php");
 include_once("../../Database.php");

@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded',function(){
       <path d="M26 32l5 5 11-11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       <defs><linearGradient id="g" x1="8" y1="4" x2="56" y2="58"><stop stop-color="#22c55e"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs>
     </svg>
-    <div><h1>TravianZ Installation</h1><p>Setup wizard • v.10.0 Full Refactor&Redesign</p></div>
+    <div><h1>TravianZ Installation</h1><p>Setup wizard • v.11.0 Full Refactor&Redesign</p></div>
   `;
   var wrap = document.querySelector('.wrapper');
   if(wrap) wrap.parentNode.insertBefore(h, wrap);

@@ -578,7 +578,9 @@ class Units {
                     $j = 1;
                     for ( $i = $start; $i <= $end; $i ++ ) {
                         $units[] = $i;
-                        $amounts[] = $post[ 't' . $j . '' ];
+                        // Formularul trimite doar casutele completate; o unitate necompletata
+                        // inseamna zero trupe din tipul acela.
+                        $amounts[] = isset($post['t'.$j]) ? $post['t'.$j] : 0;
                         $modes[] = 0;
                         $j ++;
                     }

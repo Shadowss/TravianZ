@@ -151,7 +151,12 @@ if ($displayarray['access'] == BANNED) {
     <td>
         <?php
         $tribeArrays = [TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5, TRIBE6, TRIBE7, TRIBE8, TRIBE9];
-        echo $tribeArrays[$displayarray['tribe'] - 1];
+
+        // Un cont fara trib (tribe = 0, de exemplu conturile de sistem sau unul
+        // inca neinregistrat complet) dadea indexul -1.
+        $tribeIndex = (int) ($displayarray['tribe'] ?? 0) - 1;
+
+        echo isset($tribeArrays[$tribeIndex]) ? $tribeArrays[$tribeIndex] : '';
         ?>
     </td>
 </tr>
