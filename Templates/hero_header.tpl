@@ -273,17 +273,54 @@ if (isset($building) && is_object($building) && method_exists($building, 'getTyp
     $tzHeroField = (int) $building->getTypeField(37);
 }
 
+/**
+ * ATENTIE la varianta "build.php?gid=37" fara nimic in spate: build.php
+ * rezolva gid-ul in satul CURENT, iar daca nu gaseste cladirea pune id = 1,
+ * adica primul camp de resurse. Cine nu avea nici erou, nici Resedinta,
+ * ajungea pe Padure cand apasa pe cerc. De aceea nu mai construim niciodata
+ * linkul "orb": daca nu stim un camp valid, componenta ramane needclickabila.
+ *
+ * $tzHeroClickable spune daca avem o tinta reala:
+ *   - cladirea 37 exista in satul curent            -> link direct
+ *   - altfel, stim satul eroului                    -> newdid + gid=37
+ *   - altfel (fara erou SI fara Resedinta nicaieri) -> fara link
+ */
+$tzHeroClickable = true;
+
 if ($tzHeroField > 0) {
     $tzHeroBase = 'build.php?id=' . $tzHeroField;
 } elseif ($tzHeroWref > 0) {
     $tzHeroBase = 'build.php?newdid=' . $tzHeroWref . '&amp;gid=37';
 } else {
-    $tzHeroBase = 'build.php?gid=37';
+    $tzHeroBase      = '';
+    $tzHeroClickable = false;
 }
 
 $tzLinkHero = $tzHeroBase;
-$tzLinkAdv  = $tzHeroBase . '&amp;t4tab=adventures';
-$tzLinkAuc  = $tzHeroBase . '&amp;t4tab=auction';
+$tzLinkAdv  = $tzHeroClickable ? $tzHeroBase . '&amp;t4tab=adventures' : '';
+$tzLinkAuc  = $tzHeroClickable ? $tzHeroBase . '&amp;t4tab=auction'    : '';
+
+/**
+ * Cand nu e clickabil folosim <span> in loc de <a>: fara href gol, fara
+ * cursor de link, fara intrare in ordinea de tabulare. Tooltip-ul ramane.
+ */
+$tzTag = $tzHeroClickable ? 'a' : 'span';
+
+/**
+ * Deschide slotul ca <a href=...> sau ca <span>, dupa caz.
+ * function_exists: un template inclus de doua ori intr-un request ar da
+ * fatal error la redeclarare.
+ */
+if (!function_exists('tzHeroSlotOpen')) {
+function tzHeroSlotOpen($link, $classes, $clickable)
+{
+    if ($clickable && $link !== '') {
+        return '<a href="' . $link . '" class="' . $classes . '">';
+    }
+
+    return '<span class="' . $classes . ' tzHeroNoLink">';
+}
+}
 
 /**
  * ---------------------------------------------------------------------------
@@ -357,7 +394,7 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
 <div id="tzHeroBox" class="<?php echo $tzHeroDead ? 'tzHeroDeadState' : ''; ?>">
 
     <!-- ============ STANGA: locatia eroului -> 37.tpl ============ -->
-    <a href="<?php echo $tzLinkHero; ?>" class="tzHeroSlot tzHeroHome">
+    <?php echo tzHeroSlotOpen($tzLinkHero, 'tzHeroSlot tzHeroHome', $tzHeroClickable); ?>
 
         <?php if ($tzHeroState === 'dead') { ?>
 
@@ -373,13 +410,12 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
 
         <?php } elseif ($tzHeroState === 'adventure') { ?>
 
-            <!-- cizma de drum: eroul e plecat in aventura (ca in referinta) -->
+            <!-- indicator cu doua sageti: eroul e plecat in aventura -->
             <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
                 <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
-                <path class="tzHeroBoot"
-                      d="M8.4 4.6h3.9c.5 0 .9.4.9.9v5.2c0 1.5.7 2.4 2 3.1l2.6 1.4c.9.5 1.4 1.2 1.4 2.1v1.2c0 .5-.4.9-.9.9H8.4c-.5 0-.9-.4-.9-.9V5.5c0-.5.4-.9.9-.9z" />
-                <path class="tzHeroBootSole" d="M7.5 17.2h11.7v1.3c0 .5-.4.9-.9.9H8.4c-.5 0-.9-.4-.9-.9z" />
-                <path class="tzHeroBootCuff" d="M7.5 5.5c0-.5.4-.9.9-.9h3.9c.5 0 .9.4.9.9v1.6H7.5z" />
+                <rect x="11.2" y="6.2" width="1.6" height="12" rx="0.4" class="tzHeroPost" />
+                <path d="M5.4 7.6h10.2l2.6 2-2.6 2H5.4z" class="tzHeroSign" />
+                <path d="M18.6 12.6H8.4l-2.6 2 2.6 2h10.2z" class="tzHeroSign" />
             </svg>
 
         <?php } elseif ($tzHeroState === 'attack') { ?>
@@ -402,9 +438,33 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
                 <path d="M12 5.2v14c3.5-1.2 6.1-3.7 6.1-7.3V7.5z" class="tzHeroShieldDark" />
             </svg>
 
+        <?php } elseif ($tzHeroState === 'training') { ?>
+
+            <!-- clepsidra: eroul e in antrenament, inca nu e disponibil -->
+            <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
+                <rect x="7.2" y="5.4" width="9.6" height="1.7" rx="0.6" class="tzHeroGlassFrame" />
+                <rect x="7.2" y="16.9" width="9.6" height="1.7" rx="0.6" class="tzHeroGlassFrame" />
+                <path d="M8.9 7.1h6.2L12 12z" class="tzHeroGlass" />
+                <path d="M8.9 16.9h6.2L12 12z" class="tzHeroGlass" />
+                <path d="M9.9 8.4h4.2L12 11z" class="tzHeroSand" />
+                <path d="M10.3 16.9h3.4L12 14.6z" class="tzHeroSand" />
+            </svg>
+
+        <?php } elseif ($tzHeroState === 'nohero') { ?>
+
+            <!-- silueta stinsa: jucatorul nu are inca niciun erou.
+                 Acelasi desen ca portretul gol din centru, ca sa se citeasca
+                 imediat ca "aici inca nu e nimeni". -->
+            <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
+                <circle cx="12" cy="9.8" r="3.5" class="tzHeroNone" />
+                <path d="M5.6 19.2c0-3.7 2.9-5.8 6.4-5.8s6.4 2.1 6.4 5.8z" class="tzHeroNone" />
+            </svg>
+
         <?php } else { ?>
 
-            <!-- casuta: eroul e in satul lui (sau in antrenament) -->
+            <!-- casuta: eroul e in satul lui -->
             <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
                 <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
                 <path class="tzHeroRoof" d="M12 5 4.3 11.3h2.3v6.8h10.8v-6.8h2.3z" />
@@ -461,10 +521,10 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
                 </i>
             <?php } ?>
         </span>
-    </a>
+    <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
 
     <!-- ============ CENTRU: portret + inel Health/Experience -> 37.tpl ============ -->
-    <a href="<?php echo $tzLinkHero; ?>" class="tzHeroSlot tzHeroCenter">
+    <?php echo tzHeroSlotOpen($tzLinkHero, 'tzHeroSlot tzHeroCenter', $tzHeroClickable); ?>
 
         <svg viewBox="0 0 64 64" class="tzHeroRing" aria-hidden="true">
 
@@ -510,20 +570,20 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
                 <?php } ?>
             <?php } ?>
         </span>
-    </a>
+    <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
 
     <?php if ($tzHeroT4) { ?>
 
     <!-- ============ DREAPTA SUS: aventuri -> 37_adventures.tpl ============ -->
-    <a href="<?php echo $tzLinkAdv; ?>" class="tzHeroSlot tzHeroAdv <?php echo $tzHeroAdv > 0 ? 'tzHeroAdvOn' : 'tzHeroAdvOff'; ?>">
+    <?php echo tzHeroSlotOpen($tzLinkAdv, 'tzHeroSlot tzHeroAdv ' . ($tzHeroAdv > 0 ? 'tzHeroAdvOn' : 'tzHeroAdvOff'), $tzHeroClickable); ?>
         <span class="tzHeroAdvNum"><?php echo (int) $tzHeroAdv; ?></span>
         <span class="tzHeroTip tzHeroTipAdv">
             <b><?php echo $tzTxtAdventures; ?>: <?php echo (int) $tzHeroAdv; ?></b>
         </span>
-    </a>
+    <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
 
     <!-- ============ DREAPTA JOS: argint -> 37_auction.tpl ============ -->
-    <a href="<?php echo $tzLinkAuc; ?>" class="tzHeroSlot tzHeroSilver">
+    <?php echo tzHeroSlotOpen($tzLinkAuc, 'tzHeroSlot tzHeroSilver', $tzHeroClickable); ?>
         <!-- Teanc de monede desenat, in acelasi stil ca iconita de casa.
              Inlocuieste img/hero/silver.png din graphic pack. -->
         <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
@@ -536,7 +596,7 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
         <span class="tzHeroTip tzHeroTipSilver">
             <b><?php echo $tzTxtSilver; ?>: <?php echo number_format($tzHeroSilver); ?></b>
         </span>
-    </a>
+    <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
 
     <?php } ?>
 

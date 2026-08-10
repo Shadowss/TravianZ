@@ -204,18 +204,50 @@ if ($hour > 1759 || $hour < 500) {
         ?>
         <div id="goldHeader">
             <?php
-            if ($session->gold <= 1) {
-                echo '<font color="#B3B3B3">
-                        <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
-                        ' . $session->gold . ' ' . GOLD . '
-                      </font>';
-            } else {
-                echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
-                      ' . $session->gold . ' ' . GOLD;
-            }
+            /**
+             * FORMAT COMPACT: iconita + valoare, fara cuvintele "Aur"/"Argint".
+             * Cuvintele au ramas in title/alt, deci se vad la mouseover.
+             *
+             * ICONITE SVG, nu gif-uri din graphic pack: gold.gif si gold_g.gif
+             * aveau alt contur si alta dimensiune decat silver.png, asa ca cele
+             * doua randuri nu se aliniau. Acum ambele sunt desenate la fel -
+             * acelasi cerc, aceeasi rama, aceeasi marime - si difera doar
+             * culoarea monedelor. Aceleasi clase ca iconita de argint din
+             * componenta Hero (css/hero_header.css), deci se potrivesc intre ele.
+             */
+            $goldLabel = defined('GOLD') ? GOLD : 'Gold';
+            $goldValue = (int) $session->gold;
 
             /**
-             * Argintul eroului, afisat langa aur (doar cu functiile T4 pornite).
+             * Un teanc de monede, desenat o singura data si refolosit.
+             * $tone alege paleta: aur, aur stins (fara aur) sau argint.
+             */
+            if (!function_exists('tzCoinIcon')) {
+            function tzCoinIcon($tone, $title)
+            {
+                $cls = 'tzCoinStack tzCoin-' . $tone;
+
+                return '<svg viewBox="0 0 24 24" class="' . $cls . '" role="img">'
+                     . '<title>' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</title>'
+                     . '<circle cx="12" cy="12" r="11" class="tzCoinBg" />'
+                     . '<ellipse cx="12" cy="16.1" rx="6.2" ry="2.3" class="tzCoinDisc" />'
+                     . '<ellipse cx="12" cy="13.1" rx="6.2" ry="2.3" class="tzCoinDisc" />'
+                     . '<ellipse cx="12" cy="10.1" rx="6.2" ry="2.3" class="tzCoinDisc" />'
+                     . '<ellipse cx="12" cy="10.1" rx="2.6" ry="0.9" class="tzCoinShine" />'
+                     . '</svg>';
+            }
+            }
+
+            // sub 2 monede aurul era deja afisat stins in interfata veche
+            $goldTone = ($goldValue <= 1) ? 'goldOff' : 'gold';
+
+            echo '<div id="goldHeaderRow" class="tzCoinRow tzCoinRow-' . $goldTone . '">'
+               . tzCoinIcon($goldTone, $goldValue . ' ' . $goldLabel)
+               . '<span class="tzCoinValue">' . $goldValue . '</span>'
+               . '</div>';
+
+            /**
+             * Argintul eroului, afisat sub aur (doar cu functiile T4 pornite).
              * Valoarea sta pe randul eroului, in hero.silver. O tinem in
              * $GLOBALS, nu intr-o variabila "static": intr-un fisier inclus,
              * "static" nu persista intre includeri, deci nu ar fi un cache real.
@@ -228,10 +260,11 @@ if ($hour > 1759 || $hour < 500) {
                 }
 
                 $t4SilverLabel = defined('HERO_SILVER') ? HERO_SILVER : 'Silver';
+                $t4SilverValue = (int) $GLOBALS['t4SilverValue'];
 
-                echo '<div id="silverHeader">'
-                   . '<img src="img/hero/silver.png" alt="' . $t4SilverLabel . '" title="' . $t4SilverLabel . '"/>'
-                   . ' ' . (int) $GLOBALS['t4SilverValue'] . ' ' . $t4SilverLabel
+                echo '<div id="silverHeader" class="tzCoinRow tzCoinRow-silver">'
+                   . tzCoinIcon('silver', $t4SilverValue . ' ' . $t4SilverLabel)
+                   . '<span class="tzCoinValue">' . $t4SilverValue . '</span>'
                    . '</div>';
             }
             ?>
@@ -325,25 +358,79 @@ if ($hour > 1759 || $hour < 500) {
         /* GOLD IN DREPTUNGHIUL ALBASTRU (RELOCARE_GOLD_LOCATIE_EROU.png)
            Vechea pozitie era left:370px, adica exact cercul rosu - acolo sta
            acum componenta Hero (#tzHeroBox), asa ca aurul s-a mutat la dreapta,
-           dupa butonul Plus si iconita day/night. */
+           dupa butonul Plus si iconita day/night.
+
+           ANCORAT LA DREAPTA, NU LA STANGA (right, nu left):
+           #mtop are 570px latime, deci right:-104px pune marginea dreapta la
+           x=674, sub limita de 686 peste care pagina se taie pe mobil
+           (#header are min-width:980px si #mtop incepe la ~294px absolut).
+           Ancorarea la dreapta face ca valorile lungi (un jucator cu milioane
+           de argint) sa creasca spre STANGA, nu spre marginea paginii - cu
+           "left" ar fi iesit iar din ecran. */
         #goldHeader {
             position: absolute;
-            left: 630px; /* << DREPTUNGHIUL ALBASTRU - muta 620-680 daca e nevoie */
-            /* Centrare pe verticala in bara gri: ancoram la mijloc si compensam
-               inaltimea proprie. Asa ramane centrat si acum, cand sunt doua
-               randuri (aur + argint), nu impins spre partea de jos. */
+            /* ANCORAT IN INTERIORUL BARII.
+               #mtop are 700px latime, nu 570: lang.css face @import la
+               modules/new_layout_ltr.css, care se incarca DUPA compact.css si
+               ii suprascrie regula. Cu right negativ blocul iesea din pagina
+               pe mobil. right:8px il tine mereu in bara, oricat de lunga ar fi
+               valoarea, si lasa ~45px fata de iconita day/night. */
+            right: 8px;
+            left: auto;
+            white-space: nowrap;
             top: 40%;
             transform: translateY(-50%);
             width: auto;
-            min-width: 100px;
             height: auto;
             min-height: 22px;
             line-height: 16px;
-            text-align: center;
+            text-align: right;
             font-size: 11px;
             font-weight: bold;
             z-index: 50;
         }
+
+        /* Randurile de aur/argint: iconita si valoarea aliniate pe aceeasi
+           linie de baza, ca sa nu mai "sara" una fata de alta. */
+        #goldHeader .tzCoinRow {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            height: 18px;
+        }
+
+        #goldHeader .tzCoinStack {
+            display: block;
+            width: 16px;
+            height: 16px;
+            flex: 0 0 16px;
+        }
+
+        #goldHeader .tzCoinValue {
+            display: inline-block;
+        }
+
+        /* Rama comuna: acelasi cerc pentru toate cele trei variante */
+        #goldHeader .tzCoinBg {
+            fill: #f6f5f2;
+            stroke: #b8b6b1;
+            stroke-width: 1;
+        }
+
+        /* Aur */
+        #goldHeader .tzCoin-gold .tzCoinDisc  { fill: #e3b427; stroke: #9a7512; stroke-width: .8; }
+        #goldHeader .tzCoin-gold .tzCoinShine { fill: #f7e08a; }
+
+        /* Aur epuizat: aceeasi forma, doar decolorata (inlocuieste gold_g.gif) */
+        #goldHeader .tzCoin-goldOff .tzCoinDisc  { fill: #d3d2ce; stroke: #a3a19c; stroke-width: .8; }
+        #goldHeader .tzCoin-goldOff .tzCoinShine { fill: #efeeeb; }
+        #goldHeader .tzCoinRow-goldOff .tzCoinValue { color: #b3b3b3; }
+
+        /* Argint */
+        #goldHeader .tzCoin-silver .tzCoinDisc  { fill: #cdd2d6; stroke: #7e858b; stroke-width: .8; }
+        #goldHeader .tzCoin-silver .tzCoinShine { fill: #eef1f3; }
+
 
         #goldHeader img {
             vertical-align: middle;

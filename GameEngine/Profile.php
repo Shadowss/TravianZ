@@ -269,8 +269,14 @@ class Profile {
          * numele se afiseaza in rapoarte de lupta, pe harta si in listele de
          * sate - deci codul se executa in browserul altor jucatori.
          *
-         * Aceleasi reguli ca la numele de cont: litere, cifre, punct, liniuta,
-         * underscore si spatii simple. Fara caractere cu inteles in HTML.
+         * Permise: litere, cifre, punct, liniuta, underscore, paranteze
+         * rotunde si drepte, plus spatii simple intre grupuri.
+         *
+         * Parantezele sunt sigure aici: nu au niciun inteles in HTML, iar
+         * numele satelor nu trec prin BBCode (acesta se aplica doar pe
+         * descrierile de profil si pe forum), deci un sat numit "[b]x[/b]"
+         * se afiseaza ca atare, nu ingrosat. Raman excluse < > & " ',
+         * adica exact caracterele care ar putea sparge HTML-ul.
          */
         if (function_exists('mb_strlen')) {
             if (mb_strlen($newName, 'UTF-8') > 25) {
@@ -280,7 +286,7 @@ class Profile {
             $newName = substr($newName, 0, 25);
         }
 
-        if (!preg_match('/^[\p{L}\p{N}._-]+(?: [\p{L}\p{N}._-]+)*$/u', $newName)) {
+        if (!preg_match('/^[\p{L}\p{N}._\-\[\]()]+(?: [\p{L}\p{N}._\-\[\]()]+)*$/u', $newName)) {
             continue;   // nume respins, satul isi pastreaza numele vechi
         }
 

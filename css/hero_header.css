@@ -160,10 +160,17 @@ div#mtop {
 .tzHeroSkull    { fill: #e9e7e2; stroke: #7d7b76; stroke-width: .8; }
 .tzHeroSkullEye { fill: #3a3835; }
 
-/* Starile "plecat": aventura (cizma), atac (sabii), intarire (scut) */
-.tzHeroBoot     { fill: #8a6a3f; stroke: #5f482a; stroke-width: .8; }
-.tzHeroBootSole { fill: #4a3a24; }
-.tzHeroBootCuff { fill: #b08a52; }
+/* Aventura: indicator cu doua sageti */
+.tzHeroPost { fill: #8a6a3f; }
+.tzHeroSign { fill: #d8c9a6; stroke: #8a6a3f; stroke-width: .8; }
+
+/* Antrenament: clepsidra */
+.tzHeroGlassFrame { fill: #8a6a3f; }
+.tzHeroGlass      { fill: #dfe6ea; stroke: #8f9aa1; stroke-width: .7; }
+.tzHeroSand       { fill: #d8a93f; }
+
+/* Fara erou: silueta stinsa, la fel ca portretul gol din centru */
+.tzHeroNone { fill: #b9b7b2; }
 
 .tzHeroBlade  { fill: none; stroke: #9a9894; stroke-width: 2.2; stroke-linecap: round; }
 .tzHeroHilt   { fill: none; stroke: #8a6a3f; stroke-width: 2.2; stroke-linecap: round; }
@@ -239,6 +246,12 @@ div#mtop {
 
 .tzHeroSlot:hover .tzHeroTip {
     display: block;
+}
+
+/* Slot fara tinta valida (fara erou SI fara Resedinta Eroului nicaieri):
+   ramane vizibil si cu tooltip, dar nu mai arata a link. */
+.tzHeroNoLink {
+    cursor: default;
 }
 
 .tzHeroTip b {
