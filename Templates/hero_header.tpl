@@ -147,10 +147,11 @@ if ($tzHeroExists && $tzCurExp < $tzMaxExp && $tzExpNext > $tzExpCur && $tzHeroL
  * Metoda are cache static pe uid, deci daca o mai cheama cineva pe aceeasi
  * pagina nu se duce a doua oara la baza de date.
  */
-$tzHeroAway    = '';
-$tzHeroTarget  = 0;
-$tzHeroEndtime = 0;
-$tzHeroSort    = 0;
+$tzHeroAway      = '';
+$tzHeroTarget    = 0;
+$tzHeroEndtime   = 0;
+$tzHeroSort      = 0;
+$tzHeroReturning = false;
 
 if ($tzHeroExists && !$tzHeroDead && !$tzHeroTraining && class_exists('HeroItems')) {
 
@@ -158,11 +159,12 @@ if ($tzHeroExists && !$tzHeroDead && !$tzHeroTraining && class_exists('HeroItems
 
     if (method_exists($tzAwayObject, 'heroLocation')) {
 
-        $tzLoc         = $tzAwayObject->heroLocation($tzHeroUid);
-        $tzHeroAway    = (string) $tzLoc['reason'];
-        $tzHeroTarget  = (int) $tzLoc['target'];
-        $tzHeroEndtime = (int) $tzLoc['endtime'];
-        $tzHeroSort    = (int) $tzLoc['sort'];
+        $tzLoc           = $tzAwayObject->heroLocation($tzHeroUid);
+        $tzHeroAway      = (string) $tzLoc['reason'];
+        $tzHeroTarget    = (int) $tzLoc['target'];
+        $tzHeroEndtime   = (int) $tzLoc['endtime'];
+        $tzHeroSort      = (int) $tzLoc['sort'];
+        $tzHeroReturning = !empty($tzLoc['returning']);
 
     } else {
 
@@ -203,6 +205,13 @@ if (!$tzHeroExists) {
     $tzHeroState = 'dead';
 } elseif ($tzHeroTraining) {
     $tzHeroState = 'training';
+} elseif ($tzHeroReturning) {
+    /**
+     * O singura stare pentru toate intoarcerile acasa: din aventura, din
+     * atac sau dupa rechemarea dintr-o intarire. Motivul brut ramane in
+     * $tzHeroAway, ca sa alegem textul potrivit mai jos.
+     */
+    $tzHeroState = 'returning';
 } elseif ($tzHeroAway !== '') {
     $tzHeroState = $tzHeroAway;
 } else {
@@ -254,6 +263,38 @@ if ($tzHeroT4 && class_exists('HeroItems')) {
 
     $tzHeroSilver = (int) $GLOBALS['t4SilverValue'];
 }
+
+/**
+ * ---------------------------------------------------------------------------
+ * 6b. Resursa produsa de erou (atributul T4 "Resources")
+ * ---------------------------------------------------------------------------
+ * Aceleasi formule ca in 37_hero.tpl, ca sa nu apara doua cifre diferite
+ * pentru acelasi lucru:
+ *   res_type 0     -> produce din TOATE, cate HERO_RES_PER_POINT_ALL / punct
+ *   res_type 1..4  -> o singura resursa, HERO_RES_PER_POINT_ONE / punct
+ * Totul inmultit cu SPEED, ca in pagina Resedintei.
+ *
+ * Coloanele "resources" si "res_type" lipsesc pe serverele care n-au rulat
+ * inca add-hero-resources.sql, de aceea sunt citite cu ?? 0.
+ */
+$tzResPoints = $tzHeroExists ? (int) ($tzHeroRow['resources'] ?? 0) : 0;
+$tzResType   = $tzHeroExists ? (int) ($tzHeroRow['res_type'] ?? 0) : 0;
+
+$tzResPerAll = defined('HERO_RES_PER_POINT_ALL') ? (int) HERO_RES_PER_POINT_ALL : 3;
+$tzResPerOne = defined('HERO_RES_PER_POINT_ONE') ? (int) HERO_RES_PER_POINT_ONE : 10;
+$tzResSpeed  = defined('SPEED') ? SPEED : 1;
+
+$tzResSingle = ($tzResType >= 1 && $tzResType <= 4);
+$tzResAmount = $tzResSingle
+    ? (int) round($tzResPoints * $tzResPerOne * $tzResSpeed)
+    : (int) round($tzResPoints * $tzResPerAll * $tzResSpeed);
+
+$tzResNames = array(
+    1 => (defined('LUMBER') ? LUMBER : 'Lumber'),
+    2 => (defined('CLAY')   ? CLAY   : 'Clay'),
+    3 => (defined('IRON')   ? IRON   : 'Iron'),
+    4 => (defined('CROP')   ? CROP   : 'Crop'),
+);
 
 /**
  * ---------------------------------------------------------------------------
@@ -375,6 +416,10 @@ $tzTxtAdventure  = defined('HERO_HEADER_ADVENTURE') ? HERO_HEADER_ADVENTURE : 'H
 $tzTxtAttack     = defined('HERO_HEADER_ATTACK')    ? HERO_HEADER_ATTACK    : 'Hero is with the army';
 $tzTxtReinforce  = defined('HERO_HEADER_REINFORCE') ? HERO_HEADER_REINFORCE : 'Hero is reinforcing';
 $tzTxtIn         = defined('HERO_HEADER_IN')        ? HERO_HEADER_IN        : 'in';
+$tzTxtRetAdv     = defined('HERO_HEADER_RETURN_ADV')  ? HERO_HEADER_RETURN_ADV  : 'Hero returning from adventure';
+$tzTxtRetHome    = defined('HERO_HEADER_RETURN_HOME') ? HERO_HEADER_RETURN_HOME : 'Hero returning home';
+$tzTxtResources  = defined('RESOURCES')            ? RESOURCES            : 'Resources';
+$tzTxtPerHour    = defined('HERO_HEADER_PER_HOUR') ? HERO_HEADER_PER_HOUR : 'per hour';
 $tzTxtVillage    = defined('VILLAGE')              ? VILLAGE              : 'Village';
 $tzTxtLevel      = defined('LEVEL')                ? LEVEL                : 'Level';
 $tzTxtHealth     = defined('TZ_HEALTH')            ? TZ_HEALTH            : 'Health';
@@ -389,7 +434,18 @@ $tzHeroNameSafe    = htmlspecialchars($tzHeroName,    ENT_QUOTES, 'UTF-8');
 $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
 
 ?>
-<link rel="stylesheet" href="css/hero_header.css" type="text/css" />
+<?php
+/**
+ * ?v=<data fisierului>: fara asta, browserul pastra CSS-ul vechi din cache
+ * dupa fiecare deploy. Efectul e insidios - HTML-ul nou apare, dar regulile
+ * noi lipsesc, asa ca elementele isi pierd pozitia (position:absolute fara
+ * left/top cade in coltul din stanga sus) si SVG-urile raman negre, fiindca
+ * fill-ul vine din CSS. filemtime se schimba singur la fiecare incarcare.
+ */
+$tzCssVer = @filemtime('css/hero_header.css');
+?>
+<link rel="stylesheet" type="text/css"
+      href="css/hero_header.css<?php echo $tzCssVer ? '?v=' . $tzCssVer : ''; ?>" />
 
 <div id="tzHeroBox" class="<?php echo $tzHeroDead ? 'tzHeroDeadState' : ''; ?>">
 
@@ -436,6 +492,18 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
                 <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
                 <path d="M12 5.2 5.9 7.5v4.4c0 3.6 2.6 6.1 6.1 7.3 3.5-1.2 6.1-3.7 6.1-7.3V7.5z" class="tzHeroShield" />
                 <path d="M12 5.2v14c3.5-1.2 6.1-3.7 6.1-7.3V7.5z" class="tzHeroShieldDark" />
+            </svg>
+
+        <?php } elseif ($tzHeroState === 'returning') { ?>
+
+            <!-- casa cu sageata care intra in ea: eroul e pe drumul spre casa,
+                 indiferent daca vine din aventura, din atac sau dintr-o
+                 intarire de la care a fost rechemat -->
+            <svg viewBox="0 0 24 24" class="tzHeroIco" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" class="tzHeroIcoBg" />
+                <path class="tzHeroRoof" d="M13.5 5.6 6.9 11.2h1.9v5.9h9.2v-5.9h1.9z" />
+                <rect x="10.4" y="12.1" width="6.3" height="5" class="tzHeroWall" />
+                <path class="tzHeroBackArrow" d="M3.2 13.6h6.4v-2.4l4 3.6-4 3.6v-2.4H3.2z" />
             </svg>
 
         <?php } elseif ($tzHeroState === 'training') { ?>
@@ -488,6 +556,10 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
                 'attack'        => $tzTxtAttack,
                 'reinforcement' => $tzTxtReinforce,
                 'home'          => $tzTxtAtHome,
+                // din aventura stim sigur de unde vine; la sort_type 4 nu se
+                // poate deosebi atacul de rechemarea dintr-o intarire, deci
+                // textul ramane generic
+                'returning'     => ($tzHeroAway === 'adventure') ? $tzTxtRetAdv : $tzTxtRetHome,
             ];
             ?>
             <b><?php echo $tzStateLabels[$tzHeroState]; ?></b>
@@ -579,6 +651,46 @@ $tzHeroVillageSafe = htmlspecialchars($tzHeroVillage, ENT_QUOTES, 'UTF-8');
         <span class="tzHeroAdvNum"><?php echo (int) $tzHeroAdv; ?></span>
         <span class="tzHeroTip tzHeroTipAdv">
             <b><?php echo $tzTxtAdventures; ?>: <?php echo (int) $tzHeroAdv; ?></b>
+        </span>
+    <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
+
+    <!-- ============ STANGA JOS: resursa produsa de erou -> 37.tpl ============ -->
+    <?php echo tzHeroSlotOpen($tzLinkHero, 'tzHeroSlot tzHeroRes', $tzHeroClickable); ?>
+
+        <?php
+        /**
+         * Exact aceleasi iconite ca in 37_hero.tpl, ca sa nu existe doua
+         * seturi de grafica pentru acelasi lucru:
+         *   - "toate"  -> img/hero/res_all.png (iconita combinata)
+         *   - 1..4     -> clasele r1..r4, care decupeaza sprite-ul
+         *                 img/a/res2.gif din graphic pack, peste img/x.gif
+         */
+        if ($tzResSingle) {
+            echo '<img class="tzHeroResOne r' . $tzResType . '" src="img/x.gif" alt="" />';
+        } else {
+            echo '<img class="tzHeroResAll" src="img/hero/res_all.png" alt="" />';
+        }
+        ?>
+
+        <span class="tzHeroTip tzHeroTipRes">
+            <?php if ($tzResPoints <= 0) { ?>
+                <b><?php echo $tzTxtResources; ?>: 0</b>
+            <?php } elseif ($tzResSingle) { ?>
+                <b><?php echo $tzResNames[$tzResType]; ?>:
+                   +<?php echo number_format($tzResAmount); ?> <?php echo $tzTxtPerHour; ?></b>
+            <?php } else { ?>
+                <?php
+                /**
+                 * res_type 0 inseamna ca eroul produce suma asta din FIECARE
+                 * resursa, nu impartita intre ele - de aceea o listam pe fiecare
+                 * rand, in loc s-o repetam si in titlu.
+                 */
+                ?>
+                <b><?php echo $tzTxtResources; ?> <?php echo $tzTxtPerHour; ?></b>
+                <?php foreach ($tzResNames as $tzResName) { ?>
+                    <i><?php echo $tzResName; ?>: +<?php echo number_format($tzResAmount); ?></i>
+                <?php } ?>
+            <?php } ?>
         </span>
     <?php echo $tzHeroClickable ? '</a>' : '</span>'; ?>
 

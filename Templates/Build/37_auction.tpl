@@ -88,6 +88,173 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
 }
 ?>
 
+<style type="text/css">
+/* ---------------------------------------------------------------------------
+   Stiluri locale pentru pagina de licitatii. Toate clasele au prefixul
+   "t4auc-" ca sa nu atinga nimic altceva din interfata.
+   --------------------------------------------------------------------------- */
+
+/* --- Casa de schimb: cele doua celule egale pe inaltime, continut centrat --- */
+.t4auc-ex td { vertical-align: middle; }
+.t4auc-ex-cell { width: 50%; padding: 12px 10px; }
+
+.t4auc-ex-inner {
+    max-width: 290px;
+    margin: 0 auto;          /* centrat pe orizontala in celula */
+    text-align: left;
+}
+
+.t4auc-balance {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 0 0 12px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #dcd9d3;
+}
+
+.t4auc-bal {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.t4auc-bal b { font-size: 13px; }
+
+/* Aceleasi monede desenate ca in bara de sus (header.tpl) */
+.t4auc-coin { display: block; width: 18px; height: 18px; flex: 0 0 18px; }
+.t4auc-coin .t4auc-coinBg    { fill: #f6f5f2; stroke: #b8b6b1; stroke-width: 1; }
+.t4auc-coin-gold   .t4auc-coinDisc  { fill: #e3b427; stroke: #9a7512; stroke-width: .8; }
+.t4auc-coin-gold   .t4auc-coinShine { fill: #f7e08a; }
+.t4auc-coin-silver .t4auc-coinDisc  { fill: #cdd2d6; stroke: #7e858b; stroke-width: .8; }
+.t4auc-coin-silver .t4auc-coinShine { fill: #eef1f3; }
+
+.t4auc-form {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 9px 0;
+}
+
+.t4auc-num {
+    width: 76px;
+    padding: 3px 5px;
+    text-align: right;
+    border: 1px solid #b9b6b0;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.t4auc-rate {
+    color: #8a877f;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.t4auc-hint {
+    margin: 10px 0 0 0;
+    color: #8a877f;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.t4auc-merchant { max-width: 100%; max-height: 230px; }
+
+/* --- Butoane --- */
+.t4auc-btn {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #3f5f22;
+    cursor: pointer;
+    white-space: nowrap;
+    background: #e4f0d0;
+    background: linear-gradient(#fbfdf6, #dcebc6);
+    border: 1px solid #a3bf7c;
+    border-radius: 4px;
+}
+
+.t4auc-btn:hover {
+    background: #d6e8bd;
+    background: linear-gradient(#ffffff, #cfe4b0);
+    border-color: #8bab61;
+}
+
+.t4auc-btn:active {
+    background: linear-gradient(#d5e6b8, #e9f3da);
+    border-color: #8bab61;
+}
+
+/* --- Tabelul de licitatii deschise ---------------------------------------
+   Latimile sunt stranse la minimul in care incape headerul, ca tabelul sa nu
+   mai depaseasca zona de continut (~505px) si sa nu mai apara scroll
+   orizontal. Total: 78+96+66+46+66+74 = 426px + padding. */
+.t4auc-tbl th { text-align: center; }
+
+/* fara white-space:nowrap pe th: "Se incheie in" se rupe pe doua randuri
+   in loc sa forteze latirea coloanei */
+.t4auc-tbl td, .t4auc-tbl th { padding: 4px 3px; }
+
+.t4auc-col-item  { width: 78px; text-align: center; }
+.t4auc-col-tier  { width: 96px; text-align: center; }
+.t4auc-col-qty   { width: 66px; text-align: center; }
+.t4auc-col-price { width: 46px; text-align: center; }
+.t4auc-col-time  { width: 66px; text-align: center; }
+.t4auc-col-bid   { width: 74px; text-align: center; }
+
+/* Obiect: iconita sus, numele dedesubt cu scris palid */
+.t4auc-itemname {
+    display: block;
+    margin-top: 2px;
+    color: #9b978f;
+    font-size: 10px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+/* Tier: numarul sus, abilitatea dedesubt cu scris mai pal */
+.t4auc-tier {
+    display: inline-block;
+    min-width: 30px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #5c5850;
+    background: #eceae5;
+    border: 1px solid #cfccc5;
+    border-radius: 3px;
+}
+
+.t4auc-ability {
+    display: block;
+    margin-top: 3px;
+    color: #9b978f;      /* palid, ca sa nu concureze cu numele obiectului */
+    font-size: 9px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+/* Oferta: casuta SUS, butonul DEDESUBT - una langa alta cereau ~116px,
+   stivuite incap in 74px */
+.t4auc-bidform { margin: 0; text-align: center; }
+
+.t4auc-bidnum {
+    display: block;
+    width: 56px;
+    margin: 0 auto 3px auto;
+    padding: 2px 4px;
+    text-align: right;
+    border: 1px solid #b9b6b0;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.t4auc-bidform .t4auc-btn { padding: 3px 9px; }
+</style>
+
 <?php if ($t4Msg !== '') { ?>
     <p class="message" style="font-weight:bold;"><?php echo $t4Msg; ?></p>
 <?php } ?>
@@ -100,41 +267,76 @@ $t4Gold     = (int) $session->gold;
 $t4RateG2S  = HeroItems::silverPerGold();
 $t4RateS2G  = HeroItems::silverForOneGold();
 ?>
-<table id="distribution" cellpadding="1" cellspacing="1">
+<?php
+/**
+ * Aceleasi monede desenate ca in bara de sus, ca sa nu existe doua
+ * reprezentari diferite pentru aur si argint. Culorile vin din blocul
+ * <style> de mai sus, nu din atribute inline.
+ */
+if (!function_exists('t4AucCoin')) {
+function t4AucCoin($tone, $title)
+{
+    return '<svg viewBox="0 0 24 24" class="t4auc-coin t4auc-coin-' . $tone . '" role="img">'
+         . '<title>' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</title>'
+         . '<circle cx="12" cy="12" r="11" class="t4auc-coinBg" />'
+         . '<ellipse cx="12" cy="16.1" rx="6.2" ry="2.3" class="t4auc-coinDisc" />'
+         . '<ellipse cx="12" cy="13.1" rx="6.2" ry="2.3" class="t4auc-coinDisc" />'
+         . '<ellipse cx="12" cy="10.1" rx="6.2" ry="2.3" class="t4auc-coinDisc" />'
+         . '<ellipse cx="12" cy="10.1" rx="2.6" ry="0.9" class="t4auc-coinShine" />'
+         . '</svg>';
+}
+}
+
+$t4LblGold   = defined('GOLD') ? GOLD : 'Gold';
+$t4LblSilver = defined('HERO_SILVER') ? HERO_SILVER : 'Silver';
+?>
+<table id="distribution" class="t4auc-ex" cellpadding="1" cellspacing="1">
     <thead>
         <tr><th colspan="2"><?php echo defined('HERO_EXCHANGE') ? HERO_EXCHANGE : 'Exchange office'; ?></th></tr>
     </thead>
     <tbody>
         <tr>
-            <td style="width:290px;vertical-align:top;">
-                <p style="margin:0 0 6px 0;">
-                    <b><?php echo HERO_SILVER; ?>:</b> <?php echo $t4Silver; ?>
-                    &nbsp;&nbsp;
-                    <b><?php echo defined('GOLD') ? GOLD : 'Gold'; ?>:</b> <?php echo $t4Gold; ?>
-                </p>
+            <td class="t4auc-ex-cell">
+                <div class="t4auc-ex-inner">
 
-                <form action="" method="POST" style="margin:0 0 5px 0;">
-                    <input type="hidden" name="t4action" value="g2s">
-                    <input type="number" name="amount" min="1" max="100000" value="1" style="width:70px">
-                    <?php echo defined('GOLD') ? GOLD : 'Gold'; ?>
-                    <input type="submit" value="<?php echo defined('HERO_EXCHANGE_G2S') ? HERO_EXCHANGE_G2S : 'Gold to silver'; ?>">
-                    <small>(1 : <?php echo $t4RateG2S; ?>)</small>
-                </form>
+                    <div class="t4auc-balance">
+                        <span class="t4auc-bal">
+                            <?php echo t4AucCoin('silver', $t4LblSilver); ?>
+                            <b><?php echo number_format((int) $t4Silver); ?></b>
+                        </span>
+                        <span class="t4auc-bal">
+                            <?php echo t4AucCoin('gold', $t4LblGold); ?>
+                            <b><?php echo number_format((int) $t4Gold); ?></b>
+                        </span>
+                    </div>
 
-                <form action="" method="POST" style="margin:0;">
-                    <input type="hidden" name="t4action" value="s2g">
-                    <input type="number" name="amount" min="1" max="100000000" value="<?php echo $t4RateS2G; ?>" style="width:70px">
-                    <?php echo HERO_SILVER; ?>
-                    <input type="submit" value="<?php echo defined('HERO_EXCHANGE_S2G') ? HERO_EXCHANGE_S2G : 'Silver to gold'; ?>">
-                    <small>(<?php echo $t4RateS2G; ?> : 1)</small>
-                </form>
+                    <form action="" method="POST" class="t4auc-form">
+                        <input type="hidden" name="t4action" value="g2s">
+                        <input type="number" name="amount" min="1" max="100000" value="1" class="t4auc-num">
+                        <?php echo t4AucCoin('gold', $t4LblGold); ?>
+                        <button type="submit" class="t4auc-btn"><?php
+                            echo defined('HERO_EXCHANGE_G2S') ? HERO_EXCHANGE_G2S : 'Gold to silver';
+                        ?></button>
+                        <span class="t4auc-rate">1 : <?php echo $t4RateG2S; ?></span>
+                    </form>
 
-                <p style="margin:6px 0 0 0;color:#777;font-size:11px;">
-                    <?php echo defined('HERO_EXCHANGE_HINT') ? HERO_EXCHANGE_HINT
-                        : 'You type the amount you give. Silver left over below one unit of gold stays with you.'; ?>
-                </p>
+                    <form action="" method="POST" class="t4auc-form">
+                        <input type="hidden" name="t4action" value="s2g">
+                        <input type="number" name="amount" min="1" max="100000000" value="<?php echo $t4RateS2G; ?>" class="t4auc-num">
+                        <?php echo t4AucCoin('silver', $t4LblSilver); ?>
+                        <button type="submit" class="t4auc-btn"><?php
+                            echo defined('HERO_EXCHANGE_S2G') ? HERO_EXCHANGE_S2G : 'Silver to gold';
+                        ?></button>
+                        <span class="t4auc-rate"><?php echo $t4RateS2G; ?> : 1</span>
+                    </form>
+
+                    <p class="t4auc-hint">
+                        <?php echo defined('HERO_EXCHANGE_HINT') ? HERO_EXCHANGE_HINT
+                            : 'You type the amount you give. Silver left over below one unit of gold stays with you.'; ?>
+                    </p>
+                </div>
             </td>
-            <td style="text-align:center;vertical-align:middle;">
+            <td class="t4auc-ex-cell" style="text-align:center;">
                 <?php
                 /**
                  * Negustorul casei de licitatii, pe trib.
@@ -178,49 +380,96 @@ $t4RateS2G  = HeroItems::silverForOneGold();
                     $t4MerchantFile = 'merchant.png';
                 }
                 ?>
-                <img src="img/hero/<?php echo $t4MerchantFile; ?>" alt=""
-                     style="max-width:280px;max-height:300px;">
+                <img class="t4auc-merchant" src="img/hero/<?php echo $t4MerchantFile; ?>" alt="">
             </td>
         </tr>
     </tbody>
 </table>
 
-<table id="distribution" cellpadding="1" cellspacing="1">
+<?php
+/**
+ * Tier-ul obiectului vine din catalogul de iteme ($heroItemCatalog), acolo
+ * unde e definit si bonusul - deci o singura sursa de adevar, nu o lista
+ * paralela care s-ar desincroniza la prima modificare de balans.
+ */
+if (!function_exists('t4AucItemTier')) {
+function t4AucItemTier($itemid)
+{
+    global $heroItemCatalog;
+
+    return isset($heroItemCatalog[(int) $itemid]['tier'])
+        ? (int) $heroItemCatalog[(int) $itemid]['tier']
+        : 0;
+}
+}
+
+$t4LblTier = defined('HERO_AUC_TIER') ? HERO_AUC_TIER : 'Tier';
+
+/**
+ * Eticheta scurta pentru coloana de pret: HERO_AUC_PRICE e "Pret curent" /
+ * "Current price" si latea coloana degeaba. Daca HERO_AUC_PRICE_SHORT nu e
+ * definita inca, ramanem pe cea lunga - nu vrem sa apara brusc engleza
+ * intr-o interfata romaneasca.
+ */
+$t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_PRICE;
+?>
+<table id="distribution" class="t4auc-tbl" cellpadding="1" cellspacing="1">
     <thead>
-        <tr><th colspan="5"><?php echo HERO_AUC_OPEN; ?></th></tr>
+        <tr><th colspan="6"><?php echo HERO_AUC_OPEN; ?></th></tr>
         <tr>
-            <td><b><?php echo HERO_AUC_ITEM; ?></b></td>
-            <td><b><?php echo HERO_QUANTITY; ?></b></td>
-            <td><b><?php echo HERO_AUC_PRICE; ?></b></td>
-            <td><b><?php echo HERO_AUC_TIME_LEFT; ?></b></td>
-            <td><b><?php echo HERO_AUC_BID; ?></b></td>
+            <th class="t4auc-col-item"><?php echo HERO_AUC_ITEM; ?></th>
+            <th class="t4auc-col-tier"><?php echo $t4LblTier; ?></th>
+            <th class="t4auc-col-qty"><?php echo HERO_QUANTITY; ?></th>
+            <th class="t4auc-col-price"><?php echo $t4LblPrice; ?></th>
+            <th class="t4auc-col-time"><?php echo HERO_AUC_TIME_LEFT; ?></th>
+            <th class="t4auc-col-bid"><?php echo HERO_AUC_BID; ?></th>
         </tr>
     </thead>
     <tbody>
     <?php if (count($t4Open)) { ?>
         <?php foreach ($t4Open as $t4A) { ?>
+        <?php
+            $t4ItemId  = (int) $t4A['itemid'];
+            $t4Tier    = t4AucItemTier($t4ItemId);
+            $t4Ability = heroItemBonusText($t4ItemId);
+        ?>
         <tr>
-            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><span class="heroT4Item item<?php echo (int) $t4A['itemid']; ?>"></span> <?php echo $t4A['name']; ?>
-                <?php if ((int) $t4A['seller'] === 0) { ?><small>(<?php echo HERO_AUC_SELLER_NPC; ?>)</small><?php } ?>
+            <td class="t4auc-col-item" title="<?php echo htmlspecialchars($t4Ability); ?>">
+                <span class="heroT4Item item<?php echo $t4ItemId; ?>"></span>
+                <span class="t4auc-itemname">
+                    <?php echo $t4A['name']; ?><?php if ((int) $t4A['seller'] === 0) { ?> (<?php echo HERO_AUC_SELLER_NPC; ?>)<?php } ?>
+                </span>
             </td>
-            <td style="text-align:center;"><?php echo (int) $t4A['quantity']; ?></td>
-            <td style="text-align:right;"><?php echo number_format((int) $t4A['silver_current']); ?></td>
-            <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
-            <td style="width:170px;text-align:center;">
+            <td class="t4auc-col-tier" style="text-align:center;">
+                <?php if ($t4Tier > 0) { ?>
+                    <span class="t4auc-tier"><?php echo $t4LblTier; ?> <?php echo $t4Tier; ?></span>
+                <?php } else { ?>
+                    <span class="t4auc-tier">&ndash;</span>
+                <?php } ?>
+                <?php if ($t4Ability !== '') { ?>
+                    <span class="t4auc-ability"><?php echo htmlspecialchars($t4Ability); ?></span>
+                <?php } ?>
+            </td>
+            <td class="t4auc-col-qty"><?php echo (int) $t4A['quantity']; ?></td>
+            <td class="t4auc-col-price"><?php echo number_format((int) $t4A['silver_current']); ?></td>
+            <td class="t4auc-col-time">
+                <span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span>
+            </td>
+            <td class="t4auc-col-bid">
                 <?php if ((int) $t4A['seller'] !== $session->uid) { ?>
-                <form action="" method="POST" style="margin:0;">
+                <form action="" method="POST" class="t4auc-bidform">
                     <input type="hidden" name="t4action" value="bid">
                     <input type="hidden" name="aucid" value="<?php echo (int) $t4A['id']; ?>">
-                    <input type="text" name="maxbid" size="6" style="text-align:right;"
+                    <input type="text" name="maxbid" class="t4auc-bidnum"
                            value="<?php echo (int) $t4A['silver_current'] + ((int) $t4A['bidder'] > 0 ? 1 : 0); ?>">
-                    <input type="submit" value="<?php echo HERO_AUC_BID; ?>">
+                    <button type="submit" class="t4auc-btn"><?php echo HERO_AUC_BID; ?></button>
                 </form>
-                <?php } else { ?>-<?php } ?>
+                <?php } else { ?>&ndash;<?php } ?>
             </td>
         </tr>
         <?php } ?>
     <?php } else { ?>
-        <tr><td colspan="5"><?php echo HERO_AUC_NONE; ?></td></tr>
+        <tr><td colspan="6"><?php echo HERO_AUC_NONE; ?></td></tr>
     <?php } ?>
     </tbody>
 </table>

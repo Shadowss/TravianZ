@@ -461,6 +461,18 @@ class HeroItems
 
         $p = TB_PREFIX;
 
+        /**
+         * FIX: eroul care se INTORCEA dintr-o aventura aparea ca fiind acasa.
+         *
+         * Ciclul unei aventuri e: status 0 (oferta) -> status 1 (dus, miscare
+         * sort_type 20) -> la sosire status devine 2 si se creeaza miscarea de
+         * intoarcere (sort_type 21). Numaram doar status = 1, deci pe tot
+         * drumul de intoarcere eroul "disparea": bara de sus scria "Hero at
+         * home", iar pagina de echipare lasa schimbarea itemelor desi eroul
+         * era inca pe drum. Adaugam si miscarea de intoarcere.
+         */
+        $advBack = defined('MOVEMENT_ADVENTURE_BACK') ? (int) MOVEMENT_ADVENTURE_BACK : 21;
+
         // ATENTIE: aliasul pentru miscarea de intoarcere NU poate fi "returning" -
         // e cuvant rezervat in MariaDB (clauza RETURNING) si strica query-ul.
         // Un singur query, cu motive separate, ca interfata sa poata afisa
@@ -471,6 +483,10 @@ class HeroItems
                   WHERE uid = ? AND COALESCE(intraining, 0) = 0) AS hero_exists,
                 (SELECT COUNT(*) FROM {$p}hero_adventure
                   WHERE uid = ? AND status = 1) AS adventure,
+                (SELECT COUNT(*) FROM {$p}movement m
+                  INNER JOIN {$p}vdata v ON v.wref = m.`to`
+                  WHERE v.owner = ? AND m.proc = 0
+                    AND m.sort_type = {$advBack}) AS adv_return,
                 (SELECT IFNULL(SUM(e.hero), 0) FROM {$p}enforcement e
                   INNER JOIN {$p}vdata v ON v.wref = e.`from`
                   WHERE v.owner = ?) AS reinforcement,
@@ -490,9 +506,9 @@ class HeroItems
             return self::$awayCache[$uid] = '';
         }
 
-        $stmt->bind_param('iiiii', $uid, $uid, $uid, $uid, $uid);
+        $stmt->bind_param('iiiiii', $uid, $uid, $uid, $uid, $uid, $uid);
         $stmt->execute();
-        $stmt->bind_result($heroExists, $adventure, $reinforcement, $outgoing, $atkReturn);
+        $stmt->bind_result($heroExists, $adventure, $advReturn, $reinforcement, $outgoing, $atkReturn);
         $stmt->fetch();
         $stmt->close();
 
@@ -504,7 +520,10 @@ class HeroItems
         // conteaza - inca nu exista cu adevarat.
         if ((int) $heroExists === 0) {
             $reason = 'nohero';
-        } elseif ((int) $adventure > 0) {
+        } elseif (((int) $adventure + (int) $advReturn) > 0) {
+            // "adventure" acopera ambele picioare ale drumului: dus si intors.
+            // Contractul metodei ramane neschimbat, deci 37_items.tpl continua
+            // sa afiseze acelasi mesaj - doar ca acum si pe drumul de intoarcere.
             $reason = 'adventure';
         } elseif (((int) $outgoing + (int) $atkReturn) > 0) {
             $reason = 'attack';
@@ -539,7 +558,13 @@ class HeroItems
             return self::$locationCache[$uid];
         }
 
-        $info = array('reason' => $this->heroAwayReason($uid), 'target' => 0, 'endtime' => 0, 'sort' => 0);
+        $info = array(
+            'reason'    => $this->heroAwayReason($uid),
+            'target'    => 0,
+            'endtime'   => 0,
+            'sort'      => 0,
+            'returning' => false,   // true = se intoarce acasa
+        );
 
         if ($info['reason'] === '' || $info['reason'] === 'nohero') {
             return self::$locationCache[$uid] = $info;
@@ -548,14 +573,24 @@ class HeroItems
         $p = TB_PREFIX;
         $q = '';
 
+        $advOut  = defined('MOVEMENT_ADVENTURE_OUT')  ? (int) MOVEMENT_ADVENTURE_OUT  : 20;
+        $advBack = defined('MOVEMENT_ADVENTURE_BACK') ? (int) MOVEMENT_ADVENTURE_BACK : 21;
+
         if ($info['reason'] === 'adventure') {
 
-            // LEFT JOIN, nu INNER: daca randul de miscare a fost deja procesat,
-            // vrem macar destinatia, nu sa pierdem tot randul.
-            $q = "SELECT a.wref AS target, IFNULL(m.endtime, 0) AS endtime, IFNULL(m.sort_type, 0) AS sort_type
-                    FROM {$p}hero_adventure a
-                    LEFT JOIN {$p}movement m ON m.moveid = a.moveid
-                   WHERE a.uid = ? AND a.status = 1
+            /**
+             * Citim direct miscarea, nu randul din hero_adventure: la
+             * intoarcere randul e deja status = 2, deci ar fi invizibil.
+             * Satul jucatorului e `from` la dus si `to` la intors, de aceea
+             * IF() alege coloana potrivita pentru verificarea proprietarului.
+             * Destinatia afisata e mereu `to` - locul aventurii la dus,
+             * satul de acasa la intoarcere.
+             */
+            $q = "SELECT m.`to` AS target, m.endtime, m.sort_type
+                    FROM {$p}movement m
+                    INNER JOIN {$p}vdata v ON v.wref = IF(m.sort_type = {$advBack}, m.`to`, m.`from`)
+                   WHERE v.owner = ? AND m.proc = 0 AND m.sort_type IN ({$advOut}, {$advBack})
+                   ORDER BY m.endtime ASC
                    LIMIT 1";
 
         } elseif ($info['reason'] === 'attack') {
@@ -597,6 +632,15 @@ class HeroItems
             $info['target']  = (int) $target;
             $info['endtime'] = (int) $endtime;
             $info['sort']    = (int) $sortType;
+
+            /**
+             * Drumul de intoarcere, indiferent de unde:
+             *   sort_type 21 = intoarcere din aventura
+             *   sort_type  4 = intoarcere din atac SAU erou rechemat dintr-o
+             *                  intarire (ambele produc aceeasi miscare, deci
+             *                  nu pot fi deosebite - textul e generic)
+             */
+            $info['returning'] = ($info['sort'] === $advBack || $info['sort'] === 4);
         }
 
         $stmt->close();

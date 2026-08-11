@@ -2790,7 +2790,7 @@ tz_def('HERO_AUC_SELL_FAIL',     'Acest obiect nu poate fi listat (obiectele ech
 tz_def('HERO_AUC_SELL_OK',       'Obiectul tau a fost listat.');
 tz_def('HERO_AUC_SOLD',          'Licitatia ta s-a vandut:');
 tz_def('HERO_AUC_START_PRICE',   'Pret de pornire');
-tz_def('HERO_AUC_TIME_LEFT',     'Se incheie in');
+tz_def('HERO_AUC_TIME_LEFT',     'Se incheie');
 tz_def('HERO_AUC_WON',           'Ai castigat licitatia pentru');
 tz_def('HERO_AUC_YOUR_MAX',      'Maximul tau');
 
@@ -4110,8 +4110,12 @@ tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Nume de jucatori separate prin virgula, car
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPONENTA HERO DIN BARA DE SUS
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('HERO_HEADER_AT_HOME',  'Eroul este acasa');
-tz_def('HERO_HEADER_DEAD',     'Eroul este mort');
-tz_def('HERO_HEADER_TRAINING', 'Eroul este in antrenament');
-tz_def('HERO_HEADER_NOHERO',   'Inca nu ai erou');
-tz_def('TZ_HEALTH',            'Sanatate');
+tz_def('HERO_HEADER_AT_HOME',   'Eroul este acasa');
+tz_def('HERO_HEADER_DEAD',      'Eroul este mort');
+tz_def('HERO_HEADER_TRAINING',  'Eroul este in antrenament');
+tz_def('HERO_HEADER_NOHERO',    'Inca nu ai erou');
+tz_def('HERO_HEADER_ADVENTURE', 'Eroul este in aventura');
+tz_def('HERO_HEADER_ATTACK',    'Eroul este plecat cu armata');
+tz_def('HERO_HEADER_REINFORCE', 'Eroul este intr-o intarire');
+tz_def('HERO_HEADER_IN',        'in');
+tz_def('TZ_HEALTH',             'Sanatate');

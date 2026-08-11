@@ -4370,8 +4370,16 @@ tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Comma-separated player names that cannot be
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPONENTA HERO DIN BARA DE SUS
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('HERO_HEADER_AT_HOME',  'Hero at home');
-tz_def('HERO_HEADER_DEAD',     'Hero is dead');
-tz_def('HERO_HEADER_TRAINING', 'Hero in training');
-tz_def('HERO_HEADER_NOHERO',   'No hero yet');
-tz_def('TZ_HEALTH',            'Health');
+tz_def('HERO_HEADER_AT_HOME',   'Hero at home');
+tz_def('HERO_HEADER_DEAD',      'Hero is dead');
+tz_def('HERO_HEADER_TRAINING',  'Hero in training');
+tz_def('HERO_HEADER_NOHERO',    'No hero yet');
+tz_def('HERO_HEADER_ADVENTURE', 'Hero on adventure');
+tz_def('HERO_HEADER_ATTACK',    'Hero is with the army');
+tz_def('HERO_HEADER_REINFORCE', 'Hero is reinforcing');
+tz_def('HERO_HEADER_IN',        'in');
+tz_def('HERO_HEADER_RETURN_ADV',  'Hero returning from adventure');
+tz_def('HERO_HEADER_RETURN_HOME', 'Hero returning home');
+tz_def('HERO_HEADER_PER_HOUR',    'per hour');
+tz_def('TZ_HEALTH',             'Health');
+

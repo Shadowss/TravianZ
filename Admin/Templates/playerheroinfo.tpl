@@ -128,8 +128,8 @@ if ($hero !== false) {
 	<tr><th><?php echo ADM_DETAILS; ?></th><th><?php echo ADM_POINT; ?></th><th><?php echo ADM_LEVEL_2; ?></th></tr>
 	<tr><td><?php echo ADM_OFFENCE_2; ?></td><td><?php echo $h['atk']; ?></td><td><?php echo $h['attack']; ?></td></tr> 
 	<tr><td><?php echo ADM_DEFENCE_2; ?></td><td><?php echo $h['di']."/".$h['dc']; ?></td><td><?php echo $h['defence']; ?></td></tr> 
-	<tr><td><?php echo ADM_OFF_BONUS_2; ?></td><td><?php echo ($h['ob']-1)*100; ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
-	<tr><td><?php echo ADM_DEF_BONUS_2; ?></td><td><?php echo ($h['db']-1)*100; ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
+	<tr><td><?php echo ADM_OFF_BONUS_2; ?></td><td><?php echo round(($h['ob']-1)*100, 1); ?>%</td><td><?php echo $h['attackbonus']; ?></td></tr> 
+	<tr><td><?php echo ADM_DEF_BONUS_2; ?></td><td><?php echo round(($h['db']-1)*100, 1); ?>%</td><td><?php echo $h['defencebonus']; ?></td></tr> 
 	<tr><td><?php echo ADM_REGENERATION; ?></td><td><?php echo min(100,$h['regeneration'])*5*SPEED; ?>/Day</td><td><?php echo $h['regeneration']; ?></td></tr>
 	<?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
 		$hResPoints = (int) ($h['resources'] ?? 0);

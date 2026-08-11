@@ -150,14 +150,37 @@ $renderAddLink = function ($action) use ($hero_info, $id, $heroStatColumns) {
 
     <table class="t4h-tbl">
     <?php
+        /**
+         * BUG FIX: Bonus atac / Bonus aparare aratau "1.2%" in loc de "20%".
+         *
+         * 'ob' si 'db' NU sunt procente, ci MULTIPLICATORI de lupta:
+         *     ob = 1 + 0.002 * attackbonus
+         * adica 100 de puncte (maximul) inseamna 1.2, deci +20%. Tabelul le
+         * tiparea direct cu semnul %, asa ca multiplicatorul aparea ca procent.
+         *
+         * Doar afisarea era gresita: Battle.php foloseste aceeasi formula
+         * (getBattleHero: 1 + 0.010 * (bonus / 5), identic cu 1 + 0.002 * bonus)
+         * si inmulteste corect atacul/apararea cu ea, deci luptele s-au calculat
+         * mereu bine. Panoul de Admin facea deja conversia asta.
+         *
+         * Rotunjim la o zecimala fiindca 0.002 nu e exact in binar:
+         * (1.2 - 1) * 100 da 19.999999999999996.
+         */
+        $t4BonusPct = function ($multiplier) {
+            $pct = round(((float) $multiplier - 1) * 100, 1);
+
+            // 20 in loc de 20.0, dar pastram 19.8 cand chiar are zecimala
+            return ($pct == (int) $pct) ? (string) (int) $pct : (string) $pct;
+        };
+
         // nume afisat, valoarea, punctele investite si cheia pentru (+)
         $t4Rows = array(
             array(OFFENCE,      $t4ItemStrength > 0
                                     ? $hero_info['atk'] . ' <span class="t4h-item">+' . number_format($t4ItemStrength) . '</span>'
                                     : $hero_info['atk'],                           (int) $hero_info['attack'],       'off'),
             array(DEFENCE,      $hero_info['dc'] . '/' . $hero_info['di'],         (int) $hero_info['defence'],      'deff'),
-            array(OFF_BONUS,    $hero_info['ob'] . '%',                            (int) $hero_info['attackbonus'],  'obonus'),
-            array(DEF_BONUS,    $hero_info['db'] . '%',                            (int) $hero_info['defencebonus'], 'dbonus'),
+            array(OFF_BONUS,    $t4BonusPct($hero_info['ob']) . '%',               (int) $hero_info['attackbonus'],  'obonus'),
+            array(DEF_BONUS,    $t4BonusPct($hero_info['db']) . '%',               (int) $hero_info['defencebonus'], 'dbonus'),
             array(REGENERATION, ($hero_info['regeneration'] * 5 * SPEED) . '/' . DAY, (int) $hero_info['regeneration'], 'reg'),
         );
 

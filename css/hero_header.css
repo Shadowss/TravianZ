@@ -164,6 +164,9 @@ div#mtop {
 .tzHeroPost { fill: #8a6a3f; }
 .tzHeroSign { fill: #d8c9a6; stroke: #8a6a3f; stroke-width: .8; }
 
+/* Intoarcere acasa: sageata care intra in casa */
+.tzHeroBackArrow { fill: #4b8f3a; stroke: #2f6b21; stroke-width: .7; }
+
 /* Antrenament: clepsidra */
 .tzHeroGlassFrame { fill: #8a6a3f; }
 .tzHeroGlass      { fill: #dfe6ea; stroke: #8f9aa1; stroke-width: .7; }
@@ -209,6 +212,43 @@ div#mtop {
 
 .tzHeroAdvOn  .tzHeroAdvNum { color: #ffffff; }
 .tzHeroAdvOff .tzHeroAdvNum { color: #6b6964; }
+
+/* =========================================================================
+   Stanga jos: resursa produsa de erou
+   =========================================================================
+   Aliniat cu casa de deasupra (acelasi left: 10px) si pe aceeasi linie cu
+   argintul din dreapta (acelasi top: 45px), ca cele patru cercuri mici sa
+   formeze un dreptunghi in jurul inelului. */
+
+.tzHeroRes {
+    left: 10px;
+    top: 45px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f6f5f2;
+    border: 1px solid #b8b6b1;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.tzHeroRes img {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* iconita combinata "toate resursele" (img/hero/res_all.png, 25x21) */
+.tzHeroRes img.tzHeroResAll {
+    height: 16px;
+    width: auto;
+    margin-top: 3px;
+}
+
+/* o singura resursa: latimea si inaltimea vin din regula img.r1..r4 a
+   graphic pack-ului (18x12 din sprite-ul res2.gif), aici doar centram */
+.tzHeroRes img.tzHeroResOne {
+    margin-top: 5px;
+}
 
 /* =========================================================================
    Dreapta jos: argintul / casa de licitatii
@@ -284,3 +324,4 @@ div#mtop {
 .tzHeroTipCenter { left: 58px; top: 44px; }
 .tzHeroTipAdv    { left: 29px; top: 4px; }
 .tzHeroTipSilver { left: 29px; top: 2px; }
+.tzHeroTipRes    { left: 29px; top: 2px; }

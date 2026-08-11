@@ -4313,8 +4313,15 @@ tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Noms de joueurs separes par des virgules qu
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPONENTA HERO DIN BARA DE SUS
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('HERO_HEADER_AT_HOME',  'Le heros est chez lui');
-tz_def('HERO_HEADER_DEAD',     'Le heros est mort');
-tz_def('HERO_HEADER_TRAINING', 'Heros en formation');
-tz_def('HERO_HEADER_NOHERO',   'Pas encore de heros');
-tz_def('TZ_HEALTH',            'Sante');
+tz_def('HERO_HEADER_AT_HOME',   'Le heros est chez lui');
+tz_def('HERO_HEADER_DEAD',      'Le heros est mort');
+tz_def('HERO_HEADER_TRAINING',  'Heros en formation');
+tz_def('HERO_HEADER_NOHERO',    'Pas encore de heros');
+tz_def('HERO_HEADER_ADVENTURE', 'Le heros est en aventure');
+tz_def('HERO_HEADER_ATTACK',    'Le heros est parti avec l\'armee');
+tz_def('HERO_HEADER_REINFORCE', 'Le heros est en renfort');
+tz_def('HERO_HEADER_IN',        'dans');
+tz_def('HERO_HEADER_RETURN_ADV',  'Le heros revient de l\'aventure');
+tz_def('HERO_HEADER_RETURN_HOME', 'Le heros rentre chez lui');
+tz_def('HERO_HEADER_PER_HOUR',    'par heure');
+tz_def('TZ_HEALTH',             'Sante');

@@ -205,7 +205,7 @@ function go_url(url){ location=url; return false; }
                  | Points used: <b><?php echo $eUsed; ?></b><?php echo ADM_OF; ?><b><?php echo $eTotal; ?></b><?php echo ADM_FREE; ?><b><?php echo $eFree; ?></b>)</div>
             <div><?php echo ADM_OFFENCE; ?><b><?php echo $hero['atk'];?></b> (Lv <?php echo $hero['attack'];?>)</div>
             <div><?php echo ADM_DEFENCE; ?><b><?php echo $hero['di']."/".$hero['dc'];?></b> (Lv <?php echo $hero['defence'];?>)</div>
-            <div><?php echo ADM_OFF_BONUS; ?><b><?php echo ($hero['ob']-1)*100;?>%</b><?php echo ADM_DEF_BONUS; ?><b><?php echo ($hero['db']-1)*100;?>%</b></div>
+            <div><?php echo ADM_OFF_BONUS; ?><b><?php echo round(($hero['ob']-1)*100, 1);?>%</b><?php echo ADM_DEF_BONUS; ?><b><?php echo round(($hero['db']-1)*100, 1);?>%</b></div>
             <div><?php echo ADM_REGEN; ?><b><?php echo $hero['regeneration']*5*SPEED;?>/day</b></div>
             <?php if (defined('NEW_FUNCTIONS_HERO_T4') && NEW_FUNCTIONS_HERO_T4) {
                 $eResPts  = (int)($hero['resources'] ?? 0);
