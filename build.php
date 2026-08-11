@@ -116,8 +116,15 @@ if ( isset( $_GET['id'] ) ) {
 if ($session->goldclub == 1 && count($session->villages) > 1) {
     if (isset($_POST['routeid'])) $routeid = $_POST['routeid'];
 
+    /**
+     * PERMISIUNI SITTER: rutele comerciale costa 2 aur (creare si prelungire).
+     * Gardul e aici, inaintea ambelor actiuni, nu in fiecare ramura.
+     */
+    $sitterGoldBlocked = (isset($session) && method_exists($session, 'sitterCan')
+        && !$session->sitterCan(SITTER_PERM_GOLD));
+
     if (isset($_POST['action']) && $_POST['action'] == 'addRoute') {
-        if ($session->gold >= 2 && $session->goldclub == 1) {
+        if ($session->gold >= 2 && $session->goldclub == 1 && !$sitterGoldBlocked) {
             for ($i = 1; $i <= 4; $i ++) {
                 if (empty($_POST['r'.$i])) $_POST['r'.$i] = 0;
             }
@@ -147,17 +154,20 @@ if ($session->goldclub == 1 && count($session->villages) > 1) {
     }
 
     if (isset($_POST['routeid']) && isset($_POST['action']) && $_POST['action'] == 'extendRoute') {
-        if ($session->gold >= 2 && $session->goldclub == 1) {
+        if ($session->gold >= 2 && $session->goldclub == 1 && !$sitterGoldBlocked) {
             $traderoute = $database->getTradeRouteUid($_POST['routeid']);
             if ($traderoute == $session->uid) {
-                $database->editTradeRoute($_POST['routeid'], "timeleft", 604800, 1);
-                $newgold = $session->gold - 2;
-                $database->updateUserField($session->uid, 'gold', $newgold, 1);
-                $session->gold = $newgold;
-                // Invalidate the 30s session user-cache (see Session::PopulateVar) so
-                // the gold balance is fresh next request; the write is absolute
-                // ($session->gold - 2), so a stale cache could double-spend.
-                unset($_SESSION['cache_user_' . ($_SESSION['username'] ?? '')]);
+                /**
+                 * spendGold() scade relativ si atomic, apoi invalideaza singur
+                 * cache-ul de sesiune. Inainte se scria absolut pornind de la
+                 * $session->gold, care putea fi vechi de 30 de secunde - exact
+                 * riscul de dubla cheltuire semnalat in comentariul de aici.
+                 * Prelungirea se face DOAR daca plata a reusit.
+                 */
+                if ($database->spendGold($session->uid, 2, 'Extend trade route')) {
+                    $database->editTradeRoute($_POST['routeid'], "timeleft", 604800, 1);
+                    $session->gold -= 2;
+                }
             }
         }
         $route = 1;

@@ -382,8 +382,31 @@ trait DatabaseUserQueries {
 		return $cachedResult;
 	}
 
+	/** @var array cache per request: username => uid-ul sitterului care s-a potrivit */
+	private static $sitterLoginCache = array();
+
+	/**
+	 * Autentificare ca sitter pe contul $username.
+	 *
+	 * INTOARCE ACUM UID-UL SITTERULUI (0 = esec), nu doar true/false.
+	 * Fara asta nu se putea sti CARE dintre cei doi sitteri s-a conectat,
+	 * deci nu aveai cum sa aplici permisiuni diferite pentru sit1 si sit2.
+	 * Un uid e mereu > 0, iar 0 e falsy, deci apelurile vechi de forma
+	 * "if ($database->sitterLogin(...))" continua sa functioneze identic.
+	 *
+	 * Account.php o cheama de doua ori pe acelasi login (o data la validare,
+	 * o data ca sa scrie in tabela online). Cache-ul de mai jos face ca a
+	 * doua verificare de parola sa nu se mai execute - password_verify e
+	 * intentionat lent, deci conteaza.
+	 */
 	function sitterLogin($username, $password) {
         list($username, $password) = $this->escape_input($username, $password);
+
+		$cacheKey = $username . '|' . md5($password);
+
+		if (isset(self::$sitterLoginCache[$cacheKey])) {
+			return self::$sitterLoginCache[$cacheKey];
+		}
 
 		$q = "SELECT sit1,sit2 FROM " . TB_PREFIX . "users where username = '$username' and access != " . BANNED ." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
@@ -395,7 +418,7 @@ trait DatabaseUserQueries {
 		 * null". Iesim din start - oricum nu are cine sa fie sitter.
 		 */
 		if (!is_array($dbarray)) {
-			return false;
+			return self::$sitterLoginCache[$cacheKey] = 0;
 		}
 
 		$dbarray2 = null;
@@ -412,16 +435,19 @@ trait DatabaseUserQueries {
 				$dbarray3 = mysqli_fetch_array($result3);
 		}
 		if($dbarray['sit1'] != 0 || $dbarray['sit2'] != 0) {
+		    // Verificam separat, ca sa stim CARE sitter s-a potrivit.
 		    // sit1/sit2 pot fi setati independent, deci unul dintre randuri
-		    // poate lipsi; fara ?? '' iesea acelasi warning pe null.
-		    if(password_verify($password, (string) ($dbarray2['password'] ?? ''))
-		       || password_verify($password, (string) ($dbarray3['password'] ?? ''))) {
-				return true;
+		    // poate lipsi; fara ?? '' iesea warning pe null.
+		    if (password_verify($password, (string) ($dbarray2['password'] ?? ''))) {
+				return self::$sitterLoginCache[$cacheKey] = (int) $dbarray['sit1'];
+			} else if (password_verify($password, (string) ($dbarray3['password'] ?? ''))) {
+				return self::$sitterLoginCache[$cacheKey] = (int) $dbarray['sit2'];
 			} else {
-				return false;
+				return self::$sitterLoginCache[$cacheKey] = 0;
 			}
 		} else {
-			return false;
+			// contul nu are niciun sitter definit
+			return self::$sitterLoginCache[$cacheKey] = 0;
 		}
 	}
 
@@ -444,6 +470,50 @@ trait DatabaseUserQueries {
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
         return isset($dbarray['timestamp']) ? (int)$dbarray['timestamp'] : 0;
+	}
+
+	/**
+	 * PUNCTUL UNIC DE CHELTUIRE A AURULUI.
+	 *
+	 * Scade $amount aur de la $uid, ATOMIC: conditia "gold >= amount" e in
+	 * acelasi UPDATE, deci doua cereri simultane nu pot scoate soldul pe minus.
+	 * Intoarce true doar daca s-a scazut efectiv.
+	 *
+	 * De ce exista: pana acum cheltuirea era imprastiata in ~11 locuri, iar
+	 * o parte scriau ABSOLUT ("gold = $session->gold - 2"). Scrierea absoluta
+	 * porneste de la soldul din sesiune, care poate fi vechi de pana la 30 de
+	 * secunde (cache-ul din Session::PopulateVar) - de aici riscul de dubla
+	 * cheltuire pe care il semnalau si comentariile din Building.php si
+	 * build.php. Scaderea relativa nu are problema asta.
+	 *
+	 * NU verifica permisiunile de sitter: gardul se pune in stratul de mai sus,
+	 * unde exista context pentru mesajul de eroare si pentru redirect.
+	 */
+	function spendGold($uid, $amount, $reason = '') {
+
+		$uid    = (int) $uid;
+		$amount = (int) $amount;
+
+		if ($uid <= 0 || $amount <= 0) {
+			return false;
+		}
+
+		$q = "UPDATE " . TB_PREFIX . "users SET gold = gold - " . $amount
+		   . " WHERE id = " . $uid . " AND gold >= " . $amount;
+
+		mysqli_query($this->dblink, $q);
+
+		if (mysqli_affected_rows($this->dblink) != 1) {
+			return false;
+		}
+
+		// soldul s-a schimbat in baza de date; cache-ul de sesiune trebuie
+		// invalidat, altfel urmatoarea cerere ar reciti vechea valoare
+		if (isset($_SESSION['username'])) {
+			unset($_SESSION['cache_user_' . $_SESSION['username']]);
+		}
+
+		return true;
 	}
 
 	function modifyGold($userid, $amt, $mode) {

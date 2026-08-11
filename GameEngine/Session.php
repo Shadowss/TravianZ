@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Permisiuni sitter - masca de biti. Definite aici, nu in config, ca sa fie
+ * disponibile oriunde e incarcat Session.php (adica pe orice pagina de joc).
+ */
+if (!defined('SITTER_PERM_ATTACK')) define('SITTER_PERM_ATTACK', 1);
+if (!defined('SITTER_PERM_RAID'))   define('SITTER_PERM_RAID',   2);
+if (!defined('SITTER_PERM_REINF'))  define('SITTER_PERM_REINF',  4);
+if (!defined('SITTER_PERM_RES'))    define('SITTER_PERM_RES',    8);
+if (!defined('SITTER_PERM_GOLD'))   define('SITTER_PERM_GOLD',  16);
+if (!defined('SITTER_PERM_ALL'))    define('SITTER_PERM_ALL',   31);
+
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -94,6 +106,26 @@ class Session {
 	var $sit;
 	var $sit1;
 	var $sit2;
+
+	/**
+	 * PERMISIUNI SITTER (masca de biti, salvata in users.sit1_perm / sit2_perm)
+	 *
+	 *    1  SITTER_PERM_ATTACK  - trimite atacuri normale
+	 *    2  SITTER_PERM_RAID    - trimite raiduri
+	 *    4  SITTER_PERM_REINF   - trimite intariri
+	 *    8  SITTER_PERM_RES     - trimite resurse altor jucatori
+	 *   16  SITTER_PERM_GOLD    - cheltuie aur
+	 *   31  SITTER_PERM_ALL     - toate (valoarea implicita)
+	 *
+	 * 31 e default in baza de date ca sitterii existenti sa nu-si piarda
+	 * drepturile in momentul migrarii.
+	 */
+
+	/** uid-ul sitterului conectat; 0 = sesiune normala, a proprietarului */
+	public $sitterUid = 0;
+
+	/** masca de permisiuni valabila pentru sesiunea curenta */
+	public $sitterPerm = 31;
 	var $cp;
 function __construct() {
     global $database;
@@ -511,9 +543,58 @@ function __construct() {
         $this->checker = $_SESSION['checker'];
         $this->mchecker = $_SESSION['mchecker'];
 
-        $this->sit = $database->GetOnline($this->uid);
+        /**
+         * $this->sit (0 = proprietar, 1 = sitter) se calculeaza acum din
+         * sesiune, nu din tabela "online".
+         *
+         * GetOnline() citea flagul scris de UpdateOnline() cu INSERT IGNORE -
+         * adica flagul NU se actualiza daca randul exista deja. In practica:
+         *   - proprietarul care se loga dupa un sitter mostenea sit = 1 si era
+         *     blocat sa cumpere Plus pe propriul cont;
+         *   - sitterul care se loga dupa proprietar primea sit = 0 si trecea de
+         *     toate gardurile.
+         * Flagul din sesiune e per-sesiune si mereu corect, deci il folosim ca
+         * sursa. Toti consumatorii existenti de $session->sit (a2b.php,
+         * alli_menu.tpl, Profile/overview.tpl, Templates/Plus/*) se repara
+         * automat, fara sa fie atinsi.
+         *
+         * Nota: sesiunile deschise INAINTE de acest update nu au sitter_uid,
+         * deci un sitter deja conectat va aparea ca proprietar pana la
+         * urmatoarea autentificare.
+         */
+        $this->sit = (isset($_SESSION['sitter_uid']) && (int) $_SESSION['sitter_uid'] > 0) ? 1 : 0;
         $this->sit1 = $this->userarray['sit1'];
         $this->sit2 = $this->userarray['sit2'];
+
+        /**
+         * Permisiunile sesiunii curente.
+         *
+         * Recitim sit1/sit2 din contul proprietarului la FIECARE cerere, nu
+         * doar la login: daca proprietarul retrage un sitter sau ii taie un
+         * drept in timp ce acesta e conectat, modificarea se aplica imediat.
+         *
+         * Daca sitterul conectat nu mai apare in sit1/sit2 (a fost sters
+         * intre timp), masca devine 0 - adica nu mai are voie nimic.
+         */
+        $this->sitterUid  = isset($_SESSION['sitter_uid']) ? (int) $_SESSION['sitter_uid'] : 0;
+        $this->sitterPerm = SITTER_PERM_ALL;
+
+        if ($this->sitterUid > 0) {
+
+            if ((int) $this->userarray['sit1'] === $this->sitterUid) {
+                $this->sitterPerm = isset($this->userarray['sit1_perm'])
+                    ? (int) $this->userarray['sit1_perm']
+                    : SITTER_PERM_ALL;
+
+            } else if ((int) $this->userarray['sit2'] === $this->sitterUid) {
+                $this->sitterPerm = isset($this->userarray['sit2_perm'])
+                    ? (int) $this->userarray['sit2_perm']
+                    : SITTER_PERM_ALL;
+
+            } else {
+                $this->sitterPerm = 0;
+            }
+        }
 
         $this->cp = floor($this->userarray['cp']);
         $this->gold = $this->userarray['gold'];
@@ -605,6 +686,45 @@ function __construct() {
                 exit;
             }
         }
+    }
+
+    /**
+     * Sesiunea curenta apartine unui sitter, nu proprietarului contului?
+     */
+    public function isSitterSession()
+    {
+        return $this->sitterUid > 0;
+    }
+
+    /**
+     * Are sesiunea curenta dreptul $perm (una din constantele SITTER_PERM_*)?
+     *
+     * Proprietarul primeste mereu true. Se verifica la EXECUTIE, pe server -
+     * nu e suficient sa ascunzi butoanele, fiindca un sitter poate trimite
+     * POST-ul direct.
+     */
+    /**
+     * Scurtatura pentru cel mai des folosit drept.
+     * Intoarce mesajul de eroare gata de afisat, sau "" daca are voie.
+     */
+    public function sitterGoldError()
+    {
+        if ($this->sitterCan(SITTER_PERM_GOLD)) {
+            return "";
+        }
+
+        return defined('SITTER_P_DENIED')
+            ? SITTER_P_DENIED
+            : 'Your sitter permissions do not allow this action.';
+    }
+
+    public function sitterCan($perm)
+    {
+        if (!$this->isSitterSession()) {
+            return true;
+        }
+
+        return ((int) $this->sitterPerm & (int) $perm) === (int) $perm;
     }
 }
 

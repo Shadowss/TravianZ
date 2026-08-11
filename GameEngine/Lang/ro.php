@@ -4119,3 +4119,14 @@ tz_def('HERO_HEADER_ATTACK',    'Eroul este plecat cu armata');
 tz_def('HERO_HEADER_REINFORCE', 'Eroul este intr-o intarire');
 tz_def('HERO_HEADER_IN',        'in');
 tz_def('TZ_HEALTH',             'Sanatate');
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// PERMISIUNI SITTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('SITTER_P_ATTACK', 'trimite atacuri');
+tz_def('SITTER_P_RAID',   'trimite raiduri');
+tz_def('SITTER_P_REINF',  'trimite intariri');
+tz_def('SITTER_P_RES',    'trimite resurse altor jucatori');
+tz_def('SITTER_P_GOLD',   'cheltuie aur');
+tz_def('SITTER_P_DENIED', 'Permisiunile tale de sitter nu iti permit aceasta actiune.');

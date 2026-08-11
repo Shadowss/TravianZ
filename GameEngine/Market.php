@@ -290,9 +290,50 @@ class Market
         // Keeping logic safe while preserving compatibility.
         $id = isset($post['getwref']) ? (int)$post['getwref'] : 0;
 
-        // Check vacation mode
+        /**
+         * PERMISIUNI SITTER: "trimite resurse altor jucatori".
+         *
+         * Restrictia se aplica DOAR catre alte conturi. Mutarea resurselor
+         * intre satele proprii ramane permisa - altfel un sitter n-ar mai putea
+         * administra contul deloc, ceea ce nu e scopul.
+         *
+         * Verificam proprietarul satului tinta, nu numele lui: un jucator poate
+         * avea oricate sate, iar comparatia pe uid e singura de incredere.
+         */
+        if ($id > 0 && isset($session) && is_object($session) && method_exists($session, 'sitterCan')) {
+
+            $targetOwner = (int) $database->getVillageField($id, 'owner');
+
+            if ($targetOwner > 0
+                && $targetOwner !== (int) $session->uid
+                && !$session->sitterCan(SITTER_PERM_RES)) {
+
+                $form->addError('error', defined('SITTER_P_DENIED')
+                    ? SITTER_P_DENIED
+                    : 'Your sitter permissions do not allow this action.');
+
+                /**
+                 * "return", nu doar addError: mai jos urmeaza un lant
+                 * if/elseif care ajunge la ramura de trimitere indiferent de
+                 * erorile adaugate inainte. Fara iesire explicita, resursele
+                 * ar fi plecat oricum, iar mesajul de eroare ar fi fost doar
+                 * decorativ.
+                 */
+                return;
+            }
+        }
+
+        /**
+         * BUG PREEXISTENT: modul vacanta era doar semnalat, nu si blocat.
+         *
+         * Eroarea se adauga aici, dar mai jos urmeaza un lant if/elseif care
+         * ajunge la ramura de trimitere indiferent de erorile de dinainte.
+         * Rezultatul: mesajul "utilizatorul e in vacanta" aparea pe ecran, dar
+         * resursele plecau oricum catre contul protejat. Iesim explicit.
+         */
         if ($database->getvacmodexy($id)) {
             $form->addError('error', USER_ON_VACATION);
+            return;
         }
 
         if (!$database->checkVilExist($post['getwref'])) {
@@ -878,6 +919,21 @@ class Market
             exit;
         }
 
+        /**
+         * PERMISIUNI SITTER: schimbul NPC costa 3 aur.
+         *
+         * Gardul TREBUIE sa fie aici, nu langa plata de la finalul functiei:
+         * redistribuirea resurselor (setVillageField) se executa INAINTE de
+         * scaderea aurului, deci un garda pus doar pe plata ar fi oferit
+         * sitterului NPC gratuit.
+         */
+        if (isset($session) && method_exists($session, 'sitterCan')
+            && !$session->sitterCan(SITTER_PERM_GOLD)) {
+
+            header('Location: build.php?id=' . $post['id'] . '&t=3');
+            exit;
+        }
+
         // Sanitize the requested distribution: never negative, never above the
         // warehouse / granary capacity. Guards against a forged or NaN-corrupted
         // POST (issue #211: NPC distribution).
@@ -917,7 +973,9 @@ class Market
             ]
         );
 		$this->forget();
-        $database->modifyGold($session->uid, 3, 0);
+
+        // permisiunea a fost verificata la intrarea in functie
+        $database->spendGold($session->uid, 3, 'NPC merchant');
 
         header('Location: build.php?id=' . $post['id'] . '&t=3&c');
         exit;

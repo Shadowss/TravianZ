@@ -24,7 +24,11 @@ $wid = (int)$village->wid;
 $now = time();
 $cost = 100;
 
-if($session->sit != 0) {
+// PERMISIUNI SITTER: cumparaturile cu aur.
+// Inlocuieste vechiul "$session->sit", care citea un flag din tabela online
+// scris cu INSERT IGNORE - deci nu se actualiza daca randul exista deja.
+// sitterCan() se bazeaza pe sesiune, deci e mereu corect.
+if(!$session->sitterCan(SITTER_PERM_GOLD)) {
     header("Location: plus.php?id=3"); exit;
 }
 

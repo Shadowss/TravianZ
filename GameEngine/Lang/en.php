@@ -4383,3 +4383,13 @@ tz_def('HERO_HEADER_RETURN_HOME', 'Hero returning home');
 tz_def('HERO_HEADER_PER_HOUR',    'per hour');
 tz_def('TZ_HEALTH',             'Health');
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// PERMISIUNI SITTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('SITTER_P_ATTACK', 'send attacks');
+tz_def('SITTER_P_RAID',   'send raids');
+tz_def('SITTER_P_REINF',  'send reinforcements');
+tz_def('SITTER_P_RES',    'send resources to other players');
+tz_def('SITTER_P_GOLD',   'spend Gold');
+tz_def('SITTER_P_DENIED', 'Your sitter permissions do not allow this action.');
+

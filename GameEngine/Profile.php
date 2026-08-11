@@ -448,6 +448,31 @@ class Profile {
 			}
 		}
 
+		/**
+		 * Transforma un set de casute bifate intr-o masca de biti.
+		 *
+		 * Acceptam doar valorile din SITTER_PERM_ALL: orice altceva venit prin
+		 * POST e ignorat, ca un jucator sa nu-si poata inventa biti noi.
+		 * Un array gol inseamna "niciun drept" - stare perfect valida, deci NU
+		 * cadem pe SITTER_PERM_ALL cand lipseste continutul.
+		 */
+		$sitterMaskFromPost = function ($raw) {
+
+			$mask = 0;
+
+			if (is_array($raw)) {
+				foreach ($raw as $bit) {
+					$bit = (int) $bit;
+
+					if ($bit > 0 && ($bit & SITTER_PERM_ALL) === $bit) {
+						$mask |= $bit;
+					}
+				}
+			}
+
+			return $mask;
+		};
+
 		// Sitter assignment
 		if (!empty($post['v1'])) {
 
@@ -458,13 +483,53 @@ class Profile {
 
 			} else if ($sitid != $session->uid) {
 
+				// permisiunile cu care intra noul sitter
+				$newPerm = $sitterMaskFromPost($post['perm_new'] ?? null);
+
 				if ($session->userinfo['sit1'] == 0) {
 					$database->updateUserField($session->uid, "sit1", $sitid, 1);
+					$database->updateUserField($session->uid, "sit1_perm", $newPerm, 1);
 
 				} else if ($session->userinfo['sit2'] == 0) {
 					$database->updateUserField($session->uid, "sit2", $sitid, 1);
+					$database->updateUserField($session->uid, "sit2_perm", $newPerm, 1);
 				}
 			}
+		}
+
+		/**
+		 * Actualizarea permisiunilor pentru sitterii deja existenti.
+		 *
+		 * Casutele sunt in acelasi formular cu restul setarilor de cont, deci
+		 * ajung aici la orice salvare. Scriem doar pentru sloturile ocupate -
+		 * altfel am seta permisiuni pentru un sitter inexistent.
+		 *
+		 * Atentie: casutele nebifate NU se trimit prin POST. De aceea ne uitam
+		 * dupa cheia campului, nu dupa continutul ei: daca perm1 lipseste cu
+		 * totul inseamna ca formularul nu continea sectiunea (nu ca sitterul
+		 * si-a pierdut toate drepturile).
+		 */
+		foreach (array(1 => 'sit1', 2 => 'sit2') as $slot => $key) {
+
+			if ((int) $session->userinfo[$key] === 0) {
+				continue;
+			}
+
+			$field = 'perm' . $slot;
+
+			// slotul e afisat in formular doar cand e ocupat; daca butonul de
+			// salvare a fost apasat, campul exista chiar si gol (vezi hidden-ul
+			// din account.tpl)
+			if (!isset($post[$field . '_sent'])) {
+				continue;
+			}
+
+			$database->updateUserField(
+				$session->uid,
+				$key . '_perm',
+				$sitterMaskFromPost($post[$field] ?? null),
+				1
+			);
 		}
 
 		// Persist errors if any

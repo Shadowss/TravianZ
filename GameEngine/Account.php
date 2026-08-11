@@ -360,19 +360,42 @@ class Account {
     // Vacation mode by Shadow
     $database->removevacationmode($userData['id']);
 
+    /**
+     * Marcam sesiunea ca fiind de SITTER si retinem CARE sitter e.
+     *
+     * Pana acum, dupa autentificare sesiunea unui sitter era identica cu a
+     * proprietarului - nu exista nimic in $_SESSION care sa spuna ca cel din
+     * spatele tastaturii e altcineva. Flagul "sit" din tabela online nu ajuta:
+     * e per cont (nu per sesiune), se scrie cu INSERT IGNORE (deci nu se
+     * actualizeaza daca randul exista deja) si nu spune care dintre cei doi
+     * sitteri s-a conectat.
+     *
+     * $_SESSION['sitter_uid'] e sursa de adevar pentru permisiuni.
+     */
+    $sitterUid = 0;
+
     if ($database->login($username, $password)) {
         $database->UpdateOnline("login", $username, time(), $userData['id']);
-    } elseif ($database->sitterLogin($username, $password)) {
-        $database->UpdateOnline("sitter", $username, time(), $userData['id']);
+    } else {
+        $sitterUid = (int) $database->sitterLogin($username, $password);
+
+        if ($sitterUid > 0) {
+            $database->UpdateOnline("sitter", $username, time(), $userData['id']);
+        }
     }
 
     setcookie("COOKUSR", $username, time() + COOKIE_EXPIRE, COOKIE_PATH);
     $session->login($username);
+
+    // dupa Login(), ca sa nu fie suprascris de initializarea sesiunii
+    $_SESSION['sitter_uid'] = $sitterUid;
 }
 
 	private function Logout() {
 		global $session, $database;
     unset($_SESSION['wid']);
+    // altfel un login normal facut imediat dupa ar mosteni flagul de sitter
+    unset($_SESSION['sitter_uid']);
     // actualizează statusul "activ" al utilizatorului
     $database->activeModify($database->escape($session->username), 1);
     // actualizează ultima activitate online

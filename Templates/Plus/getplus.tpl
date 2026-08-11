@@ -46,6 +46,23 @@ if(empty($_POST['plus'])) {
 </form>
 <?php
 } else {
+
+    /**
+     * PERMISIUNI SITTER: aici se cumpara Plus si bonusurile de productie.
+     *
+     * Acest sablon nu avea NICIO verificare de sitter - spre deosebire de
+     * 8/9/10/11/12/15.tpl, care aveau (chiar daca pe un flag nesigur). Un
+     * sitter putea cheltui aurul proprietarului de aici, oricat.
+     */
+    if (isset($session) && method_exists($session, 'sitterCan')
+        && !$session->sitterCan(SITTER_PERM_GOLD)) {
+
+        die('<div align="center"><font color="red"><b>'
+            . (defined('SITTER_P_DENIED') ? SITTER_P_DENIED
+               : 'Your sitter permissions do not allow this action.')
+            . '</b></font><br><button onclick="history.back()">' . BACK . '</button></div>');
+    }
+
     $reward = $_POST['reward'] ?? '';
     
     // whitelist

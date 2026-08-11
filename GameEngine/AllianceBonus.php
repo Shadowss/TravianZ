@@ -556,8 +556,17 @@ class AllianceBonus
 
         if ($triple) {
             $cost = defined('ALLIANCE_BONUS_TRIPLE_GOLD') ? (int) ALLIANCE_BONUS_TRIPLE_GOLD : 3;
-            $database->modifyGold($uid, $cost, 0);
-            $session->gold -= $cost;
+
+            // PERMISIUNI SITTER: donatia tripla costa aur. Daca sitterul nu are
+            // dreptul, donatia simpla (deja inregistrata mai sus) ramane valida,
+            // doar bonusul platit nu se aplica.
+            if (!isset($session) || !method_exists($session, 'sitterCan')
+                || $session->sitterCan(SITTER_PERM_GOLD)) {
+
+                if ($database->spendGold($uid, $cost, 'Alliance bonus triple donation')) {
+                    $session->gold -= $cost;
+                }
+            }
         }
 
         mysqli_query($this->db, "COMMIT");

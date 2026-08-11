@@ -76,6 +76,47 @@ class Units {
      * @return string Returns the errors, or empty if no errors was found
      */
     
+    /**
+     * PERMISIUNI SITTER - misiune -> drept necesar.
+     *
+     * Codurile de misiune vin din formularul de trimitere (Templates/a2b/):
+     *     1 = spionaj      -> permis mereu (nu e in lista din Travian)
+     *     2 = intarire     -> SITTER_PERM_REINF
+     *     3 = atac normal  -> SITTER_PERM_ATTACK
+     *     4 = raid         -> SITTER_PERM_RAID
+     *     5 = colonizare   -> permis mereu
+     *
+     * Intoarce mesajul de eroare, sau "" daca actiunea e permisa.
+     * Proprietarul contului primeste mereu "".
+     */
+    private function sitterMissionError($missionType) {
+        global $session;
+
+        if (!isset($session) || !is_object($session) || !method_exists($session, 'sitterCan')) {
+            return "";
+        }
+
+        $map = array(
+            2 => SITTER_PERM_REINF,
+            3 => SITTER_PERM_ATTACK,
+            4 => SITTER_PERM_RAID,
+        );
+
+        $missionType = (int) $missionType;
+
+        if (!isset($map[$missionType])) {
+            return "";
+        }
+
+        if ($session->sitterCan($map[$missionType])) {
+            return "";
+        }
+
+        return defined('SITTER_P_DENIED')
+            ? SITTER_P_DENIED
+            : 'Your sitter permissions do not allow this action.';
+    }
+
     public function checkErrors(&$post){
         global $database, $generator, $session;
 
@@ -86,6 +127,9 @@ class Units {
         if(!empty($disabledr) && $post['c'] == 2) return "You can't reinforce this village/oasis";
         if(!empty($disabled) && $post['c'] == 3) return "You can't attack this village/oasis with normal attack";
         if($post['c'] < 2 || $post['c'] > 4) return "Invalid attack type.";
+
+        // sitterul fara dreptul respectiv nu ajunge nici macar la confirmare
+        if(($error = $this->sitterMissionError($post['c'])) !== "") return $error;
 
         //check if at least one troops has been selected
         $selectedTroops = 0;
@@ -343,6 +387,22 @@ class Units {
 
         $data = $database->getA2b($post['timestamp_checksum']);
         $Gtribe = ($session->tribe == 1) ? "" : $session->tribe - 1;
+
+        /**
+         * A DOUA verificare, cea care conteaza cu adevarat.
+         *
+         * checkErrors() ruleaza pe formular, dar un sitter poate trimite POST-ul
+         * de confirmare direct, sarind peste el. Aici e ultimul punct inainte ca
+         * trupele sa fie scazute din sat, deci verificam din nou - pe tipul REAL
+         * al misiunii, citit din baza de date ($data['type']), nu din $_POST.
+         */
+        if (($sitterError = $this->sitterMissionError($data['type'] ?? 0)) !== "") {
+            $form->addError("error", $sitterError);
+            $_SESSION['errorarray'] = $form->getErrors();
+            $_SESSION['valuearray'] = $_POST;
+            header("Location: a2b.php");
+            exit;
+        }
 
         for ($i = 1; $i < 10; $i++) {
             if (isset($data['u'.$i])) {
@@ -964,6 +1024,17 @@ class Units {
     
     public function startRaidList($post){   
     	global $database, $generator, $session;
+
+    	/**
+    	 * Lista de ferme trimite raiduri, deci intra tot sub SITTER_PERM_RAID.
+    	 * Fara garda aici, un sitter caruia i s-ai taiat raidurile le-ar fi
+    	 * putut porni oricum din Punctul de Adunare.
+    	 */
+    	if (($sitterError = $this->sitterMissionError(4)) !== "") {
+    		$_SESSION['errorarray'] = array($sitterError);
+    		header("Location: build.php?id=39&t=99");
+    		exit();
+    	}
 
     	$slots = $post['slot'] ?? [];
     	if(empty($slots)){

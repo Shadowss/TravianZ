@@ -1604,9 +1604,26 @@ class Building {
     }
 
     $spent = ($countMasterGold && $countPlus2Gold) ? 3 : 2;
-    $newgold = $this->sess->gold - $spent;
 
-    $this->db->updateUserField($this->sess->uid, 'gold', $newgold, 1);
+    /**
+     * PERMISIUNI SITTER: "cheltuie aur".
+     * Verificam inainte de scadere; daca nu are voie, nu se ia nimic.
+     */
+    if (isset($this->sess) && method_exists($this->sess, 'sitterCan')
+        && !$this->sess->sitterCan(SITTER_PERM_GOLD)) {
+        return;
+    }
+
+    /**
+     * spendGold() in loc de scriere absoluta: scaderea e relativa si atomica,
+     * deci dispare riscul de dubla cheltuire descris in comentariul de mai jos
+     * (soldul din sesiune putea fi vechi de pana la 30 de secunde).
+     */
+    if (!$this->db->spendGold($this->sess->uid, $spent, 'Finish all constructions')) {
+        return;
+    }
+
+    $newgold = $this->sess->gold - $spent;
 
     $this->db->addGoldFinLog(
         $this->vil->wid,

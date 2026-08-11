@@ -32,6 +32,48 @@ $sitterError = $form->getError("sit");
 $count = 0;
 if ($session->userinfo['sit1'] != 0) $count += 1;
 if ($session->userinfo['sit2'] != 0) $count += 1;
+
+/**
+ * PERMISIUNI SITTER
+ *
+ * Lista e definita o singura data si folosita si la sitterii existenti, si la
+ * casuta de adaugare, ca sa nu se desincronizeze. Cheile din $_POST sunt
+ * perm1[], perm2[] si perm_new[], fiecare continand valorile bitilor bifati.
+ */
+$sitterPermList = array(
+    SITTER_PERM_ATTACK => defined('SITTER_P_ATTACK') ? SITTER_P_ATTACK : 'send attacks',
+    SITTER_PERM_RAID   => defined('SITTER_P_RAID')   ? SITTER_P_RAID   : 'send raids',
+    SITTER_PERM_REINF  => defined('SITTER_P_REINF')  ? SITTER_P_REINF  : 'send reinforcements',
+    SITTER_PERM_RES    => defined('SITTER_P_RES')    ? SITTER_P_RES    : 'send resources to other players',
+    SITTER_PERM_GOLD   => defined('SITTER_P_GOLD')   ? SITTER_P_GOLD   : 'spend Gold',
+);
+
+/**
+ * Casutele pentru un slot. $mask = permisiunile curente, $field = numele
+ * campului din formular.
+ */
+function sitterPermBoxes($mask, $field, $list) {
+
+    /**
+     * Marcaj ascuns: o casuta nebifata nu se trimite deloc prin POST, deci
+     * "toate debifate" ar arata identic cu "sectiunea nu a fost afisata".
+     * Campul asta e mereu trimis, asa ca Profile.php poate deosebi cele doua
+     * situatii si nu reseteaza permisiunile din greseala.
+     */
+    $out = '<input type="hidden" name="' . $field . '_sent" value="1" />';
+    $out .= '<div class="sitterPerm">';
+
+    foreach ($list as $bit => $label) {
+
+        $checked = (((int) $mask & $bit) === $bit) ? ' checked' : '';
+
+        $out .= '<label><input type="checkbox" class="checkbox" name="' . $field . '[]"'
+              . ' value="' . (int) $bit . '"' . $checked . ' /> '
+              . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</label>';
+    }
+
+    return $out . '</div>';
+}
 ?>
 
 <form action="spieler.php" method="POST">
@@ -110,6 +152,19 @@ if (!empty($emailError)) {
 }
 ?>
 
+<style type="text/css">
+/* casutele de permisiuni pentru sitteri */
+#sitter .sitterPerm { margin: 4px 0 8px 18px; }
+#sitter .sitterPerm label {
+    display: block;
+    padding: 1px 0;
+    font-weight: normal;
+    white-space: nowrap;
+    cursor: pointer;
+}
+#sitter .sitterPerm input { margin-right: 5px; vertical-align: -1px; }
+</style>
+
 <!-- =========================
      SITTERS
 ========================= -->
@@ -133,6 +188,10 @@ if (!empty($emailError)) {
     <td>
         <input class="text" type="text" name="v1" maxlength="15">
         <span class="count">(<?php echo $count; ?>/2)</span>
+        <?php
+        // permisiunile cu care intra noul sitter; implicit toate bifate
+        echo sitterPermBoxes(SITTER_PERM_ALL, 'perm_new', $sitterPermList);
+        ?>
     </td>
 </tr>
 <?php } ?>
@@ -160,6 +219,14 @@ foreach ($sitSlots as $type => $key) {
         echo "<img class=\"del\" src=\"img/x.gif\" title=\"Remove sitters\" alt=\"Remove sitters\" />";
         echo "</a>";
         echo "<a href=\"spieler.php?uid=".$uid."\">".$uname."</a>";
+
+        // permisiunile curente ale acestui sitter
+        $permField = 'perm' . $type;
+        $permMask  = isset($session->userinfo[$key . '_perm'])
+            ? (int) $session->userinfo[$key . '_perm']
+            : SITTER_PERM_ALL;
+
+        echo sitterPermBoxes($permMask, $permField, $sitterPermList);
         echo "</div>";
     }
 }
