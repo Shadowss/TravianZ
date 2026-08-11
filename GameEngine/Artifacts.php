@@ -41,7 +41,7 @@ class Artifacts
      * @var string Default Natars' email
      */
     
-    NATARS_EMAIL = TRIBE5."@noreply.com",
+    NATARS_EMAIL = TRIBE5."@travianz.org",
     
     /**
      * @var string Default Natars' description
@@ -193,10 +193,18 @@ class Artifacts
 	 */
 
     NATARS_CAPITAL_BUILDINGS = [
+	    //All Woodcutter of the 20th level
+        "f1" => 20, "f3" => 20, "f14" => 20, "f17" => 20,
+        //All Clay Pit of the 20th level
+        "f5" => 20, "f6" => 20, "f16" => 20, "f18" => 20,
+        //All Iron Mine of the 20th level
+        "f4" => 20, "f7" => 20, "f10" => 20, "f11" => 20,
+        //All Cropland of the 20th level
+        "f2" => 20, "f8" => 20, "f9" => 20, "f12" => 20, "f13" => 20, "f15" => 20,
 		// Town Hall, Great Warehouses (38), and Great Granaries (39), all at level 20.
 		// Building slots 25, 26, 29, 30, and 33 remain EMPTY, as they are reserved
 		// for World Wonder–related buildings.
-        "f19t" => 24, "f19" => 20, "f20t" => 38, "f20" => 20, "f21t" => 39, "f21" => 20,
+        "f19t" => 15, "f19" => 20, "f20t" => 38, "f20" => 20, "f21t" => 39, "f21" => 20,
         "f22t" => 38, "f22" => 20, "f23t" => 39, "f23" => 20, "f24t" => 38, "f24" => 20,
         "f27t" => 39, "f27" => 20, "f28t" => 38, "f28" => 20, "f31t" => 39, "f31" => 20,
         "f32t" => 38, "f32" => 20, "f34t" => 38, "f34" => 20, "f35t" => 39, "f35" => 20,
@@ -294,7 +302,7 @@ class Artifacts
         $capitalUnits[1][] = array_values(self::NATARS_CAPITAL_UNITS);
 
         $wid = $database->generateVillages(
-            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 1184, 'name' => null, 'natar' => 0]],
+            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 1163, 'name' => null, 'natar' => 0]],
             self::NATARS_UID,
             TRIBE5,
             $capitalUnits,
