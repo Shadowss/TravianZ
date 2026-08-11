@@ -513,11 +513,14 @@
 					}
 					$value['players'] = count($memberlist);
 					$value['totalap'] = $totalap;
-					if($value['avg'] > 0) {
-					$value['avg'] = ($totalap > 0 && count($memberlist) > 0) ? round($totalap / count($memberlist)) : 0;
-					} else {
-						$value['avg'] = 0;
-					}
+					/**
+					 * BUG: aici era "if($value['avg'] > 0)", dar getARanking()
+					 * selecteaza doar id,name,tag,oldrank,Aap,Adp - cheia 'avg' nu
+					 * exista niciodata. Conditia pica mereu pe ramura else, deci
+					 * media pe membru era intotdeauna 0 in clasament (pe langa
+					 * warning-ul "Undefined array key"). Calculam direct.
+					 */
+					$value['avg'] = (count($memberlist) > 0) ? (int) round($totalap / count($memberlist)) : 0;
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "Aap", false, 2);
@@ -540,11 +543,14 @@
 					}
 					$value['players'] = count($memberlist);
 					$value['totaldp'] = $totaldp;
-					if($value['avg'] > 0) {
-					$value['avg'] = ($totaldp > 0 && count($memberlist) > 0) ? round($totaldp / count($memberlist)) : 0;
-					} else {
-						$value['avg'] = 0;
-					}
+					/**
+					 * BUG: aici era "if($value['avg'] > 0)", dar getARanking()
+					 * selecteaza doar id,name,tag,oldrank,Aap,Adp - cheia 'avg' nu
+					 * exista niciodata. Conditia pica mereu pe ramura else, deci
+					 * media pe membru era intotdeauna 0 in clasament (pe langa
+					 * warning-ul "Undefined array key"). Calculam direct.
+					 */
+					$value['avg'] = (count($memberlist) > 0) ? (int) round($totaldp / count($memberlist)) : 0;
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "Adp", false, 2);

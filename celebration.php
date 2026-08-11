@@ -38,7 +38,7 @@ if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 			$clay = 6650;
 			$iron = 5940;
 			$crop = 1340;
-			$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,$mode);
+			$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,0);
 			$database->addCel($village->resarray['vref'],$endtime,$_GET['type']);
 		}
 	}
@@ -49,7 +49,7 @@ if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 			$clay= 33250;
 			$iron= 32000;
 			$crop= 6700;
-			$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,$mode);
+			$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,0);
 			$database->addCel($village->resarray['vref'],$endtime,$_GET['type']);
 		}
 	}

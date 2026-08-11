@@ -43,7 +43,12 @@ include_once($autoprefix.'GameEngine/config.php');
 use App\Utils\AccessLogger;
 AccessLogger::logRequest();
 
-switch($_GET['f']) {
+/**
+ * ajax.php poate fi cerut si fara parametrul "f" (boti, prefetch de browser,
+ * un link vechi). Fara isset() iesea "Undefined array key f" la fiecare
+ * astfel de cerere; acum pica linistit pe default.
+ */
+switch(isset($_GET['f']) ? $_GET['f'] : '') {
 	case 'k7':
 	    header('Content-Type: application/json');
 		$x = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);

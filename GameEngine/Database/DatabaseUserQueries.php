@@ -388,6 +388,19 @@ trait DatabaseUserQueries {
 		$q = "SELECT sit1,sit2 FROM " . TB_PREFIX . "users where username = '$username' and access != " . BANNED ." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
+
+		/**
+		 * Daca username-ul nu exista (sau contul e banat), fetch intoarce NULL
+		 * si toate citirile de mai jos dadeau "Trying to access array offset on
+		 * null". Iesim din start - oricum nu are cine sa fie sitter.
+		 */
+		if (!is_array($dbarray)) {
+			return false;
+		}
+
+		$dbarray2 = null;
+		$dbarray3 = null;
+
 		if($dbarray['sit1'] != 0) {
 		    $q2 = "SELECT password FROM " . TB_PREFIX . "users where id = " . (int) $dbarray['sit1'] . " and access != " . BANNED . " LIMIT 1";
 			$result2 = mysqli_query($this->dblink,$q2);
@@ -399,7 +412,10 @@ trait DatabaseUserQueries {
 				$dbarray3 = mysqli_fetch_array($result3);
 		}
 		if($dbarray['sit1'] != 0 || $dbarray['sit2'] != 0) {
-		    if(password_verify($password, $dbarray2['password']) || password_verify($password, $dbarray3['password'])) {
+		    // sit1/sit2 pot fi setati independent, deci unul dintre randuri
+		    // poate lipsi; fara ?? '' iesea acelasi warning pe null.
+		    if(password_verify($password, (string) ($dbarray2['password'] ?? ''))
+		       || password_verify($password, (string) ($dbarray3['password'] ?? ''))) {
 				return true;
 			} else {
 				return false;

@@ -616,6 +616,20 @@ class Units {
                     exit;
                 } else {
 
+                    /**
+                     * Formularul de retragere trimite doar casutele completate,
+                     * deci $post['t1'..'t10'] pot lipsi cu totul. Bucla de mai jos
+                     * avea deja isset(), dar addAttack() si getWalkingTroopsTime()
+                     * le citeau direct si scoteau "Undefined array key t10".
+                     * Le normalizam o singura data, aici, ca toti consumatorii de
+                     * mai jos sa primeasca numere.
+                     */
+                    for ($t = 1; $t <= 10; $t++) {
+                        if (!isset($post['t'.$t]) || !is_numeric($post['t'.$t])) {
+                            $post['t'.$t] = 0;
+                        }
+                    }
+
                     //change units
                     $tribe = $database->getUserField($to['owner'], 'tribe', 0);
                     $start = ($tribe - 1 ) * 10 + 1;

@@ -162,7 +162,7 @@ if (count($rankArray) > 1) {
         echo "<td class=\"pla\">";
 
         $uid = (int)($row['userid'] ?? 0);
-        $username = htmlspecialchars($row['username'], ENT_QUOTES, 'UTF-8');
+        $username = htmlspecialchars((string) $row['username'], ENT_QUOTES, 'UTF-8');
 
         if (!empty($row['access']) && $row['access'] > 2) {
             echo "<u><a href=\"spieler.php?uid={$uid}\">{$username}</a></u>";
@@ -177,7 +177,7 @@ if (count($rankArray) > 1) {
 
         if (!empty($row['aname']) && !empty($row['alliance'])) {
             $aid = (int)$row['alliance'];
-            $aname = htmlspecialchars($row['aname'], ENT_QUOTES, 'UTF-8');
+            $aname = htmlspecialchars((string) $row['aname'], ENT_QUOTES, 'UTF-8');
             echo "<a href=\"allianz.php?aid={$aid}\">{$aname}</a>";
         } else {
             echo "-";

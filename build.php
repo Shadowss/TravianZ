@@ -27,6 +27,14 @@ include_once( "GameEngine/Village.php" );
 include_once( "GameEngine/Units.php" );
 AccessLogger::logRequest();
 
+/**
+ * $route e setat doar in unele ramuri de mai jos, dar linia
+ * "if(... || $route == 1 || ...)" din zona de afisare il citeste mereu.
+ * Il initializam aici, o singura data, ca sa nu mai iasa
+ * "Undefined variable $route" pe fiecare deschidere de cladire.
+ */
+$route = 0;
+
 if(isset($_GET['newdid'])){
     $_SESSION['wid'] = $_GET['newdid'];
 
