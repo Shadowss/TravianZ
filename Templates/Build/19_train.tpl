@@ -35,12 +35,13 @@ foreach ($units as $i) {
     $maxPlus = $technology->maxUnitPlus($i);
     $available = (int)($village->unitarray['u'.$i] ?? 0);
 
-    $dur = $database->getArtifactsValueInfluence(
-        $session->uid,
-        $village->wid,
-        5,
-        round($unitData['time'] * ($bid19[$village->resarray['f'.$id]]['attri'] / 100) / SPEED)
-    );
+    /**
+     * Timpul de BAZA, doar din formula cladirii. Artefactele nu se mai aplica
+     * aici: sunt tratate ca reducere, alaturi de erou si alianta, in
+     * train_bonus.tpl - si, din acest commit, si in motor (Technology.php),
+     * unde inainte lipseau cu totul.
+     */
+    $dur = (int) round($unitData['time'] * ($bid19[$village->resarray['f'.$id]]['attri'] / 100) / SPEED);
     $timeFormatted = $generator->getTimeFormat($dur);
 
     $total_required = (int)($unitData['wood'] + $unitData['clay'] + $unitData['iron'] + $unitData['crop']);
@@ -64,6 +65,12 @@ foreach ($units as $i) {
                 |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" title="<?php echo NPC_TRADE; ?>" /></a>
             <?php endif;?>
         </div>
+
+        <?php
+        // reducerile de timp (coif erou + bonus alianta), sub timpul normal
+        $tbUnit = $i; $tbTime = $dur;
+        include("train_bonus.tpl");
+        ?>
     </td>
     <td class="val"><input type="text" class="text" name="t<?php echo $i;?>" value="0" maxlength="10"></td>
     <td class="max"><a href="#" onClick="document.snd.t<?php echo $i;?>.value=<?php echo $maxTrain;?>; return false;">(<?php echo $maxTrain;?>)</a></td>

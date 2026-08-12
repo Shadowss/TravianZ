@@ -42,7 +42,8 @@ for ($i = $start; $i <= $end; $i++) {
 
     $baseTime = $unitData['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100);
     if ($horseTrough >= 1) $baseTime *= (1 / $bid41[$horseTrough]['attri']);
-    $dur = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round($baseTime / SPEED));
+    // timpul de baza, fara artefacte: acestea apar ca reducere in train_bonus.tpl
+    $dur = (int) round($baseTime / SPEED);
     $timeFormatted = $generator->getTimeFormat($dur);
 
     $total_required = (int)($unitData['wood'] + $unitData['clay'] + $unitData['iron'] + $unitData['crop']);
@@ -67,6 +68,12 @@ for ($i = $start; $i <= $end; $i++) {
                 |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" /></a>
             <?php endif;?>
         </div>
+
+        <?php
+        // reducerile de timp (coif erou + bonus alianta), sub timpul normal
+        $tbUnit = $i; $tbTime = $dur;
+        include("train_bonus.tpl");
+        ?>
     </td>
     <td class="val"><input type="text" class="text" name="t<?php echo $i;?>" value="0" maxlength="10"></td>
     <td class="max"><a href="#" onClick="document.snd.t<?php echo $i;?>.value=<?php echo $maxTrain;?>; return false;">(<?php echo $maxTrain;?>)</a></td>

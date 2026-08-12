@@ -4337,3 +4337,11 @@ tz_def('SITTER_P_GOLD',   'dépenser de l’or');
 tz_def('SITTER_P_DENIED', 'Vos permissions de sitter ne vous permettent pas d’effectuer cette action.');
 tz_def('SITTER_P_HINT',        'Permissions du nouveau sitter :');
 tz_def('SITTER_P_NOT_SITTING', 'Vous n\'etes sitter sur aucun compte.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// RÉDUCTIONS DU TEMPS D'ENTRAÎNEMENT (caserne / écurie)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artefact');
+tz_def('TRAIN_BONUS_HERO',     'Bonus héros');
+tz_def('TRAIN_BONUS_ALLIANCE', 'Bonus alliance');
+tz_def('TRAIN_BONUS_FINAL',    'Temps d’entraînement');

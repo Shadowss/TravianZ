@@ -4132,3 +4132,11 @@ tz_def('SITTER_P_GOLD',   'cheltuie aur');
 tz_def('SITTER_P_DENIED', 'Permisiunile tale de sitter nu iti permit aceasta actiune.');
 tz_def('SITTER_P_HINT',        'Permisiuni pentru noul sitter:');
 tz_def('SITTER_P_NOT_SITTING', 'Nu esti sitter pe niciun cont.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// REDUCERI TIMP INSTRUIRE (cazarma / grajd)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artefact');
+tz_def('TRAIN_BONUS_HERO',     'Bonus erou');
+tz_def('TRAIN_BONUS_ALLIANCE', 'Bonus alianta');
+tz_def('TRAIN_BONUS_FINAL',    'Timp instruire');

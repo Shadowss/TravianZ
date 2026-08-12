@@ -4394,3 +4394,11 @@ tz_def('SITTER_P_GOLD',   'spend Gold');
 tz_def('SITTER_P_DENIED', 'Your sitter permissions do not allow this action.');
 tz_def('SITTER_P_HINT',        'Permissions for the new sitter:');
 tz_def('SITTER_P_NOT_SITTING', 'You are not a sitter on any account.');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// REDUCERI TIMP INSTRUIRE (cazarma / grajd)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('TRAIN_BONUS_ARTIFACT', 'Artifact bonus');
+tz_def('TRAIN_BONUS_HERO',     'Hero bonus');
+tz_def('TRAIN_BONUS_ALLIANCE', 'Alliance bonus');
+tz_def('TRAIN_BONUS_FINAL',    'Training time');

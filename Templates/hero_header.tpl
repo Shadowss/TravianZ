@@ -18,16 +18,15 @@
 ##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
-##  Componenta Hero din bara de sus (zona incercuita cu rosu in                ##
-##  RELOCARE_GOLD_LOCATIE_EROU.png). Se include din Templates/header.tpl,      ##
+##  Componenta Hero din bara de sus. Se include din Templates/header.tpl,      ##
 ##  in interiorul lui #mtop.                                                   ##
 ##                                                                             ##
-##  Structura (vezi VEDERE_GENERALA.png):                                      ##
-##    - stanga sus  : casa  = "Hero at home" + numele satului -> 37.tpl        ##
+##  Structura:                                                                 ##
+##  - stanga sus  : casa  = "Hero at home" + numele satului -> 37.tpl          ##
 ##                    (craniu, cand eroul e mort -> tot 37.tpl)                ##
-##    - centru      : portretul eroului + inelul Health(rosu)/Experience(albastru)
-##    - dreapta sus : numarul de aventuri -> 37_adventures.tpl                 ##
-##    - dreapta jos : argintul -> 37_auction.tpl                               ##
+##  - centru      : portretul eroului + inelul Health(rosu)/Experience(albastru)#
+##  - dreapta sus : numarul de aventuri -> 37_adventures.tpl                   ##
+##  - dreapta jos : argintul -> 37_auction.tpl                                 ##
 ##                                                                             ##
 ##  Toate valorile sunt reale (nimic hardcodat). Inelul e SVG desenat din      ##
 ##  procentele efective, NU o imagine statica.                                 ##

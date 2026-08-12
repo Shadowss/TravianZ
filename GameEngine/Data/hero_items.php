@@ -342,8 +342,8 @@ $heroAdventureConfig = array(
         'silver'       => array(0, 40),
         'hp_loss'      => array(0, 8),
         'resources'    => array(0, 400),
-        'equip_chance' => 3,                              // % chance: 1 random piece of gear
-        'item_chance'  => 5,                              // % chance: consumables (rolled only if no gear dropped)
+        'equip_chance' => 20,                              // % chance: 1 random piece of gear
+        'item_chance'  => 40,                              // % chance: consumables (rolled only if no gear dropped)
         'consumable'   => array(200, 201, 208),           // Ointment, Scroll, Cage
     ),
     1 => array( // HARD

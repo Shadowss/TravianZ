@@ -655,6 +655,13 @@ class Technology {
 		// in cazarma/grajd normale si in cele mari (Great Barracks/Great Stable),
 		// fiindca ramura e aleasa dupa TIPUL unitatii, nu dupa cladire.
 		// Nu se aplica la atelier, unitati speciale sau capcane - la fel ca in T4.
+		// FIX: artefactele de instruire (kind 5) erau aplicate DOAR la afisare,
+		// in sabloane - trainUnit() nu le folosea deloc. Un jucator cu artefact
+		// vedea jumatate din timp, dar trupele se antrenau in timpul intreg.
+		// Se aplica pe timpul dat de cladire, inaintea bonusurilor de erou si
+		// alianta, exact in ordinea in care sabloanele afisau pana acum.
+		$each = $this->applyArtifactTrainingBonus($each);
+
 		$each = $this->applyHeroTrainingBonus($each, $unit, $footies, $calvary);
 
 		// Bonusul de alianta "Recruitment": instruire mai rapida in toate
@@ -663,6 +670,199 @@ class Technology {
 		$each = $this->applyAllianceRecruitmentBonus($each);
 
 		return $each;
+	}
+
+	/**
+	 * Defalcarea reducerilor de timp pentru afisare in cazarma / grajd.
+	 *
+	 * Primeste timpul de baza pe care sablonul l-a calculat deja (formula
+	 * cladirii + artefacte) si intoarce cum arata el dupa fiecare bonus:
+	 *
+	 *   'hero_percent'     - % dat de coiful eroului (0 daca nu are)
+	 *   'after_hero'       - timpul dupa bonusul eroului
+	 *   'hero_saved'       - secunde economisite de erou
+	 *   'alliance_percent' - % dat de bonusul de alianta Recruitment
+	 *   'after_alliance'   - timpul final
+	 *   'alliance_saved'   - secunde economisite de alianta
+	 *   'total_saved'      - economia totala
+	 *   'has_bonus'        - true daca exista cel putin o reducere
+	 *
+	 * Refoloseste EXACT aceleasi doua metode private pe care le apeleaza si
+	 * getTrainingTime(), in aceeasi ordine (erou, apoi alianta). Asa afisajul
+	 * nu poate ajunge sa spuna altceva decat calculeaza motorul: daca cineva
+	 * schimba candva formula, se schimba in amandoua locurile deodata.
+	 */
+	public function getTrainingBonusInfo($unit, $baseTime) {
+
+		$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 61, 62, 63, 71, 72, 73, 74, 81, 82, 83, 84];
+		$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46, 53, 54, 55, 56, 64, 65, 66, 75, 76, 85, 86];
+
+		$baseTime = (int) $baseTime;
+
+		$info = array(
+			'base'             => $baseTime,
+			'artifact_percent' => 0,
+			'after_artifact'   => $baseTime,
+			'artifact_saved'   => 0,
+			'hero_percent'     => 0,
+			'after_hero'       => $baseTime,
+			'hero_saved'       => 0,
+			'alliance_percent' => 0,
+			'after_alliance'   => $baseTime,
+			'alliance_saved'   => 0,
+			'total_saved'      => 0,
+			'has_bonus'        => false,
+		);
+
+		if ($baseTime <= 0) {
+			return $info;
+		}
+
+		/**
+		 * IMPORTANT: procentele se iau din SURSA bonusului, nu din secundele
+		 * economisite.
+		 *
+		 * Pe serverele rapide (100x) timpii ajung la 1-4 secunde, iar o
+		 * reducere de 8% din 2 secunde inseamna 0,15s - care dispare la
+		 * rotunjirea la secunda intreaga. Calculat din secunde, bonusul de
+		 * alianta parea inexistent, desi el se aplica. Procentul nominal e
+		 * mereu corect, iar secundele economisite raman doar informative.
+		 */
+
+		// --- artefacte ---
+		$info['artifact_percent'] = $this->artifactTrainingPercent();
+		$afterArtifact            = $this->applyArtifactTrainingBonus($baseTime);
+		$info['after_artifact']   = $afterArtifact;
+		$info['artifact_saved']   = $baseTime - $afterArtifact;
+
+		// --- coiful eroului ---
+		$info['hero_percent'] = $this->heroTrainingPercent($unit, $footies, $calvary);
+		$afterHero            = $this->applyHeroTrainingBonus($afterArtifact, $unit, $footies, $calvary);
+		$info['after_hero']   = $afterHero;
+		$info['hero_saved']   = $afterArtifact - $afterHero;
+
+		// --- bonusul de alianta ---
+		$info['alliance_percent'] = $this->allianceTrainingPercent();
+		$afterAlliance            = $this->applyAllianceRecruitmentBonus($afterHero);
+		$info['after_alliance']   = $afterAlliance;
+		$info['alliance_saved']   = $afterHero - $afterAlliance;
+
+		$info['total_saved'] = $baseTime - $afterAlliance;
+
+		$info['has_bonus'] = ($info['artifact_percent'] > 0
+			|| $info['hero_percent'] > 0
+			|| $info['alliance_percent'] > 0);
+
+		return $info;
+	}
+
+	/**
+	 * Procentul de reducere dat de artefacte, dedus din chiar functia care il
+	 * aplica: o valoare mare trece prin ea, iar raportul da procentul. Asa nu
+	 * duplicam logica multiplicatorilor si a "artefactului nebunului".
+	 */
+	private function artifactTrainingPercent() {
+
+		$probe = 1000000;
+		$out   = $this->applyArtifactTrainingBonus($probe);
+
+		if ($out >= $probe) {
+			return 0;
+		}
+
+		return (int) round(($probe - $out) * 100 / $probe);
+	}
+
+	/** Procentul dat de coiful echipat al eroului (0 daca nu are). */
+	private function heroTrainingPercent($unit, array $footies, array $calvary) {
+		global $village, $database;
+
+		if (!class_exists('HeroBattleBonus') || !HeroBattleBonus::enabled()) {
+			return 0;
+		}
+
+		$uid = (isset($village->wid) && $database)
+			? (int) $database->getVillageField($village->wid, 'owner')
+			: 0;
+
+		if ($uid <= 0) {
+			return 0;
+		}
+
+		$bonuses = HeroBattleBonus::bonuses($uid);
+
+		if (!$bonuses) {
+			return 0;
+		}
+
+		if (in_array($unit, $footies)) {
+			$percent = (int) $bonuses[HB_TRAIN_INF];
+		} elseif (in_array($unit, $calvary)) {
+			$percent = (int) $bonuses[HB_TRAIN_CAV];
+		} else {
+			return 0;
+		}
+
+		if ($percent < 0)  $percent = 0;
+		if ($percent > 90) $percent = 90;
+
+		return $percent;
+	}
+
+	/**
+	 * Procentul efectiv al bonusului de alianta "Recruitment".
+	 *
+	 * Bonusul e multiplicativ (timpul se imparte la 1+x), deci un bonus
+	 * anuntat ca +8% inseamna 1 - 1/1.08 = 7% timp mai putin. Afisam procentul
+	 * real de reducere, nu pe cel din panoul aliantei.
+	 */
+	private function allianceTrainingPercent() {
+		global $village, $database;
+
+		if (!class_exists('AllianceBonus') || !AllianceBonus::enabled()) {
+			return 0;
+		}
+
+		$owner = (isset($village->wid) && $database)
+			? (int) $database->getVillageField($village->wid, 'owner')
+			: 0;
+
+		if ($owner <= 0) {
+			return 0;
+		}
+
+		$mult = AllianceBonus::multiplier($owner, AllianceBonus::RECRUITMENT);
+
+		if ($mult <= 1.0) {
+			return 0;
+		}
+
+		return (int) round((1 - (1 / $mult)) * 100);
+	}
+
+	/**
+	* Aplica influenta artefactelor de instruire (kind 5) asupra timpului.
+	*
+	* Proprietarul si satul se iau la fel ca la celelalte doua bonusuri, ca sa
+	* fie corect si cand codul ruleaza in alt context (cron, sitter, admin).
+	*/
+
+	private function applyArtifactTrainingBonus($each) {
+		global $village, $database;
+
+		if (!$database || !isset($village->wid)) {
+			return $each;
+		}
+
+		$uid = (int) $database->getVillageField($village->wid, 'owner');
+
+		if ($uid <= 0) {
+			return $each;
+		}
+
+		$out = (int) $database->getArtifactsValueInfluence($uid, $village->wid, 5, $each);
+
+		return $out > 0 ? $out : 1;
 	}
 
 	/**
