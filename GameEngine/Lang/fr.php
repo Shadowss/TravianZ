@@ -4335,3 +4335,5 @@ tz_def('SITTER_P_REINF',  'envoyer des renforts');
 tz_def('SITTER_P_RES',    'envoyer des ressources à d’autres joueurs');
 tz_def('SITTER_P_GOLD',   'dépenser de l’or');
 tz_def('SITTER_P_DENIED', 'Vos permissions de sitter ne vous permettent pas d’effectuer cette action.');
+tz_def('SITTER_P_HINT',        'Permissions du nouveau sitter :');
+tz_def('SITTER_P_NOT_SITTING', 'Vous n\'etes sitter sur aucun compte.');

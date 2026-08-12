@@ -49,8 +49,8 @@ $sitterPermList = array(
 );
 
 /**
- * Casutele pentru un slot. $mask = permisiunile curente, $field = numele
- * campului din formular.
+ * Casutele editabile pentru un slot de sitter.
+ * $mask = permisiunile curente, $field = numele campului din formular.
  */
 function sitterPermBoxes($mask, $field, $list) {
 
@@ -60,19 +60,44 @@ function sitterPermBoxes($mask, $field, $list) {
      * Campul asta e mereu trimis, asa ca Profile.php poate deosebi cele doua
      * situatii si nu reseteaza permisiunile din greseala.
      */
-    $out = '<input type="hidden" name="' . $field . '_sent" value="1" />';
-    $out .= '<div class="sitterPerm">';
+    $out  = '<input type="hidden" name="' . $field . '_sent" value="1" />';
+    $out .= '<ul class="permGrid">';
 
     foreach ($list as $bit => $label) {
 
-        $checked = (((int) $mask & $bit) === $bit) ? ' checked' : '';
+        $on = (((int) $mask & $bit) === $bit);
 
-        $out .= '<label><input type="checkbox" class="checkbox" name="' . $field . '[]"'
-              . ' value="' . (int) $bit . '"' . $checked . ' /> '
-              . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</label>';
+        $out .= '<li class="permItem' . ($on ? ' isOn' : '') . '">'
+              . '<label>'
+              . '<input type="checkbox" name="' . $field . '[]" value="' . (int) $bit . '"'
+              . ($on ? ' checked' : '') . ' />'
+              . '<span>' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</span>'
+              . '</label></li>';
     }
 
-    return $out . '</div>';
+    return $out . '</ul>';
+}
+
+/**
+ * Aceleasi drepturi, dar DOAR pentru citire: se foloseste in lista conturilor
+ * pe care esti tu sitter, ca sa vezi ce ti-a permis fiecare proprietar.
+ * Bifa verde = ai voie, X gri = nu ai voie.
+ */
+function sitterPermView($mask, $list) {
+
+    $out = '<ul class="permGrid permView">';
+
+    foreach ($list as $bit => $label) {
+
+        $on = (((int) $mask & $bit) === $bit);
+
+        $out .= '<li class="permItem ' . ($on ? 'isOn' : 'isOff') . '">'
+              . '<i class="permMark">' . ($on ? '&#10003;' : '&#10007;') . '</i>'
+              . '<span>' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</span>'
+              . '</li>';
+    }
+
+    return $out . '</ul>';
 }
 ?>
 
@@ -153,16 +178,96 @@ if (!empty($emailError)) {
 ?>
 
 <style type="text/css">
-/* casutele de permisiuni pentru sitteri */
-#sitter .sitterPerm { margin: 4px 0 8px 18px; }
-#sitter .sitterPerm label {
+/* =======================================================================
+   Sitteri: permisiuni
+   Totul e limitat la #sitter, deci nu atinge restul paginii de cont.
+
+   Fara CSS grid si fara "gap": jocul e deschis si din browsere vechi, iar
+   acolo grid-ul cade pe o singura coloana, iar gap-ul e ignorat (bifele
+   raman lipite de text). inline-block + margini merg peste tot.
+   ======================================================================= */
+
+/* --- cardul unui sitter: nume sus, drepturi dedesubt --- */
+#sitter .sitterCard {
+    margin: 0 0 8px 0;
+    padding: 7px 9px;
+    background: #fbfaf8;
+    border: 1px solid #dedbd4;
+    border-radius: 4px;
+}
+
+#sitter .sitterCard:last-child { margin-bottom: 0; }
+
+#sitter .sitterCard { text-align: left; }
+
+#sitter .sitterHead {
+    padding-bottom: 6px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid #e8e5df;
+}
+
+#sitter .sitterHead .del  { margin-right: 6px; vertical-align: -1px; cursor: pointer; }
+#sitter .sitterHead .name { font-weight: bold; }
+
+/* --- grila de drepturi: doua coloane --- */
+#sitter .permGrid {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0;          /* elimina spatiul dintre elementele inline-block */
+    text-align: left;      /* celulele tabelului sunt centrate; grila nu trebuie */
+}
+
+#sitter .permGrid .permItem {
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 2px 10px 2px 0;
+    font-size: 11px;
+    line-height: 15px;
+    color: #6f6b64;
+    vertical-align: top;
+}
+
+#sitter .permGrid .permItem label {
     display: block;
-    padding: 1px 0;
     font-weight: normal;
-    white-space: nowrap;
     cursor: pointer;
 }
-#sitter .sitterPerm input { margin-right: 5px; vertical-align: -1px; }
+
+#sitter .permGrid .permItem input {
+    margin: 0 5px 0 0;
+    padding: 0;
+    vertical-align: -1px;
+}
+
+#sitter .permGrid .permItem.isOn { color: #2f2d29; }
+
+/* --- varianta doar-citire (conturile pe care esti TU sitter) --- */
+#sitter .permMark {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-right: 5px;
+    line-height: 13px;
+    text-align: center;
+    font-style: normal;
+    font-size: 10px;
+    border-radius: 2px;
+    vertical-align: -2px;
+}
+
+#sitter .permView .isOn  .permMark { color: #ffffff; background: #5aa02c; }
+#sitter .permView .isOff .permMark { color: #ffffff; background: #c2bfb8; }
+#sitter .permView .isOff { color: #a5a19a; }
+
+/* --- casuta de adaugare a unui sitter nou --- */
+/* titlul cardului de adaugare: acelasi loc ca numele unui sitter existent,
+   dar fara accentul de nume propriu */
+#sitter .addSitter .name { font-weight: normal; color: #8a877f; }
+
+#sitter span.none { color: #a5a19a; }
 </style>
 
 <!-- =========================
@@ -188,10 +293,32 @@ if (!empty($emailError)) {
     <td>
         <input class="text" type="text" name="v1" maxlength="15">
         <span class="count">(<?php echo $count; ?>/2)</span>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" class="sitter">
         <?php
-        // permisiunile cu care intra noul sitter; implicit toate bifate
-        echo sitterPermBoxes(SITTER_PERM_ALL, 'perm_new', $sitterPermList);
+        /**
+         * Permisiunile noului sitter stau pe UN RAND PROPRIU, pe toata latimea.
+         *
+         * Inainte erau inghesuite in celula de langa "Name of the sitter", care
+         * are ~300px: cele doua coloane ieseau la ~150px fiecare, iar etichetele
+         * lungi ("send resources to other players") se taiau. Acum folosesc
+         * acelasi card ca sitterii existenti de mai jos, deci si latimea, si
+         * aspectul sunt identice.
+         */
         ?>
+        <div class="sitterCard addSitter">
+            <div class="sitterHead">
+                <span class="name"><?php
+                    echo defined('SITTER_P_HINT') ? SITTER_P_HINT : 'Permissions for the new sitter:';
+                ?></span>
+            </div>
+            <?php
+            // permisiunile cu care intra noul sitter; implicit toate bifate
+            echo sitterPermBoxes(SITTER_PERM_ALL, 'perm_new', $sitterPermList);
+            ?>
+        </div>
     </td>
 </tr>
 <?php } ?>
@@ -214,17 +341,19 @@ foreach ($sitSlots as $type => $key) {
         $uid = $session->userinfo[$key];
         $uname = $database->getUserField($uid, "username", 0);
 
-        echo "<div>";
-        echo "<a href=\"spieler.php?s=3&e=3&id=".$uid."&a=".$session->checker."&type=".$type."\">";
-        echo "<img class=\"del\" src=\"img/x.gif\" title=\"Remove sitters\" alt=\"Remove sitters\" />";
-        echo "</a>";
-        echo "<a href=\"spieler.php?uid=".$uid."\">".$uname."</a>";
-
         // permisiunile curente ale acestui sitter
         $permField = 'perm' . $type;
         $permMask  = isset($session->userinfo[$key . '_perm'])
             ? (int) $session->userinfo[$key . '_perm']
             : SITTER_PERM_ALL;
+
+        echo "<div class=\"sitterCard\">";
+        echo "<div class=\"sitterHead\">";
+        echo "<a href=\"spieler.php?s=3&e=3&id=".$uid."&a=".$session->checker."&type=".$type."\">";
+        echo "<img class=\"del\" src=\"img/x.gif\" title=\"Remove sitters\" alt=\"Remove sitters\" />";
+        echo "</a>";
+        echo "<a class=\"name\" href=\"spieler.php?uid=".$uid."\">".$uname."</a>";
+        echo "</div>";
 
         echo sitterPermBoxes($permMask, $permField, $sitterPermList);
         echo "</div>";
@@ -251,14 +380,41 @@ foreach ($sitSlots as $type => $key) {
 $sitee = $database->getSitee($session->uid);
 
 if (count($sitee) == 0) {
-    echo "<span class=\"none\">You have no sitters.</span>";
+    // textul de aici spunea tot "You have no sitters", desi lista arata
+    // conturile pe care esti TU sitter - doua lucruri diferite
+    echo "<span class=\"none\">"
+       . (defined('SITTER_P_NOT_SITTING') ? SITTER_P_NOT_SITTING
+          : 'You are not a sitter on any account.')
+       . "</span>";
 } else {
     foreach ($sitee as $sit) {
-        echo "<div>";
+
+        /**
+         * Ce drepturi mi-a dat ACEST proprietar.
+         *
+         * getSitee() intoarce randul lui, deci ne uitam pe care dintre cele
+         * doua sloturi stam si citim masca potrivita. Daca serverul inca nu are
+         * coloanele (migrarea nerulata), cadem pe SITTER_PERM_ALL - exact ce
+         * face si backendul, deci afisajul nu minte.
+         */
+        $myMask = SITTER_PERM_ALL;
+
+        if ((int) ($sit['sit1'] ?? 0) === (int) $session->uid) {
+            $myMask = isset($sit['sit1_perm']) ? (int) $sit['sit1_perm'] : SITTER_PERM_ALL;
+        } else if ((int) ($sit['sit2'] ?? 0) === (int) $session->uid) {
+            $myMask = isset($sit['sit2_perm']) ? (int) $sit['sit2_perm'] : SITTER_PERM_ALL;
+        }
+
+        echo "<div class=\"sitterCard\">";
+        echo "<div class=\"sitterHead\">";
         echo "<a href=\"spieler.php?s=3&e=2&id=".$sit['id']."&a=".$session->checker."\">";
         echo "<img class=\"del\" src=\"img/x.gif\" title=\"Remove sitters\" alt=\"Remove sitters\" />";
         echo "</a>";
-        echo "<a href=\"spieler.php?uid=".$sit['id']."\">".$database->getUserField($sit['id'], "username", 0)."</a>";
+        echo "<a class=\"name\" href=\"spieler.php?uid=".$sit['id']."\">"
+           . $database->getUserField($sit['id'], "username", 0)."</a>";
+        echo "</div>";
+
+        echo sitterPermView($myMask, $sitterPermList);
         echo "</div>";
     }
 }

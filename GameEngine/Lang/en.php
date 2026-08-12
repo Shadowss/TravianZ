@@ -4392,4 +4392,5 @@ tz_def('SITTER_P_REINF',  'send reinforcements');
 tz_def('SITTER_P_RES',    'send resources to other players');
 tz_def('SITTER_P_GOLD',   'spend Gold');
 tz_def('SITTER_P_DENIED', 'Your sitter permissions do not allow this action.');
-
+tz_def('SITTER_P_HINT',        'Permissions for the new sitter:');
+tz_def('SITTER_P_NOT_SITTING', 'You are not a sitter on any account.');

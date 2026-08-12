@@ -28,6 +28,30 @@ ob_start();
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
+/**
+ * RESTRICTIE SITTER pe pagina de profil.
+ *
+ * Un sitter are voie DOAR la Overview (spieler.php?uid=...). Taburile
+ * Profile / Preferences / Account / Vacation / Graphic Pack (s=1..5) sunt
+ * interzise, inclusiv prin URL scris de mana sau POST trimis direct.
+ *
+ * De ce aici si nu la finalul fisierului, unde exista deja o verificare
+ * "$_GET['s'] > 5 or $session->sit == 1":
+ *   - procProfile($_POST) ruleaza la linia urmatoare si salveaza efectiv
+ *     setarile; verificarea de la final se executa mult dupa;
+ *   - graphic.tpl si preference.tpl scriu direct in baza de date la include,
+ *     tot inainte de acea verificare.
+ * Cu ob_start() activ, redirectul de la final ascundea doar PAGINA, nu si
+ * efectele - un sitter putea schimba setarile proprietarului fara sa vada
+ * vreun ecran.
+ */
+if (isset($session) && is_object($session) && method_exists($session, 'isSitterSession')
+    && $session->isSitterSession() && isset($_GET['s'])) {
+
+    header("Location: " . $_SERVER['PHP_SELF'] . "?uid=" . (int) $session->uid);
+    exit;
+}
+
 $profile->procProfile($_POST);
 $profile->procSpecial($_GET);
 if(isset($_GET['newdid'])){

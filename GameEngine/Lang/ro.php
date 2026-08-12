@@ -4130,3 +4130,5 @@ tz_def('SITTER_P_REINF',  'trimite intariri');
 tz_def('SITTER_P_RES',    'trimite resurse altor jucatori');
 tz_def('SITTER_P_GOLD',   'cheltuie aur');
 tz_def('SITTER_P_DENIED', 'Permisiunile tale de sitter nu iti permit aceasta actiune.');
+tz_def('SITTER_P_HINT',        'Permisiuni pentru noul sitter:');
+tz_def('SITTER_P_NOT_SITTING', 'Nu esti sitter pe niciun cont.');

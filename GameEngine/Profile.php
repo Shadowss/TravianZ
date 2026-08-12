@@ -30,8 +30,36 @@ class Profile {
 		'villages'  => []
 	];
 
+	/**
+	 * Sesiunea curenta e a unui sitter?
+	 * Verificat defensiv, ca Profile.php sa mearga si daca ajunge intr-un
+	 * context unde $session inca nu e initializat.
+	 */
+	private function isSitter() {
+		global $session;
+
+		return isset($session) && is_object($session)
+			&& method_exists($session, 'isSitterSession')
+			&& $session->isSitterSession();
+	}
+
 	public function procProfile($post) {
 		global $session;
+
+		/**
+		 * RESTRICTIE SITTER - al doilea nivel, cel care conteaza.
+		 *
+		 * spieler.php blocheaza deja accesul la taburi, dar aceasta metoda e
+		 * punctul unic prin care trec TOATE formularele de profil (p1..p5:
+		 * descriere, preferinte, cont, parola, vacanta). Un sitter putea
+		 * trimite POST-ul direct catre spieler.php, fara sa deschida tabul.
+		 *
+		 * Aici se opreste definitiv: un sitter nu modifica setarile
+		 * proprietarului, indiferent pe unde intra.
+		 */
+		if ($this->isSitter()) {
+			return;
+		}
 
 		if (isset($post['ft'])) {
 			switch ($post['ft']) {
@@ -214,6 +242,21 @@ class Profile {
 	}
 
 	public function procSpecial($get) {
+
+		/**
+		 * Aceleasi motive ca la procProfile(). Actiunile de aici sunt chiar mai
+		 * sensibile, fiindca se declanseaza prin simplu GET:
+		 *   e=2 removeMeSit    - se scoate ca sitter de pe un cont
+		 *   e=3 removeSitter   - sterge un sitter al proprietarului (deci un
+		 *                        sitter l-ar fi putut elimina pe celalalt, sau
+		 *                        pe sine, ca sa scape de urme)
+		 *   e=4 cancelDeleting - anuleaza stergerea contului proprietarului
+		 * Niciuna nu are ce cauta intr-o sesiune de sitter.
+		 */
+		if ($this->isSitter()) {
+			return;
+		}
+
 		if (isset($get['e'])) {
 			switch ($get['e']) {
 				case 2:

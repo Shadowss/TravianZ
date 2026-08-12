@@ -385,10 +385,23 @@ class Account {
     }
 
     setcookie("COOKUSR", $username, time() + COOKIE_EXPIRE, COOKIE_PATH);
-    $session->login($username);
 
-    // dupa Login(), ca sa nu fie suprascris de initializarea sesiunii
+    /**
+     * BUG CRITIC REPARAT: aceasta linie era DUPA $session->login().
+     *
+     * Session::Login() se termina cu header("Location: dorf1.php"); exit;
+     * deci tot ce urma dupa apel era cod mort. $_SESSION['sitter_uid'] nu se
+     * scria NICIODATA, sesiunea sitterului arata identic cu a proprietarului
+     * si toate verificarile de permisiuni treceau - indiferent ce bifai in
+     * interfata.
+     *
+     * Setarea INAINTE de Login() are si un avantaj: Login() apeleaza intern
+     * PopulateVar(), care citeste chiar aceasta cheie, deci permisiunile sunt
+     * corecte inca din prima cerere, nu de la a doua.
+     */
     $_SESSION['sitter_uid'] = $sitterUid;
+
+    $session->login($username);
 }
 
 	private function Logout() {

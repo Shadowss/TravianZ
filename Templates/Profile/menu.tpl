@@ -20,6 +20,17 @@ $menuUid = isset($_GET['uid']) ? (int)$_GET['uid'] : (int)$session->uid;
 // helper simplu pentru "selected"
 $selectedUid = isset($_GET['uid']);
 $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
+
+/**
+ * Un sitter vede DOAR Overview. Restul taburilor nu se mai deseneaza.
+ *
+ * Ascunderea e doar cosmetica - blocarea reala e in spieler.php (redirect
+ * inainte de orice include) si in Profile::procProfile()/procSpecial()
+ * (refuza POST-urile trimise direct). Aici doar nu mai aratam linkuri care
+ * oricum ar redirectiona.
+ */
+$sitterView = isset($session) && is_object($session)
+    && method_exists($session, 'isSitterSession') && $session->isSitterSession();
 ?>
 
 <div id="textmenu">
@@ -30,6 +41,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
         <?php echo OVERVIEW; ?>
     </a>
 
+<?php if (!$sitterView) { ?>
     |
 
     <!-- ================= PROFILE ================= -->
@@ -77,5 +89,6 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
     <?php
     }
     ?>
+<?php } // fara taburi de setari pentru sitteri ?>
 
 </div>

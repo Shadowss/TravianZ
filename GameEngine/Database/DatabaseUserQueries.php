@@ -246,10 +246,18 @@ trait DatabaseUserQueries {
 }
 
 	// no need to cache this method
+	/**
+	 * Conturile pe care utilizatorul $uid e sitter.
+	 *
+	 * Intoarce si sloturile si mastile de permisiuni, ca pagina de cont sa
+	 * poata afisa CE drepturi i-a dat fiecare proprietar. Inainte se selecta
+	 * doar "id", deci sitterul nu avea de unde sa stie ce are voie sa faca.
+	 * Cheia 'id' ramane neschimbata, deci codul existent nu e afectat.
+	 */
 	function getSitee($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT id from " . TB_PREFIX . "users where sit1 = $uid or sit2 = $uid";
+		$q = "SELECT id, sit1, sit2, sit1_perm, sit2_perm from " . TB_PREFIX . "users where sit1 = $uid or sit2 = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
