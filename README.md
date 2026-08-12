@@ -89,6 +89,7 @@ Admin Panel
 * Multi-Account Detection
 * Push Protection Dashboard
 * Registration Blocklist
+* Add Protected Players (cannot attack,raid,etc.)
 * Quest Editor Page
 * New Admin Panel design.
 * World Map Heatmap
@@ -125,6 +126,8 @@ Gameplay Improvements
 
 * Vacation Mode added (requires 9 conditions).
 * Added Graphical Statistics
+* Added Sitters Permissions
+* Added time reduction display for Stables, Barracks, and Workshop (Artifacts, Hero Bonus, Alliance Bonus).
 * Added Server Milestones
 * Activated gpack for each player
 * NEW gpack travian_t4 style buildings
