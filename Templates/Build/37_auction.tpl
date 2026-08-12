@@ -192,6 +192,18 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
    Latimile sunt stranse la minimul in care incape headerul, ca tabelul sa nu
    mai depaseasca zona de continut (~505px) si sa nu mai apara scroll
    orizontal. Total: 78+96+66+46+66+74 = 426px + padding. */
+/* Capul de COLOANE, la fel ca in 37_items.tpl si 37_adventures.tpl: gri
+   deschis, text mic, ca sa nu concureze cu titlul tabelului de deasupra. */
+.t4auc-tbl tr.t4cols th {
+    background: #e8e8ea;
+    color: #444;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    padding: 3px 5px;
+    border-bottom: 1px solid #d0d0d4;
+}
+
 .t4auc-tbl th { text-align: center; }
 
 /* fara white-space:nowrap pe th: "Se incheie in" se rupe pe doua randuri
@@ -214,6 +226,55 @@ foreach ($t4HeroItems->getInventory($session->uid) as $t4Row) {
     line-height: 1.3;
     word-wrap: break-word;
 }
+
+/* --- "My bids" / "My sales": aceleasi tonuri ca restul paginii --- */
+.t4auc-mini td { padding: 6px; font-size: 11px; vertical-align: middle; }
+
+/* Coloana obiectului: iconita sus, numele dedesubt cu scris pal - exact ca in
+   tabelul de licitatii deschise, ca cele doua liste sa se citeasca la fel. */
+.t4auc-mini .t4auc-col-item { width: 86px; text-align: center; }
+
+/* Eticheta pe RANDUL EI, valoarea dedesubt.
+   Inainte erau inline: in coloana ingusta eticheta se rupea, iar cifra
+   ingrosata urca peste ea. Ca bloc, fiecare are randul propriu. */
+.t4auc-mini .t4auc-lbl {
+    display: block;
+    margin-bottom: 3px;
+    color: #8a877f;
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+}
+
+/* NU folosi ".t4auc-num" aici: numele e deja luat de campurile din Casa de
+   schimb (input cu chenar), iar valorile ar fi aratat ca niste casute
+   editabile. */
+.t4auc-mini .t4auc-value { display: block; font-weight: bold; line-height: 15px; color: #3f3d39; }
+.t4auc-mini .t4auc-val  { text-align: right; width: 92px; }
+.t4auc-mini .t4auc-time { text-align: center; width: 74px; font-variant-numeric: tabular-nums; color: #8a877f; }
+
+/* --- "Sell an item" --- */
+.t4auc-sell td { padding: 6px; font-size: 11px; vertical-align: middle; }
+
+.t4auc-sell .t4auc-lbl {
+    display: block;
+    margin-bottom: 3px;
+    color: #8a877f;
+    font-size: 10px;
+}
+
+.t4auc-sell select,
+.t4auc-sell input[type="text"] {
+    padding: 2px 4px;
+    border: 1px solid #b9b6b0;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: inherit;
+}
+
+.t4auc-sell select      { max-width: 100%; }
+.t4auc-sell .t4auc-qty  { width: 48px; text-align: center; }
+.t4auc-sell .t4auc-prc  { width: 62px; text-align: right; }
 
 /* Tier: numarul sus, abilitatea dedesubt cu scris mai pal */
 .t4auc-tier {
@@ -416,7 +477,7 @@ $t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_
 <table id="distribution" class="t4auc-tbl" cellpadding="1" cellspacing="1">
     <thead>
         <tr><th colspan="6"><?php echo HERO_AUC_OPEN; ?></th></tr>
-        <tr>
+        <tr class="t4cols">
             <th class="t4auc-col-item"><?php echo HERO_AUC_ITEM; ?></th>
             <th class="t4auc-col-tier"><?php echo $t4LblTier; ?></th>
             <th class="t4auc-col-qty"><?php echo HERO_QUANTITY; ?></th>
@@ -475,17 +536,28 @@ $t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_
 </table>
 
 <?php if (count($t4MyBids)) { ?>
-<table id="distribution" cellpadding="1" cellspacing="1" style="margin-top:10px;">
+<table id="distribution" class="t4auc-mini" cellpadding="1" cellspacing="1" style="margin-top:10px;">
     <thead>
         <tr><th colspan="4"><?php echo HERO_AUC_MY_BIDS; ?></th></tr>
     </thead>
     <tbody>
     <?php foreach ($t4MyBids as $t4A) { ?>
         <tr>
-            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
-            <td style="text-align:right;"><?php echo HERO_AUC_PRICE; ?>: <?php echo number_format((int) $t4A['silver_current']); ?></td>
-            <td style="text-align:right;"><?php echo HERO_AUC_YOUR_MAX; ?>: <?php echo number_format((int) $t4A['bid_max']); ?></td>
-            <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
+            <td class="t4auc-col-item" title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>">
+                <span class="heroT4Item item<?php echo (int) $t4A['itemid']; ?>"></span>
+                <span class="t4auc-itemname">
+                    <?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)
+                </span>
+            </td>
+            <td class="t4auc-val">
+                <span class="t4auc-lbl"><?php echo $t4LblPrice; ?></span>
+                <span class="t4auc-value"><?php echo number_format((int) $t4A['silver_current']); ?></span>
+            </td>
+            <td class="t4auc-val">
+                <span class="t4auc-lbl"><?php echo HERO_AUC_YOUR_MAX; ?></span>
+                <span class="t4auc-value"><?php echo number_format((int) $t4A['bid_max']); ?></span>
+            </td>
+            <td class="t4auc-time"><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
         </tr>
     <?php } ?>
     </tbody>
@@ -493,16 +565,24 @@ $t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_
 <?php } ?>
 
 <?php if (count($t4MySales)) { ?>
-<table id="distribution" cellpadding="1" cellspacing="1" style="margin-top:10px;">
+<table id="distribution" class="t4auc-mini" cellpadding="1" cellspacing="1" style="margin-top:10px;">
     <thead>
         <tr><th colspan="3"><?php echo HERO_AUC_MY_SALES; ?></th></tr>
     </thead>
     <tbody>
     <?php foreach ($t4MySales as $t4A) { ?>
         <tr>
-            <td title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>"><?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)</td>
-            <td style="text-align:right;"><?php echo HERO_AUC_PRICE; ?>: <?php echo number_format((int) $t4A['silver_current']); ?></td>
-            <td><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
+            <td class="t4auc-col-item" title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4A['itemid'])); ?>">
+                <span class="heroT4Item item<?php echo (int) $t4A['itemid']; ?>"></span>
+                <span class="t4auc-itemname">
+                    <?php echo $t4A['name']; ?> (<?php echo (int) $t4A['quantity']; ?>x)
+                </span>
+            </td>
+            <td class="t4auc-val">
+                <span class="t4auc-lbl"><?php echo $t4LblPrice; ?></span>
+                <span class="t4auc-value"><?php echo number_format((int) $t4A['silver_current']); ?></span>
+            </td>
+            <td class="t4auc-time"><span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat(max(0, $t4A['time_end'] - $t4Now)); ?></span></td>
         </tr>
     <?php } ?>
     </tbody>
@@ -510,15 +590,24 @@ $t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_
 <?php } ?>
 
 <?php if (count($t4Sellable)) { ?>
-<table id="distribution" cellpadding="1" cellspacing="1" style="margin-top:10px;">
+<table id="distribution" class="t4auc-sell" cellpadding="1" cellspacing="1" style="margin-top:10px;">
     <thead>
         <tr><th colspan="5"><?php echo HERO_AUC_SELL; ?></th></tr>
     </thead>
     <tbody>
         <tr>
+            <?php
+            /**
+             * <form> sta intre <tr> si <td>, ceea ce nu e HTML valid - browserele
+             * il "ridica" in afara tabelului, dar campurile raman asociate si
+             * formularul functioneaza. Structura e cea originala; a fost pastrata
+             * intentionat, ca sa nu se schimbe alinierea pe coloane.
+             */
+            ?>
             <form action="" method="POST" style="margin:0;">
             <input type="hidden" name="t4action" value="sell">
             <td>
+                <span class="t4auc-lbl"><?php echo HERO_AUC_ITEM; ?></span>
                 <select name="rowid">
                 <?php foreach ($t4Sellable as $t4Row) { ?>
                     <option value="<?php echo (int) $t4Row['id']; ?>" title="<?php echo htmlspecialchars(heroItemBonusText((int) $t4Row['itemid'])); ?>">
@@ -527,16 +616,25 @@ $t4LblPrice = defined('HERO_AUC_PRICE_SHORT') ? HERO_AUC_PRICE_SHORT : HERO_AUC_
                 <?php } ?>
                 </select>
             </td>
-            <td><?php echo HERO_QUANTITY; ?>: <input type="text" name="qty" value="1" size="3" style="text-align:center;"></td>
-            <td><?php echo HERO_AUC_START_PRICE; ?>: <input type="text" name="price" value="10" size="5" style="text-align:right;"></td>
-            <td><?php echo HERO_AUC_DURATION; ?>:
+            <td>
+                <span class="t4auc-lbl"><?php echo HERO_QUANTITY; ?></span>
+                <input type="text" name="qty" value="1" class="t4auc-qty">
+            </td>
+            <td>
+                <span class="t4auc-lbl"><?php echo HERO_AUC_START_PRICE; ?></span>
+                <input type="text" name="price" value="10" class="t4auc-prc">
+            </td>
+            <td>
+                <span class="t4auc-lbl"><?php echo HERO_AUC_DURATION; ?></span>
                 <select name="duration">
                     <option value="14400">4h</option>
                     <option value="28800">8h</option>
                     <option value="86400">24h</option>
                 </select>
             </td>
-            <td style="text-align:center;"><input type="submit" value="<?php echo HERO_AUC_LIST; ?>"></td>
+            <td style="text-align:center;">
+                <button type="submit" class="t4auc-btn"><?php echo HERO_AUC_LIST; ?></button>
+            </td>
             </form>
         </tr>
     </tbody>
