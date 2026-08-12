@@ -2451,6 +2451,7 @@ tz_def('TZ_MILESTONE_FIRST_ALLIANCE', 'First Alliance Founded');
 tz_def('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'First Village Conquered from a Player');
 tz_def('TZ_MILESTONE_FIVE_VILLAGES', 'First to Found 5 Villages');
 tz_def('TZ_MILESTONE_FOUNDED_BY', 'Founded by');
+tz_def('TZ_MILESTONE_HERO_MASTER', 'First Hero Master (full tier 3 equipment)');
 
 // ===== i18n etape 2 (lot suivant) =====
 tz_def('TZ_ACCOUNT_OR_INCREASE_YOUR_RESOURCE', '-Account or increase your resource production.To do so click');

@@ -698,7 +698,70 @@ class HeroItems
         $stmt->close();
 
         $this->invalidateCaches($uid);
+
+        /**
+         * Milestone "Hero Master": primul jucator de pe server care are eroul
+         * echipat cu tier 3 pe TOATE cele sase sloturi (coif, armura, mana
+         * dreapta, mana stanga, incaltaminte si Warhorse - calul de tier 3).
+         *
+         * Verificarea se face dupa echipare, cand chiar s-a schimbat ceva.
+         * recordMilestoneIfFirst() foloseste INSERT IGNORE pe o cheie unica,
+         * deci al doilea jucator care ajunge acolo nu suprascrie nimic, iar
+         * apelurile repetate ale aceluiasi jucator nu costa nimic.
+         */
+        if ($ok) {
+            $this->checkHeroMasterMilestone($uid);
+        }
+
         return $ok;
+    }
+
+    /**
+     * Eroul are tier 3 pe toate cele sase sloturi de echipament?
+     * Slotul 7 (HSLOT_BAG) e pentru consumabile, deci nu conteaza.
+     */
+    public function isFullTier3($uid)
+    {
+        $equipped = $this->getEquipped((int) $uid);
+
+        if (!is_array($equipped)) {
+            return false;
+        }
+
+        $slots = array(HSLOT_HELMET, HSLOT_BODY, HSLOT_RIGHT, HSLOT_LEFT, HSLOT_SHOES, HSLOT_HORSE);
+
+        foreach ($slots as $slot) {
+
+            if (!isset($equipped[$slot]['def']['tier'])) {
+                return false;
+            }
+
+            if ((int) $equipped[$slot]['def']['tier'] !== 3) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** Inregistreaza milestone-ul, daca e cazul. */
+    private function checkHeroMasterMilestone($uid)
+    {
+        global $database;
+
+        if (!defined('NEW_FUNCTIONS_MILESTONES') || !NEW_FUNCTIONS_MILESTONES) {
+            return;
+        }
+
+        if (!$database || !method_exists($database, 'recordMilestoneIfFirst')) {
+            return;
+        }
+
+        if (!$this->isFullTier3($uid)) {
+            return;
+        }
+
+        $database->recordMilestoneIfFirst('hero_master', (int) $uid, 0, '');
     }
 
     /** Unequip a specific owned row. Returns true on success. */

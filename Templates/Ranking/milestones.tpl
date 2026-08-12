@@ -54,6 +54,9 @@ $milestoneIcons = [
     'alliance' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 3v5.5c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 12l2.3 2.3L15.8 9.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     'conquest' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l7 7M4 4l1 3.2L7.2 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4l-7 7M20 4l-1 3.2L16.8 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20l6.5-6.5M21 20l-6.5-6.5" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M11 13l1 1 1-1" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     'five_villages' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 22V14.5L8 12L11 14.5V22" stroke="white" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 22v-3h2v3" stroke="white" stroke-width="1.4" stroke-linejoin="round"/><path d="M11 16L13.5 14L16 16V22H11" stroke="white" stroke-width="1.3" stroke-linejoin="round" opacity="0.9"/><path d="M2.5 17L4 16l2 1" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/><path d="M2.5 17V22H5" stroke="white" stroke-width="1.2" stroke-linejoin="round" opacity="0.75"/><path d="M19 16l1.5-1L22 16V22h-3" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/><circle cx="12" cy="6" r="1.8" stroke="white" stroke-width="1.3"/><path d="M10 8.5l2 1.5 2-1.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    // Coif cu creasta si o stea deasupra: echipament complet de tier maxim.
+    // Acelasi stil liniar, alb pe fundal colorat, ca restul setului.
+    'hero_master' => '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.2l.9 1.9 2.1.3-1.5 1.5.35 2.1L12 7l-1.85 1 .35-2.1L9 4.4l2.1-.3z" stroke="white" stroke-width="1.1" stroke-linejoin="round"/><path d="M6 20v-6.5c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5V20" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 14.5h12" stroke="white" stroke-width="1.3"/><path d="M12 14.5V20" stroke="white" stroke-width="1.3"/><path d="M8.6 11.4h6.8" stroke="white" stroke-width="1.2" opacity="0.85"/></svg>',
 ];
 
 $milestoneDefs = [
@@ -65,6 +68,13 @@ $milestoneDefs = [
     'first_alliance'     => ['label' => TZ_MILESTONE_FIRST_ALLIANCE,     'icon' => 'alliance',      'color' => '#3fa14a'],
     'first_pvp_conquest' => ['label' => TZ_MILESTONE_FIRST_PVP_CONQUEST, 'icon' => 'conquest',      'color' => '#b6362f'],
     'five_villages'      => ['label' => TZ_MILESTONE_FIVE_VILLAGES,      'icon' => 'five_villages', 'color' => '#7a6030'],
+    // Primul erou cu tier 3 pe toate cele sase sloturi (inclusiv Warhorse).
+    // Rosu-visiniu, ca sa nu semene cu niciuna dintre celelalte insigne.
+    'hero_master'        => [
+        'label' => defined('TZ_MILESTONE_HERO_MASTER') ? TZ_MILESTONE_HERO_MASTER : 'First Hero Master (full tier 3 equipment)',
+        'icon'  => 'hero_master',
+        'color' => '#8c2f4a',
+    ],
 ];
 ?>
 

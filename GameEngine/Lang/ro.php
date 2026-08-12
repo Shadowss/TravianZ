@@ -2698,6 +2698,7 @@ tz_def('TZ_MILESTONE_FIRST_ALLIANCE', 'Prima alianță fondată');
 tz_def('TZ_MILESTONE_FIRST_PVP_CONQUEST', 'Primul sat cucerit de la un jucător');
 tz_def('TZ_MILESTONE_FIVE_VILLAGES', 'Primul care a fondat 5 sate');
 tz_def('TZ_MILESTONE_FOUNDED_BY', 'Fondată de');
+tz_def('TZ_MILESTONE_HERO_MASTER', 'Primul Erou Maestru (echipament complet tier 3)');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPLETARE 1:1 dupa en.php - Hero T4, triburi noi, milestones, Waterworks (revizuieste traducerile)

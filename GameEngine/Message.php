@@ -738,43 +738,751 @@ class Message
         }
     }
 
-    public function sendWelcome($uid, $username)
-    {
-        global $database;
-        $welcomemsg = file_get_contents("GameEngine/Admin/welcome.tpl");
-        $welcomemsg = "[message]" . preg_replace(
-            [
-                "'%USER%'",
-                "'%START%'",
-                "'%TIME%'",
-                "'%PLAYERS%'",
-                "'%ALLI%'",
-                "'%SERVER_NAME%'",
-                "'%PROTECTION%'"
-            ],
-            [
-                $username,
-                date("y.m.d", COMMENCE),
-                date("H:i", COMMENCE),
-                $database->countUser(),
-                $database->countAlli(),
-                SERVER_NAME,
-                round((PROTECTION / 3600))
-            ],
-            $welcomemsg
-        ) . "[/message]";
-        return $database->sendMessage(
-            $uid,
-            1,
-            WEL_TOPIC,
-            addslashes($welcomemsg),
-            0,
-            0,
-            0,
-            0,
-            0
+	public function sendWelcome($uid, $username){
+		global $database;
+
+    $welcomemsg = file_get_contents("GameEngine/Admin/welcome.tpl");
+
+    /*
+     * ================================================================
+     * GAME WORLD DATES
+     * ================================================================
+     */
+
+	/*
+	* ================================================================
+	* REAL SERVER START DATE / TIME
+	* ================================================================
+	*
+	* START_DATE and START_TIME are the official world start values
+	* configured in config.php.
+	*
+	* COMMENCE is not used here because it may represent a different
+	* internal timestamp.
+	*/
+
+	$worldStart = strtotime(
+    START_DATE . ' ' . START_TIME
+	);
+
+    /*
+     * Natars spawn
+     *
+     * NATARS_SPAWN_TIME is stored in days.
+     */
+    $natarsDate = $worldStart;
+
+    if (defined('NATARS_SPAWN_TIME')) {
+        $natarsDate = $worldStart + ((int) NATARS_SPAWN_TIME * 86400);
+    }
+
+    /*
+     * World Wonder villages
+     */
+    $wwVillagesDate = $worldStart;
+
+    if (defined('NATARS_WW_SPAWN_TIME')) {
+        $wwVillagesDate = $worldStart + ((int) NATARS_WW_SPAWN_TIME * 86400);
+    }
+
+    /*
+     * World Wonder Construction Plans
+     */
+    $wwPlansDate = $worldStart;
+
+    if (defined('NATARS_WW_BUILDING_PLAN_SPAWN_TIME')) {
+        $wwPlansDate = $worldStart + (
+            (int) NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400
         );
     }
+
+
+	/*
+	* ================================================================
+	* WORLD WONDER BUILD TIME
+	* ================================================================
+	*
+	* The World Wonder is building gid 40.
+	*
+	* Calculate the complete construction time from level 1
+	* through level 100 using the actual World Wonder times
+	* from buidata.php.
+	*
+	* This calculation follows the same formula used by
+	* getBuildingTime() for normal buildings:
+	*
+	*     base_time
+	*     × (Main Building attri / 100)
+	*     ÷ SPEED
+	*
+	* The World Wonder village is considered to have
+	* Main Building level 20 for this calculation.
+	*/
+
+	$wwBuildSeconds = 0;
+
+	/*
+	* Load building data if it is not already loaded.
+	*
+	* buidata.php contains:
+	*   $bid40 = World Wonder
+	*   $bid15 = Main Building
+	*/
+	if (!isset($bid40) || !isset($bid15)) {
+    require_once("GameEngine/Data/buidata.php");
+	}
+
+	/*
+	* World Wonder construction is calculated using
+	* Main Building level 20.
+	*
+	* This corresponds to the formula in getBuildingTime():
+	*
+	* $dataArray[$level]['time']
+	* * ($bid15[$mainBuilding]['attri'] / 100)
+	* / SPEED
+	*/
+	$mainBuildingLevel = 20;
+
+	if (
+    isset($bid40) &&
+    is_array($bid40) &&
+    isset($bid15) &&
+    is_array($bid15) &&
+    isset($bid15[$mainBuildingLevel]) &&
+    isset($bid15[$mainBuildingLevel]['attri'])
+	) {
+
+    $mainBuildingModifier =
+        ((float) $bid15[$mainBuildingLevel]['attri']) / 100;
+
+    /*
+     * Calculate the total construction time
+     * from World Wonder level 1 to level 100.
+     */
+    for ($level = 1; $level <= 100; $level++) {
+
+        if (
+            !isset($bid40[$level]) ||
+            !isset($bid40[$level]['time'])
+        ) {
+            continue;
+        }
+
+        $baseTime = (float) $bid40[$level]['time'];
+
+        /*
+         * Same formula as getBuildingTime():
+         *
+         * base time
+         * × Main Building modifier
+         * ÷ server speed
+         */
+        $levelBuildTime = round(
+            $baseTime
+            * $mainBuildingModifier
+            / SPEED
+        );
+
+        $wwBuildSeconds += $levelBuildTime;
+		}
+	}
+
+
+    /*
+     * ================================================================
+     * WW START DATE
+     * ================================================================
+     *
+     * The WW cannot start before:
+     *
+     * 1. Natars appear
+     * 2. WW villages appear
+     * 3. Construction Plans appear
+     *
+     * Therefore use the latest of these dates.
+     */
+
+    $wwStartDate = max(
+        $natarsDate,
+        $wwVillagesDate,
+        $wwPlansDate
+    );
+
+
+    /*
+     * ================================================================
+     * WW LEVEL 100 DATE
+     * ================================================================
+     */
+
+    $ww100Date = $wwStartDate + $wwBuildSeconds;
+
+
+    /*
+     * ================================================================
+     * FINAL WORLD END DATE
+     * ================================================================
+     *
+     * Add 5 additional days for:
+     *
+     * - final attacks
+     * - WW setbacks
+     * - possible destruction/downgrade of WW levels
+     *
+     * This is intentionally a safety margin.
+     */
+
+    $worldEndDate = $ww100Date + (5 * 86400);
+
+
+    /*
+     * ================================================================
+     * DATE FORMAT
+     * ================================================================
+     */
+
+    $formatDate = function ($timestamp) {
+        return date("d.m.Y H:i", $timestamp);
+    };
+
+
+    /*
+     * ================================================================
+     * FORMAT WW BUILD TIME
+     * ================================================================
+     */
+
+    $wwBuildTimeDays = floor($wwBuildSeconds / 86400);
+    $wwBuildTimeHours = floor(
+        ($wwBuildSeconds % 86400) / 3600
+    );
+    $wwBuildTimeMinutes = floor(
+        ($wwBuildSeconds % 3600) / 60
+    );
+
+    $wwBuildTimeParts = [];
+
+    if ($wwBuildTimeDays > 0) {
+        $wwBuildTimeParts[] =
+            $wwBuildTimeDays . ' ' .
+            ($wwBuildTimeDays == 1 ? 'day' : 'days');
+    }
+
+    if ($wwBuildTimeHours > 0) {
+        $wwBuildTimeParts[] =
+            $wwBuildTimeHours . ' ' .
+            ($wwBuildTimeHours == 1 ? 'hour' : 'hours');
+    }
+
+    if ($wwBuildTimeMinutes > 0) {
+        $wwBuildTimeParts[] =
+            $wwBuildTimeMinutes . ' ' .
+            ($wwBuildTimeMinutes == 1 ? 'minute' : 'minutes');
+    }
+
+    if (empty($wwBuildTimeParts)) {
+        $wwBuildTime = 'less than 1 minute';
+    } else {
+        $wwBuildTime = implode(', ', $wwBuildTimeParts);
+    }
+
+
+    /*
+     * ================================================================
+     * NATAR TIME
+     * ================================================================
+     *
+     * If Natars appear after at least approximately 2 months,
+     * display the elapsed time in months.
+     *
+     * If they appear sooner, display the exact date instead.
+     */
+
+    $natarSeconds = $natarsDate - $worldStart;
+
+    /*
+     * Average month length used only for displaying
+     * "approximately X months".
+     */
+    $averageMonthSeconds = 30.4375 * 86400;
+
+    $natarMonths = $natarSeconds / $averageMonthSeconds;
+
+    if ($natarMonths >= 2) {
+
+        $roundedNatarMonths = round($natarMonths, 1);
+
+        /*
+         * Remove unnecessary .0
+         */
+        if (
+            floor($roundedNatarMonths) ==
+            $roundedNatarMonths
+        ) {
+            $roundedNatarMonths = (int) $roundedNatarMonths;
+        }
+
+        $natarTime =
+            'approximately ' .
+            $roundedNatarMonths . ' ' .
+            ($roundedNatarMonths == 1 ? 'month' : 'months');
+
+    } else {
+
+        $natarTime =
+            'on ' .
+            date("d.m.Y H:i", $natarsDate);
+    }
+
+
+    /*
+     * ================================================================
+     * TRIBES
+     * ================================================================
+     *
+     * Romans, Gauls and Teutons are always available.
+     *
+     * Additional tribes are displayed only when their corresponding
+     * NEW_FUNCTION constant is enabled.
+     */
+
+    $tribes = [
+        'Romans',
+        'Gauls',
+        'Teutons'
+    ];
+
+    if (
+        defined('NEW_FUNCTION_TRIBE_HUNS') &&
+        NEW_FUNCTION_TRIBE_HUNS
+    ) {
+        $tribes[] = 'Huns';
+    }
+
+    if (
+        defined('NEW_FUNCTION_TRIBE_EGIPTEANS') &&
+        NEW_FUNCTION_TRIBE_EGIPTEANS
+    ) {
+        $tribes[] = 'Egyptians';
+    }
+
+    if (
+        defined('NEW_FUNCTION_TRIBE_SPARTANS') &&
+        NEW_FUNCTION_TRIBE_SPARTANS
+    ) {
+        $tribes[] = 'Spartans';
+    }
+
+    if (
+        defined('NEW_FUNCTION_TRIBE_VIKINGS') &&
+        NEW_FUNCTION_TRIBE_VIKINGS
+    ) {
+        $tribes[] = 'Vikings';
+    }
+
+
+    /*
+     * Human-readable tribe list.
+     *
+     * 3 tribes:
+     * Romans, Gauls and Teutons
+     *
+     * 4 tribes:
+     * Romans, Gauls, Teutons and Huns
+     *
+     * 7 tribes:
+     * Romans, Gauls, Teutons, Huns, Egyptians, Spartans and Vikings
+     */
+
+    $tribeCount = count($tribes);
+
+    if ($tribeCount == 1) {
+
+        $tribesText = $tribes[0];
+
+    } elseif ($tribeCount == 2) {
+
+        $tribesText =
+            $tribes[0] . ' and ' .
+            $tribes[1];
+
+    } else {
+
+        $lastTribe = array_pop($tribes);
+
+        $tribesText =
+            implode(', ', $tribes) .
+            ' and ' .
+            $lastTribe;
+    }
+
+
+    /*
+     * ================================================================
+     * ACTIVE NEW FUNCTIONS
+     * ================================================================
+     *
+     * Only functions that are actually enabled are shown.
+     */
+
+    $activeFunctions = [];
+
+    /*
+     * Function:
+     * Oasis display
+     */
+    if (
+        defined('NEW_FUNCTIONS_OASIS') &&
+        NEW_FUNCTIONS_OASIS
+    ) {
+        $activeFunctions[] = 'Enhanced Oasis Display';
+    }
+
+    /*
+     * Alliance invitations
+     */
+    if (
+        defined('NEW_FUNCTIONS_ALLIANCE_INVITATION') &&
+        NEW_FUNCTIONS_ALLIANCE_INVITATION
+    ) {
+        $activeFunctions[] = 'Alliance Invitation System';
+    }
+
+    /*
+     * Alliance & Embassy mechanics
+     */
+    if (
+        defined('NEW_FUNCTIONS_EMBASSY_MECHANICS') &&
+        NEW_FUNCTIONS_EMBASSY_MECHANICS
+    ) {
+        $activeFunctions[] = 'New Alliance & Embassy Mechanics';
+    }
+
+    /*
+     * Forum post notifications
+     */
+    if (
+        defined('NEW_FUNCTIONS_FORUM_POST_MESSAGE') &&
+        NEW_FUNCTIONS_FORUM_POST_MESSAGE
+    ) {
+        $activeFunctions[] = 'Forum Post Notifications';
+    }
+
+    /*
+     * Tribe images
+     */
+    if (
+        defined('NEW_FUNCTIONS_TRIBE_IMAGES') &&
+        NEW_FUNCTIONS_TRIBE_IMAGES
+    ) {
+        $activeFunctions[] = 'Tribe Images';
+    }
+
+    /*
+     * Multihunter images
+     */
+    if (
+        defined('NEW_FUNCTIONS_MHS_IMAGES') &&
+        NEW_FUNCTIONS_MHS_IMAGES
+    ) {
+        $activeFunctions[] = 'Multihunter Images';
+    }
+
+    /*
+     * Artifact display
+     */
+    if (
+        defined('NEW_FUNCTIONS_DISPLAY_ARTIFACT') &&
+        NEW_FUNCTIONS_DISPLAY_ARTIFACT
+    ) {
+        $activeFunctions[] = 'Artifact Display';
+    }
+
+    /*
+     * World Wonder display
+     */
+    if (
+        defined('NEW_FUNCTIONS_DISPLAY_WONDER') &&
+        NEW_FUNCTIONS_DISPLAY_WONDER
+    ) {
+        $activeFunctions[] = 'World Wonder Display';
+    }
+
+    /*
+     * Vacation Mode
+     */
+    if (
+        defined('NEW_FUNCTIONS_VACATION') &&
+        NEW_FUNCTIONS_VACATION
+    ) {
+        $activeFunctions[] = 'Vacation Mode';
+    }
+
+    /*
+     * Catapult target display
+     */
+    if (
+        defined('NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET') &&
+        NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET
+    ) {
+        $activeFunctions[] = 'Catapult Target Display';
+    }
+
+    /*
+     * Nature / Natars manual
+     */
+    if (
+        defined('NEW_FUNCTIONS_MANUAL_NATURENATARS') &&
+        NEW_FUNCTIONS_MANUAL_NATURENATARS
+    ) {
+        $activeFunctions[] = 'Nature & Natars Manual';
+    }
+
+    /*
+     * Direct links
+     */
+    if (
+        defined('NEW_FUNCTIONS_DISPLAY_LINKS') &&
+        NEW_FUNCTIONS_DISPLAY_LINKS
+    ) {
+        $activeFunctions[] = 'Direct Links';
+    }
+
+    /*
+     * 3-year medal
+     */
+    if (
+        defined('NEW_FUNCTIONS_MEDAL_3YEAR') &&
+        NEW_FUNCTIONS_MEDAL_3YEAR
+    ) {
+        $activeFunctions[] = '3-Year Veteran Medal';
+    }
+
+    /*
+     * 5-year medal
+     */
+    if (
+        defined('NEW_FUNCTIONS_MEDAL_5YEAR') &&
+        NEW_FUNCTIONS_MEDAL_5YEAR
+    ) {
+        $activeFunctions[] = '5-Year Veteran Medal';
+    }
+
+    /*
+     * 10-year medal
+     */
+    if (
+        defined('NEW_FUNCTIONS_MEDAL_10YEAR') &&
+        NEW_FUNCTIONS_MEDAL_10YEAR
+    ) {
+        $activeFunctions[] = '10-Year Veteran Medal';
+    }
+
+    /*
+     * Special medals
+     */
+    if (
+        defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') &&
+        NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM
+    ) {
+        $activeFunctions[] = 'Special Medals System';
+    }
+
+    /*
+     * Server milestones
+     */
+    if (
+        defined('NEW_FUNCTIONS_MILESTONES') &&
+        NEW_FUNCTIONS_MILESTONES
+    ) {
+        $activeFunctions[] = 'Server Milestones';
+    }
+
+    /*
+     * Medal reset
+     */
+    if (
+        defined('NEW_FUNCTIONS_MEDAL_RESET') &&
+        NEW_FUNCTIONS_MEDAL_RESET
+    ) {
+        $activeFunctions[] = 'Medal Reset Timer';
+    }
+
+    /*
+     * T4 Hero System
+     */
+    if (
+        defined('NEW_FUNCTIONS_HERO_T4') &&
+        NEW_FUNCTIONS_HERO_T4
+    ) {
+        $activeFunctions[] = 'T4 Hero System';
+    }
+
+    /*
+     * Huns
+     */
+    if (
+        defined('NEW_FUNCTION_TRIBE_HUNS') &&
+        NEW_FUNCTION_TRIBE_HUNS
+    ) {
+        $activeFunctions[] = 'Huns';
+    }
+
+    /*
+     * Egyptians
+     */
+    if (
+        defined('NEW_FUNCTION_TRIBE_EGIPTEANS') &&
+        NEW_FUNCTION_TRIBE_EGIPTEANS
+    ) {
+        $activeFunctions[] = 'Egyptians';
+    }
+
+    /*
+     * Spartans
+     */
+    if (
+        defined('NEW_FUNCTION_TRIBE_SPARTANS') &&
+        NEW_FUNCTION_TRIBE_SPARTANS
+    ) {
+        $activeFunctions[] = 'Spartans';
+    }
+
+    /*
+     * Vikings
+     */
+    if (
+        defined('NEW_FUNCTION_TRIBE_VIKINGS') &&
+        NEW_FUNCTION_TRIBE_VIKINGS
+    ) {
+        $activeFunctions[] = 'Vikings';
+    }
+
+    /*
+     * Registration Gold
+     */
+    if (
+        defined('NEW_FUNCTION_REGISTRATION_GOLD') &&
+        NEW_FUNCTION_REGISTRATION_GOLD
+    ) {
+        $activeFunctions[] = 'Registration Gold Bonus';
+    }
+	
+	 /*
+     * Alliance Bonus
+     */
+    if (
+        defined('NEW_FUNCTIONS_ALLIANCE_BONUSES') &&
+        NEW_FUNCTIONS_ALLIANCE_BONUSES
+    ) {
+        $activeFunctions[] = 'Alliance Bonus';
+    }
+	
+	/*
+     * WW Image
+     */
+    if (
+        defined('NEW_FUNCTION_WW_IMAGE') &&
+        NEW_FUNCTION_WW_IMAGE
+    ) {
+        $activeFunctions[] = 'WW Image by Tribe';
+    }
+
+
+    /*
+     * ================================================================
+     * ACTIVE FEATURES HTML
+     * ================================================================
+     */
+
+    if (!empty($activeFunctions)) {
+
+        $activeFunctionsHtml =
+            '<ul style="margin-top:0;margin-bottom:0;">';
+
+        foreach ($activeFunctions as $feature) {
+            $activeFunctionsHtml .=
+                '<li>' .
+                htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') .
+                '</li>';
+        }
+
+        $activeFunctionsHtml .= '</ul>';
+
+    } else {
+
+        $activeFunctionsHtml =
+            '<i>No additional server features are currently active.</i>';
+    }
+
+
+    /*
+     * ================================================================
+     * REPLACE TEMPLATE VARIABLES
+     * ================================================================
+     */
+
+    $welcomemsg = preg_replace(
+        [
+            "'%USER%'",
+            "'%START%'",
+            "'%TIME%'",
+            "'%PLAYERS%'",
+            "'%ALLI%'",
+            "'%SERVER_NAME%'",
+            "'%PROTECTION%'",
+            "'%TRIBES%'",
+            "'%WORLD_END_DATE%'",
+            "'%NATARS_DATE%'",
+            "'%WW_VILLAGES_DATE%'",
+            "'%WW_PLANS_DATE%'",
+            "'%WW_BUILD_TIME%'",
+            "'%WW100_DATE%'",
+            "'%NATAR_TIME%'",
+            "'%ACTIVE_NEW_FUNCTIONS%'"
+        ],
+        [
+            $username,
+            date("d.m.Y", $worldStart),
+            date("H:i", $worldStart),
+            $database->countUser(),
+            $database->countAlli(),
+            SERVER_NAME,
+            round((PROTECTION / 3600)),
+            $tribesText,
+            $formatDate($worldEndDate),
+            $formatDate($natarsDate),
+            $formatDate($wwVillagesDate),
+            $formatDate($wwPlansDate),
+            $wwBuildTime,
+            $formatDate($ww100Date),
+            $natarTime,
+            $activeFunctionsHtml
+        ],
+        $welcomemsg
+    );
+
+    /*
+     * Add message BBCode wrapper.
+     */
+    $welcomemsg = "[message]" . $welcomemsg . "[/message]";
+
+    /*
+     * Send welcome message.
+     */
+    return $database->sendMessage(
+        $uid,
+        1,
+        WEL_TOPIC,
+        addslashes($welcomemsg),
+        0,
+        0,
+        0,
+        0,
+        0
+    );
+	}
 
     private function wordCensor($text)
     {
