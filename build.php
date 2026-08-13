@@ -273,22 +273,42 @@ else $create = 0;
 
 if(isset($_POST['a']) == 533374 && isset($_POST['id']) == 39) $units->Settlers($_POST);
 
+/**
+ * Anularea unei miscari din rally point (linkul "x" din 16_walking.tpl).
+ *
+ * EXPLOIT REPARAT (duplicare de trupe): varianta veche verifica intai
+ * "SELECT Count(*) ... where proc = 0 and moveid = X", apoi facea UPDATE proc = 1
+ * si abia apoi addMovement(4, ..., ref-ul miscarii anulate). Intre COUNT si UPDATE
+ * exista o fereastra TOCTOU: doua request-uri trimise simultan treceau amandoua de
+ * COUNT si inserau DOUA movement-uri de retur cu ACELASI ref. Cron-ul livreaza
+ * trupele o data pentru fiecare rand de movement, deci un ciclu trimite-anuleaza
+ * dubla trupele. Repetat de cateva ori: 30k -> 60k -> 120k -> 242k -> ... -> milioane.
+ *
+ * Acum revendicarea se face intr-un singur UPDATE conditionat, in
+ * $database->claimMovementCancel(), care verifica atomic: proc = 0, expeditorul e
+ * satul curent, sort_type IN (3, 5) si fereastra de 90 de secunde. Returul se
+ * creeaza doar daca ACEST request a fost cel care a schimbat randul.
+ *
+ * Doua lucruri semnalate, nu schimbate tacit:
+ *  - $q2 ("SELECT id FROM send ORDER BY id DESC") si $lastid erau cod mort:
+ *    rezultatul nu era folosit nicaieri. Eliminat.
+ *  - $_GET['id'] intra brut in antetul Location. Trecut acum prin (int),
+ *    ca in restul fisierului.
+ */
 if(isset($_GET['mode']) && $_GET['mode'] == 'troops' && isset($_GET['cancel']) && $_GET['cancel'] == 1){
-    $oldmovement = $database->getMovementById($_GET['moveid']);
-    $now = time();
-    if(($now - $oldmovement[0]['starttime']) < 90 && $oldmovement[0]['from'] == $village->wid){
-        $qc = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
-        $resultc = mysqli_fetch_array(mysqli_query($database->dblink, $qc), MYSQLI_ASSOC);
-        if($resultc['Total'] == 1){
-            $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
-            $database->query($q);
-            $end = $now + ($now - $oldmovement[0]['starttime']);
-            $q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-            $lastid = mysqli_fetch_array(mysqli_query($database->dblink, $q2));
-            $database->addMovement(4, $oldmovement[0]['to'], $oldmovement[0]['from'], $oldmovement[0]['ref'], $now, $end);
+    $moveid = isset($_GET['moveid']) && is_numeric($_GET['moveid']) ? (int) $_GET['moveid'] : 0;
+
+    if($moveid > 0 && $database->claimMovementCancel($moveid, $village->wid)){
+        $oldmovement = $database->getMovementById($moveid);
+
+        if(!empty($oldmovement)){
+            $now = time();
+            $end = $now + ($now - (int) $oldmovement[0]['starttime']);
+            $database->addMovement(4, (int) $oldmovement[0]['to'], (int) $oldmovement[0]['from'], (int) $oldmovement[0]['ref'], $now, $end);
         }
     }
-    header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id']);
+
+    header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . (isset($_GET['id']) ? (int) $_GET['id'] : 39));
     exit();
 }
 

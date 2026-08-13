@@ -347,6 +347,130 @@ trait AutomationBattleResolution {
 
         return (mysqli_affected_rows($database->dblink) === 1);
     }
+	
+	/**
+	* Claim atomic pentru un retur de trupe.
+	*
+	* Un attack ref poate avea legitim un singur movement de retur
+	* (sort_type = 4).
+	*
+	* Daca exista deja un alt return pentru acelasi ref care a fost
+	* procesat, acest movement este considerat duplicat si este marcat
+	* processed fara a mai credita trupele.
+	*/
+	
+	private function claimReturnMovementRecord($moveid, $ref) {
+    global $database;
+
+    $moveid = (int)$moveid;
+    $ref    = (int)$ref;
+
+    if ($moveid <= 0 || $ref <= 0) {
+        return false;
+    }
+
+    /*
+     * Lock pe ATTACK REF, nu pe moveid.
+     *
+     * Astfel doua movement-uri duplicate cu moveid diferit
+     * nu pot trece simultan de verificarea de unicitate.
+     */
+    $lockResult = mysqli_query(
+        $database->dblink,
+        "SELECT GET_LOCK('return_attack_ref_$ref', 10) AS locked"
+    );
+
+    if (!$lockResult) {
+        return false;
+    }
+
+    $lockRow = mysqli_fetch_assoc($lockResult);
+
+    if (
+        !isset($lockRow['locked']) ||
+        (int)$lockRow['locked'] !== 1
+    ) {
+        return false;
+    }
+
+    try {
+        /*
+         * Verificam daca acest movement mai este pending.
+         */
+        $q = "
+            SELECT moveid
+            FROM " . TB_PREFIX . "movement
+            WHERE moveid = $moveid
+              AND sort_type = 4
+              AND proc = 0
+            LIMIT 1
+        ";
+
+        $result = mysqli_query(
+            $database->dblink,
+            $q
+        );
+
+        if (!$result || mysqli_num_rows($result) === 0) {
+            return false;
+        }
+
+        /*
+         * Verificam daca un alt return pentru acelasi attack
+         * a fost deja procesat.
+         */
+        $q = "
+            SELECT moveid
+            FROM " . TB_PREFIX . "movement
+            WHERE ref = $ref
+              AND sort_type = 4
+              AND proc = 1
+              AND moveid <> $moveid
+            LIMIT 1
+        ";
+
+        $result = mysqli_query(
+            $database->dblink,
+            $q
+        );
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            /*
+             * Este un duplicate.
+             *
+             * Il consumam fara sa adaugam trupele.
+             */
+            mysqli_query(
+                $database->dblink,
+                "UPDATE " . TB_PREFIX . "movement
+                 SET proc = 1
+                 WHERE moveid = $moveid
+                   AND proc = 0"
+            );
+
+            return false;
+        }
+
+        /*
+         * Claim atomic pentru movement-ul legitim.
+         */
+        $result = mysqli_query(
+            $database->dblink,
+            "UPDATE " . TB_PREFIX . "movement
+             SET proc = 1
+             WHERE moveid = $moveid
+               AND proc = 0"
+        );
+
+        return $result && mysqli_affected_rows($database->dblink) === 1;
+
+    } finally {
+        mysqli_query(
+            $database->dblink,
+            "SELECT RELEASE_LOCK('return_attack_ref_$ref')"
+        );
+    }
+	}
 
     /**
      * Handle hero evasion: if the defender has evasion active and can afford it,

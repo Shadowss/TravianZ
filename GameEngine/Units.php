@@ -351,35 +351,353 @@ class Units {
         return "";
     }
     
+    /**
+     * Returneaza trupele stationate in sat si/sau in oazele acestuia.
+     *
+     * IMPORTANT:
+     * - fiecare reinforcement este procesat sub lock;
+     * - fiecare oaza este procesata sub un lock separat;
+     * - datele sunt re-citite din DB dupa obtinerea lock-ului;
+     * - nu folosim cache pentru datele critice.
+     *
+     * @param int $wref
+     * @param int $mode
+     *
+     * mode = 0:
+     *     returneaza reinforcement-urile din sat + oazele lui
+     *
+     * mode = 1:
+     *     returneaza doar reinforcement-urile din oazele satului
+     */
     public function returnTroops($wref, $mode = 0) {
         global $database;
-        
-        if(!$mode){
-			$getenforce = $database->getEnforceVillage($wref, 0);
-			foreach($getenforce as $enforce) $this->processReturnTroops($enforce);
-		}
-		
-		// check oasis
-		$getenforce1 = $database->getOasisEnforce($wref, 1);
-		foreach($getenforce1 as $enforce) $this->processReturnTroops($enforce);
-		
-		// set oasis to default
-		if(count($getenforce1) > 0) $database->regenerateOasisUnits($getenforce1[0]['vref']);
+
+        $wref = (int) $wref;
+
+        if ($wref <= 0) {
+            return;
+        }
+
+        /*
+         * Reinforcement-uri stationate direct in sat.
+         *
+         * Le procesam individual sub enforce lock.
+         */
+        if (!$mode) {
+            $getenforce = $database->getEnforceVillage($wref, 0, false);
+
+            if ($getenforce && count($getenforce)) {
+                foreach ($getenforce as $enforce) {
+                    if (!empty($enforce['id'])) {
+                        $this->returnEnforcementRecord((int)$enforce['id']);
+                    }
+                }
+            }
+        }
+
+        /*
+         * OAZE
+         *
+         * getOasisEnforce() ne da toate reinforcement-urile din oazele
+         * cucerite de acest sat.
+         *
+         * Nu procesam direct rezultatul deoarece acesta poate fi cached.
+         * Extragem doar ID-urile oazelor si apoi fiecare oaza este re-citita
+         * dupa obtinerea lock-ului.
+         */
+        $getenforce1 = $database->getOasisEnforce($wref, 1, false);
+
+        if (!$getenforce1 || !count($getenforce1)) {
+            return;
+        }
+
+        $oasisRefs = [];
+
+        foreach ($getenforce1 as $enforce) {
+            $oasisWref = isset($enforce['vref']) ? (int)$enforce['vref'] : 0;
+
+            if ($oasisWref > 0) {
+                $oasisRefs[$oasisWref] = true;
+            }
+        }
+
+        foreach (array_keys($oasisRefs) as $oasisWref) {
+            $this->returnOasisTroops($oasisWref);
+        }
     }
 
+    /**
+     * Returneaza TOATE reinforcement-urile dintr-o singura oaza.
+     *
+     * Aceasta este protectia principala impotriva exploitului de duplicare.
+     *
+     * Doua request-uri simultane pentru aceeasi oaza:
+     *
+     *   Request A -> obtine lock
+     *   Request B -> asteapta
+     *
+     *   A -> citeste reinforcement
+     *   A -> creeaza movement
+     *   A -> sterge reinforcement
+     *   A -> release lock
+     *
+     *   B -> obtine lock
+     *   B -> re-citeste DB
+     *   B -> nu mai gaseste reinforcement
+     *   B -> nu mai poate duplica nimic
+     */
+    public function returnOasisTroops($oasisWref) {
+        global $database;
+
+        $oasisWref = (int)$oasisWref;
+
+        if ($oasisWref <= 0) {
+            return false;
+        }
+
+        if (!$database->getOasisReturnLock($oasisWref)) {
+            return false;
+        }
+
+        try {
+            /*
+             * IMPORTANT:
+             * Re-fetch DIRECT din DB dupa lock.
+             * Nu folosim getOasisEnforce(..., cache).
+             */
+            $reinforcements = $database->getOasisEnforceByWref(
+                $oasisWref,
+                false
+            );
+
+            if (!$reinforcements || !count($reinforcements)) {
+                return false;
+            }
+
+            foreach ($reinforcements as $enforce) {
+                if (empty($enforce['id'])) {
+                    continue;
+                }
+
+                /*
+                 * processReturnTroops() sterge reinforcement-ul dupa ce
+                 * creeaza movement-ul de retur.
+                 */
+                $this->processReturnTroops($enforce);
+            }
+
+            /*
+             * Comportamentul original:
+             * dupa ce reinforcement-urile au fost returnate, oaza isi
+             * regenereaza trupele naturale.
+             */
+            $database->regenerateOasisUnits($oasisWref);
+
+            return true;
+
+        } finally {
+            $database->releaseOasisReturnLock($oasisWref);
+        }
+    }
+
+    /**
+     * Returneaza un singur reinforcement record.
+     *
+     * Protectie suplimentara pentru cazurile in care un sat este sters
+     * sau reinforcement-ul este procesat dintr-o alta cale.
+     */
+    private function returnEnforcementRecord($enforceId) {
+        global $database;
+
+        $enforceId = (int)$enforceId;
+
+        if ($enforceId <= 0) {
+            return false;
+        }
+
+        if (!$database->getEnforceLock($enforceId)) {
+            return false;
+        }
+
+        try {
+            /*
+             * Re-fetch dupa lock.
+             */
+            $enforce = $database->getEnforceArray(
+                $enforceId,
+                0,
+                false
+            );
+
+            /*
+             * Poate sa fi fost deja procesat de alt request.
+             */
+            if (!$enforce || empty($enforce['id'])) {
+                return false;
+            }
+
+            $this->processReturnTroops($enforce);
+
+            return true;
+
+        } finally {
+            $database->releaseEnforceLock($enforceId);
+        }
+    }
+
+    /**
+     * Creeaza movement-ul de retur pentru un reinforcement.
+     *
+     * ATENTIE:
+     * Aceasta functie NU mai este responsabila de locking.
+     * Lock-ul este facut de:
+     *
+     *   returnEnforcementRecord()
+     *   returnOasisTroops()
+     *
+     * astfel incat sa avem o singura responsabilitate pentru lock.
+     */
     private function processReturnTroops($enforce) {
         global $database;
-        
-        $to = $database->getVillage($enforce['from']);
-        $tribe = $database->getUserField($to['owner'], 'tribe', 0);
+
+        if (empty($enforce['id']) || empty($enforce['from'])) {
+            return false;
+        }
+
+        $fromWref = (int)$enforce['from'];
+        $oasisWref = (int)$enforce['vref'];
+
+        /*
+         * Satul de origine al reinforcement-ului.
+         */
+        $to = $database->getVillage($fromWref);
+
+        if (!$to || empty($to['owner'])) {
+            return false;
+        }
+
+        $tribe = (int)$database->getUserField(
+            $to['owner'],
+            'tribe',
+            0
+        );
+
+        if ($tribe <= 0) {
+            return false;
+        }
+
         $start = ($tribe - 1) * 10 + 1;
-        
-        $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $enforce, 1);
-        $time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
-        
-        $reference =  $database->addAttack($enforce['from'], $enforce['u'.$start], $enforce['u'.($start + 1)], $enforce['u'.($start + 2)], $enforce['u'.($start + 3)], $enforce['u'.($start + 4)], $enforce['u'.($start + 5)], $enforce['u'.($start + 6)], $enforce['u'.($start + 7)], $enforce['u'.($start + 8)], $enforce['u'.($start + 9)], $enforce['hero'], 2, 0, 0, 0, 0);
-        $database->addMovement(4, $enforce['vref'], $enforce['from'], $reference, time(), ($time + time()));
-        $database->deleteReinf($enforce['id']);
+
+        /*
+         * Calculeaza timpul de mers Oaza -> Sat.
+         */
+        $troopsTime = $this->getWalkingTroopsTime(
+            $fromWref,
+            $oasisWref,
+            $to['owner'],
+            $tribe,
+            $enforce,
+            1
+        );
+
+        /*
+         * BUG FIX:
+         *
+         * Codul vechi folosea:
+         *
+         * $from['owner']
+         *
+         * dar $from nu exista in aceasta functie.
+         *
+         * Proprietarul corect este $to['owner'].
+         */
+        $time = $database->getArtifactsValueInfluence(
+            $to['owner'],
+            $fromWref,
+            2,
+            $troopsTime
+        );
+
+        /*
+         * Unit-urile din reinforcement sunt stocate in coloanele
+         * corespunzatoare tribului proprietarului.
+         */
+        $t1  = (int)($enforce['u' . $start] ?? 0);
+        $t2  = (int)($enforce['u' . ($start + 1)] ?? 0);
+        $t3  = (int)($enforce['u' . ($start + 2)] ?? 0);
+        $t4  = (int)($enforce['u' . ($start + 3)] ?? 0);
+        $t5  = (int)($enforce['u' . ($start + 4)] ?? 0);
+        $t6  = (int)($enforce['u' . ($start + 5)] ?? 0);
+        $t7  = (int)($enforce['u' . ($start + 6)] ?? 0);
+        $t8  = (int)($enforce['u' . ($start + 7)] ?? 0);
+        $t9  = (int)($enforce['u' . ($start + 8)] ?? 0);
+        $t10 = (int)($enforce['u' . ($start + 9)] ?? 0);
+        $hero = (int)($enforce['hero'] ?? 0);
+
+        /*
+         * Nu cream movement pentru un reinforcement gol.
+         */
+        if (
+            $t1 <= 0 &&
+            $t2 <= 0 &&
+            $t3 <= 0 &&
+            $t4 <= 0 &&
+            $t5 <= 0 &&
+            $t6 <= 0 &&
+            $t7 <= 0 &&
+            $t8 <= 0 &&
+            $t9 <= 0 &&
+            $t10 <= 0 &&
+            $hero <= 0
+        ) {
+            $database->deleteReinf((int)$enforce['id']);
+            return false;
+        }
+
+        /*
+         * Creeaza attack record pentru retur.
+         */
+        $reference = $database->addAttack(
+            $fromWref,
+            $t1,
+            $t2,
+            $t3,
+            $t4,
+            $t5,
+            $t6,
+            $t7,
+            $t8,
+            $t9,
+            $t10,
+            $hero,
+            2,
+            0,
+            0,
+            0,
+            0
+        );
+
+        /*
+         * Creeaza EXACT UN singur movement de retur.
+         */
+        $now = time();
+
+        $database->addMovement(
+            4,
+            $oasisWref,
+            $fromWref,
+            $reference,
+            $now,
+            $now + $time
+        );
+
+        /*
+         * Acum reinforcement-ul nu mai poate fi procesat din nou,
+         * deoarece row-ul este sters IN TIMP CE lock-ul este detinut.
+         */
+        $database->deleteReinf((int)$enforce['id']);
+
+        return true;
     }
     
     private function sendTroops($post) {
@@ -639,23 +957,38 @@ class Units {
                 $to     = $database->getVillage( $enforce['from'] );
                 $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
 
-                for ( $i = 1; $i < 10; $i ++ ) {
-                    if ( isset( $post[ 't' . $i ] ) ) {
-                        if ( $i != 10 ) {
-                            if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
-                                $form->addError( "error", "You can't send back more units than you have" );
-                                break;
-                            }
+				for ($i = 1; $i <= 10; $i++) {
+				if (!isset($post['t'.$i])) {
+					$post['t'.$i] = 0;
+				continue;
+			}
 
-                            if ( $post[ 't' . $i ] < 0 ) {
-                                $form->addError( "error", "You can't send back negative units." );
-                                break;
-                            }
-                        }
-                    } else {
-                        $post[ 't' . $i . '' ] = '0';
-                    }
-                }
+				if (!is_numeric($post['t'.$i])) {
+				$form->addError(
+				"error",
+				"Invalid troop amount."
+			);
+			break;
+		}
+
+			$post['t'.$i] = (int)$post['t'.$i];
+
+			if ($post['t'.$i] < 0) {
+				$form->addError(
+				"error",
+				"You can't send back negative units."
+			);
+			break;
+		}
+
+			if ($post['t'.$i] > (int)$enforce['u'.$Gtribe.$i]) {
+			$form->addError(
+            "error",
+            "You can't send back more units than you have"
+			);
+			break;
+		}
+	}
                 if ( isset( $post['t11'] ) ) {
                     if ( $post['t11'] > $enforce['hero'] ) {
                         $form->addError( "error", "You can't send back more units than you have" );

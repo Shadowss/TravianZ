@@ -211,7 +211,7 @@ trait AutomationTroopMovements {
         $time = time();
         $q = "
             SELECT
-                `to`, `from`, moveid, starttime, endtime, wood, clay, iron, crop,
+                `to`, `from`, moveid, ref, starttime, endtime, wood, clay, iron, crop,
                 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
             FROM
                 ".TB_PREFIX."movement,
@@ -238,9 +238,11 @@ trait AutomationTroopMovements {
             $database->getOasisEnforce($vilIDs, 1);
 
             foreach($dataarray as $data) {
-                if (!$this->claimMovementRecord($data['moveid'])) {
-                    continue;
-                }
+			if (!$this->claimReturnMovementRecord(
+			$data['moveid'],
+			$data['ref'])) {
+			continue;
+			}
 
             	$tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
             	$u = $tribe == 1 ? "" : $tribe - 1;

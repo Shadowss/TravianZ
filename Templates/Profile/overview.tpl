@@ -137,7 +137,7 @@ if ($displayarray['vac_mode'] == 1)
 
 <?php
 if ($displayarray['access'] == BANNED) {
-    echo "<tr><td colspan='2'><center><b>".BANNED."</b></center></td></tr>";
+    echo "<tr><td colspan='2'><center><b>BANNED</b></center></td></tr>";
 }
 ?>
 

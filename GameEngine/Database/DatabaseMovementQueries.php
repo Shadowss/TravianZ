@@ -192,6 +192,52 @@ trait DatabaseMovementQueries {
         return (mysqli_affected_rows($this->dblink) === 1);
     }
 
+    /**
+     * Revendicare ATOMICA a unei miscari care urmeaza sa fie anulata din rally point
+     * (build.php?mode=troops&cancel=1&moveid=X).
+     *
+     * DE CE EXISTA: varianta veche din build.php facea, in trei pasi separati:
+     *     SELECT COUNT(*) ... WHERE proc = 0 AND moveid = X   ->  daca Total == 1
+     *     UPDATE ... SET proc = 1 WHERE proc = 0 AND moveid = X
+     *     addMovement(4, to, from, REF-UL VECHI, now, end)
+     * Doua request-uri simultane treceau AMANDOUA de SELECT COUNT (ambele vad Total = 1),
+     * UPDATE-ul era idempotent, deci amandoua ajungeau la addMovement() si inserau DOUA
+     * randuri sort_type = 4 cu ACELASI ref. Cron-ul (AutomationTroopMovements) livreaza
+     * trupele o data PER RAND DE MOVEMENT, nu per ref => trupele se dublau la fiecare
+     * ciclu trimite-anuleaza: 30k -> 60k -> 120k -> 242k -> ...
+     *
+     * Acum proprietatea, tipul, fereastra de 90 de secunde si proc = 0 sunt toate in
+     * acelasi UPDATE conditionat. Doar request-ul care chiar modifica randul primeste
+     * true (affected_rows === 1); toate celelalte pierd cursa si nu creeaza nimic.
+     *
+     * ANOMALIE SEMNALATA, NU SCHIMBATA TACIT: codul vechi nu verifica deloc sort_type,
+     * deci se putea "anula" si un sort_type = 4 (retur) al carui `from` era satul tau -
+     * adica returul unei intariri straine care pleaca din satul tau - iar returul nou
+     * generat aducea acele trupe LA TINE. Restrictia sort_type IN (3, 5) inchide si
+     * acest vector si pastreaza exact cele doua cazuri legitime din 16_walking.tpl:
+     * atac/intarire iesita din sat (3) si colonisti (5).
+     *
+     * @param int $moveid ID-ul miscarii
+     * @param int $wid    Satul curent (trebuie sa fie expeditorul)
+     * @return bool True doar pentru request-ul care a revendicat miscarea
+     */
+    function claimMovementCancel($moveid, $wid) {
+        $moveid = (int) $moveid;
+        $wid    = (int) $wid;
+
+        if ($moveid <= 0 || $wid <= 0) return false;
+
+        $limit = time() - 90;
+
+        $q = "UPDATE " . TB_PREFIX . "movement SET proc = 1 WHERE moveid = $moveid AND proc = 0 AND `from` = $wid AND sort_type IN (3, 5) AND starttime > $limit";
+
+        if (!mysqli_query($this->dblink, $q)) {
+            return false;
+        }
+
+        return (mysqli_affected_rows($this->dblink) === 1);
+    }
+
 	// no need to cache this method
 	function getA2b($ckey) {
         list($ckey) = $this->escape_input($ckey);

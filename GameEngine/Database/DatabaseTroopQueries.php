@@ -95,6 +95,79 @@ trait DatabaseTroopQueries {
 		$id = (int) $id;
 		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('enforce_$id')");
 	}
+	
+	 /**
+     * Lock pentru procesarea returului trupelor dintr-o oaza.
+     *
+     * Este separat de enforce_$id deoarece o oaza poate avea mai multe
+     * randuri de reinforcement.
+     *
+     * Scop:
+     *   Request A -> citeste reinforcement din oasis
+     *   Request B -> citeste acelasi reinforcement
+     *   => fara lock, ambele pot crea movement de retur.
+     */
+    function getOasisReturnLock($wref) {
+        $wref = (int) $wref;
+
+        $result = mysqli_query(
+            $this->dblink,
+            "SELECT GET_LOCK('oasis_return_$wref', 10) AS locked"
+        );
+
+        if (!$result) {
+            return false;
+        }
+
+        $row = mysqli_fetch_assoc($result);
+
+        return isset($row['locked']) && (int)$row['locked'] === 1;
+    }
+
+    /**
+     * Elibereaza lock-ul pentru returul unei oaze.
+     */
+    function releaseOasisReturnLock($wref) {
+        $wref = (int) $wref;
+
+        mysqli_query(
+            $this->dblink,
+            "SELECT RELEASE_LOCK('oasis_return_$wref')"
+        );
+    }
+
+    /**
+     * Citeste DIRECT din DB toate reinforcement-urile aflate in oaza.
+     *
+     * IMPORTANT:
+     * Nu folosim cache aici. Functia este apelata DUPA obtinerea lock-ului
+     * pentru a preveni TOCTOU/race condition.
+     */
+    function getOasisEnforceByWref($wref, $use_cache = false) {
+        $wref = (int) $wref;
+
+        if ($wref <= 0) {
+            return [];
+        }
+
+        $q = "
+            SELECT e.*, o.conqured
+            FROM " . TB_PREFIX . "enforcement AS e
+            LEFT JOIN " . TB_PREFIX . "odata AS o
+                ON e.vref = o.wref
+            WHERE e.vref = $wref
+              AND o.wref = $wref
+              AND o.conqured > 0
+        ";
+
+        $result = mysqli_query($this->dblink, $q);
+
+        if (!$result) {
+            return [];
+        }
+
+        return $this->mysqli_fetch_all($result);
+    }
 
 	/**
 	 * Add the unit table(s) and troops if presents

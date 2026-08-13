@@ -36,11 +36,59 @@
 	}
 	$wwMultiplier = $wwFactor / 0.25; // 1.0 fara Waterworks, 1.5 la nivel maxim
 
-	if (isset($_GET['gid']) && $_GET['gid'] == 37 && isset($_GET['del']) && $database->getOasisField($_GET['del'], 'owner') == $session->uid) {
-		$units->returnTroops($village->wid, 1);
-		$database->removeOases($_GET['del']);
-		header("Location: build.php?id=" . $id . "&land");
-		exit;
+	if (
+    isset($_GET['gid']) &&
+    (int)$_GET['gid'] === 37 &&
+    isset($_GET['del'])
+	) {
+    $oasisWref = (int)$_GET['del'];
+
+    /*
+     * Verificam server-side ca:
+     *
+     * 1. oaza exista;
+     * 2. apartine jucatorului;
+     * 3. este cucerita de SATUL CURENT.
+     *
+     * Nu este suficient doar owner == session uid deoarece un jucator
+     * poate avea mai multe sate si mai multe oaze.
+     */
+    $oasisOwner = (int)$database->getOasisField(
+        $oasisWref,
+        'owner'
+    );
+
+    $oasisConquered = (int)$database->getOasisField(
+        $oasisWref,
+        'conqured'
+    );
+
+    if (
+        $oasisWref > 0 &&
+        $oasisOwner === (int)$session->uid &&
+        $oasisConquered === (int)$village->wid
+    ) {
+        /*
+         * FOARTE IMPORTANT:
+         *
+         * Returnam doar trupele din OAZA SELECTATA.
+         *
+         * returnTroops($village->wid, 1) NU trebuie folosit aici,
+         * deoarece acela proceseaza toate oazele satului.
+         *
+         * Functia are lock per oasis si re-citeste DB dupa lock.
+         */
+        $units->returnOasisTroops($oasisWref);
+
+        /*
+         * Dupa ce reinforcement-urile au fost returnate,
+         * oaza este eliberata.
+         */
+        $database->removeOases($oasisWref);
+    }
+
+    header("Location: build.php?id=" . $id . "&land");
+    exit;
 	}
 
 	// Explicit lookup, instead of the original repetitive switch:
