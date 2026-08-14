@@ -73,30 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_definitions'])
         if ($id === '') {
             $id = 's' . $i;
         }
-
         if (!preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/', $id)) {
             $error = 'Instance ID invalid la serverul ' . $i . '. Foloseste doar litere mici, cifre, _ sau -.';
             break;
         }
-
         if (isset($usedIds[$id])) {
             $error = 'Instance ID duplicat: ' . htmlspecialchars($id, ENT_QUOTES, 'UTF-8');
             break;
         }
         $usedIds[$id] = true;
-
-        if ($name === '') {
-            $name = 'TravianZ ' . strtoupper($id);
-        }
-
-        if ($db === '') {
-            $db = 'travian_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $id);
-        }
-
-        if ($prefix === '') {
-            $prefix = $id . '_';
-        }
-
+        if ($name === '') $name = 'TravianZ ' . strtoupper($id);
+        if ($db === '') $db = 'travian_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $id);
+        if ($prefix === '') $prefix = $id . '_';
         if (!preg_match('/^[A-Za-z0-9_$]+_$/', $prefix)) {
             $error = 'Prefix invalid la serverul ' . $i . '.';
             break;
@@ -107,11 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_definitions'])
             $error = 'Nu pot crea directorul instanței ' . $id . '.';
             break;
         }
-
         $runtimePath = $instancePath . DIRECTORY_SEPARATOR . 'runtime';
-        if (!is_dir($runtimePath)) {
-            @mkdir($runtimePath, 0775, true);
-        }
+        if (!is_dir($runtimePath)) @mkdir($runtimePath, 0775, true);
 
         $newRegistry[$id] = [
             'id' => $id,
@@ -134,15 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_definitions'])
     }
 }
 
-$selected = strtolower(trim((string) ($_GET['instance'] ?? '')));
-if ($selected !== '' && !isset($registry[$selected])) {
-    $selected = '';
-}
-
 $serverCount = isset($_POST['server_count']) ? max(1, min(100, (int) $_POST['server_count'])) : max(1, count($registry));
-if ($serverCount < 1) {
-    $serverCount = 1;
-}
+if ($serverCount < 1) $serverCount = 1;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -196,12 +174,9 @@ if ($serverCount < 1) {
                 box.appendChild(div);
             }
         }
-        function escapeHtml(value) {
-            return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        }
+        function escapeHtml(value) { return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
         window.addEventListener('DOMContentLoaded', function(){
-            const count = document.getElementById('server_count');
-            if (count && !document.querySelector('#servers .server')) buildServers();
+            if (!document.querySelector('#servers .server')) buildServers();
         });
     </script>
 </head>
@@ -252,17 +227,14 @@ if ($serverCount < 1) {
             <span class="status">Status: <?=htmlspecialchars($instance['status'] ?? 'defined', ENT_QUOTES, 'UTF-8')?></span>
         </p>
         <div class="actions">
-            <a class="btn btn-primary" href="config_instance.php?instance=<?=rawurlencode($id)?>">Configure server</a>
+            <?php if (($instance['status'] ?? '') !== 'installed'): ?><a class="btn btn-primary" href="config_instance.php?instance=<?=rawurlencode($id)?>">Configure server</a><?php endif; ?>
 <?php if (($instance['status'] ?? '') === 'configured'): ?>
             <form method="post" action="process_instance.php" style="display:inline"><input type="hidden" name="instance_id" value="<?=htmlspecialchars($id, ENT_QUOTES, 'UTF-8')?>"><input type="hidden" name="action" value="structure"><button class="btn-warning" type="submit">Create database structure</button></form>
-<?php endif; ?>
-<?php if (($instance['status'] ?? '') === 'structure_created'): ?>
+<?php elseif (($instance['status'] ?? '') === 'structure_created'): ?>
             <form method="post" action="process_instance.php" style="display:inline"><input type="hidden" name="instance_id" value="<?=htmlspecialchars($id, ENT_QUOTES, 'UTF-8')?>"><input type="hidden" name="action" value="world"><button class="btn-warning" type="submit">Create world data</button></form>
-<?php endif; ?>
-<?php if (($instance['status'] ?? '') === 'world_created'): ?>
-            <form method="post" action="process_instance.php" style="display:inline"><input type="hidden" name="instance_id" value="<?=htmlspecialchars($id, ENT_QUOTES, 'UTF-8')?>"><input type="hidden" name="action" value="finalize"><button class="btn-success" type="submit">Finish installation</button></form>
-<?php endif; ?>
-<?php if (($instance['status'] ?? '') === 'installed'): ?>
+<?php elseif (($instance['status'] ?? '') === 'world_created'): ?>
+            <a class="btn btn-success" href="accounts_instance.php?instance=<?=rawurlencode($id)?>">Create admin / MultiHunter / Support accounts</a>
+<?php elseif (($instance['status'] ?? '') === 'installed'): ?>
             <span class="btn btn-success">Installed</span>
 <?php endif; ?>
         </div>
