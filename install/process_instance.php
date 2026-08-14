@@ -61,6 +61,11 @@ final class TravianZInstanceInstallProcess
                     $this->createWorld($instanceId);
                     break;
 
+                case 'accounts':
+                    $this->loadInstanceBootstrap();
+                    $this->createAccounts($instanceId);
+                    break;
+
                 case 'finalize':
                     $this->finalize($instanceId);
                     break;
@@ -114,85 +119,32 @@ final class TravianZInstanceInstallProcess
         ];
 
         $defaults = [
-            '%SERVERNAME%' => 'TravianZ',
-            '%SPEED%' => '1',
-            '%INCSPEED%' => '1',
-            '%EVASIONSPEED%' => '1',
-            '%TRADERCAP%' => '1',
-            '%CRANNYCAP%' => '1',
-            '%TRAPPERCAP%' => '1',
-            '%STORAGE_MULTIPLIER%' => '1',
-            '%MAX%' => '100',
-            '%LANG%' => 'en',
-            '%STIMEZONE%' => 'Europe/Bucharest',
-            '%BEGINNER%' => '43200',
-            '%REG_OPEN%' => 'true',
-            '%TS_THRESHOLD%' => '20',
-            '%MEDALINTERVAL%' => '0',
-            '%GREAT_WKS%' => 'false',
-            '%WW%' => 'false',
-            '%SHOW_NATARS%' => 'false',
-            '%NATARS_UNITS%' => '100',
-            '%NATARS_SPAWN_TIME%' => '260',
-            '%NATARS_WW_SPAWN_TIME%' => '260',
-            '%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%' => '260',
-            '%NATARS_WW_START_DELAY%' => '10',
-            '%NATURE_REGTIME%' => '43200',
-            '%OASIS_WOOD_MULTIPLIER%' => '40',
-            '%OASIS_CLAY_MULTIPLIER%' => '40',
-            '%OASIS_IRON_MULTIPLIER%' => '40',
-            '%OASIS_CROP_MULTIPLIER%' => '40',
-            '%CRONLOOP%' => '300',
-            '%CRONTICK%' => '60',
-            '%CLEANUPREPORTS%' => '14',
-            '%CLEANUPCHAT%' => '7',
-            '%CLEANUPMESSAGES%' => '0',
-            '%HEROBASEREGEN%' => '10',
-            '%HEROSILVERPERGOLD%' => '10',
-            '%HEROSILVERTOGOLD%' => '25',
-            '%HERORESALL%' => '3',
-            '%HERORESONE%' => '10',
-            '%ERRORREPORT%' => '0',
-            '%GP%' => 'false',
-            '%GP_LOCATE%' => 'gpack/travian_default/',
-            '%ALLIANCEBONUSES%' => 'false',
-            '%PLUSSTATS%' => 'true',
-            '%PLUSSTATSHOURS%' => '6',
-            '%PLUSSTATSKEEP%' => '0',
-            '%USRNMSPECIAL%' => 'true',
-            '%USRNMMIN%' => '3',
-            '%USRNMMAX%' => '15',
-            '%PWMIN%' => '4',
-            '%WWIMAGE%' => 'true',
-            '%PROTECTEDPLAYERS%' => '',
-            '%ASUPPMSGS%' => 'true',
-            '%ARAIDS%' => 'false',
-            '%ARANK%' => 'false',
-            '%CONNECTT%' => '1',
-            '%DOMAIN%' => '',
-            '%HOMEPAGE%' => '',
-            '%SERVER%' => '',
-            '%LIMIT_MAILBOX%' => '0',
-            '%MAX_MAILS%' => '100',
-            '%DEMOLISH%' => 'true',
-            '%BOX1%' => 'false',
-            '%BOX2%' => 'false',
-            '%BOX3%' => 'false',
-            '%VILLAGE_EXPAND%' => '0',
-            '%PLUS_TIME%' => '0',
-            '%PLUS_PRODUCTION%' => '0',
-            '%PAYPAL_EMAIL%' => '',
-            '%PAYPAL_CURRENCY%' => 'EUR',
-            '%PEACE%' => '0',
-            '%T4_COMING%' => 'false',
+            '%SERVERNAME%' => 'TravianZ', '%SPEED%' => '1', '%INCSPEED%' => '1', '%EVASIONSPEED%' => '1',
+            '%TRADERCAP%' => '1', '%CRANNYCAP%' => '1', '%TRAPPERCAP%' => '1', '%STORAGE_MULTIPLIER%' => '1',
+            '%MAX%' => '100', '%LANG%' => 'en', '%STIMEZONE%' => 'Europe/Bucharest', '%BEGINNER%' => '43200',
+            '%REG_OPEN%' => 'true', '%TS_THRESHOLD%' => '20', '%MEDALINTERVAL%' => '0', '%GREAT_WKS%' => 'false',
+            '%WW%' => 'false', '%SHOW_NATARS%' => 'false', '%NATARS_UNITS%' => '100', '%NATARS_SPAWN_TIME%' => '260',
+            '%NATARS_WW_SPAWN_TIME%' => '260', '%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%' => '260', '%NATARS_WW_START_DELAY%' => '10',
+            '%NATURE_REGTIME%' => '43200', '%OASIS_WOOD_MULTIPLIER%' => '40', '%OASIS_CLAY_MULTIPLIER%' => '40',
+            '%OASIS_IRON_MULTIPLIER%' => '40', '%OASIS_CROP_MULTIPLIER%' => '40', '%CRONLOOP%' => '300',
+            '%CRONTICK%' => '60', '%CLEANUPREPORTS%' => '14', '%CLEANUPCHAT%' => '7', '%CLEANUPMESSAGES%' => '0',
+            '%HEROBASEREGEN%' => '10', '%HEROSILVERPERGOLD%' => '10', '%HEROSILVERTOGOLD%' => '25',
+            '%HERORESALL%' => '3', '%HERORESONE%' => '10', '%ERRORREPORT%' => '0', '%GP%' => 'false',
+            '%GP_LOCATE%' => 'gpack/travian_default/', '%ALLIANCEBONUSES%' => 'false', '%PLUSSTATS%' => 'true',
+            '%PLUSSTATSHOURS%' => '6', '%PLUSSTATSKEEP%' => '0', '%USRNMSPECIAL%' => 'true', '%USRNMMIN%' => '3',
+            '%USRNMMAX%' => '15', '%PWMIN%' => '4', '%WWIMAGE%' => 'true', '%PROTECTEDPLAYERS%' => '',
+            '%ASUPPMSGS%' => 'true', '%ARAIDS%' => 'false', '%ARANK%' => 'false', '%CONNECTT%' => '1',
+            '%DOMAIN%' => '', '%HOMEPAGE%' => '', '%SERVER%' => '', '%LIMIT_MAILBOX%' => '0', '%MAX_MAILS%' => '100',
+            '%DEMOLISH%' => 'true', '%BOX1%' => 'false', '%BOX2%' => 'false', '%BOX3%' => 'false', '%VILLAGE_EXPAND%' => '0',
+            '%PLUS_TIME%' => '0', '%PLUS_PRODUCTION%' => '0', '%PAYPAL_EMAIL%' => '', '%PAYPAL_CURRENCY%' => 'EUR',
+            '%PEACE%' => '0', '%T4_COMING%' => 'false',
         ];
 
         $replacements = [];
         foreach ($placeholders as $placeholder) {
-            if (array_key_exists($placeholder, $aliases) && $aliases[$placeholder] !== null) {
-                $field = $aliases[$placeholder];
-            } else {
-                $field = strtolower(trim($placeholder, '%'));
+            $field = $aliases[$placeholder] ?? strtolower(trim($placeholder, '%'));
+            if ($field === null) {
+                continue;
             }
 
             if (isset($_POST[$field]) && !is_array($_POST[$field])) {
@@ -200,9 +152,6 @@ final class TravianZInstanceInstallProcess
             } elseif (array_key_exists($placeholder, $defaults)) {
                 $value = (string) $defaults[$placeholder];
             } else {
-                // Preserve the old installer's behavior for optional fields:
-                // an absent option becomes an empty string rather than leaving
-                // an unresolved %PLACEHOLDER% in the generated PHP file.
                 $value = '';
             }
 
@@ -217,18 +166,12 @@ final class TravianZInstanceInstallProcess
         $replacements['%STARTTIME%'] = time();
         $replacements['%CRONKEY%'] = bin2hex(random_bytes(24));
 
-        // The registry owns these values; a form cannot redirect an instance
-        // to another database or table prefix.
         $registry = $this->readRegistry();
         if (isset($registry[(string) $_POST['instance_id']])) {
             $instance = $registry[(string) $_POST['instance_id']];
             $replacements['%SERVERNAME%'] = (string) ($instance['name'] ?? $replacements['%SERVERNAME%']);
             $replacements['%SDB%'] = (string) ($instance['database'] ?? '');
             $replacements['%PREFIX%'] = (string) ($instance['prefix'] ?? '');
-            $replacements['%SSERVER%'] = (string) ($_POST['sserver'] ?? 'localhost');
-            $replacements['%SPORT%'] = (string) ($_POST['sport'] ?? '3306');
-            $replacements['%SUSER%'] = (string) ($_POST['suser'] ?? '');
-            $replacements['%SPASS%'] = (string) ($_POST['spass'] ?? '');
         }
 
         return $replacements;
@@ -236,14 +179,8 @@ final class TravianZInstanceInstallProcess
 
     private function writeConfig(string $instanceId): void
     {
-        $replacements = $this->buildReplacements();
-        $path = TravianZInstanceConfigWriter::write($instanceId, $replacements);
-
-        $this->updateStatus($instanceId, 'configured', [
-            'config' => $path,
-            'configured_at' => date('c'),
-        ]);
-
+        $path = TravianZInstanceConfigWriter::write($instanceId, $this->buildReplacements());
+        $this->updateStatus($instanceId, 'configured', ['config' => $path, 'configured_at' => date('c')]);
         $this->redirect('multi.php?instance=' . rawurlencode($instanceId));
     }
 
@@ -255,17 +192,12 @@ final class TravianZInstanceInstallProcess
     private function createStructure(string $instanceId): void
     {
         global $database;
-
         require_once $this->root . '/GameEngine/Database.php';
         require_once $this->root . '/GameEngine/Admin/database.php';
 
         $result = $database->createDbStructure();
-        if ($result === false) {
-            $this->fail('Database structure creation failed.');
-        }
-        if ($result === -1) {
-            $this->fail('Database structure already exists or installation requires attention.');
-        }
+        if ($result === false) $this->fail('Database structure creation failed.');
+        if ($result === -1) $this->fail('Database structure already exists or installation requires attention.');
 
         $this->updateStatus($instanceId, 'structure_created', ['structure_at' => date('c')]);
         $this->redirect('multi.php?instance=' . rawurlencode($instanceId));
@@ -274,36 +206,37 @@ final class TravianZInstanceInstallProcess
     private function createWorld(string $instanceId): void
     {
         global $database;
-
         require_once $this->root . '/GameEngine/Database.php';
         require_once $this->root . '/GameEngine/Admin/database.php';
 
         $result = $database->populateWorldData();
-        if ($result === false) {
-            $this->fail('World data creation failed.');
-        }
-        if ($result === -1) {
-            $this->fail('World data already exists or installation requires attention.');
-        }
+        if ($result === false) $this->fail('World data creation failed.');
+        if ($result === -1) $this->fail('World data already exists or installation requires attention.');
 
         $this->updateStatus($instanceId, 'world_created', ['world_at' => date('c')]);
         $this->redirect('multi.php?instance=' . rawurlencode($instanceId));
     }
 
+    private function createAccounts(string $instanceId): void
+    {
+        // accounts.php contains the canonical account/village provisioning logic.
+        // The instance environment is already selected before this include, and
+        // the account script now resolves its config path through TravianZInstance.
+        require $this->root . '/install/include/accounts.php';
+        $this->fail('Account installation did not redirect as expected.');
+    }
+
     private function finalize(string $instanceId): void
     {
         $registry = $this->readRegistry();
-        if (!isset($registry[$instanceId])) {
-            $this->fail('Instance not found.');
-        }
+        if (!isset($registry[$instanceId])) $this->fail('Instance not found.');
 
         $instancePath = $this->root . '/instances/' . $instanceId;
         if (!is_dir($instancePath) && !mkdir($instancePath, 0775, true) && !is_dir($instancePath)) {
             $this->fail('Cannot create instance directory.');
         }
 
-        $installedMarker = $instancePath . '/installed';
-        if (file_put_contents($installedMarker, date('c') . PHP_EOL, LOCK_EX) === false) {
+        if (file_put_contents($instancePath . '/installed', date('c') . PHP_EOL, LOCK_EX) === false) {
             $this->fail('Cannot create instance installed marker.');
         }
 
@@ -313,10 +246,7 @@ final class TravianZInstanceInstallProcess
 
     private function readRegistry(): array
     {
-        if (!is_file($this->instancesFile)) {
-            return [];
-        }
-
+        if (!is_file($this->instancesFile)) return [];
         $data = json_decode((string) file_get_contents($this->instancesFile), true);
         return is_array($data) ? $data : [];
     }
@@ -324,20 +254,11 @@ final class TravianZInstanceInstallProcess
     private function updateStatus(string $instanceId, string $status, array $extra = []): void
     {
         $registry = $this->readRegistry();
-        if (!isset($registry[$instanceId]) || !is_array($registry[$instanceId])) {
-            return;
-        }
+        if (!isset($registry[$instanceId]) || !is_array($registry[$instanceId])) return;
 
         $registry[$instanceId]['status'] = $status;
         $registry[$instanceId]['updated_at'] = date('c');
-        foreach ($extra as $key => $value) {
-            $registry[$instanceId][$key] = $value;
-        }
-
-        $dir = dirname($this->instancesFile);
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
+        foreach ($extra as $key => $value) $registry[$instanceId][$key] = $value;
 
         $tmp = $this->instancesFile . '.tmp';
         if (file_put_contents($tmp, json_encode($registry, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL, LOCK_EX) === false) {
