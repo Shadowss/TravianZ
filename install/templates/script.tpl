@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // FOOTER
   var f = document.createElement('div');
   f.className = 'tz-footer';
-  f.innerHTML = `<div>© 2010 - 2026 TravianZ • All rights reserved</div><div>Server running on <b>v.10.0 Full Refactor&Redesign</b></div>`;
+  f.innerHTML = `<div>© 2010 - 2026 TravianZ • All rights reserved</div><div>Server running on <b>v.11.0 Full Refactor&Redesign</b></div>`;
   document.body.appendChild(f);
 
   // curăță resturi vechi
