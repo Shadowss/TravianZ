@@ -12,8 +12,14 @@ class TravianZInstanceConfigWriter
 {
     public static function write($instanceId, array $replacements)
     {
-        $instanceId = TravianZInstance::sanitizeId($instanceId);
-        $instancePath = TravianZInstance::path($instanceId);
+        if (!class_exists('TravianZInstanceResolver') || !TravianZInstanceResolver::isValid((string) $instanceId)) {
+            throw new RuntimeException('Invalid TravianZ instance ID.');
+        }
+
+        $instanceId = strtolower((string) $instanceId);
+        $instancePath = TravianZInstance::projectRoot()
+            . DIRECTORY_SEPARATOR . 'instances'
+            . DIRECTORY_SEPARATOR . $instanceId;
         $sourceTemplate = dirname(__DIR__) . '/../install/data/constant_format.tpl';
 
         if (!is_file($sourceTemplate)) {
