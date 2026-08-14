@@ -17,10 +17,6 @@
 ##                                                                             ##
 #################################################################################
 
-// Multi-instance bootstrap MUST run before session_start() so each world gets
-// its own session name and its own configuration before Admin loads the DB.
-require_once __DIR__ . "/../GameEngine/Instance/Bootstrap.php";
-
 // ─── SESSION ─────────────────────────────────────────────────────────────────
 // Harden session cookie before session_start() — has no effect after.
 if (session_status() === PHP_SESSION_NONE) {
@@ -44,7 +40,7 @@ include_once("../GameEngine/config.php");
 include_once("../GameEngine/Database.php");
 require_once __DIR__ . "/../GameEngine/Lang/loader.php";
 tz_load_language(LANG);
-include_once __DIR__ . "/../GameEngine/Admin/database.php";
+include_once("../GameEngine/Admin/database.php");
 
 // Helperul care descopera pachetele grafice din gpack/ (tz_available_gpacks).
 // Sabloanele panoului il folosesc pentru selectorul de pachet; fara acest
