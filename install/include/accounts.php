@@ -13,16 +13,23 @@
 ##                                                                             ##
 #################################################################################
 
-
         // verify form
         if (empty($_POST['mhpw']) || empty($_POST['spw'])) {
-            header("Location: ../index.php?s=4&err=1");
+            if (defined('TRAVIANZ_INSTANCE_ID') && TRAVIANZ_INSTANCE_ID !== 'default') {
+                header("Location: ../accounts_instance.php?instance=" . rawurlencode(TRAVIANZ_INSTANCE_ID) . "&err=1");
+            } else {
+                header("Location: ../index.php?s=4&err=1");
+            }
             exit;
         }
 
         // don't allow creating Natars user
         if (!empty($_POST['aname']) && strtolower($_POST['aname']) == 'natars') {
-            header("Location: ../index.php?s=4&err=2");
+            if (defined('TRAVIANZ_INSTANCE_ID') && TRAVIANZ_INSTANCE_ID !== 'default') {
+                header("Location: ../accounts_instance.php?instance=" . rawurlencode(TRAVIANZ_INSTANCE_ID) . "&err=2");
+            } else {
+                header("Location: ../index.php?s=4&err=2");
+            }
             exit;
         }
 
@@ -31,10 +38,21 @@
 
 		$gameinstall = 1;
 
-		$configFile = "../../GameEngine/config.php";
-		include_once($configFile);
-		include_once("../../GameEngine/Database.php");
-		include_once("../../GameEngine/Admin/database.php");
+        // The default installer keeps the legacy config path. A named world
+        // always writes to its own instance config and never modifies another
+        // world's configuration.
+        if (!class_exists('TravianZInstanceBootstrap')) {
+            $bootstrap = dirname(__DIR__, 2) . "/GameEngine/Instance/Bootstrap.php";
+            if (is_file($bootstrap)) {
+                require_once $bootstrap;
+            }
+        }
+        $configFile = class_exists('TravianZInstance')
+            ? TravianZInstance::configPath()
+            : "../../GameEngine/config.php";
+
+		include_once(dirname(__DIR__, 2) . "/GameEngine/Database.php");
+		include_once(dirname(__DIR__, 2) . "/GameEngine/Admin/database.php");
 		require_once dirname(__DIR__, 2) . "/GameEngine/Lang/loader.php";
 		tz_load_language(LANG);
 
@@ -156,6 +174,10 @@
 	    }
 
         $gameinstall = 0;
-		header("Location: ../index.php?s=5");
+        if (defined('TRAVIANZ_INSTANCE_ID') && TRAVIANZ_INSTANCE_ID !== 'default') {
+            header("Location: ../multi.php?instance=" . rawurlencode(TRAVIANZ_INSTANCE_ID));
+        } else {
+            header("Location: ../index.php?s=5");
+        }
 
 ?>
