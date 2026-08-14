@@ -174,7 +174,29 @@
 	    }
 
         $gameinstall = 0;
+
         if (defined('TRAVIANZ_INSTANCE_ID') && TRAVIANZ_INSTANCE_ID !== 'default') {
+            // The account step is the final step for a named world. Keep the
+            // installed marker local to this instance and update only its
+            // registry entry; the default world's legacy installer marker is
+            // deliberately untouched.
+            $instancePath = dirname(__DIR__, 2) . '/instances/' . TRAVIANZ_INSTANCE_ID;
+            if (!is_dir($instancePath)) {
+                @mkdir($instancePath, 0775, true);
+            }
+            @file_put_contents($instancePath . '/installed', date('c') . PHP_EOL, LOCK_EX);
+
+            $registryFile = dirname(__DIR__, 2) . '/instances/registry.json';
+            if (is_file($registryFile)) {
+                $registry = json_decode((string) @file_get_contents($registryFile), true);
+                if (is_array($registry) && isset($registry[TRAVIANZ_INSTANCE_ID])) {
+                    $registry[TRAVIANZ_INSTANCE_ID]['status'] = 'installed';
+                    $registry[TRAVIANZ_INSTANCE_ID]['installed_at'] = date('c');
+                    $registry[TRAVIANZ_INSTANCE_ID]['updated_at'] = date('c');
+                    @file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL, LOCK_EX);
+                }
+            }
+
             header("Location: ../multi.php?instance=" . rawurlencode(TRAVIANZ_INSTANCE_ID));
         } else {
             header("Location: ../index.php?s=5");
