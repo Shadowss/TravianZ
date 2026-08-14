@@ -14,37 +14,6 @@
 ##                 https://github.com/Shadowss/TravianZ                        ##
 #################################################################################
 
-// -----------------------------------------------------------------------------
-// Multi-instance bootstrap
-// -----------------------------------------------------------------------------
-// config.php is generated from this template. The bootstrap resolves the
-// current world before any server constants are defined.
-//
-// For a normal/default installation, execution continues in this file exactly
-// as before. For s1/s2/etc., an instance-local config is loaded instead. The
-// guard prevents that instance config from recursively loading itself.
-require_once __DIR__ . '/../GameEngine/Instance/Bootstrap.php';
-
-if (defined('TRAVIANZ_INSTANCE_ID')
-    && TRAVIANZ_INSTANCE_ID !== 'default'
-    && !defined('TRAVIANZ_LOADING_INSTANCE_CONFIG')) {
-
-    $instanceConfigPath = dirname(__DIR__) . '/instances/'
-        . TRAVIANZ_INSTANCE_ID . '/config.php';
-
-    if (is_file($instanceConfigPath)) {
-        define('TRAVIANZ_LOADING_INSTANCE_CONFIG', true);
-        require $instanceConfigPath;
-        return;
-    }
-
-    // Do not silently fall back to the default world. A request reaching an
-    // instance hostname without its configuration must fail safely rather than
-    // allowing s2.example.com to operate on the default database/settings.
-    http_response_code(503);
-    die('TravianZ instance configuration is missing for ' . htmlspecialchars(TRAVIANZ_INSTANCE_ID, ENT_QUOTES, 'UTF-8'));
-}
-
 //////////////////////////////////
 // *****  ERROR REPORTING  *****//
 //////////////////////////////////
@@ -148,104 +117,198 @@ define("START_DATE", "%SSTARTDATE%");
 define("START_TIME", "%SSTARTTIME%");
 
 // ***** Language
-// SERVER_LANG is the DEFAULT language of the server (chosen at install / in
-// the admin "Server Settings"). LANG is the EFFECTIVE display language.
-//
-// Per-user language (issue #166): if the logged-in player picked a language
-// in their profile preferences (stored in users.lang and mirrored into
-// $_SESSION['lang']), LANG becomes that language; otherwise LANG falls back
-// to SERVER_LANG.
-//
-// SECURITY: LANG is used in include("Lang/".LANG.".php"), so the value is
-// strictly sanitized to [a-z_] (no path traversal) and the target file MUST
-// exist, otherwise we fall back to the server default. This prevents Local
-// File Inclusion via a crafted session value.
 define("SERVER_LANG", "%LANG%");
 if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
 $__user_lang = isset($_SESSION['lang']) ? preg_replace('/[^a-z_]/', '', strtolower((string) $_SESSION['lang'])) : '';
 define("LANG", ($__user_lang !== '' && is_file(__DIR__ . "/Lang/" . $__user_lang . ".php")) ? $__user_lang : SERVER_LANG);
 
 // ***** Speed
-// Choose your server speed. NOTICE: Higher speed, more likely
-// to have some bugs. Lower speed, most likely no major bugs.
-// Values: 1 (normal), 3 (3x speed) etc...
 define("SPEED", "%SPEED%");
 
 // ***** World size
-// Defines world size. NOTICE: DO NOT EDIT!!
 define("WORLD_MAX", "%MAX%");
 
-// ***** Graphical statistics (Travian Plus)
-// The game periodically records each player's rank, population, villages, and
-// army from the moment this feature is enabled. These snapshots are then used
-// to generate the account progression graphs.
-//
-// Data is collected for ALL players, but the Statistics tab is visible ONLY to
-// users with an active Plus account. Otherwise, players who purchase Plus would
-// open the page and see an empty graph immediately after paying.
 define("NEW_FUNCTIONS_PLUS_STATISTICS", %PLUSSTATS%);
-
-// Number of hours between snapshots. On a fast server, a single day represents
-// a significant amount of gameplay, so taking a snapshot every 6 hours provides
-// a smooth graph without filling the database table too quickly.
 define("PLUS_STATS_INTERVAL_HOURS", %PLUSSTATSHOURS%);
-
-// Number of days to retain historical data. Set to 0 to keep all snapshots,
-// allowing the complete account progression to be displayed. Even over the
-// lifetime of an entire server, this only amounts to a few tens of thousands of records.
 define("PLUS_STATS_KEEP_DAYS", %PLUSSTATSKEEP%);
 
-// ***** Registration rules
-// Validation rules applied during registration (see Account.php).
-//
-// USRNM_SPECIAL: when set to true, usernames may contain dots, hyphens,
-// underscores, and single spaces between words. When set to false,
-// only letters and numbers are allowed.
 define("USRNM_SPECIAL", %USRNMSPECIAL%);
 define("USRNM_MIN_LENGTH", %USRNMMIN%);
-define("USRNM_MAX_LENGTH", %USR NMMAX%);
+define("USRNM_MAX_LENGTH", %USRNMMAX%);
 define("PW_MIN_LENGTH", %PWMIN%);
 
-// ***** Activation Mail
-// true = activation mail will be sent, users will have to finish registration
-//        by clicking on link recieved in mail.
-// false =  users can register with any mail. Not needed to be real one.
 define("AUTH_EMAIL",%ACTIVATE%);
-
-// ***** Troop Speed
-// Values: 1 (normal), 3 (3x speed) etc...
 define("INCREASE_SPEED","%INCSPEED%");
-
-// ***** Evasion Speed
 define("EVASION_SPEED","%EVASIONSPEED%");
-
-// ***** Trader capacity
-// Values: 1 (normal), 3 (3x speed) etc...
 define("TRADER_CAPACITY","%TRADERCAP%");
-
-// ***** Cranny capacity
 define("CRANNY_CAPACITY","%CRANNYCAP%");
-
-// ***** Trapper capacity
 define("TRAPPER_CAPACITY","%TRAPPERCAP%");
-
-// ***** Village Expand
-// 1 = slow village expanding - more Cultural Points needed for every new village
-// 0 = fast village expanding - less Cultural Points needed for every new village
 define("CP", %VILLAGE_EXPAND%);
-
-// ***** Demolish Level Required
-// Defines which level of Main building is required to be able to
-// demolish. Min value = 1, max value = 20
-// Default: 10
 define("DEMOLISH_LEVEL_REQ","%DEMOLISH%");
-
-// ***** Change storage capacity
 define("STORAGE_MULTIPLIER","%STORAGE_MULTIPLIER%");
 define("STORAGE_BASE",800*STORAGE_MULTIPLIER);
-
-// ***** Quest
-// Ingame quest enabled/disabled.
 define("QUEST",%QUEST%);
-//quest type : 25 = Travian Official 
-//             37 = TravianZ Extended 
+define("QTYPE",%QTYPE%);
+define("PROTECTION","%BEGINNER%");
+define("WW",%WW%);
+define("SHOW_NATARS",%SHOW_NATARS%); 
+define("NATARS_UNITS",%NATARS_UNITS%); 
+define("NATARS_SPAWN_TIME",%NATARS_SPAWN_TIME%); 
+define("NATARS_WW_SPAWN_TIME",%NATARS_WW_SPAWN_TIME%); 
+define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME",%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%);
+define("NATARS_WW_START_DELAY", %NATARS_WW_START_DELAY%); 
+define("NATURE_REGTIME",%NATURE_REGTIME%); 
+define("OASIS_WOOD_MULTIPLIER",%OASIS_WOOD_MULTIPLIER%); 
+define("OASIS_CLAY_MULTIPLIER",%OASIS_CLAY_MULTIPLIER%); 
+define("OASIS_IRON_MULTIPLIER",%OASIS_IRON_MULTIPLIER%); 
+define("OASIS_CROP_MULTIPLIER",%OASIS_CROP_MULTIPLIER%); 
+define("OASIS_WOOD_PRODUCTION",OASIS_WOOD_MULTIPLIER*SPEED);
+define("OASIS_CLAY_PRODUCTION",OASIS_CLAY_MULTIPLIER*SPEED);
+define("OASIS_IRON_PRODUCTION",OASIS_IRON_MULTIPLIER*SPEED);
+define("OASIS_CROP_PRODUCTION",OASIS_CROP_MULTIPLIER*SPEED); 
+define("MEDALINTERVAL",%MEDALINTERVAL%);
+define("GREAT_WKS",%GREAT_WKS%);
+define("TS_THRESHOLD",%TS_THRESHOLD%);  
+define("REG_OPEN",%REG_OPEN%);
+define("PEACE",%PEACE%);
+define("PROTECTED_PLAYERS", "%PROTECTEDPLAYERS%");
+
+define("NEW_FUNCTIONS_ALLIANCE_BONUSES", %ALLIANCEBONUSES%);
+define("ALLIANCE_BONUS_COSTS", "1200000,5600000,17100000,51200000,153600000");
+define("ALLIANCE_BONUS_HOURS", "24,48,72,96,120");
+define("ALLIANCE_BONUS_DAILY", "300000,300000,400000,550000,750000,1000000");
+define("ALLIANCE_BONUS_PCT_SMALL", 2);
+define("ALLIANCE_BONUS_PCT_LARGE", 4);
+define("ALLIANCE_BONUS_TRIPLE_GOLD", 3);
+
+define("GP_ENABLE",%GP%);
+define("SERVER_GP", "%GP_LOCATE%");
+$__user_gp = '';
+if (GP_ENABLE && isset($_SESSION['gpack']) && is_string($_SESSION['gpack'])) {
+    $__candidate = trim((string) $_SESSION['gpack']);
+    if (preg_match('#^gpack/[A-Za-z0-9_\-]+/$#', $__candidate)
+        && is_file(__DIR__ . "/../" . $__candidate . "travian.css")) {
+        $__user_gp = $__candidate;
+    }
+}
+define("GP_LOCATE", $__user_gp !== '' ? $__user_gp : SERVER_GP);
+define("NEW_FUNCTION_WW_IMAGE", %WWIMAGE%);
+define("T4_COMING",%T4_COMING%);
+
+define("PAYPAL_EMAIL","%PAYPAL_EMAIL%");
+define("PAYPAL_CURRENCY","%PAYPAL_CURRENCY%");
+define("PLUS_PACKAGE_A_PRICE","%PLUS_PACKAGE_A_PRICE%");
+define("PLUS_PACKAGE_A_GOLD","%PLUS_PACKAGE_A_GOLD%");
+define("PLUS_PACKAGE_B_PRICE","%PLUS_PACKAGE_B_PRICE%");
+define("PLUS_PACKAGE_B_GOLD","%PLUS_PACKAGE_B_GOLD%");
+define("PLUS_PACKAGE_C_PRICE","%PLUS_PACKAGE_C_PRICE%");
+define("PLUS_PACKAGE_C_GOLD","%PLUS_PACKAGE_C_GOLD%");
+define("PLUS_PACKAGE_D_GOLD","%PLUS_PACKAGE_D_GOLD%");
+define("PLUS_PACKAGE_D_PRICE","%PLUS_PACKAGE_D_PRICE%");
+define("PLUS_PACKAGE_E_PRICE","%PLUS_PACKAGE_E_PRICE%");
+define("PLUS_PACKAGE_E_GOLD","%PLUS_PACKAGE_E_GOLD%");
+define("PLUS_TIME",%PLUS_TIME%);
+define("PLUS_PRODUCTION",%PLUS_PRODUCTION%);
+
+define("LOG_BUILD",%LOGBUILD%);
+define("LOG_TECH",%LOGTECH%);
+define("LOG_LOGIN",%LOGLOGIN%);
+define("LOG_GOLD_FIN",%LOGGOLDFIN%);
+define("LOG_ADMIN",%LOGADMIN%);
+define("LOG_WAR",%LOGWAR%);
+define("LOG_MARKET",%LOGMARKET%);
+define("LOG_ILLEGAL",%LOGILLEGAL%);
+define("NEWSBOX1",%BOX1%);
+define("NEWSBOX2",%BOX2%);
+define("NEWSBOX3",%BOX3%);
+
+define("SQL_SERVER", "%SSERVER%");
+define("SQL_PORT", %SPORT%);
+define("SQL_USER", "%SUSER%");
+define("SQL_PASS", "%SPASS%");
+define("SQL_DB", "%SDB%");
+define("TB_PREFIX", "%PREFIX%");
+define("DB_TYPE", %CONNECTT%);
+
+define("LIMIT_MAILBOX",%LIMIT_MAILBOX%);
+define("MAX_MAIL","%MAX_MAILS%");
+define("INCLUDE_ADMIN", %ARANK%);
+
+define("ADMIN_EMAIL", "%AEMAIL%");
+define("ADMIN_NAME", "%ANAME%");
+define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
+define("ADMIN_ALLOW_INCOMING_RAIDS", %ARAIDS%);
+
+define("NEW_FUNCTIONS_OASIS", %NEW_FUNCTIONS_OASIS%);
+define("NEW_FUNCTIONS_ALLIANCE_INVITATION", %NEW_FUNCTIONS_ALLIANCE_INVITATION%);
+define("NEW_FUNCTIONS_EMBASSY_MECHANICS", %NEW_FUNCTIONS_EMBASSY_MECHANICS%);
+define("NEW_FUNCTIONS_FORUM_POST_MESSAGE", %NEW_FUNCTIONS_FORUM_POST_MESSAGE%);
+define("NEW_FUNCTIONS_TRIBE_IMAGES", %NEW_FUNCTIONS_TRIBE_IMAGES%);
+define("NEW_FUNCTIONS_MHS_IMAGES", %NEW_FUNCTIONS_MHS_IMAGES%);
+define("NEW_FUNCTIONS_DISPLAY_ARTIFACT", %NEW_FUNCTIONS_DISPLAY_ARTIFACT%);
+define("NEW_FUNCTIONS_DISPLAY_WONDER", %NEW_FUNCTIONS_DISPLAY_WONDER%);
+define("NEW_FUNCTIONS_VACATION", %NEW_FUNCTIONS_VACATION%);
+define("NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET", %NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%);
+define("NEW_FUNCTIONS_MANUAL_NATURENATARS", %NEW_FUNCTIONS_MANUAL_NATURENATARS%);
+define("NEW_FUNCTIONS_DISPLAY_LINKS", %NEW_FUNCTIONS_DISPLAY_LINKS%);
+define("NEW_FUNCTIONS_MEDAL_3YEAR", %NEW_FUNCTIONS_MEDAL_3YEAR%);
+define("NEW_FUNCTIONS_MEDAL_5YEAR", %NEW_FUNCTIONS_MEDAL_5YEAR%);
+define("NEW_FUNCTIONS_MEDAL_10YEAR", %NEW_FUNCTIONS_MEDAL_10YEAR%);
+define("NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM", %NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%);
+define("NEW_FUNCTIONS_MILESTONES", %NEW_FUNCTIONS_MILESTONES%);
+define("NEW_FUNCTIONS_MEDAL_RESET", %NEW_FUNCTIONS_MEDAL_RESET%);
+define("NEW_FUNCTIONS_HERO_T4", %NEW_FUNCTIONS_HERO_T4%);
+define("NEW_FUNCTION_TRIBE_HUNS", %NEW_FUNCTION_TRIBE_HUNS%);
+define("NEW_FUNCTION_TRIBE_EGIPTEANS", %NEW_FUNCTION_TRIBE_EGIPTEANS%);
+define("NEW_FUNCTION_TRIBE_SPARTANS", %NEW_FUNCTION_TRIBE_SPARTANS%);
+define("NEW_FUNCTION_TRIBE_VIKINGS", %NEW_FUNCTION_TRIBE_VIKINGS%);
+define("NEW_FUNCTION_REGISTRATION_GOLD", %NEW_FUNCTION_REGISTRATION_GOLD%);
+define("NEW_FUNCTION_REGISTRATION_GOLD_VALUE", %NEW_FUNCTION_REGISTRATION_GOLD_VALUE%);
+
+define("AUTO_DEL_INACTIVE",false);
+define("UN_ACT_TIME", 3628800);
+define("ALLOW_BURST",false);
+define("BASIC_MAX",1);
+define("INNER_MAX",1);
+define("PLUS_MAX",1);
+define("ALLOW_ALL_TRIBE",false);
+define("CFM_ADMIN_ACT",true);
+define("SERVER_WEB_ROOT",false);
+
+define("BAN_IP_ENABLED",true);
+define("IP_TRUSTED_PROXIES","");
+define("IP_FORWARDED_HEADER","HTTP_X_FORWARDED_FOR");
+define("BANNED",0);
+define("AUTH",1);
+define("USER",2);
+define("MULTIHUNTER",8);
+define("ADMIN",9);
+define("COOKIE_EXPIRE", 60*60*24*7); 
+define("COOKIE_PATH", "/"); 
+define("LOG_PAGE_ACCESS", false);
+define("PAGE_ACCESS_LOG_DATE", true);
+define("PAGE_ACCESS_LOG_IP", true);
+define("PAGE_ACCESS_LOG_FILENAME", 'access.log');
+
+define("DOMAIN", "%DOMAIN%");
+define("HOMEPAGE", "%HOMEPAGE%");
+define("SERVER", "%SERVER%");
+
+$requse = 0;
+
+###############################  E    N    D   ##################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       config.php                                                  ##
+##  Version        11.0 Full Refactor & Security                               ##
+##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
+##  Modified by:   Shadow and ronix                                            ##
+##  Refactored by: Shadow                                                      ##
+##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
+#################################################################################
+
+?>
