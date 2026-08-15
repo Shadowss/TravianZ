@@ -4141,3 +4141,19 @@ tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artefact');
 tz_def('TRAIN_BONUS_HERO',     'Bonus erou');
 tz_def('TRAIN_BONUS_ALLIANCE', 'Bonus alianta');
 tz_def('TRAIN_BONUS_FINAL',    'Timp instruire');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// FOR MULTI-INSTANCE SERVER
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADMIN_ADD_SERVER', 'Adăugați server');
+tz_def('SERVER_STATUS_TITLE', 'STAREA SERVERULUI');
+tz_def('SERVER_STATUS_OPERATIONAL', 'OPERATIONAL');
+tz_def('SERVER_STATUS_CLOSED', 'ÎNCHIS');
+tz_def('SERVER_STATUS_MAINTENANCE', 'ÎN CURENT DE ÎNTREȚINERE');
+tz_def('SERVER_REGISTER_OPEN', 'DESCHIS');
+tz_def('SERVER_REGISTER_CLOSED', 'ÎNCHIS'); // diferit de SERVER_STATUS_CLOSED pentru alte limbaje
+tz_def('SERVER_LABEL', 'SERVER');
+tz_def('SERVER_STATUS_LABEL', 'STATUS');
+tz_def('SERVER_REGISTER_LABEL', 'ÎNREGISTRARE');
+tz_def('SERVER_PLAYERS_LABEL', 'Număr de jucători');
+tz_def('SERVER_ONLINE_LABEL', 'Online');

@@ -72,23 +72,75 @@ $dbUser = $envDefaults['MARIADB_USER']?? ($envDefaults['MYSQL_USER']?? '');
 $dbPass = $envDefaults['MARIADB_PASSWORD']?? ($envDefaults['MYSQL_PASSWORD']?? '');
 $dbName = $envDefaults['MARIADB_DATABASE']?? ($envDefaults['MYSQL_DATABASE']?? '');
 
-if(empty($_SESSION['install_random_prefix'])) {
+// The installer can be opened as /install/?instance=s1, /install/?instance=s2,
+// etc. The value is persisted in the session so subsequent installation steps
+// cannot accidentally switch worlds.
+require_once __DIR__ . '/../../GameEngine/Instance/Resolver.php';
+$requestedInstance = InstanceResolver::sanitize(isset($_GET['instance']) ? $_GET['instance'] : '');
+if ($requestedInstance === null) {
+    $requestedInstance = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : 's1');
+}
+if ($requestedInstance === null) {
+    $requestedInstance = 's1';
+}
+$_SESSION['install_instance'] = $requestedInstance;
+
+// Build the URL defaults automatically from the current installation URL.
+// Local installations keep the project path and expose each world through
+// /s1/, /s2/, ...; production installations keep the current hostname.
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = isset($_SERVER['HTTP_HOST']) ? preg_replace('/[^a-zA-Z0-9.:-]/', '', $_SERVER['HTTP_HOST']) : 'localhost';
+$scriptPath = isset($_SERVER['SCRIPT_NAME']) ? str_replace('\\', '/', $_SERVER['SCRIPT_NAME']) : '/install/index.php';
+$projectPath = rtrim(str_replace('/install/index.php', '', $scriptPath), '/') . '/';
+if ($projectPath === '//') { $projectPath = '/'; }
+$baseUrl = $scheme . '://' . $host . $projectPath;
+$isLocalHost = ($host === 'localhost' || filter_var(preg_replace('/:\d+$/', '', $host), FILTER_VALIDATE_IP) !== false);
+$defaultDomain = $baseUrl;
+$defaultHomepage = $baseUrl;
+if ($isLocalHost) {
+    $defaultServer = $baseUrl . rawurlencode($requestedInstance) . '/';
+} else {
+    // Production convention: DOMAIN/HOMEPAGE keep the public front door
+    // (normally www.mondomaine.com), while each world gets its own hostname.
+    $hostParts = explode('.', $host);
+    if (count($hostParts) >= 2) {
+        $hostParts[0] = $requestedInstance;
+        $instanceHost = implode('.', $hostParts);
+    } else {
+        $instanceHost = $requestedInstance . '.' . $host;
+    }
+    $defaultServer = $scheme . '://' . $instanceHost . '/';
+}
+
+// Keep the generated table prefix isolated per installer instance.
+// The installer uses one PHP session for all worlds, so a single shared
+// session key would accidentally reuse S1's prefix when S2 is installed.
+// The instance-specific session key keeps the prefix stable between the
+// installer steps while guaranteeing that S1 and S2 receive different
+// prefixes even when they share the same browser session.
+$prefixInstance = isset($requestedInstance) ? $requestedInstance : 's1';
+$prefixSessionKey = 'install_random_prefix_' . $prefixInstance;
+
+if(empty($_SESSION[$prefixSessionKey])) {
     try {
-        $_SESSION['install_random_prefix'] = 's'. substr(bin2hex(random_bytes(2)), 0, 4). '_';
+        $_SESSION[$prefixSessionKey] = $prefixInstance . '_' . substr(bin2hex(random_bytes(2)), 0, 4) . '_';
     } catch (Throwable $e) {
-        $_SESSION['install_random_prefix'] = 's'. str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT). '_';
+        $_SESSION[$prefixSessionKey] = $prefixInstance . '_' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT) . '_';
     }
 }
-$dbPrefix = $_SESSION['install_random_prefix'];
+$dbPrefix = $_SESSION[$prefixSessionKey];
+
 ?>
 
 <form action="process.php" method="post" id="dataform">
 <input type="hidden" name="subconst" value="1">
+<input type="hidden" name="instance" value="<?=htmlspecialchars($requestedInstance, ENT_QUOTES, 'UTF-8')?>">
 
 <div class="card">
   <span class="f10 c">SERVER RELATED</span>
   <div class="grid-2" style="margin-top:8px;">
     <div><label>Server name</label><input class="input" name="servername" id="servername" value="TravianZ"></div>
+    <div><label>Instance ID</label><input class="input" name="instance_display" value="<?=htmlspecialchars($requestedInstance, ENT_QUOTES, 'UTF-8')?>" disabled><small style="display:block;color:#64748b;margin-top:4px;">Use ?instance=s1, ?instance=s2, etc. in the installer URL.</small></div>
     <div><label>Timezone</label>
       <select class="input" name="tzone" onchange="refresh(this.value)">
         <option value="1,Africa/Dakar" <?=$tz==1?'selected':''?>>Africa</option>
@@ -108,6 +160,8 @@ $dbPrefix = $_SESSION['install_random_prefix'];
       </select>
     </div>
     <div><label>Server speed</label><input class="input" name="speed" id="speed" value="1"></div>
+    <div><label>Classic server</label><select class="input" name="server_classic"><option value="false" selected>No</option><option value="true">Yes</option></select><small style="display:block;color:#64748b;margin-top:4px;">Use Classic OR Speed. Used only for the login and register popups.</small></div>
+    <div><label>Speed server</label><select class="input" name="server_speed"><option value="false" selected>No</option><option value="true">Yes</option></select></div>
     <div><label>Troop speed</label><input class="input" name="incspeed" id="incspeed" value="1"></div>
     <div><label>Evasion speed</label><input class="input" name="evasionspeed" id="evasionspeed" value="1"></div>
     <div><label>Trader capacity</label><input class="input" name="tradercap" id="tradercap" value="1"></div>
@@ -174,9 +228,9 @@ $dbPrefix = $_SESSION['install_random_prefix'];
   <div class="card">
     <span class="f10 c">SERVER URLS</span>
     <div style="margin-top:12px;display:grid;gap:10px;">
-      <div><label>Server</label><input class="input" name="server" id="homepage" value="http://<?=$_SERVER['HTTP_HOST']?>/"></div>
-      <div><label>Domain</label><input class="input" name="domain" id="homepage" value="http://<?=$_SERVER['HTTP_HOST']?>/"></div>
-      <div><label>Homepage</label><input class="input" name="homepage" id="homepage" value="http://<?=$_SERVER['HTTP_HOST']?>/"></div>
+      <div><label>Server</label><input class="input" name="server" id="server_url" value="<?=htmlspecialchars($defaultServer, ENT_QUOTES, 'UTF-8')?>"></div>
+      <div><label>Domain</label><input class="input" name="domain" id="domain_url" value="<?=htmlspecialchars($defaultDomain, ENT_QUOTES, 'UTF-8')?>"></div>
+      <div><label>Homepage</label><input class="input" name="homepage" id="homepage_url" value="<?=htmlspecialchars($defaultHomepage, ENT_QUOTES, 'UTF-8')?>"></div>
       <div><label>Medal Interval</label><select class="input" name="medalinterval"><option value="0">none</option><option value="(3600*24)">1 day</option><option value="(3600*24*2)">2 days</option><option value="(3600*24*3)">3 days</option><option value="(3600*24*4)">4 days</option><option value="(3600*24*5)">5 days</option><option value="(3600*24*6)">6 days</option><option value="(3600*24*7)" selected>7 days</option></select></div>
       <div><label>Great Workshop</label><select class="input" name="great_wks"><option value="true">true</option><option value="false" selected>false</option></select></div>
       <div><label>WW enabled</label><select class="input" name="ww"><option value="true">true</option><option value="false" selected>false</option></select></div>

@@ -26,6 +26,24 @@ $tz=(isset($_GET['t']))? (int)$_GET['t'] : 8;
 		default: $t_zone="America/Sao_Paulo";break;
     }
 date_default_timezone_set($t_zone);
+
+require_once __DIR__ . '/../GameEngine/Instance/Resolver.php';
+
+/*
+ * The installer must use the same per-instance session mechanism as the game.
+ * Do not start a generic PHP session first: doing so would lock the cookie name
+ * to PHPSESSID and make Resolver::startInstanceSession() fail when it later
+ * tries to select TZSESSID_S1, TZSESSID_S2, etc.
+ */
+$installerInstance = InstanceResolver::sanitize(isset($_GET['instance']) ? $_GET['instance'] : '');
+if ($installerInstance === null && session_status() === PHP_SESSION_ACTIVE) {
+    $installerInstance = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : '');
+}
+if ($installerInstance === null) {
+    $installerInstance = 's1';
+}
+InstanceResolver::startInstanceSession($installerInstance);
+$_SESSION['install_instance'] = $installerInstance;
 ?>
 
  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -54,7 +72,7 @@ function refresh(tz) {
      var dt = new Array();
     dt=tz.split(",");
     tz=dt[0];
-    location="?s=1&t="+tz;
+    location="?instance=<?php echo rawurlencode($installerInstance); ?>&s=1&t="+tz;
 }
 function proceed() {
 	var e = document.getElementById('Submit');
@@ -100,8 +118,8 @@ function proceed() {
 				if(substr(sprintf('%o', fileperms('../')), -4)<'700'){
 					echo"<span class='f18 c5'>ERROR!</span><br />It's not possible to write the config file. Change the permission to '777'. After that, refresh this page!";
 				} 
-				else if (file_exists("../var/installed")) {
-					echo"<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove /var/installed file in install directory.";
+				else if (InstanceResolver::isInstalled($installerInstance)) {
+					echo "<span class='f18 c5'>ERROR!</span><br />Instance <b>" . htmlspecialchars($installerInstance, ENT_QUOTES, 'UTF-8') . "</b> is already installed. Choose another instance, for example <b>?instance=s2</b>.";
 				}
 				else
 					switch($_GET['s']){

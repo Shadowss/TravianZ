@@ -158,8 +158,16 @@ class Automation {
         				  "recordPlayerStatistics",
 					  "buildNatarsWonder"];
         
+        $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+        $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+        $preventionPath = $instancePath . '/Prevention';
+
+        if (!is_dir($preventionPath)) {
+            @mkdir($preventionPath, 0755, true);
+        }
+
         foreach($methodsArrays as $method){
-        	$file = fopen($autoprefix."GameEngine/Prevention/".$method.".txt", "w");
+        	$file = fopen($preventionPath . '/' . $method . '.txt', 'w');
         	if(flock($file, LOCK_EX)) {
         		call_user_func(array($this, $method));
         		flock($file, LOCK_UN);     		

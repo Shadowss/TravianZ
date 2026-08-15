@@ -86,6 +86,9 @@ if($maintenance['active'] == 1 && $session->access < 9){
 				<?php include("Templates/menu.tpl"); ?>
 				<div id="content" class="village2" style="font-size: 20pt;text-align: center">
 					<p><b>Presently, the server is not available due to maintenance.</b></p>
+					<?php if (isset($session->access) && (int)$session->access >= 9): ?>
+						<p style="font-size:14px; margin-top:20px;"><a href="Admin/admin.php" style="font-weight:bold;"><?php echo ADMIN_ADMIN; ?></a></p>
+					<?php endif; ?>
 					<img src="img/lol.PNG">
 					<p><b>This take a few minutes. In the meantime you can drink a coffee.</b></p>
 				</div>

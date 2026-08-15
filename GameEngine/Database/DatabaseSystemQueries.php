@@ -367,7 +367,9 @@ trait DatabaseSystemQueries {
 		list($message) = $this->escape_input($message);
 		global $autoprefix;
 		
-		$myFile = $autoprefix."Templates/text.tpl";
+		$instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+		$instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+		$myFile = $instancePath . '/text.tpl';
 		$fh = fopen($myFile, 'w');
 		$text = file_get_contents($autoprefix."Templates/text_format.tpl");
 		$text = preg_replace("'%TEKST%'", $message, $text);

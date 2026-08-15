@@ -148,6 +148,17 @@ if (!function_exists('tz_available_gpacks')) {
     }
 }
 
+if (!function_exists('admin_instance_config_path')) {
+    /**
+     * Return the generated configuration file for the current TravianZ world.
+     * Admin modules must use this helper instead of ../../config.php because
+     * GameEngine/config.php is now the shared multi-instance bootstrap.
+     */
+    function admin_instance_config_path() {
+        return InstanceResolver::adminConfigPath();
+    }
+}
+
 if (!function_exists('admin_config_template_path')) {
 
     // Absolute path of the template to use, or false when none is available.
@@ -191,6 +202,13 @@ if (!function_exists('admin_config_template_path')) {
 
         if ($text === false) {
             return false;
+        }
+
+        // INSTANCE_ID is infrastructure metadata, not an editable gameplay
+        // setting. Every ACP regeneration must keep the current world identity.
+        if (strpos($text, '%INSTANCEID%') !== false) {
+            $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : InstanceResolver::resolve();
+            $text = str_replace('%INSTANCEID%', $instanceId, $text);
         }
 
         if (strpos($text, '%CRONKEY%') !== false) {

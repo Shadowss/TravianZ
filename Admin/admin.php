@@ -17,18 +17,13 @@
 ##                                                                             ##
 #################################################################################
 
-// ─── SESSION ─────────────────────────────────────────────────────────────────
-// Harden session cookie before session_start() — has no effect after.
-if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path'     => '/',
-        'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-        'httponly' => true,
-        'samesite' => 'Strict',
-    ]);
-    session_start();
-}
+// ─── INSTANCE + SESSION ───────────────────────────────────────────────────────
+// Resolve the world before starting the PHP session. Each world gets its own
+// cookie name (TZSESSID_S1, TZSESSID_S2, ...), so S1 and S2 can both remain
+// authenticated in the same browser without sharing session state.
+require_once __DIR__ . '/../GameEngine/Instance/Resolver.php';
+$travianInstance = InstanceResolver::resolve();
+InstanceResolver::startInstanceSession($travianInstance);
 
 // ─── CSRF PROTECTION ──────────────────────────────────────────────────────────
 // Token init + csrf_token()/csrf_field()/csrf_verify() helpers, shared with the
@@ -52,6 +47,7 @@ include_once("../GameEngine/MultiAccount.php");
 include_once("../GameEngine/PushProtection.php");
 include_once("../GameEngine/RegBlock.php");
 include_once("../GameEngine/Heatmap.php");
+include_once("../GameEngine/Instance/Registry.php");
 include_once("../GameEngine/GoldShop.php");
 include_once("../GameEngine/QuestConfig.php");
 
@@ -111,7 +107,7 @@ function admin_validated_page(string $raw): string
         'multiacc',
         'pushprot',
         'blockReg',
-        'heatmap',
+        'heatmap', 'addserver',
         'goldShop',
         'questEditor',
     ];
@@ -203,6 +199,16 @@ if ($page !== '') {
         case 'heatmap':
             $subpage = ADMIN_WORLD_MAP_HEATMAP;
             break;
+
+        case 'addserver':
+            // Server creation is intentionally available only from the ACP.
+            // The next free sN identifier is calculated from the installed
+            // worlds, then the existing installer performs the actual setup.
+            $nextInstance = InstanceRegistry::nextInstanceId();
+            $scriptRoot = isset($_SERVER['SCRIPT_NAME']) ? dirname(dirname(str_replace('\\', '/', $_SERVER['SCRIPT_NAME']))) : '';
+            $installUrl = rtrim($scriptRoot, '/') . '/install/?instance=' . rawurlencode($nextInstance);
+            header('Location: ' . $installUrl);
+            exit;
 
         case 'goldShop':
             $subpage = ADMIN_GOLD_SHOP_PROMO_CODES;
@@ -900,6 +906,7 @@ body.app #menu li.sub ul li a:hover{color:#d97706!important}
                                 <li><a href="?p=admin_log"><font color="Red"><b><?php echo ADMIN_ADMIN_LOG; ?></b></font></a></li>
 								<li><a href="?p=questEditor"><font color="Red"><b><?php echo ADMIN_QUEST_EDITOR; ?></b></font></a></li>
                                 <li><a href="?p=heatmap"><font color="Red"><b><?php echo ADMIN_WORLD_MAP_HEATMAP; ?></b></font></a></li>
+                                <li><a href="?p=addserver"><font color="Green"><b><?php echo ADMIN_ADD_SERVER; ?></b></font></a></li>
                                 <li><a href="?p=debug_log"><?php echo ADMIN_DEBUG_ERROR_LOG; ?></a></li>
                                 <li><a href="?p=config"><?php echo ADMIN_SERVER_SETTINGS; ?></a></li>
                                 <li><a href="?p=maintenance"><?php echo ADMIN_SERVER_MAINTENANCE; ?></a></li>

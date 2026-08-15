@@ -1,4 +1,6 @@
 <?php
+
+require_once(__DIR__ . '/../../Instance/Resolver.php');
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -83,7 +85,7 @@ if ($regenerateKey || $cronKey === '') {
 // ---------------------------------------------------------------------------
 // Editarea chirurgicala a fisierului de configuratie
 // ---------------------------------------------------------------------------
-$configFile = "../../config.php";
+$configFile = InstanceResolver::adminConfigPath();
 $config     = @file_get_contents($configFile);
 
 if ($config === false) {

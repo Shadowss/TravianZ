@@ -127,7 +127,10 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
 // Pragul de 90s e acelasi cu cel din GameEngine/Village.php: sub el, paginile
 // jucatorilor NU mai declanseaza automation (il face cron-ul); peste el, paginile
 // preiau automat ca fallback.
-$cronMarkerFile = __DIR__ . '/../../GameEngine/Prevention/cron_active.txt';
+// The cron marker is stored in the runtime directory of the current world.
+$cronMarkerFile = defined('INSTANCE_RUNTIME_PATH')
+    ? INSTANCE_RUNTIME_PATH . 'cron_active.txt'
+    : __DIR__ . '/../../GameEngine/Prevention/cron_active.txt';
 $cronLastRun    = @is_file($cronMarkerFile) ? (int) @file_get_contents($cronMarkerFile) : 0;
 $cronAge        = $cronLastRun > 0 ? (time() - $cronLastRun) : -1;
 $cronActive     = ($cronAge >= 0 && $cronAge < 90);

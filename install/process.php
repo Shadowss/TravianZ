@@ -18,8 +18,22 @@
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
 
-if (file_exists("../var/installed")) {
-	die("<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove /var/installed file in install directory.");
+require_once __DIR__ . '/../GameEngine/Instance/Resolver.php';
+
+/*
+ * The POST request already contains the selected instance in the hidden form
+ * field. Start the matching instance session before touching $_SESSION.
+ * Starting a generic PHPSESSID here would prevent the resolver from switching
+ * to TZSESSID_S1/TZSESSID_S2 and produces "headers already sent" warnings on
+ * the following installation step.
+ */
+$installerPostInstance = InstanceResolver::sanitize(isset($_POST['instance']) ? $_POST['instance'] : '');
+if ($installerPostInstance === null && session_status() === PHP_SESSION_ACTIVE) {
+    $installerPostInstance = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : '');
+}
+if ($installerPostInstance !== null) {
+    InstanceResolver::startInstanceSession($installerPostInstance);
+    $_SESSION['install_instance'] = $installerPostInstance;
 }
 
 class Process {
@@ -37,15 +51,48 @@ class Process {
 					if(isset($_POST['subacc'])) {
 						$this->createAcc();
 						} else {
-							header("Location: index.php");
+							header("Location: index.php?instance=" . rawurlencode($instanceId));
 						}
 	}
 
-	private function constForm() {
-	    $configFile = "../GameEngine/config.php";
-		$configTemplateFile = "../GameEngine/Admin/Mods/constant_format.tpl";
+	/**
+	 * Resolve the instance associated with the current installer POST request.
+	 *
+	 * The instance is read from POST first and from the installer session
+	 * second. This prevents a missing query parameter or redirect from silently
+	 * falling back to S1 during a later installation step.
+	 */
+	private function getInstanceId() {
+		$instanceId = InstanceResolver::sanitize(isset($_POST['instance']) ? $_POST['instance'] : '');
+		if ($instanceId === null) {
+			$instanceId = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : '');
+		}
+		if ($instanceId === null) {
+			die("<span class='f18 c5'>ERROR!</span><br />Invalid or missing TravianZ instance identifier.");
+		}
+		$_SESSION['install_instance'] = $instanceId;
+		return $instanceId;
+	}
 
-		$gameConfig = @fopen($configFile, 'w') or die("<br/><br/><br/>Can't create or update file: GameEngine\config.php");
+	private function constForm() {
+		$instanceId = $this->getInstanceId();
+
+
+        $instancePath = InstanceResolver::instancePath($instanceId);
+        $runtimePath = InstanceResolver::runtimePath($instanceId);
+        $configFile = InstanceResolver::configPath($instanceId);
+        $configTemplateFile = "../GameEngine/Admin/Mods/constant_format.tpl";
+
+        // Each world owns its configuration and runtime directory. The PHP
+        // source code itself remains shared between all worlds.
+        if (!is_dir($instancePath) && !@mkdir($instancePath, 0755, true)) {
+            die("<br/><br/><br/>Can't create instance directory: " . htmlspecialchars($instanceId, ENT_QUOTES, 'UTF-8'));
+        }
+        if (!is_dir($runtimePath) && !@mkdir($runtimePath, 0755, true)) {
+            die("<br/><br/><br/>Can't create instance runtime directory.");
+        }
+
+        $gameConfig = @fopen($configFile, 'w') or die("<br/><br/><br/>Can't create or update instance config.php");
 
 		// copy the contents of the config template file into a new location, used when editing
 		// game configuration from the in-game Admin (since the install folder would be deleted at that point)
@@ -60,6 +107,7 @@ class Process {
 		// continue with text replacements
 		$findReplace = [];
 		
+		$findReplace["%INSTANCEID%"] = $instanceId;
 		$findReplace["%SERVERNAME%"] = $_POST['servername'];
 		$findReplace["%SSTARTDATE%"] = $_POST['start_date'];
 		$findReplace["%SSTARTTIME%"] = $_POST['start_time'];
@@ -68,6 +116,10 @@ class Process {
         $findReplace["%STIMEZONE%"] = $tz[1];
 		$findReplace["%LANG%"] = $_POST['lang'];
 		$findReplace["%SPEED%"] = $_POST['speed'];
+		$findReplace["%SERVERNUMBER%"] = (int) preg_replace('/\D+/', '', $instanceId) ?: 1;
+		$findReplace["%SERVERCLASSIC%"] = (isset($_POST['server_classic']) && $_POST['server_classic'] === 'true') ? 'true' : 'false';
+		$findReplace["%SERVERSPEED%"] = (isset($_POST['server_speed']) && $_POST['server_speed'] === 'true') ? 'true' : 'false';
+		$findReplace["%SERVERENABLED%"] = 'true';
 		$findReplace["%INCSPEED%"] = $_POST['incspeed'];
 		$findReplace["%EVASIONSPEED%"] = $_POST['evasionspeed'];
 		$findReplace["%TRADERCAP%"] = $_POST['tradercap'];
@@ -299,9 +351,9 @@ class Process {
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 
 		if (file_exists($configFile) && file_exists($configTemplateFile)) {
-			header("Location: index.php?s=2");
+			header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=2");
 		} else {
-			header("Location: index.php?s=1&c=1");
+			header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=1&c=1");
 		}
 
 		fclose($gameConfig);
@@ -312,6 +364,7 @@ class Process {
 	 */
 	function createStruc() {
 	    global $database;
+	    $instanceId = $this->getInstanceId();
 
 	    include ("../GameEngine/config.php");
 	    include ("../GameEngine/Database.php");
@@ -320,14 +373,14 @@ class Process {
 	    // create table structure
 	    $result = $database->createDbStructure();
         if ($result === false) {
-            header("Location: index.php?s=2&err=1");
+            header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=2&err=1");
             exit;
         } else if ($result === -1) {
-	        header("Location: index.php?s=2&c=1");
+	        header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=2&c=1");
 	        exit;
 	    }
 
-    	header("Location: index.php?s=3");
+    	header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=3");
     	exit;
 	}
 
@@ -336,6 +389,7 @@ class Process {
 	 */
 		function createWdata() {
 			global $database;
+			$instanceId = $this->getInstanceId();
 
 			include ("../GameEngine/config.php");
 			include ("../GameEngine/Database.php");
@@ -344,14 +398,14 @@ class Process {
 			// 1) Populate world data
 			$result = $database->populateWorldData();
 			if ($result === false) {
-				header("Location: index.php?s=3&err=1");
+				header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=3&err=1");
 				exit;
 			} else if ($result === -1) {
-				header("Location: index.php?s=3&c=1");
+				header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=3&c=1");
 				exit;
 			}
 
-			header("Location: index.php?s=3&startCroppers=1");
+			header("Location: index.php?instance=" . rawurlencode($instanceId) . "&s=3&startCroppers=1");
 			exit;
 		}
 

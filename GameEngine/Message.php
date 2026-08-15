@@ -489,7 +489,11 @@ class Message
     public function loadNotes()
     {
         global $session;
-        $noteFile = "GameEngine/Notes/" . md5($session->username) . ".txt";
+
+        $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+    $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+    $noteFile = $instancePath . '/Notes/' . md5($session->username) . '.txt';
+
         if (file_exists($noteFile)) {
             $this->note = file_get_contents($noteFile);
         } else {
@@ -503,7 +507,16 @@ class Message
         if (!$session->plus) {
             return;
         }
-        $noteFile = "GameEngine/Notes/" . md5($session->username) . ".txt";
+        $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+    $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+    $notesPath = $instancePath . '/Notes';
+
+    if (!is_dir($notesPath)) {
+        @mkdir($notesPath, 0755, true);
+    }
+
+    $noteFile = $notesPath . '/' . md5($session->username) . '.txt';
+    
         $ourFileHandle = fopen($noteFile, 'w');
         fwrite($ourFileHandle, $post['notizen']);
         fclose($ourFileHandle);

@@ -47,7 +47,15 @@ trait AutomationCleanup {
             $interval = 60;
         }
 
-        $markerFile = __DIR__ . '/../Prevention/cleanup_last.txt';
+        $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+        $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+        $preventionPath = $instancePath . '/Prevention';
+
+        if (!is_dir($preventionPath)) {
+            @mkdir($preventionPath, 0755, true);
+        }
+
+        $markerFile = $preventionPath . '/cleanup_last.txt';
         $lastRun    = 0;
 
         if (@is_file($markerFile)) {

@@ -335,7 +335,14 @@ if($sessionOk) {
         Hi <?php echo $username; ?>,
     </h3>
 
-    <?php include("Templates/text.tpl"); ?>
+    <?php
+    $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+    $instanceTextFile = dirname(__DIR__) . '/instances/' . $instanceId . '/text.tpl';
+
+    if (is_file($instanceTextFile)) {
+    include($instanceTextFile);
+    }
+    ?>
 
     <div class="c1">
 

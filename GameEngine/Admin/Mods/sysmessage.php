@@ -117,8 +117,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'execute') {
         die("Cannot update Templates/text.tpl: the placeholder was not found exactly once in text_format.tpl");
     }
 
-    if (@file_put_contents($autoprefix . 'Templates/text.tpl', $out) === false) {
-        die("Cannot write Templates/text.tpl (check permissions)");
+    $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+    $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+    $myFile = $instancePath . '/text.tpl';
+
+    if (@file_put_contents($myFile, $out) === false) {
+        die("Cannot write " . $myFile . " (check permissions)");
     }
 
     // Make the message visible to every player (they will see it on next page).

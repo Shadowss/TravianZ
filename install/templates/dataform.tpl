@@ -29,6 +29,7 @@ if(isset($_GET['err']) && $_GET['err'] == 1) {
 ?>
 <form action="process.php" method="post" id="dataform">
   <input type="hidden" name="substruc" value="1">
+  <input type="hidden" name="instance" value="<?=htmlspecialchars($installerInstance, ENT_QUOTES, 'UTF-8')?>">
   <div class="card">
     <span class="f10 c">Create Database Structure</span>
     <p style="color:#475569;"><b>Warning</b>: This can take some time. Please wait until the next page loads.</p>

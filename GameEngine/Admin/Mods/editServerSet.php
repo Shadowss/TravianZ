@@ -1,4 +1,5 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -9,8 +10,22 @@
 ##                                                                             ##
 #################################################################################
 
-if(!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
+// This module is POSTed to directly instead of passing through Admin/admin.php.
+// Therefore it must reproduce the same instance/session bootstrap first.
+// Without it, PHP starts the default session (PHPSESSID), so $_SESSION['access']
+// is missing even though the administrator is correctly authenticated on S4.
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+// Load the generated instance configuration and language before using admin
+include_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../Lang/loader.php');
+tz_load_language(LANG);
+
+if (!isset($_SESSION['access']) || (int)$_SESSION['access'] < 9) {
+    die(ACCESS_DENIED_ADMIN);
+}
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
 // itself (it does not go through admin.php's central csrf_verify()).
@@ -31,7 +46,7 @@ if (!admin_config_template_available()) {
         '<strong>https://raw.githubusercontent.com/Shadowss/TravianZ/master/install/data/constant_format.tpl</strong>');
 }
 
-$myFile = "../../config.php";
+$myFile = InstanceResolver::adminConfigPath();
 
 		$T4=(T4_COMING==false)? "false":"true";
 		$LOG_BUILD=(LOG_BUILD==false)? "false":"true";

@@ -12,7 +12,6 @@ Desktop.ini
 .DS_Store
 
 # Ignore generated config file
-GameEngine/config.php
 
 # Ignore generated prevention and notes
 GameEngine/Prevention/*
@@ -43,3 +42,10 @@ var/log/access.log
 # Docker environment file with sensitive credentials
 .env
 *.lnk
+
+# Generated per-instance TravianZ configuration files
+/instances/*/config.php
+/instances/*/installed
+/instances/*/runtime/
+/instances/*/Prevention/
+/instances/*/Notes/

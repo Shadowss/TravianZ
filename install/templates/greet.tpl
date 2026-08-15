@@ -35,6 +35,6 @@
 </div>
 
 <div style="text-align:center;margin-top:16px;">
-  <a class="btn" href="?s=1">Next →</a>
+  <a class="btn" href="?instance=<?php echo rawurlencode($installerInstance); ?>&s=1">Next →</a>
   <div style="margin-top:8px;color:#64748b;font-size:12px;">TravianZ Team</div>
 </div>

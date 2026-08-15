@@ -20,7 +20,7 @@
 ##    seconds for approximately 5 minutes, then exits and waits for the next   ##
 ##    scheduled cron execution.                                                ##
 ##                                                                             ##
-##    Each tick rewrites Prevention/cron_active.txt, keeping the marker file   ##
+##    Each tick rewrites the current instance's runtime cron_active.txt,      ##
 ##    fresh so player page requests will no longer trigger Automation at all.  ##
 ## --------------------------------------------------------------------------- ##
 ##  cPanel Cron Installation (every 5 minutes - recommended with the           ##
@@ -145,7 +145,18 @@ if ($forceSingleTick)  { $loopSeconds = 0; }
 //    everything twice. The flock() lock is automatically released, even if
 //    the process terminates unexpectedly.
 // -----------------------------------------------------------------------------
-$runLockPath   = $autoprefix . 'GameEngine/Prevention/cron_running.lock';
+// The generated instance configuration defines the runtime directory.
+// Keeping the lock below that directory prevents S1 and S2 from blocking one
+// another when both cron processes are running from the same codebase.
+$runtimePath = defined('INSTANCE_RUNTIME_PATH')
+    ? INSTANCE_RUNTIME_PATH
+    : $autoprefix . 'GameEngine/Prevention/';
+
+if (!is_dir($runtimePath)) {
+    @mkdir($runtimePath, 0755, true);
+}
+
+$runLockPath = $runtimePath . 'cron_running.lock';
 $runLockHandle = @fopen($runLockPath, 'c');
 
 if ($runLockHandle === false) {
@@ -181,7 +192,8 @@ if (!defined('AUTOMATION_MANUAL_RUN')) {
     define('AUTOMATION_MANUAL_RUN', true);
 }
 
-$cronMarkerPath = $autoprefix . 'GameEngine/Prevention/cron_active.txt';
+// The activity marker is also instance-specific for the same reason as the overlap lock.
+$cronMarkerPath = $runtimePath . 'cron_active.txt';
 
 /**
  * Clears the request-scoped caches of the database class.
@@ -286,6 +298,14 @@ while ($loopSeconds > 0) {
 // -----------------------------------------------------------------------------
 flock($runLockHandle, LOCK_UN);
 fclose($runLockHandle);
+
+// The lock file is only a synchronization handle; it must not remain as a
+// visible runtime artifact after a normal cron execution. Removing it after
+// closing the handle also keeps the instance runtime directory easy to read.
+// If the process terminates unexpectedly, the file may remain, but flock()
+// itself is released by the operating system and the next invocation can still
+// acquire the lock safely.
+@unlink($runLockPath);
 
 if ($isCli) {
     echo "cron: " . $ticks . " tick(uri) in " . (time() - $startedAt) . "s, terminat la " . date('Y-m-d H:i:s') . "\n";

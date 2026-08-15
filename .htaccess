@@ -1,3 +1,28 @@
+########################################################################
+## MULTI-INSTANCE LOCAL ROUTING
+##
+## Local URLs use /s1/ or /s2/ and never require a hosts-file or DNS change.
+## Apache internally strips the instance prefix and adds ?instance=<id>.
+## The browser keeps the prefixed URL, so relative links remain in the same
+## world. Only directories containing an installed instance config.php match.
+########################################################################
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Instance URLs are intentionally restricted to the conventional sN form.
+    # This prevents ordinary top-level folders from being mistaken for worlds.
+    # The actual configuration file is validated again by InstanceResolver.
+
+    # /sN (without slash) -> /sN/ for stable relative URLs.
+    RewriteRule ^(s[0-9]+)$ $1/ [R=302,L]
+
+    # /sN/ -> shared index.php with the instance selected internally.
+    RewriteRule ^(s[0-9]+)/$ index.php?instance=$1 [QSA,L]
+
+    # /sN/<resource> -> shared <resource> with the instance selected internally.
+    RewriteRule ^(s[0-9]+)/(.*)$ $2?instance=$1 [QSA,L]
+</IfModule>
+
 <Files "*.tpl">
 	Order Allow,Deny
 	Deny from all

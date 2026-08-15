@@ -4249,14 +4249,14 @@ tz_def('TZ_HERO_REGEN_ITEMS', 'des objets');
 // MINUNEA LUMII A NATARILOR
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('TZ_WW_NATARS', 'Natars');
-tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Debut de la Merveille des Natars');
-tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'Combien de jours apres l\'apparition des plans de construction les Natars commencent leur propre Merveille du Monde. Ajuste selon la vitesse du serveur. 0 desactive.');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY', 'Début de la Merveille des Natars');
+tz_def('CONF_SERV_NATARS_WW_START_DELAY_TOOLTIP', 'Combien de jours apres l\'apparition des plans de construction les Natars commencent leur propre Merveille du Monde. Ajuste selon la vitesse du serveur. 0 désactivé.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // SIMULATOR - bonusuri proprii incluse automat
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('TZ_WS_APPLIED', 'Inclus automatiquement dans cette simulation :');
-tz_def('TZ_WS_ITEM_STRENGTH', 'Force de l\'equipement');
+tz_def('TZ_WS_ITEM_STRENGTH', 'Force de l\'équipement');
 tz_def('TZ_WS_ITEM_UNIT', 'Bonus d\'arme');
 tz_def('TZ_WS_VS_NATARS', 'Contre les Natars');
 
@@ -4272,8 +4272,8 @@ tz_def('CONF_SERV_USRNM_MIN', 'Longueur minimale du nom');
 tz_def('CONF_SERV_USRNM_MAX', 'Longueur maximale du nom');
 tz_def('CONF_SERV_PW_MIN', 'Longueur minimale du mot de passe');
 tz_def('CONF_SERV_USRNM_SPECIAL', 'Autoriser . - _ dans les noms');
-tz_def('CONF_SERV_USRNM_SPECIAL_TOOLTIP', 'Avec True, les noms peuvent contenir un point, un tiret ou un underscore, et des espaces simples entre les mots. Avec False, seules les lettres et les chiffres sont acceptes.');
-tz_def('CONF_SERV_REGRULES_TOOLTIP', 'Regles verifiees lors de l\'inscription. Les modifier n\'affecte pas les comptes existants.');
+tz_def('CONF_SERV_USRNM_SPECIAL_TOOLTIP', 'Avec True, les noms peuvent contenir un point, un tiret ou un underscore, et des espaces simples entre les mots. Avec False, seules les lettres et les chiffres sont acceptés.');
+tz_def('CONF_SERV_REGRULES_TOOLTIP', 'Règles verifiées lors de l\'inscription. Les modifier n\'affecte pas les comptes existants.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // STATISTICI - sectiunea de alianta
@@ -4293,7 +4293,7 @@ tz_def('HERO_COL_ACTION', 'Action');
 // MINUNEA LUMII - stil pe trib
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 tz_def('ADM_WW_IMAGE', 'Merveille par tribu');
-tz_def('ADM_WW_IMAGE_TIP', 'Chaque tribu voit sa propre Merveille du Monde, sur la carte du village et sur la page de construction. Les tribus sans images gardent l\'image d\'origine, quel que soit ce reglage.');
+tz_def('ADM_WW_IMAGE_TIP', 'Chaque tribu voit sa propre Merveille du Monde, sur la carte du village et sur la page de construction. Les tribus sans images gardent l\'image d\'origine, quel que soit ce réglage.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // MINUNEA LUMII - satul nu poate fi capitala
@@ -4303,29 +4303,29 @@ tz_def('TZ_WW_NO_CAPITAL', 'Le village de la Merveille du Monde ne peut pas deve
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // BONUSURI DE ALIANTA - donatie peste necesarul ultimului nivel
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('ALLYBONUS_MSG_OVERMAX', 'Ceci est le dernier niveau : vous pouvez donner au maximum %s ressources supplementaires.');
+tz_def('ALLYBONUS_MSG_OVERMAX', 'Ceci est le dernier niveau : vous pouvez donner au maximum %s ressources supplémentaires.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // JUCATORI PROTEJATI IMPOTRIVA ATACURILOR
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('ADM_PROTECTED_PLAYERS', 'Joueurs proteges');
-tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Noms de joueurs separes par des virgules qui ne peuvent etre ni attaques ni pilles. Les renforts restent autorises. Laisser vide pour desactiver.');
+tz_def('ADM_PROTECTED_PLAYERS', 'Joueurs protégés');
+tz_def('ADM_PROTECTED_PLAYERS_TIP', 'Noms de joueurs séparés par des virgules qui ne peuvent être ni attaqués ni pillés. Les renforts restent autorisés. Laisser vide pour désactiver.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // COMPONENTA HERO DIN BARA DE SUS
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('HERO_HEADER_AT_HOME',   'Le heros est chez lui');
-tz_def('HERO_HEADER_DEAD',      'Le heros est mort');
-tz_def('HERO_HEADER_TRAINING',  'Heros en formation');
-tz_def('HERO_HEADER_NOHERO',    'Pas encore de heros');
-tz_def('HERO_HEADER_ADVENTURE', 'Le heros est en aventure');
-tz_def('HERO_HEADER_ATTACK',    'Le heros est parti avec l\'armee');
-tz_def('HERO_HEADER_REINFORCE', 'Le heros est en renfort');
+tz_def('HERO_HEADER_AT_HOME',   'Le héros est chez lui');
+tz_def('HERO_HEADER_DEAD',      'Le héros est mort');
+tz_def('HERO_HEADER_TRAINING',  'Le héros est en formation');
+tz_def('HERO_HEADER_NOHERO',    'Pas encore de héros');
+tz_def('HERO_HEADER_ADVENTURE', 'Le héros est en aventure');
+tz_def('HERO_HEADER_ATTACK',    'Le héros est parti avec l\'armée');
+tz_def('HERO_HEADER_REINFORCE', 'Le héros est en renfort');
 tz_def('HERO_HEADER_IN',        'dans');
-tz_def('HERO_HEADER_RETURN_ADV',  'Le heros revient de l\'aventure');
-tz_def('HERO_HEADER_RETURN_HOME', 'Le heros rentre chez lui');
+tz_def('HERO_HEADER_RETURN_ADV',  'Le héros revient de l\'aventure');
+tz_def('HERO_HEADER_RETURN_HOME', 'Le héros rentre chez lui');
 tz_def('HERO_HEADER_PER_HOUR',    'par heure');
-tz_def('TZ_HEALTH',             'Sante');
+tz_def('TZ_HEALTH',             'Santé');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // PERMISSIONS DU SITTER
@@ -4335,14 +4335,30 @@ tz_def('SITTER_P_RAID',   'envoyer des raids');
 tz_def('SITTER_P_REINF',  'envoyer des renforts');
 tz_def('SITTER_P_RES',    'envoyer des ressources à d’autres joueurs');
 tz_def('SITTER_P_GOLD',   'dépenser de l’or');
-tz_def('SITTER_P_DENIED', 'Vos permissions de sitter ne vous permettent pas d’effectuer cette action.');
-tz_def('SITTER_P_HINT',        'Permissions du nouveau sitter :');
-tz_def('SITTER_P_NOT_SITTING', 'Vous n\'etes sitter sur aucun compte.');
+tz_def('SITTER_P_DENIED', 'Vos permissions de co-gestionnaire ne vous permettent pas d’effectuer cette action.');
+tz_def('SITTER_P_HINT',        'Permissions du nouveau co-gestionnaire :');
+tz_def('SITTER_P_NOT_SITTING', 'Vous n\'etes co-gestionnaire sur aucun compte.');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // RÉDUCTIONS DU TEMPS D'ENTRAÎNEMENT (caserne / écurie)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artefact');
+tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artéfact');
 tz_def('TRAIN_BONUS_HERO',     'Bonus héros');
 tz_def('TRAIN_BONUS_ALLIANCE', 'Bonus alliance');
 tz_def('TRAIN_BONUS_FINAL',    'Temps d’entraînement');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// FOR MULTI-INSTANCE SERVER
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADMIN_ADD_SERVER', 'Ajouter Serveur');
+tz_def('SERVER_STATUS_TITLE', 'STATUS DES SERVEURS');
+tz_def('SERVER_STATUS_OPERATIONAL', 'OPERATIONEL');
+tz_def('SERVER_STATUS_CLOSED', 'FERMÉ');
+tz_def('SERVER_STATUS_MAINTENANCE', 'EN MAINTENANCE');
+tz_def('SERVER_REGISTER_OPEN', 'OUVERTE');
+tz_def('SERVER_REGISTER_CLOSED', 'FERMÉE'); // different from SERVER_STATUS_CLOSED for other language
+tz_def('SERVER_LABEL', 'SERVEUR');
+tz_def('SERVER_STATUS_LABEL', 'STATUS');
+tz_def('SERVER_REGISTER_LABEL', 'INSCRIPTIONS');
+tz_def('SERVER_PLAYERS_LABEL', 'Nombre de joueurs');
+tz_def('SERVER_ONLINE_LABEL', 'En ligne');

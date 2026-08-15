@@ -22,8 +22,10 @@
 
 use App\Utils\AccessLogger;
 
-if (!file_exists('var/installed') && @opendir('install')) {
-    header("Location: install/");
+require_once __DIR__ . '/GameEngine/Instance/Resolver.php';
+$travianInstance = InstanceResolver::resolve();
+if (!InstanceResolver::isInstalled($travianInstance) && @opendir('install')) {
+    header("Location: install/?instance=" . rawurlencode($travianInstance));
     exit;
 }
 

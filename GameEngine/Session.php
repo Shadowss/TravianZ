@@ -50,8 +50,11 @@ for ($i = 0; $i < 5; $i++) {
     }
 }
 
-if (!file_exists($autoprefix . 'GameEngine/config.php')) {
-    header("Location: install/");
+require_once $autoprefix . 'GameEngine/Instance/Resolver.php';
+require_once $autoprefix . 'GameEngine/Instance/Status.php';
+$travianInstance = InstanceResolver::resolve();
+if (!InstanceResolver::isInstalled($travianInstance)) {
+    header("Location: install/?instance=" . rawurlencode($travianInstance));
     exit;
 }
 
@@ -106,7 +109,7 @@ class Session {
 	var $sit;
 	var $sit1;
 	var $sit2;
-
+	
 	/**
 	 * PERMISIUNI SITTER (masca de biti, salvata in users.sit1_perm / sit2_perm)
 	 *
@@ -132,27 +135,11 @@ function __construct() {
 
     $this->time = time();
 
-    if (!isset($_SESSION)) {
-        /**
-         * FIX SECURITATE (CSRF): cookie-ul de sesiune nu avea SameSite, deci
-         * era trimis si la cereri pornite de pe alte site-uri. Panoul de admin
-         * avea deja 'Strict' (vezi Admin/admin.php); jocul, nu.
-         *
-         * Folosim 'Lax', nu 'Strict': cu Strict, un jucator care intra pe link
-         * din forum sau dintr-un e-mail ar aparea delogat. Lax pastreaza
-         * navigarea normala si opreste cererile POST venite din alta parte.
-         */
-        if (PHP_VERSION_ID >= 70300) {
-            session_set_cookie_params(array(
-                'lifetime' => 0,
-                'path'     => '/',
-                'secure'   => !empty($_SERVER['HTTPS']),
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ));
-        }
-
-        session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        // The resolver selects an instance-specific cookie name before the
+        // session is started (TZSESSID_S1, TZSESSID_S2, ...). This prevents
+        // two worlds from overwriting each other in the same browser.
+        InstanceResolver::startInstanceSession($travianInstance);
     }
 
     $this->logged_in = $this->checkLogin();
@@ -177,11 +164,18 @@ function __construct() {
         \App\Utils\IpResolver::enforce($database);
     }
 
-    // === MAINTENANCE CHECK - DUPA ce avem access ===
-    $maint = $database->getMaintenance();
-    if($maint['active'] == 1 && $this->access < 9) {
-        // evita loop infinit
-        if(strpos($_SERVER['PHP_SELF'], 'maintenance.php') === false) {
+    // === CENTRAL SERVER STATUS - DUPA ce avem access ===
+    // Every request uses the same status rules as the public homepage:
+    // maintenance OR debug => IN MAINTENANCE. Administrators remain reachable
+    // so they can disable maintenance/debug from the ACP.
+    $serverStatus = InstanceStatus::inspectDatabase(
+        $database,
+        defined('SERVER_ENABLED') ? SERVER_ENABLED : true
+    );
+
+    if (InstanceStatus::isMaintenance($serverStatus) && $this->access < 9) {
+        // Avoid redirect loops when the maintenance page itself is requested.
+        if (strpos($_SERVER['PHP_SELF'], 'maintenance.php') === false) {
             header('Location: maintenance.php');
             exit;
         }
@@ -687,8 +681,8 @@ function __construct() {
             }
         }
     }
-
-    /**
+	
+	    /**
      * Sesiunea curenta apartine unui sitter, nu proprietarului contului?
      */
     public function isSitterSession()

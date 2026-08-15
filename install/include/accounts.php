@@ -14,15 +14,30 @@
 #################################################################################
 
 
+        // The account step is a separate HTTP request. Keep the selected
+        // instance explicit so account creation can never update the shared
+        // GameEngine/config.php bootstrap.
+        @session_start();
+        require_once dirname(__DIR__, 2) . "/GameEngine/Instance/Resolver.php";
+
+        $instanceId = InstanceResolver::sanitize(isset($_POST['instance']) ? $_POST['instance'] : '');
+        if ($instanceId === null) {
+            $instanceId = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : '');
+        }
+        if ($instanceId === null) {
+            die("Invalid or missing TravianZ instance identifier.");
+        }
+        $_SESSION['install_instance'] = $instanceId;
+
         // verify form
         if (empty($_POST['mhpw']) || empty($_POST['spw'])) {
-            header("Location: ../index.php?s=4&err=1");
+            header("Location: ../index.php?instance=" . rawurlencode($_SESSION['install_instance'] ?? 's1') . "&s=4&err=1");
             exit;
         }
 
         // don't allow creating Natars user
         if (!empty($_POST['aname']) && strtolower($_POST['aname']) == 'natars') {
-            header("Location: ../index.php?s=4&err=2");
+            header("Location: ../index.php?instance=" . rawurlencode($_SESSION['install_instance'] ?? 's1') . "&s=4&err=2");
             exit;
         }
 
@@ -31,7 +46,7 @@
 
 		$gameinstall = 1;
 
-		$configFile = "../../GameEngine/config.php";
+		$configFile = InstanceResolver::configPath($instanceId);
 		include_once($configFile);
 		include_once("../../GameEngine/Database.php");
 		include_once("../../GameEngine/Admin/database.php");
@@ -156,6 +171,6 @@
 	    }
 
         $gameinstall = 0;
-		header("Location: ../index.php?s=5");
+		header("Location: ../index.php?instance=" . rawurlencode($_SESSION['install_instance'] ?? 's1') . "&s=5");
 
 ?>

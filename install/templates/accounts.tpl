@@ -27,6 +27,7 @@ if(isset($_GET['err']) && $_GET['err'] == 2) {
 }
 ?>
 <form action="include/accounts.php" method="post" id="dataform">
+  <input type="hidden" name="instance" value="<?=htmlspecialchars($installerInstance, ENT_QUOTES, 'UTF-8')?>">
   <div class="grid-2">
     <div class="card">
       <span class="f10 c">Multihunter account</span>

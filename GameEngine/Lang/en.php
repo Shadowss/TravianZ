@@ -4403,3 +4403,19 @@ tz_def('TRAIN_BONUS_ARTIFACT', 'Artifact bonus');
 tz_def('TRAIN_BONUS_HERO',     'Hero bonus');
 tz_def('TRAIN_BONUS_ALLIANCE', 'Alliance bonus');
 tz_def('TRAIN_BONUS_FINAL',    'Training time');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// FOR MULTI-INSTANCE SERVER
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('ADMIN_ADD_SERVER', 'Add Server');
+tz_def('SERVER_STATUS_TITLE', 'SERVERS STATUS');
+tz_def('SERVER_STATUS_OPERATIONAL', 'OPERATIONAL');
+tz_def('SERVER_STATUS_CLOSED', 'CLOSE');
+tz_def('SERVER_STATUS_MAINTENANCE', 'IN MAINTENANCE');
+tz_def('SERVER_REGISTER_OPEN', 'OPEN');
+tz_def('SERVER_REGISTER_CLOSED', 'CLOSE'); // different from SERVER_STATUS_CLOSED for other language
+tz_def('SERVER_LABEL', 'SERVER');
+tz_def('SERVER_STATUS_LABEL', 'STATUS');
+tz_def('SERVER_REGISTER_LABEL', 'REGISTER');
+tz_def('SERVER_PLAYERS_LABEL', 'Nbr of players');
+tz_def('SERVER_ONLINE_LABEL', 'Online');

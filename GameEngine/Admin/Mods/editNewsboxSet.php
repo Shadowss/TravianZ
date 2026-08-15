@@ -1,4 +1,6 @@
 <?php
+
+require_once(__DIR__ . '/../../Instance/Resolver.php');
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -31,7 +33,7 @@ if (!admin_config_template_available()) {
         '<strong>https://raw.githubusercontent.com/Shadowss/TravianZ/master/install/data/constant_format.tpl</strong>');
 }
 
-$myFile = "../../config.php";
+$myFile = InstanceResolver::adminConfigPath();
 
 		$ERRORREPORT=ERROR_REPORT;
 		$T4=(T4_COMING==false)? "false":"true";

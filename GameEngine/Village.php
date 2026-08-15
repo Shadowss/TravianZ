@@ -475,7 +475,10 @@ $building = new Building;
 // A fresh marker (< 90s) => cron is active, so we skip. Fallback: if the cron
 // stops (marker old or missing), the pages take over automatically, as before, so
 // the game does not stall if you forget to set up the cron or if it dies.
-$__cronMarker = __DIR__ . '/Prevention/cron_active.txt';
+// cron_active.txt belongs to the current world, not to the shared codebase.
+$__cronMarker = defined('INSTANCE_RUNTIME_PATH')
+    ? INSTANCE_RUNTIME_PATH . 'cron_active.txt'
+    : __DIR__ . '/Prevention/cron_active.txt';
 $__cronActive = false;
 if (@is_file($__cronMarker)) {
 	$__cronTime = (int)@file_get_contents($__cronMarker);

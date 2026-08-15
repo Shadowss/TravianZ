@@ -19,12 +19,26 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 
-include("../GameEngine/config.php"); $time=time(); @rename("../install/","../installed_".$time); @touch('../var/installed'); ?>
+include("../GameEngine/config.php");
+
+// The installation marker belongs to the current world, not to the shared
+// TravianZ codebase. This allows S1, S2, S3... to be installed independently.
+$instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
+$instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+if (!is_dir($instancePath)) {
+    @mkdir($instancePath, 0755, true);
+}
+@touch($instancePath . '/installed');
+
+// Keep the installer directory available. Renaming it after the first world
+// made multi-instance installation unnecessarily painful, because creating a
+// second world required restoring the installer directory manually.
+// @rename("../install/","../installed_".$time);
+?>
 <div class="card" style="text-align:center;">
   <h2 style="margin:0 0 8px;">🎉 Installation Complete!</h2>
-  <p style="color:#475569;">Thanks for installing TravianZ. Please remove the install folder.</p>
+  <p style="color:#475569;">Thanks for installing TravianZ. The install folder remains available so additional worlds can be created. Protect it from public access in production.</p>
   <div style="display:inline-block;text-align:left;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px 16px;font-family:ui-monospace;font-size:13px;line-height:1.6;">
-    rm -R install<br>
     chmod -R 755 GameEngine<br>
     chmod -R 777 GameEngine/Prevention<br>
     chmod -R 777 GameEngine/Notes<br>

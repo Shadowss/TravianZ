@@ -18,7 +18,10 @@ if (!isset($_SESSION)) {
 }
 if ($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 
-$cronMarkerFile = __DIR__ . '/../../GameEngine/Prevention/cron_active.txt';
+// The cron marker is stored in the runtime directory of the current world.
+$cronMarkerFile = defined('INSTANCE_RUNTIME_PATH')
+    ? INSTANCE_RUNTIME_PATH . 'cron_active.txt'
+    : __DIR__ . '/../../GameEngine/Prevention/cron_active.txt';
 $cronLastRun    = @is_file($cronMarkerFile) ? (int) @file_get_contents($cronMarkerFile) : 0;
 $cronAge        = $cronLastRun > 0 ? (time() - $cronLastRun) : -1;
 $cronActive     = ($cronAge >= 0 && $cronAge < 90);
