@@ -159,7 +159,7 @@ class Automation {
 					  "buildNatarsWonder"];
         
         $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
-        $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
+        $instancePath = dirname(__DIR__) . '/instances/' . $instanceId;
         $preventionPath = $instancePath . '/Prevention';
 
         if (!is_dir($preventionPath)) {
