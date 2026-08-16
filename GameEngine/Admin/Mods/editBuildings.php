@@ -45,8 +45,8 @@ csrf_verify();
 // ============================================================
 // DATABASE / AUTOMATION
 // ============================================================
-include_once(__DIR__ . '/../../GameEngine/Database.php');
-include_once(__DIR__ . '/../../GameEngine/Automation.php');
+include_once(__DIR__ . '/../../Database.php');
+include_once(__DIR__ . '/../../Automation.php');
 
 // ============================================================
 // INPUT
