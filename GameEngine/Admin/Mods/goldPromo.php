@@ -1,4 +1,21 @@
-<?php
+﻿<?php
+
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -10,10 +27,38 @@
 #################################################################################
 
 require_once(__DIR__ . '/../csrf.php');
-if (!isset($_SESSION)) session_start();
+if (!isset(<?php
+
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       goldPromo.php                                              ##
+##  Type           BACKEND (Gold shop / promo codes)                         ##
+##  Developed by:  Shadow                                                      ##
+##  License:       TravianZ Project                                           ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.               ##
+#################################################################################
+
+require_once(__DIR__ . '/../csrf.php');
 if ($_SESSION['access'] < 9) {
     admin_deny('You must be signed in as an administrator to do this. '
-        . 'Your session may have expired — please return to the admin panel and sign in again.');
+        . 'Your session may have expired â€” please return to the admin panel and sign in again.');
 }
 
 csrf_verify();
@@ -34,7 +79,7 @@ $check = mysqli_query($GLOBALS['link'],
     "SELECT access FROM " . TB_PREFIX . "users WHERE id = " . $admid);
 $acc = $check ? mysqli_fetch_assoc($check) : null;
 if (!$acc || (int)$acc['access'] < 9) {
-    admin_deny('Your session may have expired — please sign in again.');
+    admin_deny('Your session may have expired â€” please sign in again.');
 }
 
 $do  = $_POST['do'] ?? '';
@@ -79,3 +124,169 @@ if ($do === 'create') {
 header("Location: ../../../Admin/admin.php?p=goldShop&msg=" . urlencode($msg));
 exit;
 ?>
+SESSION['access']) || (int)<?php
+
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       goldPromo.php                                              ##
+##  Type           BACKEND (Gold shop / promo codes)                         ##
+##  Developed by:  Shadow                                                      ##
+##  License:       TravianZ Project                                           ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.               ##
+#################################################################################
+
+require_once(__DIR__ . '/../csrf.php');
+if ($_SESSION['access'] < 9) {
+    admin_deny('You must be signed in as an administrator to do this. '
+        . 'Your session may have expired â€” please return to the admin panel and sign in again.');
+}
+
+csrf_verify();
+
+include_once("../../config.php");
+
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix . 'autoloader.php')) break;
+}
+include_once($autoprefix . "GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/GoldShop.php");
+
+$admid = (int)($_SESSION['id'] ?? 0);
+
+$check = mysqli_query($GLOBALS['link'],
+    "SELECT access FROM " . TB_PREFIX . "users WHERE id = " . $admid);
+$acc = $check ? mysqli_fetch_assoc($check) : null;
+if (!$acc || (int)$acc['access'] < 9) {
+    admin_deny('Your session may have expired â€” please sign in again.');
+}
+
+$do  = $_POST['do'] ?? '';
+$msg = '';
+
+if ($do === 'create') {
+    $code    = $_POST['code']     ?? '';
+    $gold    = (int)($_POST['gold'] ?? 0);
+    $maxUses = (int)($_POST['max_uses'] ?? 0);
+    $perUser = isset($_POST['per_user']) ? 1 : 0;
+
+    // Optional expiry: number of days from now (0/empty = never).
+    $expDays = (int)($_POST['expires_days'] ?? 0);
+    $expires = $expDays > 0 ? time() + $expDays * 86400 : 0;
+
+    $note = $_POST['note'] ?? '';
+
+    list($ok, $msg) = GoldShop::createCode($code, $gold, $maxUses, $perUser, $expires, $note, $admid);
+    if ($ok) {
+        $logMsg = mysqli_real_escape_string($GLOBALS['link'],
+            'Promo code created: ' . GoldShop::normCode($code) . ' (' . (int)$gold . ' gold)');
+        mysqli_query($GLOBALS['link'],
+            "INSERT INTO " . TB_PREFIX . "admin_log VALUES (0, " . $admid . ", '" . $logMsg . "', " . time() . ")");
+    }
+} elseif ($do === 'toggle') {
+    $id     = (int)($_POST['id'] ?? 0);
+    $active = (int)($_POST['active'] ?? 0);
+    if ($id > 0) {
+        GoldShop::setActive($id, $active);
+        $msg = $active ? 'Code enabled.' : 'Code disabled.';
+    }
+} elseif ($do === 'delete') {
+    $id = (int)($_POST['id'] ?? 0);
+    if ($id > 0) {
+        GoldShop::deleteCode($id);
+        mysqli_query($GLOBALS['link'],
+            "INSERT INTO " . TB_PREFIX . "admin_log VALUES (0, " . $admid . ", 'Promo code deleted (id " . $id . ")', " . time() . ")");
+        $msg = 'Code deleted.';
+    }
+}
+
+header("Location: ../../../Admin/admin.php?p=goldShop&msg=" . urlencode($msg));
+exit;
+?>
+SESSION['access'] < 9) {
+    admin_deny('You must be signed in as an administrator to do this. '
+        . 'Your session may have expired â€” please return to the admin panel and sign in again.');
+}
+
+csrf_verify();
+
+include_once("../../config.php");
+
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix . 'autoloader.php')) break;
+}
+include_once($autoprefix . "GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/GoldShop.php");
+
+$admid = (int)($_SESSION['id'] ?? 0);
+
+$check = mysqli_query($GLOBALS['link'],
+    "SELECT access FROM " . TB_PREFIX . "users WHERE id = " . $admid);
+$acc = $check ? mysqli_fetch_assoc($check) : null;
+if (!$acc || (int)$acc['access'] < 9) {
+    admin_deny('Your session may have expired â€” please sign in again.');
+}
+
+$do  = $_POST['do'] ?? '';
+$msg = '';
+
+if ($do === 'create') {
+    $code    = $_POST['code']     ?? '';
+    $gold    = (int)($_POST['gold'] ?? 0);
+    $maxUses = (int)($_POST['max_uses'] ?? 0);
+    $perUser = isset($_POST['per_user']) ? 1 : 0;
+
+    // Optional expiry: number of days from now (0/empty = never).
+    $expDays = (int)($_POST['expires_days'] ?? 0);
+    $expires = $expDays > 0 ? time() + $expDays * 86400 : 0;
+
+    $note = $_POST['note'] ?? '';
+
+    list($ok, $msg) = GoldShop::createCode($code, $gold, $maxUses, $perUser, $expires, $note, $admid);
+    if ($ok) {
+        $logMsg = mysqli_real_escape_string($GLOBALS['link'],
+            'Promo code created: ' . GoldShop::normCode($code) . ' (' . (int)$gold . ' gold)');
+        mysqli_query($GLOBALS['link'],
+            "INSERT INTO " . TB_PREFIX . "admin_log VALUES (0, " . $admid . ", '" . $logMsg . "', " . time() . ")");
+    }
+} elseif ($do === 'toggle') {
+    $id     = (int)($_POST['id'] ?? 0);
+    $active = (int)($_POST['active'] ?? 0);
+    if ($id > 0) {
+        GoldShop::setActive($id, $active);
+        $msg = $active ? 'Code enabled.' : 'Code disabled.';
+    }
+} elseif ($do === 'delete') {
+    $id = (int)($_POST['id'] ?? 0);
+    if ($id > 0) {
+        GoldShop::deleteCode($id);
+        mysqli_query($GLOBALS['link'],
+            "INSERT INTO " . TB_PREFIX . "admin_log VALUES (0, " . $admid . ", 'Promo code deleted (id " . $id . ")', " . time() . ")");
+        $msg = 'Code deleted.';
+    }
+}
+
+header("Location: ../../../Admin/admin.php?p=goldShop&msg=" . urlencode($msg));
+exit;
+?>
+

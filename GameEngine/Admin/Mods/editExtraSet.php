@@ -1,6 +1,5 @@
 <?php
 
-require_once(__DIR__ . '/../../Instance/Resolver.php');
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -11,11 +10,22 @@ require_once(__DIR__ . '/../../Instance/Resolver.php');
 ##                                                                             ##
 #################################################################################
 
-if(!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
-
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
 // itself (it does not go through admin.php's central csrf_verify()).
+// Multi-instance bootstrap: resolve the instance and bind the correct session/config.
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+// Load the generated instance configuration and language before using the admin session.
+include_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../Lang/loader.php');
+tz_load_language(LANG);
+
+if (!isset($_SESSION['access']) || (int)$_SESSION['access'] < 9) {
+    die(ACCESS_DENIED_ADMIN);
+}
+
 require_once(__DIR__ . '/../csrf.php');
 csrf_verify();
 

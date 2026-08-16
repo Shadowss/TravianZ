@@ -1,5 +1,21 @@
-<?php
+﻿<?php
 
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -17,13 +33,11 @@
 
 // #299: load CSRF helpers + admin_deny() before the access check below.
 require_once(__DIR__ . '/../csrf.php');
-session_start();
-
 include_once("../../config.php");
 include_once("../../Database.php");
 
 if (!isset($_SESSION['access']) || $_SESSION['access'] < ADMIN) {
-    admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
+    admin_deny('You must be signed in as an administrator to view this page. Your session may have expired â€” please return to the admin panel and sign in again.');
 }
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
@@ -117,12 +131,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'execute') {
         die("Cannot update Templates/text.tpl: the placeholder was not found exactly once in text_format.tpl");
     }
 
-    $instanceId = defined('INSTANCE_ID') ? INSTANCE_ID : 's1';
-    $instancePath = dirname(__DIR__, 2) . '/instances/' . $instanceId;
-    $myFile = $instancePath . '/text.tpl';
-
-    if (@file_put_contents($myFile, $out) === false) {
-        die("Cannot write " . $myFile . " (check permissions)");
+    if (@file_put_contents($autoprefix . 'Templates/text.tpl', $out) === false) {
+        die("Cannot write Templates/text.tpl (check permissions)");
     }
 
     // Make the message visible to every player (they will see it on next page).
@@ -138,3 +148,4 @@ if (isset($_POST['action']) && $_POST['action'] == 'execute') {
 header("Location: ../../../Admin/admin.php?p=sysmessage");
 exit;
 ?>
+

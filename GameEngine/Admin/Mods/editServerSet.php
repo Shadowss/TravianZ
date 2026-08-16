@@ -10,15 +10,12 @@
 ##                                                                             ##
 #################################################################################
 
-// This module is POSTed to directly instead of passing through Admin/admin.php.
-// Therefore it must reproduce the same instance/session bootstrap first.
-// Without it, PHP starts the default session (PHPSESSID), so $_SESSION['access']
-// is missing even though the administrator is correctly authenticated on S4.
+// Direct POST endpoint: resolve and start the instance-isolated session before any session access.
 require_once(__DIR__ . '/../../Instance/Resolver.php');
 $travianInstance = InstanceResolver::resolve(false);
 InstanceResolver::startInstanceSession($travianInstance);
 
-// Load the generated instance configuration and language before using admin
+// Load instance configuration and language after the instance session is initialized.
 include_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/../../Lang/loader.php');
 tz_load_language(LANG);

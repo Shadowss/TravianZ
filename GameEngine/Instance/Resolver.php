@@ -122,7 +122,23 @@ class InstanceResolver
             }
         }
 
-        // 5. Hostname selection. Production should use distinct hostnames,
+        // 5. Explicit POST selection.
+        //
+        // The installer submits the selected instance in POST. This must take
+        // precedence over an already active session because install/process.php
+        // can receive S2 while a previous S1 session still exists.
+        //
+        // This is intentionally a resolution source only. The installer already
+        // validates the instance with getInstanceId(), while sanitize() prevents
+        // arbitrary values from becoming filesystem paths.
+        if (isset($_POST['instance'])) {
+            $postInstance = self::sanitize($_POST['instance']);
+            if ($postInstance !== null) {
+                return $postInstance;
+            }
+        }
+
+        // 6. Hostname selection. Production should use distinct hostnames,
         // e.g. travianz.example.com and travianz2.example.com. This gives us
         // an unambiguous instance identity and therefore an unambiguous
         // session cookie name.
@@ -380,22 +396,19 @@ class InstanceResolver
             return;
         }
 
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            return;
-        }
+        $cookieName = 'TZSESSID_' . strtoupper($instance);
 
         /*
-         * session_name(), session_set_cookie_params() and session_start() all
-         * need headers to be still available. The normal TravianZ bootstrap
-         * reaches this method before page output; legacy installer templates
-         * may not. In that case the caller must have started the appropriate
-         * session earlier, so fail safely instead of emitting PHP warnings.
+         * If another instance session is already active, close it before
+         * selecting the cookie name for the requested instance.
          */
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
+
         if (headers_sent()) {
             return;
         }
-
-        $cookieName = 'TZSESSID_' . strtoupper($instance);
 
         session_name($cookieName);
         session_set_cookie_params(array(

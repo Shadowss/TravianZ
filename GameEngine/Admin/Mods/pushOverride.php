@@ -1,4 +1,21 @@
-<?php
+﻿<?php
+
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -11,10 +28,9 @@
 
 // #299 style: load CSRF helpers + admin_deny() before the access check.
 require_once(__DIR__ . '/../csrf.php');
-if (!isset($_SESSION)) session_start();
 if ($_SESSION['access'] < MULTIHUNTER) {
     admin_deny('You must be signed in as an administrator or multihunter to do this. '
-        . 'Your session may have expired — please return to the admin panel and sign in again.');
+        . 'Your session may have expired â€” please return to the admin panel and sign in again.');
 }
 
 // This Mod is POSTed to directly, so verify the CSRF token itself.
@@ -42,7 +58,7 @@ $check = mysqli_query($GLOBALS['link'],
     "SELECT access, username FROM " . TB_PREFIX . "users WHERE id = " . $admid);
 $acc = $check ? mysqli_fetch_assoc($check) : null;
 if (!$acc || (int)$acc['access'] < MULTIHUNTER) {
-    admin_deny('Your session may have expired — please sign in again.');
+    admin_deny('Your session may have expired â€” please sign in again.');
 }
 
 if ($uid > 3) {
@@ -71,3 +87,4 @@ if ($uid > 3) {
 header("Location: ../../../Admin/admin.php?p=pushprot");
 exit;
 ?>
+

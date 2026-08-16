@@ -2,7 +2,28 @@
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
 
-include("templates/script.tpl");
+require_once __DIR__ . '/../GameEngine/Instance/Resolver.php';
+
+/*
+ * The installer must use the same per-instance session mechanism as the game.
+ * Resolve and start the instance session before ANY HTML output.
+ */
+$installerInstance = InstanceResolver::sanitize(
+    isset($_GET['instance']) ? $_GET['instance'] : ''
+);
+
+if ($installerInstance === null && session_status() === PHP_SESSION_ACTIVE) {
+    $installerInstance = InstanceResolver::sanitize(
+        isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : ''
+    );
+}
+
+if ($installerInstance === null) {
+    $installerInstance = 's1';
+}
+
+InstanceResolver::startInstanceSession($installerInstance);
+$_SESSION['install_instance'] = $installerInstance;
 
 if(!isset($_GET['s'])) {
 	$_GET['s']=0;
@@ -27,24 +48,7 @@ $tz=(isset($_GET['t']))? (int)$_GET['t'] : 8;
     }
 date_default_timezone_set($t_zone);
 
-require_once __DIR__ . '/../GameEngine/Instance/Resolver.php';
-
-/*
- * The installer must use the same per-instance session mechanism as the game.
- * Do not start a generic PHP session first: doing so would lock the cookie name
- * to PHPSESSID and make Resolver::startInstanceSession() fail when it later
- * tries to select TZSESSID_S1, TZSESSID_S2, etc.
- */
-$installerInstance = InstanceResolver::sanitize(isset($_GET['instance']) ? $_GET['instance'] : '');
-if ($installerInstance === null && session_status() === PHP_SESSION_ACTIVE) {
-    $installerInstance = InstanceResolver::sanitize(isset($_SESSION['install_instance']) ? $_SESSION['install_instance'] : '');
-}
-if ($installerInstance === null) {
-    $installerInstance = 's1';
-}
-InstanceResolver::startInstanceSession($installerInstance);
-$_SESSION['install_instance'] = $installerInstance;
-?>
+include("templates/script.tpl");?>
 
  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

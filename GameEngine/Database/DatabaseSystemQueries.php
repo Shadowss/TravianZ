@@ -55,7 +55,7 @@ trait DatabaseSystemQueries {
 
             // load the DB structure SQL file
             $str = file_get_contents($autoprefix."var/db/struct.sql");
-            $str = preg_replace("'%PREFIX%'", TB_PREFIX, $str);
+            $str = str_replace('%PREFIX%', TB_PREFIX, $str);
             $result = $this->dblink->multi_query($str);
 
             // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work

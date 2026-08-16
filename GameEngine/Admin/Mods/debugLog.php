@@ -1,4 +1,21 @@
-<?php
+﻿<?php
+
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -13,8 +30,6 @@
 ##    do=clear    -> empty the log file(s)                                     ##
 ##    do=download -> stream the log file as a download                         ##
 #################################################################################
-
-if(!isset($_SESSION)) session_start();
 if(($_SESSION['access'] ?? 0) < 9) die("Access denied: You are not Admin!");
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
@@ -82,3 +97,4 @@ switch ($do) {
 
 header("Location: ../../../Admin/admin.php?p=debug_log");
 exit;
+

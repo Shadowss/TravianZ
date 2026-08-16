@@ -1,5 +1,21 @@
-<?php
+﻿<?php
 
+// ============================================================
+// TRAVIANZ MI INSTANCE / SESSION BOOTSTRAP
+// ============================================================
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
+include_once(__DIR__ . '/../../config.php');
+
+if (file_exists(__DIR__ . '/../../Lang/loader.php')) {
+    require_once(__DIR__ . '/../../Lang/loader.php');
+    if (defined('LANG') && function_exists('tz_load_language')) {
+        tz_load_language(LANG);
+    }
+}
 #################################################################################
 ## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
 ## --------------------------------------------------------------------------- ##
@@ -20,8 +36,7 @@ include_once("../../Database.php");
 
 // #299: load CSRF helpers + admin_deny() before the access check below.
 require_once(__DIR__ . '/../csrf.php');
-if (!isset($_SESSION)) session_start();
-if(($_SESSION['access']?? 0) < ADMIN) admin_deny('You must be signed in as an administrator to view this page. Your session may have expired — please return to the admin panel and sign in again.');
+if(($_SESSION['access']?? 0) < ADMIN) admin_deny('You must be signed in as an administrator to view this page. Your session may have expired â€” please return to the admin panel and sign in again.');
 
 // Issue #139: this Mod is POSTed to directly, so it must verify the CSRF token
 // itself (it does not go through admin.php's central csrf_verify()).
@@ -68,7 +83,7 @@ $database->query("
     WHERE id = $id
 ");
 
-// --- LOG GOLD dacă s-a modificat ---
+// --- LOG GOLD dacÄƒ s-a modificat ---
 if($diffGold!== 0){
     $vill = $database->getVillagesID($id);
     $wid = $vill[0]?? 0;
@@ -76,7 +91,7 @@ if($diffGold!== 0){
     $details = 'Admin adjustment by '.($session->username?? 'Admin');
     $now = time();
 
-    // folosește mysqli_real_escape_string dacă $database->query nu face escape automat
+    // foloseÈ™te mysqli_real_escape_string dacÄƒ $database->query nu face escape automat
     $action_esc = mysqli_real_escape_string($GLOBALS["link"], $action);
     $details_esc = mysqli_real_escape_string($GLOBALS["link"], $details);
 
@@ -94,7 +109,7 @@ $playerName = $database->getUserField($id, 'username', 0)?: 'Unknown';
 $protectDays = (int)($_POST['protect']?? 0);
 
 $logParts = [];
-$logParts[] = "Gold: $oldGold → $newGold". ($diffGold!=0? " ($diffGold)" : "");
+$logParts[] = "Gold: $oldGold â†’ $newGold". ($diffGold!=0? " ($diffGold)" : "");
 $logParts[] = "VacMode: $vac_mode";
 $logParts[] = "Access: $access";
 $logParts[] = "Protect: {$protectDays}d";

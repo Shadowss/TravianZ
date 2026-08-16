@@ -14,6 +14,13 @@
 
 use App\Entity\User;
 
+// Multi-instance bootstrap MUST happen before any session access.
+// This direct POST endpoint must use the same instance-specific session cookie
+// as the rest of the Admin/Mods endpoints.
+require_once(__DIR__ . '/../../Instance/Resolver.php');
+$travianInstance = InstanceResolver::resolve(false);
+InstanceResolver::startInstanceSession($travianInstance);
+
 // go max 5 levels up - we don't have folders that go deeper than that
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
@@ -22,7 +29,6 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 include_once($autoprefix."GameEngine/config.php");
-include_once($autoprefix."GameEngine/Session.php");
 include_once($autoprefix."GameEngine/Automation.php");
 include_once($autoprefix."GameEngine/Database.php");
 
