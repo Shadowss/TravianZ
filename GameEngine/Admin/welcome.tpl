@@ -16,16 +16,15 @@ The taskmaster will help you on your way to establishing your empire with advice
 
 <b>Game World Timeline</b>
 
-This game world is expected to run until approximately <b>%WORLD_END_DATE%</b>
-.
-The estimated end date is calculated dynamically from the World Wonder Construction Plan release, the time required to construct the World Wonder from level 0 to level 100 at the current server speed, and an additional <b>5 days</b> to allow for final attacks and possible World Wonder setbacks.
+This game world is expected to run until approximately <b>%WORLD_END_DATE%</b>. The estimated end date is calculated dynamically, following the timeline below, plus an additional <b>5 days</b> to allow for final attacks and possible World Wonder setbacks.
 
 <ul style="margin-top:0;margin-bottom:0;">
 <li><b>Natars appear:</b> %NATARS_DATE%</li>
 <li><b>World Wonder villages appear:</b> %WW_VILLAGES_DATE%</li>
 <li><b>World Wonder Construction Plans appear:</b> %WW_PLANS_DATE%</li>
-<li><b>World Wonder construction time from level 0 to 100:</b> %WW_BUILD_TIME%</li>
+<li><b>World Wonder build time (level 0 &rarr; 100):</b> %WW_BUILD_TIME%</li>
 <li><b>Estimated World Wonder completion:</b> %WW100_DATE%</li>
+<li><b>Estimated world end date:</b> %WORLD_END_DATE%</li>
 </ul>
 
 <b>Natars</b>

@@ -138,6 +138,12 @@ class Units {
 
         if(!empty($post['dname']) && $post['x'] != "" && $post['y'] != "") return "Insert name or coordinates";
 
+        // Neither a village name nor coordinates were provided at all -> $id would
+        // otherwise stay undefined and reach array_push() below unset.
+        if(empty($post['dname']) && (!isset($post['x']) || !isset($post['y']) || $post['x'] === "" || $post['y'] === "")) {
+            return "Insert name or coordinates";
+        }
+
         if(isset($post['dname']) && !empty($post['dname'])) {
             $id = $database->resolveVillageInput(stripslashes($post['dname']),
                 (int) ($session->uid ?? 0));   // accepta si "Nume (x|y)"

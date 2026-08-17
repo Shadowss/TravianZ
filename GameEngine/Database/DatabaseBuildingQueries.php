@@ -217,7 +217,7 @@ trait DatabaseBuildingQueries {
 			if($job['id'] == $d) $jobToDelete = $job;
 		}	
 
-		if($canBeRemoved && $jobToDelete['field'] > 18 && $jobToDelete['field'] != 99 && $jobToDelete['level'] - 1 == 0){
+		if($canBeRemoved && !empty($jobToDelete) && $jobToDelete['field'] > 18 && $jobToDelete['field'] != 99 && $jobToDelete['level'] - 1 == 0){
 			$this->setVillageLevel($wid, ["f".$jobToDelete['field']."t"], [0]);
 		}
 		

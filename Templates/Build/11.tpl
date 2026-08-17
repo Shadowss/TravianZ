@@ -25,7 +25,8 @@ $field            = 'f' . $id;
 $currentLevel     = (int) ($village->resarray[$field] ?? 0);
 $buildingType     = $village->resarray[$field . 't'] ?? 0;
 
-$currentCapacity  = $bid11[$currentLevel]['attri'] * STORAGE_MULTIPLIER;
+// $bid11 is keyed from level 1 upward; at level 0 (not built yet) fall back to the base capacity
+$currentCapacity  = ($currentLevel > 0) ? $bid11[$currentLevel]['attri'] * STORAGE_MULTIPLIER : STORAGE_BASE;
 
 $isMax            = $building->isMax($buildingType, $id);
 $maxLevel         = 20;

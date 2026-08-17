@@ -26,7 +26,7 @@ use App\Utils\AccessLogger;
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$amount = $_SESSION['amount'];
+$amount = $_SESSION['amount'] ?? 0;
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);

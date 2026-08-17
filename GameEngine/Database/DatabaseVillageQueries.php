@@ -1563,7 +1563,7 @@ trait DatabaseVillageQueries {
         $y1 = intval($coor['y']);
         $prevdist = 0;
         $array2 = $this->getVillage(0, 4);
-        $vill = $array2['wref'];
+        $vill = $array2['wref'] ?? 0;
 
         if ($array && count($array)){
             foreach($array as $village){

@@ -289,7 +289,7 @@ class MyGenerator
 	 */
 	public function getMapCheck($wref)
 	{
-		return substr(md5($wref), 5, 2);
+		return substr(md5((string) $wref), 5, 2);
 	}
 
 	/**

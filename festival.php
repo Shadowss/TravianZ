@@ -41,7 +41,7 @@ if($village->capital == 1 && $village->resarray['f'.$_GET['id'].'t'] == 35 && $s
 		$clay = $festival['clay'];
 		$iron = $festival['iron'];
 		$crop = $festival['crop'];
-		$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,$mode);
+		$database->modifyResource($village->resarray['vref'],$wood,$clay,$iron,$crop,0);
 		$database->addFestival($village->resarray['vref'],$endtime);
 	}
 }

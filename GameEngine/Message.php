@@ -740,6 +740,14 @@ class Message
 
 	public function sendWelcome($uid, $username){
 		global $database;
+		/*
+		 * FIX: $bid40 / $bid15 sunt deja incarcate global de Session.php
+		 * (include_once("Data/buidata.php")), care ruleaza pe orice pagina.
+		 * Fara "global" aici, require_once() de mai jos e no-op (fisierul
+		 * e deja inclus o data in script), iar $bid40/$bid15 raman nesetate
+		 * local -> blocul de calcul WW e sarit -> wwBuildSeconds = 0.
+		 */
+		global $bid40, $bid15;
 
     $welcomemsg = file_get_contents("GameEngine/Admin/welcome.tpl");
 
