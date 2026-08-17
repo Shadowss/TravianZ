@@ -24,7 +24,7 @@ $uid = (int)$session->uid;
 $gold = defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : 2000;
 $price = defined('PLUS_PACKAGE_E_PRICE') ? str_replace(',', '.', PLUS_PACKAGE_E_PRICE) : '49.99';
 $currency = defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR';
-$paypal = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
+$paypal = trim((string) (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : ''));
 $base = rtrim(HOMEPAGE,'/');
 ?>
 <table class="rate_details" cellpadding="1" cellspacing="1">
@@ -36,6 +36,9 @@ $base = rtrim(HOMEPAGE,'/');
             <div>Gold: <?= $gold ?><br>Cost: <?= $price ?> <?= $currency ?><br><?php echo TZ_WAIT_INSTANT; ?></div>
         </td>
         <td class="desc">
+            <?php if ($paypal === ''): ?>
+                <strong><?php echo TZ_PAYMENTS_DISABLED; ?></strong>
+            <?php else: ?>
             <?php echo TZ_PAY_SECURELY_WITH_PAYPAL; ?><br><br>
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                 <input type="hidden" name="cmd" value="_xclick">
@@ -51,6 +54,7 @@ $base = rtrim(HOMEPAGE,'/');
                 <input type="hidden" name="cancel_return" value="<?= $base ?>/plus.php?id=1">
                 <input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" name="submit" alt="<?php echo BUY_NOW; ?>">
             </form>
+            <?php endif; ?>
         </td>
     </tr>
     </tbody>

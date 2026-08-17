@@ -64,7 +64,7 @@ class RegBlock
             PRIMARY KEY (`id`),
             UNIQUE KEY `type_value` (`type`,`value`),
             KEY `type` (`type`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
 
     /** Normalise a value: trim + lowercase. */

@@ -1,0 +1,5 @@
+@charset "UTF-8";
+html[dir="rtl"] body, html[dir="rtl"] #content-container { direction: rtl; text-align: right; font-family: Tahoma, Arial, sans-serif; }
+html[dir="rtl"] #backgroundLeft { left: auto; right: 0; transform: scaleX(-1); }
+html[dir="rtl"] #backgroundRight { right: auto; left: 0; transform: scaleX(-1); }
+html[dir="rtl"] input { direction: rtl; text-align: right; }

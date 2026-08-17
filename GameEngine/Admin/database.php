@@ -589,7 +589,7 @@ class adm_DB {
                 PRIMARY KEY (`id`),
                 UNIQUE KEY `ip` (`ip`),
                 KEY `active-end` (`active`,`end`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
 
     // $end is an absolute UNIX timestamp (0 = permanent).

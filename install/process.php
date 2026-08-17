@@ -66,7 +66,12 @@ class Process {
 
 		$tz = explode(",",$_POST['tzone']);
         $findReplace["%STIMEZONE%"] = $tz[1];
-		$findReplace["%LANG%"] = $_POST['lang'];
+		$language = strtolower((string) ($_POST['lang'] ?? 'en'));
+		if (!preg_match('/^[a-z]{2}$/', $language)
+			|| !is_file('../GameEngine/Lang/' . $language . '.php')) {
+			$language = 'en';
+		}
+		$findReplace["%LANG%"] = $language;
 		$findReplace["%SPEED%"] = $_POST['speed'];
 		$findReplace["%INCSPEED%"] = $_POST['incspeed'];
 		$findReplace["%EVASIONSPEED%"] = $_POST['evasionspeed'];

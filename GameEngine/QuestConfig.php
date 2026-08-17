@@ -75,7 +75,7 @@ class QuestConfig
             `req_level` int(11) NOT NULL DEFAULT 0,
             `note`      varchar(255) NOT NULL DEFAULT '',
             PRIMARY KEY (`variant`,`quest_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
 
     /** Seed the table with the current (extracted) hardcoded values, once. */

@@ -196,9 +196,9 @@ if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone']) || i
 $lang = LANG;
 if(isset($_POST['lang']))
 {
-    $allowedLangs = ['en','fr','it','ro','zh'];
     $selectedLang = strtolower(trim($_POST['lang']));
-    if(in_array($selectedLang, $allowedLangs))
+    if (preg_match('/^[a-z]{2}$/', $selectedLang)
+        && is_file(dirname(__DIR__, 2) . '/GameEngine/Lang/' . $selectedLang . '.php'))
     {
         $lang = $selectedLang;
     }
@@ -521,6 +521,9 @@ if(isset($_POST['lang']))
             <option value="en" <?php if($session->userinfo['lang']=="en") echo 'selected'; ?>>
                 <?php echo TZ_ENGLISH; ?>
             </option>
+            <option value="ar" <?php if($session->userinfo['lang']=="ar") echo 'selected'; ?>>
+                <?php echo TZ_ARABIC; ?>
+            </option>
             <option value="ro" <?php if($session->userinfo['lang']=="ro") echo 'selected'; ?>>
                 <?php echo TZ_ROMANIAN; ?>
             </option>
@@ -549,4 +552,3 @@ if(isset($_POST['lang']))
 </p>
 
 </form>
-

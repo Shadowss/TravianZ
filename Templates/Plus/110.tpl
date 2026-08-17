@@ -26,7 +26,7 @@ $pkg = [
 ];
 $price = str_replace(',', '.', $pkg['price']);
 $currency = defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR';
-$email = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
+$email = trim((string) (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : ''));
 ?>
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
     <thead><tr><th colspan="2"><?php echo TZ_PAYPAL_PACKAGE_A; ?></th></tr></thead>
@@ -37,6 +37,9 @@ $email = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
             <div>Gold: <?= $pkg['gold'] ?><br>Cost: <?= $pkg['price'] ?> <?= $currency ?><br><?php echo TZ_WAIT_24H; ?></div>
         </td>
         <td class="desc">
+            <?php if ($email === ''): ?>
+                <strong><?php echo TZ_PAYMENTS_DISABLED; ?></strong>
+            <?php else: ?>
             <?php echo TZ_INITIATE_PAYMENT_BY_PAYPAL; ?><br><br>
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
                 <input type="hidden" name="business" value="<?= $email ?>">
@@ -52,6 +55,7 @@ $email = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
                 <input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" name="submit" alt="<?php echo BUY_NOW; ?>">
             </form>
             <br><?php echo TZ_MORE_INFO; ?> <a href="https://www.paypal.com" target="_blank"><?php echo TZ_PAYPAL; ?></a>
+            <?php endif; ?>
         </td>
     </tr>
     </tbody>

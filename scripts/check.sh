@@ -19,7 +19,10 @@ lint_php()
 
 		php -l "$file" > /dev/null
 		linted=$((linted + 1))
-	done < <(git ls-files -z -- '*.php' '*.tpl')
+	done < <(
+		git ls-files -z -- '*.php' '*.tpl'
+		git ls-files -z --others --exclude-standard -- '*.php' '*.tpl'
+	)
 
 	echo "PHP syntax check passed for ${linted} tracked files."
 }
@@ -37,7 +40,10 @@ run_php_tests()
 		echo "Running ${file}"
 		php "$file"
 		tested=$((tested + 1))
-	done < <(git ls-files -z -- 'tests/*.php' 'tests/**/*.php')
+	done < <(
+		git ls-files -z -- 'tests/*.php' 'tests/**/*.php'
+		git ls-files -z --others --exclude-standard -- 'tests/*.php' 'tests/**/*.php'
+	)
 
 	if [[ "$tested" -eq 0 ]]; then
 		echo "No zero-dependency PHP tests found."
@@ -60,7 +66,10 @@ run_shell_tests()
 		sh -n "$file"
 		sh "$file"
 		tested=$((tested + 1))
-	done < <(git ls-files -z -- 'tests/*.sh' 'tests/**/*.sh')
+	done < <(
+		git ls-files -z -- 'tests/*.sh' 'tests/**/*.sh'
+		git ls-files -z --others --exclude-standard -- 'tests/*.sh' 'tests/**/*.sh'
+	)
 
 	if [[ "$tested" -eq 0 ]]; then
 		echo "No shell contract tests found."

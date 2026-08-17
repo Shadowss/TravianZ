@@ -63,7 +63,7 @@ AccessLogger::logRequest();
 	<link rel="stylesheet" type="text/css" href="gpack/travian/main.css" />
 	<link rel="stylesheet" type="text/css" href="gpack/travian/flaggs.css" />
 	<link rel="stylesheet" type="text/css" href="gpack/travian/main_en.css" />
-	<meta name="content-language" content="<?php echo LANG; ?>" />
+	<meta name="content-language" content="<?php echo htmlspecialchars(LANG, ENT_QUOTES, 'UTF-8'); ?>" />
 	<meta http-equiv="imagetoolbar" content="no" />
 	<script src="mt-core.js" type="text/javascript"></script>
 	<script src="new.js?22102017" type="text/javascript"></script>
@@ -88,7 +88,7 @@ AccessLogger::logRequest();
 		</div>
 		<div id="header"><h1><?php echo $lang['index'][0][1]; ?></h1></div>
 		<div id="navigation">
-			<a href="index.php" class="home"><img src="img/x.gif" alt="Travian" /></a>
+			<a href="index.php" class="home"><img src="img/x.gif" alt="<?php echo defined('TZ_TRAVIAN') ? TZ_TRAVIAN : 'Travian'; ?>" /></a>
 			<table class="menu">
 				<tr>
 					<td><a href="tutorial.php"><span><?php echo TUTORIAL; ?></span></a></td>
@@ -184,13 +184,13 @@ AccessLogger::logRequest();
 						<a href="#last" class="navi prev dynamic_btn"><img class="dynamic_btn" src="img/x.gif" alt="previous" /></a>
 						<div id="screenshots_preview">
 							<ul id="screenshot_list" class="c1">
-								<li><a href="#"><img src="img/un/s/s1s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s2s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s4s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s3s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s5s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s7s.jpg" alt="Screenshot" /></a></li>
-								<li><a href="#"><img src="img/un/s/s8s.jpg" alt="Screenshot" /></a></li>
+								<li><a href="#"><img src="img/un/s/s1s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s2s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s4s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s3s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s5s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s7s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
+								<li><a href="#"><img src="img/un/s/s8s.jpg" alt="<?php echo TZ_SCREENSHOT; ?>" /></a></li>
 							</ul>
 						</div><a href="#next" class="navi next"><img class="dynamic_btn" src="img/x.gif" alt="next" /></a>
 					</div>
@@ -210,7 +210,7 @@ AccessLogger::logRequest();
 					<li><a href="spielregeln.php"><?php echo SPIELREGELN; ?></a>|</li>
 					<li><a href="agb.php"><?php echo AGB; ?></a>|</li>
 					<li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
-					<li class="copyright">&copy; 2011-<?php echo date('Y'); ?> - TravianZ - All rights reserved</li>
+					<li class="copyright">&copy; 2011-<?php echo date('Y'); ?> - TravianZ - <?php echo TZ_ALL_RIGHTS_RESERVED; ?></li>
 				</ul>
 			</div>
 		</div>
@@ -219,10 +219,10 @@ AccessLogger::logRequest();
 		<div class="mask closer"></div>
 		<div id="login_list" class="overlay_content">
 			<h2><?php echo CHOOSE; ?></h2>
-			<a href="#" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
+			<a href="#" class="closer"><img class="dynamic_img" alt="<?php echo TZ_CLOSE; ?>" src="img/un/x.gif" /></a>
 			<ul class="world_list">
 				<li class="w_big c3" style="background-image:url('img/en/welten/en1_big.jpg');">
-					<a href="login.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
+					<a href="login.php"><img class="w_button" src="img/un/x.gif" alt="<?php echo TZ_WORLD; ?>" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
 					<div class="label_players c0"><?php echo PLAYERS; ?>:</div>
 					<div class="label_online c0"><?php echo ONLINE; ?>:</div>
 					<div class="players c1"><?php echo $users; ?></div>
@@ -236,10 +236,10 @@ AccessLogger::logRequest();
 		<div class="mask closer"></div>
 		<div id="signup_list" class="overlay_content">
 			<h2><?php echo CHOOSE; ?></h2>
-			<a href="#" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
+			<a href="#" class="closer"><img class="dynamic_img" alt="<?php echo TZ_CLOSE; ?>" src="img/un/x.gif" /></a>
 			<ul class="world_list">
 				<li class="w_big c4" style="background-image:url('img/en/welten/en1_big.jpg');">
-					<a href="anmelden.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
+					<a href="anmelden.php"><img class="w_button" src="img/un/x.gif" alt="<?php echo TZ_WORLD; ?>" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
 					<div class="label_players c0"><?php echo PLAYERS; ?>:</div>
 					<div class="label_online c0"><?php echo ONLINE; ?>:</div>
 					<div class="players c1"><?php echo $users; ?></div>
@@ -252,7 +252,7 @@ AccessLogger::logRequest();
 	<div id="iframe_layer" class="overlay">
 		<div class="mask closer"></div>
 		<div class="overlay_content">
-			<a href="#" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
+			<a href="#" class="closer"><img class="dynamic_img" alt="<?php echo TZ_CLOSE; ?>" src="img/un/x.gif" /></a>
 			<h2><?php echo $lang['index'][0][2]; ?></h2>
 			<div id="frame_box"></div>
 			<div class="footer"></div>

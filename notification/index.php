@@ -20,10 +20,11 @@ include("../GameEngine/config.php");
 require_once dirname(__DIR__) . "/GameEngine/Lang/loader.php";
 tz_load_language(LANG);
 include(__DIR__ . "/lang/".LANG.".php");
+$notificationLang = LANG === 'ar' ? 'ar' : 'en';
 if(T4_COMING==true){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo htmlspecialchars(LANG, ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
 <head>
 	<title><?php echo SERVER_NAME; ?></title>
 	<meta http-equiv="cache-control" content="max-age=0" />
@@ -32,8 +33,8 @@ if(T4_COMING==true){
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type"	content="text/html; charset=UTF-8" />
 	<meta name="content-language" content="<?php echo LANG; ?>" />
-	<link href="../notification/gpack/notification_v1_zzjhons/lang/en/lang.css" rel="stylesheet" type="text/css" />
-	<link href="../notification/gpack/notification_v1_zzjhons/lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
+	<link href="../notification/gpack/notification_v1_zzjhons/lang/<?php echo $notificationLang; ?>/lang.css" rel="stylesheet" type="text/css" />
+	<link href="../notification/gpack/notification_v1_zzjhons/lang/<?php echo $notificationLang; ?>/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="crypt.js"></script>
 	<script type="text/javascript">
 		Travian.Translation.add({'allgemein.cancel': 'Abbrechen','allgemein.ok': 'OK','allgemein.send': 'com'});
@@ -44,9 +45,9 @@ if(T4_COMING==true){
 	<div id="backgroundRight"></div>
 	<div id="background">
 		<div id="content-container">
-			<img alt="Logo" id="logoMed" src="img/x.gif" />
+			<img alt="شعار" id="logoMed" src="img/x.gif" />
 			<div id="header">
-				<img src="img/x.gif" id="brand" alt="Travian"/> <?php echo $lang['notification']['awaits_you']; ?></div>
+				<img src="img/x.gif" id="brand" alt="<?php echo TZ_TRAVIAN; ?>"/> <?php echo $lang['notification']['awaits_you']; ?></div>
 				<div id="text-container">
 				<h1 id="first"><?php echo $lang['notification']['join_now']; ?></h1>
 				<div><?php echo $lang['notification']['new_challenges']; ?></div>
@@ -121,8 +122,8 @@ if(T4_COMING==true){
 				<a target="_blank" href="#" class ="devlabel"><?php echo $lang['notification']['more']; ?></a>
 			</div>
 			<div id="fbt-container">
-				<a target="_blank" href="#" title="post a message on Twitter" id="twitter"></a>
-				<a target="_blank" href="#" title="post a message on Facebook" id="facebook"></a>
+				<a target="_blank" href="#" title="نشر رسالة على تويتر" id="twitter"></a>
+				<a target="_blank" href="#" title="نشر رسالة على فيسبوك" id="facebook"></a>
 			</div>
 			<script type="text/javascript">
 				window.addEvent('domready', function()

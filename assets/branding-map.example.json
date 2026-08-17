@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "description": "Copy approved entries from exampleRenames into renames only when replacement artwork and its final brand filename exist. Update every source reference atomically with its rename.",
+  "renames": {},
+  "exampleRenames": {
+    "gpack/travian_default/lang/en/a/travian0.gif": "gpack/travian_default/lang/ar/a/approved-brand-logo.gif",
+    "gpack/travian_default/lang/en/t1/login.gif": "gpack/travian_default/lang/ar/t1/approved-login-title.gif",
+    "img/t4n/Teaser_Prelandingpage_EN.png": "img/t4n/approved-arabic-teaser.png"
+  }
+}

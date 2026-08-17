@@ -142,7 +142,7 @@ if (isset($packages[$amount]) && $amount > 0) {
 
                 <p>Please verify the information.<br>It will let us know if the data is incorrect.</p>
                 <p>Please mail your username, package, order time and email used to 
-                <a href="mailto:<?php echo defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com'; ?>">our billing address</a>.</p>
+                <?php if (defined('PAYPAL_EMAIL') && trim((string) PAYPAL_EMAIL) !== ''): ?><a href="mailto:<?php echo htmlspecialchars(PAYPAL_EMAIL, ENT_QUOTES, 'UTF-8'); ?>">our billing address</a><?php else: ?><?php echo TZ_PAYMENTS_DISABLED; ?><?php endif; ?>.</p>
 
             <?php } else { 
                 // --- ISTORIC NORMAL CU FILTRU ---
@@ -269,7 +269,7 @@ if (isset($packages[$amount]) && $amount > 0) {
 
                 <p>Please verify the information.<br>It will let us know if the data is incorrect.</p>
                 <p>Please mail your username, package, order time and email used to 
-                <a href="mailto:<?php echo defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'cata7007@gmail.com'; ?>">our billing address</a>.</p>
+                <?php if (defined('PAYPAL_EMAIL') && trim((string) PAYPAL_EMAIL) !== ''): ?><a href="mailto:<?php echo htmlspecialchars(PAYPAL_EMAIL, ENT_QUOTES, 'UTF-8'); ?>">our billing address</a><?php else: ?><?php echo TZ_PAYMENTS_DISABLED; ?><?php endif; ?>.</p>
             <?php } ?>
         </div>
     </div>

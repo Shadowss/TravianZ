@@ -71,7 +71,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
                 <tr>
                     <td class="b"><?php echo CONF_PLUS_PAYPALEMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PAYPALEMAIL_TOOLTIP ?></span></em></td>
                     <td>
-                        <input class="fm" name="paypal-email" value="<?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : '@'); ?>" style="width: 70%;">
+                        <input class="fm" name="paypal-email" value="<?php echo htmlspecialchars((string) (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : ''), ENT_QUOTES, 'UTF-8'); ?>" style="width: 70%;">
                     </td>
                 </tr>
                 <tr>

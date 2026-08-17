@@ -24,7 +24,7 @@ $uid = (int)$session->uid;
 $gold = defined('PLUS_PACKAGE_C_GOLD') ? PLUS_PACKAGE_C_GOLD : 360;
 $price = defined('PLUS_PACKAGE_C_PRICE') ? str_replace(',', '.', PLUS_PACKAGE_C_PRICE) : '9.99';
 $currency = defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR';
-$paypal = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
+$paypal = trim((string) (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : ''));
 
 $base = rtrim(HOMEPAGE,'/');
 ?>
@@ -37,6 +37,9 @@ $base = rtrim(HOMEPAGE,'/');
             <div>Gold: <?= $gold ?><br>Cost: <?= $price ?> <?= $currency ?><br><?php echo TZ_WAIT_INSTANT; ?></div>
         </td>
         <td class="desc">
+            <?php if ($paypal === ''): ?>
+                <strong><?php echo TZ_PAYMENTS_DISABLED; ?></strong>
+            <?php else: ?>
             <?php echo TZ_PAY_SECURELY_WITH_PAYPAL; ?><br><br>
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                 <input type="hidden" name="cmd" value="_xclick">
@@ -55,6 +58,7 @@ $base = rtrim(HOMEPAGE,'/');
                 
                 <input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" name="submit" alt="<?php echo BUY_NOW; ?>">
             </form>
+            <?php endif; ?>
         </td>
     </tr>
     </tbody>

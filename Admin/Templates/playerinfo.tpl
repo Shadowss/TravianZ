@@ -170,8 +170,9 @@
 					// map language
 					$langMap = [
 					'en' => 'English',
-					'ro' => 'Romanian',
-					'zh' => 'Chinese',
+						'ro' => 'Romanian',
+						'ar' => 'Arabic',
+						'zh' => 'Chinese',
 					'fr' => 'French',
 					'it' => 'Italian',
 					];

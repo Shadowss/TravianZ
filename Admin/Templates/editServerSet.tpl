@@ -151,6 +151,7 @@ function refresh(tz) {
                     <td>
                         <select name="lang">
                             <option value="en" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="en") echo "selected";?>><?php echo ADM_ENGLISH; ?></option>
+                            <option value="ar" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="ar") echo "selected";?>><?php echo ADM_ARABIC; ?></option>
                             <option value="fr" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="fr") echo "selected";?>><?php echo ADM_FRENCH; ?></option>
                             <option value="it" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="it") echo "selected";?>><?php echo ADM_ITALIAN; ?></option>
                             <option value="es" <?php if ((defined('SERVER_LANG') ? SERVER_LANG : LANG)=="es") echo "selected";?>><?php echo ADM_SPANISH; ?></option>

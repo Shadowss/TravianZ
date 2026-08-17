@@ -121,7 +121,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
       </select>
     </div>
     <div><label>Language</label>
-      <select class="input" name="lang"><option value="en" selected>English</option><option value="fr">French</option><option value="it">Italian</option><option value="es">Spanish</option><option value="ro">Romanian</option><option value="zh">Chinese</option></select>
+      <select class="input" name="lang"><option value="en" selected>English</option><option value="ar">Arabic</option><option value="fr">French</option><option value="it">Italian</option><option value="es">Spanish</option><option value="ro">Romanian</option><option value="zh">Chinese</option></select>
     </div>
     <div><label>Beginners protection</label>
       <select class="input" name="beginner">
@@ -239,7 +239,7 @@ foreach($mechs as $k => $l){
 <div class="card">
   <span class="f10 c">PLUS GOLD PACKAGES</span>
   <div class="grid-2" style="margin-top:12px;">
-    <div><label>PayPal Email</label><input class="input" name="paypal-email" id="paypal-email" value="@"></div>
+    <div><label>PayPal Email (leave blank to disable)</label><input class="input" name="paypal-email" id="paypal-email" value=""></div>
     <div><label>Currency</label><input class="input" name="paypal-currency" id="paypal-currency" value="EUR"></div>
     <div><label>Package A Gold</label><input class="input" name="plus-a-gold" id="plus-a-gold" value="60"></div>
     <div><label>Package A Price</label><input class="input" name="plus-a-price" id="plus-a-price" value="1,99"></div>

@@ -34,7 +34,7 @@ AccessLogger::logRequest();
 	<title><?php echo SERVER_NAME; ?></title>
 	<link rel="stylesheet" type="text/css" href="img/tutorial/main.css"/>
 	<link rel="stylesheet" type="text/css" href="img/tutorial/flaggs.css"/>
-	<meta name="content-language" content="en"/>
+	<meta name="content-language" content="<?php echo htmlspecialchars(LANG, ENT_QUOTES, 'UTF-8'); ?>"/>
 	<meta http-equiv="imagetoolbar" content="no"/>
 	<script src="mt-core.js" type="text/javascript"></script>
 	<script src="new.js" type="text/javascript"></script>
@@ -53,7 +53,7 @@ AccessLogger::logRequest();
 
 <div id="navigation">
 
-<a href="index.php" class="home"><img src="img/x.gif" alt="Travian"/></a>
+<a href="index.php" class="home"><img src="img/x.gif" alt="<?php echo TZ_TRAVIAN; ?>"/></a>
 
 	<table class="menu">
 
@@ -144,7 +144,7 @@ include("Templates/Anleitung/4.tpl"); }
 
 <a href="index.php" class="closer"><img class="dynamic_img" alt="<?php echo PUBLIC_CLOSE; ?>" src="img/un/x.gif" /></a>
 
-<h2>Anleitung</h2>
+<h2><?php echo PUBLIC_MANUAL; ?></h2>
 
 
 

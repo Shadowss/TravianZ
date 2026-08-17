@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+/* Arabic keeps the original graphic-pack sprites, then adds the RTL layer. */
+@import "../en/lang.css";
+@import "rtl.css";

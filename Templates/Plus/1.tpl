@@ -30,7 +30,8 @@ $packages = [
 ];
 
 $currency = defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR';
-$payEmail = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
+$payEmail = trim((string) (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : ''));
+$paymentsEnabled = $payEmail !== '';
 ?>
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead><tr><th colspan="2"><?php echo GOLD_SHOP; ?></th></tr></thead>
@@ -38,8 +39,11 @@ $payEmail = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
 		<tr>
 			<td class="pic"><img src="img/bezahlung/Travian_verdienen.jpg" style="width:99px;height:99px;" alt="<?php echo GOLD_SHOP; ?>" /><div><?php echo GOLD_SHOP; ?></div></td>
 			<td class="desc">
-				<?php echo TZ_ML_GOLD_RESERVE; ?> 
-				<a href="mailto:<?= $payEmail ?>"><?php echo TZ_PAYMENT_ACCOUNT; ?></a>.<br><br>
+				<?php if ($paymentsEnabled): ?>
+					<?php echo TZ_ML_GOLD_RESERVE; ?> <a href="mailto:<?= htmlspecialchars($payEmail, ENT_QUOTES, 'UTF-8') ?>"><?php echo TZ_PAYMENT_ACCOUNT; ?></a>.<br><br>
+				<?php else: ?>
+					<strong><?php echo TZ_PAYMENTS_DISABLED; ?></strong><br><br>
+				<?php endif; ?>
 				<b><?php echo TZ_USERNAME; ?><br><?php echo PAYMENT_METHOD; ?><br><?php echo TZ_ORDERED_PACKAGE; ?><br><?php echo TZ_DATE_AND_TIME; ?></b><br><br>
 				<?php echo TZ_WE_STRIVE_TO_ENSURE_SPEEDY_PROCESS; ?>
 			</td>
@@ -55,7 +59,7 @@ $payEmail = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
             <tr><td class="pic"><a href="plus1.php?id=<?= $p['id'] ?>"><img src="img/bezahlung/<?= $p['img'] ?>" style="width:99px;height:99px;" alt="Package <?= $p['key'] ?>" /></a></td></tr>
             <tr><td><?= $p['gold'] ?>&nbsp;Gold</td></tr>
             <tr><td><?= $p['price'] ?>&nbsp;<?= $currency ?></td></tr>
-            <tr><td><a href="plus1.php?id=<?= $p['id'] ?>" onclick="if(this.dataset.c) return false; this.dataset.c=1;">&raquo; buy</a></td></tr>
+			<tr><td><?php if ($paymentsEnabled): ?><a href="plus1.php?id=<?= $p['id'] ?>" onclick="if(this.dataset.c) return false; this.dataset.c=1;">&raquo; <?php echo BUY_NOW; ?></a><?php else: ?><span><?php echo TZ_PAYMENTS_DISABLED; ?></span><?php endif; ?></td></tr>
         </tbody>
     </table>
 <?php endforeach; ?>

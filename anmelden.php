@@ -160,9 +160,9 @@ $regStep = $regErrors ? 3 : 1;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-	<title><?php echo SERVER_NAME; ?> - Registration</title>
+	<title><?php echo SERVER_NAME; ?> - <?php echo TZ_REGISTRATION_SCREEN; ?></title>
 		<link rel="shortcut icon" href="favicon.ico"/>
-	<meta name="content-language" content="en" />
+	<meta name="content-language" content="<?php echo htmlspecialchars(LANG, ENT_QUOTES, 'UTF-8'); ?>" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -297,7 +297,7 @@ ul.rw-err{margin:0 0 6px;padding:0 0 0 16px;color:#c0392b;font:bold 12px/17px Ar
 if(REG_OPEN == true){ ?>
 <div id="content"  class="signup">
 
-<h1><img src="img/x.gif" class="anmelden" alt="register for the game" /></h1>
+<h1><img src="img/x.gif" class="anmelden" alt="<?php echo TZ_REGISTRATION_SCREEN; ?>" /></h1>
 
 <form name="snd" method="post" action="anmelden.php" id="regform">
 <input type="hidden" name="invited" value="<?php echo htmlspecialchars($invited, ENT_QUOTES, 'UTF-8'); ?>" />
@@ -326,7 +326,7 @@ if(REG_OPEN == true){ ?>
 			<div class="rw-info<?php echo ($tribeId == $regTribe) ? ' on' : ''; ?>" id="rw_info<?php echo (int) $tribeId; ?>">
 				<img class="rw-portrait" src="img/reg/portrait_v<?php echo (int) $tribeId; ?>.png" alt="" />
 <?php     if ($tribeData['best']) { ?>
-				<img class="rw-badge" src="img/reg/badge_new.png" alt="recommended for new players" />
+		<img class="rw-badge" src="img/reg/badge_new.png" alt="<?php echo defined('TRIBE3_L4') ? TRIBE3_L4 : 'Recommended for new players'; ?>" />
 <?php     } ?>
 				<h2 class="rw-name"><?php echo htmlspecialchars($tribeData['name'], ENT_QUOTES, 'UTF-8'); ?></h2>
 				<ul class="rw-lines">
@@ -346,7 +346,7 @@ if(REG_OPEN == true){ ?>
 		<p class="rw-intro"><?php echo regText('REG_POS_INTRO', 'Where do you want to start building up your empire? Use the "recommended" area for the most ideal location. Or select the area where your friends are located and team up!'); ?></p>
 
 		<div class="rw-map<?php echo ($regQuad > 0) ? ' picked' : ''; ?>" id="rw_map">
-			<img class="rw-mapbg" src="img/reg/map.png" alt="world map" />
+			<img class="rw-mapbg" src="img/reg/map.png" alt="<?php echo TZ_MAP; ?>" />
 <?php for ($k = 1; $k <= 4; $k++) { ?>
 			<div class="rw-q rw-q<?php echo $k; ?><?php echo ($regQuad == $k) ? ' sel' : ''; ?>" data-kid="<?php echo $k; ?>" title="<?php echo htmlspecialchars($regQuadrants[$k]['name'] . ' ' . $regQuadrants[$k]['coords'], ENT_QUOTES, 'UTF-8'); ?>"></div>
 <?php } ?>
@@ -535,8 +535,8 @@ echo $form->getError('agree');
 <?php }else{ ?>
 <div id="content"  class="signup">
 
-<h1><img src="img/x.gif" class="anmelden" alt="register for the game" /></h1>
-<h5><img src="img/x.gif" class="img_u05" alt="registration"/></h5>
+<h1><img src="img/x.gif" class="anmelden" alt="<?php echo TZ_REGISTRATION_SCREEN; ?>" /></h1>
+<h5><img src="img/x.gif" class="img_u05" alt="<?php echo TZ_REGISTRATION_SCREEN; ?>"/></h5>
 
 <p><?php echo REGISTER_CLOSED; ?></p>
 </div>

@@ -488,8 +488,6 @@ class MYSQLi_DB implements IDbConnection {
 	        ));
 	    }
 
-		// we will operate in UTF8
-		mysqli_query($this->dblink,"SET NAMES 'UTF8'");
 	}
 };
 

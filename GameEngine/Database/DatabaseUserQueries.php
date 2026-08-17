@@ -37,9 +37,8 @@ trait DatabaseUserQueries {
         ? strtolower(trim((string) SERVER_LANG))
         : 'en';
 
-    $allowedLanguages = ['en', 'fr', 'it', 'ro', 'zh'];
-
-    if (!in_array($serverLang, $allowedLanguages, true)) {
+    if (!preg_match('/^[a-z]{2}$/', $serverLang)
+        || !is_file(__DIR__ . '/../Lang/' . $serverLang . '.php')) {
         $serverLang = 'en';
     }
 

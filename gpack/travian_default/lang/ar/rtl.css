@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+/* Loaded only for Arabic. Keep this after the graphic-pack styles. */
+html[dir="rtl"] body { direction: rtl; text-align: right; font-family: Tahoma, Arial, sans-serif; }
+html[dir="rtl"] input, html[dir="rtl"] select, html[dir="rtl"] textarea, html[dir="rtl"] button { direction: rtl; text-align: right; }
+html[dir="rtl"] .wrapper, html[dir="rtl"] #content, html[dir="rtl"] .contentPage, html[dir="rtl"] .manual { direction: rtl; }
+html[dir="rtl"] #header,
+html[dir="rtl"] #mtop,
+html[dir="rtl"] #res,
+html[dir="rtl"] #resWrap { direction: ltr; }
+html[dir="rtl"] .left, html[dir="rtl"] .float_left, html[dir="rtl"] .fleft { float: right !important; }
+html[dir="rtl"] .right, html[dir="rtl"] .float_right, html[dir="rtl"] .fright { float: left !important; }
+html[dir="rtl"] table { direction: rtl; }
+html[dir="rtl"] th, html[dir="rtl"] td, html[dir="rtl"] .message, html[dir="rtl"] .report, html[dir="rtl"] .queue { text-align: right; }
+html[dir="rtl"] #side_navi { float: right; }
+html[dir="rtl"] #content { float: right; }
+html[dir="rtl"] #side_info { float: left; }
+
+/* The landing page uses a centered two-column layout, not the in-game shell. */
+html[dir="rtl"] body.indexPage #content {
+    float: none;
+    width: auto;
+}
+html[dir="rtl"] body.indexPage #content .grit {
+    display: flow-root;
+}
+html[dir="rtl"] body.indexPage .grit .infobox,
+html[dir="rtl"] body.indexPage .grit .secondarybox {
+    float: right;
+}
+
+html[dir="rtl"] #ltime, html[dir="rtl"] #stime { left: auto; right: 0; direction: rtl; }
+html[dir="rtl"] #side_navi p a, html[dir="rtl"] #side_navi table { padding-left: 0; padding-right: 12px; }
+html[dir="rtl"] #side_navi table td { text-align: right; }
+html[dir="rtl"] #side_info { padding-left: 0; padding-right: 10px; }
+html[dir="rtl"] #side_info h5, html[dir="rtl"] #side_info div.news { margin-left: 0; margin-right: 10px; }
+html[dir="rtl"] #side_info div.news ul { margin-left: 0; margin-right: 15px; }
+html[dir="rtl"] #side_info td.link { padding-right: 0; padding-left: 10px; }
+html[dir="rtl"] #footer ul.menu li { float: right; }
+html[dir="rtl"] #footer ul.menu.menu2 { left: 210px; right: auto; }
+html[dir="rtl"] #guide1, html[dir="rtl"] #guide2 { left: auto; right: 50%; border-left: 0; border-right: 1px dashed red; }
+html[dir="rtl"] #guide1 { margin-left: 0; margin-right: -480px; }
+html[dir="rtl"] #guide2 { margin-left: 0; margin-right: -336px; }
+html[dir="rtl"] #guide3, html[dir="rtl"] #guide4 { right: auto; left: 50%; border-right: 0; border-left: 1px dashed red; }
+html[dir="rtl"] #guide3 { margin-right: 0; margin-left: -218px; }
+html[dir="rtl"] #guide4 { margin-right: 0; margin-left: -480px; }
+html[dir="rtl"] table tr.hl th.fc, html[dir="rtl"] table tr.hl td.fc { border-left: 0; border-right: 1px solid #71D000; }
+html[dir="rtl"] table tr.hl th.lc, html[dir="rtl"] table tr.hl td.lc { border-right: 0; border-left: 1px solid #71D000; }
+html[dir="rtl"] .player table#profile td.details table th, html[dir="rtl"] .alliance table#profile td.details table th { border-right: 0; border-left: 1px solid #C0C0C0; }
+html[dir="rtl"] .arrow, html[dir="rtl"] .next, html[dir="rtl"] .forward { transform: scaleX(-1); }
+html[dir="rtl"] .progress, html[dir="rtl"] .bar { direction: ltr; }
+html[dir="rtl"] .tree ul { padding-right: 1.25em; padding-left: 0; }
+html[dir="rtl"] .tree li { margin-right: 0; margin-left: 0; }
+html[dir="rtl"] #map_content, html[dir="rtl"] #map_links { transform: scaleX(-1); transform-origin: center; }
+html[dir="rtl"] #map_content span { transform: scaleX(-1); }
+html[dir="rtl"] #map div#map_coords { left: auto; right: 30px; direction: rtl; }
+html[dir="rtl"] #mbig #map div#map_coords { left: auto; right: 10px; }
+html[dir="rtl"] #map div#map_coords span, html[dir="rtl"] #map div#map_coords input { float: right; margin-right: 0; margin-left: 5px; }
+html[dir="rtl"] #map table#map_infobox { right: auto; left: 20px; }
+html[dir="rtl"] #mbig #map table#map_infobox { right: auto; left: 50px; }
+html[dir="rtl"] .rank, html[dir="rtl"] .alliance, html[dir="rtl"] .messages, html[dir="rtl"] .reports { direction: rtl; }
+
+/* English text baked into legacy GIF controls is replaced with Arabic-safe CSS assets. */
+html[dir="rtl"] input.dynamic_img#btn_ok,
+html[dir="rtl"] input.dynamic_img#fbtn_ok,
+html[dir="rtl"] input#btn_login,
+html[dir="rtl"] input#btn_signup,
+html[dir="rtl"] input#btn_reply,
+html[dir="rtl"] input.dynamic_img#btn_save,
+html[dir="rtl"] input.dynamic_img#btn_send,
+html[dir="rtl"] input.dynamic_img#btn_train,
+html[dir="rtl"] input.dynamic_img#btn_search,
+html[dir="rtl"] input.dynamic_img#btn_delete,
+html[dir="rtl"] input.dynamic_img#btn_archiv,
+html[dir="rtl"] input.dynamic_img#btn_demolish,
+html[dir="rtl"] img.dynamic_img#fbtn_post,
+html[dir="rtl"] img.dynamic_img#fbtn_newforum,
+html[dir="rtl"] img.dynamic_img#fbtn_reply { background-image: url("button-action.svg") !important; }
+html[dir="rtl"] input.dynamic_img#btn_back { background-image: url("button-back.svg") !important; }
+html[dir="rtl"] input.dynamic_img#btn_forward { background-image: url("button-next.svg") !important; }
+
+/* The registration wizard is text-first, so keep its cards readable in RTL. */
+html[dir="rtl"] #regwiz,
+html[dir="rtl"] #regwiz .rw-body,
+html[dir="rtl"] #regwiz .rw-panel,
+html[dir="rtl"] #regwiz .rw-card,
+html[dir="rtl"] #regwiz .rw-field,
+html[dir="rtl"] #regwiz .rw-note,
+html[dir="rtl"] #regwiz .rw-agree { direction: rtl; text-align: right; }
+html[dir="rtl"] #regwiz .rw-intro,
+html[dir="rtl"] #regwiz .rw-lines,
+html[dir="rtl"] #regwiz .rw-lines li { text-align: right; }
+html[dir="rtl"] #regwiz .rw-lines li { padding-left: 0; padding-right: 30px; background-position: 100% 50%; }
+html[dir="rtl"] #regwiz .rw-portrait { right: auto; left: 0; }
+html[dir="rtl"] #regwiz .rw-badge { right: auto; left: 8%; }
+html[dir="rtl"] #regwiz .rw-note { padding-left: 10px; padding-right: 36px; }
+html[dir="rtl"] #regwiz .rw-note:before { left: auto; right: 10px; }
+html[dir="rtl"] #regwiz .rw-agree input { margin-left: 5px; margin-right: 0; }

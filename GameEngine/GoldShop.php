@@ -62,7 +62,7 @@ class GoldShop
             `time`       int(11) NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE KEY `code` (`code`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
         @mysqli_query($link, "CREATE TABLE IF NOT EXISTS `" . TB_PREFIX . "gold_promo_redeem` (
             `id`       int(11) NOT NULL AUTO_INCREMENT,
@@ -73,7 +73,7 @@ class GoldShop
             PRIMARY KEY (`id`),
             KEY `promo_uid` (`promo_id`,`uid`),
             KEY `uid` (`uid`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
 
     /** Normalise a code: trim, uppercase, collapse to allowed charset. */

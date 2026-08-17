@@ -101,7 +101,7 @@ class MultiAccount
             KEY `ip` (`ip`),
             KEY `ua_hash` (`ua_hash`),
             KEY `login_time` (`login_time`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
         @mysqli_query($link, $sql);
     }
 

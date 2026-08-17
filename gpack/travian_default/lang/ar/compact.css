@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+/* Arabic keeps the original compact layout, then adds the RTL layer. */
+@import "../en/compact.css";
+@import "rtl.css";

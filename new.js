@@ -1,5 +1,15 @@
 /* Dynamic images, change class */
 
+// Keep the legacy 980px game shell visible on mobile devices without
+// disturbing pages (such as the admin panel) that already set a viewport.
+if (!document.getElementsByName('viewport').length)
+{
+	var viewport = document.createElement('meta');
+	viewport.name = 'viewport';
+	viewport.content = 'width=980';
+	document.getElementsByTagName('head')[0].appendChild(viewport);
+}
+
 // MooTools
 
 window

@@ -92,7 +92,7 @@ class PushProtection
             PRIMARY KEY (`id`),
             KEY `to_uid_time` (`to_uid`,`time`),
             KEY `from_uid_time` (`from_uid`,`time`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
         @mysqli_query($link, "CREATE TABLE IF NOT EXISTS `" . TB_PREFIX . "push_override` (
             `uid`          int(11) NOT NULL,
@@ -102,7 +102,7 @@ class PushProtection
             `set_by`       int(11) NOT NULL DEFAULT 0,
             `time`         int(11) NOT NULL DEFAULT 0,
             PRIMARY KEY (`uid`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
 
     /* ---- Data collection (called from Automation on delivery) ---------- */

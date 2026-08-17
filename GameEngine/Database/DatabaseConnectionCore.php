@@ -75,7 +75,7 @@ trait DatabaseConnectionCore {
             }
 
             if ($this->dblink instanceof \mysqli) {
-                return true;
+                return mysqli_set_charset($this->dblink, 'utf8mb4');
             }
 
             // During container startup DB may still be booting.

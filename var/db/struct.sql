@@ -13,7 +13,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 -- --------------------------------------------------------
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
  `type` smallint(1) NULL,
  PRIMARY KEY (`id`),
  KEY `ckey` (`ckey`(25))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%a2b`
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
  `b7` tinyint(2) NULL DEFAULT '0',
  `b8` tinyint(2) NULL DEFAULT '0',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%abdata`
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%activate`
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%admin_log` (
  `log` text NULL,
  `time` int(25) NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%admin_log`
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
  PRIMARY KEY (`id`),
  KEY `week` (`week`),
  KEY `allyid` (`allyid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`),
  KEY `size-type` (`size`, `type`),
  KEY `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Table structure for table `%PREFIX%artefacts`
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts_chrono` (
   `conqueredtime` int(11) NULL,
   PRIMARY KEY (`id`),
   KEY `artefactid-conqueredtime` (`artefactid`,`conqueredtime`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Table structure for table `%PREFIX%artefacts_chrono`
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
  KEY `tag` (`tag`),
  KEY `name` (`name`),
  KEY `leader` (`leader`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%alidata`
@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_invite` (
  PRIMARY KEY (`id`),
  KEY `alliance-accept` (`alliance`, `accept`),
  KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%ali_invite`
@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_log` (
  `date` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `aid` (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%ali_log`
@@ -317,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
  PRIMARY KEY (`id`),
  UNIQUE KEY `uid-alliance` (`uid`, `alliance`) USING BTREE,
  KEY `alliance` (`alliance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%ali_permission`
@@ -340,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_bonus` (
  `upgrade_end` int(11) NOT NULL DEFAULT '0',
  PRIMARY KEY (`aid`, `btype`),
  KEY `upgrade_end` (`upgrade_end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%alliance_bonus`
@@ -360,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_donation` (
  `amount` bigint(20) NOT NULL DEFAULT '0',
  PRIMARY KEY (`uid`, `day`),
  KEY `day` (`day`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%alliance_donation`
@@ -384,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alliance_donation_log` (
  PRIMARY KEY (`id`),
  KEY `aid_time` (`aid`, `time`),
  KEY `aid_uid` (`aid`, `uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%alliance_donation_log`
@@ -413,7 +413,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%player_statistics_history` (
  PRIMARY KEY (`id`),
  UNIQUE KEY `uid_time` (`uid`, `recorded_at`),
  KEY `recorded_at` (`recorded_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%player_statistics_history`
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
  PRIMARY KEY (`id`),
   KEY `vref` (`vref`),
   KEY `attack_type` (`attack_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%attacks`
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
   `active` tinyint(1) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `active-end` (`active`,`end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -499,7 +499,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%banlist_ip` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ip` (`ip`),
   KEY `active-end` (`active`,`end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%banlist`
@@ -527,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
  KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
  KEY `wid` (`wid`),
   KEY `wid_timestamp` (`wid`,`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%bdata`
@@ -546,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%build_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%build_log`
@@ -569,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
  PRIMARY KEY (`id`),
  KEY `alli` (`alli`(32)),
  KEY `id_user` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%chat`
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%config` (
  `lastgavemedal` int(11) NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 INSERT INTO `%PREFIX%config` VALUES (0);
 
 --
@@ -603,7 +603,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
  `timestamp` int(11) NULL,
  PRIMARY KEY (`uid`),
  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%deleting`
@@ -623,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
  `timetofinish` int(11) NULL,
  PRIMARY KEY (`vref`),
  KEY `timetofinish` (`timetofinish`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%demolition`
@@ -646,7 +646,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
  KEY `alli1` (`alli1`),
  KEY `alli2` (`alli2`),
  KEY `type-accepted` (`type`,`accepted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 --
 -- Dumping data for table `%prefix%diplomacy`
 --
@@ -756,7 +756,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
  KEY `from` (`from`,`hero`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%enforcement`
@@ -775,7 +775,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
  `name` varchar(100) NULL,
  PRIMARY KEY (`id`),
  KEY `wref` (`wref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%farmlist`
@@ -877,7 +877,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
  PRIMARY KEY (`vref`),
  KEY `f99` (`f99`),
  KEY `f99t` (`f99t`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%fdata`
@@ -905,7 +905,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
   KEY `display_to_alliances` (`display_to_alliances`(11)),
   KEY `display_to_users` (`display_to_users`(11)),
   KEY `sorting` (`sorting`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%forum_cat`
@@ -924,7 +924,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
  `result` varchar(255) NULL,
  PRIMARY KEY (`id`),
  KEY `alliance` (`alliance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%forum_edit`
@@ -945,7 +945,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
   `date` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
  KEY `topic-owner` (`topic`,`owner`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%forum_post`
@@ -979,7 +979,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_survey` (
  `vote8` int(11) NULL DEFAULT '0',
  `voted` text NULL,
  `ends` int(11) NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%forum_survey`
@@ -1006,7 +1006,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
   `stick` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `cat-stick` (`cat`, `stick`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%forum_topic`
@@ -1026,7 +1026,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
  `shown` tinyint(1) NULL,
  PRIMARY KEY (`id`),
  KEY `shown` (`shown`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%general`
@@ -1051,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
   PRIMARY KEY (id),
   KEY uid (uid),
   KEY time (time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%gold_fin_log`
@@ -1094,7 +1094,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  KEY `lastupdate` (`lastupdate`),
  KEY `inrevive` (`inrevive`),
  KEY `intraining` (`intraining`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%hero`
@@ -1122,7 +1122,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero_items` (
  KEY `uid_equipped` (`uid`,`equipped`),
  KEY `uid_slot` (`uid`,`slot`),
  KEY `itemid` (`itemid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1144,7 +1144,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero_adventure` (
  KEY `uid_status` (`uid`,`status`),
  KEY `expire` (`expire`),
  KEY `moveid` (`moveid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1170,7 +1170,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%auction` (
  KEY `status_end` (`status`,`time_end`),
  KEY `bidder` (`bidder`),
  KEY `seller` (`seller`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1184,7 +1184,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%illegal_log`
@@ -1203,7 +1203,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
  `ip` varchar(15) NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1225,7 +1225,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mad_session` (
  KEY `ip` (`ip`),
  KEY `ua_hash` (`ua_hash`),
  KEY `login_time` (`login_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1248,7 +1248,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%resource_transfer_log` (
  PRIMARY KEY (`id`),
  KEY `to_uid_time` (`to_uid`,`time`),
  KEY `from_uid_time` (`from_uid`,`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1265,7 +1265,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%push_override` (
  `set_by` int(11) NOT NULL DEFAULT 0,
  `time` int(11) NOT NULL DEFAULT 0,
  PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1284,7 +1284,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%reg_block` (
  PRIMARY KEY (`id`),
  UNIQUE KEY `type_value` (`type`,`value`),
  KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1307,7 +1307,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_promo` (
  `time` int(11) NOT NULL DEFAULT 0,
  PRIMARY KEY (`id`),
  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1325,7 +1325,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_promo_redeem` (
  PRIMARY KEY (`id`),
  KEY `promo_uid` (`promo_id`,`uid`),
  KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1347,7 +1347,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%quest_config` (
  `req_level` int(11) NOT NULL DEFAULT 0,
  `note` varchar(255) NOT NULL DEFAULT '',
  PRIMARY KEY (`variant`,`quest_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%login_log`
@@ -1373,7 +1373,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market` (
  `merchant` tinyint(2) NULL,
  PRIMARY KEY (`id`),
  KEY `vref-accept-merchant` (`vref`,`accept`,`merchant`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%market`
@@ -1392,7 +1392,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%market_log`
@@ -1425,7 +1425,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
  KEY `target-time` (`target`,`time`) USING BTREE,
  KEY `owner` (`owner`),
  KEY `target-viewed` (`target`,`viewed`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%mdata`
@@ -1449,7 +1449,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
  `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `week` (`week`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%medal`
@@ -1484,7 +1484,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   KEY `proc-sort_type-endtime` (`proc`,`sort_type`,`endtime`),
   KEY `to_endtime` (`to`,`endtime`),
   KEY `from_endtime` (`from`,`endtime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%movement`
@@ -1515,7 +1515,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  KEY `del` (`del`),
  KEY `toWref` (`toWref`),
  KEY `uid-viewed` (`uid`,`viewed`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%ndata`
@@ -1555,7 +1555,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
  KEY `maxcrop` (`maxcrop`),
  KEY `maxstore` (`maxstore`),
  KEY `owner` (`owner`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%odata`
@@ -1575,7 +1575,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
  `sit` tinyint(1) NULL,
  UNIQUE KEY `name` (`name`),
  KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%online`
@@ -1605,7 +1605,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
  PRIMARY KEY (`id`),
  KEY `wref` (`wref`),
  KEY `from` (`from`,`t11`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%prisoners`
@@ -1633,7 +1633,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
  `t6` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `lid-distance` (`lid`, `distance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%raidlist`
@@ -1658,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
  -- each queued upgrade of the SAME unit as its own row (same tech, different
  -- timestamp). A UNIQUE(vref,tech) made the 2nd queued upgrade INSERT fail,
  -- which under PHP 8 mysqli (exceptions on) became an uncaught HTTP 500.
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%research`
@@ -1691,7 +1691,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
  KEY `timestamp` (`timestamp`),
  KEY `timeleft` (`timeleft`),
  KEY `uid-timestamp` (`uid`, `timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%route`
@@ -1712,7 +1712,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%send` (
  `crop` int(11) NULL,
  `merchant` tinyint(2) NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%send`
@@ -1809,7 +1809,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%tdata` (
  `t89` tinyint(1) NULL DEFAULT '0',
  `t90` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%tdata`
@@ -1828,7 +1828,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%tech_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%tech_log`
@@ -1852,7 +1852,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
  `timestamp2` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%training`
@@ -1961,7 +1961,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
  `u99o` int(11) NULL DEFAULT '0',
  `hero` int(11) NULL DEFAULT '0',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%units`
@@ -2087,7 +2087,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   KEY `sit1` (`sit1`),
   KEY `sit2` (`sit2`),
   KEY `gold` (`gold`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%users`
@@ -2151,7 +2151,7 @@ KEY `exp1` (`exp1`),
 KEY `exp2` (`exp2`),
 KEY `exp3` (`exp3`),
 KEY `idx_owner_wref` (`owner`, `wref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%vdata`
@@ -2176,7 +2176,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
  KEY `occupied` (`occupied`),
  KEY `fieldtype` (`fieldtype`),
  KEY `x-y` (`x`, `y`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%prefix%wdata`
@@ -2194,7 +2194,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
  `used` tinyint(1) NULL DEFAULT '0',
  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `%prefix%password`
@@ -2210,7 +2210,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ww_attacks` (
   `attack_time` int(11) DEFAULT NULL,
   KEY `attack_time` (`attack_time`),
   KEY `vid` (`vid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `%prefix%ww_attacks`
@@ -2249,7 +2249,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%maintenance` (
   `started_by` int(11) DEFAULT NULL,
   `started_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%maintenance`
@@ -2274,7 +2274,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%debug_log` (
   `started_by` int(11) DEFAULT NULL,
   `started_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `%PREFIX%debug_log`
@@ -2301,7 +2301,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%milestones` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `milestone_key` (`milestone_key`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%hospital` (
  `vref` int(11) NOT NULL,
@@ -2396,7 +2396,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hospital` (
  `u89` int(11) NULL DEFAULT '0',
  `u90` int(11) NULL DEFAULT '0',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%healing` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2408,4 +2408,4 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%healing` (
  `timestamp2` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

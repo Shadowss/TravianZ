@@ -44,7 +44,7 @@ $currentYear = date('Y');
  * Build version
  * Ușor de modificat ulterior
  */
-$serverVersion = 'v.11 Full Refactor';
+$serverVersion = 'الإصدار 11';
 ?>
 
 <!-- ===================== FOOTER ===================== -->
@@ -63,13 +63,13 @@ $serverVersion = 'v.11 Full Refactor';
                 <div class="copyright">
                     &copy; 2010 - <?php echo (int)$currentYear; ?>
                     <?php echo safeHTML($serverName); ?>
-                    All rights reserved
+                    <?php echo defined('TZ_ALL_RIGHTS_RESERVED') ? TZ_ALL_RIGHTS_RESERVED : 'All rights reserved'; ?>
                 </div>
 
                 <!-- Version -->
                 <div class="copyright">
 
-                    <?php echo TZ_SERVER_RUNNING_ON; ?>
+                    <?php echo defined('TZ_SERVER_RUNNING_ON') ? TZ_SERVER_RUNNING_ON : ''; ?>
 
                     <a href="version.php"
                        style="color:#FF5555;text-decoration:none;font-weight:bold;transition:0.3s;"
