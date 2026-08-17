@@ -277,7 +277,7 @@ $text = admin_config_template_contents(array(
 		// PLUS settings need to be kept intact
 		tz_config_set($text, '%PLUS_TIME%', PLUS_TIME);
 		tz_config_set($text, '%PLUS_PRODUCTION%', PLUS_PRODUCTION);
-		tz_config_set($text, '%PAYPAL_EMAIL%', (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'));
+		tz_config_set($text, '%PAYPAL_EMAIL%', (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com'));
 		tz_config_set($text, '%PAYPAL_CURRENCY%', (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'));
 		tz_config_set($text, '%PLUS_PACKAGE_A_PRICE%', (defined('PLUS_PACKAGE_A_PRICE') ? PLUS_PACKAGE_A_PRICE : '1,99'));
 		tz_config_set($text, '%PLUS_PACKAGE_A_GOLD%', (defined('PLUS_PACKAGE_A_GOLD') ? PLUS_PACKAGE_A_GOLD : '60'));
