@@ -200,6 +200,7 @@ tz_def('WAIT_FOR_CONFIRM', 'Așteaptă confirmarea');
 tz_def('CONFIRM', 'Confirmă');
 tz_def('WRITE_MESS_WARN', '<b>Atenție:</b> nu poți folosi <b>[message]</b> sau <b>[/message]</b> în mesaj deoarece pot cauza probleme cu sistemul BBCode');
 tz_def('NO_REPORTS', 'Nu există rapoarte disponibile');
+tz_def('READ_ALL_REPORTS', 'Marchează toate ca citite');
 tz_def('ATTACKER', 'Atacator');
 tz_def('NATAR_COUNTERFORCE', 'Contraatac Natari');
 tz_def('FROM_THE_VILL', 'din satul');

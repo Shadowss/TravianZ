@@ -5924,6 +5924,25 @@ div#textmenu span {
 div#textmenu a.selected {
     border-bottom: 1px dashed Silver;
 }
+/* Buton "Read All" din berichte.php - stilizat sa se potriveasca cu linkurile de tab din #textmenu */
+div#textmenu.rpt-readall {
+    text-align: right;
+}
+button.rpt-readall-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #71D000;
+    font-weight: bold;
+    font-size: 13px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+}
+button.rpt-readall-btn:hover {
+    color: #00BC00;
+}
 .none {
     color: #C0C0C0;
 }

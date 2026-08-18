@@ -359,6 +359,26 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
+	/**
+	 * Buton "Read All" (cerut de Catalin, berichte.php): marcheaza TOATE
+	 * rapoartele necitite ale userului ca citite dintr-o singura interogare,
+	 * in loc sa deschizi fiecare in parte.
+	 *
+	 * Acelasi domeniu ca getNotice($uid) (doar del = 0) - deci acopera
+	 * exact ce se vede in lista, inclusiv rapoartele arhivate necitite
+	 * (ntype = 9).
+	 */
+	function noticeViewedAll($uid) {
+	    $uid = (int) $uid;
+
+	    if ($uid <= 0) {
+	        return false;
+	    }
+
+	    $q = "UPDATE " . TB_PREFIX . "ndata set viewed = 1 WHERE uid = $uid AND viewed = 0 AND del = 0";
+		return mysqli_query($this->dblink,$q);
+	}
+
     function addNotice($uid, $toWref, $ally, $type, $topic, $data, $time = 0) {
     list($uid, $toWref, $ally, $type, $topic, $data, $time) = $this->escape_input((int) $uid, (int) $toWref, (int) $ally, (int) $type, $topic, $data, (int) $time);
         

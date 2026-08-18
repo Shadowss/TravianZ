@@ -204,6 +204,7 @@ tz_def('WAIT_FOR_CONFIRM', 'En attente de confirmation');
 tz_def('CONFIRM', 'Confirmer');
 tz_def('WRITE_MESS_WARN', '<b>Attention :</b> vous ne pouvez pas utiliser les balises <b>[message]</b> ou <b>[/message]</b> dans votre message car cela peut causer des problèmes avec le système BBCode.');
 tz_def('NO_REPORTS', 'Aucun rapport disponible');
+tz_def('READ_ALL_REPORTS', 'Marquer tout comme lu');
 tz_def('ATTACKER', 'Attaquant');
 tz_def('NATAR_COUNTERFORCE', 'Contre-offensive Natar');
 tz_def('FROM_THE_VILL', 'du village');

@@ -198,6 +198,7 @@ tz_def('WAIT_FOR_CONFIRM', 'Wait for confirm');
 tz_def('CONFIRM', 'Confirm');
 tz_def('WRITE_MESS_WARN', '<b>Warning:</b> you can`t use the values <b>[message]</b> or <b>[/message]</b> in your message because it can cause problem with bbcode system');
 tz_def('NO_REPORTS', 'There are no reports available');
+tz_def('READ_ALL_REPORTS', 'Mark all as read');
 tz_def('ATTACKER', 'Attacker');
 tz_def('NATAR_COUNTERFORCE', 'Natar Counterforce');
 tz_def('FROM_THE_VILL', 'from the village');
