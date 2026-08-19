@@ -102,7 +102,7 @@ if ($action === 'addSlot' && $lid) {
             /* ======================
                FINAL INSERT
             ====================== */
-            $coor = $database->getCoor($village->wid);
+            $coor = $database->getCoor($FLData['wref']);
             $distance = $database->getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
 
             $database->addSlotFarm(
