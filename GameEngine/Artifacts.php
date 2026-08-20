@@ -277,39 +277,58 @@ class Artifacts
         global $database;
         
         //Register the Natars account, the Natars' password is the same as the MH's one
+        //NOTE: pre-existing anomaly, left untouched - this call passes 8 args
+        //(...,  self::NATARS_DESC, self::NATARS_DESC2) but register() only
+        //accepts up to $desc (7 params), so NATARS_DESC2 is silently dropped
+        //by PHP. Not related to the crash fixed below.
         $password = $database->getUserField(5, 'password', 0);
         $database->register(TRIBE5, $password, self::NATARS_EMAIL, self::NATARS_TRIBE, null, self::NATARS_UID, self::NATARS_DESC, self::NATARS_DESC2);
-        
-        //Convert from coordinates to village IDs
-        $possibleWids = $database->getVilWrefs(self::NATARS_CAPITAL_COORDINATES);
-        
-        //Check if the villages aren't already taken
-        $wid = $database->getFreeVillage($possibleWids);
 
-        //Generate the Natars' capital
-        //
-		// The capital starts with the World Wonder and the infrastructure defined
-		// in NATARS_CAPITAL_BUILDINGS. The data is passed in the same format used
-		// for World Wonder villages: [0] = column names, [1][] = values.
-        $capitalBuildings = [];
-        $capitalBuildings[0]   = array_keys(self::NATARS_CAPITAL_BUILDINGS);
-        $capitalBuildings[1][] = array_values(self::NATARS_CAPITAL_BUILDINGS);
+        //Idempotency guard: this whole method isn't wrapped in a transaction,
+        //so a previous run may have already built the Natars' capital (e.g.
+        //the register() call above went through, then the process died/timed
+        //out before finishing). Reuse the existing capital instead of trying
+        //to generate a second one, which would either collide or leave a
+        //stray village behind.
+        $existingCapital = $database->getVrefCapital(self::NATARS_UID);
+        if ($existingCapital) {
+            $wid = $existingCapital['wref'];
+        } else {
+            //Convert from coordinates to village IDs
+            $possibleWids = $database->getVilWrefs(self::NATARS_CAPITAL_COORDINATES);
 
-		// The capital army, using the same format as World Wonder villages:
-		// [0] = column names, [1][] = values.
-        $capitalUnits = [];
-        $capitalUnits[0]   = array_keys(self::NATARS_CAPITAL_UNITS);
-        $capitalUnits[1][] = array_values(self::NATARS_CAPITAL_UNITS);
+            //Check if the villages aren't already taken
+            $wid = $database->getFreeVillage($possibleWids);
 
-        $wid = $database->generateVillages(
-            [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 1163, 'name' => null, 'natar' => 0]],
-            self::NATARS_UID,
-            TRIBE5,
-            $capitalUnits,
-            $capitalBuildings
-        );
+            //Generate the Natars' capital
+            //
+            // The capital starts with the World Wonder and the infrastructure defined
+            // in NATARS_CAPITAL_BUILDINGS. The data is passed in the same format used
+            // for World Wonder villages: [0] = column names, [1][] = values.
+            $capitalBuildings = [];
+            $capitalBuildings[0]   = array_keys(self::NATARS_CAPITAL_BUILDINGS);
+            $capitalBuildings[1][] = array_values(self::NATARS_CAPITAL_BUILDINGS);
+
+            // The capital army, using the same format as World Wonder villages:
+            // [0] = column names, [1][] = values.
+            $capitalUnits = [];
+            $capitalUnits[0]   = array_keys(self::NATARS_CAPITAL_UNITS);
+            $capitalUnits[1][] = array_values(self::NATARS_CAPITAL_UNITS);
+
+            $wid = $database->generateVillages(
+                [['wid' => $wid, 'mode' => 2, 'type' => 3, 'kid' => 0, 'capital' => 1, 'pop' => 1163, 'name' => null, 'natar' => 0]],
+                self::NATARS_UID,
+                TRIBE5,
+                $capitalUnits,
+                $capitalBuildings
+            );
+        }
 
         //Scouts all players
+        //NOTE: if this retry path is taken (capital already existed), players
+        //get scouted again - harmless duplicate espionage reports, not data
+        //corruption. Only reachable if a prior run died after building the
+        //capital but before finishing artifact spawning below.
         $this->scoutAllPlayers($wid);
         
         //Add artifacts

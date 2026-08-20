@@ -120,7 +120,7 @@ define("START_TIME", "%SSTARTTIME%");
 // SERVER_LANG is the DEFAULT language of the server (chosen at install / in
 // the admin "Server Settings"). LANG is the EFFECTIVE display language.
 //
-// Per-user language (issue #166): if the logged-in player picked a language
+// Per-user language : if the logged-in player picked a language
 // in their profile preferences (stored in users.lang and mirrored into
 // $_SESSION['lang']), LANG becomes that language; otherwise LANG falls back
 // to SERVER_LANG.

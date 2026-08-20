@@ -31,6 +31,27 @@ trait DatabaseUserQueries {
     $time = time();
     $access = USER;
 
+    // Idempotency guard for pre-assigned IDs (system accounts such as
+    // Natars, uid=3, called from Artifacts::createNatars()). Regular
+    // player registration always passes uid=0, so this branch never
+    // runs for it. It exists because createNatars() is not wrapped in
+    // a transaction: if it registers the Natars row but then dies
+    // further down (village/scout/artifact generation), every retry
+    // used to hit this INSERT again and throw an uncaught
+    // "Duplicate entry '3' for key PRIMARY" mysqli_sql_exception,
+    // fatal on every cron tick and page-load fallback. Detect the
+    // existing row and hand its id back instead of re-inserting.
+    if ($uid > 0) {
+        $existing = $this->dblink->prepare("SELECT id FROM `".TB_PREFIX."users` WHERE id = ? LIMIT 1");
+        $existing->bind_param("i", $uid);
+        $existing->execute();
+        $existingRow = $existing->get_result()->fetch_assoc();
+        $existing->close();
+        if ($existingRow) {
+            return (int)$existingRow['id'];
+        }
+    }
+
     // New accounts inherit the configured server language.
     // English remains the safe fallback if SERVER_LANG is missing or invalid.
     $serverLang = defined('SERVER_LANG')
