@@ -614,7 +614,25 @@ trait DatabaseTroopQueries {
             //Fixed part of negative troops (double troops) - by InCube
             $array_amt[$i] = (int) $array_amt[$i] < 0 ? 0 : $array_amt[$i];
             //Fixed part of negative troops (double troops) - by InCube
-            $units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.($array_amt[$i] ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
+            $amount = (int) ($array_amt[$i] ? $array_amt[$i] : 0);
+
+            /**
+             * The guard above only clamps the AMOUNT, never the RESULT, so any
+             * caller subtracting more than the column holds wrote a NEGATIVE
+             * troop count (issue #379: "-1 Hero" in the village troop list,
+             * after the hero was removed once by Battle::applyHeroBattleDamage()
+             * and a second time by the casualty pipeline).
+             *
+             * A negative troop count is never a valid game state, so floor the
+             * subtraction at 0 in SQL. Additions are untouched.
+             */
+            if ($array_mode[$i] == 1) {
+                $units .= $unit.' = '.$unit.' + '.$amount;
+            } else {
+                $units .= $unit.' = GREATEST('.$unit.' - '.$amount.', 0)';
+            }
+
+            $units .= (($number > $i+1) ? ', ' : '');
 		}
 		$q = "UPDATE ".TB_PREFIX."units set $units WHERE vref = $vref";
 		return mysqli_query($this->dblink, $q);
@@ -881,7 +899,14 @@ trait DatabaseTroopQueries {
 
         foreach ($unit as $index => $unitType) {
             $unitType = ($unitType != 'hero' ? 'u' . $this->escape($unitType) : $unitType);
-		    $pairs[] = $unitType . ' = ' . $unitType . (!(int) $mode[$index] ? ' - ' : ' + ') . (int) $amt[$index];
+
+            // Same floor as modifyUnit(): a reinforcement column must never go
+            // negative either (issue #379).
+            if ((int) $mode[$index]) {
+                $pairs[] = $unitType . ' = ' . $unitType . ' + ' . (int) $amt[$index];
+            } else {
+                $pairs[] = $unitType . ' = GREATEST(' . $unitType . ' - ' . (int) $amt[$index] . ', 0)';
+            }
         }
 
 		$q = "UPDATE " . TB_PREFIX . "enforcement SET ".implode(', ', $pairs)." WHERE id = $id";

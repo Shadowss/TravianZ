@@ -1231,9 +1231,24 @@ trait AutomationBattleResolution {
         if ($unitlist) {
             $owndead['hero'] = (isset($battlepart['deadherodef']) ? $battlepart['deadherodef'] : '');
 
-            $unitModifications_units[] = 'hero';
-            $unitModifications_amounts[] = $owndead['hero'];
-            $unitModifications_modes[] = 0;
+            /**
+             * BUG FIXED (issue #379): units.hero ended up at -1.
+             *
+             * The value is still reported (it feeds the battle report and the
+             * points), but it must NOT be subtracted from units.hero here any
+             * more. Battle::applyHeroBattleDamage() already clears the column
+             * itself ("UPDATE units u JOIN vdata v SET u.hero = 0 WHERE
+             * v.owner = <hero owner>") the moment the hero dies, and that runs
+             * inside calculateBattle(), i.e. BEFORE this method.
+             *
+             * So the column went 1 -> 0 there and 0 - 1 -> -1 here: the
+             * village kept showing "-1 Hero" in the troop list while the
+             * Hero's Mansion correctly offered a revive.
+             *
+             * One writer only: the death is owned by applyHeroBattleDamage(),
+             * which is also the only place that knows about the hero's other
+             * possible locations (reinforcements, another village).
+             */
         }
 
         // modify units in DB
@@ -1330,10 +1345,21 @@ trait AutomationBattleResolution {
             }
 
             if ($enforce['hero'] > 0) {
-                $enforceModificationsById[$enforce['id']]['units'][] = 'hero';
-                $enforceModificationsById[$enforce['id']]['amounts'][] = $battlepart['deadheroref'][$enforce['id']];
-                $enforceModificationsById[$enforce['id']]['modes'][] = 0;
-
+                /**
+                 * BUG FIXED (issue #379), same double subtraction as in
+                 * applyOwnDefenceCasualties(): a reinforcement hero who died
+                 * was already removed by Battle::applyHeroBattleDamage()
+                 * ("UPDATE enforcement e JOIN vdata v SET e.hero = 0"), so
+                 * subtracting him again here drove enforcement.hero to -1.
+                 *
+                 * $enforce still reads 1 because getEnforceVillage() answers
+                 * from the request cache filled before the battle, so the
+                 * stale row hid the problem instead of preventing it.
+                 *
+                 * The dead count below is kept: it is what the reinforcement
+                 * report and $wrong (which decides whether the wiped-out
+                 * reinforcement row is deleted) are built from.
+                 */
                 $dead['hero'] = $battlepart['deadheroref'][$enforce['id']];
                 $alldead['hero'] += $dead['hero'];
                 $wrong = $dead['hero'] != $enforce['hero'];
