@@ -259,7 +259,7 @@ class Battle {
      * cast (int) + clamp de interval. Pentru valori VALIDE rezultatul
      * este identic cu originalul (verificat cu harness-ul de
      * echivalenta); clamp-urile schimba comportamentul doar pe input
-     * invalid â fiecare e semnalat individual mai jos.
+     * invalid - fiecare e semnalat individual mai jos.
      ******************************************************************/
     $attTribe = (int)$post['a1_v'];   // validat 1..9 in procSim()
 
@@ -421,7 +421,7 @@ class Battle {
 
         // The building TYPE is stored in the 'f<n>t' columns of fdata (e.g. the
         // Brewery on slot 20 is 'f20t' == 35); the matching level lives in 'f<n>'.
-        // Match on the 't' SUFFIX, not the first character â a previous rewrite
+        // Match on the 't' SUFFIX, not the first character - a previous rewrite
         // tested $key[0] === 't', which never matched 'f<n>t' and made this
         // return 0 for every building (issue #294: Brewery bonus never applied).
         // Mirrors Building::getTypeLevel()/Automation::getTypeLevel().
@@ -482,14 +482,14 @@ class Battle {
 	
 	/*****************************************
 	Function to process Calculate Battle
-	(Phase 2: orchestrator â fiecare sectiune
+	(Phase 2: orchestrator - fiecare sectiune
 	a devenit un helper privat, mai jos)
 
 	$previousHeroOutcome: result of an earlier
 	pass over the SAME battle (rams changed the
 	wall level, so it is replayed). When set,
 	the hero damage is not applied a second
-	time â the first verdict is reused instead
+	time - the first verdict is reused instead
 	(issue #372).
 	*****************************************/
 
@@ -552,7 +552,7 @@ class Battle {
     }
 
     /******************************************************************
-     * DEFENDER FORCES (BASE + REINFORCEMENTS) â citeste DB, nu scrie
+     * DEFENDER FORCES (BASE + REINFORCEMENTS) - citeste DB, nu scrie
      ******************************************************************/
     $defForces = $this->computeDefenderForces(
         $Defender, $def_ab, $type,
@@ -636,7 +636,7 @@ class Battle {
     $Mfactor    = $this->computeMfactor($involve, $type);
 
     /******************************************************************
-     * LOSSES (tip 1/3/4 â izoleaza singurul rand() din fisier)
+     * LOSSES (tip 1/3/4 - izoleaza singurul rand() din fisier)
      ******************************************************************/
     $losses = $this->computeLossRatios(
         $type, $winner, $att_tribe, $detected, $Attacker,
@@ -701,7 +701,7 @@ class Battle {
     );
 
     /******************************************************************
-     * HERO DAMAGE â per-hero carry over on a recalculation
+     * HERO DAMAGE - per-hero carry over on a recalculation
      *
      * applyHeroBattleDamage() WRITES to the hero table. When rams change
      * the wall level, the caller replays the whole battle
@@ -1109,7 +1109,7 @@ class Battle {
         }
 
         // NOTA: artefactul ofensiv al atacatorului se aplica DOAR pe ramura
-        // de spionaj (tip 1), nu si la atacurile normale â comportament
+        // de spionaj (tip 1), nu si la atacurile normale - comportament
         // original pastrat 1:1; de verificat separat daca e intentionat
         $ap *= $attacker_artefact;
 
@@ -1375,7 +1375,7 @@ class Battle {
 	/*****************************************
 	Phase 2 helper: bonusul de atac Brewery
 	(citeste DB; extras ca sa ramana
-	computeTotalPoints() pur â vezi tabelul
+	computeTotalPoints() pur - vezi tabelul
 	de mapare din livrare)
 	*****************************************/
 
@@ -1387,8 +1387,8 @@ class Battle {
 
     // Brewery (35) Mead-Festival attack bonus: Teuton-only, capital-only but
     // empire-wide, and active ONLY while a festival is running (72h). It must be
-    // read from the attacker's CAPITAL â $AttackerWref is the launching village,
-    // which usually has no Brewery â and gated on the festival being active,
+    // read from the attacker's CAPITAL - $AttackerWref is the launching village,
+    // which usually has no Brewery - and gated on the festival being active,
     // otherwise the bonus is permanent and never reacts to the festival being
     // started/expired (issue #294). This mirrors the catapult-randomization gate
     // in Units.php and the chief-penalty gate in Automation.php. The simulator
@@ -1487,7 +1487,7 @@ class Battle {
 
 	/*****************************************
 	Phase 2 helper: ratele de pierderi pentru
-	tipurile 1/3/4 â izoleaza singurul rand()
+	tipurile 1/3/4 - izoleaza singurul rand()
 	din fisier (hero_fealthy); pentru alte
 	tipuri nu seteaza cheile 1/2, exact ca
 	originalul
@@ -1526,7 +1526,7 @@ class Battle {
 
         // NOTA: $result[1] e o fractie 0..1, deci "/ 100" face scaderea
         // aproape mereu 0 (berbecii/catapultele trag cu efectivul de
-        // dinainte de pierderi) â comportament original pastrat 1:1
+        // dinainte de pierderi) - comportament original pastrat 1:1
         $ram  -= round($ram * $result[1] / 100);
         $catp -= round($catp * $result[1] / 100);
 
@@ -1564,7 +1564,7 @@ class Battle {
 
         // NOTA: cast-ul (int) trunchiaza fractia la 0, deci $aviables ==
         // $kings pentru orice pierdere partiala (doar pierderea totala,
-        // result[1] == 1, ii scade) â comportament original pastrat 1:1
+        // result[1] == 1, ii scade) - comportament original pastrat 1:1
         $aviables = $kings - round($kings * (int)$result[1]);
 
         if ($aviables > 0) {
@@ -1580,7 +1580,7 @@ class Battle {
             $result['hero_fealthy'] = $fealthy;
         }
 
-        // NOTA: acelasi "/ 100" pe fractie ca la tipul 4 â pastrat 1:1
+        // NOTA: acelasi "/ 100" pe fractie ca la tipul 4 - pastrat 1:1
         $ram -= ($winner)
             ? round($ram * $result[1] / 100)
             : round($ram * $result[2] / 100);
@@ -1718,7 +1718,7 @@ class Battle {
 
 	/*****************************************
 	Phase 2 helper: daunele de sanatate ale
-	unui erou dupa lupta â unifica cele 3
+	unui erou dupa lupta - unifica cele 3
 	blocuri DB duplicate (atacator, aparator,
 	intariri); SINGURUL helper care scrie in
 	DB. Intoarce: null = eroul nu exista /
@@ -1778,7 +1778,7 @@ class Battle {
      *
      * BUG REPARAT: armurile scad daunele cu o valoare fixa
      * (HeroBattleBonus::reduceDamage), asa ca la o infrangere totala eroul
-     * putea coborÃ® sub prag si supravietuia - se intorcea singur in sat, desi
+     * putea cobori sub prag si supravietuia - se intorcea singur in sat, desi
      * toata armata murise.
      *
      * Reducerea din armuri ramane valabila pentru lupte partiale, dar cand
