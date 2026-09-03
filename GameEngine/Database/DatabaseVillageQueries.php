@@ -557,13 +557,16 @@ trait DatabaseVillageQueries {
 	 */
 	
 	function removeOases($wref, $mode = 0) {
-	    list($wref) = $this->escape_input((int) $wref);
-
-	    if(!is_array($wref)) $wref = [$wref];
+	    if(!is_array($wref)) {
+	        $wref = [$wref];
+	    }
+	
+	    $wref = array_map('intval', $wref);
 	    $wrefs = implode(",", $wref);
-	    
-		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE ".(!$mode ? "wref IN($wrefs)" : "conqured IN($wrefs)");
-		return mysqli_query($this->dblink,$q);
+	
+	    $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE ".(!$mode ? "wref IN($wrefs)" : "conqured IN($wrefs)");
+	
+	    return mysqli_query($this->dblink,$q);
 	}
 
 	/***************************
