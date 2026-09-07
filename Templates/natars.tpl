@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       natars.tpl                                                  ##
+##  Filename       : natars.tpl                                                ##
 ##  Original Code  TravianZ Project                                            ##
 ##  Refactored by: Shadow Incremental Refactor 			                       ##
 ##  License:       TravianZ Project                                            ##
@@ -15,7 +15,6 @@
 ##  - Reduced magic numbers                                                    ##
 ##  - Added safer variable handling                                            ##
 ##  - Added comments                                                           ##
-##                                                                             ##
 #################################################################################
 
 /**
@@ -92,3 +91,20 @@ foreach ($spawnEvents as $eventName => $spawnTime) {
     }
 }
 ?>
+
+<!-- TravianZ Global Chat -->
+<script type="text/javascript">
+(function () {
+    var src = '<?php echo (defined("GP_LOCATE") ? GP_LOCATE : ""); ?>js/chat.js?v=1';
+    var scripts = document.getElementsByTagName('script');
+    for (var i = 0; i < scripts.length; i++) {
+        if (scripts[i].src && scripts[i].src.indexOf('/js/chat.js') !== -1) {
+            return;
+        }
+    }
+    var script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    document.head.appendChild(script);
+})();
+</script>
