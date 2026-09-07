@@ -148,7 +148,7 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
 	
 	<!-- Discord -->
 	<p>
-		<a href="https://discord.gg/HzU2HfqaG" target="_blank" rel="noopener noreferrer" style="color: #d32f2f; font-weight: bold;">
+		<a href="https://discord.gg/Bg9w8w9ft" target="_blank" rel="noopener noreferrer" style="color: #d32f2f; font-weight: bold;">
 			Discord
 		</a>
 	</p>
