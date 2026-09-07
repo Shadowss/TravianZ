@@ -190,6 +190,7 @@ if ($action === 'send') {
         $message = '';
     }
 
+    // The existing TravianZ chat table uses VARCHAR(255) for msg.
     $length = function_exists('mb_strlen') ? mb_strlen($message, 'UTF-8') : strlen($message);
 
     if ($length < 1) {
@@ -198,7 +199,7 @@ if ($action === 'send') {
         exit;
     }
 
-    if ($length > 500) {
+    if ($length > 255) {
         http_response_code(400);
         echo json_encode(['ok' => 0, 'error' => 'length']);
         exit;
