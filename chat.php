@@ -29,7 +29,6 @@ if (!$autoloader_found) {
 
 include_once $autoprefix . 'GameEngine/config.php';
 include_once $autoprefix . 'GameEngine/Database.php';
-include_once $autoprefix . 'GameEngine/Chat.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -78,17 +77,19 @@ if ($action === 'messages') {
     if ($after > 0) {
         $stmt = mysqli_prepare(
             $link,
-            "SELECT id_user AS uid, name AS username, date, msg AS message
+            "SELECT id, id_user AS uid, name AS username, date, msg AS message
              FROM `" . $table . "`
              WHERE id > ? AND alli = ''
              ORDER BY id ASC
              LIMIT 50"
         );
+
         if (!$stmt) {
             http_response_code(500);
             echo json_encode(['ok' => 0, 'error' => 'query']);
             exit;
         }
+
         mysqli_stmt_bind_param($stmt, 'i', $after);
     } else {
         $stmt = mysqli_prepare(
@@ -99,6 +100,7 @@ if ($action === 'messages') {
              ORDER BY id DESC
              LIMIT 40"
         );
+
         if (!$stmt) {
             http_response_code(500);
             echo json_encode(['ok' => 0, 'error' => 'query']);
@@ -114,6 +116,7 @@ if ($action === 'messages') {
     }
 
     $result = mysqli_stmt_get_result($stmt);
+
     if (!$result) {
         mysqli_stmt_close($stmt);
         http_response_code(500);
@@ -122,9 +125,10 @@ if ($action === 'messages') {
     }
 
     $messages = [];
+
     while ($row = mysqli_fetch_assoc($result)) {
         $messages[] = [
-            'id'       => isset($row['id']) ? (int) $row['id'] : 0,
+            'id'       => (int) $row['id'],
             'uid'      => (int) $row['uid'],
             'username' => (string) $row['username'],
             'message'  => (string) $row['message'],
@@ -139,13 +143,13 @@ if ($action === 'messages') {
         $messages = array_reverse($messages);
     }
 
-    // The legacy chat table uses an auto-increment id. Return the current
-    // maximum so the browser can continue polling from a stable cursor.
     $latestResult = mysqli_query(
         $link,
         "SELECT MAX(id) AS latest_id FROM `" . $table . "` WHERE alli = ''"
     );
+
     $latestId = 0;
+
     if ($latestResult) {
         $latestRow = mysqli_fetch_assoc($latestResult);
         $latestId = isset($latestRow['latest_id']) ? (int) $latestRow['latest_id'] : 0;
