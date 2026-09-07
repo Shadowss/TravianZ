@@ -868,7 +868,7 @@ trait DatabaseUserQueries {
     // 2. INCOMING TROOPS
     $sql = "SELECT 1 FROM ".TB_PREFIX."movement m
             JOIN ".TB_PREFIX."vdata v ON v.wref = m.to
-            WHERE v.owner=? AND m.proc=0 AND m.endtime>? AND m.sort_type IN (3,4) LIMIT 1";
+            WHERE v.owner=? AND m.proc=0 AND m.endtime>? AND m.sort_type IN (3,4,5,20,21) LIMIT 1";
     if ($exists($sql, [$uid, $now])) $errors[] = "INCOMING_TROOPS";
 
     // 3. REINFORCEMENTS
