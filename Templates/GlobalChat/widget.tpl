@@ -235,6 +235,7 @@
     var unread = 0;
     var isOpen = false;
     var viewerIsMod = false;
+    var viewerAccess = 0;
     var pollTimer = null;
 
     function fmtTime(unixTs) {
@@ -251,7 +252,10 @@
     function escapeForLog(s) { return s; } // (folosim textContent peste tot mai jos - nu innerHTML pe input de utilizator)
 
     function renderModActions(row) {
-        if (!viewerIsMod || row.id_user === myUid || (row.access || 0) >= ACCESS_MH) {
+        var targetAccess = parseInt(row.access, 10) || 0;
+        var targetUid = parseInt(row.id_user, 10) || 0;
+
+        if (!viewerIsMod || targetUid === myUid || targetAccess >= viewerAccess) {
             return null;
         }
 
@@ -346,7 +350,8 @@
     }
 
     function applyViewerState(viewer) {
-        viewerIsMod = !!viewer.isMod;
+        viewerAccess = parseInt(viewer.access, 10) || 0;
+        viewerIsMod = viewerAccess >= ACCESS_MH;
 
         if (viewer.mutedUntil) {
             input.disabled = true;
@@ -365,8 +370,8 @@
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data || !data.ok) { return; }
-                appendMessages(data.messages || []);
                 applyViewerState(data.viewer || {});
+                appendMessages(data.messages || []);
             })
             .catch(function () { /* hiccup de retea - reincercam la urmatorul tick */ });
     }
@@ -383,8 +388,8 @@
                     empty.textContent = GCHAT_TXT.empty;
                     messagesBox.appendChild(empty);
                 }
-                appendMessages(data.messages || []);
                 applyViewerState(data.viewer || {});
+                appendMessages(data.messages || []);
             });
     }
 
@@ -442,7 +447,10 @@
                   showNotice('');
                   poll();
               } else if (data && data.reason === 'muted') {
-                  applyViewerState({ isMod: viewerIsMod, mutedUntil: data.mutedUntil });
+                  applyViewerState({
+                      access: viewerAccess,
+                      mutedUntil: data.mutedUntil
+                  });
               } else if (data && data.reason === 'ratelimit') {
                   showNotice(GCHAT_TXT.ratelimit);
               }
