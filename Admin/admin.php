@@ -1,20 +1,23 @@
 <?php
+
 #################################################################################
-##                                                                             ##
-##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
-##                                                                             ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##                                                                             ##
-##  Project:       TravianZ                                                    ##
-##  Version:       05.03.2026                                                  ##
-##  Filename:      Admin/admin.php                                             ##
-##  Developed by:  Dzoki                                                       ##
-##  Refactored by: Shadow                                                      ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          https://travianz.org                                        ##
-##                 https://github.com/Shadowss/TravianZ                        ##
-##                                                                             ##
+##  Filename       : admin.php                      	                       ##
+##  Type           : Admin Main Page (engine)                                  ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki 						                               ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  URLs:          : https://travianz.org                                      ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2026. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 // ─── SESSION ─────────────────────────────────────────────────────────────────
@@ -176,11 +179,6 @@ if ($page !== '') {
             break;
 
         case 'message':
-            // NOTE: original code had this case duplicated (second occurrence
-            // overrode with 'Search IGMs/Reports'). The first definition
-            // ('Players Message') is intentional for the ?p=message route.
-            // The 'Search IGMs/Reports' label belongs to ?p=search sub-section
-            // which is already covered by the search template include logic.
             $subpage = ADMIN_PLAYERS_MESSAGE;
             break;
 
@@ -444,8 +442,6 @@ if ($page !== '') {
             break;
 
         case 'userlogin':
-            // SECURITY FIX: was raw mysqli_query with direct $_GET interpolation.
-            // Now uses admin_get_user_by_id() which internally uses a prepared statement.
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $player  = admin_get_user_by_id($uid);
@@ -458,7 +454,6 @@ if ($page !== '') {
             break;
 
         case 'userillegallog':
-            // SECURITY FIX: same as userlogin above.
             $uid = admin_input_id($_GET, 'uid');
             if ($uid !== null) {
                 $player  = admin_get_user_by_id($uid);
@@ -500,7 +495,6 @@ if ($page !== '') {
             }
             break;
 
-        // ── Village-context pages (require a valid ?did=) ────────────────────
         case 'village':
             $did = admin_input_id($_GET, 'did');
             if ($did !== null) {
@@ -525,8 +519,6 @@ if ($page !== '') {
                     $user    = $database->getUserArray($village['owner'], 1);
                     $subpage = ADMIN_EDIT_RESOURCES . ' (' . e($village['name']) . ' » ' . e($user['username']) . ')';
                 } else {
-                    // BUGFIX: original used $did which was only set in 'village' case,
-                    // causing an undefined variable notice here. Now always defined above.
                     $subpage = ADMIN_EDIT_RESOURCES . $did . ' not found)';
                     $village = null;
                 }
@@ -568,7 +560,6 @@ if ($page !== '') {
             }
             break;
 
-        // ── Alliance-context pages (require a valid ?aid=) ───────────────────
         case 'alliance':
             $aid = admin_input_id($_GET, 'aid');
             if ($aid !== null) {

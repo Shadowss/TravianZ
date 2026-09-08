@@ -4142,3 +4142,21 @@ tz_def('TRAIN_BONUS_ARTIFACT', 'Bonus artefact');
 tz_def('TRAIN_BONUS_HERO',     'Bonus erou');
 tz_def('TRAIN_BONUS_ALLIANCE', 'Bonus alianta');
 tz_def('TRAIN_BONUS_FINAL',    'Timp instruire');
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// CHAT GENERAL (server-wide) - widget plutitor, footer.tpl + Templates/GlobalChat/widget.tpl
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('GCHAT_TITLE',         'Chat general');
+tz_def('GCHAT_PLACEHOLDER',   'Mesaj...');
+tz_def('GCHAT_SEND',          'Trimite');
+tz_def('GCHAT_EMPTY',         'Niciun mesaj inca.');
+tz_def('GCHAT_MUTED',         'Esti mutat din chat.');
+tz_def('GCHAT_RATELIMIT',     'Trimiti mesaje prea repede.');
+tz_def('GCHAT_CONFIRM_BLOCK', 'Blochezi permanent acest jucator din chat?');
+tz_def('GCHAT_MUTE_5M',       'Mute 5m');
+tz_def('GCHAT_MUTE_30M',      'Mute 30m');
+tz_def('GCHAT_MUTE_1H',       'Mute 1h');
+tz_def('GCHAT_MUTE_24H',      'Mute 24h');
+tz_def('GCHAT_BLOCK',         'Blocheaza');
+tz_def('GCHAT_UNMUTE',        'Anuleaza mute');
+tz_def('GCHAT_ADMIN_BADGE',   'Admin');
+tz_def('GCHAT_MH_BADGE',      'MH');

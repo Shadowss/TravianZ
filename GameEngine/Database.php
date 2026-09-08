@@ -60,6 +60,8 @@ include_once __DIR__ . '/Database/DatabaseHeroQueries.php';
 include_once __DIR__ . '/Database/DatabaseStatisticsQueries.php';
 include_once __DIR__ . '/Database/DatabaseArtefactQueries.php';
 include_once __DIR__ . '/Database/DatabaseSystemQueries.php';
+// Chat general (server-wide), cerut de Catalin 07.09.2026 - separat de alliance chat (chat.php)
+include_once __DIR__ . '/Database/DatabaseGlobalChatQueries.php';
 
 use App\Database\IDbConnection;
 use App\Utils\Math;
@@ -80,6 +82,7 @@ class MYSQLi_DB implements IDbConnection {
     use DatabaseStatisticsQueries;
     use DatabaseArtefactQueries;
     use DatabaseSystemQueries;
+    use DatabaseGlobalChatQueries;
 
 
 

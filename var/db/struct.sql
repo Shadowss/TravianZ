@@ -575,6 +575,41 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 -- Dumping data for table `%prefix%chat`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Chat general (server-wide), cerut de Catalin 07.09.2026 - separat de
+-- chat-ul de alianta de mai sus (acela e filtrat pe `alli`, asta e vazut
+-- de toti jucatorii de pe server, indiferent de alianta)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global` (
+ `id` int(20) NOT NULL AUTO_INCREMENT,
+ `id_user` int(11) NOT NULL,
+ `date` int(11) NOT NULL,
+ `msg` varchar(250) NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `id_user_date` (`id_user`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Stare activa de mute/block pe chat-ul general - un singur rand per user
+-- (id_user e PRIMARY KEY, deci un nou mute suprascrie direct pe cel vechi
+-- via ON DUPLICATE KEY UPDATE, fara sa acumuleze istoric).
+-- muted_until in viitorul indepartat (~100 ani) = block permanent.
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%chat_mutes` (
+ `id_user` int(11) NOT NULL,
+ `muted_until` int(11) NOT NULL,
+ `muted_by` int(11) NOT NULL,
+ `reason` varchar(255) NULL,
+ `created` int(11) NOT NULL,
+ PRIMARY KEY (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 

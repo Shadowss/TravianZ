@@ -92,3 +92,16 @@ $serverVersion = 'v.11 Full Refactor';
     <div id="cfoot"></div>
 
 </div>
+
+<?php
+/**
+ * Chat general (server-wide) - cerut de Catalin, 07.09.2026.
+ * footer.tpl e inclus si de pagini fara user logat (login/anmelden/logout/
+ * banned/maintenance) - widget-ul apare DOAR daca exista o sesiune valida
+ * si contul nu e blocat (access == BANNED inseamna cont blocat, nu "vizitator
+ * neautentificat" - ambele cazuri trebuie excluse aici).
+ */
+if (isset($session) && !empty($session->uid) && (!isset($session->access) || $session->access != BANNED)) {
+    include __DIR__ . '/GlobalChat/widget.tpl';
+}
+?>

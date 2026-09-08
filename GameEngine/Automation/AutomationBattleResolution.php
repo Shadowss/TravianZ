@@ -1227,7 +1227,13 @@ trait AutomationBattleResolution {
      */
     private function applyOwnDefenceCasualties($data, $targettribe, $battlepart) {
         global $database;
-
+		
+		$targettribe = (int)$targettribe;
+		// FIX: daca satul a fost sters / owner 0 / oaza fara trib, nu avem ce sterge
+		if($targettribe < 1 || $targettribe > 9) {
+        return [];
+		}
+		
         $owndead = [];
         $unitlist = $database->getUnit($data['to'], false);
         $start = ($targettribe - 1) * 10 + 1;
@@ -1319,7 +1325,7 @@ trait AutomationBattleResolution {
             } else {
                 $tribe = 4;
             }
-
+			if($tribe < 1 || $tribe > 9) $tribe = 4; // fallback la natura
             $start = ($tribe - 1) * 10 + 1;
             $end = ($tribe * 10);
             unset($dead);

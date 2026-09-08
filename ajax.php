@@ -107,5 +107,86 @@ switch(isset($_GET['f']) ? $_GET['f'] : '') {
 		$ok = $database->setMovementMarker($_POST['moveid'] ?? 0, $_POST['marker'] ?? 0, $uid);
 		echo json_encode(['ok' => $ok ? 1 : 0]);
 		break;
+
+	// Chat general (server-wide), cerut de Catalin 07.09.2026. Separat de
+	// alliance chat (Chat.php, SAJAX) - vazut/scris de orice user logat,
+	// moderat de MH (access 8) si Admin (access 9).
+	case 'gchat_poll':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		$sinceId = (int) ($_GET['sinceId'] ?? 0);
+		echo json_encode([
+			'ok' => 1,
+			'messages' => $database->getGlobalChatMessages(30, $sinceId),
+			'viewer' => $database->getGlobalChatViewerInfo($uid),
+		]);
+		break;
+
+	case 'gchat_send':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		echo json_encode($database->postGlobalChatMessage($uid, $_POST['msg'] ?? ''));
+		break;
+
+	case 'gchat_mute':
+	case 'gchat_block':
+	case 'gchat_unmute':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$modUid = (int) ($_SESSION['id_user'] ?? 0);
+		$targetUid = (int) ($_POST['target'] ?? 0);
+
+		if (!$modUid || !$targetUid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+
+		$modAccess = (int) $database->getUserField($modUid, 'access', 0);
+		$targetAccess = (int) $database->getUserField($targetUid, 'access', 0);
+
+		// doar MH (8) si Admin (9) modereaza chat-ul general, si nimeni nu
+		// poate modera pe cineva de rang egal sau mai mare - deci MH nu
+		// poate muta alt MH/Admin, iar Admin nu poate muta alt Admin
+		if ($modAccess < MULTIHUNTER || $targetAccess >= $modAccess) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'forbidden']);
+			break;
+		}
+
+		if ($_GET['f'] == 'gchat_unmute') {
+			$ok = $database->unmuteGlobalChatUser($targetUid);
+		} else {
+			$reason = substr((string) ($_POST['reason'] ?? ''), 0, 255);
+			// 'gchat_block' = permanent (~100 de ani); 'gchat_mute' = temporar, in minute (POST['minutes'])
+			$until = ($_GET['f'] == 'gchat_block')
+				? (time() + 3600 * 24 * 365 * 100)
+				: (time() + max(1, (int) ($_POST['minutes'] ?? 0)) * 60);
+			$ok = $database->muteGlobalChatUser($targetUid, $modUid, $until, $reason);
+		}
+
+		echo json_encode(['ok' => $ok ? 1 : 0]);
+		break;
 }
 ?>

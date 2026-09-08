@@ -4404,3 +4404,22 @@ tz_def('TRAIN_BONUS_ARTIFACT', 'Artifact bonus');
 tz_def('TRAIN_BONUS_HERO',     'Hero bonus');
 tz_def('TRAIN_BONUS_ALLIANCE', 'Alliance bonus');
 tz_def('TRAIN_BONUS_FINAL',    'Training time');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// GENERAL (SERVER-WIDE) CHAT - floating widget, footer.tpl + Templates/GlobalChat/widget.tpl
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+tz_def('GCHAT_TITLE',         'World Chat');
+tz_def('GCHAT_PLACEHOLDER',   'Message...');
+tz_def('GCHAT_SEND',          'Send');
+tz_def('GCHAT_EMPTY',         'No messages yet.');
+tz_def('GCHAT_MUTED',         'You are muted from chat.');
+tz_def('GCHAT_RATELIMIT',     'You are sending messages too fast.');
+tz_def('GCHAT_CONFIRM_BLOCK', 'Block this player from chat permanently?');
+tz_def('GCHAT_MUTE_5M',       'Mute 5m');
+tz_def('GCHAT_MUTE_30M',      'Mute 30m');
+tz_def('GCHAT_MUTE_1H',       'Mute 1h');
+tz_def('GCHAT_MUTE_24H',      'Mute 24h');
+tz_def('GCHAT_BLOCK',         'Block');
+tz_def('GCHAT_UNMUTE',        'Unmute');
+tz_def('GCHAT_ADMIN_BADGE',   'Admin');
+tz_def('GCHAT_MH_BADGE',      'MH');
