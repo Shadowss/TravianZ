@@ -1215,12 +1215,49 @@ trait AutomationBattleResolution {
     }
 
     /**
+     * FIX: validate a tribe before using it to build u1..u90 column names.
+     * Accept database integer strings, but reject null, zero and malformed IDs.
+     */
+    private function isValidBattleTribe($tribe) {
+        return (is_int($tribe) || is_string($tribe))
+            && preg_match('/^[1-9]$/D', (string)$tribe) === 1;
+    }
+
+    /**
+     * FIX: only reinforcement rows explicitly originating from 0 are Nature.
+     * A missing owner/user is inconsistent data, not evidence of tribe 4.
+     */
+    private function resolveReinforcementBattleTribe($enforce) {
+        global $database;
+
+        if (!isset($enforce['from'])) return null;
+        if ($enforce['from'] === 0 || $enforce['from'] === '0') return 4;
+        $owner = $database->getVillageField($enforce['from'], "owner");
+        if (!$owner) return null;
+        $user = $database->getUserArray($owner, 1);
+        $tribe = $user['tribe'] ?? null;
+        return $this->isValidBattleTribe($tribe) ? (int)$tribe : null;
+    }
+
+    /**
+     * FIX: diagnose corrupt battle context without logging player text.
+     * The preflight caller leaves the movement pending for a later retry;
+     * it must not mark it processed or fabricate a tribe/return movement.
+     */
+    private function logInvalidBattleContext($data, $reason) {
+        error_log(sprintf(
+            'TravianZ battle validation: move=%d target=%d %s',
+            (int)($data['moveid'] ?? 0), (int)($data['to'] ?? 0), $reason
+        ));
+    }
+
+    /**
      * Apply battle casualties to the defender's own (in-village) troops, persist
      * the losses, and return the per-unit dead map used later for points/reports.
      * Pure behaviour-preserving extraction (refactor for issue #155).
      *
      * @param array $data        Current attack row (uses 'to').
-     * @param int   $targettribe Defender tribe (1-5).
+     * @param int   $targettribe Defender tribe (1-9).
      * @param array $battlepart  Battle result (index 2 = defender kill ratio,
      *                           'deadherodef' = defender hero losses).
      * @return array Map of dead own troops: keys are the unit index (int) plus 'hero'.
@@ -1228,23 +1265,33 @@ trait AutomationBattleResolution {
     private function applyOwnDefenceCasualties($data, $targettribe, $battlepart) {
         global $database;
 		
-		$targettribe = (int)$targettribe;
-		// FIX: daca satul a fost sters / owner 0 / oaza fara trib, nu avem ce sterge
-		if($targettribe < 1 || $targettribe > 9) {
-        return [];
-		}
+        // FIX: final guard against invalid SQL column names. The main loop
+        // validates this BEFORE combat; this guard also protects future callers.
+        if (!$this->isValidBattleTribe($targettribe)) {
+            $this->logInvalidBattleContext($data, 'invalid own-defence tribe');
+            return array_fill(1, 90, 0) + ['hero' => 0];
+        }
+        $targettribe = (int)$targettribe;
 		
         $owndead = [];
         $unitlist = $database->getUnit($data['to'], false);
         $start = ($targettribe - 1) * 10 + 1;
         $end = ($targettribe * 10);
 
+        // FIX: preserve ten report slots plus hero when the units row vanished;
+        // do not submit an empty UPDATE to modifyUnit().
+        $owndead = array_fill($start, 10, 0) + ['hero' => 0];
+        if (!is_array($unitlist) || !$unitlist) {
+            $this->logInvalidBattleContext($data, 'missing own-defence units row');
+            return $owndead;
+        }
+
         $unitModifications_units = [];
         $unitModifications_amounts = [];
         $unitModifications_modes = [];
         for ($i = $start; $i <= $end; $i++) {
             if ($unitlist) {
-                $owndead[$i] = round($battlepart[2] * $unitlist['u'.$i]);
+                $owndead[$i] = round($battlepart[2] * ($unitlist['u'.$i] ?? 0));
                 $unitModifications_units[] = $i;
                 $unitModifications_amounts[] = $owndead[$i];
                 $unitModifications_modes[] = 0;
@@ -1320,12 +1367,14 @@ trait AutomationBattleResolution {
         $enforcementarray3 = $database->getEnforceVillage($data['to'], 0);
         foreach ($enforcementarray3 as $enforce) {
             $life = ''; $notlife = ''; $wrong = false;
-            if ($enforce['from'] != 0) {
-                $tribe = $database->getUserArray($database->getVillageField($enforce['from'], "owner"), 1)["tribe"];
-            } else {
-                $tribe = 4;
+            // FIX: reuse the preflight resolver; never guess Nature for an
+            // orphaned player reinforcement. Keep the row intact if its source
+            // disappeared since preflight, and record it for investigation.
+            $tribe = $this->resolveReinforcementBattleTribe($enforce);
+            if ($tribe === null) {
+                $this->logInvalidBattleContext($data, 'invalid reinforcement source id=' . (int)($enforce['id'] ?? 0));
+                continue;
             }
-			if($tribe < 1 || $tribe > 9) $tribe = 4; // fallback la natura
             $start = ($tribe - 1) * 10 + 1;
             $end = ($tribe * 10);
             unset($dead);
@@ -1390,8 +1439,8 @@ trait AutomationBattleResolution {
                 $wrong = $dead['hero'] != $enforce['hero'];
 
                 //Collecting information for the report
-                $reinfTribe = ($enforce['from'] == 0) ? 4 : $database->getUserField($database->getVillageField($enforce['from'], "owner"), "tribe", 0);
-                $DefenderHeroesDeadArray[$reinfTribe] += $dead['hero'];
+                // FIX: use the validated tribe for hero report indexing too.
+                $DefenderHeroesDeadArray[$tribe] = ($DefenderHeroesDeadArray[$tribe] ?? 0) + $dead['hero'];
             }
 
             // modify enforce in DB
@@ -2601,8 +2650,68 @@ trait AutomationBattleResolution {
                 $from              = $ctx['from'];
                 $fromF             = $ctx['fromF'];
 
+                // FIX: validate the same owner/tribe source used by the target
+                // resolvers BEFORE evasion, traps, battle damage or casualties.
+                // Deleted villages retain the existing bounce-home path below.
+                $validationTarget = ($isoasis == 0) ? $database->getMInfo($data['to']) : null;
+                $deletedBattleTarget = $isoasis == 0
+                    && (isset($razedTargets[$data['to']]) || empty($validationTarget['wref']));
+                $invalidBattleContext = !$this->isValidBattleTribe($owntribe);
+                if (!$deletedBattleTarget) {
+                    $validationOwner = ($isoasis == 0)
+                        ? $database->getVillageField($data['to'], "owner")
+                        : $database->getOasisField($data['to'], "owner");
+                    $validationUser = $this->getCachedUser($validationOwner, 1);
+                    $invalidBattleContext = $invalidBattleContext
+                        || !$this->isValidBattleTribe($validationUser['tribe'] ?? null);
+                    foreach ($database->getEnforceVillage($data['to'], 0) as $validationEnforce) {
+                        if ($this->resolveReinforcementBattleTribe($validationEnforce) === null) {
+                            $this->logInvalidBattleContext($data, 'invalid reinforcement source id=' . (int)($validationEnforce['id'] ?? 0));
+                            $invalidBattleContext = true;
+                            break;
+                        }
+                    }
+                }
+                if ($invalidBattleContext) {
+                    $this->logInvalidBattleContext($data, 'combat deferred: invalid attacker, defender or reinforcement tribe');
+                    $data_num++;
+                    continue;
+                }
+
                 //It's a village
                 if ($isoasis == 0){
+                    // FIX: reject a deleted target before resolving its owner,
+                    // tribe, wall or units. Keep the existing return-trip logic.
+                    $to = $database->getMInfo($data['to']);
+                    // Issue #298: the target village no longer exists — it was razed
+                    // either earlier in this same batch ($razedTargets), or in an
+                    // earlier tick whose still-in-flight follow-up waves DelVillage()
+                    // failed to bounce. getMInfo() then returns NULL vdata columns
+                    // ($to['wref'] is NULL), so resolving a battle here would fight a
+                    // phantom village and compute the return trip from NULL coordinates
+                    // — a bogus arrival time that strands the troops in an endless loop
+                    // (report against "[?]"). Bounce the whole army straight home
+                    // instead, exactly like DelVillage() does for in-flight attacks,
+                    // and mark the movement processed so it stops being re-fetched.
+                    if (isset($razedTargets[$data['to']]) || empty($to['wref'])) {
+                        // only own the bounce if DelVillage() hasn't already handled it
+                        // (setMovementProc() returns true only when it flips proc 0->1),
+                        // so we never create a duplicate return movement
+                        //
+                        // BUG FIXED: setMovementProc() lives on $database (DatabaseMovementQueries),
+                        // not on Automation - "$this->" was throwing "Call to undefined method
+                        // Automation::setMovementProc()" (fatal, killed the whole automation tick)
+                        // every time this razed-target bounce path was hit. Every other call site
+                        // in this file already uses $database->setMovementProc().
+                        if ($database->setMovementProc($data['moveid'])) {
+                            $bounceTime = $units->getWalkingTroopsTime($from['wref'], $data['to'], $from['owner'], $owntribe, $data, 1, 't');
+                            $bounceEnd  = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $bounceTime) + $AttackArrivalTime;
+                            $database->addMovement(4, $data['to'], $from['wref'], $data['ref'], $AttackArrivalTime, $bounceEnd);
+                        }
+                        $data_num++;
+                        continue;
+                    }
+
                     // target + battle environment — extracted to resolveVillageTarget() [#155]
                     $vt = $this->resolveVillageTarget($data, $dataarray, $data_num, $owntribe);
                     $DefenderID   = $vt['DefenderID'];
@@ -2634,35 +2743,6 @@ trait AutomationBattleResolution {
                     $wallid       = $vt['wallid'];
                     $tblevel      = $vt['tblevel'];
                     $stonemason   = $vt['stonemason'];
-
-                    // Issue #298: the target village no longer exists — it was razed
-                    // either earlier in this same batch ($razedTargets), or in an
-                    // earlier tick whose still-in-flight follow-up waves DelVillage()
-                    // failed to bounce. getMInfo() then returns NULL vdata columns
-                    // ($to['wref'] is NULL), so resolving a battle here would fight a
-                    // phantom village and compute the return trip from NULL coordinates
-                    // — a bogus arrival time that strands the troops in an endless loop
-                    // (report against "[?]"). Bounce the whole army straight home
-                    // instead, exactly like DelVillage() does for in-flight attacks,
-                    // and mark the movement processed so it stops being re-fetched.
-                    if (isset($razedTargets[$data['to']]) || empty($to['wref'])) {
-                        // only own the bounce if DelVillage() hasn't already handled it
-                        // (setMovementProc() returns true only when it flips proc 0->1),
-                        // so we never create a duplicate return movement
-                        //
-                        // BUG FIXED: setMovementProc() lives on $database (DatabaseMovementQueries),
-                        // not on Automation - "$this->" was throwing "Call to undefined method
-                        // Automation::setMovementProc()" (fatal, killed the whole automation tick)
-                        // every time this razed-target bounce path was hit. Every other call site
-                        // in this file already uses $database->setMovementProc().
-                        if ($database->setMovementProc($data['moveid'])) {
-                            $bounceTime = $units->getWalkingTroopsTime($from['wref'], $data['to'], $from['owner'], $owntribe, $data, 1, 't');
-                            $bounceEnd  = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $bounceTime) + $AttackArrivalTime;
-                            $database->addMovement(4, $data['to'], $from['wref'], $data['ref'], $AttackArrivalTime, $bounceEnd);
-                        }
-                        $data_num++;
-                        continue;
-                    }
 
                     $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $vt['evasion'], $vt['maxevasion'], $vt['gold'], $vt['cannotsend'], $dataarray[$data_num]['attack_type']);
 
