@@ -108,6 +108,39 @@ textarea{width:100%;box-sizing:border-box;min-height:120px;padding:8px;border:1p
             </div>
         </div>
 
+        <?php
+        require_once __DIR__ . '/../../GameEngine/AllianceBonus.php';
+        $bonusesEnabled = AllianceBonus::enabled();
+        ?>
+        <div class="card">
+            <h3><?php echo ADM_ALLIANCE_BONUSES; ?></h3>
+            <div class="body">
+                <?php if ($bonusesEnabled): ?>
+                <p class="hint">Select the bonuses to update. Changing a level cancels its current upgrade and preserves accumulated resources. Level 5 clears remaining resources.</p>
+                <div class="form-grid">
+                <?php foreach ((new AllianceBonus())->getState($aid) as $btype => $bonus):
+                    $bonusType = AllianceBonus::types()[$btype];
+                ?>
+                    <div class="form-row">
+                        <label for="bonus-level-<?php echo $btype; ?>"><?php echo htmlspecialchars(constant($bonusType['lang'])); ?></label>
+                        <label><input type="checkbox" name="bonus_apply[<?php echo $btype; ?>]" value="1"> Update this bonus</label>
+                        <input id="bonus-level-<?php echo $btype; ?>" type="number" name="bonus_levels[<?php echo $btype; ?>]" min="0" max="<?php echo AllianceBonus::MAX_LEVEL; ?>" step="1" value="<?php echo $bonus['level']; ?>">
+                        <div class="hint">
+                            <?php echo ALLYBONUS_LEVEL . ': ' . $bonus['level'] . ' (' . AllianceBonus::percentFor($btype, $bonus['level']) . '%)'; ?><br>
+                            Resources in pool: <?php echo number_format($bonus['pool']); ?>
+                            <?php if ($bonus['upgrade_end'] > 0): ?><br>
+                                <?php echo ALLYBONUS_UNLOCKING . ' ' . ($bonus['level'] + 1) . ' — ' . date('d.m.Y H:i:s', $bonus['upgrade_end']); ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+                <?php else: ?>
+                    <p class="hint">Alliance bonuses are disabled or their database table is unavailable.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
         <div class="actions">
             <button type="submit" class="btn-save"><?php echo ADM_SAVE_ALLIANCE; ?></button>
             <a href="admin.php?p=alliance&aid=<?php echo $aid; ?>" style="margin-left:12px;color:#555;text-decoration:none;"><?php echo ADM_CANCEL_2; ?></a>

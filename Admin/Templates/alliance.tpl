@@ -24,7 +24,8 @@ if($_GET['aid']) {
     $alidata = $database->getAlliance($aid);
     $aliusers = $database->getAllMember($aid);
     
-    if($alidata && $aliusers) {
+    if($alidata) {
+        $aliusers = $aliusers ?: array();
         $memberIDs = array_column($aliusers, 'id');
         $data = $database->getVSumField($memberIDs,"pop");
         $totalpop = 0;
@@ -182,6 +183,42 @@ if($_GET['aid']) {
             <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>"><?php echo ADM_EDIT_ALLIANCE; ?></a>
             <a class="btn del" href="?p=delAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')"><?php echo ADM_DELETE_2; ?></a>
         </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3><?php echo ADM_ALLIANCE_BONUSES; ?></h3>
+    <div class="body" style="overflow-x:auto;">
+        <?php require_once __DIR__ . '/../../GameEngine/AllianceBonus.php'; ?>
+        <?php if (AllianceBonus::enabled()): ?>
+        <table class="mini-table">
+            <thead><tr><th><?php echo ALLYBONUS_TAB; ?></th><th><?php echo ALLYBONUS_LEVEL; ?></th><th>Bonus</th><th>Resources in pool</th><th><?php echo ADM_STATUS; ?></th></tr></thead>
+            <tbody>
+            <?php foreach ((new AllianceBonus())->getState($aid) as $btype => $bonus):
+                $bonusType = AllianceBonus::types()[$btype];
+            ?>
+                <tr>
+                    <td><?php echo htmlspecialchars(constant($bonusType['lang'])); ?></td>
+                    <td><?php echo $bonus['level'] . '/' . AllianceBonus::MAX_LEVEL; ?></td>
+                    <td><?php echo AllianceBonus::percentFor($btype, $bonus['level']); ?>%</td>
+                    <td><?php echo number_format($bonus['pool']); ?></td>
+                    <td><?php
+                        if ($bonus['level'] >= AllianceBonus::MAX_LEVEL) {
+                            echo ALLYBONUS_MAXED;
+                        } elseif ($bonus['upgrade_end'] > 0) {
+                            echo ALLYBONUS_UNLOCKING . ' ' . ($bonus['level'] + 1) . ' — ' . date('d.m.Y H:i:s', $bonus['upgrade_end']);
+                        } else {
+                            echo ALLYBONUS_NEXT . ': ' . number_format(AllianceBonus::costFor($bonus['level']));
+                        }
+                    ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="btn-row"><a class="btn edit" href="?p=editAli&amp;aid=<?php echo $aid; ?>"><?php echo ADM_EDIT_ALLIANCE; ?></a></div>
+        <?php else: ?>
+            <p>Alliance bonuses are disabled or their database table is unavailable.</p>
+        <?php endif; ?>
     </div>
 </div>
 

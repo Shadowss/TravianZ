@@ -40,7 +40,7 @@ include_once($autoprefix . "GameEngine/Database.php");
 // ---------------------------------------------------------------------------
 // Input
 // ---------------------------------------------------------------------------
-$admid = (int)($_POST['admid'] ?? 0);
+$admid = (int)($_SESSION['id'] ?? 0);
 $aid   = (int)($_POST['aid'] ?? 0);
 
 if ($aid <= 0 || $admid <= 0) {
@@ -59,6 +59,28 @@ if (!$admin || (int)$admin['access'] !== 9) {
 // ---------------------------------------------------------------------------
 // Câmpuri
 // ---------------------------------------------------------------------------
+if (!$database->getAlliance($aid)) {
+    admin_deny('Alliance not found.');
+}
+
+require_once __DIR__ . '/../../AllianceBonus.php';
+$bonusUpdates = array();
+if (!empty($_POST['bonus_apply'])) {
+    if (!AllianceBonus::enabled() || !is_array($_POST['bonus_apply']) ||
+        !isset($_POST['bonus_levels']) || !is_array($_POST['bonus_levels'])) {
+        admin_deny('Invalid alliance bonus settings.');
+    }
+    $bonusTypes = AllianceBonus::types();
+    foreach ($_POST['bonus_apply'] as $btype => $apply) {
+        $rawLevel = $_POST['bonus_levels'][$btype] ?? null;
+        if (!isset($bonusTypes[$btype]) || $apply !== '1' || !is_string($rawLevel) ||
+            !preg_match('/^[0-5]$/D', $rawLevel)) {
+            admin_deny('Alliance bonus levels must be integers from 0 to 5.');
+        }
+        $bonusUpdates[(int)$btype] = (int)$rawLevel;
+    }
+}
+
 $tag    = $database->escape(substr(trim($_POST['tag'] ?? ''), 0, 8));
 $name   = $database->escape(substr(trim($_POST['name'] ?? ''), 0, 25));
 $leader = (int)($_POST['leader'] ?? 0);
@@ -84,8 +106,27 @@ $database->query(
 // ---------------------------------------------------------------------------
 // Log admin - aceeași structură ca editUser
 // ---------------------------------------------------------------------------
+foreach ($bonusUpdates as $btype => $level) {
+    // Compare against the current database level, not a potentially stale form.
+    // Assignment order matters: preserve the old level until the final assignment.
+    $ok = $database->query(
+        "INSERT INTO " . TB_PREFIX . "alliance_bonus (aid, btype, level, pool, upgrade_end)
+         VALUES ($aid, $btype, $level, 0, 0)
+         ON DUPLICATE KEY UPDATE
+            upgrade_end = IF(level <> $level OR $level = " . AllianceBonus::MAX_LEVEL . ", 0, upgrade_end),
+            pool = IF($level = " . AllianceBonus::MAX_LEVEL . ", 0, pool),
+            level = $level"
+    );
+    if (!$ok) {
+        admin_deny('Could not save alliance bonuses. Please reload the alliance and check its settings.');
+    }
+}
+
 $time = time();
 $logText = "Edited alliance <a href='admin.php?p=alliance&aid=$aid'>$tag</a>";
+if ($bonusUpdates) {
+    $logText .= ' | Alliance bonus levels: ' . json_encode($bonusUpdates);
+}
 $logEsc = $database->escape($logText);
 
 $database->query(
