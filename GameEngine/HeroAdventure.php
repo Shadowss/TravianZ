@@ -39,6 +39,9 @@ class HeroAdventure
     /** Hero base speed on foot, fields/hour (T4 convention). */
     const BASE_HERO_SPEED = 7;
 
+    /** Guaranteed item on the player's first adventure: tier-1 Riding Horse. */
+    const FIRST_ADVENTURE_ITEM = 70;
+
     /** How far from the hero's village adventure sites are picked (tiles). */
     const SITE_MIN_RADIUS = 3;
     const SITE_MAX_RADIUS = 25;
@@ -454,6 +457,24 @@ class HeroAdventure
             }
 
             /* ---- Hero survives: apply rewards ---- */
+            // Completed adventures are retained (including deaths). Use player
+            // history rather than inventory so selling a horse or retraining a
+            // hero cannot grant the introductory reward again. Available/expired
+            // offers do not count as adventures the player has undertaken.
+            $stmt = $this->db->prepare(
+                "SELECT id FROM " . TB_PREFIX . "hero_adventure
+                  WHERE uid = ? AND status = 2 LIMIT 1"
+            );
+            $stmt->bind_param('i', $uid);
+            $stmt->execute();
+            $previousAdventure = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            if (!$previousAdventure) {
+                // Replace the random item, keeping the one-item reward limit.
+                $itemId = self::FIRST_ADVENTURE_ITEM;
+                $itemQty = 1;
+            }
+
             $heroItems = new HeroItems();
 
             // XP with helmet bonus; level-up handled by Automation::updateHero().
