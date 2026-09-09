@@ -497,8 +497,13 @@ class MYSQLi_DB implements IDbConnection {
 	        ));
 	    }
 
-		// we will operate in UTF8
-		mysqli_query($this->dblink,"SET NAMES 'UTF8'");
+		// Faza 2 Global Chat (09.09.2026): FIX critic - linia asta rula "SET NAMES
+		// 'UTF8'" (3 octeti/caracter) IMEDIAT dupa connect(), suprascriind
+		// silentios mysqli_set_charset('utf8mb4') facut in connect() (vezi
+		// DatabaseConnectionCore::connect()) - fara aceasta corectie, emoji-urile
+		// din chat_global tot ar fi picat sau ar fi fost trunchiate la INSERT,
+		// desi coloana + conexiunea "pareau" corect setate pe utf8mb4.
+		mysqli_query($this->dblink,"SET NAMES 'utf8mb4'");
 	}
 };
 

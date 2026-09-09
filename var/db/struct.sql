@@ -583,14 +583,25 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 -- de toti jucatorii de pe server, indiferent de alianta)
 --
 
+-- NOTA (Faza 2, 09.09.2026): tabela + coloanele noi de mai jos folosesc
+-- utf8mb4 (nu utf8 ca restul proiectului) - utf8 clasic din MySQL e de fapt
+-- utf8mb3 (max 3 octeti/caracter) si NU poate stoca emoji moderne (necesita
+-- 4 octeti). utf8mb4 e superset, deci JOIN-urile pe id-uri numerice cu
+-- `users`/`alidata` (ramase utf8) raman perfect functionale.
 CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global` (
  `id` int(20) NOT NULL AUTO_INCREMENT,
  `id_user` int(11) NOT NULL,
  `date` int(11) NOT NULL,
  `msg` varchar(250) NOT NULL,
+ `type` varchar(10) NOT NULL DEFAULT 'text',
+ `poll_id` int(20) NULL DEFAULT NULL,
+ `deleted` tinyint(1) NOT NULL DEFAULT 0,
+ `edited` tinyint(1) NOT NULL DEFAULT 0,
+ `updated_at` int(11) NULL DEFAULT NULL,
  PRIMARY KEY (`id`),
- KEY `id_user_date` (`id_user`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ KEY `id_user_date` (`id_user`,`date`),
+ KEY `updated_at` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -609,6 +620,43 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat_mutes` (
  `created` int(11) NOT NULL,
  PRIMARY KEY (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Sondaje in chat-ul general (Faza 2, 09.09.2026). `chat_id` leaga sondajul
+-- de randul-ancora din chat_global (type='poll'), care ii pastreaza pozitia
+-- cronologica in fluxul de mesaje. `options` = array JSON de string-uri
+-- (2-6 optiuni, validat in PHP la creare).
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global_polls` (
+ `id` int(20) NOT NULL AUTO_INCREMENT,
+ `chat_id` int(20) NOT NULL,
+ `id_user` int(11) NOT NULL,
+ `question` varchar(200) NOT NULL,
+ `options` text NOT NULL,
+ `created` int(11) NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `chat_id` (`chat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Voturi pe sondaje - un singur vot per user per sondaj (id_user in PRIMARY
+-- KEY alaturi de poll_id); un vot nou suprascrie vechiul vot al aceluiasi
+-- user via ON DUPLICATE KEY UPDATE (userul isi poate schimba optiunea).
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global_poll_votes` (
+ `poll_id` int(20) NOT NULL,
+ `id_user` int(11) NOT NULL,
+ `option_index` tinyint(3) NOT NULL,
+ `voted_at` int(11) NOT NULL,
+ PRIMARY KEY (`poll_id`,`id_user`),
+ KEY `poll_id` (`poll_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 -- --------------------------------------------------------

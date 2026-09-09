@@ -75,6 +75,12 @@ trait DatabaseConnectionCore {
             }
 
             if ($this->dblink instanceof \mysqli) {
+                // FIX (Faza 2 Global Chat, 09.09.2026): fara asta, conexiunea foloseste
+                // charset-ul implicit al serverului MySQL, care poate sa nu fie utf8mb4 -
+                // emoji-urile (caractere pe 4 octeti) ar pica cu eroare sau ar fi trunchiate
+                // silentios la INSERT in chat_global.msg (acum utf8mb4). utf8mb4 e superset
+                // peste utf8, deci restul tabelelor (ramase utf8) nu sunt afectate negativ.
+                @mysqli_set_charset($this->dblink, 'utf8mb4');
                 return true;
             }
 

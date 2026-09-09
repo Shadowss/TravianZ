@@ -111,6 +111,7 @@ switch(isset($_GET['f']) ? $_GET['f'] : '') {
 	// Chat general (server-wide), cerut de Catalin 07.09.2026. Separat de
 	// alliance chat (Chat.php, SAJAX) - vazut/scris de orice user logat,
 	// moderat de MH (access 8) si Admin (access 9).
+	// Faza 2 (09.09.2026): sterge/editeaza mesaj, sondaje, mai jos.
 	case 'gchat_poll':
 		header('Content-Type: application/json');
 		if (!isset($_SESSION)) {
@@ -126,8 +127,34 @@ switch(isset($_GET['f']) ? $_GET['f'] : '') {
 		$sinceId = (int) ($_GET['sinceId'] ?? 0);
 		echo json_encode([
 			'ok' => 1,
-			'messages' => $database->getGlobalChatMessages(30, $sinceId),
+			'messages' => $database->getGlobalChatMessages(30, $sinceId, $uid),
 			'viewer' => $database->getGlobalChatViewerInfo($uid),
+		]);
+		break;
+
+	// Faza 2 (09.09.2026): editari/stergeri intamplate de la ultimul cec al
+	// clientului - separat de 'gchat_poll' de mai sus (acela e long-polling
+	// pentru mesaje NOI dupa id; asta e watermark pe timp, pentru mesaje VECHI
+	// deja afisate care s-au schimbat - denumiri diferite intentionat, ca sa
+	// nu se confunde cele doua mecanisme).
+	case 'gchat_updates':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		$sinceTs = (int) ($_GET['sinceTs'] ?? 0);
+		$result = $database->getGlobalChatUpdates($sinceTs, $uid);
+		echo json_encode([
+			'ok' => 1,
+			'rows' => $result['rows'],
+			'now' => $result['now'],
 		]);
 		break;
 
@@ -144,6 +171,81 @@ switch(isset($_GET['f']) ? $_GET['f'] : '') {
 			break;
 		}
 		echo json_encode($database->postGlobalChatMessage($uid, $_POST['msg'] ?? ''));
+		break;
+
+	// Faza 2 (09.09.2026): userul isi editeaza propriul mesaj. Verificarea de
+	// proprietate (doar mesajul lui) se face in Database::editGlobalChatMessage().
+	case 'gchat_edit':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		echo json_encode($database->editGlobalChatMessage($uid, $_POST['id'] ?? 0, $_POST['msg'] ?? ''));
+		break;
+
+	// Faza 2 (09.09.2026): MH/Admin sterg un mesaj (de obicei vulgar). Spre
+	// deosebire de mute/block mai jos, aici NU se compara rangul cu al
+	// autorului mesajului - vezi comentariul din Database::deleteGlobalChatMessage().
+	case 'gchat_delete':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$modUid = (int) ($_SESSION['id_user'] ?? 0);
+		$msgId = (int) ($_POST['id'] ?? 0);
+		if (!$modUid || !$msgId) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		$modAccess = (int) $database->getUserField($modUid, 'access', 0);
+		if ($modAccess < MULTIHUNTER) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'forbidden']);
+			break;
+		}
+		echo json_encode(['ok' => $database->deleteGlobalChatMessage($msgId) ? 1 : 0]);
+		break;
+
+	// Faza 2 (09.09.2026): creare sondaj in chat-ul general. $_POST['options']
+	// vine ca array (options[]=...&options[]=...) din formularul de creare.
+	case 'gchat_poll_create':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		$options = isset($_POST['options']) && is_array($_POST['options']) ? $_POST['options'] : [];
+		echo json_encode($database->createGlobalChatPoll($uid, $_POST['question'] ?? '', $options));
+		break;
+
+	case 'gchat_poll_vote':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		echo json_encode($database->voteGlobalChatPoll($uid, $_POST['pollId'] ?? 0, $_POST['option'] ?? -1));
 		break;
 
 	case 'gchat_mute':
