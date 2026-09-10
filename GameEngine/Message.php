@@ -447,7 +447,15 @@ class Message
 
         if (
             $notice['uid'] == $session->uid ||
-            $notice['ally'] == $session->alliance
+            $notice['ally'] == $session->alliance ||
+            // Faza 3 Global Chat (09.09.2026): raport distribuit public in chat-ul
+            // general - vezi berichte.php (acelasi check, la "poarta" de acces) si
+            // Database::shareGlobalChatReport(). Fara linia asta, berichte.php lasa
+            // pagina sa se incarce, dar readingNotice tot pica null pentru un
+            // vizitator din afara aliantei -> template-ul de raport primeste
+            // $message->readingNotice['data'] gol -> toate campurile ies "[?]"/0,
+            // exact ce a raportat Catalin (raport gol la click din chat).
+            $database->isGlobalChatSharedReport($id)
         ) {
             if ($notice['uid'] == $session->uid) {
                 $database->noticeViewed($notice['id']);
