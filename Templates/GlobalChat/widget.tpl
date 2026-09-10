@@ -24,7 +24,7 @@
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 #################################################################################
 ?>
-<div id="gchat_root" data-uid="<?php echo (int) $session->uid; ?>">
+<div id="gchat_root" data-uid="<?php echo (int) $session->uid; ?>" data-username="<?php echo htmlspecialchars($session->username, ENT_QUOTES, 'UTF-8'); ?>">
     <button id="gchat_bubble" type="button" title="<?php echo GCHAT_TITLE; ?>">
         💬<span id="gchat_badge" style="display:none">0</span>
     </button>
@@ -49,6 +49,8 @@
                 <button id="gchat_poll_submit" type="button"><?php echo GCHAT_POLL_CREATE; ?></button>
             </div>
         </div>
+
+        <div id="gchat_mention_list" style="display:none"></div>
 
         <form id="gchat_form" autocomplete="off">
             <button id="gchat_emoji_btn" type="button" class="gchat_toolbar_btn" title="<?php echo GCHAT_EMOJI_TITLE; ?>">🙂</button>
@@ -335,6 +337,50 @@
     #gchat_poll_add_option { background: #ddd; }
     #gchat_poll_submit { background: #6b8f47; color: #fff; }
 
+    /* Faza 3: mentiuni @username */
+    #gchat_mention_list {
+        display: none;
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 40px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        max-height: 120px;
+        overflow-y: auto;
+        box-shadow: 0 -2px 8px rgba(0,0,0,.15);
+        z-index: 10;
+    }
+    .gchat_mention_item {
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .gchat_mention_item:hover, .gchat_mention_item.active { background: #eef2e8; }
+
+    .gchat_mention { color: #1a5aa8; font-weight: bold; }
+    .gchat_msg_mentioned {
+        background: #fff6d5;
+        border-radius: 3px;
+        padding: 2px 3px;
+        margin: -2px -3px 4px -3px;
+    }
+
+    /* Faza 3: rapoarte de lupta distribuite in chat */
+    .gchat_report_block { margin-top: 2px; }
+    .gchat_report_link {
+        display: inline-block;
+        padding: 3px 6px;
+        background: #f2f0e6;
+        border: 1px solid #ddd6bd;
+        border-radius: 4px;
+        color: #6b4a1f;
+        text-decoration: none;
+        font-size: 11px;
+    }
+    .gchat_report_link:hover { text-decoration: underline; }
+
     @media (max-width: 480px) {
         #gchat_panel { right: 8px; bottom: 66px; }
         #gchat_bubble { right: 8px; bottom: 8px; }
@@ -367,7 +413,8 @@
         deletedPlaceholder: <?php echo json_encode(GCHAT_DELETED_PLACEHOLDER); ?>,
         pollOptionPlaceholder: <?php echo json_encode(GCHAT_POLL_OPTION_PLACEHOLDER); ?>,
         pollVotesWord: <?php echo json_encode(GCHAT_POLL_VOTES_WORD); ?>,
-        errorGeneric: <?php echo json_encode(GCHAT_ERROR_GENERIC); ?>
+        errorGeneric: <?php echo json_encode(GCHAT_ERROR_GENERIC); ?>,
+        reportFallback: <?php echo json_encode(GCHAT_REPORT_FALLBACK); ?>
     };
 
     var ACCESS_ADMIN = 9, ACCESS_MH = 8;
@@ -390,8 +437,10 @@
     var pollForm = document.getElementById('gchat_poll_form');
     var pollQuestionInput = document.getElementById('gchat_poll_question');
     var pollOptionsBox = document.getElementById('gchat_poll_options');
+    var mentionList = document.getElementById('gchat_mention_list');
 
     var myUid = parseInt(root.getAttribute('data-uid'), 10) || 0;
+    var myUsername = root.getAttribute('data-username') || '';
     var lastId = 0;
     var unread = 0;
     var isOpen = false;
@@ -406,6 +455,12 @@
     var lastMutationTs = Math.floor(Date.now() / 1000);
     var MAX_POLL_OPTIONS = 6;
     var EMOJI_LIST = ['😀','😂','😅','😊','😍','😎','🤔','😴','😭','😡','👍','👎','👏','🙏','💪','🔥','⭐','❤️','💯','🎉','⚔️','🛡️','🏰','🌾','🪵','⛏️','🧱','⏳','🐎','🏆'];
+
+    // Faza 3: stare pentru autocomplete la @mentiuni
+    var mentionMatches = [];
+    var mentionActiveIndex = -1;
+    var mentionTokenStart = -1;
+    var mentionTimer = null;
 
     function fmtTime(unixTs) {
         var d = new Date(unixTs * 1000);
@@ -587,6 +642,44 @@
         return wrap;
     }
 
+    /**
+     * Faza 3: evidentiaza "@cuvant" in text (stil, nu neaparat un user real -
+     * verificare simpla, client-side, fara sa validam impotriva bazei de date
+     * la fiecare randare). Daca vreunul dintre ele e chiar username-ul
+     * vizualizatorului, intoarce true - renderMessage() adauga atunci un fundal
+     * pe tot randul, ca "notificare" vizuala (nu exista notificari separate,
+     * gen sunet/browser - in linie cu restul widget-ului, minimalist).
+     */
+    function renderTextWithMentions(container, text) {
+        var re = /@([A-Za-z0-9_.\-]{2,32})/g;
+        var lastIndex = 0;
+        var match;
+        var mentionsMe = false;
+
+        while ((match = re.exec(text)) !== null) {
+            if (match.index > lastIndex) {
+                container.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+            }
+
+            var mSpan = document.createElement('span');
+            mSpan.className = 'gchat_mention';
+            mSpan.textContent = '@' + match[1];
+            container.appendChild(mSpan);
+
+            if (myUsername && match[1].toLowerCase() === myUsername.toLowerCase()) {
+                mentionsMe = true;
+            }
+
+            lastIndex = re.lastIndex;
+        }
+
+        if (lastIndex < text.length) {
+            container.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        return mentionsMe;
+    }
+
     function renderMessage(row) {
         var line = document.createElement('div');
         line.className = 'gchat_msg';
@@ -646,9 +739,34 @@
             return line;
         }
 
+        // Faza 3: raport de lupta distribuit - link catre berichte.php, cu
+        // topicul raportului (deja in row.msg) ca text vizibil
+        if (row.type === 'report') {
+            var reportBlock = document.createElement('div');
+            reportBlock.className = 'gchat_report_block';
+
+            var reportLink = document.createElement('a');
+            reportLink.href = 'berichte.php?id=' + encodeURIComponent(row.report_id);
+            reportLink.target = '_blank';
+            reportLink.rel = 'noopener';
+            reportLink.className = 'gchat_report_link';
+            reportLink.textContent = '\u2694\ufe0f ' + (row.msg || GCHAT_TXT.reportFallback);
+            reportBlock.appendChild(reportLink);
+            line.appendChild(reportBlock);
+
+            var reportActions = document.createElement('span');
+            reportActions.className = 'gchat_actions';
+            appendModActionLinks(reportActions, row);
+            if (reportActions.childNodes.length) { line.appendChild(reportActions); }
+
+            return line;
+        }
+
         var text = document.createElement('span');
         text.className = 'gchat_text';
-        text.textContent = row.msg;
+        if (renderTextWithMentions(text, row.msg)) {
+            line.classList.add('gchat_msg_mentioned');
+        }
         line.appendChild(text);
 
         var editedTag = document.createElement('span');
@@ -712,7 +830,11 @@
 
         var textEl2 = line.querySelector('.gchat_text');
         var editedTagEl2 = line.querySelector('.gchat_edited_tag');
-        if (textEl2) { textEl2.textContent = row.msg; }
+        if (textEl2) {
+            textEl2.textContent = '';
+            var mentionsMe2 = renderTextWithMentions(textEl2, row.msg);
+            line.classList.toggle('gchat_msg_mentioned', mentionsMe2);
+        }
         if (editedTagEl2 && parseInt(row.edited, 10) === 1) {
             editedTagEl2.style.display = 'inline';
         }
@@ -877,6 +999,125 @@
         field.focus();
         if (field.setSelectionRange) { field.setSelectionRange(pos, pos); }
     }
+
+    // Faza 3: autocomplete la @mentiuni
+    function currentMentionToken() {
+        var pos = input.selectionStart;
+        var value = input.value;
+        if (pos == null) { return null; }
+
+        var atPos = value.lastIndexOf('@', pos - 1);
+        if (atPos === -1) { return null; }
+
+        // "@" trebuie sa fie inceput de cuvant (spatiu inainte, sau chiar
+        // inceputul mesajului) - altfel un email sau "cuvant@altceva" ar
+        // declansa gresit autocomplete-ul
+        if (atPos > 0 && !/\s/.test(value.charAt(atPos - 1))) { return null; }
+
+        var token = value.slice(atPos + 1, pos);
+        if (/[\s@]/.test(token)) { return null; }
+
+        return { start: atPos, query: token };
+    }
+
+    function closeMentionList() {
+        mentionList.style.display = 'none';
+        mentionList.innerHTML = '';
+        mentionMatches = [];
+        mentionActiveIndex = -1;
+        mentionTokenStart = -1;
+    }
+
+    function renderMentionList() {
+        mentionList.innerHTML = '';
+
+        mentionMatches.forEach(function (u, idx) {
+            var item = document.createElement('div');
+            item.className = 'gchat_mention_item' + (idx === mentionActiveIndex ? ' active' : '');
+            item.textContent = u.username;
+            // mousedown (nu click) - trebuie sa apuce inaintea lui 'blur' de pe input
+            item.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                selectMention(u.username);
+            });
+            mentionList.appendChild(item);
+        });
+
+        mentionList.style.display = mentionMatches.length ? 'block' : 'none';
+    }
+
+    function selectMention(username) {
+        if (mentionTokenStart === -1) { return; }
+
+        var pos = input.selectionStart;
+        var value = input.value;
+        var before = value.slice(0, mentionTokenStart);
+        var after = value.slice(pos);
+        var inserted = '@' + username + ' ';
+
+        input.value = before + inserted + after;
+        var newPos = (before + inserted).length;
+        input.focus();
+        if (input.setSelectionRange) { input.setSelectionRange(newPos, newPos); }
+
+        closeMentionList();
+    }
+
+    input.addEventListener('input', function () {
+        var token = currentMentionToken();
+        if (!token || token.query.length < 1) {
+            closeMentionList();
+            return;
+        }
+
+        mentionTokenStart = token.start;
+
+        if (mentionTimer) { window.clearTimeout(mentionTimer); }
+        mentionTimer = window.setTimeout(function () {
+            fetch(AJAX_URL + '?f=gchat_search_users&q=' + encodeURIComponent(token.query), { credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data || !data.ok) { return; }
+
+                    // token-ul s-ar fi putut schimba intre timp (cerere async) -
+                    // verificam ca inca suntem pe acelasi "@cuvant" inainte sa
+                    // afisam rezultate posibil deja irelevante
+                    var stillSame = currentMentionToken();
+                    if (!stillSame || stillSame.start !== mentionTokenStart) { return; }
+
+                    mentionMatches = data.users || [];
+                    mentionActiveIndex = mentionMatches.length ? 0 : -1;
+                    renderMentionList();
+                })
+                .catch(function () { closeMentionList(); });
+        }, 150);
+    });
+
+    input.addEventListener('keydown', function (e) {
+        if (!mentionMatches.length) { return; }
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            mentionActiveIndex = (mentionActiveIndex + 1) % mentionMatches.length;
+            renderMentionList();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            mentionActiveIndex = (mentionActiveIndex - 1 + mentionMatches.length) % mentionMatches.length;
+            renderMentionList();
+        } else if (e.key === 'Enter' || e.key === 'Tab') {
+            if (mentionActiveIndex >= 0) {
+                e.preventDefault();
+                selectMention(mentionMatches[mentionActiveIndex].username);
+            }
+        } else if (e.key === 'Escape') {
+            closeMentionList();
+        }
+    });
+
+    input.addEventListener('blur', function () {
+        // delay ca sa apuce mousedown-ul pe un item din lista inainte sa o inchidem
+        window.setTimeout(closeMentionList, 150);
+    });
 
     function addPollOptionRow(value) {
         if (pollOptionsBox.children.length >= MAX_POLL_OPTIONS) { return; }

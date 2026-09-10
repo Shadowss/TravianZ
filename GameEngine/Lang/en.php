@@ -4439,3 +4439,7 @@ tz_def('GCHAT_POLL_CREATE',   'Create poll');
 tz_def('GCHAT_POLL_VOTES_WORD', 'votes');
 tz_def('GCHAT_EMOJI_TITLE',   'Emoji');
 tz_def('GCHAT_ERROR_GENERIC', 'Something went wrong.');
+// Phase 3 (09.09.2026): @username mentions, share battle reports
+tz_def('GCHAT_SHARE_REPORT',    'Share to chat');
+tz_def('GCHAT_SHARE_REPORT_OK', 'Shared to chat!');
+tz_def('GCHAT_REPORT_FALLBACK', 'Battle report');

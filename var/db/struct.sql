@@ -595,6 +595,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global` (
  `msg` varchar(250) NOT NULL,
  `type` varchar(10) NOT NULL DEFAULT 'text',
  `poll_id` int(20) NULL DEFAULT NULL,
+ `report_id` int(20) NULL DEFAULT NULL,
  `deleted` tinyint(1) NOT NULL DEFAULT 0,
  `edited` tinyint(1) NOT NULL DEFAULT 0,
  `updated_at` int(11) NULL DEFAULT NULL,
@@ -657,6 +658,24 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global_poll_votes` (
  PRIMARY KEY (`poll_id`,`id_user`),
  KEY `poll_id` (`poll_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Faza 3 (09.09.2026): allowlist de rapoarte distribuite in chat-ul general.
+-- NU atingem tabela `ndata` (folosita de tot sistemul de mesaje/rapoarte) -
+-- in loc, un raport prezent aici e vizibil oricui e logat, indiferent de
+-- alianta (vezi berichte.php, verificarea de acces). notice_id e PRIMARY
+-- KEY: un raport se distribuie o singura data in allowlist (re-distribuirea
+-- doar posteaza un mesaj nou in chat, vezi Database::shareGlobalChatReport).
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%chat_global_shared_reports` (
+ `notice_id` int(11) NOT NULL,
+ `shared_by` int(11) NOT NULL,
+ `created` int(11) NOT NULL,
+ PRIMARY KEY (`notice_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- --------------------------------------------------------

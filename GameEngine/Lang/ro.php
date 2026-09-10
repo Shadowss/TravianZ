@@ -4176,3 +4176,7 @@ tz_def('GCHAT_POLL_CREATE',   'Creeaza sondaj');
 tz_def('GCHAT_POLL_VOTES_WORD', 'voturi');
 tz_def('GCHAT_EMOJI_TITLE',   'Emoji');
 tz_def('GCHAT_ERROR_GENERIC', 'A aparut o eroare.');
+// Faza 3 (09.09.2026): mentiuni @username, distribuire rapoarte de lupta
+tz_def('GCHAT_SHARE_REPORT',    'Distribuie in chat');
+tz_def('GCHAT_SHARE_REPORT_OK', 'Distribuit in chat!');
+tz_def('GCHAT_REPORT_FALLBACK', 'Raport de lupta');

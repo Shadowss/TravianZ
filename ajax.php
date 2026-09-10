@@ -248,6 +248,40 @@ switch(isset($_GET['f']) ? $_GET['f'] : '') {
 		echo json_encode($database->voteGlobalChatPoll($uid, $_POST['pollId'] ?? 0, $_POST['option'] ?? -1));
 		break;
 
+	// Faza 3 (09.09.2026): autocomplete la @mentiuni - cautare useri dupa
+	// inceputul username-ului. GET, nu necesita alta permisiune decat login.
+	case 'gchat_search_users':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		echo json_encode(['ok' => 1, 'users' => $database->searchGlobalChatUsers($_GET['q'] ?? '')]);
+		break;
+
+	// Faza 3 (09.09.2026): distribuie un raport de lupta propriu in chat.
+	// Verificarea de tip+proprietate se face in Database::shareGlobalChatReport().
+	case 'gchat_share_report':
+		header('Content-Type: application/json');
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		include_once($autoprefix.'GameEngine/Database.php');
+		$uid = (int) ($_SESSION['id_user'] ?? 0);
+		if (!$uid) {
+			http_response_code(403);
+			echo json_encode(['ok' => 0, 'reason' => 'notloggedin']);
+			break;
+		}
+		echo json_encode($database->shareGlobalChatReport($uid, $_POST['id'] ?? 0));
+		break;
+
 	case 'gchat_mute':
 	case 'gchat_block':
 	case 'gchat_unmute':

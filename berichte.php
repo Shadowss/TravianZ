@@ -157,6 +157,8 @@ if (isset($_GET['t']) && (int) $_GET['t'] === 3) {
 <?php
 if (isset($_GET['id'])) 
 {
+    $tzShareEligible = false;
+
     if (isset($_GET['aid']) && $_GET['aid'] > 0 && $_GET['aid'] == $session->alliance && $database->getNotice2($_GET['id'], 'ally') == $session->alliance)
     {
         $type = $database->getNotice2($_GET['id'], 'ntype');
@@ -170,9 +172,40 @@ if (isset($_GET['id']))
     elseif($database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['id']), 'uid') == $session->uid) 
     {
         $type = ($message->readingNotice['ntype'] == 9) ? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
+
+        // Faza 3 Global Chat (09.09.2026): doar proprietarul vazand propriul
+        // raport poate primi butonul de distribuire, si doar rapoarte de
+        // LUPTA - atac SAU aparare (cand te ataca altcineva pe tine, raportul
+        // TAU are tot un ntype din acelasi set - t=3/TZ_ATTACKS din
+        // Message::noticeType() include deja ambele roluri). Verificam ntype-ul
+        // ORIGINAL, nefiltrat (nu $type, care mai sus poate fi deja remapat pe
+        // arhiva). Tine sincron cu $shareableNtypes din
+        // Database::shareGlobalChatReport().
+        $tzShareableNtypes = [1, 2, 3, 4, 5, 6, 7, 22, 23];
+        $tzOwnNtype = $message->readingNotice['ntype'] ?? null;
+        if ($tzOwnNtype !== null && in_array((int) $tzOwnNtype, $tzShareableNtypes, true)) {
+            $tzShareEligible = true;
+        }
+    }
+    elseif ($database->isGlobalChatSharedReport($_GET['id']))
+    {
+        // Faza 3 Global Chat (09.09.2026): raport distribuit explicit in
+        // chat-ul general de catre proprietarul lui - vizibil oricui e logat,
+        // indiferent de alianta. Acelasi filtru de siguranta ca la share-ul
+        // de alianta mai sus (10-17 raman ascunse), desi in practica
+        // Database::shareGlobalChatReport() deja refuza sa distribuie orice
+        // in afara de ntype 1-7 - dublam verificarea aici din prudenta.
+        $type = $database->getNotice2($_GET['id'], 'ntype');
+        if ($type >= 10 && $type <= 17) unset($type);
     }
     
     if(isset($type)) include("Templates/Notice/".$message->getReportType($type).".tpl");
+
+    // Faza 3 Global Chat: butonul "Distribuie in chat", doar cand eligibil (vezi mai sus)
+    if ($tzShareEligible) {
+        include("Templates/GlobalChat/share_report_button.tpl");
+    }
+
     unset($type);
 }
 else include("Templates/Notice/all.tpl");

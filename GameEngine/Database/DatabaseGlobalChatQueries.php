@@ -97,7 +97,8 @@ trait DatabaseGlobalChatQueries {
 
         // Faza 2: c.type/c.poll_id/c.deleted/c.edited - vezi editGlobalChatMessage(),
         // deleteGlobalChatMessage() si createGlobalChatPoll() mai jos
-        $q = "SELECT c.id, c.id_user, c.date, c.msg, c.type, c.poll_id, c.deleted, c.edited,
+        // Faza 3: c.report_id - vezi shareGlobalChatReport() mai jos
+        $q = "SELECT c.id, c.id_user, c.date, c.msg, c.type, c.poll_id, c.report_id, c.deleted, c.edited,
                      u.username, u.access, a.tag AS ally_tag, a.id AS ally_id
               FROM " . TB_PREFIX . "chat_global c
               LEFT JOIN " . TB_PREFIX . "users u ON u.id = c.id_user
@@ -474,5 +475,119 @@ trait DatabaseGlobalChatQueries {
         return $this->query(
             "DELETE FROM " . TB_PREFIX . "chat_mutes WHERE id_user = $targetUid"
         ) ? true : false;
+    }
+
+    /**
+     * Faza 3 (09.09.2026): cautare useri dupa inceputul username-ului, pentru
+     * autocomplete la @mentiuni. Exclude id 1-3 (Nature/Natars/conturi de
+     * sistem - vezi addNotice() din DatabaseMessageQueries.php, care le trateaza
+     * deja ca speciale). Scapam manual '%'/'_' din query ca sa nu functioneze
+     * ca wildcard-uri LIKE neintentionate daca cineva tasteaza chiar aceste
+     * caractere dupa @.
+     */
+    function searchGlobalChatUsers($prefix, $limit = 8) {
+        $prefix = trim((string) $prefix);
+        $limit = (int) $limit;
+
+        if ($prefix === '') {
+            return [];
+        }
+
+        $likeSafe = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $prefix);
+        list($eprefix) = $this->escape_input($likeSafe);
+
+        return $this->mysqli_fetch_all($this->query(
+            "SELECT id, username FROM " . TB_PREFIX . "users
+             WHERE username LIKE '$eprefix%' AND id > 3
+             ORDER BY username ASC
+             LIMIT $limit"
+        ));
+    }
+
+    /**
+     * Faza 3 (09.09.2026): distribuie un raport de lupta propriu in chat-ul
+     * general - de atac SAU de aparare (cand te ataca altcineva pe tine,
+     * raportul TAU are tot ntype in acelasi set - vezi
+     * AutomationBattleResolution::[cod care apeleaza addNotice], unde
+     * atacatorul si apararea primesc fiecare propriul rand in `ndata`, cu
+     * ntype-uri complementare din SETUL de mai jos - t=3/TZ_ATTACKS din
+     * Message::noticeType() include deja ambele roluri, nu doar atacul).
+     * Include si perechea 22/23 (scenariu de atac separat, gasit tot in
+     * AutomationBattleResolution.php - nu e in intervalul 1-7 dar e tot
+     * un raport de lupta atac+aparare).
+     *
+     * Exclude intentionat intariri (8,15,16,17) si comert (10-13): acelea
+     * dezvaluie logistica/loturi, nepotrivite pentru difuzare pe tot
+     * serverul (chat-ul general nu are granita de alianta, deci un raport
+     * distribuit aici e vizibil oricui, inclusiv unui inamic) - acelasi
+     * filtru ca share-ul de alianta din berichte.php.
+     *
+     * NU atingem tabela ndata (folosita de tot sistemul de mesaje) - in loc,
+     * adaugam id-ul raportului intr-o allowlist separata (chat_global_shared_reports),
+     * verificata suplimentar in berichte.php la afisarea unui raport individual.
+     *
+     * @return array ['ok'=>bool, 'reason'=>string|null]
+     */
+    function shareGlobalChatReport($uid, $noticeId) {
+        $uid = (int) $uid;
+        $noticeId = (int) $noticeId;
+
+        if ($uid <= 0 || $noticeId <= 0) {
+            return ['ok' => false, 'reason' => 'invalid'];
+        }
+
+        $notice = $this->getNotice2($noticeId, null);
+
+        if (!$notice) {
+            return ['ok' => false, 'reason' => 'notfound'];
+        }
+
+        // tine sincron cu acelasi set din berichte.php ($tzShareableNtypes)
+        $shareableNtypes = [1, 2, 3, 4, 5, 6, 7, 22, 23];
+        if ((int) $notice['uid'] !== $uid || !in_array((int) $notice['ntype'], $shareableNtypes, true)) {
+            return ['ok' => false, 'reason' => 'forbidden'];
+        }
+
+        $mutedUntil = $this->getGlobalChatMuteStatus($uid);
+        if ($mutedUntil !== null) {
+            return ['ok' => false, 'reason' => 'muted', 'mutedUntil' => $mutedUntil];
+        }
+
+        $now = time();
+        list($eNoticeId, $euid) = $this->escape_input($noticeId, $uid);
+
+        // allowlist: acest raport devine vizibil oricui e logat (vezi berichte.php)
+        $this->query(
+            "INSERT INTO " . TB_PREFIX . "chat_global_shared_reports (notice_id, shared_by, created)
+             VALUES ($eNoticeId, $euid, $now)
+             ON DUPLICATE KEY UPDATE shared_by = $euid, created = $now"
+        );
+
+        // mesajul-ancora in chat - topicul raportului (deja text afisabil,
+        // acelasi camp folosit si in lista de rapoarte din berichte.php)
+        $topic = trim((string) ($notice['topic'] ?? ''));
+        $topic = function_exists('mb_substr') ? mb_substr($topic, 0, 250) : substr($topic, 0, 250);
+        list($eTopic) = $this->escape_input($topic);
+
+        $this->query(
+            "INSERT INTO " . TB_PREFIX . "chat_global (id_user, date, msg, type, report_id)
+             VALUES ($euid, $now, '$eTopic', 'report', $eNoticeId)"
+        );
+
+        return ['ok' => true];
+    }
+
+    /**
+     * Verifica daca un raport a fost distribuit in chat-ul general - folosita
+     * de berichte.php ca o conditie suplimentara de acces (vezi acolo).
+     */
+    function isGlobalChatSharedReport($noticeId) {
+        $noticeId = (int) $noticeId;
+
+        $row = mysqli_fetch_assoc($this->query(
+            "SELECT notice_id FROM " . TB_PREFIX . "chat_global_shared_reports WHERE notice_id = $noticeId"
+        ));
+
+        return $row ? true : false;
     }
 }
