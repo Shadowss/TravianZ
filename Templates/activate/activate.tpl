@@ -45,10 +45,10 @@ if(isset($show)){
                 </p> 
             </div> 
             </div> 
-        <?php if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){ ?> 
+        <?php if(!$serverHasStarted && $serverStartTimestamp !== null){ ?>
 <br/><center><big><?php echo TZ_ACTIVATION_AVAILBLE_IN; ?> </big></center>
 <script>
-TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
+TargetDate = <?php echo json_encode($serverStartTimestamp); ?>;
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
@@ -104,7 +104,7 @@ if (CountStepper == 0)
   CountActive = false;
 var SetTimeOutPeriod = (Math.abs(CountStepper)-1)*1000 + 990;
 putspan(BackColor, ForeColor);
-var dthen = new Date(TargetDate);
+var dthen = new Date(TargetDate * 1000);
 var dnow = new Date();
 if(CountStepper>0)
   ddiff = new Date(dnow-dthen);
@@ -117,11 +117,11 @@ CountBack(gsecs);
 <?php }}else{ ?> 
             <p> 
                 <?php  
-                if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){
+                if(!$serverHasStarted && $serverStartTimestamp !== null){
 				?>
 <br/><center><big><?php echo TZ_ACTIVATION_AVAILBLE_IN; ?> </big></center>
 <script language="JavaScript">
-TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
+TargetDate = <?php echo json_encode($serverStartTimestamp); ?>;
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
@@ -177,7 +177,7 @@ if (CountStepper == 0)
   CountActive = false;
 var SetTimeOutPeriod = (Math.abs(CountStepper)-1)*1000 + 990;
 putspan(BackColor, ForeColor);
-var dthen = new Date(TargetDate);
+var dthen = new Date(TargetDate * 1000);
 var dnow = new Date();
 if(CountStepper>0)
   ddiff = new Date(dnow-dthen);
@@ -188,7 +188,7 @@ CountBack(gsecs);
 
 </script>
 <?php       
-}else{ ?> 
+}elseif($serverHasStarted){ ?>
             <div id="activation"> 
                 <form action="activate.php" method="post"> 
                     <p class="important"> 

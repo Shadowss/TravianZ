@@ -223,7 +223,7 @@ class Account {
 		global $database;
 
     // ==================== VERIFICARE DATA DE START A SERVERULUI ====================
-    if (START_DATE < date('d.m.Y') || (START_DATE === date('d.m.Y') && START_TIME <= date('H:i'))) {
+    if (\App\Utils\DateTime::hasServerStarted(START_DATE, START_TIME)) {
         
         // Caută codul de activare în tabela activate
 		$code = trim($_POST['id'] ?? '');
