@@ -9,9 +9,14 @@
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.               ##
 #################################################################################
 
+require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/../csrf.php');
-if (!isset($_SESSION)) session_start();
-if ($_SESSION['access'] < ADMIN) {
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (($_SESSION['access'] ?? 0) < ADMIN) {
     admin_deny('You must be signed in as an administrator to do this. '
         . 'Your session may have expired — please return to the admin panel and sign in again.');
 }
