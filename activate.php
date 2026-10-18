@@ -25,6 +25,9 @@ use App\Utils\AccessLogger;
 include('GameEngine/Account.php');
 AccessLogger::logRequest();
 
+$serverStartTimestamp = \App\Utils\DateTime::getServerStartTimestamp(START_DATE, START_TIME);
+$serverHasStarted = $serverStartTimestamp !== null && time() >= $serverStartTimestamp;
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -56,7 +59,7 @@ AccessLogger::logRequest();
 <div id="content"  class="activate">
 <?php
 
-	if(isset($_GET['e']) && (START_DATE < date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')))
+	if(isset($_GET['e']) && $serverHasStarted)
 	{
 		switch($_GET['e'])
 		{
