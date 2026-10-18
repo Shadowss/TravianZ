@@ -30,10 +30,16 @@ function run_language_case($language)
             'tribe' => 'Romains',
             'welcome' => 'Bienvenue sur le Test Server!',
         ],
+        'es' => [
+            'tribe' => 'Romanos',
+            'welcome' => 'Welcome to Test Server',
+            'spanish_label' => 'Espanol',
+        ],
         'it' => [
             'tribe' => 'Romani',
             'welcome' => 'Benvenuto in Test Server',
             'fallback' => ['TRIBE7', 'Egyptians'],
+            'spanish_label' => 'Spagnolo',
         ],
         'ro' => [
             'tribe' => 'Romani',
@@ -60,8 +66,11 @@ function run_language_case($language)
     define('SPEED', 1);
 
     require dirname(__DIR__) . '/GameEngine/Lang/loader.php';
+    ob_start();
     $loaded = tz_load_language($language);
+    $unexpectedOutput = ob_get_clean();
 
+    assert_same('', $unexpectedOutput, $language . ': loading a locale must not emit output');
     assert_same($expected[$language]['tribe'], TRIBE1, $language . ': selected constants must win');
     assert_same(
         $expected[$language]['welcome'],
@@ -73,6 +82,14 @@ function run_language_case($language)
     if (isset($expected[$language]['fallback'])) {
         [$constant, $value] = $expected[$language]['fallback'];
         assert_same($value, constant($constant), $language . ': missing constant must fall back to English');
+    }
+
+    if (isset($expected[$language]['spanish_label'])) {
+        assert_same(
+            $expected[$language]['spanish_label'],
+            ADM_SPANISH,
+            $language . ': selected locale must define the Spanish language label'
+        );
     }
 
     $fixtureDirectory = __DIR__ . '/fixtures/languages';
@@ -118,7 +135,7 @@ if (isset($argv[1])) {
     exit(0);
 }
 
-$languages = ['en', 'fr', 'it', 'ro', 'zh'];
+$languages = ['en', 'es', 'fr', 'it', 'ro', 'zh'];
 foreach ($languages as $language) {
     $pipes = [];
     $process = proc_open(
@@ -149,4 +166,4 @@ foreach ($languages as $language) {
     echo $stdout;
 }
 
-echo "PASS language loader: 5 locales\n";
+echo "PASS language loader: 6 locales\n";

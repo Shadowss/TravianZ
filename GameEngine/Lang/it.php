@@ -2257,6 +2257,4 @@ tz_def('MANUAL_INTRO', "Questo aiuto di gioco ti permette di consultare informaz
 tz_def('MANUAL_NEW_FEATURES_DESC', "Queste sono novità che non troverai nella versione reale del gioco Travian T3.6. Qui puoi conoscere tutte le novità in dettaglio.");
 tz_def('MANUAL_FAQ', 'FAQ Travian');
 tz_def('MANUAL_FAQ_DESC', "Questo aiuto di gioco fornisce solo brevi informazioni. Maggiori informazioni sono disponibili sul");
-
-?>
 tz_def('ADM_SPANISH', 'Spagnolo');
