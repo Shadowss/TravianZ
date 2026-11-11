@@ -507,14 +507,13 @@ class Market
             exit;
         }
 
-        // Invalid max. time of transport: whole hours, 1 to 99
+        // Invalid max. time of transport: whole hours, at least 1
         if (
             isset($post['d1']) &&
             (
                 !isset($post['d2']) ||
                 !ctype_digit((string) $post['d2']) ||
-                $post['d2'] < 1 ||
-                $post['d2'] > 99
+                $post['d2'] < 1
             )
         ) {
 
