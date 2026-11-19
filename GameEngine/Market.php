@@ -507,6 +507,20 @@ class Market
             exit;
         }
 
+        // Invalid max. time of transport: whole hours, at least 1
+        if (
+            isset($post['d1']) &&
+            (
+                !isset($post['d2']) ||
+                !ctype_digit((string) $post['d2']) ||
+                $post['d2'] < 1
+            )
+        ) {
+
+            header('Location: build.php?id=' . $post['id'] . '&t=2&e2');
+            exit;
+        }
+
         // Offered resources
         $wood = ($post['rid1'] == 1) ? $post['m1'] : 0;
         $clay = ($post['rid1'] == 2) ? $post['m1'] : 0;
@@ -580,8 +594,8 @@ class Market
 
                     $time = 0;
 
-                    if (isset($_POST['d1'])) {
-                        $time = $_POST['d2'] * 3600;
+                    if (isset($post['d1'])) {
+                        $time = (int) $post['d2'] * 3600;
                     }
 
                     $alliance = (
@@ -668,7 +682,7 @@ class Market
             ) ||
             (
                 $infoarray['maxtime'] > 0 &&
-                ($infoarray['maxtime'] * 3600) <
+                $infoarray['maxtime'] <
                 $generator->procDistanceTime(
                     $database->getCoor($infoarray['vref']),
                     $village->coor,
@@ -819,7 +833,7 @@ class Market
             );
 
             if (
-                $duration <= ($value['maxtime'] * 3600) ||
+                $duration <= $value['maxtime'] ||
                 $value['maxtime'] == 0
             ) {
 
